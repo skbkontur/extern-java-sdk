@@ -28,6 +28,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * Create new a draft
 	 *
+	 * POST /v1/{billingAccountId}/drafts
+	 *
 	 * @param clientInfo DraftMeta
 	 * @return DTO
 	 * @throws ExternSDKException a business error
@@ -47,6 +49,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 
 	/**
 	 * lookup a draft by an identifier
+	 *
+	 * GET /v1/{billingAccountId}/drafts/{draftId}
 	 *
 	 * @param draftId String a draft identifier
 	 * @return DTO
@@ -68,6 +72,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * Delete a draft
 	 *
+	 * DELETE /v1/{billingAccountId}/drafts/{draftId}
+	 *
 	 * @param draftId String a draft identifier
 	 * @throws ExternSDKException a business error
 	 */
@@ -85,6 +91,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 
 	/**
 	 * lookup a draft meta by an identifier
+	 *
+	 * GET /v1/{billingAccountId}/drafts/{draftId}/meta
 	 *
 	 * @param draftId String a draft identifier
 	 * @return DTO
@@ -106,6 +114,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * update a draft meta
 	 *
+	 * PUT /v1/{billingAccountId}/drafts/{draftId}/meta
+	 *
 	 * @param clientInfo DraftMeta
 	 * @param draftId String a draft identifier
 	 * @return DTO
@@ -125,10 +135,57 @@ public class ExternSDKDraft extends ExternSDKBase {
 	}
 
 	/**
-	 * POST /v1/{billingAccountId}/drafts/drafts/{draftId}/send
-	 *
+	 * Operate CHECK
+	 * 
+	 * POST /v1/{billingAccountId}/drafts/{draftId}/check
+	 * 
+	 * @param draftId String draft identifier
+	 * @param deffered boolean
+	 * @return DTO
+	 * @throws ExternSDKException a business error
+	 */
+	public Map<String,Object> check(String draftId, boolean deffered) throws ExternSDKException {
+		for (int i = 0; i < 2; i++) {
+			try {
+				return (Map) api.draftsCheck(getBillingAccountId(), UUID.fromString(draftId), getAccessToken(), getApiKey(), deffered);
+			}
+			catch (ApiException x) {
+				errorHandler(x, i, "Черновик", draftId);
+			}
+		}
+		// never too be
+		return null;
+	}
+	
+
+	/**
+	 * Operate PREPARE
+	 * 
+	 * POST /v1/{billingAccountId}/drafts/{draftId}/prepare
+	 * 
+	 * @param draftId String draft identifier
+	 * @param deffered boolean
+	 * @return DTO
+	 * @throws ExternSDKException a business error
+	 */
+	public Map<String,Object> prepare(String draftId, boolean deffered) throws ExternSDKException {
+		for (int i = 0; i < 2; i++) {
+			try {
+				return (Map) api.draftsPrepare(getBillingAccountId(), UUID.fromString(draftId), getAccessToken(), getApiKey(), deffered);
+			}
+			catch (ApiException x) {
+				errorHandler(x, i, "Черновик", draftId);
+			}
+		}
+		// never too be
+		return null;
+	}
+	
+	/**
 	 * Send the draft
 	 *
+	 * POST /v1/{billingAccountId}/drafts/drafts/{draftId}/send
+	 * 
 	 * @param draftId a draft identifier
 	 * @throws ExternSDKException a business error
 	 */
