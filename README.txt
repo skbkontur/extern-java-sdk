@@ -9,16 +9,16 @@ SDK для работы с API Контур.Экстерна для платфо
 
 Основной проект: extern-sdk
 ---------------------------
-	- файл с настройками: extern-sdk\src\main\resources\extern-sdk-config.json
+	- файл с настройками: extern-sdk\src\test\resources\extern-sdk-config.json
 {
-	"billingAccountId":"4f2fee32-6b0a-4f36-bd3a-93bf5df76030",
-	"apiKey":"d5f8c8b3-7716-4e75-99bd-67a910045fd5",
+	"billingAccountId":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+	"apiKey":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
 	"authPrefix":"auth.sid ",
-	"login":"argos_testing@skbkontur.ru",
-	"pass":"QWERTY123456",
+	"login":"XXXXXXXXXXXXX@skbkontur.ru",
+	"pass":"XXXXXXXXXXXX",
 	"authBaseUri":"http://api.testkontur.ru/auth/",
 
-	"thumbprint":"fd3e438933387026ee46c03691f20743d7d34766"
+	"thumbprint":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
 
 где: thumbprint - отпечаток сертификата подписи, опционально, если отсутствует, то не будет формировать подпись

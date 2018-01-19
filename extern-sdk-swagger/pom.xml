@@ -4,7 +4,7 @@
 
     <parent>
       <groupId>ru.skbkontur.sdk</groupId>
-      <artifactId>extern</artifactId>
+      <artifactId>extern-swagger</artifactId>
       <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -38,6 +38,7 @@
                    <modelPackage>ru.skbkontur.sdk.extern.rest.swagger.model</modelPackage>
                    <apiPackage>ru.skbkontur.sdk.extern.rest.swagger.api</apiPackage>
                    <invokerPackage>ru.skbkontur.sdk.extern.rest.swagger.invoker</invokerPackage>
+		   <hideGenerationTimestamp>true</hideGenerationTimestamp>
                 </configOptions>
             </configuration>
         </execution>

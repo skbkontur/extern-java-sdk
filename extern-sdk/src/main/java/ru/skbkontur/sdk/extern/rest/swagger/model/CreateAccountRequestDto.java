@@ -27,7 +27,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.AccountCertificate;
 /**
  * CreateAccountRequestDto
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-01-19T09:43:00.717+03:00")
+
 public class CreateAccountRequestDto {
   @SerializedName("inn")
   private String inn = null;

@@ -164,6 +164,12 @@
     </repositories>
     <dependencies>
         <dependency>
+            <groupId>ru.skbkontur.sdk</groupId>
+            <artifactId>extern-sdk-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>asn1</artifactId>
             <version>${cryptoservice.version}</version>

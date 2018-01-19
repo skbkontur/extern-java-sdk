@@ -27,7 +27,7 @@ import java.util.UUID;
 /**
  * AddressItem
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-01-19T09:43:00.717+03:00")
+
 public class AddressItem {
   @SerializedName("code")
   private String code = null;

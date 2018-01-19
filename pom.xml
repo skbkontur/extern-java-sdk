@@ -24,6 +24,7 @@
 
     <modules>
       <module>extern-sdk</module>
+      <module>extern-sdk-test</module>
       <module>extern-sdk-examples</module>
     </modules>
 

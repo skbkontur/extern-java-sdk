@@ -13,7 +13,7 @@
 
 package ru.skbkontur.sdk.extern.rest.swagger.invoker;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-01-19T09:43:00.717+03:00")
+
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).
