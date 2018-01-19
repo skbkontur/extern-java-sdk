@@ -71,14 +71,15 @@ public class ExternSDKDraftTest {
 			for (DraftMeta ci : clientInfos) {
 				Map<String, Object> draft = api.createDraft(ci);
 				String draftId = (String) draft.get("id");
-				Object r = api.getDraftById(draftId);
+				Object r = api.getDraft(draftId);
 				assertNotNull(r);
 			}
 		}
 	}
 
 	/**
-	 * Test of deleteDraftById method, of class ExternSDKDraft.
+	 * DELETE /v1/{billingAccountId}/drafts/{draftId}
+	 * Test of deleteDraft method, of class ExternSDKDraft.
 	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
 	 */
 	@Test
@@ -92,7 +93,8 @@ public class ExternSDKDraftTest {
 	}
 
 	/**
-	 * Test of getDraftMetaById method, of class ExternSDKDraft.
+	 * GET /v1/{billingAccountId}/drafts/{draftId}/meta
+	 * Test of getDraftMeta method, of class ExternSDKDraft.
 	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
 	 */
 	@Test

@@ -29,8 +29,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 * Create new a draft
 	 *
 	 * @param clientInfo DraftMeta
-	 * @return Map<String, Object>
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> createDraft(DraftMeta clientInfo) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -48,11 +48,11 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * lookup a draft by an identifier
 	 *
-	 * @param draftId String
-	 * @return Map<String, Object>
-	 * @throws ExternSDKException
+	 * @param draftId String a draft identifier
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
-	public Map<String, Object> getDraftById(String draftId) throws ExternSDKException {
+	public Map<String, Object> getDraft(String draftId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
 			try {
 				return (Map) api.draftsGetDraft(getBillingAccountId(), UUID.fromString(draftId), getAccessToken(), getApiKey());
@@ -68,8 +68,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * Delete a draft
 	 *
-	 * @param draftId String
-	 * @throws ExternSDKException
+	 * @param draftId String a draft identifier
+	 * @throws ExternSDKException a business error
 	 */
 	public void deleteDraft(String draftId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -86,9 +86,9 @@ public class ExternSDKDraft extends ExternSDKBase {
 	/**
 	 * lookup a draft meta by an identifier
 	 *
-	 * @param draftId String
-	 * @return Map<String, Object>
-	 * @throws ExternSDKException
+	 * @param draftId String a draft identifier
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public DraftMeta getDraftMeta(String draftId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -107,9 +107,9 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 * update a draft meta
 	 *
 	 * @param clientInfo DraftMeta
-	 * @param draftId String
-	 * @return Map<String, Object>
-	 * @throws ExternSDKException
+	 * @param draftId String a draft identifier
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public DraftMeta updateDraftMeta(String draftId, DraftMeta clientInfo) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -129,8 +129,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 *
 	 * Send the draft
 	 *
-	 * @param draftId
-	 * @throws ExternSDKException
+	 * @param draftId a draft identifier
+	 * @throws ExternSDKException a business error
 	 */
 	public void send(String draftId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {

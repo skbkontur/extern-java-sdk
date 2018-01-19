@@ -34,11 +34,11 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * Add a new document to the draft
 	 *
-	 * @param draftId
-	 * @param documentContent
-	 * @param fileName
-	 * @return
-	 * @throws ExternSDKException
+	 * @param draftId String a draft identifier
+	 * @param documentContent byte[] a document content
+	 * @param fileName String a file name
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> addUncryptedDocument(String draftId, byte[] documentContent, String fileName) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -60,7 +60,7 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @throws ExternSDKException
+	 * @throws ExternSDKException a business error
 	 */
 	public void deleteDocument(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -80,8 +80,8 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @return
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> getDocument(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -104,8 +104,8 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
 	 * @param documentContents DocumentContents a new document content
-	 * @return
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> updateDocument(String draftId, String documentId, DocumentContents documentContents) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -128,7 +128,7 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
 	 * @return a document content in base64
-	 * @throws ExternSDKException
+	 * @throws ExternSDKException a business error
 	 */
 	public String getDecryptedDocumentContent(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -150,8 +150,8 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @return
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> updateDecryptedDocumentContent(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -173,8 +173,8 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @return
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> getEncryptedDocumentContent(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -197,7 +197,7 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
 	 * @return a signature content in base64
-	 * @throws ExternSDKException
+	 * @throws ExternSDKException a business error
 	 */
 	public String getSignatureContent(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {
@@ -219,8 +219,8 @@ public class ExternSDKDocument extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @return
-	 * @throws ExternSDKException
+	 * @return DTO
+	 * @throws ExternSDKException a business error
 	 */
 	public Map<String, Object> updateSignature(String draftId, String documentId) throws ExternSDKException {
 		for (int i = 0; i < 2; i++) {

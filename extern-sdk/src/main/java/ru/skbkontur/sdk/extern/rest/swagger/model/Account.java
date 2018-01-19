@@ -30,7 +30,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 /**
  * Account
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-01-18T09:09:47.467+03:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-01-19T09:43:00.717+03:00")
 public class Account {
   @SerializedName("id")
   private UUID id = null;
