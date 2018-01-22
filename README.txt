@@ -22,6 +22,8 @@ SDK для работы с API Контур.Экстерна для платфо
 }
 
 где: thumbprint - отпечаток сертификата подписи, опционально, если отсутствует, то не будет формировать подпись
+
+для получения accountId, apiKey, login, pass необходимо обратиться по адресу extern-api@skbkontur.ru
 		
 	- файл с тестовыми данными (DraftMeta[]): extern-sdk\src\test\resources\clientInfosTest.json
 [
