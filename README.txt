@@ -11,7 +11,7 @@ SDK для работы с API Контур.Экстерна для платфо
 ---------------------------
 	- файл с настройками: extern-sdk\src\test\resources\extern-sdk-config.json
 {
-	"billingAccountId":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+	"accountId":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
 	"apiKey":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
 	"authPrefix":"auth.sid ",
 	"login":"XXXXXXXXXXXXX@skbkontur.ru",
