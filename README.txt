@@ -14,7 +14,7 @@ SDK для работы с API Контур.Экстерна для платфо
 	"accountId":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
 	"apiKey":"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
 	"authPrefix":"auth.sid ",
-	"login":"XXXXXXXXXXXXX@skbkontur.ru",
+	"login":"XXXXXXXXXXXXX",
 	"pass":"XXXXXXXXXXXX",
 	"authBaseUri":"http://api.testkontur.ru/auth/",
 
