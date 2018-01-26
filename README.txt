@@ -23,10 +23,17 @@ SDK для работы с API Контур.Экстерна для платфо
 
 где: thumbprint - отпечаток сертификата подписи, опционально, если отсутствует, то не будет формировать подпись
 		
-	- файл с тестовыми данными (DraftMeta[]): extern-sdk\src\test\resources\clientInfosTest.json
+	- файл с тестовыми данными: extern-sdk\src\test\resources\clientInfosTest.json
 [
-	{"recipient": {"ifns-code":"6653" },"organization":{"type":1,"inn":"6653000832","organization":{"kpp":"665325934"}}}
+	{
+		"clientInfo":{"recipient": {"ifns-code":"7810" },"organization":{"type":1,"inn":"6653000832","organization":{"kpp":"665325934"}}},
+		"docs":
+			[
+				"/docs/NO_SRCHIS_7810_7810_6653000832665325934_20180126_993f2341-2b37-45dc-8fd5-fca7c019d49a.xml"
+			]
+	}
 ]
+	- подкаталог с тестовыми декларациями:extern-sdk\src\test\resources\docs
 
 Проект с примерами использования SDK: extern-sdk-examples
 ---------------------------------------------------------

@@ -22,31 +22,53 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 
 /**
- * IndividualInfo
+ * Content
  */
 
-public class IndividualInfo {
-  @SerializedName("policy-number")
-  private String policyNumber = null;
+public class Content {
+  @SerializedName("decrypted")
+  private Link decrypted = null;
 
-  public IndividualInfo policyNumber(String policyNumber) {
-    this.policyNumber = policyNumber;
+  @SerializedName("encrypted")
+  private Link encrypted = null;
+
+  public Content decrypted(Link decrypted) {
+    this.decrypted = decrypted;
     return this;
   }
 
    /**
-   * Get policyNumber
-   * @return policyNumber
+   * Get decrypted
+   * @return decrypted
   **/
   @ApiModelProperty(value = "")
-  public String getPolicyNumber() {
-    return policyNumber;
+  public Link getDecrypted() {
+    return decrypted;
   }
 
-  public void setPolicyNumber(String policyNumber) {
-    this.policyNumber = policyNumber;
+  public void setDecrypted(Link decrypted) {
+    this.decrypted = decrypted;
+  }
+
+  public Content encrypted(Link encrypted) {
+    this.encrypted = encrypted;
+    return this;
+  }
+
+   /**
+   * Get encrypted
+   * @return encrypted
+  **/
+  @ApiModelProperty(value = "")
+  public Link getEncrypted() {
+    return encrypted;
+  }
+
+  public void setEncrypted(Link encrypted) {
+    this.encrypted = encrypted;
   }
 
 
@@ -58,22 +80,24 @@ public class IndividualInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    IndividualInfo individualInfo = (IndividualInfo) o;
-    return Objects.equals(this.policyNumber, individualInfo.policyNumber);
+    Content content = (Content) o;
+    return Objects.equals(this.decrypted, content.decrypted) &&
+        Objects.equals(this.encrypted, content.encrypted);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(policyNumber);
+    return Objects.hash(decrypted, encrypted);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class IndividualInfo {\n");
+    sb.append("class Content {\n");
     
-    sb.append("    policyNumber: ").append(toIndentedString(policyNumber)).append("\n");
+    sb.append("    decrypted: ").append(toIndentedString(decrypted)).append("\n");
+    sb.append("    encrypted: ").append(toIndentedString(encrypted)).append("\n");
     sb.append("}");
     return sb.toString();
   }

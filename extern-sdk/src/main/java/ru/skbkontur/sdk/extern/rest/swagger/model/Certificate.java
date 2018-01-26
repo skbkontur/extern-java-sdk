@@ -24,50 +24,29 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * CreditOrganizationInfo
+ * Certificate
  */
 
-public class CreditOrganizationInfo {
-  @SerializedName("registration-number")
-  private String registrationNumber = null;
+public class Certificate {
+  @SerializedName("content")
+  private String content = null;
 
-  @SerializedName("bik")
-  private String bik = null;
-
-  public CreditOrganizationInfo registrationNumber(String registrationNumber) {
-    this.registrationNumber = registrationNumber;
+  public Certificate content(String content) {
+    this.content = content;
     return this;
   }
 
    /**
-   * Get registrationNumber
-   * @return registrationNumber
+   * Get content
+   * @return content
   **/
   @ApiModelProperty(value = "")
-  public String getRegistrationNumber() {
-    return registrationNumber;
+  public String getContent() {
+    return content;
   }
 
-  public void setRegistrationNumber(String registrationNumber) {
-    this.registrationNumber = registrationNumber;
-  }
-
-  public CreditOrganizationInfo bik(String bik) {
-    this.bik = bik;
-    return this;
-  }
-
-   /**
-   * Get bik
-   * @return bik
-  **/
-  @ApiModelProperty(value = "")
-  public String getBik() {
-    return bik;
-  }
-
-  public void setBik(String bik) {
-    this.bik = bik;
+  public void setContent(String content) {
+    this.content = content;
   }
 
 
@@ -79,24 +58,22 @@ public class CreditOrganizationInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CreditOrganizationInfo creditOrganizationInfo = (CreditOrganizationInfo) o;
-    return Objects.equals(this.registrationNumber, creditOrganizationInfo.registrationNumber) &&
-        Objects.equals(this.bik, creditOrganizationInfo.bik);
+    Certificate certificate = (Certificate) o;
+    return Objects.equals(this.content, certificate.content);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(registrationNumber, bik);
+    return Objects.hash(content);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CreditOrganizationInfo {\n");
+    sb.append("class Certificate {\n");
     
-    sb.append("    registrationNumber: ").append(toIndentedString(registrationNumber)).append("\n");
-    sb.append("    bik: ").append(toIndentedString(bik)).append("\n");
+    sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("}");
     return sb.toString();
   }

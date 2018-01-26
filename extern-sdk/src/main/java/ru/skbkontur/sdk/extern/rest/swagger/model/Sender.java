@@ -22,18 +22,25 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Certificate;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Fio;
 
 /**
- * CertificateInfo
+ * Sender
  */
 
-public class CertificateInfo {
+public class Sender {
   @SerializedName("inn")
   private String inn = null;
 
   @SerializedName("fio")
   private Fio fio = null;
+
+  @SerializedName("kpp")
+  private String kpp = null;
+
+  @SerializedName("full-name")
+  private String fullName = null;
 
   @SerializedName("ogrn")
   private String ogrn = null;
@@ -41,13 +48,13 @@ public class CertificateInfo {
   @SerializedName("ogrn-ip")
   private String ogrnIp = null;
 
-  @SerializedName("org-name")
-  private String orgName = null;
-
   @SerializedName("rns-fss")
   private String rnsFss = null;
 
-  public CertificateInfo inn(String inn) {
+  @SerializedName("сertificate")
+  private Certificate ertificate = null;
+
+  public Sender inn(String inn) {
     this.inn = inn;
     return this;
   }
@@ -65,7 +72,7 @@ public class CertificateInfo {
     this.inn = inn;
   }
 
-  public CertificateInfo fio(Fio fio) {
+  public Sender fio(Fio fio) {
     this.fio = fio;
     return this;
   }
@@ -83,7 +90,43 @@ public class CertificateInfo {
     this.fio = fio;
   }
 
-  public CertificateInfo ogrn(String ogrn) {
+  public Sender kpp(String kpp) {
+    this.kpp = kpp;
+    return this;
+  }
+
+   /**
+   * Get kpp
+   * @return kpp
+  **/
+  @ApiModelProperty(value = "")
+  public String getKpp() {
+    return kpp;
+  }
+
+  public void setKpp(String kpp) {
+    this.kpp = kpp;
+  }
+
+  public Sender fullName(String fullName) {
+    this.fullName = fullName;
+    return this;
+  }
+
+   /**
+   * Get fullName
+   * @return fullName
+  **/
+  @ApiModelProperty(value = "")
+  public String getFullName() {
+    return fullName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public Sender ogrn(String ogrn) {
     this.ogrn = ogrn;
     return this;
   }
@@ -101,7 +144,7 @@ public class CertificateInfo {
     this.ogrn = ogrn;
   }
 
-  public CertificateInfo ogrnIp(String ogrnIp) {
+  public Sender ogrnIp(String ogrnIp) {
     this.ogrnIp = ogrnIp;
     return this;
   }
@@ -119,25 +162,7 @@ public class CertificateInfo {
     this.ogrnIp = ogrnIp;
   }
 
-  public CertificateInfo orgName(String orgName) {
-    this.orgName = orgName;
-    return this;
-  }
-
-   /**
-   * Get orgName
-   * @return orgName
-  **/
-  @ApiModelProperty(value = "")
-  public String getOrgName() {
-    return orgName;
-  }
-
-  public void setOrgName(String orgName) {
-    this.orgName = orgName;
-  }
-
-  public CertificateInfo rnsFss(String rnsFss) {
+  public Sender rnsFss(String rnsFss) {
     this.rnsFss = rnsFss;
     return this;
   }
@@ -155,6 +180,24 @@ public class CertificateInfo {
     this.rnsFss = rnsFss;
   }
 
+  public Sender ertificate(Certificate ertificate) {
+    this.ertificate = ertificate;
+    return this;
+  }
+
+   /**
+   * Get ertificate
+   * @return ertificate
+  **/
+  @ApiModelProperty(value = "")
+  public Certificate getErtificate() {
+    return ertificate;
+  }
+
+  public void setErtificate(Certificate ertificate) {
+    this.ertificate = ertificate;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -164,32 +207,36 @@ public class CertificateInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CertificateInfo certificateInfo = (CertificateInfo) o;
-    return Objects.equals(this.inn, certificateInfo.inn) &&
-        Objects.equals(this.fio, certificateInfo.fio) &&
-        Objects.equals(this.ogrn, certificateInfo.ogrn) &&
-        Objects.equals(this.ogrnIp, certificateInfo.ogrnIp) &&
-        Objects.equals(this.orgName, certificateInfo.orgName) &&
-        Objects.equals(this.rnsFss, certificateInfo.rnsFss);
+    Sender sender = (Sender) o;
+    return Objects.equals(this.inn, sender.inn) &&
+        Objects.equals(this.fio, sender.fio) &&
+        Objects.equals(this.kpp, sender.kpp) &&
+        Objects.equals(this.fullName, sender.fullName) &&
+        Objects.equals(this.ogrn, sender.ogrn) &&
+        Objects.equals(this.ogrnIp, sender.ogrnIp) &&
+        Objects.equals(this.rnsFss, sender.rnsFss) &&
+        Objects.equals(this.ertificate, sender.ertificate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, fio, ogrn, ogrnIp, orgName, rnsFss);
+    return Objects.hash(inn, fio, kpp, fullName, ogrn, ogrnIp, rnsFss, ertificate);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CertificateInfo {\n");
+    sb.append("class Sender {\n");
     
     sb.append("    inn: ").append(toIndentedString(inn)).append("\n");
     sb.append("    fio: ").append(toIndentedString(fio)).append("\n");
+    sb.append("    kpp: ").append(toIndentedString(kpp)).append("\n");
+    sb.append("    fullName: ").append(toIndentedString(fullName)).append("\n");
     sb.append("    ogrn: ").append(toIndentedString(ogrn)).append("\n");
     sb.append("    ogrnIp: ").append(toIndentedString(ogrnIp)).append("\n");
-    sb.append("    orgName: ").append(toIndentedString(orgName)).append("\n");
     sb.append("    rnsFss: ").append(toIndentedString(rnsFss)).append("\n");
+    sb.append("    ertificate: ").append(toIndentedString(ertificate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

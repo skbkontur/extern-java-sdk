@@ -22,73 +22,64 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import ru.skbkontur.sdk.extern.rest.swagger.model.CheckResultData;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 
 /**
- * AddressForeign
+ * PrepareResult
  */
 
-public class AddressForeign {
-  @SerializedName("country")
-  private String country = null;
+public class PrepareResult {
+  @SerializedName("check-result")
+  private CheckResultData checkResult = null;
 
-  @SerializedName("index")
-  private String index = null;
+  @SerializedName("links")
+  private List<Link> links = null;
 
-  @SerializedName("address")
-  private String address = null;
-
-  public AddressForeign country(String country) {
-    this.country = country;
+  public PrepareResult checkResult(CheckResultData checkResult) {
+    this.checkResult = checkResult;
     return this;
   }
 
    /**
-   * Get country
-   * @return country
+   * Get checkResult
+   * @return checkResult
   **/
   @ApiModelProperty(value = "")
-  public String getCountry() {
-    return country;
+  public CheckResultData getCheckResult() {
+    return checkResult;
   }
 
-  public void setCountry(String country) {
-    this.country = country;
+  public void setCheckResult(CheckResultData checkResult) {
+    this.checkResult = checkResult;
   }
 
-  public AddressForeign index(String index) {
-    this.index = index;
+  public PrepareResult links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public PrepareResult addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
     return this;
   }
 
    /**
-   * Get index
-   * @return index
+   * Get links
+   * @return links
   **/
   @ApiModelProperty(value = "")
-  public String getIndex() {
-    return index;
+  public List<Link> getLinks() {
+    return links;
   }
 
-  public void setIndex(String index) {
-    this.index = index;
-  }
-
-  public AddressForeign address(String address) {
-    this.address = address;
-    return this;
-  }
-
-   /**
-   * Get address
-   * @return address
-  **/
-  @ApiModelProperty(value = "")
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -100,26 +91,24 @@ public class AddressForeign {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AddressForeign addressForeign = (AddressForeign) o;
-    return Objects.equals(this.country, addressForeign.country) &&
-        Objects.equals(this.index, addressForeign.index) &&
-        Objects.equals(this.address, addressForeign.address);
+    PrepareResult prepareResult = (PrepareResult) o;
+    return Objects.equals(this.checkResult, prepareResult.checkResult) &&
+        Objects.equals(this.links, prepareResult.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(country, index, address);
+    return Objects.hash(checkResult, links);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AddressForeign {\n");
+    sb.append("class PrepareResult {\n");
     
-    sb.append("    country: ").append(toIndentedString(country)).append("\n");
-    sb.append("    index: ").append(toIndentedString(index)).append("\n");
-    sb.append("    address: ").append(toIndentedString(address)).append("\n");
+    sb.append("    checkResult: ").append(toIndentedString(checkResult)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }

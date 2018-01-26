@@ -7,30 +7,75 @@
     "host": "extern-api.testkontur.ru",
     "schemes": ["http"],
     "paths": {
+        "/": {
+            "get": {
+                "tags": ["Accounts"],
+                "operationId": "Root_Index",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Link"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": []
+            }
+        },
         "/v1": {
             "get": {
                 "tags": ["Accounts"],
                 "operationId": "Accounts_GetAll",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
+                "parameters": [],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/AccountList"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -51,24 +96,48 @@
                         "schema": {
                             "$ref": "#/definitions/CreateAccountRequestDto"
                         }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -90,24 +159,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -117,14 +204,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}": {
+        "/v1/{accountId}/docflows/{docflowId}": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetDocflow",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -135,24 +222,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -162,14 +267,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/documents": {
+        "/v1/{accountId}/docflows/{docflowId}/documents": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetDocuments",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -180,24 +285,45 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -207,14 +333,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/documents/{documentId}": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetDocument",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -231,24 +357,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Document"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -258,14 +402,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/documents/{documentId}/meta": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/meta": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetDocumentMeta",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -282,24 +426,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/DocumentMeta"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -309,14 +471,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/documents/{documentId}/signature": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signature": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetDocumentSignature",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -333,24 +495,45 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Link"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -360,14 +543,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/documents/{documentType}": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentType}": {
             "get": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_GetReplyDocument",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -389,24 +572,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Reply"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -416,14 +617,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/docflows/{docflowId}/send/{documentType}": {
+        "/v1/{accountId}/docflows/{docflowId}/send/{documentType}": {
             "post": {
                 "tags": ["Docflows"],
                 "operationId": "Docflows_SendReplyDocument",
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -452,24 +653,42 @@
                         "schema": {
                             "$ref": "#/definitions/DocumentToSend"
                         }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -479,473 +698,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}": {
-            "get": {
-                "tags": ["Documents"],
-                "operationId": "Documents_GetDocumentAsync",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Documents"],
-                "operationId": "Documents_PutDocument",
-                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentContents",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DocumentContents"
-                        }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "delete": {
-                "tags": ["Documents"],
-                "operationId": "Documents_DeleteDocument",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{billingAccountId}/drafts/{draftId}/documents": {
-            "post": {
-                "tags": ["Documents"],
-                "operationId": "Documents_AddDocument",
-                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentContents",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DocumentContents"
-                        }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}/content/decrypted": {
-            "get": {
-                "tags": ["Documents"],
-                "operationId": "Documents_GetDocumentContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Documents"],
-                "operationId": "Documents_PutDocumentContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}/content/encrypted": {
-            "get": {
-                "tags": ["Documents"],
-                "operationId": "Documents_GetEncryptedDocumentContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}/signature": {
-            "get": {
-                "tags": ["Documents"],
-                "operationId": "Documents_GetSignatureContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Documents"],
-                "operationId": "Documents_PutDocumentSignature",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "billingAccountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{billingAccountId}/drafts": {
+        "/v1/{accountId}/drafts": {
             "post": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_Create",
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -957,24 +717,48 @@
                         "schema": {
                             "$ref": "#/definitions/DraftMeta"
                         }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "object"
+                        }
+                    },
+                    "201": {
+                        "description": "Черновик успешно создан",
+                        "schema": {
+                            "$ref": "#/definitions/Draft"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -984,14 +768,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/{draftId}": {
+        "/v1/{accountId}/drafts/{draftId}": {
             "get": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_GetDraft",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1002,24 +786,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Draft"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1034,7 +836,7 @@
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1045,24 +847,39 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1072,14 +889,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/{draftId}/meta": {
+        "/v1/{accountId}/drafts/{draftId}/meta": {
             "get": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_GetMeta",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1090,24 +907,42 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1122,7 +957,7 @@
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1140,24 +975,42 @@
                         "schema": {
                             "$ref": "#/definitions/DraftMeta"
                         }
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1167,14 +1020,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/{draftId}/check": {
+        "/v1/{accountId}/drafts/{draftId}/check": {
             "post": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_Check",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1190,24 +1043,48 @@
                         "in": "query",
                         "required": false,
                         "type": "boolean"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "object"
+                        }
+                    },
+                    "202": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CheckResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1217,14 +1094,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/{draftId}/prepare": {
+        "/v1/{accountId}/drafts/{draftId}/prepare": {
             "post": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_Prepare",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1240,24 +1117,42 @@
                         "in": "query",
                         "required": false,
                         "type": "boolean"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/PrepareResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1267,14 +1162,14 @@
                     }]
             }
         },
-        "/v1/{billingAccountId}/drafts/drafts/{draftId}/send": {
+        "/v1/{accountId}/drafts/{draftId}/send": {
             "post": {
                 "tags": ["Drafts"],
                 "operationId": "Drafts_Send",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "billingAccountId",
+                        "name": "accountId",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1295,24 +1190,42 @@
                         "in": "query",
                         "required": false,
                         "type": "boolean"
-                    }, {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": "auth.sid "
-                    }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
-                        "required": true,
-                        "type": "string",
-                        "default": ""
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Успешно получен протокол контроля",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1322,30 +1235,210 @@
                     }]
             }
         },
-        "/_status/ping": {
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}": {
             "get": {
-                "tags": ["Monitoring"],
-                "operationId": "Monitoring_Ping",
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "Authorization",
-                        "in": "header",
+                        "name": "accountId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": "auth.sid "
+                        "format": "uuid"
                     }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
+                        "name": "draftId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": ""
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "delete": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_DeleteDocument",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1355,30 +1448,73 @@
                     }]
             }
         },
-        "/_status/version": {
-            "get": {
-                "tags": ["Monitoring"],
-                "operationId": "Monitoring_Version",
-                "consumes": [],
+        "/v1/{accountId}/drafts/{draftId}/documents": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_AddDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "Authorization",
-                        "in": "header",
+                        "name": "accountId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": "auth.sid "
+                        "format": "uuid"
                     }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
+                        "name": "draftId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": ""
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
                     }],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "object"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1388,30 +1524,130 @@
                     }]
             }
         },
-        "/_status/stat": {
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted": {
             "get": {
-                "tags": ["Monitoring"],
-                "operationId": "Monitoring_Stat",
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentContent",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "Authorization",
-                        "in": "header",
+                        "name": "accountId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": "auth.sid "
+                        "format": "uuid"
                     }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
+                        "name": "draftId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": ""
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1421,30 +1657,199 @@
                     }]
             }
         },
-        "/": {
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted": {
             "get": {
-                "tags": ["Root"],
-                "operationId": "Root_Index",
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetEncryptedDocumentContent",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
-                        "name": "Authorization",
-                        "in": "header",
+                        "name": "accountId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": "auth.sid "
+                        "format": "uuid"
                     }, {
-                        "name": "X-Kontur-Apikey",
-                        "in": "header",
+                        "name": "draftId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
-                        "default": ""
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
                     }],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "",
                         "schema": {
-                            "type": "object"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetSignatureContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentSignature",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Не доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     }
                 },
@@ -1456,7 +1861,78 @@
         }
     },
     "definitions": {
+        "Link": {
+            "type": "object",
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "rel": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "title": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "profile": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "templated": {
+                    "type": "boolean",
+                    "readOnly": true
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/Urn"
+                },
+                "status-code": {
+                    "enum": ["continue", "switchingProtocols", "oK", "created", "accepted", "nonAuthoritativeInformation", "noContent", "resetContent", "partialContent", "multipleChoices", "ambiguous", "movedPermanently", "moved", "found", "redirect", "seeOther", "redirectMethod", "notModified", "useProxy", "unused", "temporaryRedirect", "redirectKeepVerb", "badRequest", "unauthorized", "paymentRequired", "forbidden", "notFound", "methodNotAllowed", "notAcceptable", "proxyAuthenticationRequired", "requestTimeout", "conflict", "gone", "lengthRequired", "preconditionFailed", "requestEntityTooLarge", "requestUriTooLong", "unsupportedMediaType", "requestedRangeNotSatisfiable", "expectationFailed", "upgradeRequired", "internalServerError", "notImplemented", "badGateway", "serviceUnavailable", "gatewayTimeout", "httpVersionNotSupported"],
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "track-id": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Urn": {
+            "type": "object",
+            "properties": {
+                "nid": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "nss": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "value": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
         "CreateAccountRequestDto": {
+            "required": ["inn", "organization-name"],
             "type": "object",
             "properties": {
                 "inn": {
@@ -1509,35 +1985,6 @@
                 }
             }
         },
-        "Link": {
-            "type": "object",
-            "properties": {
-                "href": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "rel": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "name": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "title": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "profile": {
-                    "type": "string",
-                    "readOnly": true
-                },
-                "templated": {
-                    "type": "boolean",
-                    "readOnly": true
-                }
-            }
-        },
         "AccountList": {
             "type": "object",
             "properties": {
@@ -1561,7 +2008,7 @@
                 }
             }
         },
-        "DocumentToSend": {
+        "Docflow": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1569,15 +2016,91 @@
                     "type": "string",
                     "example": "00000000-0000-0000-0000-000000000000"
                 },
-                "content": {
-                    "format": "byte",
+                "type": {
+                    "$ref": "#/definitions/Urn"
+                },
+                "status": {
+                    "$ref": "#/definitions/Urn"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocflowDescription"
+                },
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Document"
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "send-date": {
+                    "format": "date-time",
                     "type": "string"
+                },
+                "last-change-date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "sent-by-draft": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "DocflowDescription": {
+            "type": "object",
+            "properties": {}
+        },
+        "Document": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                },
+                "content": {
+                    "$ref": "#/definitions/Content"
+                },
+                "signatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Signature"
+                    }
+                }
+            }
+        },
+        "DocumentDescription": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/Urn"
                 },
                 "filename": {
                     "type": "string"
                 },
-                "signature": {
-                    "$ref": "#/definitions/Signature"
+                "content-type": {
+                    "type": "string"
+                },
+                "compression-type": {
+                    "$ref": "#/definitions/Urn"
+                }
+            }
+        },
+        "Content": {
+            "type": "object",
+            "properties": {
+                "decrypted": {
+                    "$ref": "#/definitions/Link"
+                },
+                "encrypted": {
+                    "$ref": "#/definitions/Link"
                 }
             }
         },
@@ -1598,20 +2121,6 @@
                 }
             }
         },
-        "DocumentContents": {
-            "type": "object",
-            "properties": {
-                "base64-content": {
-                    "type": "string"
-                },
-                "signature": {
-                    "type": "string"
-                },
-                "meta": {
-                    "$ref": "#/definitions/DocumentMeta"
-                }
-            }
-        },
         "DocumentMeta": {
             "type": "object",
             "properties": {
@@ -1624,36 +2133,51 @@
                 "content-type": {
                     "type": "string"
                 },
-                "encrypted": {
-                    "type": "boolean"
-                },
                 "compression-type": {
                     "$ref": "#/definitions/Urn"
                 }
             }
         },
-        "Urn": {
+        "Reply": {
             "type": "object",
             "properties": {
-                "nid": {
-                    "type": "string",
-                    "readOnly": true
+                "document": {
+                    "$ref": "#/definitions/DocumentToSend"
                 },
-                "nss": {
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "DocumentToSend": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
                     "type": "string",
-                    "readOnly": true
+                    "example": "00000000-0000-0000-0000-000000000000"
                 },
-                "value": {
-                    "type": "string",
-                    "readOnly": true
+                "content": {
+                    "format": "byte",
+                    "type": "string"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "signature": {
+                    "$ref": "#/definitions/Signature"
                 }
             }
         },
         "DraftMeta": {
+            "required": ["sender", "recipient", "organization"],
             "type": "object",
             "properties": {
                 "sender": {
-                    "$ref": "#/definitions/SenderInfo"
+                    "$ref": "#/definitions/Sender"
                 },
                 "recipient": {
                     "$ref": "#/definitions/RecipientInfo"
@@ -1663,16 +2187,14 @@
                 }
             }
         },
-        "SenderInfo": {
+        "Sender": {
             "type": "object",
             "properties": {
-                "type": {
-                    "format": "int32",
-                    "enum": [1, 2, 3, 4],
-                    "type": "integer"
-                },
                 "inn": {
                     "type": "string"
+                },
+                "fio": {
+                    "$ref": "#/definitions/Fio"
                 },
                 "kpp": {
                     "type": "string"
@@ -1680,8 +2202,17 @@
                 "full-name": {
                     "type": "string"
                 },
-                "signer": {
-                    "$ref": "#/definitions/SignerInfo"
+                "ogrn": {
+                    "type": "string"
+                },
+                "ogrn-ip": {
+                    "type": "string"
+                },
+                "rns-fss": {
+                    "type": "string"
+                },
+                "сertificate": {
+                    "$ref": "#/definitions/Certificate"
                 }
             }
         },
@@ -1706,15 +2237,14 @@
             }
         },
         "AccountInfo": {
+            "required": ["inn"],
             "type": "object",
             "properties": {
-                "type": {
-                    "format": "int32",
-                    "enum": [1, 2, 3, 4],
-                    "type": "integer"
-                },
                 "inn": {
                     "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/OrganizationInfo"
                 },
                 "full-name": {
                     "type": "string"
@@ -1722,254 +2252,7 @@
                 "short-name": {
                     "type": "string"
                 },
-                "ogrn": {
-                    "type": "string"
-                },
-                "okato": {
-                    "type": "string"
-                },
                 "oktmo": {
-                    "type": "string"
-                },
-                "okved": {
-                    "type": "string"
-                },
-                "okpo": {
-                    "type": "string"
-                },
-                "chief": {
-                    "$ref": "#/definitions/EmployeeInfo"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "address-registration": {
-                    "$ref": "#/definitions/Address"
-                },
-                "address-actual": {
-                    "$ref": "#/definitions/Address"
-                },
-                "pfr": {
-                    "$ref": "#/definitions/PfrInfo"
-                },
-                "fss": {
-                    "$ref": "#/definitions/FssInfo"
-                },
-                "fns": {
-                    "$ref": "#/definitions/FnsInfo"
-                },
-                "oms": {
-                    "$ref": "#/definitions/OmsInfo"
-                },
-                "organization": {
-                    "$ref": "#/definitions/OrganizationInfo"
-                },
-                "individual": {
-                    "$ref": "#/definitions/IndividualInfo"
-                }
-            }
-        },
-        "SignerInfo": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "format": "int32",
-                    "enum": [0, 1, 2],
-                    "type": "integer"
-                },
-                "certificate": {
-                    "$ref": "#/definitions/CertificateInfo"
-                }
-            }
-        },
-        "EmployeeInfo": {
-            "type": "object",
-            "properties": {
-                "inn": {
-                    "type": "string"
-                },
-                "fio": {
-                    "$ref": "#/definitions/Fio"
-                },
-                "position": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "birth-date": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "birth-place": {
-                    "type": "string"
-                },
-                "gender": {
-                    "format": "int32",
-                    "enum": [0, 1, 2],
-                    "type": "integer"
-                },
-                "citizenship-code": {
-                    "type": "string"
-                },
-                "passport": {
-                    "$ref": "#/definitions/PassportInfo"
-                },
-                "address-registration": {
-                    "$ref": "#/definitions/Address"
-                },
-                "address-foreign": {
-                    "$ref": "#/definitions/AddressForeign"
-                }
-            }
-        },
-        "Address": {
-            "type": "object",
-            "properties": {
-                "country": {
-                    "type": "string"
-                },
-                "index": {
-                    "type": "string"
-                },
-                "region": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "district": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "city": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "settlement": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "street": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "house-range": {
-                    "$ref": "#/definitions/AddressItem"
-                },
-                "house": {
-                    "type": "string"
-                },
-                "building": {
-                    "type": "string"
-                },
-                "flat": {
-                    "type": "string"
-                }
-            }
-        },
-        "PfrInfo": {
-            "type": "object",
-            "properties": {
-                "category-code": {
-                    "type": "string"
-                },
-                "registration-number": {
-                    "type": "string"
-                },
-                "registration-number-ip": {
-                    "type": "string"
-                }
-            }
-        },
-        "FssInfo": {
-            "type": "object",
-            "properties": {
-                "registration-number": {
-                    "type": "string"
-                },
-                "additional-code": {
-                    "type": "string"
-                },
-                "dependency-code": {
-                    "type": "string"
-                },
-                "representative": {
-                    "$ref": "#/definitions/EmployeeInfo"
-                }
-            }
-        },
-        "FnsInfo": {
-            "type": "object",
-            "properties": {
-                "representative": {
-                    "$ref": "#/definitions/EmployeeInfo"
-                },
-                "representative-document": {
-                    "$ref": "#/definitions/RepresentativeDocumentInfo"
-                }
-            }
-        },
-        "OmsInfo": {
-            "type": "object",
-            "properties": {
-                "tfoms": {
-                    "type": "string"
-                }
-            }
-        },
-        "OrganizationInfo": {
-            "type": "object",
-            "properties": {
-                "kpp": {
-                    "type": "string"
-                },
-                "kpp-object": {
-                    "type": "string"
-                },
-                "kpp-another": {
-                    "type": "string"
-                },
-                "okopf": {
-                    "type": "string"
-                },
-                "okfs": {
-                    "type": "string"
-                },
-                "bookkeeper": {
-                    "$ref": "#/definitions/EmployeeInfo"
-                },
-                "separate-department": {
-                    "$ref": "#/definitions/SeparateDepartmentInfo"
-                },
-                "credit-organization": {
-                    "$ref": "#/definitions/CreditOrganizationInfo"
-                }
-            }
-        },
-        "IndividualInfo": {
-            "type": "object",
-            "properties": {
-                "policy-number": {
-                    "type": "string"
-                }
-            }
-        },
-        "CertificateInfo": {
-            "type": "object",
-            "properties": {
-                "inn": {
-                    "type": "string"
-                },
-                "fio": {
-                    "$ref": "#/definitions/Fio"
-                },
-                "ogrn": {
-                    "type": "string"
-                },
-                "ogrn-ip": {
-                    "type": "string"
-                },
-                "org-name": {
-                    "type": "string"
-                },
-                "rns-fss": {
                     "type": "string"
                 }
             }
@@ -1988,92 +2271,171 @@
                 }
             }
         },
-        "PassportInfo": {
+        "Certificate": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "series-number": {
-                    "type": "string"
-                },
-                "issued-date": {
-                    "format": "date-time",
-                    "type": "string"
-                },
-                "issued-by": {
+                "content": {
                     "type": "string"
                 }
             }
         },
-        "AddressForeign": {
-            "type": "object",
-            "properties": {
-                "country": {
-                    "type": "string"
-                },
-                "index": {
-                    "type": "string"
-                },
-                "address": {
-                    "type": "string"
-                }
-            }
-        },
-        "AddressItem": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "fias-code": {
-                    "format": "uuid",
-                    "type": "string",
-                    "example": "00000000-0000-0000-0000-000000000000"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "abbreviation": {
-                    "type": "string"
-                }
-            }
-        },
-        "RepresentativeDocumentInfo": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "SeparateDepartmentInfo": {
+        "OrganizationInfo": {
             "type": "object",
             "properties": {
                 "kpp": {
                     "type": "string"
+                }
+            }
+        },
+        "Draft": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
                 },
-                "full-name": {
+                "docflows": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/DraftMeta"
+                },
+                "status": {
+                    "enum": ["new", "checked", "readyToSend", "sent"],
                     "type": "string"
                 },
-                "department-code": {
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "CheckResult": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/CheckResultData"
+                }
+            }
+        },
+        "CheckResultData": {
+            "type": "object",
+            "properties": {
+                "documents-errors": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/CheckError"
+                        }
+                    }
+                },
+                "common-errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CheckError"
+                    }
+                }
+            }
+        },
+        "CheckError": {
+            "type": "object",
+            "properties": {
+                "description": {
                     "type": "string"
                 },
-                "phone": {
+                "source": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }
         },
-        "CreditOrganizationInfo": {
+        "PrepareResult": {
             "type": "object",
             "properties": {
-                "registration-number": {
-                    "type": "string"
+                "check-result": {
+                    "$ref": "#/definitions/CheckResultData"
                 },
-                "bik": {
-                    "type": "string"
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
                 }
             }
+        },
+        "DraftDocument": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "decrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "encrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "signature-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "meta": {
+                    "$ref": "#/definitions/DocumentMeta"
+                }
+            }
+        },
+        "DocumentContents": {
+            "type": "object",
+            "properties": {
+                "base64-content": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/DocumentMeta"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "apiKey": {
+            "type": "apiKey",
+            "description": "Servie API Key Authentication",
+            "name": "X-Kontur-Apikey",
+            "in": "header"
+        },
+        "auth.sid": {
+            "type": "apiKey",
+            "description": "user session authentication",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

@@ -22,31 +22,32 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import ru.skbkontur.sdk.extern.rest.swagger.model.CheckResultData;
 
 /**
- * OrganizationInfo
+ * CheckResult
  */
 
-public class OrganizationInfo {
-  @SerializedName("kpp")
-  private String kpp = null;
+public class CheckResult {
+  @SerializedName("data")
+  private CheckResultData data = null;
 
-  public OrganizationInfo kpp(String kpp) {
-    this.kpp = kpp;
+  public CheckResult data(CheckResultData data) {
+    this.data = data;
     return this;
   }
 
    /**
-   * Get kpp
-   * @return kpp
+   * Get data
+   * @return data
   **/
   @ApiModelProperty(value = "")
-  public String getKpp() {
-    return kpp;
+  public CheckResultData getData() {
+    return data;
   }
 
-  public void setKpp(String kpp) {
-    this.kpp = kpp;
+  public void setData(CheckResultData data) {
+    this.data = data;
   }
 
 
@@ -58,22 +59,22 @@ public class OrganizationInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OrganizationInfo organizationInfo = (OrganizationInfo) o;
-    return Objects.equals(this.kpp, organizationInfo.kpp);
+    CheckResult checkResult = (CheckResult) o;
+    return Objects.equals(this.data, checkResult.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kpp);
+    return Objects.hash(data);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OrganizationInfo {\n");
+    sb.append("class CheckResult {\n");
     
-    sb.append("    kpp: ").append(toIndentedString(kpp)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

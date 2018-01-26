@@ -27,7 +27,14 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import ru.skbkontur.sdk.extern.rest.swagger.model.CheckResult;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentContents;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Draft;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DraftDocument;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Error;
+import ru.skbkontur.sdk.extern.rest.swagger.model.PrepareResult;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -56,194 +63,26 @@ public class DraftsApi {
     }
 
     /**
-     * Build call for draftsCheck
-     * @param billingAccountId  (required)
+     * Build call for draftDocumentsAddDocument
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @param deffered  (optional)
+     * @param documentContents  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsCheckCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        Object localVarPostBody = null;
+    public com.squareup.okhttp.Call draftDocumentsAddDocumentCall(UUID accountId, UUID draftId, DocumentContents documentContents, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = documentContents;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}/check"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        if (deffered != null)
-        localVarQueryParams.addAll(apiClient.parameterToPairs("", "deffered", deffered));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
-
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-        final String[] localVarAccepts = {
-            "application/json", "text/json"
-        };
-        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
-                @Override
-                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
-                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
-                    return originalResponse.newBuilder()
-                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
-                    .build();
-                }
-            });
-        }
-
-        String[] localVarAuthNames = new String[] {  };
-        return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsCheckValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsCheck(Async)");
-        }
-        
-        // verify the required parameter 'draftId' is set
-        if (draftId == null) {
-            throw new ApiException("Missing the required parameter 'draftId' when calling draftsCheck(Async)");
-        }
-        
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsCheck(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsCheck(Async)");
-        }
-        
-        
-        com.squareup.okhttp.Call call = draftsCheckCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, progressListener, progressRequestListener);
-        return call;
-
-        
-        
-        
-        
-    }
-
-    /**
-     * 
-     * 
-     * @param billingAccountId  (required)
-     * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @param deffered  (optional)
-     * @return Object
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     */
-    public Object draftsCheck(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered) throws ApiException {
-        ApiResponse<Object> resp = draftsCheckWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey, deffered);
-        return resp.getData();
-    }
-
-    /**
-     * 
-     * 
-     * @param billingAccountId  (required)
-     * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @param deffered  (optional)
-     * @return ApiResponse&lt;Object&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     */
-    public ApiResponse<Object> draftsCheckWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered) throws ApiException {
-        com.squareup.okhttp.Call call = draftsCheckValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        return apiClient.execute(call, localVarReturnType);
-    }
-
-    /**
-     *  (asynchronously)
-     * 
-     * @param billingAccountId  (required)
-     * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @param deffered  (optional)
-     * @param callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     */
-    public com.squareup.okhttp.Call draftsCheckAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ApiCallback<Object> callback) throws ApiException {
-
-        ProgressResponseBody.ProgressListener progressListener = null;
-        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
-
-        if (callback != null) {
-            progressListener = new ProgressResponseBody.ProgressListener() {
-                @Override
-                public void update(long bytesRead, long contentLength, boolean done) {
-                    callback.onDownloadProgress(bytesRead, contentLength, done);
-                }
-            };
-
-            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
-                @Override
-                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
-                    callback.onUploadProgress(bytesWritten, contentLength, done);
-                }
-            };
-        }
-
-        com.squareup.okhttp.Call call = draftsCheckValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        apiClient.executeAsync(call, localVarReturnType, callback);
-        return call;
-    }
-    /**
-     * Build call for draftsCreate
-     * @param billingAccountId  (required)
-     * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @param progressListener Progress listener
-     * @param progressRequestListener Progress request listener
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     */
-    public com.squareup.okhttp.Call draftsCreateCall(UUID billingAccountId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        Object localVarPostBody = clientInfo;
-        
-        // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()));
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -271,35 +110,30 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsCreateValidateBeforeCall(UUID billingAccountId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsAddDocumentValidateBeforeCall(UUID accountId, UUID draftId, DocumentContents documentContents, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsCreate(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsAddDocument(Async)");
         }
         
-        // verify the required parameter 'clientInfo' is set
-        if (clientInfo == null) {
-            throw new ApiException("Missing the required parameter 'clientInfo' when calling draftsCreate(Async)");
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsAddDocument(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsCreate(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsCreate(Async)");
+        // verify the required parameter 'documentContents' is set
+        if (documentContents == null) {
+            throw new ApiException("Missing the required parameter 'documentContents' when calling draftDocumentsAddDocument(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = draftsCreateCall(billingAccountId, clientInfo, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsAddDocumentCall(accountId, draftId, documentContents, progressListener, progressRequestListener);
         return call;
 
         
@@ -311,30 +145,28 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
-     * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentContents  (required)
      * @return Object
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsCreate(UUID billingAccountId, DraftMeta clientInfo, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Object> resp = draftsCreateWithHttpInfo(billingAccountId, clientInfo, authorization, xKonturApikey);
+    public Object draftDocumentsAddDocument(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
+        ApiResponse<Object> resp = draftDocumentsAddDocumentWithHttpInfo(accountId, draftId, documentContents);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
-     * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentContents  (required)
      * @return ApiResponse&lt;Object&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsCreateWithHttpInfo(UUID billingAccountId, DraftMeta clientInfo, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(billingAccountId, clientInfo, authorization, xKonturApikey, null, null);
+    public ApiResponse<Object> draftDocumentsAddDocumentWithHttpInfo(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsAddDocumentValidateBeforeCall(accountId, draftId, documentContents, null, null);
         Type localVarReturnType = new TypeToken<Object>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -342,15 +174,14 @@ public class DraftsApi {
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
-     * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentContents  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsCreateAsync(UUID billingAccountId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsAddDocumentAsync(UUID accountId, UUID draftId, DocumentContents documentContents, final ApiCallback<Object> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -371,37 +202,33 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(billingAccountId, clientInfo, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsAddDocumentValidateBeforeCall(accountId, draftId, documentContents, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Object>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for draftsDeleteDraft
-     * @param billingAccountId  (required)
+     * Build call for draftDocumentsDeleteDocument
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsDeleteDraftCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsDeleteDocumentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
-            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -429,35 +256,30 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsDeleteDraftValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsDeleteDocumentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsDeleteDraft(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsDeleteDocument(Async)");
         }
         
         // verify the required parameter 'draftId' is set
         if (draftId == null) {
-            throw new ApiException("Missing the required parameter 'draftId' when calling draftsDeleteDraft(Async)");
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsDeleteDocument(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsDeleteDraft(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsDeleteDraft(Async)");
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsDeleteDocument(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = draftsDeleteDraftCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsDeleteDocumentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -469,46 +291,40 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return Object
+     * @param documentId  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsDeleteDraft(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Object> resp = draftsDeleteDraftWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey);
-        return resp.getData();
+    public void draftDocumentsDeleteDocument(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        draftDocumentsDeleteDocumentWithHttpInfo(accountId, draftId, documentId);
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @param documentId  (required)
+     * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsDeleteDraftWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = draftsDeleteDraftValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        return apiClient.execute(call, localVarReturnType);
+    public ApiResponse<Void> draftDocumentsDeleteDocumentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsDeleteDocumentValidateBeforeCall(accountId, draftId, documentId, null, null);
+        return apiClient.execute(call);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsDeleteDraftAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsDeleteDocumentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -529,37 +345,32 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsDeleteDraftValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
-        apiClient.executeAsync(call, localVarReturnType, callback);
+        com.squareup.okhttp.Call call = draftDocumentsDeleteDocumentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        apiClient.executeAsync(call, callback);
         return call;
     }
     /**
-     * Build call for draftsGetDraft
-     * @param billingAccountId  (required)
+     * Build call for draftDocumentsGetDocumentAsync
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsGetDraftCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsGetDocumentAsyncCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
-            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -587,35 +398,30 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsGetDraftValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsGetDocumentAsyncValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsGetDraft(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsGetDocumentAsync(Async)");
         }
         
         // verify the required parameter 'draftId' is set
         if (draftId == null) {
-            throw new ApiException("Missing the required parameter 'draftId' when calling draftsGetDraft(Async)");
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsGetDocumentAsync(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsGetDraft(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsGetDraft(Async)");
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsGetDocumentAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = draftsGetDraftCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentAsyncCall(accountId, draftId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -627,46 +433,43 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return Object
+     * @param documentId  (required)
+     * @return DraftDocument
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsGetDraft(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Object> resp = draftsGetDraftWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey);
+    public DraftDocument draftDocumentsGetDocumentAsync(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        ApiResponse<DraftDocument> resp = draftDocumentsGetDocumentAsyncWithHttpInfo(accountId, draftId, documentId);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @param documentId  (required)
+     * @return ApiResponse&lt;DraftDocument&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsGetDraftWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = draftsGetDraftValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+    public ApiResponse<DraftDocument> draftDocumentsGetDocumentAsyncWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentAsyncValidateBeforeCall(accountId, draftId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsGetDraftAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsGetDocumentAsyncAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<DraftDocument> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -687,37 +490,33 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsGetDraftValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentAsyncValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for draftsGetMeta
-     * @param billingAccountId  (required)
+     * Build call for draftDocumentsGetDocumentContent
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsGetMetaCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsGetDocumentContentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}/meta"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
-            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -745,35 +544,30 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsGetMetaValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsGetDocumentContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsGetMeta(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsGetDocumentContent(Async)");
         }
         
         // verify the required parameter 'draftId' is set
         if (draftId == null) {
-            throw new ApiException("Missing the required parameter 'draftId' when calling draftsGetMeta(Async)");
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsGetDocumentContent(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsGetMeta(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsGetMeta(Async)");
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsGetDocumentContent(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = draftsGetMetaCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentContentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -785,46 +579,43 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return Object
+     * @param documentId  (required)
+     * @return String
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsGetMeta(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Object> resp = draftsGetMetaWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey);
+    public String draftDocumentsGetDocumentContent(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        ApiResponse<String> resp = draftDocumentsGetDocumentContentWithHttpInfo(accountId, draftId, documentId);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @param documentId  (required)
+     * @return ApiResponse&lt;String&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsGetMetaWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = draftsGetMetaValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+    public ApiResponse<String> draftDocumentsGetDocumentContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentContentValidateBeforeCall(accountId, draftId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsGetMetaAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsGetDocumentContentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<String> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -845,29 +636,758 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsGetMetaValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        com.squareup.okhttp.Call call = draftDocumentsGetDocumentContentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for draftsPrepare
-     * @param billingAccountId  (required)
+     * Build call for draftDocumentsGetEncryptedDocumentContent
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsGetEncryptedDocumentContentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftDocumentsGetEncryptedDocumentContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsGetEncryptedDocumentContent(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsGetEncryptedDocumentContent(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsGetEncryptedDocumentContent(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftDocumentsGetEncryptedDocumentContentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return String
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public String draftDocumentsGetEncryptedDocumentContent(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        ApiResponse<String> resp = draftDocumentsGetEncryptedDocumentContentWithHttpInfo(accountId, draftId, documentId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;String&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<String> draftDocumentsGetEncryptedDocumentContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsGetEncryptedDocumentContentValidateBeforeCall(accountId, draftId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsGetEncryptedDocumentContentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<String> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftDocumentsGetEncryptedDocumentContentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftDocumentsGetSignatureContent
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsGetSignatureContentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftDocumentsGetSignatureContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsGetSignatureContent(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsGetSignatureContent(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsGetSignatureContent(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftDocumentsGetSignatureContentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return String
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public String draftDocumentsGetSignatureContent(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        ApiResponse<String> resp = draftDocumentsGetSignatureContentWithHttpInfo(accountId, draftId, documentId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;String&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<String> draftDocumentsGetSignatureContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsGetSignatureContentValidateBeforeCall(accountId, draftId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsGetSignatureContentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<String> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftDocumentsGetSignatureContentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftDocumentsPutDocument
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param documentContents  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentCall(UUID accountId, UUID draftId, UUID documentId, DocumentContents documentContents, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = documentContents;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json", "text/json", "application/x-www-form-urlencoded"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftDocumentsPutDocumentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, DocumentContents documentContents, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsPutDocument(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsPutDocument(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsPutDocument(Async)");
+        }
+        
+        // verify the required parameter 'documentContents' is set
+        if (documentContents == null) {
+            throw new ApiException("Missing the required parameter 'documentContents' when calling draftDocumentsPutDocument(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentCall(accountId, draftId, documentId, documentContents, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param documentContents  (required)
+     * @return DraftDocument
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public DraftDocument draftDocumentsPutDocument(UUID accountId, UUID draftId, UUID documentId, DocumentContents documentContents) throws ApiException {
+        ApiResponse<DraftDocument> resp = draftDocumentsPutDocumentWithHttpInfo(accountId, draftId, documentId, documentContents);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param documentContents  (required)
+     * @return ApiResponse&lt;DraftDocument&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<DraftDocument> draftDocumentsPutDocumentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId, DocumentContents documentContents) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentValidateBeforeCall(accountId, draftId, documentId, documentContents, null, null);
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param documentContents  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentAsync(UUID accountId, UUID draftId, UUID documentId, DocumentContents documentContents, final ApiCallback<DraftDocument> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentValidateBeforeCall(accountId, draftId, documentId, documentContents, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftDocumentsPutDocumentContent
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftDocumentsPutDocumentContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsPutDocumentContent(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsPutDocumentContent(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsPutDocumentContent(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public void draftDocumentsPutDocumentContent(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        draftDocumentsPutDocumentContentWithHttpInfo(accountId, draftId, documentId);
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Void> draftDocumentsPutDocumentContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, null, null);
+        return apiClient.execute(call);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<Void> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        apiClient.executeAsync(call, callback);
+        return call;
+    }
+    /**
+     * Build call for draftDocumentsPutDocumentSignature
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftDocumentsPutDocumentSignature(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftDocumentsPutDocumentSignature(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsPutDocumentSignature(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public void draftDocumentsPutDocumentSignature(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        draftDocumentsPutDocumentSignatureWithHttpInfo(accountId, draftId, documentId);
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Void> draftDocumentsPutDocumentSignatureWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, null, null);
+        return apiClient.execute(call);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<Void> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        apiClient.executeAsync(call, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsCheck
+     * @param accountId  (required)
+     * @param draftId  (required)
      * @param deffered  (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsPrepareCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftsCheckCall(UUID accountId, UUID draftId, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}/prepare"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/check"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -875,10 +1395,6 @@ public class DraftsApi {
         localVarQueryParams.addAll(apiClient.parameterToPairs("", "deffered", deffered));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -906,35 +1422,25 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsPrepareValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftsCheckValidateBeforeCall(UUID accountId, UUID draftId, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsPrepare(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsCheck(Async)");
         }
         
         // verify the required parameter 'draftId' is set
         if (draftId == null) {
-            throw new ApiException("Missing the required parameter 'draftId' when calling draftsPrepare(Async)");
-        }
-        
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsPrepare(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsPrepare(Async)");
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftsCheck(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = draftsPrepareCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsCheckCall(accountId, draftId, deffered, progressListener, progressRequestListener);
         return call;
 
         
@@ -946,32 +1452,28 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @return Object
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsPrepare(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered) throws ApiException {
-        ApiResponse<Object> resp = draftsPrepareWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey, deffered);
+    public Object draftsCheck(UUID accountId, UUID draftId, Boolean deffered) throws ApiException {
+        ApiResponse<Object> resp = draftsCheckWithHttpInfo(accountId, draftId, deffered);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @return ApiResponse&lt;Object&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsPrepareWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered) throws ApiException {
-        com.squareup.okhttp.Call call = draftsPrepareValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, null, null);
+    public ApiResponse<Object> draftsCheckWithHttpInfo(UUID accountId, UUID draftId, Boolean deffered) throws ApiException {
+        com.squareup.okhttp.Call call = draftsCheckValidateBeforeCall(accountId, draftId, deffered, null, null);
         Type localVarReturnType = new TypeToken<Object>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -979,16 +1481,14 @@ public class DraftsApi {
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsPrepareAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsCheckAsync(UUID accountId, UUID draftId, Boolean deffered, final ApiCallback<Object> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1009,17 +1509,696 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsPrepareValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsCheckValidateBeforeCall(accountId, draftId, deffered, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Object>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for draftsSend
-     * @param billingAccountId  (required)
+     * Build call for draftsCreate
+     * @param accountId  (required)
+     * @param clientInfo  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftsCreateCall(UUID accountId, DraftMeta clientInfo, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = clientInfo;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            "application/json", "text/json", "application/x-www-form-urlencoded"
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftsCreateValidateBeforeCall(UUID accountId, DraftMeta clientInfo, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsCreate(Async)");
+        }
+        
+        // verify the required parameter 'clientInfo' is set
+        if (clientInfo == null) {
+            throw new ApiException("Missing the required parameter 'clientInfo' when calling draftsCreate(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftsCreateCall(accountId, clientInfo, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param clientInfo  (required)
+     * @return Object
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Object draftsCreate(UUID accountId, DraftMeta clientInfo) throws ApiException {
+        ApiResponse<Object> resp = draftsCreateWithHttpInfo(accountId, clientInfo);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param clientInfo  (required)
+     * @return ApiResponse&lt;Object&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Object> draftsCreateWithHttpInfo(UUID accountId, DraftMeta clientInfo) throws ApiException {
+        com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(accountId, clientInfo, null, null);
+        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param clientInfo  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsCreateAsync(UUID accountId, DraftMeta clientInfo, final ApiCallback<Object> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(accountId, clientInfo, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsDeleteDraft
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftsDeleteDraftCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftsDeleteDraftValidateBeforeCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsDeleteDraft(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftsDeleteDraft(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftsDeleteDraftCall(accountId, draftId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public void draftsDeleteDraft(UUID accountId, UUID draftId) throws ApiException {
+        draftsDeleteDraftWithHttpInfo(accountId, draftId);
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Void> draftsDeleteDraftWithHttpInfo(UUID accountId, UUID draftId) throws ApiException {
+        com.squareup.okhttp.Call call = draftsDeleteDraftValidateBeforeCall(accountId, draftId, null, null);
+        return apiClient.execute(call);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsDeleteDraftAsync(UUID accountId, UUID draftId, final ApiCallback<Void> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsDeleteDraftValidateBeforeCall(accountId, draftId, progressListener, progressRequestListener);
+        apiClient.executeAsync(call, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsGetDraft
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftsGetDraftCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftsGetDraftValidateBeforeCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsGetDraft(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftsGetDraft(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftsGetDraftCall(accountId, draftId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @return Draft
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Draft draftsGetDraft(UUID accountId, UUID draftId) throws ApiException {
+        ApiResponse<Draft> resp = draftsGetDraftWithHttpInfo(accountId, draftId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @return ApiResponse&lt;Draft&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Draft> draftsGetDraftWithHttpInfo(UUID accountId, UUID draftId) throws ApiException {
+        com.squareup.okhttp.Call call = draftsGetDraftValidateBeforeCall(accountId, draftId, null, null);
+        Type localVarReturnType = new TypeToken<Draft>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsGetDraftAsync(UUID accountId, UUID draftId, final ApiCallback<Draft> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsGetDraftValidateBeforeCall(accountId, draftId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Draft>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsGetMeta
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftsGetMetaCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/meta"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftsGetMetaValidateBeforeCall(UUID accountId, UUID draftId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsGetMeta(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftsGetMeta(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftsGetMetaCall(accountId, draftId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @return DraftMeta
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public DraftMeta draftsGetMeta(UUID accountId, UUID draftId) throws ApiException {
+        ApiResponse<DraftMeta> resp = draftsGetMetaWithHttpInfo(accountId, draftId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @return ApiResponse&lt;DraftMeta&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<DraftMeta> draftsGetMetaWithHttpInfo(UUID accountId, UUID draftId) throws ApiException {
+        com.squareup.okhttp.Call call = draftsGetMetaValidateBeforeCall(accountId, draftId, null, null);
+        Type localVarReturnType = new TypeToken<DraftMeta>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsGetMetaAsync(UUID accountId, UUID draftId, final ApiCallback<DraftMeta> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsGetMetaValidateBeforeCall(accountId, draftId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DraftMeta>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsPrepare
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param deffered  (optional)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call draftsPrepareCall(UUID accountId, UUID draftId, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/prepare"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        if (deffered != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "deffered", deffered));
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call draftsPrepareValidateBeforeCall(UUID accountId, UUID draftId, Boolean deffered, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsPrepare(Async)");
+        }
+        
+        // verify the required parameter 'draftId' is set
+        if (draftId == null) {
+            throw new ApiException("Missing the required parameter 'draftId' when calling draftsPrepare(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = draftsPrepareCall(accountId, draftId, deffered, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param deffered  (optional)
+     * @return PrepareResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public PrepareResult draftsPrepare(UUID accountId, UUID draftId, Boolean deffered) throws ApiException {
+        ApiResponse<PrepareResult> resp = draftsPrepareWithHttpInfo(accountId, draftId, deffered);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param deffered  (optional)
+     * @return ApiResponse&lt;PrepareResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<PrepareResult> draftsPrepareWithHttpInfo(UUID accountId, UUID draftId, Boolean deffered) throws ApiException {
+        com.squareup.okhttp.Call call = draftsPrepareValidateBeforeCall(accountId, draftId, deffered, null, null);
+        Type localVarReturnType = new TypeToken<PrepareResult>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param draftId  (required)
+     * @param deffered  (optional)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call draftsPrepareAsync(UUID accountId, UUID draftId, Boolean deffered, final ApiCallback<PrepareResult> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = draftsPrepareValidateBeforeCall(accountId, draftId, deffered, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<PrepareResult>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for draftsSend
+     * @param accountId  (required)
+     * @param draftId  (required)
      * @param deffered  (optional)
      * @param force  (optional)
      * @param progressListener Progress listener
@@ -1027,12 +2206,12 @@ public class DraftsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsSendCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftsSendCall(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/drafts/{draftId}/send"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/send"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -1042,10 +2221,6 @@ public class DraftsApi {
         localVarQueryParams.addAll(apiClient.parameterToPairs("", "force", force));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -1073,16 +2248,16 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsSendValidateBeforeCall(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftsSendValidateBeforeCall(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsSend(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsSend(Async)");
         }
         
         // verify the required parameter 'draftId' is set
@@ -1090,18 +2265,8 @@ public class DraftsApi {
             throw new ApiException("Missing the required parameter 'draftId' when calling draftsSend(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsSend(Async)");
-        }
         
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsSend(Async)");
-        }
-        
-        
-        com.squareup.okhttp.Call call = draftsSendCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, force, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsSendCall(accountId, draftId, deffered, force, progressListener, progressRequestListener);
         return call;
 
         
@@ -1113,52 +2278,46 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @param force  (optional)
-     * @return Object
+     * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsSend(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, Boolean force) throws ApiException {
-        ApiResponse<Object> resp = draftsSendWithHttpInfo(billingAccountId, draftId, authorization, xKonturApikey, deffered, force);
+    public Docflow draftsSend(UUID accountId, UUID draftId, Boolean deffered, Boolean force) throws ApiException {
+        ApiResponse<Docflow> resp = draftsSendWithHttpInfo(accountId, draftId, deffered, force);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @param force  (optional)
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsSendWithHttpInfo(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, Boolean force) throws ApiException {
-        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, force, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+    public ApiResponse<Docflow> draftsSendWithHttpInfo(UUID accountId, UUID draftId, Boolean deffered, Boolean force) throws ApiException {
+        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deffered, force, null, null);
+        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param deffered  (optional)
      * @param force  (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsSendAsync(UUID billingAccountId, UUID draftId, String authorization, String xKonturApikey, Boolean deffered, Boolean force, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsSendAsync(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ApiCallback<Docflow> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1179,38 +2338,32 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(billingAccountId, draftId, authorization, xKonturApikey, deffered, force, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deffered, force, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
      * Build call for draftsUpdateDraftMeta
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
      * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsUpdateDraftMetaCall(UUID billingAccountId, UUID draftId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftsUpdateDraftMetaCall(UUID accountId, UUID draftId, DraftMeta clientInfo, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = clientInfo;
         
         // create path and map variables
-        String localVarPath = "/v1/{billingAccountId}/drafts/{draftId}/meta"
-            .replaceAll("\\{" + "billingAccountId" + "\\}", apiClient.escapeString(billingAccountId.toString()))
+        String localVarPath = "/v1/{accountId}/drafts/{draftId}/meta"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -1238,16 +2391,16 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsUpdateDraftMetaValidateBeforeCall(UUID billingAccountId, UUID draftId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftsUpdateDraftMetaValidateBeforeCall(UUID accountId, UUID draftId, DraftMeta clientInfo, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
-        // verify the required parameter 'billingAccountId' is set
-        if (billingAccountId == null) {
-            throw new ApiException("Missing the required parameter 'billingAccountId' when calling draftsUpdateDraftMeta(Async)");
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling draftsUpdateDraftMeta(Async)");
         }
         
         // verify the required parameter 'draftId' is set
@@ -1260,18 +2413,8 @@ public class DraftsApi {
             throw new ApiException("Missing the required parameter 'clientInfo' when calling draftsUpdateDraftMeta(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling draftsUpdateDraftMeta(Async)");
-        }
         
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling draftsUpdateDraftMeta(Async)");
-        }
-        
-        
-        com.squareup.okhttp.Call call = draftsUpdateDraftMetaCall(billingAccountId, draftId, clientInfo, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsUpdateDraftMetaCall(accountId, draftId, clientInfo, progressListener, progressRequestListener);
         return call;
 
         
@@ -1283,49 +2426,43 @@ public class DraftsApi {
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
      * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return Object
+     * @return DraftMeta
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsUpdateDraftMeta(UUID billingAccountId, UUID draftId, DraftMeta clientInfo, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Object> resp = draftsUpdateDraftMetaWithHttpInfo(billingAccountId, draftId, clientInfo, authorization, xKonturApikey);
+    public DraftMeta draftsUpdateDraftMeta(UUID accountId, UUID draftId, DraftMeta clientInfo) throws ApiException {
+        ApiResponse<DraftMeta> resp = draftsUpdateDraftMetaWithHttpInfo(accountId, draftId, clientInfo);
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
      * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;DraftMeta&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsUpdateDraftMetaWithHttpInfo(UUID billingAccountId, UUID draftId, DraftMeta clientInfo, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = draftsUpdateDraftMetaValidateBeforeCall(billingAccountId, draftId, clientInfo, authorization, xKonturApikey, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+    public ApiResponse<DraftMeta> draftsUpdateDraftMetaWithHttpInfo(UUID accountId, UUID draftId, DraftMeta clientInfo) throws ApiException {
+        com.squareup.okhttp.Call call = draftsUpdateDraftMetaValidateBeforeCall(accountId, draftId, clientInfo, null, null);
+        Type localVarReturnType = new TypeToken<DraftMeta>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param billingAccountId  (required)
+     * @param accountId  (required)
      * @param draftId  (required)
      * @param clientInfo  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsUpdateDraftMetaAsync(UUID billingAccountId, UUID draftId, DraftMeta clientInfo, String authorization, String xKonturApikey, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsUpdateDraftMetaAsync(UUID accountId, UUID draftId, DraftMeta clientInfo, final ApiCallback<DraftMeta> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1346,8 +2483,8 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsUpdateDraftMetaValidateBeforeCall(billingAccountId, draftId, clientInfo, authorization, xKonturApikey, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        com.squareup.okhttp.Call call = draftsUpdateDraftMetaValidateBeforeCall(accountId, draftId, clientInfo, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DraftMeta>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

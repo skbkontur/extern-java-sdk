@@ -8,7 +8,7 @@
       <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>extern-examples</artifactId>
+    <artifactId>extern-sdk-examples</artifactId>
 
     <packaging>jar</packaging>
 

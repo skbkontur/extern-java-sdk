@@ -5,9 +5,7 @@
  */
 package ru.skbkontur.sdk.extern;
 
-import com.google.gson.Gson;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,17 +13,22 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import ru.skbkontur.sdk.extern.model.DraftTest;
+import ru.skbkontur.sdk.extern.model.TestData;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentContents;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Draft;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DraftDocument;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
 
 /**
  *
  * @author AlexS
  */
-public class ExternSDKDraftTest {
+public class ExternSDKDraftTest extends AbstractTest {
 
 	private static ExternSDKDraft apiDraft;
-	private static ExternSDKDocument apiDoc;
-	private static DraftMeta[] clientInfos;
+	private static TestData[] testData;
 
 	public ExternSDKDraftTest() {
 	}
@@ -33,8 +36,7 @@ public class ExternSDKDraftTest {
 	@BeforeClass
 	public static void setUpClass() throws ExternSDKException {
 		apiDraft = new ExternSDK().draft;
-		apiDoc = new ExternSDK().document;
-		clientInfos = getTestClientInfos();
+		testData = getTestClientInfos();
 	}
 
 	@AfterClass
@@ -57,9 +59,9 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testCreateDraft() throws ExternSDKException {
 		System.out.println("createDraft");
-		for (DraftMeta ci : clientInfos) {
-			Map<String, Object> result = apiDraft.createDraft(ci);
-			assertNotNull(result);
+		for (TestData td : testData) {
+			Draft draft = apiDraft.createDraft(td.getClientInfo());
+			assertNotNull(draft);
 		}
 	}
 
@@ -71,12 +73,12 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testGetDraft() throws ExternSDKException {
 		System.out.println("getDraft");
-		if (clientInfos != null) {
-			for (DraftMeta ci : clientInfos) {
-				Map<String, Object> draft = apiDraft.createDraft(ci);
-				String draftId = (String) draft.get("id");
-				Object r = apiDraft.getDraft(draftId);
-				assertNotNull(r);
+		if (testData != null) {
+			for (TestData td : testData) {
+				Draft draft = apiDraft.createDraft(td.getClientInfo());
+				String draftId = draft.getId().toString();
+				Draft result = apiDraft.getDraft(draftId);
+				assertNotNull(result);
 			}
 		}
 	}
@@ -89,10 +91,10 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testDeleteDraft() throws ExternSDKException {
 		System.out.println("deleteDraft");
-		for (DraftMeta ci : clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
+		for (TestData td : testData) {
+			Draft draft = apiDraft.createDraft(td.getClientInfo());
 			assertNotNull(draft);
-			apiDraft.deleteDraft((String) draft.get("id"));
+			apiDraft.deleteDraft(draft.getId().toString());
 		}
 	}
 
@@ -106,10 +108,10 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testGetDraftMeta() throws ExternSDKException {
 		System.out.println("getDraftMeta");
-		for (DraftMeta ci : clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
+		for (TestData td : testData) {
+			Draft draft = apiDraft.createDraft(td.getClientInfo());
 			assertNotNull(draft);
-			Object result = apiDraft.getDraftMeta((String) draft.get("id"));
+			DraftMeta result = apiDraft.getDraftMeta(draft.getId().toString());
 			assertNotNull(result);
 		}
 	}
@@ -123,19 +125,21 @@ public class ExternSDKDraftTest {
 	 */
 	@Test
 	public void testUpdateDraftMeta() throws ExternSDKException {
-		System.out.println("getDraftMeta");
-		for (DraftMeta ci : clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
+		System.out.println("updateDraftMeta");
+		for (TestData td : testData) {
+			DraftMeta ci = td.getClientInfo();
+			Draft draft = apiDraft.createDraft(td.getClientInfo());
 			assertNotNull(draft);
 			String name = "new " + ci.getOrganization().getFullName();
 			ci.getOrganization().setFullName(name);
-			Object result = apiDraft.updateDraftMeta((String) draft.get("id"), ci);
-			assertNotNull(result);
+			DraftMeta draftMeta = apiDraft.updateDraftMeta(draft.getId().toString(), ci);
+			assertNotNull(draftMeta);
+			assertEquals(name,draftMeta.getOrganization().getFullName());
 		}
 	}
 
 	/**
-	 * Test of send method, of class ExternSDKDraft.
+	 * Test of check method, of class ExternSDKDraft.
 	 *
 	 * POST /v1/{billingAccountId}/drafts/drafts/{draftId}/check
 	 * 
@@ -144,19 +148,15 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testCheck() throws ExternSDKException {
 		System.out.println("check");
-		for (DraftMeta ci: clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
-			assertNotNull(draft);
-			String draftId = (String)draft.get("id");
-			byte[] documentBody = ("This is a simple text document: " + draftId).getBytes();
-			Map<String,Object> result = apiDoc.addUncryptedDocument(draftId, documentBody, "unformal-"+draftId+".txt");
-			assertNotNull(result);
-			apiDraft.check(draftId, true);
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			Map<String,Object> protocol = apiDraft.check(dt.getId(), true);
+			assertNotNull(protocol);
 		}		
 	}
 	
 	/**
-	 * Test of send method, of class ExternSDKDraft.
+	 * Test of prepare method, of class ExternSDKDraft.
 	 *
 	 * POST /v1/{billingAccountId}/drafts/drafts/{draftId}/prepare
 	 * 
@@ -165,14 +165,10 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testPrepare() throws ExternSDKException {
 		System.out.println("prepare");
-		for (DraftMeta ci: clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
-			assertNotNull(draft);
-			String draftId = (String)draft.get("id");
-			byte[] documentBody = ("This is a simple text document: " + draftId).getBytes();
-			Map<String,Object> result = apiDoc.addUncryptedDocument(draftId, documentBody, "unformal-"+draftId+".txt");
-			assertNotNull(result);
-			apiDraft.prepare(draftId, true);
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			Map<String,Object> protocol = apiDraft.prepare(dt.getId(), true);
+			assertNotNull(protocol);
 		}		
 	}
 	
@@ -186,21 +182,161 @@ public class ExternSDKDraftTest {
 	@Test
 	public void testSend() throws ExternSDKException {
 		System.out.println("send");
-		for (DraftMeta ci: clientInfos) {
-			Map<String, Object> draft = apiDraft.createDraft(ci);
+		for (TestData td: testData) {
+			DraftMeta ci = td.getClientInfo();
+			Draft draft = apiDraft.createDraft(td.getClientInfo());
 			assertNotNull(draft);
-			String draftId = (String)draft.get("id");
+			String draftId = draft.getId().toString();
 			byte[] documentBody = ("This is a simple text document: " + draftId).getBytes();
-			Map<String,Object> result = apiDoc.addUncryptedDocument(draftId, documentBody, "unformal-"+draftId+".txt");
-			assertNotNull(result);
-			apiDraft.send(draftId);
+			DraftDocument draftDocument = apiDraft.addDecryptedDocument(draftId, documentBody, "unformal-"+draftId+".txt");
+			assertNotNull(draftDocument);
+			Docflow docflow = apiDraft.send(draftId);
+			assertNotNull(docflow);
+		}		
+	}
+	/**
+	 * Test of addDecryptedDocument method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testAddDecryptedDocument() throws ExternSDKException {
+		System.out.println("addUncryptedDocument");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			assertNotNull(dt);
+		}		
+	}
+
+	/**
+	 * Test of deleteDocument method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testDeleteDocument() throws ExternSDKException {
+		System.out.println("deleteDocument");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				apiDraft.deleteDocument(draftId, draftDocumentId);
+			}
+		}		
+	}
+	/**
+	 * Test of getDocument method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testGetDocument() throws ExternSDKException {
+		System.out.println("getDocument");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				DraftDocument draftDocument = apiDraft.getDocument(draftId, draftDocumentId);
+				assertNotNull(draftDocument);
+			}
+		}		
+	}
+
+	/**
+	 * Test of updateDocument method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testUpdateDocument() throws ExternSDKException {
+		System.out.println("updateDocument");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				DraftDocument draftDocument = apiDraft.getDocument(draftId, draftDocumentId);
+				assertNotNull(draftDocument);
+				String path = "/docs/NO_PRIB_7810_7810_6653000832665325934_20180125_7C66E6A9-90D5-49D0-9325-75AB620DF370.xml";
+				DocumentContents documentContents = createDocumentContents(apiDraft,path);
+				draftDocument = apiDraft.updateDocument(draftId, draftDocumentId, documentContents);
+				assertNotNull(draftDocument);
+				String fileName = new File(path).getName();
+				assertEquals(fileName, draftDocument.getMeta().getFilename());
+			}
 		}		
 	}
 	
-	private static DraftMeta[] getTestClientInfos() {
-		Gson gson = new Gson();
-		InputStream is = ExternSDKDraftTest.class.getClassLoader().getResourceAsStream("clientInfosTest.json");
-		InputStreamReader reader = new java.io.InputStreamReader(is);
-		return gson.fromJson(reader, DraftMeta[].class);
+	/**
+	 * Test of getDecryptedDocumentContent method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testGetDecryptedDocumentContent() throws ExternSDKException {
+		System.out.println("getDecryptedDocumentContent");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				String result = apiDraft.getDecryptedDocumentContent(draftId, draftDocumentId);
+				assertNotNull(result);
+			}
+		}		
 	}
+
+	/**
+	 * Test of updateDecryptedDocumentContent method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testUpdateDecryptedDocumentContent() throws ExternSDKException {
+		System.out.println("updateDecryptedDocumentContent");
+		// Map<String, Object> result = instance.updateDecryptedDocumentContent(draftId, documentId);
+		fail("The test case is a prototype.");
+	}
+
+	/**
+	 * Test of getEecryptedDocumentContent method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testGetEncryptedDocumentContent() throws ExternSDKException {
+		System.out.println("getEecryptedDocumentContent");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			Map<String,Object> protocol = apiDraft.prepare(dt.getId(), true);
+			assertNotNull(protocol);
+			
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				String result = apiDraft.getEncryptedDocumentContent(draftId, draftDocumentId);
+				assertNotNull(result);
+			}
+		}		
+	}
+
+	/**
+	 * Test of getSignatureContent method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testGetSignatureContent() throws ExternSDKException {
+		System.out.println("getSignatureContent");
+		for (TestData td: testData) {
+			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
+			String draftId = dt.getId();
+			for (String draftDocumentId: dt.getDraftDocumentIdList()) {
+				Object result = apiDraft.getSignatureContent(draftId, draftDocumentId);
+				assertNotNull(result);
+			}
+		}		
+	}
+	/**
+	 * Test of updateSignature method, of class ExternSDKDocument.
+	 * @throws ru.skbkontur.sdk.extern.ExternSDKException
+	 */
+	@Test
+	public void testUpdateSignature() throws ExternSDKException {
+		System.out.println("updateSignature");
+//		Map<String, Object> result = instance.updateSignature(draftId, documentId);
+//		assertEquals(expResult, result);
+		// TODO review the generated test code and remove the default call to fail.
+		fail("The test case is a prototype.");
+	}
+	
 }
