@@ -14,41 +14,12 @@
 package ru.skbkontur.sdk.extern.rest.swagger.model;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
- * RepresentativeDocumentInfo
+ * DocflowDescription
  */
 
-public class RepresentativeDocumentInfo {
-  @SerializedName("name")
-  private String name = null;
-
-  public RepresentativeDocumentInfo name(String name) {
-    this.name = name;
-    return this;
-  }
-
-   /**
-   * Get name
-   * @return name
-  **/
-  @ApiModelProperty(value = "")
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
+public class DocflowDescription {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -58,22 +29,20 @@ public class RepresentativeDocumentInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RepresentativeDocumentInfo representativeDocumentInfo = (RepresentativeDocumentInfo) o;
-    return Objects.equals(this.name, representativeDocumentInfo.name);
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash();
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RepresentativeDocumentInfo {\n");
+    sb.append("class DocflowDescription {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import ru.skbkontur.sdk.extern.rest.swagger.model.AccountInfo;
 import ru.skbkontur.sdk.extern.rest.swagger.model.RecipientInfo;
-import ru.skbkontur.sdk.extern.rest.swagger.model.SenderInfo;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Sender;
 
 /**
  * DraftMeta
@@ -32,7 +32,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.SenderInfo;
 
 public class DraftMeta {
   @SerializedName("sender")
-  private SenderInfo sender = null;
+  private Sender sender = null;
 
   @SerializedName("recipient")
   private RecipientInfo recipient = null;
@@ -40,7 +40,7 @@ public class DraftMeta {
   @SerializedName("organization")
   private AccountInfo organization = null;
 
-  public DraftMeta sender(SenderInfo sender) {
+  public DraftMeta sender(Sender sender) {
     this.sender = sender;
     return this;
   }
@@ -49,12 +49,12 @@ public class DraftMeta {
    * Get sender
    * @return sender
   **/
-  @ApiModelProperty(value = "")
-  public SenderInfo getSender() {
+  @ApiModelProperty(required = true, value = "")
+  public Sender getSender() {
     return sender;
   }
 
-  public void setSender(SenderInfo sender) {
+  public void setSender(Sender sender) {
     this.sender = sender;
   }
 
@@ -67,7 +67,7 @@ public class DraftMeta {
    * Get recipient
    * @return recipient
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public RecipientInfo getRecipient() {
     return recipient;
   }
@@ -85,7 +85,7 @@ public class DraftMeta {
    * Get organization
    * @return organization
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public AccountInfo getOrganization() {
     return organization;
   }

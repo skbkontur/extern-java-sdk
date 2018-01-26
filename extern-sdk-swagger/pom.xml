@@ -4,11 +4,11 @@
 
     <parent>
       <groupId>ru.skbkontur.sdk</groupId>
-      <artifactId>extern-swagger</artifactId>
+      <artifactId>extern</artifactId>
       <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>extern-sdk</artifactId>
+    <artifactId>extern-swagger</artifactId>
 
     <packaging>jar</packaging>
 

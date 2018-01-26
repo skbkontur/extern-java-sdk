@@ -32,7 +32,7 @@ public class ExternSDK {
 	
 	public ExternSDKDraft draft; 
 
-	public ExternSDKDocument document; 
+	public ExternSDKDocflow docflow; 
 	
 	public ExternSDK() throws ExternSDKException {
 		init();
@@ -45,11 +45,11 @@ public class ExternSDK {
 	public String acquireAccessToken() throws ExternSDKException {
 		try {
 			AuthenticationApi authenticationApi = new AuthenticationApi(env.configuration.getApiKey());
-			env.accessToken =  env.configuration.getAuthPrefix() + " " + authenticationApi.getSid(env.configuration.getLogin(), env.configuration.getPass(), env.configuration.getAuthBaseUri());
+			env.accessToken = authenticationApi.getSid(env.configuration.getLogin(), env.configuration.getPass(), env.configuration.getAuthBaseUri());
 			return env.accessToken;
 		}
 		catch (ApiException x) {
-			throw new ExternSDKException(ExternSDKException.AUTHORIZATION_BY_LOGIN, x);
+			throw new ExternSDKException(ExternSDKException.S_AUTHORIZATION_BY_LOGIN, x);
 		}
 		catch (Exception x) {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);
@@ -65,8 +65,8 @@ public class ExternSDK {
 		initCryptoService();
 		// initialize draft api
 		draft = new ExternSDKDraft(this);
-		// initialize document api
-		document = new ExternSDKDocument(this);
+		// initialize docflow api
+		docflow = new ExternSDKDocflow(this);
 	}
 
 	
@@ -75,7 +75,7 @@ public class ExternSDK {
 			return gson.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
 		}
 		catch (IOException x) {
-			throw new ExternSDKException(ExternSDKException.CONFIG_LOAD, x);
+			throw new ExternSDKException(ExternSDKException.C_CONFIG_LOAD, x);
 		}
 		catch (Exception x) {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);

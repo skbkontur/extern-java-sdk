@@ -22,31 +22,64 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentToSend;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 
 /**
- * OmsInfo
+ * Reply
  */
 
-public class OmsInfo {
-  @SerializedName("tfoms")
-  private String tfoms = null;
+public class Reply {
+  @SerializedName("document")
+  private DocumentToSend document = null;
 
-  public OmsInfo tfoms(String tfoms) {
-    this.tfoms = tfoms;
+  @SerializedName("links")
+  private List<Link> links = null;
+
+  public Reply document(DocumentToSend document) {
+    this.document = document;
     return this;
   }
 
    /**
-   * Get tfoms
-   * @return tfoms
+   * Get document
+   * @return document
   **/
   @ApiModelProperty(value = "")
-  public String getTfoms() {
-    return tfoms;
+  public DocumentToSend getDocument() {
+    return document;
   }
 
-  public void setTfoms(String tfoms) {
-    this.tfoms = tfoms;
+  public void setDocument(DocumentToSend document) {
+    this.document = document;
+  }
+
+  public Reply links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Reply addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
+    return this;
+  }
+
+   /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(value = "")
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
   }
 
 
@@ -58,22 +91,24 @@ public class OmsInfo {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OmsInfo omsInfo = (OmsInfo) o;
-    return Objects.equals(this.tfoms, omsInfo.tfoms);
+    Reply reply = (Reply) o;
+    return Objects.equals(this.document, reply.document) &&
+        Objects.equals(this.links, reply.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tfoms);
+    return Objects.hash(document, links);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OmsInfo {\n");
+    sb.append("class Reply {\n");
     
-    sb.append("    tfoms: ").append(toIndentedString(tfoms)).append("\n");
+    sb.append("    document: ").append(toIndentedString(document)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }

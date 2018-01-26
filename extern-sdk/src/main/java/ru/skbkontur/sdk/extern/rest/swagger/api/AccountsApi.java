@@ -30,6 +30,8 @@ import java.io.IOException;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Account;
 import ru.skbkontur.sdk.extern.rest.swagger.model.AccountList;
 import ru.skbkontur.sdk.extern.rest.swagger.model.CreateAccountRequestDto;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Error;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -60,14 +62,12 @@ public class AccountsApi {
     /**
      * Build call for accountsCreateAsync
      * @param request  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call accountsCreateAsyncCall(CreateAccountRequestDto request, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call accountsCreateAsyncCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = request;
         
         // create path and map variables
@@ -76,10 +76,6 @@ public class AccountsApi {
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -107,30 +103,20 @@ public class AccountsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call accountsCreateAsyncValidateBeforeCall(CreateAccountRequestDto request, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call accountsCreateAsyncValidateBeforeCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'request' is set
         if (request == null) {
             throw new ApiException("Missing the required parameter 'request' when calling accountsCreateAsync(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling accountsCreateAsync(Async)");
-        }
         
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling accountsCreateAsync(Async)");
-        }
-        
-        
-        com.squareup.okhttp.Call call = accountsCreateAsyncCall(request, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = accountsCreateAsyncCall(request, progressListener, progressRequestListener);
         return call;
 
         
@@ -143,13 +129,11 @@ public class AccountsApi {
      * 
      * 
      * @param request  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @return Account
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Account accountsCreateAsync(CreateAccountRequestDto request, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Account> resp = accountsCreateAsyncWithHttpInfo(request, authorization, xKonturApikey);
+    public Account accountsCreateAsync(CreateAccountRequestDto request) throws ApiException {
+        ApiResponse<Account> resp = accountsCreateAsyncWithHttpInfo(request);
         return resp.getData();
     }
 
@@ -157,13 +141,11 @@ public class AccountsApi {
      * 
      * 
      * @param request  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @return ApiResponse&lt;Account&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Account> accountsCreateAsyncWithHttpInfo(CreateAccountRequestDto request, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, authorization, xKonturApikey, null, null);
+    public ApiResponse<Account> accountsCreateAsyncWithHttpInfo(CreateAccountRequestDto request) throws ApiException {
+        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, null, null);
         Type localVarReturnType = new TypeToken<Account>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -172,13 +154,11 @@ public class AccountsApi {
      *  (asynchronously)
      * 
      * @param request  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call accountsCreateAsyncAsync(CreateAccountRequestDto request, String authorization, String xKonturApikey, final ApiCallback<Account> callback) throws ApiException {
+    public com.squareup.okhttp.Call accountsCreateAsyncAsync(CreateAccountRequestDto request, final ApiCallback<Account> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -199,7 +179,7 @@ public class AccountsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Account>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
@@ -207,14 +187,12 @@ public class AccountsApi {
     /**
      * Build call for accountsGet
      * @param accountId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call accountsGetCall(UUID accountId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call accountsGetCall(UUID accountId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -224,10 +202,6 @@ public class AccountsApi {
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -255,30 +229,20 @@ public class AccountsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] {  };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call accountsGetValidateBeforeCall(UUID accountId, String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call accountsGetValidateBeforeCall(UUID accountId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
             throw new ApiException("Missing the required parameter 'accountId' when calling accountsGet(Async)");
         }
         
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling accountsGet(Async)");
-        }
         
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling accountsGet(Async)");
-        }
-        
-        
-        com.squareup.okhttp.Call call = accountsGetCall(accountId, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = accountsGetCall(accountId, progressListener, progressRequestListener);
         return call;
 
         
@@ -291,13 +255,11 @@ public class AccountsApi {
      * 
      * 
      * @param accountId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @return Account
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Account accountsGet(UUID accountId, String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<Account> resp = accountsGetWithHttpInfo(accountId, authorization, xKonturApikey);
+    public Account accountsGet(UUID accountId) throws ApiException {
+        ApiResponse<Account> resp = accountsGetWithHttpInfo(accountId);
         return resp.getData();
     }
 
@@ -305,13 +267,11 @@ public class AccountsApi {
      * 
      * 
      * @param accountId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @return ApiResponse&lt;Account&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Account> accountsGetWithHttpInfo(UUID accountId, String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = accountsGetValidateBeforeCall(accountId, authorization, xKonturApikey, null, null);
+    public ApiResponse<Account> accountsGetWithHttpInfo(UUID accountId) throws ApiException {
+        com.squareup.okhttp.Call call = accountsGetValidateBeforeCall(accountId, null, null);
         Type localVarReturnType = new TypeToken<Account>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -320,13 +280,11 @@ public class AccountsApi {
      *  (asynchronously)
      * 
      * @param accountId  (required)
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call accountsGetAsync(UUID accountId, String authorization, String xKonturApikey, final ApiCallback<Account> callback) throws ApiException {
+    public com.squareup.okhttp.Call accountsGetAsync(UUID accountId, final ApiCallback<Account> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -347,21 +305,19 @@ public class AccountsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = accountsGetValidateBeforeCall(accountId, authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = accountsGetValidateBeforeCall(accountId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Account>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
      * Build call for accountsGetAll
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call accountsGetAllCall(String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call accountsGetAllCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -370,10 +326,122 @@ public class AccountsApi {
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        if (authorization != null)
-        localVarHeaderParams.put("Authorization", apiClient.parameterToString(authorization));
-        if (xKonturApikey != null)
-        localVarHeaderParams.put("X-Kontur-Apikey", apiClient.parameterToString(xKonturApikey));
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call accountsGetAllValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        
+        com.squareup.okhttp.Call call = accountsGetAllCall(progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @return AccountList
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public AccountList accountsGetAll() throws ApiException {
+        ApiResponse<AccountList> resp = accountsGetAllWithHttpInfo();
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @return ApiResponse&lt;AccountList&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<AccountList> accountsGetAllWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = accountsGetAllValidateBeforeCall(null, null);
+        Type localVarReturnType = new TypeToken<AccountList>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call accountsGetAllAsync(final ApiCallback<AccountList> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = accountsGetAllValidateBeforeCall(progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<AccountList>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for rootIndex
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call rootIndexCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
 
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
@@ -406,20 +474,10 @@ public class AccountsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call accountsGetAllValidateBeforeCall(String authorization, String xKonturApikey, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        
-        // verify the required parameter 'authorization' is set
-        if (authorization == null) {
-            throw new ApiException("Missing the required parameter 'authorization' when calling accountsGetAll(Async)");
-        }
-        
-        // verify the required parameter 'xKonturApikey' is set
-        if (xKonturApikey == null) {
-            throw new ApiException("Missing the required parameter 'xKonturApikey' when calling accountsGetAll(Async)");
-        }
+    private com.squareup.okhttp.Call rootIndexValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         
-        com.squareup.okhttp.Call call = accountsGetAllCall(authorization, xKonturApikey, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = rootIndexCall(progressListener, progressRequestListener);
         return call;
 
         
@@ -431,40 +489,34 @@ public class AccountsApi {
     /**
      * 
      * 
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return AccountList
+     * @return List&lt;Link&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public AccountList accountsGetAll(String authorization, String xKonturApikey) throws ApiException {
-        ApiResponse<AccountList> resp = accountsGetAllWithHttpInfo(authorization, xKonturApikey);
+    public List<Link> rootIndex() throws ApiException {
+        ApiResponse<List<Link>> resp = rootIndexWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * 
      * 
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
-     * @return ApiResponse&lt;AccountList&gt;
+     * @return ApiResponse&lt;List&lt;Link&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<AccountList> accountsGetAllWithHttpInfo(String authorization, String xKonturApikey) throws ApiException {
-        com.squareup.okhttp.Call call = accountsGetAllValidateBeforeCall(authorization, xKonturApikey, null, null);
-        Type localVarReturnType = new TypeToken<AccountList>(){}.getType();
+    public ApiResponse<List<Link>> rootIndexWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = rootIndexValidateBeforeCall(null, null);
+        Type localVarReturnType = new TypeToken<List<Link>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
     /**
      *  (asynchronously)
      * 
-     * @param authorization  (required)
-     * @param xKonturApikey  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call accountsGetAllAsync(String authorization, String xKonturApikey, final ApiCallback<AccountList> callback) throws ApiException {
+    public com.squareup.okhttp.Call rootIndexAsync(final ApiCallback<List<Link>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -485,8 +537,8 @@ public class AccountsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = accountsGetAllValidateBeforeCall(authorization, xKonturApikey, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<AccountList>(){}.getType();
+        com.squareup.okhttp.Call call = rootIndexValidateBeforeCall(progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<List<Link>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

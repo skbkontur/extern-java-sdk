@@ -50,7 +50,7 @@ public class CreateAccountRequestDto {
    * Get inn
    * @return inn
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getInn() {
     return inn;
   }
@@ -86,7 +86,7 @@ public class CreateAccountRequestDto {
    * Get organizationName
    * @return organizationName
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getOrganizationName() {
     return organizationName;
   }

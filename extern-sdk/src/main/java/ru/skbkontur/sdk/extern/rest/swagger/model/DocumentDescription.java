@@ -14,14 +14,21 @@
 package ru.skbkontur.sdk.extern.rest.swagger.model;
 
 import java.util.Objects;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Urn;
 
 /**
- * DocumentMeta
+ * DocumentDescription
  */
 
-public class DocumentMeta {
+public class DocumentDescription {
   @SerializedName("type")
   private Urn type = null;
 
@@ -34,7 +41,7 @@ public class DocumentMeta {
   @SerializedName("compression-type")
   private Urn compressionType = null;
 
-  public DocumentMeta type(Urn type) {
+  public DocumentDescription type(Urn type) {
     this.type = type;
     return this;
   }
@@ -52,7 +59,7 @@ public class DocumentMeta {
     this.type = type;
   }
 
-  public DocumentMeta filename(String filename) {
+  public DocumentDescription filename(String filename) {
     this.filename = filename;
     return this;
   }
@@ -70,7 +77,7 @@ public class DocumentMeta {
     this.filename = filename;
   }
 
-  public DocumentMeta contentType(String contentType) {
+  public DocumentDescription contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -88,7 +95,7 @@ public class DocumentMeta {
     this.contentType = contentType;
   }
 
-  public DocumentMeta compressionType(Urn compressionType) {
+  public DocumentDescription compressionType(Urn compressionType) {
     this.compressionType = compressionType;
     return this;
   }
@@ -115,11 +122,11 @@ public class DocumentMeta {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DocumentMeta documentMeta = (DocumentMeta) o;
-    return Objects.equals(this.type, documentMeta.type) &&
-        Objects.equals(this.filename, documentMeta.filename) &&
-        Objects.equals(this.contentType, documentMeta.contentType) &&
-        Objects.equals(this.compressionType, documentMeta.compressionType);
+    DocumentDescription documentDescription = (DocumentDescription) o;
+    return Objects.equals(this.type, documentDescription.type) &&
+        Objects.equals(this.filename, documentDescription.filename) &&
+        Objects.equals(this.contentType, documentDescription.contentType) &&
+        Objects.equals(this.compressionType, documentDescription.compressionType);
   }
 
   @Override
@@ -131,7 +138,7 @@ public class DocumentMeta {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DocumentMeta {\n");
+    sb.append("class DocumentDescription {\n");
     
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
