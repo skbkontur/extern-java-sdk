@@ -223,10 +223,11 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
+	 * @param content byte[] a new document content
 	 * @throws ExternSDKException a business error
 	 */
-	public void updateDecryptedDocumentContent(String draftId, String documentId) throws ExternSDKException {
-		invokeApply(api::updateDecryptedDocumentContent,newCxt(EN_DOC, Void.class).setDraftId(draftId).setDocumentId(documentId).setEntityId(documentId));
+	public void updateDecryptedDocumentContent(String draftId, String documentId, byte[] content) throws ExternSDKException {
+		invokeApply(api::updateDecryptedDocumentContent,newCxt(EN_DOC, Void.class).setDraftId(draftId).setDocumentId(documentId).setContent(content).setEntityId(documentId));
 	}
 
 	/**
@@ -264,11 +265,11 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 *
 	 * @param draftId a draft identifier
 	 * @param documentId a document identifier
-	 * @return DTO
+	 * @param content a new signatute cintent
 	 * @throws ExternSDKException a business error
 	 */
-	public void updateSignature(String draftId, String documentId) throws ExternSDKException {
-		invokeApply(api::updateSignature,newCxt(EN_DOC, Void.class).setDraftId(draftId).setDocumentId(documentId).setEntityId(documentId));
+	public void updateSignature(String draftId, String documentId, byte[] content) throws ExternSDKException {
+		invokeApply(api::updateSignature,newCxt(EN_DOC, Void.class).setDraftId(draftId).setDocumentId(documentId).setContent(content).setEntityId(documentId));
 	}
 
 	public DocumentContents createDocumentContents(byte[] documentContent, String fileName) throws ExternSDKException {

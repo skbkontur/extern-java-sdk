@@ -212,7 +212,7 @@ public class DraftsApiWrap extends ApiWrap {
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<Void> cxt) throws ApiException {
-		api.draftDocumentsPutDocumentContent(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentId());
+		api.draftDocumentsPutDocumentContent(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentId(), cxt.getContent());
 		return cxt.setResult(null);
 	}
 
@@ -252,7 +252,7 @@ public class DraftsApiWrap extends ApiWrap {
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Void> updateSignature(QueryContext<Void> cxt) throws ApiException {
-		api.draftDocumentsPutDocumentSignature(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentId());
+		api.draftDocumentsPutDocumentSignature(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentId(), cxt.getContent());
 		return cxt.setResult(null);
 	}
 }

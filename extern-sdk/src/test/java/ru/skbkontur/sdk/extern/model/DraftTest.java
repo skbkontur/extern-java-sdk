@@ -13,8 +13,18 @@ import java.util.List;
  * @author AlexS
  */
 public class DraftTest {
+	public static class TestDocument {
+		public String draftDocumentId;
+		public String path;
+		
+		public TestDocument(String draftDocumentId, String path) {
+			this.draftDocumentId = draftDocumentId;
+			this.path = path;
+		}
+	}
+	
 	private String id;
-	private List<String> draftDocumentIdList = new ArrayList<>();
+	private final List<TestDocument> draftDocumentIdList = new ArrayList<>();
 
 	public String getId() {
 		return id;
@@ -24,15 +34,11 @@ public class DraftTest {
 		this.id = id;
 	}
 
-	public List<String> getDraftDocumentIdList() {
+	public List<TestDocument> getDraftDocumentIdList() {
 		return draftDocumentIdList;
 	}
 
-	public void setDraftDocumentIdList(List<String> draftDocumentIdList) {
-		this.draftDocumentIdList = draftDocumentIdList;
-	}
-	
-	public void addDraftDocumentId(String draftDocumentId) {
-		draftDocumentIdList.add(draftDocumentId);
+	public void addDraftDocumentId(String draftDocumentId, String path) {
+		draftDocumentIdList.add(new TestDocument(draftDocumentId, path));
 	}
 }

@@ -1595,7 +1595,7 @@
             "put": {
                 "tags": ["Drafts"],
                 "operationId": "DraftDocuments_PutDocumentContent",
-                "consumes": [],
+                "consumes": ["application/octet-stream"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "accountId",
@@ -1615,6 +1615,14 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
                     }],
                 "responses": {
                     "200": {
@@ -1797,7 +1805,7 @@
             "put": {
                 "tags": ["Drafts"],
                 "operationId": "DraftDocuments_PutDocumentSignature",
-                "consumes": [],
+                "consumes": ["application/octet-stream"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "accountId",
@@ -1817,6 +1825,14 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
                     }],
                 "responses": {
                     "200": {

@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import static org.junit.Assert.assertNotNull;
+import ru.argosgrp.cryptoservice.utils.Base64;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.model.DraftTest;
 import ru.skbkontur.sdk.extern.model.TestData;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentContents;
@@ -24,6 +26,9 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
  */
 public class AbstractTest {
 
+	protected static final Base64.Decoder DECODER_BASE64 = Base64.getDecoder();
+	protected static final Base64.Encoder ENCODER_BASE64 = Base64.getEncoder();
+	
 	protected static TestData[] getTestClientInfos() throws ExternSDKException {
 		Gson gson = new Gson();
 		InputStream is = ExternSDKDraftTest.class.getClassLoader().getResourceAsStream("clientInfosTest.json");
@@ -64,7 +69,7 @@ public class AbstractTest {
 			byte[] documentBody = loadDocument(p);
 			DraftDocument result = apiDraft.addDecryptedDocument(draftId,documentBody,new File(p).getName());
 			assertNotNull(result);
-			draftTest.addDraftDocumentId(result.getId().toString());
+			draftTest.addDraftDocumentId(result.getId().toString(),p);
 		}
 		
 		return draftTest;
@@ -72,6 +77,12 @@ public class AbstractTest {
 	
 	protected DocumentContents createDocumentContents(ExternSDKDraft apiDraft, String path) throws ExternSDKException {
 		return apiDraft.createDocumentContents(loadDocument(path), new File(path).getName());
+	}
+
+	protected byte[] loadUpdatedDocument(String path) throws ExternSDKException {
+		String name = new File(path).getName();
+		String updatedPath = (new File(path).getParentFile().getPath() + "/" + IOUtil.getFileNameWithoutExt(name)).replaceAll("\\\\", "/");
+		return loadDocument(updatedPath + "/" + name);
 	}
 	
 	private byte[] loadDocument(String path) throws ExternSDKException {

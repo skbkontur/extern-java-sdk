@@ -1093,13 +1093,14 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        Object localVarPostBody = null;
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentCall(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = content;
         
         // create path and map variables
         String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted"
@@ -1120,7 +1121,7 @@ public class DraftsApi {
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
 
         final String[] localVarContentTypes = {
-            
+            "application/octet-stream"
         };
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
@@ -1142,7 +1143,7 @@ public class DraftsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftDocumentsPutDocumentContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsPutDocumentContentValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
@@ -1159,8 +1160,13 @@ public class DraftsApi {
             throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsPutDocumentContent(Async)");
         }
         
+        // verify the required parameter 'content' is set
+        if (content == null) {
+            throw new ApiException("Missing the required parameter 'content' when calling draftDocumentsPutDocumentContent(Async)");
+        }
         
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentCall(accountId, draftId, documentId, content, progressListener, progressRequestListener);
         return call;
 
         
@@ -1175,10 +1181,11 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void draftDocumentsPutDocumentContent(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
-        draftDocumentsPutDocumentContentWithHttpInfo(accountId, draftId, documentId);
+    public void draftDocumentsPutDocumentContent(UUID accountId, UUID draftId, UUID documentId, byte[] content) throws ApiException {
+        draftDocumentsPutDocumentContentWithHttpInfo(accountId, draftId, documentId, content);
     }
 
     /**
@@ -1187,11 +1194,12 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> draftDocumentsPutDocumentContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, null, null);
+    public ApiResponse<Void> draftDocumentsPutDocumentContentWithHttpInfo(UUID accountId, UUID draftId, UUID documentId, byte[] content) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, content, null, null);
         return apiClient.execute(call);
     }
 
@@ -1201,11 +1209,12 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentContentAsync(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1226,7 +1235,7 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentContentValidateBeforeCall(accountId, draftId, documentId, content, progressListener, progressRequestListener);
         apiClient.executeAsync(call, callback);
         return call;
     }
@@ -1235,13 +1244,14 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        Object localVarPostBody = null;
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureCall(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = content;
         
         // create path and map variables
         String localVarPath = "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature"
@@ -1262,7 +1272,7 @@ public class DraftsApi {
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
 
         final String[] localVarContentTypes = {
-            
+            "application/octet-stream"
         };
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
@@ -1284,7 +1294,7 @@ public class DraftsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureValidateBeforeCall(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
@@ -1301,8 +1311,13 @@ public class DraftsApi {
             throw new ApiException("Missing the required parameter 'documentId' when calling draftDocumentsPutDocumentSignature(Async)");
         }
         
+        // verify the required parameter 'content' is set
+        if (content == null) {
+            throw new ApiException("Missing the required parameter 'content' when calling draftDocumentsPutDocumentSignature(Async)");
+        }
         
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureCall(accountId, draftId, documentId, content, progressListener, progressRequestListener);
         return call;
 
         
@@ -1317,10 +1332,11 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void draftDocumentsPutDocumentSignature(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
-        draftDocumentsPutDocumentSignatureWithHttpInfo(accountId, draftId, documentId);
+    public void draftDocumentsPutDocumentSignature(UUID accountId, UUID draftId, UUID documentId, byte[] content) throws ApiException {
+        draftDocumentsPutDocumentSignatureWithHttpInfo(accountId, draftId, documentId, content);
     }
 
     /**
@@ -1329,11 +1345,12 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> draftDocumentsPutDocumentSignatureWithHttpInfo(UUID accountId, UUID draftId, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, null, null);
+    public ApiResponse<Void> draftDocumentsPutDocumentSignatureWithHttpInfo(UUID accountId, UUID draftId, UUID documentId, byte[] content) throws ApiException {
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, content, null, null);
         return apiClient.execute(call);
     }
 
@@ -1343,11 +1360,12 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentId  (required)
+     * @param content  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureAsync(UUID accountId, UUID draftId, UUID documentId, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsPutDocumentSignatureAsync(UUID accountId, UUID draftId, UUID documentId, byte[] content, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1368,7 +1386,7 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftDocumentsPutDocumentSignatureValidateBeforeCall(accountId, draftId, documentId, content, progressListener, progressRequestListener);
         apiClient.executeAsync(call, callback);
         return call;
     }

@@ -38,6 +38,7 @@ public class QueryContext<R> implements Serializable {
 	public static final String DOCUMENT_CONTENT = "documentContent";
 	public static final String FILE_NAME = "fileName";
 	public static final String DOCUMENT_CONTENTS = "documentContents";
+	public static final String CONTENT = "content";
 	
 	private R result;
 	
@@ -174,6 +175,14 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext<R> setDocumentContents(DocumentContents documentContents) {
 		return set(DOCUMENT_CONTENTS, documentContents);
+	}
+
+	public byte[] getContent() {
+		return (byte[])params.get(CONTENT);
+	}
+	
+	public QueryContext<R> setContent(byte[] content) {
+		return set(CONTENT,content);
 	}
 	
 	public QueryContext<R> set(String name, Object val) {
