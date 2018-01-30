@@ -316,7 +316,7 @@ public class ExternSDKDraftTest extends AbstractTest {
 	 */
 	@Test
 	public void testGetEncryptedDocumentContent() throws ExternSDKException {
-		System.out.println("getEecryptedDocumentContent");
+		System.out.println("getEncryptedDocumentContent");
 		for (TestData td : testData) {
 			DraftTest dt = this.addDecryptedDocument(apiDraft, td);
 			String draftId = dt.getId();

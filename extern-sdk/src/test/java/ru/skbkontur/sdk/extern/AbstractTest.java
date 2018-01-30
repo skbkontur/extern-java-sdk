@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.assertNotNull;
 import ru.argosgrp.cryptoservice.utils.Base64;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
@@ -31,12 +32,15 @@ public class AbstractTest {
 	
 	protected static TestData[] getTestClientInfos() throws ExternSDKException {
 		Gson gson = new Gson();
-		InputStream is = ExternSDKDraftTest.class.getClassLoader().getResourceAsStream("clientInfosTest.json");
+		InputStream is = AbstractTest.class.getResourceAsStream("/clientInfosTest.json");
 		if (is == null) {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN);
 		}
 		try {
-			return gson.fromJson(new java.io.InputStreamReader(is), TestData[].class);
+			return gson.fromJson(new java.io.InputStreamReader(is,"UTF-8"), TestData[].class);
+		}
+		catch (UnsupportedEncodingException x) {
+			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);
 		}
 		finally {
 			try {

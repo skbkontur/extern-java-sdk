@@ -1,0 +1,6 @@
+/extern-sdk/nbproject/
+extern-sdk-swagger/build.txt
+target
+Hints
+build.txt
+extern-sdk/src/test/resources/extern-sdk-config.json
