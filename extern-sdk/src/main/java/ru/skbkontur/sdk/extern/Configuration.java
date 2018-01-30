@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author AlexS
  */
 public class Configuration {
-  @SerializedName("billingAccountId")	private UUID billingAccountId;
+  @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;
 	@SerializedName("authPrefix") private String authPrefix;
 	@SerializedName("login") private String login;
@@ -21,12 +21,12 @@ public class Configuration {
 	@SerializedName("authBaseUri") private String authBaseUri;
 	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate
 
-	public UUID getBillingAccountId() {
-		return billingAccountId;
+	public UUID getAccountId() {
+		return accountId;
 	}
 
-	public void setBillingAccountId(UUID billingAccountId) {
-		this.billingAccountId = billingAccountId;
+	public void setAccountId(UUID accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getApiKey() {

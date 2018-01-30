@@ -60,7 +60,7 @@ public class ExternSDKBase {
 	}
 
 	protected UUID getAccountId() {
-		return externSDK.getEnvironment().configuration.getBillingAccountId();
+		return externSDK.getEnvironment().configuration.getAccountId();
 	}
 
 	protected String getApiKey() {
