@@ -86,7 +86,7 @@ public class AbstractTest {
 	protected byte[] loadUpdatedDocument(String path) throws ExternSDKException {
 		String name = new File(path).getName();
 		String updatedPath = (new File(path).getParentFile().getPath() + "/" + IOUtil.getFileNameWithoutExt(name)).replaceAll("\\\\", "/");
-		return loadDocument(updatedPath + "/" + name);
+		return loadDocument(updatedPath + "/1.xml");
 	}
 	
 	private byte[] loadDocument(String path) throws ExternSDKException {
