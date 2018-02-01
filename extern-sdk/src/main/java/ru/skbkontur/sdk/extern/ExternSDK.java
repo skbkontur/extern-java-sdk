@@ -94,7 +94,7 @@ public class ExternSDK {
 					if (Arrays.equals(keys[i].getThumbprint(),tp))
 						env.signKey = keys[i];
 				if (env.signKey == null)
-					System.out.println("Ключ подписи не найден.");
+					System.out.println("A Signature key not found.");
 			}
 			catch (CryptoException x) {
 				System.out.println("Ошибка инициализации криптосервиса. Подробности: " + x.getMessage());

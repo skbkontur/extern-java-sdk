@@ -19,7 +19,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
  * @author AlexS
  * 
  * Api Query Context
- * @param <R> 
+ * @param <R> some return type
  */
 public class QueryContext<R> implements Serializable {
 	private final Map<String,Object> params;

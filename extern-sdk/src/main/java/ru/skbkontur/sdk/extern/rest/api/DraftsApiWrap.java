@@ -102,7 +102,7 @@ public class DraftsApiWrap extends ApiWrap {
 	 * POST /v1/{billingAccountId}/drafts/{draftId}/check
 	 * 
 	 * @param cxt a context
-	 * @return Map<String,Object>
+	 * @return Map&lt;String,Object&gt;
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Map<String,Object>> check(QueryContext<Map<String,Object>> cxt) throws ApiException {
@@ -116,7 +116,7 @@ public class DraftsApiWrap extends ApiWrap {
 	 * POST /v1/{billingAccountId}/drafts/{draftId}/prepare
 	 * 
 	 * @param cxt a context
-	 * @return Map<String,Object>
+	 * @return Map&lt;String,Object&gt;
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Map<String,Object>> prepare(QueryContext<Map<String,Object>> cxt) throws ApiException {

@@ -27,6 +27,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.Urn;
 public class ExternSDKDraft extends ExternSDKBase {
 	private static final String EN_DFT = "Черновик";
 	private static final String EN_DOC = "Документ";
+	private static final String EN_SIGN = "Подпись";
 	
 	private final DraftsApiWrap api;
 
@@ -255,7 +256,7 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 * @throws ExternSDKException a business error
 	 */
 	public String getSignatureContent(String draftId, String documentId) throws ExternSDKException {
-		return invokeApply(api::getSignatureContent,newCxt(EN_DOC, String.class).setDraftId(draftId).setDocumentId(documentId).setEntityId(documentId)).get();
+		return invokeApply(api::getSignatureContent,newCxt(EN_SIGN, String.class).setDraftId(draftId).setDocumentId(documentId).setEntityId(documentId)).get();
 	}
 
 	/**

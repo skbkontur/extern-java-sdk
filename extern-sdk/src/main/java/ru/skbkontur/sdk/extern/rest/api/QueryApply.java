@@ -10,7 +10,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.invoker.ApiException;
 /**
  * @author AlexS
  * API REST Query
- * @param <R>
+ * @param <R> some return type
  */
 @FunctionalInterface
 public interface QueryApply<R> {

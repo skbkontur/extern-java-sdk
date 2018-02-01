@@ -43,8 +43,8 @@ public class AuthenticationApi {
 	}
 
 	/**
-	 * @param login
-	 * @param pass
+	 * @param login String 
+	 * @param pass String 
 	 * @return ApiResponse&lt;Object&gt;
 	 * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
 	 */
