@@ -6,7 +6,6 @@
 package ru.skbkontur.sdk.extern;
 
 import java.util.List;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,11 +17,8 @@ import ru.skbkontur.sdk.extern.model.DraftTest;
 import ru.skbkontur.sdk.extern.model.TestData;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Document;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Draft;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DraftDocument;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentDescription;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
 
 /**
  *
@@ -131,8 +127,8 @@ public class ExternSDKDocflowTest extends AbstractTest {
 			String docflowId = docflow.getId().toString();
 			for (Document d: docflow.getDocuments()) {
 				String documentId = d.getId().toString();
-				DocumentMeta documentMeta = apiDocflow.getDocumentMeta(docflowId, documentId);
-				assertNotNull(documentMeta);
+				DocumentDescription documentDescription = apiDocflow.getDocumentMeta(docflowId, documentId);
+				assertNotNull(documentDescription);
 			}
 		}		
 	}
@@ -154,7 +150,7 @@ public class ExternSDKDocflowTest extends AbstractTest {
 			String docflowId = docflow.getId().toString();
 			for (Document d: docflow.getDocuments()) {
 				String documentId = d.getId().toString();
-				List<Link> links = apiDocflow.getSignatures(docflowId, documentId);
+				List<Signature> links = apiDocflow.getSignatures(docflowId, documentId);
 				assertNotNull(links);
 			}
 		}		

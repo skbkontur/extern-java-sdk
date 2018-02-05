@@ -19,28 +19,28 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
  * @author AlexS
  */
 public class DraftsApiWrap extends ApiWrap {
-	
+
 	private final DraftsApi api;
-	
+
 	public DraftsApiWrap(DraftsApi api) {
 		this.api = api;
 	}
-	
+
 	public ApiClient getApiClient() {
 		return api.getApiClient();
 	}
-	
+
 	/**
 	 * Create new a draft
 	 *
 	 * POST /v1/{billingAccountId}/drafts
-	 * 
+	 *
 	 * @param cxt a context
 	 * @return Draft
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Draft> createDraft(QueryContext<Draft> cxt) throws ApiException {
-		return cxt.setResult(jsonToDTO((Map)api.draftsCreate(cxt.getAccountId(), cxt.getClientInfo()),Draft.class));
+		return cxt.setResult(jsonToDTO((Map) api.draftsCreate(cxt.getAccountId(), cxt.getClientInfo()), Draft.class));
 	}
 
 	/**
@@ -98,55 +98,41 @@ public class DraftsApiWrap extends ApiWrap {
 
 	/**
 	 * Operate CHECK
-	 * 
+	 *
 	 * POST /v1/{billingAccountId}/drafts/{draftId}/check
-	 * 
+	 *
 	 * @param cxt a context
 	 * @return Map&lt;String,Object&gt;
 	 * @throws ApiException a restful error
 	 */
-	public QueryContext<Map<String,Object>> check(QueryContext<Map<String,Object>> cxt) throws ApiException {
-		return cxt.setResult((Map) api.draftsCheck(cxt.getAccountId(), cxt.getDraftId(), cxt.getDeffered()));
+	public QueryContext<Map<String, Object>> check(QueryContext<Map<String, Object>> cxt) throws ApiException {
+		return cxt.setResult((Map) api.draftsCheck(cxt.getAccountId(), cxt.getDraftId()));
 	}
-	
 
 	/**
 	 * Operate PREPARE
-	 * 
+	 *
 	 * POST /v1/{billingAccountId}/drafts/{draftId}/prepare
-	 * 
+	 *
 	 * @param cxt a context
 	 * @return Map&lt;String,Object&gt;
 	 * @throws ApiException a restful error
 	 */
-	public QueryContext<Map<String,Object>> prepare(QueryContext<Map<String,Object>> cxt) throws ApiException {
-		return cxt.setResult((Map) api.draftsPrepare(cxt.getAccountId(), cxt.getDraftId(), cxt.getDeffered()));
+	public QueryContext<Map<String, Object>> prepare(QueryContext<Map<String, Object>> cxt) throws ApiException {
+		return cxt.setResult((Map) api.draftsPrepare(cxt.getAccountId(), cxt.getDraftId()));
 	}
-	
+
 	/**
 	 * Send the draft
 	 *
 	 * POST /v1/{billingAccountId}/drafts/drafts/{draftId}/send
-	 * 
+	 *
 	 * @param cxt a context
 	 * @return Docflow
 	 * @throws ApiException a restful error
 	 */
 	public QueryContext<Docflow> send(QueryContext<Docflow> cxt) throws ApiException {
 		return cxt.setResult(api.draftsSend(cxt.getAccountId(), cxt.getDraftId(), true, true));
-	}
-
-	/**
-	 * POST /v1/{billingAccountId}/drafts/{draftId}/documents
-	 *
-	 * Add a new document to the draft
-	 *
-	 * @param cxt a context (draftId,documentContent,fileName)
-	 * @return DraftDocument
-	 * @throws ApiException a restful error
-	 */
-	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<DraftDocument> cxt) throws ApiException {
-		return cxt.setResult(jsonToDTO((Map) api.draftDocumentsAddDocument(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentContents()), DraftDocument.class));
 	}
 
 	/**
@@ -187,6 +173,19 @@ public class DraftsApiWrap extends ApiWrap {
 	 */
 	public QueryContext<DraftDocument> updateDocument(QueryContext<DraftDocument> cxt) throws ApiException {
 		return cxt.setResult(api.draftDocumentsPutDocument(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentId(), cxt.getDocumentContents()));
+	}
+
+	/**
+	 * POST /v1/{billingAccountId}/drafts/{draftId}/documents
+	 *
+	 * Add a new document to the draft
+	 *
+	 * @param cxt a context (draftId,documentContent,fileName)
+	 * @return DraftDocument
+	 * @throws ApiException a restful error
+	 */
+	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<DraftDocument> cxt) throws ApiException {
+		return cxt.setResult(jsonToDTO((Map) api.draftDocumentsAddDocument(cxt.getAccountId(), cxt.getDraftId(), cxt.getDocumentContents()), DraftDocument.class));
 	}
 
 	/**

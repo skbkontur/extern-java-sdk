@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.UUID;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
+import ru.skbkontur.sdk.extern.rest.swagger.model.SignatureToSend;
 
 /**
  * DocumentToSend
@@ -40,7 +40,10 @@ public class DocumentToSend {
   private String filename = null;
 
   @SerializedName("signature")
-  private Signature signature = null;
+  private SignatureToSend signature = null;
+
+  @SerializedName("sender-ip")
+  private String senderIp = null;
 
   public DocumentToSend id(UUID id) {
     this.id = id;
@@ -96,7 +99,7 @@ public class DocumentToSend {
     this.filename = filename;
   }
 
-  public DocumentToSend signature(Signature signature) {
+  public DocumentToSend signature(SignatureToSend signature) {
     this.signature = signature;
     return this;
   }
@@ -106,12 +109,30 @@ public class DocumentToSend {
    * @return signature
   **/
   @ApiModelProperty(value = "")
-  public Signature getSignature() {
+  public SignatureToSend getSignature() {
     return signature;
   }
 
-  public void setSignature(Signature signature) {
+  public void setSignature(SignatureToSend signature) {
     this.signature = signature;
+  }
+
+  public DocumentToSend senderIp(String senderIp) {
+    this.senderIp = senderIp;
+    return this;
+  }
+
+   /**
+   * Get senderIp
+   * @return senderIp
+  **/
+  @ApiModelProperty(value = "")
+  public String getSenderIp() {
+    return senderIp;
+  }
+
+  public void setSenderIp(String senderIp) {
+    this.senderIp = senderIp;
   }
 
 
@@ -127,12 +148,13 @@ public class DocumentToSend {
     return Objects.equals(this.id, documentToSend.id) &&
         Objects.equals(this.content, documentToSend.content) &&
         Objects.equals(this.filename, documentToSend.filename) &&
-        Objects.equals(this.signature, documentToSend.signature);
+        Objects.equals(this.signature, documentToSend.signature) &&
+        Objects.equals(this.senderIp, documentToSend.senderIp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, content, filename, signature);
+    return Objects.hash(id, content, filename, signature, senderIp);
   }
 
 
@@ -145,6 +167,7 @@ public class DocumentToSend {
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
+    sb.append("    senderIp: ").append(toIndentedString(senderIp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

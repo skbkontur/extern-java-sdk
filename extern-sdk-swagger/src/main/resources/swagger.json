@@ -61,7 +61,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -123,7 +123,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -180,7 +180,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -207,7 +207,7 @@
         "/v1/{accountId}/docflows/{docflowId}": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetDocflow",
+                "operationId": "Docflows_GetDocflowAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -243,7 +243,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -270,7 +270,7 @@
         "/v1/{accountId}/docflows/{docflowId}/documents": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetDocuments",
+                "operationId": "Docflows_GetDocumentsAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -309,7 +309,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -336,7 +336,7 @@
         "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetDocument",
+                "operationId": "Docflows_GetDocumentAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -378,7 +378,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -402,10 +402,10 @@
                     }]
             }
         },
-        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/meta": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetDocumentMeta",
+                "operationId": "Docflows_GetDocumentDescriptionAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -431,7 +431,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/DocumentMeta"
+                            "$ref": "#/definitions/DocumentDescription"
                         }
                     },
                     "400": {
@@ -447,7 +447,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -471,10 +471,148 @@
                     }]
             }
         },
-        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signature": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetDocumentSignature",
+                "operationId": "Docflows_GetEncryptedDocumentContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DocumentDescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted": {
+            "get": {
+                "tags": ["Docflows"],
+                "operationId": "Docflows_GetDecryptedDocumentContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DocumentDescription"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures": {
+            "get": {
+                "tags": ["Docflows"],
+                "operationId": "Docflows_GetDocumentSignaturesAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -502,7 +640,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Link"
+                                "$ref": "#/definitions/Signature"
                             }
                         }
                     },
@@ -519,7 +657,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -543,10 +681,160 @@
                     }]
             }
         },
-        "/v1/{accountId}/docflows/{docflowId}/documents/{documentType}": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}": {
             "get": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_GetReplyDocument",
+                "operationId": "Docflows_GetDocumentSignatureAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "signatureId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Signature"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content": {
+            "get": {
+                "tags": ["Docflows"],
+                "operationId": "Docflows_GetDocumentSignatureContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "signatureId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Signature"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}": {
+            "get": {
+                "tags": ["Docflows"],
+                "operationId": "Docflows_GetReplyDocumentAsync",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -567,8 +855,8 @@
                         "required": true,
                         "type": "string"
                     }, {
-                        "name": "replyId",
-                        "in": "query",
+                        "name": "documentId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
                         "format": "uuid"
@@ -593,7 +881,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -615,12 +903,10 @@
                         "apiKey": [],
                         "auth.sid": []
                     }]
-            }
-        },
-        "/v1/{accountId}/docflows/{docflowId}/send/{documentType}": {
+            },
             "post": {
                 "tags": ["Docflows"],
-                "operationId": "Docflows_SendReplyDocument",
+                "operationId": "Docflows_SendReplyDocumentAsync",
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -641,8 +927,8 @@
                         "required": true,
                         "type": "string"
                     }, {
-                        "name": "replyId",
-                        "in": "query",
+                        "name": "documentId",
+                        "in": "path",
                         "required": true,
                         "type": "string",
                         "format": "uuid"
@@ -674,7 +960,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -744,7 +1030,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -807,7 +1093,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -865,7 +1151,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -928,7 +1214,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -996,7 +1282,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1038,11 +1324,6 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "deffered",
-                        "in": "query",
-                        "required": false,
-                        "type": "boolean"
                     }],
                 "responses": {
                     "200": {
@@ -1070,7 +1351,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1112,11 +1393,6 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
-                    }, {
-                        "name": "deffered",
-                        "in": "query",
-                        "required": false,
-                        "type": "boolean"
                     }],
                 "responses": {
                     "200": {
@@ -1128,7 +1404,7 @@
                     "400": {
                         "description": "Некорректные входные данные",
                         "schema": {
-                            "$ref": "#/definitions/Error"
+                            "$ref": "#/definitions/ErrorPrepareResult"
                         }
                     },
                     "401": {
@@ -1138,7 +1414,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1193,7 +1469,7 @@
                     }],
                 "responses": {
                     "200": {
-                        "description": "Успешно получен протокол контроля",
+                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/Docflow"
                         }
@@ -1211,7 +1487,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1280,7 +1556,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1360,7 +1636,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1424,7 +1700,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1500,7 +1776,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1569,7 +1845,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1641,7 +1917,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1710,7 +1986,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1779,7 +2055,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -1851,7 +2127,7 @@
                         }
                     },
                     "403": {
-                        "description": "Не доступа к ресурсу",
+                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -2060,9 +2336,6 @@
                 "last-change-date": {
                     "format": "date-time",
                     "type": "string"
-                },
-                "sent-by-draft": {
-                    "type": "boolean"
                 }
             }
         },
@@ -2088,6 +2361,12 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Signature"
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
                     }
                 }
             }
@@ -2128,29 +2407,14 @@
                     "type": "string",
                     "example": "00000000-0000-0000-0000-000000000000"
                 },
-                "content-data": {
-                    "format": "byte",
-                    "type": "string"
-                },
                 "content-link": {
                     "$ref": "#/definitions/Link"
-                }
-            }
-        },
-        "DocumentMeta": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "$ref": "#/definitions/Urn"
                 },
-                "filename": {
-                    "type": "string"
-                },
-                "content-type": {
-                    "type": "string"
-                },
-                "compression-type": {
-                    "$ref": "#/definitions/Urn"
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
                 }
             }
         },
@@ -2184,7 +2448,24 @@
                     "type": "string"
                 },
                 "signature": {
-                    "$ref": "#/definitions/Signature"
+                    "$ref": "#/definitions/SignatureToSend"
+                },
+                "sender-ip": {
+                    "type": "string"
+                }
+            }
+        },
+        "SignatureToSend": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "content-data": {
+                    "format": "byte",
+                    "type": "string"
                 }
             }
         },
@@ -2400,6 +2681,47 @@
                     "items": {
                         "$ref": "#/definitions/Link"
                     }
+                },
+                "status": {
+                    "enum": ["checkProtocolHasErrors", "checkProtocolHasOnlyWarnings", "encryptionFailed", "ok"],
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorPrepareResult": {
+            "type": "object",
+            "properties": {
+                "check-result": {
+                    "$ref": "#/definitions/CheckResultData"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "status": {
+                    "enum": ["checkProtocolHasErrors", "checkProtocolHasOnlyWarnings", "encryptionFailed", "ok"],
+                    "type": "string"
+                },
+                "id": {
+                    "$ref": "#/definitions/Urn"
+                },
+                "status-code": {
+                    "enum": ["continue", "switchingProtocols", "oK", "created", "accepted", "nonAuthoritativeInformation", "noContent", "resetContent", "partialContent", "multipleChoices", "ambiguous", "movedPermanently", "moved", "found", "redirect", "seeOther", "redirectMethod", "notModified", "useProxy", "unused", "temporaryRedirect", "redirectKeepVerb", "badRequest", "unauthorized", "paymentRequired", "forbidden", "notFound", "methodNotAllowed", "notAcceptable", "proxyAuthenticationRequired", "requestTimeout", "conflict", "gone", "lengthRequired", "preconditionFailed", "requestEntityTooLarge", "requestUriTooLong", "unsupportedMediaType", "requestedRangeNotSatisfiable", "expectationFailed", "upgradeRequired", "internalServerError", "notImplemented", "badGateway", "serviceUnavailable", "gatewayTimeout", "httpVersionNotSupported"],
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "track-id": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -2422,6 +2744,23 @@
                 },
                 "meta": {
                     "$ref": "#/definitions/DocumentMeta"
+                }
+            }
+        },
+        "DocumentMeta": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/Urn"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "content-type": {
+                    "type": "string"
+                },
+                "compression-type": {
+                    "$ref": "#/definitions/Urn"
                 }
             }
         },

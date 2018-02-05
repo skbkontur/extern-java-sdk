@@ -11,9 +11,9 @@ import ru.skbkontur.sdk.extern.rest.swagger.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.rest.swagger.invoker.ApiException;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Document;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Reply;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
 
 /**
  *
@@ -31,31 +31,31 @@ public class DocflowsApiWrap extends ApiWrap {
 	}
 	
 	public QueryContext<Docflow> getDocflow(QueryContext<Docflow> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetDocflow(ctx.getAccountId(), ctx.getDocflowId()));
+		return ctx.setResult(api.docflowsGetDocflowAsync(ctx.getAccountId(), ctx.getDocflowId()));
 	}
 
 	public QueryContext<List<Document>> getDocuments(QueryContext<List<Document>> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetDocuments(ctx.getAccountId(), ctx.getDocflowId()));
+		return ctx.setResult(api.docflowsGetDocumentsAsync(ctx.getAccountId(), ctx.getDocflowId()));
 	}
 
 	public QueryContext<Document> getDocument(QueryContext<Document> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetDocument(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
+		return ctx.setResult(api.docflowsGetDocumentAsync(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
 	}
 
-	public QueryContext<DocumentMeta> getDocumentMeta(QueryContext<DocumentMeta> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetDocumentMeta(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
+	public QueryContext<DocumentDescription> getDocumentDescription(QueryContext<DocumentDescription> ctx) throws ApiException {
+		return ctx.setResult(api.docflowsGetDocumentDescriptionAsync(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
 	}
 
-	public QueryContext<List<Link>> getSignatures(QueryContext<List<Link>> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetDocumentSignature(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
+	public QueryContext<List<Signature>> getSignatures(QueryContext<List<Signature>> ctx) throws ApiException {
+		return ctx.setResult(api.docflowsGetDocumentSignaturesAsync(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentId()));
 	}
 
 	public QueryContext<Reply> getReplyDocument(QueryContext<Reply> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsGetReplyDocument(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentType(), ctx.getReplyId()));
+		return ctx.setResult(api.docflowsGetReplyDocumentAsync(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentType(), ctx.getReplyId()));
 	}
 	
 	public QueryContext<Docflow> sendReplyDocument(QueryContext<Docflow> ctx) throws ApiException {
-		return ctx.setResult(api.docflowsSendReplyDocument(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentType(), ctx.getReplyId(), ctx.getDocumentToSend()));
+		return ctx.setResult(api.docflowsSendReplyDocumentAsync(ctx.getAccountId(), ctx.getDocflowId(), ctx.getDocumentType(), ctx.getReplyId(), ctx.getDocumentToSend()));
 	}
 
 }

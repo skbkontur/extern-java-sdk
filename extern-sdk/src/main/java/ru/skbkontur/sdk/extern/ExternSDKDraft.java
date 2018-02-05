@@ -6,12 +6,10 @@
 package ru.skbkontur.sdk.extern;
 
 import java.util.Map;
-import java.util.UUID;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.skbkontur.sdk.extern.rest.api.DraftsApiWrap;
 import ru.skbkontur.sdk.extern.rest.swagger.api.DraftsApi;
-import ru.skbkontur.sdk.extern.rest.swagger.invoker.ApiException;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentContents;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;

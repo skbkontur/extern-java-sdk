@@ -60,9 +60,6 @@ public class Docflow {
   @SerializedName("last-change-date")
   private DateTime lastChangeDate = null;
 
-  @SerializedName("sent-by-draft")
-  private Boolean sentByDraft = null;
-
   public Docflow id(UUID id) {
     this.id = id;
     return this;
@@ -223,24 +220,6 @@ public class Docflow {
     this.lastChangeDate = lastChangeDate;
   }
 
-  public Docflow sentByDraft(Boolean sentByDraft) {
-    this.sentByDraft = sentByDraft;
-    return this;
-  }
-
-   /**
-   * Get sentByDraft
-   * @return sentByDraft
-  **/
-  @ApiModelProperty(value = "")
-  public Boolean getSentByDraft() {
-    return sentByDraft;
-  }
-
-  public void setSentByDraft(Boolean sentByDraft) {
-    this.sentByDraft = sentByDraft;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -258,13 +237,12 @@ public class Docflow {
         Objects.equals(this.documents, docflow.documents) &&
         Objects.equals(this.links, docflow.links) &&
         Objects.equals(this.sendDate, docflow.sendDate) &&
-        Objects.equals(this.lastChangeDate, docflow.lastChangeDate) &&
-        Objects.equals(this.sentByDraft, docflow.sentByDraft);
+        Objects.equals(this.lastChangeDate, docflow.lastChangeDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, type, status, description, documents, links, sendDate, lastChangeDate, sentByDraft);
+    return Objects.hash(id, type, status, description, documents, links, sendDate, lastChangeDate);
   }
 
 
@@ -281,7 +259,6 @@ public class Docflow {
     sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("    sendDate: ").append(toIndentedString(sendDate)).append("\n");
     sb.append("    lastChangeDate: ").append(toIndentedString(lastChangeDate)).append("\n");
-    sb.append("    sentByDraft: ").append(toIndentedString(sentByDraft)).append("\n");
     sb.append("}");
     return sb.toString();
   }

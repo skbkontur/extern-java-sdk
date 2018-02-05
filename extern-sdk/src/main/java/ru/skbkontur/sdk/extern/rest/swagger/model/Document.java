@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.UUID;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Content;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentDescription;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
 
 /**
@@ -45,6 +46,9 @@ public class Document {
 
   @SerializedName("signatures")
   private List<Signature> signatures = null;
+
+  @SerializedName("links")
+  private List<Link> links = null;
 
   public Document id(UUID id) {
     this.id = id;
@@ -126,6 +130,32 @@ public class Document {
     this.signatures = signatures;
   }
 
+  public Document links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Document addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
+    return this;
+  }
+
+   /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(value = "")
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -139,12 +169,13 @@ public class Document {
     return Objects.equals(this.id, document.id) &&
         Objects.equals(this.description, document.description) &&
         Objects.equals(this.content, document.content) &&
-        Objects.equals(this.signatures, document.signatures);
+        Objects.equals(this.signatures, document.signatures) &&
+        Objects.equals(this.links, document.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, content, signatures);
+    return Objects.hash(id, description, content, signatures, links);
   }
 
 
@@ -157,6 +188,7 @@ public class Document {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    signatures: ").append(toIndentedString(signatures)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }

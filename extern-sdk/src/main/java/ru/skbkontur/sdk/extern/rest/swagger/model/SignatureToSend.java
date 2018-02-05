@@ -22,26 +22,20 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 
 /**
- * Signature
+ * SignatureToSend
  */
 
-public class Signature {
+public class SignatureToSend {
   @SerializedName("id")
   private UUID id = null;
 
-  @SerializedName("content-link")
-  private Link contentLink = null;
+  @SerializedName("content-data")
+  private byte[] contentData = null;
 
-  @SerializedName("links")
-  private List<Link> links = null;
-
-  public Signature id(UUID id) {
+  public SignatureToSend id(UUID id) {
     this.id = id;
     return this;
   }
@@ -59,48 +53,22 @@ public class Signature {
     this.id = id;
   }
 
-  public Signature contentLink(Link contentLink) {
-    this.contentLink = contentLink;
+  public SignatureToSend contentData(byte[] contentData) {
+    this.contentData = contentData;
     return this;
   }
 
    /**
-   * Get contentLink
-   * @return contentLink
+   * Get contentData
+   * @return contentData
   **/
   @ApiModelProperty(value = "")
-  public Link getContentLink() {
-    return contentLink;
+  public byte[] getContentData() {
+    return contentData;
   }
 
-  public void setContentLink(Link contentLink) {
-    this.contentLink = contentLink;
-  }
-
-  public Signature links(List<Link> links) {
-    this.links = links;
-    return this;
-  }
-
-  public Signature addLinksItem(Link linksItem) {
-    if (this.links == null) {
-      this.links = new ArrayList<Link>();
-    }
-    this.links.add(linksItem);
-    return this;
-  }
-
-   /**
-   * Get links
-   * @return links
-  **/
-  @ApiModelProperty(value = "")
-  public List<Link> getLinks() {
-    return links;
-  }
-
-  public void setLinks(List<Link> links) {
-    this.links = links;
+  public void setContentData(byte[] contentData) {
+    this.contentData = contentData;
   }
 
 
@@ -112,26 +80,24 @@ public class Signature {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Signature signature = (Signature) o;
-    return Objects.equals(this.id, signature.id) &&
-        Objects.equals(this.contentLink, signature.contentLink) &&
-        Objects.equals(this.links, signature.links);
+    SignatureToSend signatureToSend = (SignatureToSend) o;
+    return Objects.equals(this.id, signatureToSend.id) &&
+        Objects.equals(this.contentData, signatureToSend.contentData);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, contentLink, links);
+    return Objects.hash(id, contentData);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Signature {\n");
+    sb.append("class SignatureToSend {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    contentLink: ").append(toIndentedString(contentLink)).append("\n");
-    sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("    contentData: ").append(toIndentedString(contentData)).append("\n");
     sb.append("}");
     return sb.toString();
   }

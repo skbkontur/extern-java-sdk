@@ -5,16 +5,14 @@
  */
 package ru.skbkontur.sdk.extern;
 
-import java.util.ArrayList;
 import java.util.List;
 import ru.skbkontur.sdk.extern.rest.api.DocflowsApiWrap;
-import ru.skbkontur.sdk.extern.rest.api.QueryContext;
 import ru.skbkontur.sdk.extern.rest.swagger.api.DocflowsApi;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Document;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Reply;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
 
 /**
  *
@@ -60,12 +58,12 @@ public class ExternSDKDocflow extends ExternSDKBase {
 		return invokeApply(api::getDocument,newCxt(EN_DOC,Document.class).setDocflowId(docflowId).setDocumentId(documentId).setEntityId(docflowId)).get();
 	}
 	
-	public DocumentMeta getDocumentMeta(String docflowId, String documentId) throws ExternSDKException {
-		return invokeApply(api::getDocumentMeta,newCxt(EN_DOC, DocumentMeta.class).setDocflowId(docflowId).setDocumentId(documentId).setEntityId(docflowId)).get();
+	public DocumentDescription getDocumentMeta(String docflowId, String documentId) throws ExternSDKException {
+		return invokeApply(api::getDocumentDescription,newCxt(EN_DOC, DocumentDescription.class).setDocflowId(docflowId).setDocumentId(documentId).setEntityId(docflowId)).get();
 	}
 
-	public List<Link> getSignatures(String docflowId, String documentId) throws ExternSDKException {
-		return invokeApply(api::getSignatures,newCxtForList(EN_DOC, Link.class).setDocflowId(docflowId).setDocumentId(documentId).setEntityId(documentId)).get();
+	public List<Signature> getSignatures(String docflowId, String documentId) throws ExternSDKException {
+		return invokeApply(api::getSignatures,newCxtForList(EN_DOC, Signature.class).setDocflowId(docflowId).setDocumentId(documentId).setEntityId(documentId)).get();
 	}
 
 	public Reply getReplyDocument(String docflowId, String documentId) throws ExternSDKException {

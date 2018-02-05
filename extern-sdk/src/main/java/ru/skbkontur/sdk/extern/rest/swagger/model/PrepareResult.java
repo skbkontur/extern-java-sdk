@@ -38,6 +38,60 @@ public class PrepareResult {
   @SerializedName("links")
   private List<Link> links = null;
 
+  /**
+   * Gets or Sets status
+   */
+  @JsonAdapter(StatusEnum.Adapter.class)
+  public enum StatusEnum {
+    CHECKPROTOCOLHASERRORS("checkProtocolHasErrors"),
+    
+    CHECKPROTOCOLHASONLYWARNINGS("checkProtocolHasOnlyWarnings"),
+    
+    ENCRYPTIONFAILED("encryptionFailed"),
+    
+    OK("ok");
+
+    private String value;
+
+    StatusEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static StatusEnum fromValue(String text) {
+      for (StatusEnum b : StatusEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+    public static class Adapter extends TypeAdapter<StatusEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final StatusEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public StatusEnum read(final JsonReader jsonReader) throws IOException {
+        String value = jsonReader.nextString();
+        return StatusEnum.fromValue(String.valueOf(value));
+      }
+    }
+  }
+
+  @SerializedName("status")
+  private StatusEnum status = null;
+
   public PrepareResult checkResult(CheckResultData checkResult) {
     this.checkResult = checkResult;
     return this;
@@ -82,6 +136,24 @@ public class PrepareResult {
     this.links = links;
   }
 
+  public PrepareResult status(StatusEnum status) {
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @ApiModelProperty(value = "")
+  public StatusEnum getStatus() {
+    return status;
+  }
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -93,12 +165,13 @@ public class PrepareResult {
     }
     PrepareResult prepareResult = (PrepareResult) o;
     return Objects.equals(this.checkResult, prepareResult.checkResult) &&
-        Objects.equals(this.links, prepareResult.links);
+        Objects.equals(this.links, prepareResult.links) &&
+        Objects.equals(this.status, prepareResult.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(checkResult, links);
+    return Objects.hash(checkResult, links, status);
   }
 
 
@@ -109,6 +182,7 @@ public class PrepareResult {
     
     sb.append("    checkResult: ").append(toIndentedString(checkResult)).append("\n");
     sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

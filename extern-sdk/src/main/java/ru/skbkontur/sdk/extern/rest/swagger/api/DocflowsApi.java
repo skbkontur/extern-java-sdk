@@ -29,11 +29,11 @@ import java.io.IOException;
 
 import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Document;
-import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;
+import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentToSend;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Error;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Link;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Reply;
+import ru.skbkontur.sdk.extern.rest.swagger.model.Signature;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -62,7 +62,153 @@ public class DocflowsApi {
     }
 
     /**
-     * Build call for docflowsGetDocflow
+     * Build call for docflowsGetDecryptedDocumentContentAsync
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDecryptedDocumentContentAsyncCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call docflowsGetDecryptedDocumentContentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDecryptedDocumentContentAsync(Async)");
+        }
+        
+        // verify the required parameter 'docflowId' is set
+        if (docflowId == null) {
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDecryptedDocumentContentAsync(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDecryptedDocumentContentAsync(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = docflowsGetDecryptedDocumentContentAsyncCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @return DocumentDescription
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public DocumentDescription docflowsGetDecryptedDocumentContentAsync(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        ApiResponse<DocumentDescription> resp = docflowsGetDecryptedDocumentContentAsyncWithHttpInfo(accountId, docflowId, documentId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;DocumentDescription&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<DocumentDescription> docflowsGetDecryptedDocumentContentAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDecryptedDocumentContentAsyncValidateBeforeCall(accountId, docflowId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDecryptedDocumentContentAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<DocumentDescription> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = docflowsGetDecryptedDocumentContentAsyncValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for docflowsGetDocflowAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param progressListener Progress listener
@@ -70,7 +216,7 @@ public class DocflowsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocflowCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocflowAsyncCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -113,20 +259,20 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetDocflowValidateBeforeCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetDocflowAsyncValidateBeforeCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocflow(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocflowAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocflow(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocflowAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetDocflowCall(accountId, docflowId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocflowAsyncCall(accountId, docflowId, progressListener, progressRequestListener);
         return call;
 
         
@@ -143,8 +289,8 @@ public class DocflowsApi {
      * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Docflow docflowsGetDocflow(UUID accountId, UUID docflowId) throws ApiException {
-        ApiResponse<Docflow> resp = docflowsGetDocflowWithHttpInfo(accountId, docflowId);
+    public Docflow docflowsGetDocflowAsync(UUID accountId, UUID docflowId) throws ApiException {
+        ApiResponse<Docflow> resp = docflowsGetDocflowAsyncWithHttpInfo(accountId, docflowId);
         return resp.getData();
     }
 
@@ -156,8 +302,8 @@ public class DocflowsApi {
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Docflow> docflowsGetDocflowWithHttpInfo(UUID accountId, UUID docflowId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetDocflowValidateBeforeCall(accountId, docflowId, null, null);
+    public ApiResponse<Docflow> docflowsGetDocflowAsyncWithHttpInfo(UUID accountId, UUID docflowId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocflowAsyncValidateBeforeCall(accountId, docflowId, null, null);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -171,7 +317,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocflowAsync(UUID accountId, UUID docflowId, final ApiCallback<Docflow> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocflowAsyncAsync(UUID accountId, UUID docflowId, final ApiCallback<Docflow> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -192,13 +338,13 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetDocflowValidateBeforeCall(accountId, docflowId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocflowAsyncValidateBeforeCall(accountId, docflowId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsGetDocument
+     * Build call for docflowsGetDocumentAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
@@ -207,7 +353,7 @@ public class DocflowsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentAsyncCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -251,25 +397,25 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetDocumentValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetDocumentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocument(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocument(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentAsync(Async)");
         }
         
         // verify the required parameter 'documentId' is set
         if (documentId == null) {
-            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocument(Async)");
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetDocumentCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentAsyncCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -287,8 +433,8 @@ public class DocflowsApi {
      * @return Document
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Document docflowsGetDocument(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        ApiResponse<Document> resp = docflowsGetDocumentWithHttpInfo(accountId, docflowId, documentId);
+    public Document docflowsGetDocumentAsync(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        ApiResponse<Document> resp = docflowsGetDocumentAsyncWithHttpInfo(accountId, docflowId, documentId);
         return resp.getData();
     }
 
@@ -301,8 +447,8 @@ public class DocflowsApi {
      * @return ApiResponse&lt;Document&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Document> docflowsGetDocumentWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetDocumentValidateBeforeCall(accountId, docflowId, documentId, null, null);
+    public ApiResponse<Document> docflowsGetDocumentAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentAsyncValidateBeforeCall(accountId, docflowId, documentId, null, null);
         Type localVarReturnType = new TypeToken<Document>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -317,7 +463,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<Document> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<Document> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -338,13 +484,13 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetDocumentValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentAsyncValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Document>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsGetDocumentMeta
+     * Build call for docflowsGetDocumentDescriptionAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
@@ -353,11 +499,11 @@ public class DocflowsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentMetaCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentDescriptionAsyncCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/meta"
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description"
             .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
             .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
@@ -397,25 +543,25 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetDocumentMetaValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetDocumentDescriptionAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentMeta(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentDescriptionAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentMeta(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentDescriptionAsync(Async)");
         }
         
         // verify the required parameter 'documentId' is set
         if (documentId == null) {
-            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentMeta(Async)");
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentDescriptionAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetDocumentMetaCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentDescriptionAsyncCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -430,11 +576,11 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
-     * @return DocumentMeta
+     * @return DocumentDescription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public DocumentMeta docflowsGetDocumentMeta(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        ApiResponse<DocumentMeta> resp = docflowsGetDocumentMetaWithHttpInfo(accountId, docflowId, documentId);
+    public DocumentDescription docflowsGetDocumentDescriptionAsync(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        ApiResponse<DocumentDescription> resp = docflowsGetDocumentDescriptionAsyncWithHttpInfo(accountId, docflowId, documentId);
         return resp.getData();
     }
 
@@ -444,12 +590,12 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
-     * @return ApiResponse&lt;DocumentMeta&gt;
+     * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<DocumentMeta> docflowsGetDocumentMetaWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetDocumentMetaValidateBeforeCall(accountId, docflowId, documentId, null, null);
-        Type localVarReturnType = new TypeToken<DocumentMeta>(){}.getType();
+    public ApiResponse<DocumentDescription> docflowsGetDocumentDescriptionAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentDescriptionAsyncValidateBeforeCall(accountId, docflowId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -463,7 +609,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentMetaAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<DocumentMeta> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentDescriptionAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<DocumentDescription> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -484,13 +630,325 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetDocumentMetaValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<DocumentMeta>(){}.getType();
+        com.squareup.okhttp.Call call = docflowsGetDocumentDescriptionAsyncValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsGetDocumentSignature
+     * Build call for docflowsGetDocumentSignatureAsync
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocumentSignatureAsyncCall(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()))
+            .replaceAll("\\{" + "signatureId" + "\\}", apiClient.escapeString(signatureId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call docflowsGetDocumentSignatureAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentSignatureAsync(Async)");
+        }
+        
+        // verify the required parameter 'docflowId' is set
+        if (docflowId == null) {
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentSignatureAsync(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentSignatureAsync(Async)");
+        }
+        
+        // verify the required parameter 'signatureId' is set
+        if (signatureId == null) {
+            throw new ApiException("Missing the required parameter 'signatureId' when calling docflowsGetDocumentSignatureAsync(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureAsyncCall(accountId, docflowId, documentId, signatureId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @return Signature
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Signature docflowsGetDocumentSignatureAsync(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId) throws ApiException {
+        ApiResponse<Signature> resp = docflowsGetDocumentSignatureAsyncWithHttpInfo(accountId, docflowId, documentId, signatureId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @return ApiResponse&lt;Signature&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Signature> docflowsGetDocumentSignatureAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureAsyncValidateBeforeCall(accountId, docflowId, documentId, signatureId, null, null);
+        Type localVarReturnType = new TypeToken<Signature>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocumentSignatureAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ApiCallback<Signature> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureAsyncValidateBeforeCall(accountId, docflowId, documentId, signatureId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Signature>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for docflowsGetDocumentSignatureContentAsync
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocumentSignatureContentAsyncCall(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()))
+            .replaceAll("\\{" + "signatureId" + "\\}", apiClient.escapeString(signatureId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call docflowsGetDocumentSignatureContentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentSignatureContentAsync(Async)");
+        }
+        
+        // verify the required parameter 'docflowId' is set
+        if (docflowId == null) {
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentSignatureContentAsync(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentSignatureContentAsync(Async)");
+        }
+        
+        // verify the required parameter 'signatureId' is set
+        if (signatureId == null) {
+            throw new ApiException("Missing the required parameter 'signatureId' when calling docflowsGetDocumentSignatureContentAsync(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureContentAsyncCall(accountId, docflowId, documentId, signatureId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @return Signature
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Signature docflowsGetDocumentSignatureContentAsync(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId) throws ApiException {
+        ApiResponse<Signature> resp = docflowsGetDocumentSignatureContentAsyncWithHttpInfo(accountId, docflowId, documentId, signatureId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @return ApiResponse&lt;Signature&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Signature> docflowsGetDocumentSignatureContentAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureContentAsyncValidateBeforeCall(accountId, docflowId, documentId, signatureId, null, null);
+        Type localVarReturnType = new TypeToken<Signature>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentId  (required)
+     * @param signatureId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocumentSignatureContentAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, UUID signatureId, final ApiCallback<Signature> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureContentAsyncValidateBeforeCall(accountId, docflowId, documentId, signatureId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Signature>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for docflowsGetDocumentSignaturesAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
@@ -499,11 +957,11 @@ public class DocflowsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentSignatureCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentSignaturesAsyncCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signature"
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures"
             .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
             .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
@@ -543,25 +1001,25 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetDocumentSignatureValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetDocumentSignaturesAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentSignature(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentSignaturesAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentSignature(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentSignaturesAsync(Async)");
         }
         
         // verify the required parameter 'documentId' is set
         if (documentId == null) {
-            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentSignature(Async)");
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetDocumentSignaturesAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignaturesAsyncCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -576,11 +1034,11 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
-     * @return List&lt;Link&gt;
+     * @return List&lt;Signature&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<Link> docflowsGetDocumentSignature(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        ApiResponse<List<Link>> resp = docflowsGetDocumentSignatureWithHttpInfo(accountId, docflowId, documentId);
+    public List<Signature> docflowsGetDocumentSignaturesAsync(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        ApiResponse<List<Signature>> resp = docflowsGetDocumentSignaturesAsyncWithHttpInfo(accountId, docflowId, documentId);
         return resp.getData();
     }
 
@@ -590,12 +1048,12 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentId  (required)
-     * @return ApiResponse&lt;List&lt;Link&gt;&gt;
+     * @return ApiResponse&lt;List&lt;Signature&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<Link>> docflowsGetDocumentSignatureWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureValidateBeforeCall(accountId, docflowId, documentId, null, null);
-        Type localVarReturnType = new TypeToken<List<Link>>(){}.getType();
+    public ApiResponse<List<Signature>> docflowsGetDocumentSignaturesAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignaturesAsyncValidateBeforeCall(accountId, docflowId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<List<Signature>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -609,7 +1067,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentSignatureAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<List<Link>> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentSignaturesAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<List<Signature>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -630,13 +1088,13 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetDocumentSignatureValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<List<Link>>(){}.getType();
+        com.squareup.okhttp.Call call = docflowsGetDocumentSignaturesAsyncValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<List<Signature>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsGetDocuments
+     * Build call for docflowsGetDocumentsAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param progressListener Progress listener
@@ -644,7 +1102,7 @@ public class DocflowsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentsCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentsAsyncCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -687,20 +1145,20 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetDocumentsValidateBeforeCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetDocumentsAsyncValidateBeforeCall(UUID accountId, UUID docflowId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocuments(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocumentsAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocuments(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetDocumentsAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetDocumentsCall(accountId, docflowId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentsAsyncCall(accountId, docflowId, progressListener, progressRequestListener);
         return call;
 
         
@@ -717,8 +1175,8 @@ public class DocflowsApi {
      * @return List&lt;Document&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<Document> docflowsGetDocuments(UUID accountId, UUID docflowId) throws ApiException {
-        ApiResponse<List<Document>> resp = docflowsGetDocumentsWithHttpInfo(accountId, docflowId);
+    public List<Document> docflowsGetDocumentsAsync(UUID accountId, UUID docflowId) throws ApiException {
+        ApiResponse<List<Document>> resp = docflowsGetDocumentsAsyncWithHttpInfo(accountId, docflowId);
         return resp.getData();
     }
 
@@ -730,8 +1188,8 @@ public class DocflowsApi {
      * @return ApiResponse&lt;List&lt;Document&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<Document>> docflowsGetDocumentsWithHttpInfo(UUID accountId, UUID docflowId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetDocumentsValidateBeforeCall(accountId, docflowId, null, null);
+    public ApiResponse<List<Document>> docflowsGetDocumentsAsyncWithHttpInfo(UUID accountId, UUID docflowId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocumentsAsyncValidateBeforeCall(accountId, docflowId, null, null);
         Type localVarReturnType = new TypeToken<List<Document>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -745,7 +1203,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocumentsAsync(UUID accountId, UUID docflowId, final ApiCallback<List<Document>> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocumentsAsyncAsync(UUID accountId, UUID docflowId, final ApiCallback<List<Document>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -766,34 +1224,31 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetDocumentsValidateBeforeCall(accountId, docflowId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetDocumentsAsyncValidateBeforeCall(accountId, docflowId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<Document>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsGetReplyDocument
+     * Build call for docflowsGetEncryptedDocumentContentAsync
      * @param accountId  (required)
      * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetReplyDocumentCall(UUID accountId, UUID docflowId, String documentType, UUID replyId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetEncryptedDocumentContentAsyncCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentType}"
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted"
             .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
-            .replaceAll("\\{" + "documentType" + "\\}", apiClient.escapeString(documentType.toString()));
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        if (replyId != null)
-        localVarQueryParams.addAll(apiClient.parameterToPairs("", "replyId", replyId));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
 
@@ -828,30 +1283,25 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetReplyDocumentValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID replyId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetEncryptedDocumentContentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetEncryptedDocumentContentAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetEncryptedDocumentContentAsync(Async)");
         }
         
-        // verify the required parameter 'documentType' is set
-        if (documentType == null) {
-            throw new ApiException("Missing the required parameter 'documentType' when calling docflowsGetReplyDocument(Async)");
-        }
-        
-        // verify the required parameter 'replyId' is set
-        if (replyId == null) {
-            throw new ApiException("Missing the required parameter 'replyId' when calling docflowsGetReplyDocument(Async)");
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetEncryptedDocumentContentAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentCall(accountId, docflowId, documentType, replyId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetEncryptedDocumentContentAsyncCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
         return call;
 
         
@@ -865,13 +1315,12 @@ public class DocflowsApi {
      * 
      * @param accountId  (required)
      * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param replyId  (required)
-     * @return Reply
+     * @param documentId  (required)
+     * @return DocumentDescription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Reply docflowsGetReplyDocument(UUID accountId, UUID docflowId, String documentType, UUID replyId) throws ApiException {
-        ApiResponse<Reply> resp = docflowsGetReplyDocumentWithHttpInfo(accountId, docflowId, documentType, replyId);
+    public DocumentDescription docflowsGetEncryptedDocumentContentAsync(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        ApiResponse<DocumentDescription> resp = docflowsGetEncryptedDocumentContentAsyncWithHttpInfo(accountId, docflowId, documentId);
         return resp.getData();
     }
 
@@ -880,14 +1329,13 @@ public class DocflowsApi {
      * 
      * @param accountId  (required)
      * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param replyId  (required)
-     * @return ApiResponse&lt;Reply&gt;
+     * @param documentId  (required)
+     * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Reply> docflowsGetReplyDocumentWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID replyId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentValidateBeforeCall(accountId, docflowId, documentType, replyId, null, null);
-        Type localVarReturnType = new TypeToken<Reply>(){}.getType();
+    public ApiResponse<DocumentDescription> docflowsGetEncryptedDocumentContentAsyncWithHttpInfo(UUID accountId, UUID docflowId, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetEncryptedDocumentContentAsyncValidateBeforeCall(accountId, docflowId, documentId, null, null);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -896,13 +1344,12 @@ public class DocflowsApi {
      * 
      * @param accountId  (required)
      * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID replyId, final ApiCallback<Reply> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetEncryptedDocumentContentAsyncAsync(UUID accountId, UUID docflowId, UUID documentId, final ApiCallback<DocumentDescription> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -923,35 +1370,190 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentValidateBeforeCall(accountId, docflowId, documentType, replyId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetEncryptedDocumentContentAsyncValidateBeforeCall(accountId, docflowId, documentId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DocumentDescription>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for docflowsGetReplyDocumentAsync
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentType  (required)
+     * @param documentId  (required)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
+            .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
+            .replaceAll("\\{" + "documentType" + "\\}", apiClient.escapeString(documentType.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetReplyDocumentAsync(Async)");
+        }
+        
+        // verify the required parameter 'docflowId' is set
+        if (docflowId == null) {
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsGetReplyDocumentAsync(Async)");
+        }
+        
+        // verify the required parameter 'documentType' is set
+        if (documentType == null) {
+            throw new ApiException("Missing the required parameter 'documentType' when calling docflowsGetReplyDocumentAsync(Async)");
+        }
+        
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsGetReplyDocumentAsync(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncCall(accountId, docflowId, documentType, documentId, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentType  (required)
+     * @param documentId  (required)
+     * @return Reply
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Reply docflowsGetReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId) throws ApiException {
+        ApiResponse<Reply> resp = docflowsGetReplyDocumentAsyncWithHttpInfo(accountId, docflowId, documentType, documentId);
+        return resp.getData();
+    }
+
+    /**
+     * 
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentType  (required)
+     * @param documentId  (required)
+     * @return ApiResponse&lt;Reply&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Reply> docflowsGetReplyDocumentAsyncWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID documentId) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, null, null);
+        Type localVarReturnType = new TypeToken<Reply>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     *  (asynchronously)
+     * 
+     * @param accountId  (required)
+     * @param docflowId  (required)
+     * @param documentType  (required)
+     * @param documentId  (required)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ApiCallback<Reply> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Reply>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
-     * Build call for docflowsSendReplyDocument
+     * Build call for docflowsSendReplyDocumentAsync
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param document  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsSendReplyDocumentCall(UUID accountId, UUID docflowId, String documentType, UUID replyId, DocumentToSend document, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsSendReplyDocumentAsyncCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, DocumentToSend document, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = document;
         
         // create path and map variables
-        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/send/{documentType}"
+        String localVarPath = "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}"
             .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()))
             .replaceAll("\\{" + "docflowId" + "\\}", apiClient.escapeString(docflowId.toString()))
-            .replaceAll("\\{" + "documentType" + "\\}", apiClient.escapeString(documentType.toString()));
+            .replaceAll("\\{" + "documentType" + "\\}", apiClient.escapeString(documentType.toString()))
+            .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        if (replyId != null)
-        localVarQueryParams.addAll(apiClient.parameterToPairs("", "replyId", replyId));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
 
@@ -986,35 +1588,35 @@ public class DocflowsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsSendReplyDocumentValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID replyId, DocumentToSend document, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsSendReplyDocumentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, DocumentToSend document, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
-            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsSendReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsSendReplyDocumentAsync(Async)");
         }
         
         // verify the required parameter 'docflowId' is set
         if (docflowId == null) {
-            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsSendReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'docflowId' when calling docflowsSendReplyDocumentAsync(Async)");
         }
         
         // verify the required parameter 'documentType' is set
         if (documentType == null) {
-            throw new ApiException("Missing the required parameter 'documentType' when calling docflowsSendReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'documentType' when calling docflowsSendReplyDocumentAsync(Async)");
         }
         
-        // verify the required parameter 'replyId' is set
-        if (replyId == null) {
-            throw new ApiException("Missing the required parameter 'replyId' when calling docflowsSendReplyDocument(Async)");
+        // verify the required parameter 'documentId' is set
+        if (documentId == null) {
+            throw new ApiException("Missing the required parameter 'documentId' when calling docflowsSendReplyDocumentAsync(Async)");
         }
         
         // verify the required parameter 'document' is set
         if (document == null) {
-            throw new ApiException("Missing the required parameter 'document' when calling docflowsSendReplyDocument(Async)");
+            throw new ApiException("Missing the required parameter 'document' when calling docflowsSendReplyDocumentAsync(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = docflowsSendReplyDocumentCall(accountId, docflowId, documentType, replyId, document, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsSendReplyDocumentAsyncCall(accountId, docflowId, documentType, documentId, document, progressListener, progressRequestListener);
         return call;
 
         
@@ -1029,13 +1631,13 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param document  (required)
      * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Docflow docflowsSendReplyDocument(UUID accountId, UUID docflowId, String documentType, UUID replyId, DocumentToSend document) throws ApiException {
-        ApiResponse<Docflow> resp = docflowsSendReplyDocumentWithHttpInfo(accountId, docflowId, documentType, replyId, document);
+    public Docflow docflowsSendReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, DocumentToSend document) throws ApiException {
+        ApiResponse<Docflow> resp = docflowsSendReplyDocumentAsyncWithHttpInfo(accountId, docflowId, documentType, documentId, document);
         return resp.getData();
     }
 
@@ -1045,13 +1647,13 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param document  (required)
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Docflow> docflowsSendReplyDocumentWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID replyId, DocumentToSend document) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsSendReplyDocumentValidateBeforeCall(accountId, docflowId, documentType, replyId, document, null, null);
+    public ApiResponse<Docflow> docflowsSendReplyDocumentAsyncWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID documentId, DocumentToSend document) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsSendReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, document, null, null);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -1062,13 +1664,13 @@ public class DocflowsApi {
      * @param accountId  (required)
      * @param docflowId  (required)
      * @param documentType  (required)
-     * @param replyId  (required)
+     * @param documentId  (required)
      * @param document  (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsSendReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID replyId, DocumentToSend document, final ApiCallback<Docflow> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsSendReplyDocumentAsyncAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, DocumentToSend document, final ApiCallback<Docflow> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1089,7 +1691,7 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsSendReplyDocumentValidateBeforeCall(accountId, docflowId, documentType, replyId, document, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsSendReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, document, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
