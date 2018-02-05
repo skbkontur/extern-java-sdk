@@ -159,7 +159,7 @@
         <repository>
             <id>extern.lib</id>
             <name>lib</name>
-            <url>file://${project.basedir}/repo</url>
+            <url>file://${project.basedir}\repo</url>
         </repository>
     </repositories>
     <dependencies>

@@ -1,59 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-
-	<parent>
-		<groupId>ru.argosgrp.cryptoservice</groupId>
-		<artifactId>cryptoservice</artifactId>
-		<version>5.0.18</version>
-	</parent>
-
-	<artifactId>asn1</artifactId>
-	<!--version>${applicationVersion}</version-->
-
-	<properties>
-		<SpecificationTitle>Argos Asn1 Module</SpecificationTitle>
-		<ImplementationVersion>${applicationVersion}</ImplementationVersion>
-	</properties>
-
-	<packaging>jar</packaging>
-
-	<dependencies>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<!--plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<keystore>${code.sign.jks}</keystore>
-							<alias>${code.sign.alias}</alias>
-							<storepass>${code.sign.storepass}</storepass>
-							<keypass>${code.sign.keypass}</keypass>
-							<tsa>${sign.tsa}</tsa>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ru.argosgrp.cryptoservice</groupId>
+  <artifactId>asn1</artifactId>
+  <version>5.0.18</version>
+  <description>POM was created from install:install-file</description>
 </project>
