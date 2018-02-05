@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Feb 05 14:45:02 GMT+03:00 2018
+cs-pkcs11-5.0.18.jar>=
+cs-pkcs11-5.0.18.pom>=
