@@ -20,4 +20,8 @@ public class Environment {
 	public String accessToken;
 	public CryptoService cryptoService;
 	public Key signKey;
+	
+	public Environment() {
+		configuration = new Configuration();
+	}
 }

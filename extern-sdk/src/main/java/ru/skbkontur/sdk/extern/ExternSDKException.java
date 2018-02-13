@@ -31,4 +31,8 @@ public class ExternSDKException extends Exception {
 	public ExternSDKException(String template, Object ... params) {
 		super(MessageFormat.format(template, params));
 	}
+	
+	public ExternSDKException(String template, Throwable x, Object ... params) {
+		super(MessageFormat.format(template, params), x);
+	}
 }

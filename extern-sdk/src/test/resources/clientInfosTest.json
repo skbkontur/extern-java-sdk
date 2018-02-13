@@ -1,9 +1,0 @@
-[
-	{
-		"clientInfo":{"sender":{"inn":"781012345600","fio":{"surname":"КАЦ","name":"ОЛЕГ","patronymic":"ЕВГЕНЬЕВИЧ"}},"recipient": {"ifns-code":"7810" },"organization":{"type":1,"inn":"6653000832","organization":{"kpp":"665325934"}}},
-		"docs":
-			[
-				"/docs/NO_SRCHIS_7810_7810_6653000832665325934_20180126_993f2341-2b37-45dc-8fd5-fca7c019d49a.xml"
-			]
-	}
-]

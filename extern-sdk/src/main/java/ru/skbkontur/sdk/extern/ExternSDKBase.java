@@ -95,7 +95,7 @@ public class ExternSDKBase {
 				}
 				break;
 			case HttpURLConnection.HTTP_NOT_FOUND:
-				throw new ExternSDKException(ExternSDKException.S_ENTITY_NOT_FOUND, entityName, id);
+				throw new ExternSDKException(ExternSDKException.S_ENTITY_NOT_FOUND, x, entityName, id);
 			default:
 				throw new ExternSDKException(ExternSDKException.S_SERVER_ERROR, x);
 		}

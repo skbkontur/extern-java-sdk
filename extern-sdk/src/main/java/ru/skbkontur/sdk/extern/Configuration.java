@@ -13,6 +13,8 @@ import java.util.UUID;
  * @author AlexS
  */
 public class Configuration {
+	public static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
+	
   @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;
 	@SerializedName("authPrefix") private String authPrefix;
@@ -21,6 +23,10 @@ public class Configuration {
 	@SerializedName("authBaseUri") private String authBaseUri;
 	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate
 
+	public Configuration() {
+		authPrefix = DEFAULT_AUTH_PREFIX;
+	}
+	
 	public UUID getAccountId() {
 		return accountId;
 	}

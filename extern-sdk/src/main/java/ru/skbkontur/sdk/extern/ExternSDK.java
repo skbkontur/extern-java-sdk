@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.UUID;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
@@ -28,14 +29,44 @@ public class ExternSDK {
 
 	private final Gson gson = new Gson();
 
-	private final Environment env = new Environment();
-	
-	public ExternSDKDraft draft; 
+	private final Environment env;
 
-	public ExternSDKDocflow docflow; 
-	
+	public ExternSDKDraft draft;
+
+	public ExternSDKDocflow docflow;
+
 	public ExternSDK() throws ExternSDKException {
-		init();
+		env = new Environment();
+		// loads config data from the resourse file: extern-sdk-config.json
+		loadConfiguration();
+	}
+
+	public void setAccountId(String accountId) {
+		env.configuration.setAccountId(UUID.fromString(accountId));
+	}
+
+	public void setApiKey(String apiKey) {
+		env.configuration.setApiKey(apiKey);
+	}
+
+	public void setAuthPrefix(String authPrefix) {
+		env.configuration.setAuthPrefix(authPrefix);
+	}
+
+	public void setLogin(String login) {
+		env.configuration.setLogin(login);
+	}
+
+	public void setPass(String pass) {
+		env.configuration.setPass(pass);
+	}
+
+	public void setAuthBaseUri(String authBaseUri) {
+		env.configuration.setAuthBaseUri(authBaseUri);
+	}
+
+	public void setThumbprint(String thumbprint) {
+		env.configuration.setThumbprint(thumbprint);
 	}
 
 	public Environment getEnvironment() {
@@ -55,10 +86,8 @@ public class ExternSDK {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);
 		}
 	}
-	
-	private void init() throws ExternSDKException {
-		// loads config data from the resourse file: extern-sdk-config.json
-		env.configuration = loadConfiguration();
+
+	public void initialize() throws ExternSDKException {
 		// aquires access token (session id)
 		env.accessToken = acquireAccessToken();
 		// configurates a crypto service
@@ -69,10 +98,11 @@ public class ExternSDK {
 		docflow = new ExternSDKDocflow(this);
 	}
 
-	
 	private Configuration loadConfiguration() throws ExternSDKException {
 		try (InputStream is = ExternSDK.class.getResourceAsStream(EXTERN_SDK_CONFIG)) {
-			return gson.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+			if (is != null) {
+				return gson.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+			}
 		}
 		catch (IOException x) {
 			throw new ExternSDKException(ExternSDKException.C_CONFIG_LOAD, x);
@@ -80,6 +110,7 @@ public class ExternSDK {
 		catch (Exception x) {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);
 		}
+		return null;
 	}
 
 	private void initCryptoService() {
@@ -90,11 +121,14 @@ public class ExternSDK {
 				env.cryptoService = new MSCapi(true);
 				// searches a signature key by thumbprint
 				Key[] keys = env.cryptoService.getKeys();
-				for (int i=0; i < keys.length && env.signKey == null; i++)
-					if (Arrays.equals(keys[i].getThumbprint(),tp))
+				for (int i = 0; i < keys.length && env.signKey == null; i++) {
+					if (Arrays.equals(keys[i].getThumbprint(), tp)) {
 						env.signKey = keys[i];
-				if (env.signKey == null)
+					}
+				}
+				if (env.signKey == null) {
 					System.out.println("A Signature key not found.");
+				}
 			}
 			catch (CryptoException x) {
 				System.out.println("Ошибка инициализации криптосервиса. Подробности: " + x.getMessage());
