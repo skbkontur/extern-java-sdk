@@ -38,7 +38,7 @@ public class ExternSDK {
 	public ExternSDK() throws ExternSDKException {
 		env = new Environment();
 		// loads config data from the resourse file: extern-sdk-config.json
-		loadConfiguration();
+		env.configuration = loadConfiguration();
 	}
 
 	public void setAccountId(String accountId) {

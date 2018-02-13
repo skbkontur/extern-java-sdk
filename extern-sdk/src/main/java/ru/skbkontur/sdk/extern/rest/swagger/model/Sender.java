@@ -51,7 +51,7 @@ public class Sender {
   @SerializedName("rns-fss")
   private String rnsFss = null;
 
-  @SerializedName("сertificate")
+  @SerializedName("�ertificate")
   private Certificate ertificate = null;
 
   public Sender inn(String inn) {
