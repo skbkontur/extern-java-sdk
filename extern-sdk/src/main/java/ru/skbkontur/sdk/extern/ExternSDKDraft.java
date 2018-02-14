@@ -16,6 +16,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.DocumentMeta;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Draft;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftDocument;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
+import ru.skbkontur.sdk.extern.rest.swagger.model.PrepareResult;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Urn;
 
 /**
@@ -125,8 +126,8 @@ public class ExternSDKDraft extends ExternSDKBase {
 	 * @return DTO
 	 * @throws ExternSDKException a business error
 	 */
-	public Map<String,Object> prepare(String draftId, boolean deffered) throws ExternSDKException {
-		return invokeApply(api::prepare,newCxtForMap(EN_DFT).setDraftId(draftId).setDeffered(deffered).setEntityId(draftId)).get();
+	public PrepareResult prepare(String draftId, boolean deffered) throws ExternSDKException {
+		return invokeApply(api::prepare,newCxt(EN_DFT,PrepareResult.class).setDraftId(draftId).setDeffered(deffered).setEntityId(draftId)).get();
 	}
 	
 	/**

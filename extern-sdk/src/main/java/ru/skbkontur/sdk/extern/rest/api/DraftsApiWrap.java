@@ -13,6 +13,7 @@ import ru.skbkontur.sdk.extern.rest.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Draft;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftDocument;
 import ru.skbkontur.sdk.extern.rest.swagger.model.DraftMeta;
+import ru.skbkontur.sdk.extern.rest.swagger.model.PrepareResult;
 
 /**
  *
@@ -118,8 +119,8 @@ public class DraftsApiWrap extends ApiWrap {
 	 * @return Map&lt;String,Object&gt;
 	 * @throws ApiException a restful error
 	 */
-	public QueryContext<Map<String, Object>> prepare(QueryContext<Map<String, Object>> cxt) throws ApiException {
-		return cxt.setResult((Map) api.draftsPrepare(cxt.getAccountId(), cxt.getDraftId()));
+	public QueryContext<PrepareResult> prepare(QueryContext<PrepareResult> cxt) throws ApiException {
+		return cxt.setResult(api.draftsPrepare(cxt.getAccountId(), cxt.getDraftId()));
 	}
 
 	/**
