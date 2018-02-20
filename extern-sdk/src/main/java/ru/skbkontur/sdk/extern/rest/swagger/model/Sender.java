@@ -51,8 +51,8 @@ public class Sender {
   @SerializedName("rns-fss")
   private String rnsFss = null;
 
-  @SerializedName("�ertificate")
-  private Certificate ertificate = null;
+  @SerializedName("certificate")
+  private Certificate certificate = null;
 
   public Sender inn(String inn) {
     this.inn = inn;
@@ -180,22 +180,22 @@ public class Sender {
     this.rnsFss = rnsFss;
   }
 
-  public Sender ertificate(Certificate ertificate) {
-    this.ertificate = ertificate;
+  public Sender certificate(Certificate certificate) {
+    this.certificate = certificate;
     return this;
   }
 
    /**
-   * Get ertificate
-   * @return ertificate
+   * Get certificate
+   * @return certificate
   **/
   @ApiModelProperty(value = "")
-  public Certificate getErtificate() {
-    return ertificate;
+  public Certificate getCertificate() {
+    return certificate;
   }
 
-  public void setErtificate(Certificate ertificate) {
-    this.ertificate = ertificate;
+  public void setCertificate(Certificate certificate) {
+    this.certificate = certificate;
   }
 
 
@@ -215,12 +215,12 @@ public class Sender {
         Objects.equals(this.ogrn, sender.ogrn) &&
         Objects.equals(this.ogrnIp, sender.ogrnIp) &&
         Objects.equals(this.rnsFss, sender.rnsFss) &&
-        Objects.equals(this.ertificate, sender.ertificate);
+        Objects.equals(this.certificate, sender.certificate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, fio, kpp, fullName, ogrn, ogrnIp, rnsFss, ertificate);
+    return Objects.hash(inn, fio, kpp, fullName, ogrn, ogrnIp, rnsFss, certificate);
   }
 
 
@@ -236,7 +236,7 @@ public class Sender {
     sb.append("    ogrn: ").append(toIndentedString(ogrn)).append("\n");
     sb.append("    ogrnIp: ").append(toIndentedString(ogrnIp)).append("\n");
     sb.append("    rnsFss: ").append(toIndentedString(rnsFss)).append("\n");
-    sb.append("    ertificate: ").append(toIndentedString(ertificate)).append("\n");
+    sb.append("    certificate: ").append(toIndentedString(certificate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

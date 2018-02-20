@@ -63,9 +63,9 @@ public class DocflowsApi {
 
     /**
      * Build call for docflowsGetDecryptedDocumentContentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -143,11 +143,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete decrypted document content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return DocumentDescription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -157,11 +157,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete decrypted document content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -172,11 +172,11 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete decrypted document content from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -209,8 +209,8 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocflowAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -282,10 +282,10 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get Docflow object
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -295,10 +295,10 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get Docflow object
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -309,10 +309,10 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get Docflow object (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -345,9 +345,9 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -425,11 +425,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return Document
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -439,11 +439,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;Document&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -454,11 +454,11 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete document from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -491,9 +491,9 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentDescriptionAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -571,11 +571,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document description from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return DocumentDescription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -585,11 +585,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document description from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -600,11 +600,11 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete document description from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -637,10 +637,10 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentSignatureAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -724,12 +724,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document single signature from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @return Signature
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -739,12 +739,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document single signature from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @return ApiResponse&lt;Signature&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -755,12 +755,12 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete document single signature from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -793,10 +793,10 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentSignatureContentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -880,12 +880,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document signature single content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @return Signature
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -895,12 +895,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document signature single content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @return ApiResponse&lt;Signature&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -911,12 +911,12 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete document signature single content from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
-     * @param signatureId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param signatureId Signature identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -949,9 +949,9 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentSignaturesAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -1029,11 +1029,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document signatures from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return List&lt;Signature&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1043,11 +1043,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete document signatures from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;List&lt;Signature&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1058,11 +1058,11 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete document signatures from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1095,8 +1095,8 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetDocumentsAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -1168,10 +1168,10 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get all document from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @return List&lt;Document&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1181,10 +1181,10 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get all document from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @return ApiResponse&lt;List&lt;Document&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1195,10 +1195,10 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get all document from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1231,9 +1231,9 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetEncryptedDocumentContentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -1311,11 +1311,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete encrypted document content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return DocumentDescription
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1325,11 +1325,11 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get discrete encrypted document content from docflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1340,11 +1340,11 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get discrete encrypted document content from docflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1377,10 +1377,10 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsGetReplyDocumentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -1464,12 +1464,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get Reply document for specified workflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
      * @return Reply
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1479,12 +1479,12 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to get Reply document for specified workflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
      * @return ApiResponse&lt;Reply&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1495,12 +1495,12 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to get Reply document for specified workflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -1533,11 +1533,11 @@ public class DocflowsApi {
     }
     /**
      * Build call for docflowsSendReplyDocumentAsync
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
-     * @param document  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Dockflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
+     * @param document Reply document to be sent (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -1626,13 +1626,13 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to send Reply document for specified workflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
-     * @param document  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Dockflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
+     * @param document Reply document to be sent (required)
      * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1642,13 +1642,13 @@ public class DocflowsApi {
     }
 
     /**
+     * Allow API user to send Reply document for specified workflow
      * 
-     * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
-     * @param document  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Dockflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
+     * @param document Reply document to be sent (required)
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -1659,13 +1659,13 @@ public class DocflowsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Allow API user to send Reply document for specified workflow (asynchronously)
      * 
-     * @param accountId  (required)
-     * @param docflowId  (required)
-     * @param documentType  (required)
-     * @param documentId  (required)
-     * @param document  (required)
+     * @param accountId Account identifier (required)
+     * @param docflowId Dockflow identifier (required)
+     * @param documentType Document type (required)
+     * @param documentId Document identifier (required)
+     * @param document Reply document to be sent (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object

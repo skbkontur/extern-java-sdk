@@ -126,7 +126,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @param request  (required)
      * @return Account
@@ -138,7 +138,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @param request  (required)
      * @return ApiResponse&lt;Account&gt;
@@ -151,7 +151,7 @@ public class AccountsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Not implemented yet (asynchronously)
      * 
      * @param request  (required)
      * @param callback The callback to be executed when the API call finishes
@@ -252,7 +252,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @param accountId  (required)
      * @return Account
@@ -264,7 +264,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @param accountId  (required)
      * @return ApiResponse&lt;Account&gt;
@@ -277,7 +277,7 @@ public class AccountsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Not implemented yet (asynchronously)
      * 
      * @param accountId  (required)
      * @param callback The callback to be executed when the API call finishes
@@ -371,7 +371,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @return AccountList
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -382,7 +382,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Not implemented yet
      * 
      * @return ApiResponse&lt;AccountList&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -394,7 +394,7 @@ public class AccountsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Not implemented yet (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -487,7 +487,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Non implemented index
      * 
      * @return List&lt;Link&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -498,7 +498,7 @@ public class AccountsApi {
     }
 
     /**
-     * 
+     * Non implemented index
      * 
      * @return ApiResponse&lt;List&lt;Link&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -510,7 +510,7 @@ public class AccountsApi {
     }
 
     /**
-     *  (asynchronously)
+     * Non implemented index (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
