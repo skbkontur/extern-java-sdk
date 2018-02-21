@@ -110,7 +110,7 @@ public class ExternSDK {
 		catch (Exception x) {
 			throw new ExternSDKException(ExternSDKException.UNKNOWN, x);
 		}
-		return null;
+		return new Configuration();
 	}
 
 	private void initCryptoService() {
