@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import ru.skbkontur.sdk.extern.rest.swagger.model.Certificate;
-import ru.skbkontur.sdk.extern.rest.swagger.model.Fio;
 
 /**
  * Sender
@@ -33,23 +32,8 @@ public class Sender {
   @SerializedName("inn")
   private String inn = null;
 
-  @SerializedName("fio")
-  private Fio fio = null;
-
   @SerializedName("kpp")
   private String kpp = null;
-
-  @SerializedName("full-name")
-  private String fullName = null;
-
-  @SerializedName("ogrn")
-  private String ogrn = null;
-
-  @SerializedName("ogrn-ip")
-  private String ogrnIp = null;
-
-  @SerializedName("rns-fss")
-  private String rnsFss = null;
 
   @SerializedName("certificate")
   private Certificate certificate = null;
@@ -63,31 +47,13 @@ public class Sender {
    * Get inn
    * @return inn
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getInn() {
     return inn;
   }
 
   public void setInn(String inn) {
     this.inn = inn;
-  }
-
-  public Sender fio(Fio fio) {
-    this.fio = fio;
-    return this;
-  }
-
-   /**
-   * Get fio
-   * @return fio
-  **/
-  @ApiModelProperty(value = "")
-  public Fio getFio() {
-    return fio;
-  }
-
-  public void setFio(Fio fio) {
-    this.fio = fio;
   }
 
   public Sender kpp(String kpp) {
@@ -108,78 +74,6 @@ public class Sender {
     this.kpp = kpp;
   }
 
-  public Sender fullName(String fullName) {
-    this.fullName = fullName;
-    return this;
-  }
-
-   /**
-   * Get fullName
-   * @return fullName
-  **/
-  @ApiModelProperty(value = "")
-  public String getFullName() {
-    return fullName;
-  }
-
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
-
-  public Sender ogrn(String ogrn) {
-    this.ogrn = ogrn;
-    return this;
-  }
-
-   /**
-   * Get ogrn
-   * @return ogrn
-  **/
-  @ApiModelProperty(value = "")
-  public String getOgrn() {
-    return ogrn;
-  }
-
-  public void setOgrn(String ogrn) {
-    this.ogrn = ogrn;
-  }
-
-  public Sender ogrnIp(String ogrnIp) {
-    this.ogrnIp = ogrnIp;
-    return this;
-  }
-
-   /**
-   * Get ogrnIp
-   * @return ogrnIp
-  **/
-  @ApiModelProperty(value = "")
-  public String getOgrnIp() {
-    return ogrnIp;
-  }
-
-  public void setOgrnIp(String ogrnIp) {
-    this.ogrnIp = ogrnIp;
-  }
-
-  public Sender rnsFss(String rnsFss) {
-    this.rnsFss = rnsFss;
-    return this;
-  }
-
-   /**
-   * Get rnsFss
-   * @return rnsFss
-  **/
-  @ApiModelProperty(value = "")
-  public String getRnsFss() {
-    return rnsFss;
-  }
-
-  public void setRnsFss(String rnsFss) {
-    this.rnsFss = rnsFss;
-  }
-
   public Sender certificate(Certificate certificate) {
     this.certificate = certificate;
     return this;
@@ -189,7 +83,7 @@ public class Sender {
    * Get certificate
    * @return certificate
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Certificate getCertificate() {
     return certificate;
   }
@@ -209,18 +103,13 @@ public class Sender {
     }
     Sender sender = (Sender) o;
     return Objects.equals(this.inn, sender.inn) &&
-        Objects.equals(this.fio, sender.fio) &&
         Objects.equals(this.kpp, sender.kpp) &&
-        Objects.equals(this.fullName, sender.fullName) &&
-        Objects.equals(this.ogrn, sender.ogrn) &&
-        Objects.equals(this.ogrnIp, sender.ogrnIp) &&
-        Objects.equals(this.rnsFss, sender.rnsFss) &&
         Objects.equals(this.certificate, sender.certificate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, fio, kpp, fullName, ogrn, ogrnIp, rnsFss, certificate);
+    return Objects.hash(inn, kpp, certificate);
   }
 
 
@@ -230,12 +119,7 @@ public class Sender {
     sb.append("class Sender {\n");
     
     sb.append("    inn: ").append(toIndentedString(inn)).append("\n");
-    sb.append("    fio: ").append(toIndentedString(fio)).append("\n");
     sb.append("    kpp: ").append(toIndentedString(kpp)).append("\n");
-    sb.append("    fullName: ").append(toIndentedString(fullName)).append("\n");
-    sb.append("    ogrn: ").append(toIndentedString(ogrn)).append("\n");
-    sb.append("    ogrnIp: ").append(toIndentedString(ogrnIp)).append("\n");
-    sb.append("    rnsFss: ").append(toIndentedString(rnsFss)).append("\n");
     sb.append("    certificate: ").append(toIndentedString(certificate)).append("\n");
     sb.append("}");
     return sb.toString();

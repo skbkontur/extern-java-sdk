@@ -2348,14 +2348,14 @@ public class DraftsApi {
      * Build call for draftsSend
      * @param accountId  (required)
      * @param draftId  (required)
-     * @param deffered  (optional)
+     * @param deferred  (optional)
      * @param force  (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call draftsSendCall(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call draftsSendCall(UUID accountId, UUID draftId, Boolean deferred, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -2364,8 +2364,8 @@ public class DraftsApi {
             .replaceAll("\\{" + "draftId" + "\\}", apiClient.escapeString(draftId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        if (deffered != null)
-        localVarQueryParams.addAll(apiClient.parameterToPairs("", "deffered", deffered));
+        if (deferred != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "deferred", deferred));
         if (force != null)
         localVarQueryParams.addAll(apiClient.parameterToPairs("", "force", force));
 
@@ -2402,7 +2402,7 @@ public class DraftsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call draftsSendValidateBeforeCall(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call draftsSendValidateBeforeCall(UUID accountId, UUID draftId, Boolean deferred, Boolean force, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
@@ -2415,7 +2415,7 @@ public class DraftsApi {
         }
         
         
-        com.squareup.okhttp.Call call = draftsSendCall(accountId, draftId, deffered, force, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsSendCall(accountId, draftId, deferred, force, progressListener, progressRequestListener);
         return call;
 
         
@@ -2429,13 +2429,13 @@ public class DraftsApi {
      * 
      * @param accountId  (required)
      * @param draftId  (required)
-     * @param deffered  (optional)
+     * @param deferred  (optional)
      * @param force  (optional)
      * @return Docflow
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Docflow draftsSend(UUID accountId, UUID draftId, Boolean deffered, Boolean force) throws ApiException {
-        ApiResponse<Docflow> resp = draftsSendWithHttpInfo(accountId, draftId, deffered, force);
+    public Docflow draftsSend(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
+        ApiResponse<Docflow> resp = draftsSendWithHttpInfo(accountId, draftId, deferred, force);
         return resp.getData();
     }
 
@@ -2444,13 +2444,13 @@ public class DraftsApi {
      * 
      * @param accountId  (required)
      * @param draftId  (required)
-     * @param deffered  (optional)
+     * @param deferred  (optional)
      * @param force  (optional)
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Docflow> draftsSendWithHttpInfo(UUID accountId, UUID draftId, Boolean deffered, Boolean force) throws ApiException {
-        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deffered, force, null, null);
+    public ApiResponse<Docflow> draftsSendWithHttpInfo(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
+        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deferred, force, null, null);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -2460,13 +2460,13 @@ public class DraftsApi {
      * 
      * @param accountId  (required)
      * @param draftId  (required)
-     * @param deffered  (optional)
+     * @param deferred  (optional)
      * @param force  (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsSendAsync(UUID accountId, UUID draftId, Boolean deffered, Boolean force, final ApiCallback<Docflow> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsSendAsync(UUID accountId, UUID draftId, Boolean deferred, Boolean force, final ApiCallback<Docflow> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -2487,7 +2487,7 @@ public class DraftsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deffered, force, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deferred, force, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

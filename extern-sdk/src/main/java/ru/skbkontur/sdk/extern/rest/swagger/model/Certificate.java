@@ -40,7 +40,7 @@ public class Certificate {
    * Get content
    * @return content
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getContent() {
     return content;
   }

@@ -35,15 +35,6 @@ public class AccountInfo {
   @SerializedName("organization")
   private OrganizationInfo organization = null;
 
-  @SerializedName("full-name")
-  private String fullName = null;
-
-  @SerializedName("short-name")
-  private String shortName = null;
-
-  @SerializedName("oktmo")
-  private String oktmo = null;
-
   public AccountInfo inn(String inn) {
     this.inn = inn;
     return this;
@@ -80,60 +71,6 @@ public class AccountInfo {
     this.organization = organization;
   }
 
-  public AccountInfo fullName(String fullName) {
-    this.fullName = fullName;
-    return this;
-  }
-
-   /**
-   * Get fullName
-   * @return fullName
-  **/
-  @ApiModelProperty(value = "")
-  public String getFullName() {
-    return fullName;
-  }
-
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
-
-  public AccountInfo shortName(String shortName) {
-    this.shortName = shortName;
-    return this;
-  }
-
-   /**
-   * Get shortName
-   * @return shortName
-  **/
-  @ApiModelProperty(value = "")
-  public String getShortName() {
-    return shortName;
-  }
-
-  public void setShortName(String shortName) {
-    this.shortName = shortName;
-  }
-
-  public AccountInfo oktmo(String oktmo) {
-    this.oktmo = oktmo;
-    return this;
-  }
-
-   /**
-   * Get oktmo
-   * @return oktmo
-  **/
-  @ApiModelProperty(value = "")
-  public String getOktmo() {
-    return oktmo;
-  }
-
-  public void setOktmo(String oktmo) {
-    this.oktmo = oktmo;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -145,15 +82,12 @@ public class AccountInfo {
     }
     AccountInfo accountInfo = (AccountInfo) o;
     return Objects.equals(this.inn, accountInfo.inn) &&
-        Objects.equals(this.organization, accountInfo.organization) &&
-        Objects.equals(this.fullName, accountInfo.fullName) &&
-        Objects.equals(this.shortName, accountInfo.shortName) &&
-        Objects.equals(this.oktmo, accountInfo.oktmo);
+        Objects.equals(this.organization, accountInfo.organization);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, organization, fullName, shortName, oktmo);
+    return Objects.hash(inn, organization);
   }
 
 
@@ -164,9 +98,6 @@ public class AccountInfo {
     
     sb.append("    inn: ").append(toIndentedString(inn)).append("\n");
     sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
-    sb.append("    fullName: ").append(toIndentedString(fullName)).append("\n");
-    sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
-    sb.append("    oktmo: ").append(toIndentedString(oktmo)).append("\n");
     sb.append("}");
     return sb.toString();
   }
