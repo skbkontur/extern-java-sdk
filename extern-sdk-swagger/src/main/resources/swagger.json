@@ -1,1 +1,2961 @@
-{"swagger":"2.0","info":{"version":"v1","title":"Kontur.Extern.Api.Public"},"host":"extern-api.testkontur.ru","schemes":["http"],"paths":{"/":{"get":{"tags":["Accounts"],"operationId":"Root_Index","consumes":[],"produces":["application/json","text/json"],"parameters":[],"responses":{"200":{"description":"","schema":{"type":"array","items":{"$ref":"#/definitions/Link"}}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[]}},"/v1":{"get":{"tags":["Accounts"],"operationId":"Accounts_GetAll","consumes":[],"produces":["application/json","text/json"],"parameters":[],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/AccountList"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"post":{"tags":["Accounts"],"operationId":"Accounts_CreateAsync","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"request","in":"body","required":true,"schema":{"$ref":"#/definitions/CreateAccountRequestDto"}}],"responses":{"200":{"description":"OK","schema":{"$ref":"#/definitions/Account"}},"201":{"description":"","schema":{"$ref":"#/definitions/Account"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}":{"get":{"tags":["Accounts"],"operationId":"Accounts_Get","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Account"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocflowAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Docflow"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentsAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"type":"array","items":{"$ref":"#/definitions/Document"}}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Document"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentDescriptionAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DocumentDescription"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetEncryptedDocumentContentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DocumentDescription"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDecryptedDocumentContentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DocumentDescription"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentSignaturesAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"type":"array","items":{"$ref":"#/definitions/Signature"}}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentSignatureAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"signatureId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Signature"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetDocumentSignatureContentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"signatureId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Signature"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}":{"get":{"tags":["Docflows"],"operationId":"Docflows_GetReplyDocumentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentType","in":"path","required":true,"type":"string"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Reply"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"post":{"tags":["Docflows"],"operationId":"Docflows_SendReplyDocumentAsync","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"docflowId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentType","in":"path","required":true,"type":"string"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"document","in":"body","required":true,"schema":{"$ref":"#/definitions/DocumentToSend"}}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Docflow"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts":{"post":{"tags":["Drafts"],"operationId":"Drafts_Create","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"clientInfo","in":"body","required":true,"schema":{"$ref":"#/definitions/DraftMeta"}}],"responses":{"200":{"description":"OK","schema":{"type":"object"}},"201":{"description":"Черновик успешно создан","schema":{"$ref":"#/definitions/Draft"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}":{"get":{"tags":["Drafts"],"operationId":"Drafts_GetDraft","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Draft"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"delete":{"tags":["Drafts"],"operationId":"Drafts_DeleteDraft","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":""},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/meta":{"get":{"tags":["Drafts"],"operationId":"Drafts_GetMeta","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DraftMeta"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"put":{"tags":["Drafts"],"operationId":"Drafts_UpdateDraftMeta","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"clientInfo","in":"body","required":true,"schema":{"$ref":"#/definitions/DraftMeta"}}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DraftMeta"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/check":{"post":{"tags":["Drafts"],"operationId":"Drafts_Check","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"OK","schema":{"type":"object"}},"202":{"description":"","schema":{"$ref":"#/definitions/CheckResult"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/prepare":{"post":{"tags":["Drafts"],"operationId":"Drafts_Prepare","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/PrepareResult"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/ErrorPrepareResult"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/send":{"post":{"tags":["Drafts"],"operationId":"Drafts_Send","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"deffered","in":"query","required":false,"type":"boolean"},{"name":"force","in":"query","required":false,"type":"boolean"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/Docflow"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/documents/{documentId}":{"get":{"tags":["Drafts"],"operationId":"DraftDocuments_GetDocumentAsync","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DraftDocument"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"put":{"tags":["Drafts"],"operationId":"DraftDocuments_PutDocument","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentContents","in":"body","required":true,"schema":{"$ref":"#/definitions/DocumentContents"}}],"responses":{"200":{"description":"","schema":{"$ref":"#/definitions/DraftDocument"}},"201":{"description":"","schema":{"$ref":"#/definitions/DraftDocument"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"delete":{"tags":["Drafts"],"operationId":"DraftDocuments_DeleteDocument","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":""},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/documents":{"post":{"tags":["Drafts"],"operationId":"DraftDocuments_AddDocument","consumes":["application/json","text/json","application/x-www-form-urlencoded"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentContents","in":"body","required":true,"schema":{"$ref":"#/definitions/DocumentContents"}}],"responses":{"200":{"description":"OK","schema":{"type":"object"}},"201":{"description":"","schema":{"$ref":"#/definitions/DraftDocument"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted":{"get":{"tags":["Drafts"],"operationId":"DraftDocuments_GetDocumentContent","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"type":"string"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"put":{"tags":["Drafts"],"operationId":"DraftDocuments_PutDocumentContent","consumes":["application/octet-stream"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"content","in":"body","required":true,"schema":{"format":"byte","type":"string"}}],"responses":{"200":{"description":""},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted":{"get":{"tags":["Drafts"],"operationId":"DraftDocuments_GetEncryptedDocumentContent","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"type":"string"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}},"/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature":{"get":{"tags":["Drafts"],"operationId":"DraftDocuments_GetSignatureContent","consumes":[],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"}],"responses":{"200":{"description":"","schema":{"type":"string"}},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]},"put":{"tags":["Drafts"],"operationId":"DraftDocuments_PutDocumentSignature","consumes":["application/octet-stream"],"produces":["application/json","text/json"],"parameters":[{"name":"accountId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"draftId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"documentId","in":"path","required":true,"type":"string","format":"uuid"},{"name":"content","in":"body","required":true,"schema":{"format":"byte","type":"string"}}],"responses":{"200":{"description":""},"400":{"description":"Некорректные входные данные","schema":{"$ref":"#/definitions/Error"}},"401":{"description":"Не авторизован","schema":{"$ref":"#/definitions/Error"}},"403":{"description":"Нет доступа к ресурсу","schema":{"$ref":"#/definitions/Error"}},"404":{"description":"Не найден один из требуемых ресурсов","schema":{"$ref":"#/definitions/Error"}},"500":{"description":"Произошла внутренняя ошибка","schema":{"$ref":"#/definitions/Error"}}},"security":[{"apiKey":[],"auth.sid":[]}]}}},"definitions":{"Link":{"type":"object","properties":{"href":{"type":"string","readOnly":true},"rel":{"type":"string","readOnly":true},"name":{"type":"string","readOnly":true},"title":{"type":"string","readOnly":true},"profile":{"type":"string","readOnly":true},"templated":{"type":"boolean","readOnly":true}}},"Error":{"type":"object","properties":{"id":{"$ref":"#/definitions/Urn"},"status-code":{"enum":["continue","switchingProtocols","oK","created","accepted","nonAuthoritativeInformation","noContent","resetContent","partialContent","multipleChoices","ambiguous","movedPermanently","moved","found","redirect","seeOther","redirectMethod","notModified","useProxy","unused","temporaryRedirect","redirectKeepVerb","badRequest","unauthorized","paymentRequired","forbidden","notFound","methodNotAllowed","notAcceptable","proxyAuthenticationRequired","requestTimeout","conflict","gone","lengthRequired","preconditionFailed","requestEntityTooLarge","requestUriTooLong","unsupportedMediaType","requestedRangeNotSatisfiable","expectationFailed","upgradeRequired","internalServerError","notImplemented","badGateway","serviceUnavailable","gatewayTimeout","httpVersionNotSupported"],"type":"string"},"message":{"type":"string"},"track-id":{"type":"string"},"properties":{"type":"object","additionalProperties":{"type":"string"}}}},"Urn":{"type":"object","properties":{"nid":{"type":"string","readOnly":true},"nss":{"type":"string","readOnly":true},"value":{"type":"string","readOnly":true}}},"CreateAccountRequestDto":{"required":["inn","organization-name"],"type":"object","properties":{"inn":{"type":"string"},"kpp":{"type":"string"},"organization-name":{"type":"string"},"account-certificate":{"$ref":"#/definitions/AccountCertificate"}}},"AccountCertificate":{"type":"object","properties":{"thumbprint":{"type":"string"},"content":{"type":"string"}}},"Account":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"inn":{"type":"string"},"kpp":{"type":"string"},"organization-name":{"type":"string"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}}}},"AccountList":{"type":"object","properties":{"accounts":{"type":"array","items":{"$ref":"#/definitions/Account"}},"total-count":{"format":"int32","type":"integer"},"page-index":{"format":"int32","type":"integer"},"page-size":{"format":"int32","type":"integer"}}},"Docflow":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"type":{"$ref":"#/definitions/Urn"},"status":{"$ref":"#/definitions/Urn"},"description":{"$ref":"#/definitions/DocflowDescription"},"documents":{"type":"array","items":{"$ref":"#/definitions/Document"}},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}},"send-date":{"format":"date-time","type":"string"},"last-change-date":{"format":"date-time","type":"string"}}},"DocflowDescription":{"type":"object","properties":{}},"Document":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"description":{"$ref":"#/definitions/DocumentDescription"},"content":{"$ref":"#/definitions/Content"},"signatures":{"type":"array","items":{"$ref":"#/definitions/Signature"}},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}}}},"DocumentDescription":{"type":"object","properties":{"type":{"$ref":"#/definitions/Urn"},"filename":{"type":"string"},"content-type":{"type":"string"},"compression-type":{"$ref":"#/definitions/Urn"}}},"Content":{"type":"object","properties":{"decrypted":{"$ref":"#/definitions/Link"},"encrypted":{"$ref":"#/definitions/Link"}}},"Signature":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"content-link":{"$ref":"#/definitions/Link"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}}}},"Reply":{"type":"object","properties":{"document":{"$ref":"#/definitions/DocumentToSend"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}}}},"DocumentToSend":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"content":{"format":"byte","type":"string"},"filename":{"type":"string"},"signature":{"$ref":"#/definitions/SignatureToSend"},"sender-ip":{"type":"string"}}},"SignatureToSend":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"content-data":{"format":"byte","type":"string"}}},"DraftMeta":{"required":["sender","recipient","organization"],"type":"object","properties":{"sender":{"$ref":"#/definitions/Sender"},"recipient":{"$ref":"#/definitions/RecipientInfo"},"organization":{"$ref":"#/definitions/AccountInfo"}}},"Sender":{"type":"object","properties":{"inn":{"type":"string"},"fio":{"$ref":"#/definitions/Fio"},"kpp":{"type":"string"},"full-name":{"type":"string"},"ogrn":{"type":"string"},"ogrn-ip":{"type":"string"},"rns-fss":{"type":"string"},"сertificate":{"$ref":"#/definitions/Certificate"}}},"RecipientInfo":{"type":"object","properties":{"ifns-code":{"type":"string"},"mri-code":{"type":"string"},"togs-code":{"type":"string"},"upfr-code":{"type":"string"},"prototype-upfr-code":{"type":"string"}}},"AccountInfo":{"required":["inn"],"type":"object","properties":{"inn":{"type":"string"},"organization":{"$ref":"#/definitions/OrganizationInfo"},"full-name":{"type":"string"},"short-name":{"type":"string"},"oktmo":{"type":"string"}}},"Fio":{"type":"object","properties":{"surname":{"type":"string"},"name":{"type":"string"},"patronymic":{"type":"string"}}},"Certificate":{"type":"object","properties":{"content":{"type":"string"}}},"OrganizationInfo":{"type":"object","properties":{"kpp":{"type":"string"}}},"Draft":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"docflows":{"type":"array","items":{"$ref":"#/definitions/Link"}},"documents":{"type":"array","items":{"$ref":"#/definitions/Link"}},"meta":{"$ref":"#/definitions/DraftMeta"},"status":{"enum":["new","checked","readyToSend","sent"],"type":"string"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}}}},"CheckResult":{"type":"object","properties":{"data":{"$ref":"#/definitions/CheckResultData"}}},"CheckResultData":{"type":"object","properties":{"documents-errors":{"type":"object","additionalProperties":{"type":"array","items":{"$ref":"#/definitions/CheckError"}}},"common-errors":{"type":"array","items":{"$ref":"#/definitions/CheckError"}}}},"CheckError":{"type":"object","properties":{"description":{"type":"string"},"source":{"type":"string"},"level":{"type":"string"},"type":{"type":"string"},"tags":{"type":"string"},"id":{"type":"string"}}},"PrepareResult":{"type":"object","properties":{"check-result":{"$ref":"#/definitions/CheckResultData"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}},"status":{"enum":["checkProtocolHasErrors","checkProtocolHasOnlyWarnings","encryptionFailed","ok"],"type":"string"}}},"ErrorPrepareResult":{"type":"object","properties":{"check-result":{"$ref":"#/definitions/CheckResultData"},"links":{"type":"array","items":{"$ref":"#/definitions/Link"}},"status":{"enum":["checkProtocolHasErrors","checkProtocolHasOnlyWarnings","encryptionFailed","ok"],"type":"string"},"id":{"$ref":"#/definitions/Urn"},"status-code":{"enum":["continue","switchingProtocols","oK","created","accepted","nonAuthoritativeInformation","noContent","resetContent","partialContent","multipleChoices","ambiguous","movedPermanently","moved","found","redirect","seeOther","redirectMethod","notModified","useProxy","unused","temporaryRedirect","redirectKeepVerb","badRequest","unauthorized","paymentRequired","forbidden","notFound","methodNotAllowed","notAcceptable","proxyAuthenticationRequired","requestTimeout","conflict","gone","lengthRequired","preconditionFailed","requestEntityTooLarge","requestUriTooLong","unsupportedMediaType","requestedRangeNotSatisfiable","expectationFailed","upgradeRequired","internalServerError","notImplemented","badGateway","serviceUnavailable","gatewayTimeout","httpVersionNotSupported"],"type":"string"},"message":{"type":"string"},"track-id":{"type":"string"},"properties":{"type":"object","additionalProperties":{"type":"string"}}}},"DraftDocument":{"type":"object","properties":{"id":{"format":"uuid","type":"string","example":"00000000-0000-0000-0000-000000000000"},"decrypted-content-link":{"$ref":"#/definitions/Link"},"encrypted-content-link":{"$ref":"#/definitions/Link"},"signature-content-link":{"$ref":"#/definitions/Link"},"meta":{"$ref":"#/definitions/DocumentMeta"}}},"DocumentMeta":{"type":"object","properties":{"type":{"$ref":"#/definitions/Urn"},"filename":{"type":"string"},"content-type":{"type":"string"},"compression-type":{"$ref":"#/definitions/Urn"}}},"DocumentContents":{"type":"object","properties":{"base64-content":{"type":"string"},"signature":{"type":"string"},"meta":{"$ref":"#/definitions/DocumentMeta"}}}},"securityDefinitions":{"apiKey":{"type":"apiKey","description":"Servie API Key Authentication","name":"X-Kontur-Apikey","in":"header"},"auth.sid":{"type":"apiKey","description":"user session authentication","name":"Authorization","in":"header"}}}
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v1",
+        "title": "Kontur.Extern.Api.Public"
+    },
+    "host": "extern-api.testkontur.ru",
+    "schemes": ["https", "http"],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": ["Accounts"],
+                "summary": "Non implemented index",
+                "operationId": "Root_Index",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Link"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": []
+            }
+        },
+        "/v1": {
+            "get": {
+                "tags": ["Accounts"],
+                "operationId": "Accounts_GetAll",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/AccountList"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "post": {
+                "tags": ["Accounts"],
+                "summary": "Not implemented yet",
+                "operationId": "Accounts_CreateAsync",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "request",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateAccountRequestDto"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}": {
+            "get": {
+                "tags": ["Accounts"],
+                "operationId": "Accounts_Get",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get Docflow object",
+                "operationId": "Docflows_GetDocflowAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get all document from docflow",
+                "operationId": "Docflows_GetDocumentsAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Document"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete document from docflow",
+                "operationId": "Docflows_GetDocumentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Document"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete document description from docflow",
+                "operationId": "Docflows_GetDocumentDescriptionAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DocumentDescription"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete encrypted document content from docflow",
+                "operationId": "Docflows_GetEncryptedDocumentContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete decrypted document content from docflow",
+                "operationId": "Docflows_GetDecryptedDocumentContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete document signatures from docflow",
+                "operationId": "Docflows_GetDocumentSignaturesAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Signature"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete document single signature from docflow",
+                "operationId": "Docflows_GetDocumentSignatureAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "signatureId",
+                        "in": "path",
+                        "description": "Signature identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Signature"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get discrete document signature single content from docflow",
+                "operationId": "Docflows_GetDocumentSignatureContentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "signatureId",
+                        "in": "path",
+                        "description": "Signature identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get Reply document for specified workflow",
+                "operationId": "Docflows_GetReplyDocumentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentType",
+                        "in": "path",
+                        "description": "Document type",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Reply"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "post": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to send Reply document for specified workflow",
+                "operationId": "Docflows_SendReplyDocumentAsync",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Dockflow identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentType",
+                        "in": "path",
+                        "description": "Document type",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "document",
+                        "in": "body",
+                        "description": "Reply document to be sent",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentToSend"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_Create",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "clientInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "201": {
+                        "description": "Р§РµСЂРЅРѕРІРёРє СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Draft"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_GetDraft",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Draft"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "delete": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_DeleteDraft",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/meta": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_GetMeta",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_UpdateDraftMeta",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "clientInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftMeta"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/check": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_Check",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "202": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CheckResult"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/prepare": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_Prepare",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/PrepareResult"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorPrepareResult"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/send": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "Drafts_Send",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "deferred",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean"
+                    }, {
+                        "name": "force",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Docflow"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "delete": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_DeleteDocument",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/print": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentPrint",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_AddDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentContent",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetEncryptedDocumentContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetSignatureContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentSignature",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/print": {
+            "post": {
+                "tags": ["Print"],
+                "operationId": "Print_GetDocumentPrint",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє СЂРµСЃСѓСЂСЃСѓ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "РќРµ РЅР°Р№РґРµРЅ РѕРґРёРЅ РёР· С‚СЂРµР±СѓРµРјС‹С… СЂРµСЃСѓСЂСЃРѕРІ",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "РџСЂРѕРёР·РѕС€Р»Р° РІРЅСѓС‚СЂРµРЅРЅСЏСЏ РѕС€РёР±РєР°",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": [],
+                        "apiKeyOld": []
+                    }]
+            }
+        }
+    },
+    "definitions": {
+        "Link": {
+            "type": "object",
+            "properties": {
+                "href": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "rel": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "title": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "profile": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "templated": {
+                    "type": "boolean",
+                    "readOnly": true
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                },
+                "status-code": {
+                    "enum": ["continue", "switchingProtocols", "oK", "created", "accepted", "nonAuthoritativeInformation", "noContent", "resetContent", "partialContent", "multipleChoices", "ambiguous", "movedPermanently", "moved", "found", "redirect", "seeOther", "redirectMethod", "notModified", "useProxy", "unused", "temporaryRedirect", "redirectKeepVerb", "badRequest", "unauthorized", "paymentRequired", "forbidden", "notFound", "methodNotAllowed", "notAcceptable", "proxyAuthenticationRequired", "requestTimeout", "conflict", "gone", "lengthRequired", "preconditionFailed", "requestEntityTooLarge", "requestUriTooLong", "unsupportedMediaType", "requestedRangeNotSatisfiable", "expectationFailed", "upgradeRequired", "internalServerError", "notImplemented", "badGateway", "serviceUnavailable", "gatewayTimeout", "httpVersionNotSupported"],
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "track-id": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "CreateAccountRequestDto": {
+            "required": ["inn", "organization-name"],
+            "type": "object",
+            "properties": {
+                "inn": {
+                    "type": "string"
+                },
+                "kpp": {
+                    "type": "string"
+                },
+                "organization-name": {
+                    "type": "string"
+                },
+                "account-certificate": {
+                    "$ref": "#/definitions/AccountCertificate"
+                }
+            }
+        },
+        "AccountCertificate": {
+            "type": "object",
+            "properties": {
+                "thumbprint": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "Account": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "kpp": {
+                    "type": "string"
+                },
+                "organization-name": {
+                    "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "AccountList": {
+            "type": "object",
+            "properties": {
+                "accounts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Account"
+                    }
+                },
+                "total-count": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "page-index": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "page-size": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "Docflow": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocflowDescription"
+                },
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Document"
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "send-date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "last-change-date": {
+                    "format": "date-time",
+                    "type": "string"
+                }
+            }
+        },
+        "DocflowDescription": {
+            "type": "object",
+            "properties": {}
+        },
+        "Document": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                },
+                "content": {
+                    "$ref": "#/definitions/Content"
+                },
+                "signatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Signature"
+                    }
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "DocumentDescription": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "content-type": {
+                    "type": "string"
+                },
+                "compression-type": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                }
+            }
+        },
+        "Content": {
+            "type": "object",
+            "properties": {
+                "decrypted": {
+                    "$ref": "#/definitions/Link"
+                },
+                "encrypted": {
+                    "$ref": "#/definitions/Link"
+                }
+            }
+        },
+        "Signature": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "Reply": {
+            "type": "object",
+            "properties": {
+                "document": {
+                    "$ref": "#/definitions/DocumentToSend"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "DocumentToSend": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "content": {
+                    "format": "byte",
+                    "type": "string"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "signature": {
+                    "$ref": "#/definitions/SignatureToSend"
+                },
+                "sender-ip": {
+                    "type": "string"
+                }
+            }
+        },
+        "SignatureToSend": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "content-data": {
+                    "format": "byte",
+                    "type": "string"
+                }
+            }
+        },
+        "DraftMeta": {
+            "required": ["sender", "recipient", "organization", "ipaddress"],
+            "type": "object",
+            "properties": {
+                "sender": {
+                    "$ref": "#/definitions/Sender"
+                },
+                "recipient": {
+                    "$ref": "#/definitions/RecipientInfo"
+                },
+                "organization": {
+                    "$ref": "#/definitions/AccountInfo"
+                },
+                "ipaddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "Sender": {
+            "required": ["inn", "certificate"],
+            "type": "object",
+            "properties": {
+                "inn": {
+                    "type": "string"
+                },
+                "kpp": {
+                    "type": "string"
+                },
+                "certificate": {
+                    "$ref": "#/definitions/Certificate"
+                }
+            }
+        },
+        "RecipientInfo": {
+            "type": "object",
+            "properties": {
+                "ifns-code": {
+                    "type": "string"
+                },
+                "mri-code": {
+                    "type": "string"
+                },
+                "togs-code": {
+                    "type": "string"
+                },
+                "upfr-code": {
+                    "type": "string"
+                },
+                "prototype-upfr-code": {
+                    "type": "string"
+                }
+            }
+        },
+        "AccountInfo": {
+            "required": ["inn"],
+            "type": "object",
+            "properties": {
+                "inn": {
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/OrganizationInfo"
+                }
+            }
+        },
+        "Certificate": {
+            "required": ["content"],
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "OrganizationInfo": {
+            "type": "object",
+            "properties": {
+                "kpp": {
+                    "type": "string"
+                }
+            }
+        },
+        "Draft": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "docflows": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/DraftMeta"
+                },
+                "status": {
+                    "enum": ["new", "checked", "readyToSend", "sent"],
+                    "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                }
+            }
+        },
+        "CheckResult": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/CheckResultData"
+                }
+            }
+        },
+        "CheckResultData": {
+            "type": "object",
+            "properties": {
+                "documents-errors": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/CheckError"
+                        }
+                    }
+                },
+                "common-errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CheckError"
+                    }
+                }
+            }
+        },
+        "CheckError": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "PrepareResult": {
+            "type": "object",
+            "properties": {
+                "check-result": {
+                    "$ref": "#/definitions/CheckResultData"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "status": {
+                    "enum": ["checkProtocolHasErrors", "checkProtocolHasOnlyWarnings", "encryptionFailed", "ok"],
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorPrepareResult": {
+            "type": "object",
+            "properties": {
+                "check-result": {
+                    "$ref": "#/definitions/CheckResultData"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "status": {
+                    "enum": ["checkProtocolHasErrors", "checkProtocolHasOnlyWarnings", "encryptionFailed", "ok"],
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "urn:nss:nid"
+                },
+                "status-code": {
+                    "enum": ["continue", "switchingProtocols", "oK", "created", "accepted", "nonAuthoritativeInformation", "noContent", "resetContent", "partialContent", "multipleChoices", "ambiguous", "movedPermanently", "moved", "found", "redirect", "seeOther", "redirectMethod", "notModified", "useProxy", "unused", "temporaryRedirect", "redirectKeepVerb", "badRequest", "unauthorized", "paymentRequired", "forbidden", "notFound", "methodNotAllowed", "notAcceptable", "proxyAuthenticationRequired", "requestTimeout", "conflict", "gone", "lengthRequired", "preconditionFailed", "requestEntityTooLarge", "requestUriTooLong", "unsupportedMediaType", "requestedRangeNotSatisfiable", "expectationFailed", "upgradeRequired", "internalServerError", "notImplemented", "badGateway", "serviceUnavailable", "gatewayTimeout", "httpVersionNotSupported"],
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "track-id": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "DraftDocument": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "decrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "encrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "signature-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                }
+            }
+        },
+        "DocumentContents": {
+            "type": "object",
+            "properties": {
+                "base64-content": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "apiKey": {
+            "type": "apiKey",
+            "description": "Servie API Key Authentication",
+            "name": "X-Kontur-Apikey",
+            "in": "header"
+        },
+        "auth.sid": {
+            "type": "apiKey",
+            "description": "user session authentication. Pass it as  \"auth.sid [token]\" ",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "apiKeyOld": {
+            "type": "apiKey",
+            "description": "since libapi have bug this parametr must contain \"apiKey nonsenceContent\" ",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
