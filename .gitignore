@@ -1,0 +1,10 @@
+/extern-sdk/nbproject/
+extern-sdk/dependency-reduced-pom.xml
+extern-sdk-swagger/build.txt
+target
+Hints
+build.txt
+build.cmd
+install.cmd
+extern-sdk/src/test/resources/extern-sdk-config.json
+extern-sdk-test
