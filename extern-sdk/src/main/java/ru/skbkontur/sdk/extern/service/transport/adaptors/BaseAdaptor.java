@@ -8,8 +8,6 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
-import ru.skbkontur.sdk.extern.providers.ServiceError;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.NOTHING;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse;

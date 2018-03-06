@@ -186,14 +186,26 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 		return createQueryContext(parent, EN_DOC).apply(docflowsApi::addDocumentTypeReply);
 	}
 	
-	public CompletableFuture<QueryContext<Object>> createRepliesAsync(Docflow docflow) {
+	@Override
+	public CompletableFuture<QueryContext<List<Reply>>> getRepliesAsync(Docflow docflow) {
 		return createQueryContext(EN_DFW)
 			.setDocflow(docflow)
-			.applyAsync(docflowsApi::createReplies);
+			.applyAsync(docflowsApi::lookupReplies);
 	}
 
 	@Override
-	public QueryContext<Object> createReplies(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFW).apply(docflowsApi::createReplies);
+	public QueryContext<List<Reply>> getReplies(QueryContext<?> parent) {
+		return createQueryContext(parent, EN_DFW).apply(docflowsApi::lookupReplies);
+	}
+
+	@Override
+	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow) {
+		return createQueryContext(EN_DFW)
+			.applyAsync(docflowsApi::createReply);
+	}
+	
+	@Override
+	public QueryContext<Docflow> createReply(QueryContext<?> parent) {
+		return createQueryContext(parent, EN_DFW).apply(docflowsApi::createReply);
 	}
 }

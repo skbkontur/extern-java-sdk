@@ -54,6 +54,9 @@ public interface DocflowService {
 	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend);
 	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent);
 
-	public CompletableFuture<QueryContext<Object>> createRepliesAsync(Docflow docflow);
-	public QueryContext<Object> createReplies(QueryContext<?> parent);
+	public CompletableFuture<QueryContext<List<Reply>>> getRepliesAsync(Docflow docflow);
+	public QueryContext<List<Reply>> getReplies(QueryContext<?> parent);
+
+	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow);
+	public QueryContext<Docflow> createReply(QueryContext<?> parent);
 }

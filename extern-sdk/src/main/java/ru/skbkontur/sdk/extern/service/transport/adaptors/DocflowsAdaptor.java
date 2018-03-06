@@ -5,7 +5,6 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -411,7 +410,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
-	public QueryContext<Object> createReplies(QueryContext<Object> cxt) {
+	public QueryContext<Object> lookupReplies(QueryContext<Object> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
@@ -423,7 +422,8 @@ public class DocflowsAdaptor extends BaseAdaptor {
 				List<Reply> replies = new ArrayList<>();
 				for (Link l: docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
-						replies.add(new ReplyDto().fromDto((Map)submitHttpRequest(l.getHref(),"GET",null, Object.class)));
+						Reply reply = new ReplyDto().fromDto((Map)submitHttpRequest(l.getHref(),"GET",null, Object.class));
+						replies.add(reply);
 					}
 				}
 				return cxt.setResult(replies, REPLIES);
@@ -437,6 +437,34 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
+	public QueryContext<Docflow> createReply(QueryContext<Docflow> cxt) {
+		try {
+			if (cxt.isFail()) {
+				return cxt;
+			}
+
+			Reply reply = cxt.getReply();
+			if (reply == null)
+				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "Reply is absent in the context.", 0, null, null));
+
+			Link self = reply.getLinks().stream().filter(l->l.getRel().equals("self")).findAny().orElse(null);
+			if (self == null)
+				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "The reply does not contain a self reference.", 0, null, null));
+
+			prepareTransport(cxt);
+			
+			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
+			DocflowDto docflowDto = new DocflowDto();
+			
+			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(),	"POST",	documentToSendDto.toDto(reply.getDocument()), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
+			
+			return cxt.setResult(docflow, DOCFLOW);
+		}
+		catch (ApiException x) {
+			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+		}
+	}
+	
 	private DocflowsApi transport(QueryContext<?> cxt) {
 		prepareTransport(cxt);
 		return api;

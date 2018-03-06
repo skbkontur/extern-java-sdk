@@ -32,6 +32,7 @@ public interface DraftService {
 	 * @param sender Sender отправитель декларации
 	 * @param recipient Recipient получатель декларации
 	 * @param organization Organization организация, на которую создана декларация
+	 * @param ipAddress String
 	 * @return CompletableFuture&lt;QueryContext&lt;UUID&gt;&gt; идентификатор черновика 
 	 */
 	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization, String ipAddress);

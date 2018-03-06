@@ -36,6 +36,8 @@ import ru.skbkontur.sdk.extern.model.DraftMeta;
 import ru.skbkontur.sdk.extern.model.Reply;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
+import ru.skbkontur.sdk.extern.service.transport.invoker.SignatureToSendAdapter;
 
 /**
  *
@@ -441,6 +443,8 @@ public class QueryContext<R> implements Serializable {
 			.registerTypeAdapter(Date.class, new DateAdapter(apiClient))
 			.registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
 			.registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+			.registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend.class, new SignatureToSendAdapter())
+			.registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend.class, new DocumentToSendAdapter())
 			.create());
 		// устанавливаем api-key
 		acceptApiKey(apiKeyProvider.getApiKey());
