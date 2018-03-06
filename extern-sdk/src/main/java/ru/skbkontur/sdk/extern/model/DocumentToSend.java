@@ -39,6 +39,10 @@ public class DocumentToSend {
 		this.id = id;
 	}
 
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
+	}
+
 	/**
 	 * Get content
 	 *

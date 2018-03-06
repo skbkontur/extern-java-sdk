@@ -24,7 +24,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DraftDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DraftMetaDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.PrepareResultDto;
 import ru.skbkontur.sdk.extern.service.transport.swagger.api.DraftsApi;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT_STRING;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_DOCUMENT;
@@ -47,7 +47,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 
 	@Override
 	public ApiClient getApiClient() {
-		return api.getApiClient();
+		return (ApiClient) api.getApiClient();
 	}
 
 	@Override

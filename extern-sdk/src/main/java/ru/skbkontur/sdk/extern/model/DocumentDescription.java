@@ -14,7 +14,6 @@ public class DocumentDescription {
 	private String type = null;
 	private String filename = null;
 	private String contentType = null;
-	private String compressionType = null;
 
 	public DocumentDescription type(String type) {
 		this.type = type;
@@ -71,24 +70,5 @@ public class DocumentDescription {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
-	}
-
-	public DocumentDescription compressionType(String compressionType) {
-		this.compressionType = compressionType;
-		return this;
-	}
-
-	/**
-	 * Get compressionType
-	 *
-	 * @return compressionType
-	 *
-	 */
-	public String getCompressionType() {
-		return compressionType;
-	}
-
-	public void setCompressionType(String compressionType) {
-		this.compressionType = compressionType;
 	}
 }

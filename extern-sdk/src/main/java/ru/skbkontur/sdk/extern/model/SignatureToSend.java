@@ -33,6 +33,10 @@ public class SignatureToSend {
 		this.id = id;
 	}
 
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
+	}
+
 	/**
 	 * Get contentData
 	 *

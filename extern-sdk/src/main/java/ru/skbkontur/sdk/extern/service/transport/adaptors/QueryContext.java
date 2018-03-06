@@ -77,7 +77,9 @@ public class QueryContext<R> implements Serializable {
 	public static final String SIGNATURES = "signatures";
 	public static final String SIGNATURE = "signature";
 	public static final String REPLY = "reply";
+	public static final String REPLIES = "replies";
 	public static final String NOTHING = "nothing";
+	public static final String OBJECT = "object";
 
 	private String result;
 
@@ -400,6 +402,14 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext<R> setReply(Reply reply) {
 		return set(REPLY, reply);
+	}
+	
+	public List<Object> getReplies() {
+		return (List<Object>) params.get(REPLIES);
+	}
+	
+	public QueryContext<R> setReply(List<Object> replies) {
+		return set(REPLIES, replies);
 	}
 	
 	public QueryContext<R> set(String name, Object val) {

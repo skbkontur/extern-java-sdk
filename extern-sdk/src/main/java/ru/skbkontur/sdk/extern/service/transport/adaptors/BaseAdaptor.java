@@ -6,8 +6,13 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import com.google.gson.Gson;
+import java.util.HashMap;
 import java.util.Map;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient;
+import ru.skbkontur.sdk.extern.providers.ServiceError;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.NOTHING;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
+import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
+import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
 
@@ -16,7 +21,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentica
  * @author AlexS
  */
 public abstract class BaseAdaptor implements ApiClientAware {
-	
+
 	protected <T> T jsonToDTO(Map<?, ?> response, Class<T> t) {
 		Gson gson = new Gson();
 		String json = gson.toJson(response);
@@ -32,10 +37,22 @@ public abstract class BaseAdaptor implements ApiClientAware {
 			}
 		}
 	}
-	
+
 	protected void prepareTransport(QueryContext<?> cxt) {
 		ApiClient apiClient = cxt.getApiClient();
-		acceptAccessToken(apiClient,cxt);
+		acceptAccessToken(apiClient, cxt);
 		setApiClient(apiClient);
+	}
+
+	protected <T> T submitHttpRequest(String httpRequestUri, String httpMethod, Object body, Class<T> dtoClass) throws ApiException {
+		Map<String, String> localQueryParams = new HashMap<>();
+
+		Map<String, String> localHeaderParams = new HashMap<>();
+
+		Map<String, Object> localVarFormParams = new HashMap<>();
+
+		ApiResponse<T> response = getApiClient().submitHttpRequest(httpRequestUri, httpMethod, localQueryParams, body, localHeaderParams, localVarFormParams, dtoClass);
+
+		return response.getData();
 	}
 }

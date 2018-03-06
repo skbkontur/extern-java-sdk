@@ -5,7 +5,7 @@
         "title": "Kontur.Extern.Api.Public"
     },
     "host": "extern-api.testkontur.ru",
-    "schemes": ["https", "http"],
+    "schemes": ["http"],
     "paths": {
         "/": {
             "get": {
@@ -2589,10 +2589,6 @@
                 },
                 "content-type": {
                     "type": "string"
-                },
-                "compression-type": {
-                    "type": "string",
-                    "example": "urn:nss:nid"
                 }
             }
         },

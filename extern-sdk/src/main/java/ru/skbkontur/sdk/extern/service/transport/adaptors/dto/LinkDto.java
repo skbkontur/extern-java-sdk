@@ -5,6 +5,8 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
+import java.util.Map;
+
 /**
  *
  * @author AlexS
@@ -24,6 +26,20 @@ public class LinkDto {
 			link.setRel(dto.getRel());
 			link.setTemplated(dto.getTemplated());
 			link.setTitle(dto.getTitle());
+		}
+		return link;
+	}
+
+	public ru.skbkontur.sdk.extern.model.Link fromDto(Map<String,Object> dto) {
+		ru.skbkontur.sdk.extern.model.Link link = null;
+		if (dto != null) {
+			link = new ru.skbkontur.sdk.extern.model.Link();
+			link.setHref((String)dto.get("href"));
+			link.setName((String)dto.get("name"));
+			link.setProfile((String)dto.get("profile"));
+			link.setRel((String)dto.get("rel"));
+			link.setTemplated((Boolean)dto.get("templated"));
+			link.setTitle((String)dto.get("title"));
 		}
 		return link;
 	}

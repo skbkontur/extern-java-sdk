@@ -37,9 +37,6 @@ public class DocumentDescription {
   @SerializedName("content-type")
   private String contentType = null;
 
-  @SerializedName("compression-type")
-  private String compressionType = null;
-
   public DocumentDescription type(String type) {
     this.type = type;
     return this;
@@ -94,24 +91,6 @@ public class DocumentDescription {
     this.contentType = contentType;
   }
 
-  public DocumentDescription compressionType(String compressionType) {
-    this.compressionType = compressionType;
-    return this;
-  }
-
-   /**
-   * Get compressionType
-   * @return compressionType
-  **/
-  @ApiModelProperty(example = "urn:nss:nid", value = "")
-  public String getCompressionType() {
-    return compressionType;
-  }
-
-  public void setCompressionType(String compressionType) {
-    this.compressionType = compressionType;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -124,13 +103,12 @@ public class DocumentDescription {
     DocumentDescription documentDescription = (DocumentDescription) o;
     return Objects.equals(this.type, documentDescription.type) &&
         Objects.equals(this.filename, documentDescription.filename) &&
-        Objects.equals(this.contentType, documentDescription.contentType) &&
-        Objects.equals(this.compressionType, documentDescription.compressionType);
+        Objects.equals(this.contentType, documentDescription.contentType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, filename, contentType, compressionType);
+    return Objects.hash(type, filename, contentType);
   }
 
 
@@ -142,7 +120,6 @@ public class DocumentDescription {
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
-    sb.append("    compressionType: ").append(toIndentedString(compressionType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

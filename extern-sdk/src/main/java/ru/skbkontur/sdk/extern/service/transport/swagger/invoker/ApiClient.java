@@ -112,7 +112,7 @@ public class ApiClient {
      */
     public static final String LENIENT_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
-    private String basePath = "https://extern-api.testkontur.ru";
+    private String basePath = "http://extern-api.testkontur.ru";
     private boolean lenientOnJson = false;
     private boolean debugging = false;
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
@@ -182,7 +182,7 @@ public class ApiClient {
     /**
      * Set base path
      *
-     * @param basePath Base path of the URL (e.g https://extern-api.testkontur.ru
+     * @param basePath Base path of the URL (e.g http://extern-api.testkontur.ru
      * @return An instance of OkHttpClient
      */
     public ApiClient setBasePath(String basePath) {

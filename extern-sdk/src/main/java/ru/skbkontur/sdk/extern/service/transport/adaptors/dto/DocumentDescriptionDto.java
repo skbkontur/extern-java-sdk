@@ -18,7 +18,6 @@ public class DocumentDescriptionDto {
 		ru.skbkontur.sdk.extern.model.DocumentDescription documentDescription = null;
 		if (dto != null) {
 			documentDescription = new ru.skbkontur.sdk.extern.model.DocumentDescription();
-			documentDescription.setCompressionType(dto.getCompressionType());
 			documentDescription.setContentType(dto.getContentType());
 			documentDescription.setFilename(dto.getFilename());
 			documentDescription.setType(dto.getType());
@@ -30,7 +29,6 @@ public class DocumentDescriptionDto {
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription dto = null;
 		if (documentDescription != null) {
 			dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription();
-			dto.setCompressionType(documentDescription.getCompressionType());
 			dto.setContentType(documentDescription.getContentType());
 			dto.setFilename(documentDescription.getFilename());
 			dto.setType(documentDescription.getType());

@@ -5,7 +5,7 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
 /**
  *

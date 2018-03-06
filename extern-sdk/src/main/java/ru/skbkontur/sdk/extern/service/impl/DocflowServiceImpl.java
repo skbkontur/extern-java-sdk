@@ -55,7 +55,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<List<Document>>> getDocuments(String docflowId) {
+	public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId) {
 		return createQueryContext(EN_DFW)
 			.setDocflowId(docflowId)
 			.applyAsync(docflowsApi::getDocuments);
@@ -67,7 +67,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 	
 	@Override
-	public CompletableFuture<Document> lookupDocument(String docflowId, String documentId) {
+	public CompletableFuture<Document> lookupDocumentAsync(String docflowId, String documentId) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -80,7 +80,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<DocumentDescription>> lookupDescription(String docflowId, String documentId) {
+	public CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(String docflowId, String documentId) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -93,7 +93,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 	
 	@Override
-	public CompletableFuture<QueryContext<byte[]>> getEncryptedContent(String docflowId, String documentId) {
+	public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId, String documentId) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -106,7 +106,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<byte[]>> getDecryptedContent(String docflowId, String documentId) {
+	public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId, String documentId) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -119,7 +119,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<List<Signature>>> getSignatures(String docflowId, String documentId) {
+	public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId, String documentId) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -132,7 +132,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<Signature>> getSignature(String docflowId, String documentId, String signatureId) {
+	public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId, String documentId, String signatureId) {
 		return createQueryContext(EN_SGN)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -145,7 +145,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<byte[]>> getSignatureContent(String docflowId, String documentId, String signatureId) {
+	public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId) {
 		return createQueryContext(EN_SGN)
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
@@ -158,7 +158,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<Reply>> getDocumentTypeReply(String docflowId, String documentType, String documentId) {
+	public CompletableFuture<QueryContext<Reply>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId) {
 		return createQueryContext(EN_SGN)
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
@@ -172,7 +172,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReply(String docflowId, String documentType, String documentId, DocumentToSend documentToSend) {
+	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend) {
 		return createQueryContext(EN_DOC)
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
@@ -184,5 +184,16 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	@Override
 	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent) {
 		return createQueryContext(parent, EN_DOC).apply(docflowsApi::addDocumentTypeReply);
+	}
+	
+	public CompletableFuture<QueryContext<Object>> createRepliesAsync(Docflow docflow) {
+		return createQueryContext(EN_DFW)
+			.setDocflow(docflow)
+			.applyAsync(docflowsApi::createReplies);
+	}
+
+	@Override
+	public QueryContext<Object> createReplies(QueryContext<?> parent) {
+		return createQueryContext(parent, EN_DFW).apply(docflowsApi::createReplies);
 	}
 }
