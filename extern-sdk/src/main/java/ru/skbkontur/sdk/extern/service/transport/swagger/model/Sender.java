@@ -38,6 +38,9 @@ public class Sender {
   @SerializedName("certificate")
   private Certificate certificate = null;
 
+  @SerializedName("ipaddress")
+  private String ipaddress = null;
+
   public Sender inn(String inn) {
     this.inn = inn;
     return this;
@@ -92,6 +95,24 @@ public class Sender {
     this.certificate = certificate;
   }
 
+  public Sender ipaddress(String ipaddress) {
+    this.ipaddress = ipaddress;
+    return this;
+  }
+
+   /**
+   * Get ipaddress
+   * @return ipaddress
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public String getIpaddress() {
+    return ipaddress;
+  }
+
+  public void setIpaddress(String ipaddress) {
+    this.ipaddress = ipaddress;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -104,12 +125,13 @@ public class Sender {
     Sender sender = (Sender) o;
     return Objects.equals(this.inn, sender.inn) &&
         Objects.equals(this.kpp, sender.kpp) &&
-        Objects.equals(this.certificate, sender.certificate);
+        Objects.equals(this.certificate, sender.certificate) &&
+        Objects.equals(this.ipaddress, sender.ipaddress);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, kpp, certificate);
+    return Objects.hash(inn, kpp, certificate, ipaddress);
   }
 
 
@@ -121,6 +143,7 @@ public class Sender {
     sb.append("    inn: ").append(toIndentedString(inn)).append("\n");
     sb.append("    kpp: ").append(toIndentedString(kpp)).append("\n");
     sb.append("    certificate: ").append(toIndentedString(certificate)).append("\n");
+    sb.append("    ipaddress: ").append(toIndentedString(ipaddress)).append("\n");
     sb.append("}");
     return sb.toString();
   }

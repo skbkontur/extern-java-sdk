@@ -33,7 +33,6 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.LocalDateTypeAdapter;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
 import ru.skbkontur.sdk.extern.model.DraftMeta;
-import ru.skbkontur.sdk.extern.model.Reply;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
@@ -62,6 +61,7 @@ public class QueryContext<R> implements Serializable {
 	public static final String DOCUMENT_TYPE = "documentType";
 	public static final String REPLY_ID = "replyId";
 	public static final String DOCUMENT_TO_SEND = "documentToSend";
+	public static final String DOCUMENT_TO_SENDS = "documentToSends";
 	public static final String DRAFT_META = "draftMeta";
 	public static final String DEFFERED = "deffered";
 	public static final String FORCE = "force";
@@ -73,13 +73,13 @@ public class QueryContext<R> implements Serializable {
 	public static final String MAP = "map";
 	public static final String PREPARE_RESULT = "prepareResult";
 	public static final String DOCFLOW = "docflow";
+	public static final String DOCFLOWS = "docflows";
 	public static final String DRAFT_DOCUMENT = "draftDocument";
 	public static final String DOCUMENT_DESCRIPTION = "documentDescription";
 	public static final String SIGNATURE_ID = "signatureId";
 	public static final String SIGNATURES = "signatures";
 	public static final String SIGNATURE = "signature";
-	public static final String REPLY = "reply";
-	public static final String REPLIES = "replies";
+	public static final String THUMBPRINT = "thumbprint";
 	public static final String NOTHING = "nothing";
 	public static final String OBJECT = "object";
 
@@ -228,8 +228,22 @@ public class QueryContext<R> implements Serializable {
 		return set(DOCFLOW, docflow);
 	}
 
+	public List<Docflow> getDocflows() {
+		return (List<Docflow>) params.get(DOCFLOWS);
+	}
+
+	public QueryContext<R> setDocflow(List<Docflow> docflows) {
+		return set(DOCFLOWS, docflows);
+	}
+
 	public UUID getDocflowId() {
-		return (UUID) params.get(DOCFLOW_ID);
+		UUID docflowId = (UUID) params.get(DOCFLOW_ID);
+		if (docflowId == null) {
+			Docflow docflow = this.getDocflow();
+			if (docflow != null)
+				docflowId = docflow.getId();
+		}
+		return docflowId;
 	}
 
 	public QueryContext<R> setDocflowId(String docflowId) {
@@ -382,6 +396,14 @@ public class QueryContext<R> implements Serializable {
 		return set(SIGNATURE_ID, signatureId);
 	}
 	
+	public String getThumbprint() {
+		return (String) params.get(THUMBPRINT);
+	}
+	
+	public QueryContext<R> setThumbprint(String thumbprint) {
+		return set(THUMBPRINT, thumbprint);
+	}
+	
 	public Signature getSignature() {
 		return (Signature) params.get(SIGNATURE);
 	}
@@ -398,20 +420,12 @@ public class QueryContext<R> implements Serializable {
 		return set(SIGNATURES, signatures);
 	}
 	
-	public Reply getReply() {
-		return (Reply) params.get(REPLY);
+	public List<DocumentToSend> getDocumentToSends() {
+		return (List<DocumentToSend>) params.get(DOCUMENT_TO_SENDS);
 	}
 	
-	public QueryContext<R> setReply(Reply reply) {
-		return set(REPLY, reply);
-	}
-	
-	public List<Object> getReplies() {
-		return (List<Object>) params.get(REPLIES);
-	}
-	
-	public QueryContext<R> setReply(List<Object> replies) {
-		return set(REPLIES, replies);
+	public QueryContext<R> setDocumentToSends(List<DocumentToSend> replies) {
+		return set(DOCUMENT_TO_SENDS, replies);
 	}
 	
 	public QueryContext<R> set(String name, Object val) {
@@ -451,6 +465,8 @@ public class QueryContext<R> implements Serializable {
 	}
 
 	public CompletableFuture<QueryContext<R>> applyAsync(Query query) {
+		if (isFail()) return CompletableFuture.completedFuture(this);
+		
 		QueryContext<R> queryContext = acquireSessionId();
 		if (queryContext.isSuccess()) {
 			return CompletableFuture.supplyAsync(()->query.apply(this));
@@ -460,6 +476,8 @@ public class QueryContext<R> implements Serializable {
 	}
 
 	public QueryContext<R> apply(Query query) {
+		if (isFail()) return this;
+		
 		QueryContext<R> queryContext = acquireSessionId();
 		if (queryContext.isSuccess())
 			return query.apply(this);

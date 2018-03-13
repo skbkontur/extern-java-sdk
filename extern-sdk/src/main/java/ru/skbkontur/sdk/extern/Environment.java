@@ -6,8 +6,6 @@
 package ru.skbkontur.sdk.extern;
 
 import com.google.gson.Gson;
-import ru.argosgrp.cryptoservice.CryptoService;
-import ru.argosgrp.cryptoservice.Key;
 
 /**
  *
@@ -18,8 +16,6 @@ public class Environment {
 
 	public Configuration configuration;
 	public String accessToken;
-	public CryptoService cryptoService;
-	public Key signKey;
 	
 	public Environment() {
 		configuration = new Configuration();

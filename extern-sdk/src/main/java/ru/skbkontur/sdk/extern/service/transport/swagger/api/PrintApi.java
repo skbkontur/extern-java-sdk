@@ -101,7 +101,7 @@ public class PrintApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     

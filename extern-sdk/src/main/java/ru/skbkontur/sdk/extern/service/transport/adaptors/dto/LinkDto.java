@@ -5,6 +5,7 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
@@ -45,6 +46,19 @@ public class LinkDto {
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Link toDto(ru.skbkontur.sdk.extern.model.Link link) {
-		throw new UnsupportedOperationException();
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Link dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Link();
+		setPrivateFieldValue(dto, "href", link.getHref());
+		setPrivateFieldValue(dto, "rel", link.getRel());
+		return dto;
+	}
+
+	private void setPrivateFieldValue(Object obj, String fieldName, Object value) {
+		try {
+			Field field = obj.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(obj, value);
+		}
+		catch (NoSuchFieldException | SecurityException | IllegalAccessException ignore) {
+		}
 	}
 }

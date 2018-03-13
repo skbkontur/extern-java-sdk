@@ -60,14 +60,14 @@ public class AccountsApi {
     }
 
     /**
-     * Build call for accountsCreateAsync
+     * Build call for accountsCreate
      * @param request  (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call accountsCreateAsyncCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call accountsCreateCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = request;
         
         // create path and map variables
@@ -103,20 +103,20 @@ public class AccountsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call accountsCreateAsyncValidateBeforeCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call accountsCreateValidateBeforeCall(CreateAccountRequestDto request, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'request' is set
         if (request == null) {
-            throw new ApiException("Missing the required parameter 'request' when calling accountsCreateAsync(Async)");
+            throw new ApiException("Missing the required parameter 'request' when calling accountsCreate(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = accountsCreateAsyncCall(request, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = accountsCreateCall(request, progressListener, progressRequestListener);
         return call;
 
         
@@ -129,11 +129,11 @@ public class AccountsApi {
      * Not implemented yet
      * 
      * @param request  (required)
-     * @return Account
+     * @return Object
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Account accountsCreateAsync(CreateAccountRequestDto request) throws ApiException {
-        ApiResponse<Account> resp = accountsCreateAsyncWithHttpInfo(request);
+    public Object accountsCreate(CreateAccountRequestDto request) throws ApiException {
+        ApiResponse<Object> resp = accountsCreateWithHttpInfo(request);
         return resp.getData();
     }
 
@@ -141,12 +141,12 @@ public class AccountsApi {
      * Not implemented yet
      * 
      * @param request  (required)
-     * @return ApiResponse&lt;Account&gt;
+     * @return ApiResponse&lt;Object&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Account> accountsCreateAsyncWithHttpInfo(CreateAccountRequestDto request) throws ApiException {
-        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, null, null);
-        Type localVarReturnType = new TypeToken<Account>(){}.getType();
+    public ApiResponse<Object> accountsCreateWithHttpInfo(CreateAccountRequestDto request) throws ApiException {
+        com.squareup.okhttp.Call call = accountsCreateValidateBeforeCall(request, null, null);
+        Type localVarReturnType = new TypeToken<Object>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -158,7 +158,7 @@ public class AccountsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call accountsCreateAsyncAsync(CreateAccountRequestDto request, final ApiCallback<Account> callback) throws ApiException {
+    public com.squareup.okhttp.Call accountsCreateAsync(CreateAccountRequestDto request, final ApiCallback<Object> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -179,8 +179,8 @@ public class AccountsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = accountsCreateAsyncValidateBeforeCall(request, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Account>(){}.getType();
+        com.squareup.okhttp.Call call = accountsCreateValidateBeforeCall(request, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Object>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -229,7 +229,7 @@ public class AccountsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -353,7 +353,7 @@ public class AccountsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     

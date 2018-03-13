@@ -40,9 +40,6 @@ public class DraftMeta {
   @SerializedName("organization")
   private AccountInfo organization = null;
 
-  @SerializedName("ipaddress")
-  private String ipaddress = null;
-
   public DraftMeta sender(Sender sender) {
     this.sender = sender;
     return this;
@@ -97,24 +94,6 @@ public class DraftMeta {
     this.organization = organization;
   }
 
-  public DraftMeta ipaddress(String ipaddress) {
-    this.ipaddress = ipaddress;
-    return this;
-  }
-
-   /**
-   * Get ipaddress
-   * @return ipaddress
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public String getIpaddress() {
-    return ipaddress;
-  }
-
-  public void setIpaddress(String ipaddress) {
-    this.ipaddress = ipaddress;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -127,13 +106,12 @@ public class DraftMeta {
     DraftMeta draftMeta = (DraftMeta) o;
     return Objects.equals(this.sender, draftMeta.sender) &&
         Objects.equals(this.recipient, draftMeta.recipient) &&
-        Objects.equals(this.organization, draftMeta.organization) &&
-        Objects.equals(this.ipaddress, draftMeta.ipaddress);
+        Objects.equals(this.organization, draftMeta.organization);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sender, recipient, organization, ipaddress);
+    return Objects.hash(sender, recipient, organization);
   }
 
 
@@ -145,7 +123,6 @@ public class DraftMeta {
     sb.append("    sender: ").append(toIndentedString(sender)).append("\n");
     sb.append("    recipient: ").append(toIndentedString(recipient)).append("\n");
     sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
-    sb.append("    ipaddress: ").append(toIndentedString(ipaddress)).append("\n");
     sb.append("}");
     return sb.toString();
   }

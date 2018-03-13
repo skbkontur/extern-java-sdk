@@ -11,7 +11,6 @@ import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.model.DocumentToSend;
-import ru.skbkontur.sdk.extern.model.Reply;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
@@ -48,14 +47,14 @@ public interface DocflowService {
 	public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId);
 	public QueryContext<byte[]> getSignatureContent(QueryContext<?> parent);
 	
-	public CompletableFuture<QueryContext<Reply>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId);
-	public QueryContext<Reply> getDocumentTypeReply(QueryContext<?> parent);
+	public CompletableFuture<QueryContext<DocumentToSend>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId);
+	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<?> parent);
 
 	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend);
 	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent);
 
-	public CompletableFuture<QueryContext<List<Reply>>> getRepliesAsync(Docflow docflow);
-	public QueryContext<List<Reply>> getReplies(QueryContext<?> parent);
+	public CompletableFuture<QueryContext<List<DocumentToSend>>> getRepliesAsync(Docflow docflow);
+	public QueryContext<List<DocumentToSend>> getReplies(QueryContext<?> parent);
 
 	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow);
 	public QueryContext<Docflow> createReply(QueryContext<?> parent);

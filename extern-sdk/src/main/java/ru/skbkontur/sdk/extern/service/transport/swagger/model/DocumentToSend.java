@@ -22,7 +22,10 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.Link;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend;
 
 /**
@@ -44,6 +47,9 @@ public class DocumentToSend {
 
   @SerializedName("sender-ip")
   private String senderIp = null;
+
+  @SerializedName("links")
+  private List<Link> links = null;
 
   public DocumentToSend id(UUID id) {
     this.id = id;
@@ -135,6 +141,32 @@ public class DocumentToSend {
     this.senderIp = senderIp;
   }
 
+  public DocumentToSend links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public DocumentToSend addLinksItem(Link linksItem) {
+    if (this.links == null) {
+      this.links = new ArrayList<Link>();
+    }
+    this.links.add(linksItem);
+    return this;
+  }
+
+   /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(value = "")
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -149,12 +181,13 @@ public class DocumentToSend {
         Objects.equals(this.content, documentToSend.content) &&
         Objects.equals(this.filename, documentToSend.filename) &&
         Objects.equals(this.signature, documentToSend.signature) &&
-        Objects.equals(this.senderIp, documentToSend.senderIp);
+        Objects.equals(this.senderIp, documentToSend.senderIp) &&
+        Objects.equals(this.links, documentToSend.links);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, content, filename, signature, senderIp);
+    return Objects.hash(id, content, filename, signature, senderIp, links);
   }
 
 
@@ -168,6 +201,7 @@ public class DocumentToSend {
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
     sb.append("    senderIp: ").append(toIndentedString(senderIp)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
     sb.append("}");
     return sb.toString();
   }

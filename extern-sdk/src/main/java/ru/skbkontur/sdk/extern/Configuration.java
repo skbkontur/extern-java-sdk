@@ -23,6 +23,8 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
   @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;
 	@SerializedName("authPrefix") private String authPrefix;
+	@SerializedName("credentialSnils") private String credentialSnils;
+	@SerializedName("serviceUserId") private String serviceUserId;
 	@SerializedName("login") private String login;
 	@SerializedName("pass") private String pass;
 	@SerializedName("serviceBaseUri") private String serviceBaseUri;
@@ -55,6 +57,7 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 		this.apiKey = apiKey;
 	}
 
+	@Override
 	public String getAuthPrefix() {
 		return authPrefix;
 	}
@@ -105,5 +108,21 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 
 	public void setThumbprint(String thumbprint) {
 		this.thumbprint = thumbprint;
+	}
+
+	public String getCredentialSnils() {
+		return credentialSnils;
+	}
+
+	public void setCredentialSnils(String credentialSnils) {
+		this.credentialSnils = credentialSnils;
+	}
+
+	public String getServiceUserId() {
+		return serviceUserId;
+	}
+
+	public void setServiceUserId(String serviceUserId) {
+		this.serviceUserId = serviceUserId;
 	}
 }

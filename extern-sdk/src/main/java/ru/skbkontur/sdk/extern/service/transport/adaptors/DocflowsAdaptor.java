@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
+import ru.skbkontur.sdk.extern.model.DocumentToSend;
 import ru.skbkontur.sdk.extern.model.Link;
-import ru.skbkontur.sdk.extern.model.Reply;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
@@ -22,19 +22,18 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DO
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENTS;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_DESCRIPTION;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.REPLIES;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.REPLY;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_TO_SEND;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SIGNATURE;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SIGNATURES;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocflowDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocumentDescriptionDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocumentDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocumentToSendDto;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.ReplyDto;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.SignatureDto;
 import ru.skbkontur.sdk.extern.service.transport.swagger.api.DocflowsApi;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_TO_SENDS;
 
 /**
  *
@@ -348,27 +347,28 @@ public class DocflowsAdaptor extends BaseAdaptor {
 	 *
 	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}
 	 *
-	 * @param cxt QueryContext&lt;Signature&gt; context
+	 * @param cxt QueryContext&lt;DocumentToSend&gt; context
 	 * @return QueryContext&lt;Signature&gt; context
 	 */
-	public QueryContext<Reply> getDocumentTypeReply(QueryContext<Reply> cxt) {
+	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<DocumentToSend> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
 			}
 
 			return cxt.setResult(
-				new ReplyDto()
+				new DocumentToSendDto()
 					.fromDto(
 						transport(cxt)
 							.docflowsGetReplyDocumentAsync(
 								cxt.getAccountProvider().accountId(),
 								cxt.getDocflowId(),
 								cxt.getDocumentType(),
-								cxt.getDocumentId()
+								cxt.getDocumentId(),
+								cxt.getThumbprint()
 							)
 					),
-				REPLY
+				DOCUMENT_TO_SEND
 			);
 		}
 		catch (ApiException x) {
@@ -419,17 +419,17 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			Docflow docflow = cxt.getDocflow();
 			if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
 				prepareTransport(cxt);
-				List<Reply> replies = new ArrayList<>();
+				List<DocumentToSend> replies = new ArrayList<>();
 				for (Link l: docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
-						Reply reply = new ReplyDto().fromDto((Map)submitHttpRequest(l.getHref(),"GET",null, Object.class));
-						replies.add(reply);
+						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map)submitHttpRequest(l.getHref(),"GET",null, Object.class));
+						replies.add(documentToSend);
 					}
 				}
-				return cxt.setResult(replies, REPLIES);
+				return cxt.setResult(replies, DOCUMENT_TO_SENDS);
 			}
 			else {
-				return cxt.setResult(Collections.emptyList(), REPLIES);
+				return cxt.setResult(Collections.emptyList(), DOCUMENT_TO_SENDS);
 			}
 		}
 		catch (ApiException x) {
@@ -443,11 +443,11 @@ public class DocflowsAdaptor extends BaseAdaptor {
 				return cxt;
 			}
 
-			Reply reply = cxt.getReply();
-			if (reply == null)
+			DocumentToSend documentToSend = cxt.getDocumentToSend();
+			if (documentToSend == null)
 				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "Reply is absent in the context.", 0, null, null));
 
-			Link self = reply.getLinks().stream().filter(l->l.getRel().equals("self")).findAny().orElse(null);
+			Link self = documentToSend.getLinks().stream().filter(l->l.getRel().equals("self")).findAny().orElse(null);
 			if (self == null)
 				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "The reply does not contain a self reference.", 0, null, null));
 
@@ -456,7 +456,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
 			DocflowDto docflowDto = new DocflowDto();
 			
-			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(),	"POST",	documentToSendDto.toDto(reply.getDocument()), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
+			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(),	"POST",	documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
 			
 			return cxt.setResult(docflow, DOCFLOW);
 		}

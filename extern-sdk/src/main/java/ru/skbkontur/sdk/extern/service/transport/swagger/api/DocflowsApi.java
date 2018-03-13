@@ -32,7 +32,6 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.Document;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Error;
-import ru.skbkontur.sdk.extern.service.transport.swagger.model.Reply;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature;
 import java.util.UUID;
 
@@ -110,7 +109,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -254,7 +253,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -392,7 +391,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -538,7 +537,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -686,7 +685,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -842,7 +841,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -996,7 +995,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1140,7 +1139,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1278,7 +1277,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1381,12 +1380,13 @@ public class DocflowsApi {
      * @param docflowId Docflow identifier (required)
      * @param documentType Document type (required)
      * @param documentId Document identifier (required)
+     * @param thumbprint Signer certificate thumbprint (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, String thumbprint, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
@@ -1397,6 +1397,8 @@ public class DocflowsApi {
             .replaceAll("\\{" + "documentId" + "\\}", apiClient.escapeString(documentId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        if (thumbprint != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "thumbprint", thumbprint));
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
 
@@ -1426,12 +1428,12 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncValidateBeforeCall(UUID accountId, UUID docflowId, String documentType, UUID documentId, String thumbprint, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'accountId' is set
         if (accountId == null) {
@@ -1454,7 +1456,7 @@ public class DocflowsApi {
         }
         
         
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncCall(accountId, docflowId, documentType, documentId, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncCall(accountId, docflowId, documentType, documentId, thumbprint, progressListener, progressRequestListener);
         return call;
 
         
@@ -1470,11 +1472,12 @@ public class DocflowsApi {
      * @param docflowId Docflow identifier (required)
      * @param documentType Document type (required)
      * @param documentId Document identifier (required)
-     * @return Reply
+     * @param thumbprint Signer certificate thumbprint (optional)
+     * @return DocumentToSend
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Reply docflowsGetReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId) throws ApiException {
-        ApiResponse<Reply> resp = docflowsGetReplyDocumentAsyncWithHttpInfo(accountId, docflowId, documentType, documentId);
+    public DocumentToSend docflowsGetReplyDocumentAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, String thumbprint) throws ApiException {
+        ApiResponse<DocumentToSend> resp = docflowsGetReplyDocumentAsyncWithHttpInfo(accountId, docflowId, documentType, documentId, thumbprint);
         return resp.getData();
     }
 
@@ -1485,12 +1488,13 @@ public class DocflowsApi {
      * @param docflowId Docflow identifier (required)
      * @param documentType Document type (required)
      * @param documentId Document identifier (required)
-     * @return ApiResponse&lt;Reply&gt;
+     * @param thumbprint Signer certificate thumbprint (optional)
+     * @return ApiResponse&lt;DocumentToSend&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Reply> docflowsGetReplyDocumentAsyncWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID documentId) throws ApiException {
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, null, null);
-        Type localVarReturnType = new TypeToken<Reply>(){}.getType();
+    public ApiResponse<DocumentToSend> docflowsGetReplyDocumentAsyncWithHttpInfo(UUID accountId, UUID docflowId, String documentType, UUID documentId, String thumbprint) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, thumbprint, null, null);
+        Type localVarReturnType = new TypeToken<DocumentToSend>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -1501,11 +1505,12 @@ public class DocflowsApi {
      * @param docflowId Docflow identifier (required)
      * @param documentType Document type (required)
      * @param documentId Document identifier (required)
+     * @param thumbprint Signer certificate thumbprint (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, final ApiCallback<Reply> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetReplyDocumentAsyncAsync(UUID accountId, UUID docflowId, String documentType, UUID documentId, String thumbprint, final ApiCallback<DocumentToSend> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1526,8 +1531,8 @@ public class DocflowsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Reply>(){}.getType();
+        com.squareup.okhttp.Call call = docflowsGetReplyDocumentAsyncValidateBeforeCall(accountId, docflowId, documentType, documentId, thumbprint, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<DocumentToSend>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -1583,7 +1588,7 @@ public class DocflowsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     

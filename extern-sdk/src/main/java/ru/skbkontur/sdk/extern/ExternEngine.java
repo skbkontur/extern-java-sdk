@@ -5,6 +5,7 @@
  */
 package ru.skbkontur.sdk.extern;
 
+import ru.skbkontur.sdk.extern.service.SDKException;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
@@ -18,10 +19,12 @@ import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
+import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
-import ru.skbkontur.sdk.extern.service.impl.BaseServiceImpl;
+import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
+import ru.skbkontur.sdk.extern.service.impl.BaseService;
 import ru.skbkontur.sdk.extern.service.impl.DocflowServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DraftServiceImpl;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
@@ -48,6 +51,8 @@ public class ExternEngine {
 	private AccountProvider accountProvider;
 	
 	private ApiKeyProvider apiKeyProvider;
+	
+	private CryptoProvider cryptoProvider;
 	
 	public ExternEngine(Configuration configuration) throws SDKException {
 		env = new Environment();
@@ -87,6 +92,10 @@ public class ExternEngine {
 		this.serviceBaseUriProvider = serviceBaseUriProvider;
 	}
 	
+	public AuthenticationProvider getAuthenticationProvider() {
+		return authenticationProvider;
+	}
+	
 	public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
 		this.authenticationProvider = authenticationProvider;
 	}
@@ -97,6 +106,16 @@ public class ExternEngine {
 	
 	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
 		this.apiKeyProvider = apiKeyProvider;
+	}
+	
+	public CryptoProvider getCryptoProvider() throws SDKException {
+		if (cryptoProvider == null)
+			throw new SDKException(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER);
+		return cryptoProvider;
+	}
+	
+	public void setCryptoProvider(CryptoProvider cryptoProvider) {
+		this.cryptoProvider = cryptoProvider;
 	}
 	
 	private static Configuration loadConfiguration(String path) throws SDKException {
@@ -117,33 +136,8 @@ public class ExternEngine {
 			throw new SDKException(SDKException.UNKNOWN, x);
 		}
 	}
-	
-	private void initCryptoService() throws SDKException {
-		if (env.configuration.getThumbprint() != null && !env.configuration.getThumbprint().isEmpty()) {
-			try {
-				// a byte array of the thumbprint
-				byte[] tp = IOUtil.hexToBytes(env.configuration.getThumbprint());
-				env.cryptoService = new MSCapi(true);
-				// searches a signature key by thumbprint
-				Key[] keys = env.cryptoService.getKeys();
-				for (int i = 0; i < keys.length && env.signKey == null; i++) {
-					if (Arrays.equals(keys[i].getThumbprint(), tp)) {
-						env.signKey = keys[i];
-					}
-				}
-				if (env.signKey == null) {
-					System.out.println("A Signature key not found.");
-				}
-			}
-			catch (CryptoException x) {
-				throw new SDKException(SDKException.C_CRYPTO_ERROR, x);
-			}
-		}
-	}
-	
+
 	public void configureServices() throws SDKException {
-		initCryptoService();
-		
 		DraftServiceImpl docSrv = new DraftServiceImpl();
 		configureService(docSrv);
 		docSrv.setDraftsApi(new DraftsAdaptor());
@@ -153,13 +147,13 @@ public class ExternEngine {
 		configureService(docflowSrv);
 		docflowSrv.setDraftsApi(new DocflowsAdaptor());
 		this.docflowService = docflowSrv;
-		
 	}
 	
-	private void configureService(BaseServiceImpl baseService) {
+	private void configureService(BaseService baseService) {
 		baseService.setServiceBaseUriProvider(this.serviceBaseUriProvider);
 		baseService.setAuthenticationProvider(this.authenticationProvider);
 		baseService.setAccountProvider(this.accountProvider);
 		baseService.setApiKeyProvider(this.apiKeyProvider);
+		baseService.setCryptoProvider(this.cryptoProvider);
 	}
 }

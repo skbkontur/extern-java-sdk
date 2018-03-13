@@ -5,7 +5,6 @@
  */
 package ru.skbkontur.sdk.extern.providers.auth;
 
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -84,8 +83,8 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
 	private QueryContext<String> authenticateWithHttpInfo(String login, String pass) {
 		try {
 			com.squareup.okhttp.Call call = authenticateValidateBeforeCall(login, pass, null, null);
-			Type localVarReturnType = new TypeToken<AuthenticationProviderByPass.ResponseSid>() {}.getType();
-			ApiResponse<AuthenticationProviderByPass.ResponseSid> result = apiClient.execute(call, localVarReturnType);
+			Type localVarReturnType = new TypeToken<ResponseSid>() {}.getType();
+			ApiResponse<ResponseSid> result = apiClient.execute(call, localVarReturnType);
 			return new QueryContext().setResult(result.getData().getSid(),SESSION_ID);
 		}
 		catch (ApiException x) {
@@ -155,19 +154,5 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
 		String[] localVarAuthNames = new String[]{};
 
 		return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
-	}
-
-	public static class ResponseSid {
-
-		@SerializedName("Sid")
-		private String sid;
-
-		public String getSid() {
-			return sid;
-		}
-
-		public void setSid(String sid) {
-			this.sid = sid;
-		}
 	}
 }

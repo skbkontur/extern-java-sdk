@@ -10,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
-import ru.skbkontur.sdk.extern.model.Reply;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
@@ -21,7 +20,7 @@ import ru.skbkontur.sdk.extern.model.DocumentToSend;
  *
  * @author AlexS
  */
-public class DocflowServiceImpl extends BaseServiceImpl implements DocflowService {
+public class DocflowServiceImpl extends BaseService implements DocflowService {
 	private static final String EN_DFW = "Документооборот";
 	private static final String EN_DOC = "Документ";
 	private static final String EN_SGN = "Подпись";
@@ -158,7 +157,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<Reply>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId) {
+	public CompletableFuture<QueryContext<DocumentToSend>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId) {
 		return createQueryContext(EN_SGN)
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
@@ -167,7 +166,7 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 
 	@Override
-	public QueryContext<Reply> getDocumentTypeReply(QueryContext<?> parent) {
+	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<?> parent) {
 		return createQueryContext(parent, EN_SGN).apply(docflowsApi::getDocumentTypeReply);
 	}
 
@@ -187,14 +186,14 @@ public class DocflowServiceImpl extends BaseServiceImpl implements DocflowServic
 	}
 	
 	@Override
-	public CompletableFuture<QueryContext<List<Reply>>> getRepliesAsync(Docflow docflow) {
+	public CompletableFuture<QueryContext<List<DocumentToSend>>> getRepliesAsync(Docflow docflow) {
 		return createQueryContext(EN_DFW)
 			.setDocflow(docflow)
 			.applyAsync(docflowsApi::lookupReplies);
 	}
 
 	@Override
-	public QueryContext<List<Reply>> getReplies(QueryContext<?> parent) {
+	public QueryContext<List<DocumentToSend>> getReplies(QueryContext<?> parent) {
 		return createQueryContext(parent, EN_DFW).apply(docflowsApi::lookupReplies);
 	}
 

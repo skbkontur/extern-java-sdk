@@ -6,23 +6,24 @@
 package ru.skbkontur.sdk.extern.providers.auth;
 
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ru.argosgrp.cryptoservice.Key;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
+import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
-import ru.skbkontur.sdk.extern.providers.ServiceError.ErrorCode;
+import ru.skbkontur.sdk.extern.providers.ServiceUserIdProvider;
 import ru.skbkontur.sdk.extern.providers.SignatureKeyProvider;
+import ru.skbkontur.sdk.extern.service.SDKException;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.ServiceErrorImpl;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
@@ -36,23 +37,31 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ProgressRespons
  * @author AlexS
  */
 public class TrustedAuthentication implements AuthenticationProvider {
+
 	private static final String EOL = System.getProperty("line.separator", "\r\n");
-	private static final String IDENTITY = "identity";
+	private static final String APIKEY = "apikey";
+	private static final String ID = "id";
+	private static final String TIMESTAMP = "timestamp";
+	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 
 	private final ApiClient apiClient;
 	private ApiKeyProvider apiKeyProvider;
 	private AuthBaseUriProvider authBaseUriProvider;
+	private CryptoProvider cryptoProvider;
 	private SignatureKeyProvider signatureKeyProvider;
-	private String serviceUserId;
+	private ServiceUserIdProvider serviceUserIdProvider;
 	private String authPrefix;
 	private String timestamp;
 	private Credential credential;
-	private Key signKey;
 
-	public TrustedAuthentication(String serviceUserId, String authPrefix) {
+	public TrustedAuthentication(String authPrefix) {
 		this.apiClient = new ApiClient();
-		this.serviceUserId = serviceUserId;
 		this.authPrefix = authPrefix;
+	}
+
+	public TrustedAuthentication() {
+		this.apiClient = new ApiClient();
+		this.authPrefix = DEFAULT_AUTH_PREFIX;
 	}
 
 	public ApiKeyProvider getApiKeyProvider() {
@@ -65,6 +74,19 @@ public class TrustedAuthentication implements AuthenticationProvider {
 
 	public TrustedAuthentication apiKeyProvider(ApiKeyProvider apiKeyProvider) {
 		this.apiKeyProvider = apiKeyProvider;
+		return this;
+	}
+
+	public ServiceUserIdProvider getServiceUserIdProvider() {
+		return serviceUserIdProvider;
+	}
+
+	public void setServiceUserIdProvider(ServiceUserIdProvider serviceUserIdProvider) {
+		this.serviceUserIdProvider = serviceUserIdProvider;
+	}
+
+	public TrustedAuthentication serviceUserIdProvider(ServiceUserIdProvider serviceUserIdProvider) {
+		this.serviceUserIdProvider = serviceUserIdProvider;
 		return this;
 	}
 
@@ -81,26 +103,30 @@ public class TrustedAuthentication implements AuthenticationProvider {
 		return this;
 	}
 
+	public CryptoProvider geCryptoProvider() {
+		return cryptoProvider;
+	}
+
+	public void setCryptoProvider(CryptoProvider cryptoProvider) {
+		this.cryptoProvider = cryptoProvider;
+	}
+
+	public TrustedAuthentication cryptoProvider(CryptoProvider cryptoProvider) {
+		setCryptoProvider(cryptoProvider);
+		return this;
+	}
+
 	public SignatureKeyProvider getSignatureKeyProvider() {
 		return signatureKeyProvider;
 	}
-	
+
 	public void setSignatureKeyProvider(SignatureKeyProvider signatureKeyProvider) {
 		this.signatureKeyProvider = signatureKeyProvider;
-		this.signKey = null;
 	}
-	
+
 	public TrustedAuthentication signatureKeyProvider(SignatureKeyProvider signatureKeyProvider) {
 		setSignatureKeyProvider(signatureKeyProvider);
 		return this;
-	}
-	
-	public String getServiceUserId() {
-		return serviceUserId;
-	}
-
-	public void setServiceUserId(String serviceUserId) {
-		this.serviceUserId = serviceUserId;
 	}
 
 	public String getAuthPrefix() {
@@ -114,25 +140,27 @@ public class TrustedAuthentication implements AuthenticationProvider {
 	public Credential getCredential() {
 		return credential;
 	}
-	
-	public void getCredential(Credential credential) {
+
+	public void setCredential(Credential credential) {
 		this.credential = credential;
 	}
-	
+
 	public TrustedAuthentication credential(Credential credential) {
 		this.credential = credential;
 		return this;
 	}
-	
+
 	@Override
 	public QueryContext<String> sessionId() {
+		if (cryptoProvider == null)
+			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER, 0, null, null));
+		
 		apiClient.setBasePath(authBaseUriProvider.getAuthBaseUri());
-		timestamp = new SimpleDateFormat("dd:MM:yyyy HH:mm:ss").format(new Date());
-		QueryContext<Object> identityQuery = authenticateWithHttpInfo();
-		if (identityQuery.isFail())
-			return new QueryContext(identityQuery, IDENTITY);
-		else
-			return new QueryContext(IDENTITY).setResult("test",IDENTITY);
+
+		timestamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+
+//		QueryContext<Object> identityQuery = authenticateWithHttpInfo();
+		return authenticateRequest();
 	}
 
 	@Override
@@ -140,25 +168,50 @@ public class TrustedAuthentication implements AuthenticationProvider {
 		return authPrefix;
 	}
 
-	private QueryContext<Object> authenticateWithHttpInfo() {
+	private QueryContext<String> authenticateRequest() {
 		try {
-			com.squareup.okhttp.Call call = authenticateValidateBeforeCall(null, null);
-			Type localVarReturnType = new TypeToken<TrustedAuthentication.ResponesIdentity>() {}.getType();
-			ApiResponse<TrustedAuthentication.ResponesIdentity> result = apiClient.execute(call, localVarReturnType);
-			return new QueryContext<>().setResult(result.getData(), "Identity");
+			StringBuilder identityData = new StringBuilder();
+
+			Map<String, String> queryParams = new HashMap<>();
+
+			String apiKey = apiKeyProvider.getApiKey().toLowerCase();
+			queryParams.put(APIKEY, apiKey);
+			identityData.append(APIKEY).append("=").append(apiKey).append(EOL);
+
+			if (credential != null) {
+				queryParams.put(credential.getName(), credential.getValue());
+				identityData.append(ID).append("=").append(credential.getValue()).append(EOL);
+			}
+
+			queryParams.put(TIMESTAMP, timestamp);
+			identityData.append(TIMESTAMP).append("=").append(timestamp).append(EOL);
+
+			queryParams.put("serviceUserId", serviceUserIdProvider.getServiceUserIdProvider());
+
+			Map<String, String> localHeaderParams = new HashMap<>();
+
+			Map<String, Object> localVarFormParams = new HashMap<>();
+
+			byte[] signature = cryptoProvider.sign(signatureKeyProvider.getThumbprint(), identityData.toString().getBytes());
+
+			ApiResponse<TrustedAuthentication.ResponseLink> responseLink = apiClient.submitHttpRequest("/v5.9/authenticate-by-truster", "POST", queryParams, signature, localHeaderParams, localVarFormParams, TrustedAuthentication.ResponseLink.class);
+
+			apiClient.setBasePath("");
+			
+			ResponseLink link = responseLink.getData();
+			byte[] key = IOUtil.hexToBytes(link.getKey());
+			String approveRequest = link.getLink().getHref(); // + "&" + APIKEY + "=" + apiKey;
+			
+			ApiResponse<ResponseSid> sid = apiClient.submitHttpRequest(approveRequest, "POST", Collections.emptyMap(), key, localHeaderParams, localVarFormParams, ResponseSid.class);
+			
+			return new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
 		}
 		catch (ApiException x) {
-			return new QueryContext().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
 		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	private com.squareup.okhttp.Call authenticateValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-
-		com.squareup.okhttp.Call call = authenticateCall(progressListener, progressRequestListener);
-
-		return call;
-
+		catch (SDKException x) {
+			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, x.getMessage(), 0, null, null));
+		}
 	}
 
 	public com.squareup.okhttp.Call authenticateCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
@@ -172,122 +225,89 @@ public class TrustedAuthentication implements AuthenticationProvider {
 
 		localVarQueryParams.addAll(apiClient.parameterToPairs("", "timestamp", timestamp));
 
-		localVarQueryParams.addAll(apiClient.parameterToPairs("", "serviceUserId", serviceUserId));
-		
+		localVarQueryParams.addAll(apiClient.parameterToPairs("", "serviceUserId", serviceUserIdProvider.getServiceUserIdProvider()));
+
 		Map<String, String> localVarHeaderParams = new HashMap<>();
 
 		Map<String, Object> localVarFormParams = new HashMap<>();
-		/*
-		final String[] localVarAccepts = {
-			"application/json", "text/json"
-		};
-		final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-		if (localVarAccept != null) {
-			localVarHeaderParams.put("Accept", localVarAccept);
-		}
-		 */
+		
 		final String[] localVarContentTypes = {"text/plain"};
 		final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 		localVarHeaderParams.put("Content-Type", localVarContentType);
 
 		if (progressListener != null) {
-			apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
-				@Override
-				public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
-					com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
-					return originalResponse.newBuilder()
-						.body(new ProgressResponseBody(originalResponse.body(), progressListener))
-						.build();
-				}
-			});
+			com.squareup.okhttp.Interceptor interceptor = (com.squareup.okhttp.Interceptor.Chain chain) -> {
+				com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+				return originalResponse.newBuilder()
+					.body(new ProgressResponseBody(originalResponse.body(), progressListener))
+					.build();
+			};
+			
+			apiClient.getHttpClient().networkInterceptors().add(interceptor);
 		}
 
 		String[] localVarAuthNames = new String[]{};
 
 		return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
 	}
-	
-	public static class ResponesIdentity {
+
+	public static class ResponseLink {
+
 		@SerializedName("Link")
 		private Link link;
 		@SerializedName("Key")
 		private String key;
-		
-		public ResponesIdentity() {
+
+		public ResponseLink() {
 		}
-		
+
 		public Link getLink() {
 			return link;
 		}
-		
+
 		public void setLink(Link link) {
 			this.link = link;
 		}
-		
+
 		public String getKey() {
 			return key;
 		}
-		
+
 		public void setKey(String key) {
 			this.key = key;
 		}
 	}
-	
+
 	public static class Link {
+
 		@SerializedName("Rel")
-		private String  rel;
+		private String rel;
 		@SerializedName("Href")
 		private String href;
-		
+
 		public Link() {
-			
+
 		}
-		
+
 		public Link(String rel, String href) {
 			this.rel = rel;
 			this.href = href;
 		}
-		
+
 		public String getRel() {
 			return rel;
 		}
-		
+
 		public void setRel(String rel) {
 			this.rel = rel;
 		}
-		
+
 		public String getHref() {
 			return href;
 		}
-		
+
 		public void setHref(String href) {
 			this.href = href;
 		}
 	}
-	
-	private String getSignData() {
-		StringBuilder signData = new StringBuilder("apikey=");
-		signData.append("apikey=").append(apiKeyProvider.getApiKey()).append(EOL);
-		signData.append("id=").append(serviceUserId).append(EOL);
-		signData.append("timestamp=").append(timestamp).append(EOL);
-		return signData.toString();
-	}
-	/*
-	private QueryContext<Key> getSignKey() {
-		if (signatureKeyProvider == null) {
-			return new QueryContext<Key>()
-				.setServiceError(
-					new ServiceErrorImpl(
-						ErrorCode.business,
-						"Unknown signature key provider.",
-						0,
-						null,
-						null
-					)
-				);
-		}
-		
-		
-	}
-*/
 }

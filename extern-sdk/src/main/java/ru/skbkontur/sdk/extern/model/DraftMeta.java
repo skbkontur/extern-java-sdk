@@ -18,25 +18,14 @@ public class DraftMeta {
 	private Recipient recipient;
 	@SerializedName("organization")
 	private Organization organization;
-	@SerializedName("ipaddress")
-	private String ipAddress;
-
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
 
 	public DraftMeta() {
 	}	
 	
-	public DraftMeta(Sender sender, Recipient recipient, Organization organization, String ipAddress) {
+	public DraftMeta(Sender sender, Recipient recipient, Organization organization) {
 		this.sender = sender;
 		this.recipient = recipient;
 		this.organization = organization;
-		this.ipAddress = ipAddress;
 	}
 	
 	public Sender getSender() {

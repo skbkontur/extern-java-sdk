@@ -82,14 +82,13 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "post": {
                 "tags": ["Accounts"],
                 "summary": "Not implemented yet",
-                "operationId": "Accounts_CreateAsync",
+                "operationId": "Accounts_Create",
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -105,7 +104,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Account"
+                            "type": "object"
                         }
                     },
                     "201": {
@@ -147,8 +146,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -205,8 +203,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -272,8 +269,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -342,8 +338,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -416,8 +411,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -490,8 +484,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -565,8 +558,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -640,8 +632,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -717,8 +708,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -798,8 +788,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -880,8 +869,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -919,12 +907,18 @@
                         "required": true,
                         "type": "string",
                         "format": "uuid"
+                    }, {
+                        "name": "thumbprint",
+                        "in": "query",
+                        "description": "Signer certificate thumbprint",
+                        "required": false,
+                        "type": "string"
                     }],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/Reply"
+                            "$ref": "#/definitions/DocumentToSend"
                         }
                     },
                     "400": {
@@ -960,8 +954,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "post": {
@@ -1046,8 +1039,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1117,8 +1109,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1181,8 +1172,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "delete": {
@@ -1240,8 +1230,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1304,8 +1293,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "put": {
@@ -1373,8 +1361,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1443,8 +1430,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1507,8 +1493,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1545,7 +1530,10 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/Docflow"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Docflow"
+                            }
                         }
                     },
                     "400": {
@@ -1581,8 +1569,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1651,8 +1638,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "put": {
@@ -1732,8 +1718,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "delete": {
@@ -1797,8 +1782,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1867,8 +1851,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -1944,8 +1927,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -2014,8 +1996,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "put": {
@@ -2087,8 +2068,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -2157,8 +2137,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -2227,8 +2206,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             },
             "put": {
@@ -2300,8 +2278,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         },
@@ -2366,8 +2343,7 @@
                 },
                 "security": [{
                         "apiKey": [],
-                        "auth.sid": [],
-                        "apiKeyOld": []
+                        "auth.sid": []
                     }]
             }
         }
@@ -2622,20 +2598,6 @@
                 }
             }
         },
-        "Reply": {
-            "type": "object",
-            "properties": {
-                "document": {
-                    "$ref": "#/definitions/DocumentToSend"
-                },
-                "links": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Link"
-                    }
-                }
-            }
-        },
         "DocumentToSend": {
             "type": "object",
             "properties": {
@@ -2656,6 +2618,12 @@
                 },
                 "sender-ip": {
                     "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
                 }
             }
         },
@@ -2674,7 +2642,7 @@
             }
         },
         "DraftMeta": {
-            "required": ["sender", "recipient", "organization", "ipaddress"],
+            "required": ["sender", "recipient", "organization"],
             "type": "object",
             "properties": {
                 "sender": {
@@ -2685,14 +2653,11 @@
                 },
                 "organization": {
                     "$ref": "#/definitions/AccountInfo"
-                },
-                "ipaddress": {
-                    "type": "string"
                 }
             }
         },
         "Sender": {
-            "required": ["inn", "certificate"],
+            "required": ["inn", "certificate", "ipaddress"],
             "type": "object",
             "properties": {
                 "inn": {
@@ -2703,6 +2668,9 @@
                 },
                 "certificate": {
                     "$ref": "#/definitions/Certificate"
+                },
+                "ipaddress": {
+                    "type": "string"
                 }
             }
         },
@@ -2944,12 +2912,6 @@
         "auth.sid": {
             "type": "apiKey",
             "description": "user session authentication. Pass it as  \"auth.sid [token]\" ",
-            "name": "Authorization",
-            "in": "header"
-        },
-        "apiKeyOld": {
-            "type": "apiKey",
-            "description": "since libapi have bug this parametr must contain \"apiKey nonsenceContent\" ",
             "name": "Authorization",
             "in": "header"
         }

@@ -5,13 +5,10 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.invoker;
 
-import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
 import java.io.File;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -63,9 +60,7 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 	}
 	
 	public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String,String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class dtoClass) throws ApiException {
-		setBasePath("");
-		
-    String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+    String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
 		
 		List<Pair> params 
 			= queryParams

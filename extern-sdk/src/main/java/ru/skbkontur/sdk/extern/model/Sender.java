@@ -18,14 +18,17 @@ public class Sender {
 	private String kpp;
 	@SerializedName("certificate")
 	private String certificate;
+	@SerializedName("ipaddress")
+	private String ipaddress;
 
 	public Sender() {
 	}
 
-	public Sender(String inn, String kpp, String certificate) {
+	public Sender(String inn, String kpp, String certificate, String ipaddress) {
 		this.inn = inn;
 		this.kpp = kpp;
 		this.certificate = certificate;
+		this.ipaddress = ipaddress;
 	}
 	
 	public String getInn() {
@@ -51,4 +54,12 @@ public class Sender {
 	public void setCertificate(String certificate) {
 		this.certificate = certificate;
 	}
+
+  public String getIpaddress() {
+    return ipaddress;
+  }
+
+  public void setIpaddress(String ipaddress) {
+    this.ipaddress = ipaddress;
+  }
 }

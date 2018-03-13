@@ -8,14 +8,17 @@ package ru.skbkontur.sdk.extern.service.impl;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
+import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.service.SDKException;
+import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
  *
  * @author AlexS
  */
-public class BaseServiceImpl {
+public class BaseService {
 	
 	protected ServiceBaseUriProvider serviceBaseUriProvider;
 	
@@ -24,6 +27,8 @@ public class BaseServiceImpl {
 	protected AccountProvider accountProvider;
 
 	protected ApiKeyProvider apiKeyProvider;
+	
+	protected CryptoProvider cryptoProvider;
 	
 	public void setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
 		this.serviceBaseUriProvider = serviceBaseUriProvider;
@@ -39,6 +44,17 @@ public class BaseServiceImpl {
 
 	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
 		this.apiKeyProvider = apiKeyProvider;
+	}
+
+	public CryptoProvider getCryptoProvider() throws SDKException {
+		if (cryptoProvider == null)
+			throw new SDKException(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER);
+		return cryptoProvider;
+	}
+	
+	
+	public void setCryptoProvider(CryptoProvider cryptoProvider) {
+		this.cryptoProvider = cryptoProvider;
 	}
 
 	protected <T> QueryContext<T> createQueryContext(String entityName) {

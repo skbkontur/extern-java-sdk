@@ -111,7 +111,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -257,7 +257,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -399,7 +399,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -545,7 +545,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -691,7 +691,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -837,7 +837,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -983,7 +983,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1130,7 +1130,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1285,7 +1285,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1436,7 +1436,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1584,7 +1584,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1719,7 +1719,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1855,7 +1855,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -1987,7 +1987,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -2123,7 +2123,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -2259,7 +2259,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -2401,7 +2401,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     
@@ -2435,11 +2435,11 @@ public class DraftsApi {
      * @param draftId  (required)
      * @param deferred  (optional)
      * @param force  (optional)
-     * @return Docflow
+     * @return List&lt;Docflow&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Docflow draftsSend(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
-        ApiResponse<Docflow> resp = draftsSendWithHttpInfo(accountId, draftId, deferred, force);
+    public List<Docflow> draftsSend(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
+        ApiResponse<List<Docflow>> resp = draftsSendWithHttpInfo(accountId, draftId, deferred, force);
         return resp.getData();
     }
 
@@ -2450,12 +2450,12 @@ public class DraftsApi {
      * @param draftId  (required)
      * @param deferred  (optional)
      * @param force  (optional)
-     * @return ApiResponse&lt;Docflow&gt;
+     * @return ApiResponse&lt;List&lt;Docflow&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Docflow> draftsSendWithHttpInfo(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
+    public ApiResponse<List<Docflow>> draftsSendWithHttpInfo(UUID accountId, UUID draftId, Boolean deferred, Boolean force) throws ApiException {
         com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deferred, force, null, null);
-        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<Docflow>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -2470,7 +2470,7 @@ public class DraftsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsSendAsync(UUID accountId, UUID draftId, Boolean deferred, Boolean force, final ApiCallback<Docflow> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsSendAsync(UUID accountId, UUID draftId, Boolean deferred, Boolean force, final ApiCallback<List<Docflow>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -2492,7 +2492,7 @@ public class DraftsApi {
         }
 
         com.squareup.okhttp.Call call = draftsSendValidateBeforeCall(accountId, draftId, deferred, force, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<Docflow>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -2544,7 +2544,7 @@ public class DraftsApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "apiKey", "apiKeyOld", "auth.sid" };
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
     

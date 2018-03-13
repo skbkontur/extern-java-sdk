@@ -29,6 +29,7 @@ public class DraftMetaDto {
 			sender.setInn(dtoSender.getInn());
 			sender.setKpp(dtoSender.getKpp());
 			sender.setCertificate(dtoSender.getCertificate() == null ? null : dtoSender.getCertificate().getContent());
+			sender.setIpaddress(dto.getSender().getIpaddress());
 			
 			draftMeta.setSender(sender);
 
@@ -37,8 +38,6 @@ public class DraftMetaDto {
 			draftMeta.setOrganization(
 				new Organization(dto.getOrganization().getInn(), dto.getOrganization().getOrganization() == null ? null : dto.getOrganization().getOrganization().getKpp())
 			);
-			
-			draftMeta.setIpAddress(dto.getIpaddress());
 		}
 		return draftMeta;
 	}
@@ -57,6 +56,8 @@ public class DraftMetaDto {
 			ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate dtoCertificate = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate();
 			
 			dtoSender.setCertificate(dtoCertificate.content(draftMeta.getSender().getCertificate()));
+			
+			dtoSender.setIpaddress(draftMeta.getSender().getIpaddress());
 
 			dtoDraftMeta.setSender(dtoSender);
 
@@ -70,8 +71,6 @@ public class DraftMetaDto {
 			dtoAccountInfo.setOrganization(dtoOrganizationInfo);
 
 			dtoDraftMeta.setOrganization(dtoAccountInfo);
-			
-			dtoDraftMeta.setIpaddress(draftMeta.getIpAddress());
 		}
 		return dtoDraftMeta;
 	}

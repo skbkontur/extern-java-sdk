@@ -5,8 +5,10 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -29,6 +31,10 @@ public class DocumentToSendDto {
 		documentToSend.setId(dto.getId());
 		documentToSend.setSenderIp(dto.getSenderIp());
 		documentToSend.setSignature(new SignatureToSendDto().fromDto(dto.getSignature()));
+		if (dto.getLinks() != null) {
+			LinkDto linkDto = new LinkDto();
+			documentToSend.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
+		}
 		
 		return documentToSend;
 	}
@@ -55,6 +61,11 @@ public class DocumentToSendDto {
 		documentToSend.setId((String)dto.get("id"));
 		documentToSend.setSenderIp(null);
 		documentToSend.setSignature(new SignatureToSendDto().fromDto((Map)dto.get("signature")));
+		if (dto.get("links") != null) {
+			LinkDto linkDto = new LinkDto();
+			List<Map<String,Object>> links = (List<Map<String,Object>>)dto.get("links");
+			documentToSend.setLinks(links.stream().map(linkDto::fromDto).collect(Collectors.toList()));
+		}
 		
 		return documentToSend;
 	}
@@ -67,6 +78,10 @@ public class DocumentToSendDto {
 		dto.setId(documentToSend.getId());
 		dto.setSenderIp(documentToSend.getSenderIp());
 		dto.setSignature(new SignatureToSendDto().toDto(documentToSend.getSignature()));
+		if (documentToSend.getLinks() != null) {
+			LinkDto linkDto = new LinkDto();
+			dto.setLinks(documentToSend.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
+		}
 		
 		return dto;
 	}

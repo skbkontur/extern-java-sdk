@@ -25,7 +25,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author AlexS
  */
-public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
+public class DraftServiceImpl extends BaseService implements DraftService {
 
 	private static final String EN_DFT = "Черновик";
 	private static final String EN_DOC = "Документ";
@@ -38,9 +38,9 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization, String ipAddress) {
+	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization) {
 		return createQueryContext(EN_DFT)
-			.setDraftMeta(new DraftMeta(sender,recipient,organization,ipAddress))
+			.setDraftMeta(new DraftMeta(sender,recipient,organization))
 			.applyAsync(draftsApi::createDraft);
 	}
 

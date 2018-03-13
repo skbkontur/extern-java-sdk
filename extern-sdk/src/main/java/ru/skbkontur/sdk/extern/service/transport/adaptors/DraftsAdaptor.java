@@ -5,8 +5,10 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.DraftDocument;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
@@ -27,6 +29,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.api.DraftsApi;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT_STRING;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOWS;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_DOCUMENT;
 
 /**
@@ -248,24 +251,26 @@ public class DraftsAdaptor extends BaseAdaptor {
 	 *
 	 * @param cxt a context
 	 * 
-	 * @return Docflow
+	 * @return List&lt;Docflow&gt;
 	 */
-	public QueryContext<Docflow> send(QueryContext<Docflow> cxt) {
+	public QueryContext<List<Docflow>> send(QueryContext<List<Docflow>> cxt) {
 		try {
 			if (cxt.isFail())	return cxt;
 			
-			return cxt.setResult(
-				new DocflowDto().fromDto(
-					transport(cxt).draftsSend(
-						cxt.getAccountProvider().accountId(), 
-						cxt.getDraftId(), 
-						cxt.getDeffered(), 
-						cxt.getForce()
-					)
-				),
-				DOCFLOW
-			).setDocflowId(cxt.getDocflow().getId());
+			DocflowDto docflowDto = new DocflowDto();
 			
+			return cxt.setResult(
+				transport(cxt).draftsSend(
+					cxt.getAccountProvider().accountId(), 
+					cxt.getDraftId(), 
+					cxt.getDeffered(), 
+					cxt.getForce()
+				)
+				.stream()
+					.map(docflowDto::fromDto)
+					.collect(Collectors.toList())
+				,DOCFLOWS
+			);
 		}
 		catch (ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));

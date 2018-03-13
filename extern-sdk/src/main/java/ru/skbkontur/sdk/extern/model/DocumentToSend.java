@@ -6,6 +6,7 @@
 package ru.skbkontur.sdk.extern.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,6 +25,9 @@ public class DocumentToSend {
 	private SignatureToSend signature = null;
 	@SerializedName("sender-ip")
 	private String senderIp = null;
+  @SerializedName("links")
+  private List<Link> links = null;
+
 
 	/**
 	 * Get id
@@ -97,5 +101,13 @@ public class DocumentToSend {
 
 	public void setSenderIp(String senderIp) {
 		this.senderIp = senderIp;
+	}
+
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
 	}
 }
