@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.DraftDocument;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOW;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_ID;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_META;

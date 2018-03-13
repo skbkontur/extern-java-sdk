@@ -21,12 +21,15 @@ import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.service.AccountService;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
 import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
+import ru.skbkontur.sdk.extern.service.impl.AccountServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.BaseService;
 import ru.skbkontur.sdk.extern.service.impl.DocflowServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DraftServiceImpl;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 
@@ -40,6 +43,8 @@ public class ExternEngine {
 
 	private final Environment env;
 
+	private AccountService accountService;
+	
 	private DraftService draftService;
 	
 	private DocflowService docflowService;
@@ -72,6 +77,14 @@ public class ExternEngine {
 		this(loadConfiguration(configPath));
 	}
 
+	public AccountService getAccountService() {
+		return accountService;
+	}
+	
+	public void setAccountService(AccountService accountService) {
+		this.accountService = accountService;
+	}
+	
 	public DraftService getDraftService() {
 		return draftService;
 	}
@@ -138,10 +151,15 @@ public class ExternEngine {
 	}
 
 	public void configureServices() throws SDKException {
-		DraftServiceImpl docSrv = new DraftServiceImpl();
-		configureService(docSrv);
-		docSrv.setDraftsApi(new DraftsAdaptor());
-		this.draftService = docSrv;
+		AccountServiceImpl accSrv = new AccountServiceImpl();
+		configureService(accSrv);
+		accSrv.setAccountApi(new AccountAdaptor());
+		this.accountService = accSrv;
+		
+		DraftServiceImpl draftSrv = new DraftServiceImpl();
+		configureService(draftSrv);
+		draftSrv.setDraftsApi(new DraftsAdaptor());
+		this.draftService = draftSrv;
 		
 		DocflowServiceImpl docflowSrv = new DocflowServiceImpl();
 		configureService(docflowSrv);

@@ -16,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.HttpsURLConnection;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import ru.skbkontur.sdk.extern.model.Account;
+import ru.skbkontur.sdk.extern.model.AccountList;
+import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentContents;
@@ -33,6 +36,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.LocalDateTypeAdapter;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
 import ru.skbkontur.sdk.extern.model.DraftMeta;
+import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
@@ -80,6 +84,11 @@ public class QueryContext<R> implements Serializable {
 	public static final String SIGNATURES = "signatures";
 	public static final String SIGNATURE = "signature";
 	public static final String THUMBPRINT = "thumbprint";
+	public static final String LINKS = "links";
+	public static final String ACCOUNT_ID = "accountId";
+	public static final String ACCOUNT = "account";
+	public static final String ACCOUNT_LIST = "accountList";
+	public static final String CREATE_ACCOUNT_REQUEST = "createAccountRequest";
 	public static final String NOTHING = "nothing";
 	public static final String OBJECT = "object";
 
@@ -402,6 +411,50 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext<R> setThumbprint(String thumbprint) {
 		return set(THUMBPRINT, thumbprint);
+	}
+	
+	public List<Link> getLinks() {
+		return (List<Link>) params.get(LINKS);
+	}
+	
+	public QueryContext<R> setLinks(List<Link> links) {
+		return set(LINKS, links);
+	}
+	
+	public UUID getAccountId() {
+		return (UUID) params.get(ACCOUNT_ID);
+	}
+	
+	public QueryContext<R> setAccountId(UUID accountId) {
+		return set(ACCOUNT_ID, accountId);
+	}
+	
+	public QueryContext<R> setAccountId(String accountId) {
+		return set(ACCOUNT_ID, UUID.fromString(accountId));
+	}
+	
+	public Account getAccount() {
+		return (Account) params.get(ACCOUNT);
+	}
+	
+	public QueryContext<R> setAccount(Account account) {
+		return set(ACCOUNT, account);
+	}
+	
+	public AccountList getAccountList() {
+		return (AccountList) params.get(ACCOUNT_LIST);
+	}
+	
+	public QueryContext<R> setAccountList(AccountList accountList) {
+		return set(ACCOUNT_LIST, accountList);
+	}
+	
+	public CreateAccountRequest getCreateAccountRequest() {
+		return (CreateAccountRequest) params.get(CREATE_ACCOUNT_REQUEST);
+	}
+	
+	public QueryContext<R> setCreateAccountRequest(CreateAccountRequest createAccountRequest) {
+		return set(CREATE_ACCOUNT_REQUEST, createAccountRequest);
 	}
 	
 	public Signature getSignature() {
