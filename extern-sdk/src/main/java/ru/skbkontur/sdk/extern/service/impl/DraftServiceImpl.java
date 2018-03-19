@@ -5,6 +5,7 @@
  */
 package ru.skbkontur.sdk.extern.service.impl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -39,55 +40,64 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization) {
-		return createQueryContext(EN_DFT)
+		QueryContext<UUID> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftMeta(new DraftMeta(sender,recipient,organization))
 			.applyAsync(draftsApi::createDraft);
 	}
 
 	@Override
 	public QueryContext<UUID> create(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::createDraft);
+		QueryContext<UUID> cxt = createQueryContext(parent,EN_DFT);
+		return cxt.apply(draftsApi::createDraft);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+		QueryContext<Draft> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.applyAsync(draftsApi::lookup);
 	}
 
 	@Override
 	public QueryContext<Draft> lookup(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::lookup);
+		QueryContext<Draft> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::lookup);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<Void>> deleteAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+		QueryContext<Void> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.applyAsync(draftsApi::delete);
 	}
 
 	@Override
 	public QueryContext<Void> delete(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::delete);
+		QueryContext<Void> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::delete);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+		QueryContext<DraftMeta> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.applyAsync(draftsApi::lookupDraftMeta);
 	}
 	
 	@Override
 	public QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::lookupDraftMeta);
+		QueryContext<DraftMeta> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::lookupDraftMeta);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta) {
-		return createQueryContext(EN_DFT)
+		QueryContext<DraftMeta> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.setDraftMeta(draftMeta)
 			.applyAsync(draftsApi::updateDraftMeta);
@@ -95,36 +105,42 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 	
 	@Override
 	public QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::updateDraftMeta);
+		QueryContext<DraftMeta> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::updateDraftMeta);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<Map<String,Object>>> checkAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+		QueryContext<Map<String,Object>> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.applyAsync(draftsApi::check);
 	}
 
 	@Override
 	public QueryContext<Map<String,Object>> check(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::check);
+		QueryContext<Map<String,Object>> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::check);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+		QueryContext<PrepareResult> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.applyAsync(draftsApi::prepare);
 	}
 
 	@Override
 	public QueryContext<PrepareResult> prepare(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::prepare);
+		QueryContext<PrepareResult> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::prepare);
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<Docflow>> sendAsync(String draftId) {
-		return createQueryContext(EN_DFT)
+	public CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId) {
+		QueryContext<List<Docflow>> cxt = createQueryContext(EN_DFT);
+		return cxt
 			.setDraftId(draftId)
 			.setDeffered(true)
 			.setForce(true)
@@ -132,13 +148,15 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 	}
 	
 	@Override
-	public QueryContext<Docflow> send(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFT).apply(draftsApi::send);
+	public QueryContext<List<Docflow>> send(QueryContext<?> parent) {
+		QueryContext<List<Docflow>> cxt = createQueryContext(parent, EN_DFT);
+		return cxt.apply(draftsApi::send);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<Void> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::deleteDocument);
@@ -146,12 +164,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<Void> deleteDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::deleteDocument);
+		QueryContext<Void> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::deleteDocument);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::lookupDocument);
@@ -159,12 +179,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<DraftDocument> lookupDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::lookupDocument);
+		QueryContext<DraftDocument> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::lookupDocument);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents) {
-		return createQueryContext(EN_DOC)
+		QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.setDocumentContents(documentContents)
@@ -173,12 +195,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 	
 	@Override
 	public QueryContext<DraftDocument> updateDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::updateDocument);
+		QueryContext<DraftDocument> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::updateDocument);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<String> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::printDocument);
@@ -186,12 +210,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<String> printDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::printDocument);
+		QueryContext<String> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::printDocument);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(String draftId, DocumentContents documentContents) {
-		return createQueryContext(EN_DOC)
+		QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentContents(documentContents)
 			.applyAsync(draftsApi::addDecryptedDocument);
@@ -199,12 +225,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::addDecryptedDocument);
+		QueryContext<DraftDocument> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::addDecryptedDocument);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<String> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::getDecryptedDocumentContent);
@@ -212,12 +240,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<String> getDecryptedDocumentContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::getDecryptedDocumentContent);
+		QueryContext<String> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::getDecryptedDocumentContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content) {
-		return createQueryContext(EN_DOC)
+		QueryContext<Void> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.setContent(content)
@@ -226,12 +256,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::updateDecryptedDocumentContent);
+		QueryContext<Void> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::updateDecryptedDocumentContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<String> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::getEncryptedDocumentContent);
@@ -239,12 +271,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<String> getEncryptedDocumentContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::getEncryptedDocumentContent);
+		QueryContext<String> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::getEncryptedDocumentContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<String> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.applyAsync(draftsApi::getSignatureContent);
@@ -252,12 +286,14 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<String> getSignatureContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::getSignatureContent);
+		QueryContext<String> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::getSignatureContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content) {
-		return createQueryContext(EN_DOC)
+		QueryContext<Void> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDraftId(draftId)
 			.setDocumentId(documentId)
 			.setContent(content)
@@ -266,6 +302,7 @@ public class DraftServiceImpl extends BaseService implements DraftService {
 
 	@Override
 	public QueryContext<Void> updateSignature(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(draftsApi::updateSignature);
+		QueryContext<Void> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(draftsApi::updateSignature);
 	}
 }

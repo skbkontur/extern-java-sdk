@@ -5,17 +5,13 @@
  */
 package ru.skbkontur.sdk.extern.providers.auth;
 
-import com.google.gson.annotations.SerializedName;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.providers.AuthBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
@@ -24,19 +20,16 @@ import ru.skbkontur.sdk.extern.providers.SignatureKeyProvider;
 import ru.skbkontur.sdk.extern.service.SDKException;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.ServiceErrorImpl;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ProgressRequestBody;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ProgressResponseBody;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
+import ru.skbkontur.sdk.extern.providers.UriProvider;
 
 /**
  *
  * @author AlexS
  */
-public class TrustedAuthentication implements AuthenticationProvider {
+public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
 	private static final String EOL = System.getProperty("line.separator", "\r\n");
 	private static final String APIKEY = "apikey";
@@ -46,7 +39,7 @@ public class TrustedAuthentication implements AuthenticationProvider {
 
 	private final ApiClient apiClient;
 	private ApiKeyProvider apiKeyProvider;
-	private AuthBaseUriProvider authBaseUriProvider;
+	private UriProvider authBaseUriProvider;
 	private CryptoProvider cryptoProvider;
 	private SignatureKeyProvider signatureKeyProvider;
 	private ServiceUserIdProvider serviceUserIdProvider;
@@ -90,15 +83,15 @@ public class TrustedAuthentication implements AuthenticationProvider {
 		return this;
 	}
 
-	public AuthBaseUriProvider getAuthBaseUriProvider() {
+	public UriProvider getAuthBaseUriProvider() {
 		return authBaseUriProvider;
 	}
 
-	public void setAuthBaseUriProvider(AuthBaseUriProvider authBaseUriProvider) {
+	public void setAuthBaseUriProvider(UriProvider authBaseUriProvider) {
 		this.authBaseUriProvider = authBaseUriProvider;
 	}
 
-	public TrustedAuthentication authBaseUriProvider(AuthBaseUriProvider authBaseUriProvider) {
+	public TrustedAuthentication authBaseUriProvider(UriProvider authBaseUriProvider) {
 		this.authBaseUriProvider = authBaseUriProvider;
 		return this;
 	}
@@ -153,13 +146,12 @@ public class TrustedAuthentication implements AuthenticationProvider {
 	@Override
 	public QueryContext<String> sessionId() {
 		if (cryptoProvider == null)
-			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER, 0, null, null));
+			return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER, 0, null, null);
 		
-		apiClient.setBasePath(authBaseUriProvider.getAuthBaseUri());
+		apiClient.setBasePath(authBaseUriProvider.getUri());
 
 		timestamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
 
-//		QueryContext<Object> identityQuery = authenticateWithHttpInfo();
 		return authenticateRequest();
 	}
 
@@ -169,6 +161,9 @@ public class TrustedAuthentication implements AuthenticationProvider {
 	}
 
 	private QueryContext<String> authenticateRequest() {
+		
+		QueryContext<String> authCxt;
+		
 		try {
 			StringBuilder identityData = new StringBuilder();
 
@@ -192,122 +187,36 @@ public class TrustedAuthentication implements AuthenticationProvider {
 
 			Map<String, Object> localVarFormParams = new HashMap<>();
 
-			byte[] signature = cryptoProvider.sign(signatureKeyProvider.getThumbprint(), identityData.toString().getBytes());
+			QueryContext<byte[]> signature = cryptoProvider.sign(
+				new QueryContext<byte[]>()
+					.setThumbprint(signatureKeyProvider.getThumbprint())
+					.setContent(identityData.toString().getBytes())
+			);
 
-			ApiResponse<TrustedAuthentication.ResponseLink> responseLink = apiClient.submitHttpRequest("/v5.9/authenticate-by-truster", "POST", queryParams, signature, localHeaderParams, localVarFormParams, TrustedAuthentication.ResponseLink.class);
+			if (signature.isFail()) {
+				return new QueryContext<String>().setServiceError(signature);
+			}
+			
+			ApiResponse<ResponseLink> responseLink = apiClient.submitHttpRequest("/v5.9/authenticate-by-truster", "POST", queryParams, signature.get(), localHeaderParams, localVarFormParams, ResponseLink.class);
 
 			apiClient.setBasePath("");
 			
 			ResponseLink link = responseLink.getData();
+			
 			byte[] key = IOUtil.hexToBytes(link.getKey());
+			
 			String approveRequest = link.getLink().getHref(); // + "&" + APIKEY + "=" + apiKey;
 			
 			ApiResponse<ResponseSid> sid = apiClient.submitHttpRequest(approveRequest, "POST", Collections.emptyMap(), key, localHeaderParams, localVarFormParams, ResponseSid.class);
 			
-			return new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
+			authCxt = new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
 		}
 		catch (ApiException x) {
-			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			authCxt = new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
 		}
-		catch (SDKException x) {
-			return new QueryContext<String>().setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.auth, x.getMessage(), 0, null, null));
-		}
-	}
-
-	public com.squareup.okhttp.Call authenticateCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-		Object localVarPostBody = "signature";
-		// create path and map variables
-		String localVarPath = "v5.9/authenticate-by-truster";
-
-		List<Pair> localVarQueryParams = new ArrayList<>();
-
-		localVarQueryParams.addAll(apiClient.parameterToPairs("", "apiKey", apiKeyProvider.getApiKey()));
-
-		localVarQueryParams.addAll(apiClient.parameterToPairs("", "timestamp", timestamp));
-
-		localVarQueryParams.addAll(apiClient.parameterToPairs("", "serviceUserId", serviceUserIdProvider.getServiceUserIdProvider()));
-
-		Map<String, String> localVarHeaderParams = new HashMap<>();
-
-		Map<String, Object> localVarFormParams = new HashMap<>();
 		
-		final String[] localVarContentTypes = {"text/plain"};
-		final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-		localVarHeaderParams.put("Content-Type", localVarContentType);
-
-		if (progressListener != null) {
-			com.squareup.okhttp.Interceptor interceptor = (com.squareup.okhttp.Interceptor.Chain chain) -> {
-				com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
-				return originalResponse.newBuilder()
-					.body(new ProgressResponseBody(originalResponse.body(), progressListener))
-					.build();
-			};
-			
-			apiClient.getHttpClient().networkInterceptors().add(interceptor);
-		}
-
-		String[] localVarAuthNames = new String[]{};
-
-		return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
-	}
-
-	public static class ResponseLink {
-
-		@SerializedName("Link")
-		private Link link;
-		@SerializedName("Key")
-		private String key;
-
-		public ResponseLink() {
-		}
-
-		public Link getLink() {
-			return link;
-		}
-
-		public void setLink(Link link) {
-			this.link = link;
-		}
-
-		public String getKey() {
-			return key;
-		}
-
-		public void setKey(String key) {
-			this.key = key;
-		}
-	}
-
-	public static class Link {
-
-		@SerializedName("Rel")
-		private String rel;
-		@SerializedName("Href")
-		private String href;
-
-		public Link() {
-
-		}
-
-		public Link(String rel, String href) {
-			this.rel = rel;
-			this.href = href;
-		}
-
-		public String getRel() {
-			return rel;
-		}
-
-		public void setRel(String rel) {
-			this.rel = rel;
-		}
-
-		public String getHref() {
-			return href;
-		}
-
-		public void setHref(String href) {
-			this.href = href;
-		}
+		fireAuthenticationEvent(authCxt);
+		
+		return authCxt;
 	}
 }

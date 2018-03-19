@@ -5,13 +5,20 @@
  */
 package ru.skbkontur.sdk.extern.providers;
 
-import ru.skbkontur.sdk.extern.service.SDKException;
+import java.util.concurrent.CompletableFuture;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
  *
  * @author AlexS
  */
 public interface CryptoProvider {
-	byte[] sign(String thumbprint, byte[] content) throws SDKException;
-	byte[] getSignerCertificate(String thumbprint) throws SDKException;
+	CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content);
+	QueryContext<byte[]> sign(QueryContext<byte[]> cxt);
+	
+	CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint);
+	QueryContext<byte[]> getSignerCertificate(QueryContext<byte[]> cxt);
+
+	CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content);
+	QueryContext<byte[]> decrypt(QueryContext<byte[]> cxt);
 }

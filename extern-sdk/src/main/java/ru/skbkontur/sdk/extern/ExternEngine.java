@@ -11,16 +11,14 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import ru.argosgrp.cryptoservice.CryptoException;
-import ru.argosgrp.cryptoservice.Key;
-import ru.argosgrp.cryptoservice.mscapi.MSCapi;
-import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.skbkontur.sdk.extern.event.AuthenticationEvent;
+import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.AccountService;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
@@ -32,12 +30,14 @@ import ru.skbkontur.sdk.extern.service.impl.DraftServiceImpl;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
 
 /**
  *
  * @author AlexS
  */
-public class ExternEngine {
+public class ExternEngine implements AuthenticationListener {
 
 	private static final Gson GSON = new Gson();
 
@@ -51,7 +51,7 @@ public class ExternEngine {
 	
 	private ServiceBaseUriProvider serviceBaseUriProvider;
 	
-	private AuthenticationProvider authenticationProvider;
+	private EngineAuthenticationProvider authenticationProvider;
 	
 	private AccountProvider accountProvider;
 	
@@ -59,9 +59,12 @@ public class ExternEngine {
 	
 	private CryptoProvider cryptoProvider;
 	
+	private String sessionId;
+	
 	public ExternEngine(Configuration configuration) throws SDKException {
 		env = new Environment();
 		env.configuration = configuration;
+		this.sessionId = null;
 	}
 
 	public Environment getEnvironment() {
@@ -110,11 +113,26 @@ public class ExternEngine {
 	}
 	
 	public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
-		this.authenticationProvider = authenticationProvider;
+		if (authenticationProvider != null) {
+			authenticationProvider.addAuthenticationListener(this);
+			this.authenticationProvider = new EngineAuthenticationProvider(authenticationProvider);
+		}
+		else if (authenticationProvider != null) {
+			AuthenticationProvider originAuthenticationProvider = this.authenticationProvider.getOriginAuthenticationProvider();
+			originAuthenticationProvider.removeAuthenticationListener(this);
+		}
+	}
+	
+	public AccountProvider getAccountProvider() {
+		return accountProvider;
 	}
 	
 	public void setAccountProvider(AccountProvider accountProvider) {
 		this.accountProvider = accountProvider;
+	}
+	
+	public ApiKeyProvider getApiKeyProvider() {
+		return apiKeyProvider;
 	}
 	
 	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
@@ -173,5 +191,51 @@ public class ExternEngine {
 		baseService.setAccountProvider(this.accountProvider);
 		baseService.setApiKeyProvider(this.apiKeyProvider);
 		baseService.setCryptoProvider(this.cryptoProvider);
+	}
+
+	@Override
+	public synchronized void authenticate(AuthenticationEvent authEvent) {
+		sessionId = authEvent.getAuthCxt().isSuccess() ? authEvent.getAuthCxt().get() : null;
+	}
+	
+	class EngineAuthenticationProvider implements AuthenticationProvider {
+		
+		private final AuthenticationProvider authenticationProvider;
+		
+		private EngineAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+			this.authenticationProvider = authenticationProvider;
+		}
+		
+		public AuthenticationProvider getOriginAuthenticationProvider() {
+			return authenticationProvider;
+		}
+		
+		@Override
+		public QueryContext<String> sessionId() {
+			if (sessionId == null)
+				return authenticationProvider.sessionId();
+			else
+				return new QueryContext<String>().setResult(sessionId, SESSION_ID);
+		}
+
+		@Override
+		public String authPrefix() {
+			return authenticationProvider.authPrefix();
+		}
+
+		@Override
+		public void addAuthenticationListener(AuthenticationListener authListener) {
+			authenticationProvider.addAuthenticationListener(authListener);
+		}
+
+		@Override
+		public void removeAuthenticationListener(AuthenticationListener authListener) {
+			authenticationProvider.removeAuthenticationListener(authListener);
+		}
+
+		@Override
+		public void raiseUnauthenticated(ServiceError x) {
+			authenticationProvider.raiseUnauthenticated(x);
+		}
 	}
 }

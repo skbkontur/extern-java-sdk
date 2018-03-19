@@ -9,10 +9,8 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 
 /**
  *
@@ -26,20 +24,8 @@ public abstract class BaseAdaptor implements ApiClientAware {
 		return gson.fromJson(json, t);
 	}
 
-	protected void acceptAccessToken(ApiClient apiClient, QueryContext<?> cxt) { //String apiKeyPrefix, String accessToken) {
-		if (cxt.getSessionId() != null && !cxt.getSessionId().isEmpty()) {
-			Authentication apiKeyAuth = apiClient.getAuthentication("auth.sid");
-			if (apiKeyAuth != null) {
-				((ApiKeyAuth) apiKeyAuth).setApiKey(cxt.getSessionId());
-				((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(cxt.getAuthenticationProvider().authPrefix());
-			}
-		}
-	}
-
 	protected void prepareTransport(QueryContext<?> cxt) {
-		ApiClient apiClient = cxt.getApiClient();
-		acceptAccessToken(apiClient, cxt);
-		setApiClient(apiClient);
+		setApiClient(cxt.getApiClient());
 	}
 
 	protected <T> T submitHttpRequest(String httpRequestUri, String httpMethod, Object body, Class<T> dtoClass) throws ApiException {

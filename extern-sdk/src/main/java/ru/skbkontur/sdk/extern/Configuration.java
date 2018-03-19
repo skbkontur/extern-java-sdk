@@ -9,15 +9,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.providers.AuthBaseUriProvider;
-import ru.skbkontur.sdk.extern.providers.LoginAndPasswordAuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.providers.UriProvider;
+import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
 
 /**
  *
  * @author AlexS
  */
-public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordAuthenticationProvider, AuthBaseUriProvider, ServiceBaseUriProvider {
+public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
 	public static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 	
   @SerializedName("accountId")	private UUID accountId;
@@ -94,7 +94,7 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 	}
 
 	@Override
-	public String getAuthBaseUri() {
+	public String getUri() {
 		return authBaseUri;
 	}
 

@@ -42,32 +42,36 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 	 */
 	@Override
 	public CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId) {
-	
-		return createQueryContext(EN_DFW)
+		QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
+		return cxt
 			.setDocflowId(docflowId)
 			.applyAsync(docflowsApi::lookupDocflow);
 	}
 
 	@Override
 	public QueryContext<Docflow> lookupDocflow(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFW).apply(docflowsApi::lookupDocflow);
+		QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(docflowsApi::lookupDocflow);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId) {
-		return createQueryContext(EN_DFW)
+		QueryContext<List<Document>> cxt = createQueryContext(EN_DFW);
+		return cxt
 			.setDocflowId(docflowId)
 			.applyAsync(docflowsApi::getDocuments);
 	}
 
 	@Override
 	public QueryContext<List<Document>> getDocuments(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFW).apply(docflowsApi::getDocuments);
+		QueryContext<List<Document>> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(docflowsApi::getDocuments);
 	}
 	
 	@Override
-	public CompletableFuture<Document> lookupDocumentAsync(String docflowId, String documentId) {
-		return createQueryContext(EN_DOC)
+	public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId, String documentId) {
+		QueryContext<Document> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::lookupDocument);
@@ -75,12 +79,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<Document> lookupDocument(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::lookupDocument);
+		QueryContext<Document> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::lookupDocument);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(String docflowId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<DocumentDescription> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::lookupDescription);
@@ -88,12 +94,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<DocumentDescription> lookupDescription(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::lookupDescription);
+		QueryContext<DocumentDescription> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::lookupDescription);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::getEncryptedContent);
@@ -101,12 +109,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::getEncryptedContent);
+		QueryContext<byte[]> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::getEncryptedContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::getDecryptedContent);
@@ -114,12 +124,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<byte[]> getDecryptedContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::getDecryptedContent);
+		QueryContext<byte[]> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::getDecryptedContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId, String documentId) {
-		return createQueryContext(EN_DOC)
+		QueryContext<List<Signature>> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::getSignatures);
@@ -127,12 +139,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<List<Signature>> getSignatures(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::getSignatures);
+		QueryContext<List<Signature>> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::getSignatures);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId, String documentId, String signatureId) {
-		return createQueryContext(EN_SGN)
+		QueryContext<Signature> cxt = createQueryContext(EN_SGN);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::getSignature);
@@ -140,12 +154,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<Signature> getSignature(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_SGN).apply(docflowsApi::getSignature);
+		QueryContext<Signature> cxt = createQueryContext(parent, EN_SGN);
+		return cxt.apply(docflowsApi::getSignature);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId) {
-		return createQueryContext(EN_SGN)
+		QueryContext<byte[]> cxt = createQueryContext(EN_SGN);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
 			.applyAsync(docflowsApi::getSignatureContent);
@@ -153,12 +169,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<byte[]> getSignatureContent(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_SGN).apply(docflowsApi::getSignatureContent);
+		QueryContext<byte[]> cxt = createQueryContext(parent, EN_SGN);
+		return cxt.apply(docflowsApi::getSignatureContent);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<DocumentToSend>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId) {
-		return createQueryContext(EN_SGN)
+		QueryContext<DocumentToSend> cxt = createQueryContext(EN_SGN);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
 			.setDocumentId(documentId)
@@ -167,12 +185,14 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_SGN).apply(docflowsApi::getDocumentTypeReply);
+		QueryContext<DocumentToSend> cxt = createQueryContext(parent, EN_SGN);
+		return cxt.apply(docflowsApi::getDocumentTypeReply);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend) {
-		return createQueryContext(EN_DOC)
+		QueryContext<Docflow> cxt = createQueryContext(EN_DOC);
+		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
 			.setDocumentId(documentId)
@@ -182,29 +202,33 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 
 	@Override
 	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DOC).apply(docflowsApi::addDocumentTypeReply);
+		QueryContext<Docflow> cxt = createQueryContext(parent, EN_DOC);
+		return cxt.apply(docflowsApi::addDocumentTypeReply);
 	}
 	
 	@Override
 	public CompletableFuture<QueryContext<List<DocumentToSend>>> getRepliesAsync(Docflow docflow) {
-		return createQueryContext(EN_DFW)
+		QueryContext<List<DocumentToSend>> cxt = createQueryContext(EN_DFW);
+		return cxt
 			.setDocflow(docflow)
 			.applyAsync(docflowsApi::lookupReplies);
 	}
 
 	@Override
 	public QueryContext<List<DocumentToSend>> getReplies(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFW).apply(docflowsApi::lookupReplies);
+		QueryContext<List<DocumentToSend>> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(docflowsApi::lookupReplies);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow) {
-		return createQueryContext(EN_DFW)
-			.applyAsync(docflowsApi::createReply);
+		QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
+		return cxt.applyAsync(docflowsApi::createReply);
 	}
 	
 	@Override
 	public QueryContext<Docflow> createReply(QueryContext<?> parent) {
-		return createQueryContext(parent, EN_DFW).apply(docflowsApi::createReply);
+		QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(docflowsApi::createReply);
 	}
 }

@@ -5,6 +5,7 @@
  */
 package ru.skbkontur.sdk.extern.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -64,8 +65,8 @@ public interface DraftService {
 	public CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
 	public QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<Docflow>> sendAsync(String draftId);
-	public QueryContext<Docflow> send(QueryContext<?> cxt);
+	public CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
+	public QueryContext<List<Docflow>> send(QueryContext<?> cxt);
 	
 	public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
 	public QueryContext<Void> deleteDocument(QueryContext<?> cxt);

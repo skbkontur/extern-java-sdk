@@ -12,8 +12,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
 
 /**
@@ -28,10 +26,10 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 	 * @param obj The Java object
 	 * @param contentType The request Content-Type
 	 * @return The serialized request body
-	 * @throws ApiException If fail to serialize the given object
+	 * @throws ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException
 	 */
 	@Override
-	public RequestBody serialize(Object obj, String contentType) throws ApiException {
+	public RequestBody serialize(Object obj, String contentType) throws ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException {
 		if (obj instanceof byte[]) {
 			// Binary (byte array) body parameter support.
 			return RequestBody.create(MediaType.parse(contentType), (byte[]) obj);
@@ -55,22 +53,29 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 			return RequestBody.create(MediaType.parse(contentType), content);
 		}
 		else {
-			throw new ApiException("Content type \"" + contentType + "\" is not supported");
+			throw new ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException("Content type \"" + contentType + "\" is not supported");
 		}
 	}
-	
-	public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String,String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class dtoClass) throws ApiException {
-    String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
-		
-		List<Pair> params 
-			= queryParams
-				.entrySet()
-				.stream()
-				.map(e->new Pair(e.getKey(),e.getValue()))
-				.collect(Collectors.toList());
-		
-    Call call = buildCall(httpRequestUri, httpMetod, params, body, headerParams, formParams, localVarAuthNames, null);
-		
-		return this.execute(call, dtoClass);
+
+	public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class<T> dtoClass) throws ApiException {
+		try {
+			String[] localVarAuthNames = new String[]{"apiKey", "auth.sid"};
+
+			List<Pair> params
+				= queryParams
+					.entrySet()
+					.stream()
+					.map(e -> new Pair(e.getKey(), e.getValue()))
+					.collect(Collectors.toList());
+
+			Call call = buildCall(httpRequestUri, httpMetod, params, body, headerParams, formParams, localVarAuthNames, null);
+			
+			ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse<T> resp = this.execute(call, dtoClass);
+
+			return new ApiResponse<>(resp.getStatusCode(),resp.getHeaders(),resp.getData());
+		}
+		catch (ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException x) {
+			throw new ApiException(x.getMessage(), x.getCause(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
+		}
 	}
 }

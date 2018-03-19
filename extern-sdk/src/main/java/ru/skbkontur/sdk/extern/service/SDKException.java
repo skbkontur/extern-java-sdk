@@ -18,11 +18,13 @@ public class SDKException extends RuntimeException {
 	public static final String S_ENTITY_NOT_FOUND = "{0} ({1}) не найден.";
 	public static final String C_CONFIG_NOT_FOUND = "Не найден файл конфигурации.";
 	public static final String C_CONFIG_LOAD = "Ошибка загрузки файла конфигурации Контур SDK.";
-	public static final String C_CRYPTO_ERROR = "Ошибка криптографии.";
+	public static final String C_CRYPTO_ERROR = "Ошибка криптографии. Подробности: {0}";
 	public static final String C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER = "Не определен криптопровайдер.";
 	public static final String C_CRYPTO_ERROR_INIT = "Ошибка инициализации криптографии.";
 	public static final String C_CRYPTO_ERROR_KEY_NOT_FOUND = "Ключ подписи не найден для сертификата: {0}.";
 	public static final String C_RESOURCE_NOT_FOUND = "Не найден ресурс: {0}.";
+	public static final String C_NO_SIGNATURE = "Подпись не содержится в ответе сервиса.";
+	public static final String C_NO_DECRYPT = "Расшифрованный контент не содержится в ответе сервиса.";
 
 	public SDKException(String message, Throwable x) {
 		super(message, x);

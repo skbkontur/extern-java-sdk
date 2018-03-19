@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ru.skbkontur.sdk.extern.providers;
+package ru.skbkontur.sdk.extern.event;
 
 /**
  *
- * @author AlexS
+ * @author alexs
  */
-public interface AuthBaseUriProvider {
-	String getAuthBaseUri();
+public interface AuthenticationListener {
+	void authenticate(AuthenticationEvent authEvent);
 }

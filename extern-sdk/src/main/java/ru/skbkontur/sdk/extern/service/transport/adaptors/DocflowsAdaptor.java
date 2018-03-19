@@ -410,7 +410,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
-	public QueryContext<Object> lookupReplies(QueryContext<Object> cxt) {
+	public QueryContext<List<DocumentToSend>> lookupReplies(QueryContext<List<DocumentToSend>> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
@@ -432,7 +432,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 				return cxt.setResult(Collections.emptyList(), DOCUMENT_TO_SENDS);
 			}
 		}
-		catch (ApiException x) {
+		catch (ru.skbkontur.sdk.extern.service.transport.invoker.ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
 		}
 	}
@@ -460,7 +460,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			
 			return cxt.setResult(docflow, DOCFLOW);
 		}
-		catch (ApiException x) {
+		catch (ru.skbkontur.sdk.extern.service.transport.invoker.ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
 		}
 	}

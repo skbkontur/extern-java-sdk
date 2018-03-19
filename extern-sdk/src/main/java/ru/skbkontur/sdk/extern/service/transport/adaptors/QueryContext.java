@@ -38,7 +38,8 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentica
 import ru.skbkontur.sdk.extern.model.DraftMeta;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.model.Signature;
-import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.providers.ServiceError.ErrorCode;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
 import ru.skbkontur.sdk.extern.service.transport.invoker.SignatureToSendAdapter;
 
@@ -106,7 +107,6 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext() {
 		this.params = new ConcurrentHashMap<>();
-		this.apiClient = new ApiClient();
 		this.serviceError = null;
 		this.result = null;
 	}
@@ -118,11 +118,14 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext(QueryContext<?> parent, String entityName) {
 		this.params = new ConcurrentHashMap<>();
-		this.apiClient = new ApiClient();
 		this.params.putAll(parent.params);
 		this.serviceError = parent.getServiceError();
 		this.result = null;
 		this.setEntityName(entityName);
+	}
+	
+	public void setApiClient(ApiClient apiClient) {
+		this.apiClient = apiClient;
 	}
 	
 	public QueryContext<R> setResult(R result, String key) {
@@ -152,7 +155,19 @@ public class QueryContext<R> implements Serializable {
 		}
 		return this;
 	}
+	
+	public QueryContext<R> setServiceError(ApiException x) {
+		return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
+	}
 
+	public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
+		return setServiceError(new ServiceErrorImpl(errorCode, message, code, responseHeaders, responseBody));
+	}
+	
+	public QueryContext<R> setServiceError(String message) {
+		return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null));
+	}
+	
 	public R get() {
 		if(result==null) {
 			return null;
@@ -168,9 +183,8 @@ public class QueryContext<R> implements Serializable {
 		return serviceError != null;
 	}
 
-	public QueryContext<R> setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
-		if (serviceBaseUriProvider != null)
-			this.apiClient.setBasePath(serviceBaseUriProvider.getServiceBaseUri());
+	public QueryContext<R> setServiceBaseUri(String serviceBaseUri) {
+		this.apiClient.setBasePath(serviceBaseUri);
 		return this;
 	}
 
@@ -461,7 +475,7 @@ public class QueryContext<R> implements Serializable {
 		return (Signature) params.get(SIGNATURE);
 	}
 	
-	public QueryContext<R> setSignatures(Signature signature) {
+	public QueryContext<R> setSignature(Signature signature) {
 		return set(SIGNATURE, signature);
 	}
 	
@@ -487,8 +501,8 @@ public class QueryContext<R> implements Serializable {
 		return this;
 	}
 
-	public Object get(String name) {
-		return params.get(name);
+	public <T> T get(String name) {
+		return (T)params.get(name);
 	}
 
 	public ApiClient getApiClient() {
@@ -517,23 +531,31 @@ public class QueryContext<R> implements Serializable {
 		acceptApiKey(apiKeyProvider.getApiKey());
 	}
 
-	public CompletableFuture<QueryContext<R>> applyAsync(Query query) {
+	public CompletableFuture<QueryContext<R>> applyAsync(Query<R> query) {
 		if (isFail()) return CompletableFuture.completedFuture(this);
 		
-		QueryContext<R> queryContext = acquireSessionId();
-		if (queryContext.isSuccess()) {
+		acquireSessionId();
+		
+		if (isSuccess()) {
 			return CompletableFuture.supplyAsync(()->query.apply(this));
 		}
 		else
 			return CompletableFuture.completedFuture(this);
 	}
 
-	public QueryContext<R> apply(Query query) {
+	public QueryContext<R> apply(Query<R> query) {
 		if (isFail()) return this;
 		
-		QueryContext<R> queryContext = acquireSessionId();
-		if (queryContext.isSuccess())
-			return query.apply(this);
+		acquireSessionId();
+		
+		if (isSuccess()) {
+			QueryContext<R> r = query.apply(this);
+			if (r.isFail() && r.getServiceError().getErrorCode() == ErrorCode.server && r.getServiceError().getResponseCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+				if (authenticationProvider != null)
+					authenticationProvider.raiseUnauthenticated(r.getServiceError());
+			}
+			return r;
+		}
 		else
 			return this;
 	}
@@ -542,23 +564,34 @@ public class QueryContext<R> implements Serializable {
 		throw new ServiceException(getServiceError());
 	}
 	
-	private QueryContext<R> acquireSessionId() {
+	private void acquireSessionId() {
 		String sessionId = getSessionId();
 		if (sessionId != null && !sessionId.isEmpty()) {
-			return this;
+			acceptAccessToken(sessionId);
 		}
 		else {
 			if (authenticationProvider != null) {
 				QueryContext<String> authQuery = authenticationProvider.sessionId();
 				if (authQuery.isFail()) {
-					return setServiceError(authQuery);
+					setServiceError(authQuery);
 				}
 				else {
-					return setSessionId(authQuery.get());
+					sessionId = setSessionId(authQuery.get()).getSessionId();
+					acceptAccessToken(sessionId);
 				}
 			}
 			else {
-				return this.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.unknownAuth));
+				setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.unknownAuth));
+			}
+		}
+	}
+
+	private void acceptAccessToken(String sessionId) {
+		if (sessionId != null && !sessionId.isEmpty()) {
+			Authentication apiKeyAuth = apiClient.getAuthentication("auth.sid");
+			if (apiKeyAuth != null) {
+				((ApiKeyAuth) apiKeyAuth).setApiKey(sessionId);
+				((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(getAuthenticationProvider().authPrefix());
 			}
 		}
 	}

@@ -13,6 +13,7 @@ import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.service.SDKException;
 import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
 /**
  *
@@ -59,7 +60,8 @@ public class BaseService {
 
 	protected <T> QueryContext<T> createQueryContext(String entityName) {
 		QueryContext<T> cxt = new QueryContext<>(entityName);
-		cxt.setServiceBaseUriProvider(serviceBaseUriProvider);
+		cxt.setApiClient(new ApiClient());
+		cxt.setServiceBaseUri(serviceBaseUriProvider.getServiceBaseUri());
 		cxt.setAuthenticationProvider(authenticationProvider);
 		cxt.setAccountProvider(accountProvider);
 		cxt.setApiKeyProvider(apiKeyProvider);
@@ -69,7 +71,8 @@ public class BaseService {
 
 	protected <T> QueryContext<T> createQueryContext(QueryContext<?> parent, String entityName) {
 		QueryContext<T> cxt = new QueryContext<>(parent,entityName);
-		cxt.setServiceBaseUriProvider(serviceBaseUriProvider);
+		cxt.setApiClient(new ApiClient());
+		cxt.setServiceBaseUri(serviceBaseUriProvider.getServiceBaseUri());
 		cxt.setAuthenticationProvider(authenticationProvider);
 		cxt.setAccountProvider(accountProvider);
 		cxt.setApiKeyProvider(apiKeyProvider);

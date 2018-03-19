@@ -5,6 +5,7 @@
  */
 package ru.skbkontur.sdk.extern.providers;
 
+import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
@@ -16,4 +17,10 @@ public interface AuthenticationProvider {
 	QueryContext<String> sessionId();
 
 	String authPrefix();
+	
+	void addAuthenticationListener(AuthenticationListener authListener);
+
+	void removeAuthenticationListener(AuthenticationListener authListener);
+	
+	void raiseUnauthenticated(ServiceError x);
 }

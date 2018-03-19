@@ -4,7 +4,7 @@ package ru.skbkontur.sdk.extern.providers;
  *
  * @author AlexS
  */
-public interface LoginAndPasswordAuthenticationProvider {
+public interface LoginAndPasswordProvider {
 	String getLogin();
 	String getPass();
 }

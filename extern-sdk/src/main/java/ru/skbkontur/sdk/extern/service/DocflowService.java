@@ -26,7 +26,7 @@ public interface DocflowService {
 	public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId);
 	public QueryContext<List<Document>> getDocuments(QueryContext<?> parent);
 	
-	public CompletableFuture<Document> lookupDocumentAsync(String docflowId, String documentId);
+	public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId, String documentId);
 	public QueryContext<Document> lookupDocument(QueryContext<?> parent);
 
 	public CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(String docflowId, String documentId);

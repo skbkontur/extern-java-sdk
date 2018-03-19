@@ -30,51 +30,53 @@ public class AccountServiceImpl extends BaseService implements AccountService {
 	
 	@Override
 	public CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync() {
-		return createQueryContext(EN_ACC)
-			.applyAsync(accountApi::acquireBaseUri);
+		QueryContext<List<Link>> cxt = createQueryContext(EN_ACC);
+		return cxt.applyAsync(accountApi::acquireBaseUri);
 	}
 
 	@Override
-	public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt) {
-		return createQueryContext(cxt, EN_ACC)
-			.apply(accountApi::acquireBaseUri);
+	public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> parent) {
+		QueryContext<List<Link>> cxt = createQueryContext(parent, EN_ACC);
+		return cxt.apply(accountApi::acquireBaseUri);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync() {
-		return createQueryContext(EN_ACC)
-			.applyAsync(accountApi::acquireAccounts);
+		QueryContext<AccountList> cxt = createQueryContext(EN_ACC);
+		return cxt.applyAsync(accountApi::acquireAccounts);
 	}
 
 	@Override
-	public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt) {
-		return createQueryContext(cxt, EN_ACC)
-			.apply(accountApi::acquireAccounts);
+	public QueryContext<AccountList> acquireAccounts(QueryContext<?> parent) {
+		QueryContext<AccountList> cxt = createQueryContext(parent, EN_ACC);
+		return cxt.apply(accountApi::acquireAccounts);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Object>> createrAccountAsync(CreateAccountRequest createAccountRequest) {
-		return createQueryContext(EN_ACC)
+		QueryContext<Object> cxt = createQueryContext(EN_ACC);
+		return cxt
 			.setCreateAccountRequest(createAccountRequest)
-			.applyAsync(accountApi::acquireAccounts);
+			.applyAsync(accountApi::createAccount);
 	}
 
 	@Override
-	public QueryContext<Object> createrAccount(QueryContext<?> cxt) {
-		return createQueryContext(cxt, EN_ACC)
-			.apply(accountApi::acquireAccounts);
+	public QueryContext<Object> createrAccount(QueryContext<?> parent) {
+		QueryContext<Object> cxt = createQueryContext(parent, EN_ACC);
+		return cxt.apply(accountApi::createAccount);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId) {
-		return createQueryContext(EN_ACC)
+		QueryContext<Account> cxt = createQueryContext(EN_ACC);
+		return cxt
 			.setAccountId(accountId)
-			.applyAsync(accountApi::acquireAccounts);
+			.applyAsync(accountApi::getAccount);
 	}
 
 	@Override
-	public QueryContext<Account> getAccount(QueryContext<?> cxt) {
-		return createQueryContext(cxt, EN_ACC)
-			.apply(accountApi::acquireAccounts);
+	public QueryContext<Account> getAccount(QueryContext<?> parent) {
+		QueryContext<Account> cxt = createQueryContext(parent, EN_ACC);
+		return cxt.apply(accountApi::getAccount);
 	}
 }
