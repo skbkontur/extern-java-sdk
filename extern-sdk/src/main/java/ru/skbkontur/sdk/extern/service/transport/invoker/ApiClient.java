@@ -26,7 +26,7 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 	 * @param obj The Java object
 	 * @param contentType The request Content-Type
 	 * @return The serialized request body
-	 * @throws ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException
+	 * @throws ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException a swagger Exception
 	 */
 	@Override
 	public RequestBody serialize(Object obj, String contentType) throws ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException {

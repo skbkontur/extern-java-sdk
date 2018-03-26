@@ -10,7 +10,7 @@
         "/": {
             "get": {
                 "tags": ["Accounts"],
-                "summary": "Non implemented index",
+                "summary": "Index",
                 "operationId": "Root_Index",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
@@ -23,6 +23,30 @@
                             "items": {
                                 "$ref": "#/definitions/Link"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
                         }
                     },
                     "500": {
@@ -87,14 +111,12 @@
             },
             "post": {
                 "tags": ["Accounts"],
-                "summary": "Not implemented yet",
                 "operationId": "Accounts_Create",
                 "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "request",
                         "in": "body",
-                        "description": "",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/CreateAccountRequestDto"
@@ -168,6 +190,131 @@
                         "description": "",
                         "schema": {
                             "$ref": "#/definitions/Account"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/docflows": {
+            "get": {
+                "tags": ["Docflows"],
+                "summary": "Get docflow page",
+                "operationId": "Docflows_GetDocflowsAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "finished",
+                        "in": "query",
+                        "description": "Get finished docflows",
+                        "required": false,
+                        "type": "boolean"
+                    }, {
+                        "name": "incoming",
+                        "in": "query",
+                        "description": "Get incoming docflows",
+                        "required": false,
+                        "type": "boolean"
+                    }, {
+                        "name": "skip",
+                        "in": "query",
+                        "description": "Get docflows with skip elements",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int64"
+                    }, {
+                        "name": "take",
+                        "in": "query",
+                        "description": "Get take docflows",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    }, {
+                        "name": "innKpp",
+                        "in": "query",
+                        "description": "Get docflows with specified inn-kpp",
+                        "required": false,
+                        "type": "string"
+                    }, {
+                        "name": "updatedFrom",
+                        "in": "query",
+                        "description": "Get docflows with updated from specified date",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "updatedTo",
+                        "in": "query",
+                        "description": "Get docflows with updated to specified date",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "createdFrom",
+                        "in": "query",
+                        "description": "Get docflows with created from specified date",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "createdTo",
+                        "in": "query",
+                        "description": "Get docflows with created to specified date",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Get docflows with specified type",
+                        "required": false,
+                        "type": "string"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Docflow"
                         }
                     },
                     "400": {
@@ -1539,7 +1686,7 @@
                     "400": {
                         "description": "Некорректные входные данные",
                         "schema": {
-                            "$ref": "#/definitions/Error"
+                            "$ref": "#/definitions/ErrorPrepareResult"
                         }
                     },
                     "401": {
@@ -2415,20 +2562,6 @@
                 },
                 "organization-name": {
                     "type": "string"
-                },
-                "account-certificate": {
-                    "$ref": "#/definitions/AccountCertificate"
-                }
-            }
-        },
-        "AccountCertificate": {
-            "type": "object",
-            "properties": {
-                "thumbprint": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
                 }
             }
         },
@@ -2460,23 +2593,23 @@
         "AccountList": {
             "type": "object",
             "properties": {
-                "accounts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Account"
-                    }
+                "skip": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "take": {
+                    "format": "int32",
+                    "type": "integer"
                 },
                 "total-count": {
                     "format": "int32",
                     "type": "integer"
                 },
-                "page-index": {
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "page-size": {
-                    "format": "int32",
-                    "type": "integer"
+                "accounts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Account"
+                    }
                 }
             }
         },

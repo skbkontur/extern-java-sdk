@@ -13,7 +13,6 @@ public class CreateAccountRequest {
   private String inn = null;
   private String kpp = null;
   private String organizationName = null;
-  private AccountCertificate accountCertificate = null;
 
 	public String getInn() {
 		return inn;
@@ -37,13 +36,5 @@ public class CreateAccountRequest {
 
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
-	}
-
-	public AccountCertificate getAccountCertificate() {
-		return accountCertificate;
-	}
-
-	public void setAccountCertificate(AccountCertificate accountCertificate) {
-		this.accountCertificate = accountCertificate;
 	}
 }

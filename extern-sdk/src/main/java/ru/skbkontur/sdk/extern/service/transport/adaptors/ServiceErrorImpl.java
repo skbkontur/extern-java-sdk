@@ -24,8 +24,10 @@ public class ServiceErrorImpl implements ServiceError {
 	private Map<String, List<String>> responseHeaders;
 
 	private String responseBody = null;
+	
+	private Throwable cause;
 
-	public ServiceErrorImpl(ErrorCode errorCode, String message, int responseCode, Map<String, List<String>> responseHeaders, String responseBody) {
+	public ServiceErrorImpl(ErrorCode errorCode, String message, int responseCode, Map<String, List<String>> responseHeaders, String responseBody, Throwable cause) {
 		this.errorCode = errorCode;
 
 		this.message = message;
@@ -35,6 +37,12 @@ public class ServiceErrorImpl implements ServiceError {
 		this.responseHeaders = responseHeaders;
 
 		this.responseBody = responseBody;
+		
+		this.cause = cause;
+	}
+	
+	public ServiceErrorImpl(ErrorCode errorCode, String message, int responseCode, Map<String, List<String>> responseHeaders, String responseBody) {
+		this(errorCode, message, responseCode, responseHeaders, responseBody, null);
 	}
 	
 	public ServiceErrorImpl(ErrorCode errorCode) {

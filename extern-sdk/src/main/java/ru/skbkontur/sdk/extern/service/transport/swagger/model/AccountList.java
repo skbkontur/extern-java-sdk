@@ -31,17 +31,71 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.Account;
  */
 
 public class AccountList {
-  @SerializedName("accounts")
-  private List<Account> accounts = null;
+  @SerializedName("skip")
+  private Integer skip = null;
+
+  @SerializedName("take")
+  private Integer take = null;
 
   @SerializedName("total-count")
   private Integer totalCount = null;
 
-  @SerializedName("page-index")
-  private Integer pageIndex = null;
+  @SerializedName("accounts")
+  private List<Account> accounts = null;
 
-  @SerializedName("page-size")
-  private Integer pageSize = null;
+  public AccountList skip(Integer skip) {
+    this.skip = skip;
+    return this;
+  }
+
+   /**
+   * Get skip
+   * @return skip
+  **/
+  @ApiModelProperty(value = "")
+  public Integer getSkip() {
+    return skip;
+  }
+
+  public void setSkip(Integer skip) {
+    this.skip = skip;
+  }
+
+  public AccountList take(Integer take) {
+    this.take = take;
+    return this;
+  }
+
+   /**
+   * Get take
+   * @return take
+  **/
+  @ApiModelProperty(value = "")
+  public Integer getTake() {
+    return take;
+  }
+
+  public void setTake(Integer take) {
+    this.take = take;
+  }
+
+  public AccountList totalCount(Integer totalCount) {
+    this.totalCount = totalCount;
+    return this;
+  }
+
+   /**
+   * Get totalCount
+   * @return totalCount
+  **/
+  @ApiModelProperty(value = "")
+  public Integer getTotalCount() {
+    return totalCount;
+  }
+
+  public void setTotalCount(Integer totalCount) {
+    this.totalCount = totalCount;
+  }
 
   public AccountList accounts(List<Account> accounts) {
     this.accounts = accounts;
@@ -69,60 +123,6 @@ public class AccountList {
     this.accounts = accounts;
   }
 
-  public AccountList totalCount(Integer totalCount) {
-    this.totalCount = totalCount;
-    return this;
-  }
-
-   /**
-   * Get totalCount
-   * @return totalCount
-  **/
-  @ApiModelProperty(value = "")
-  public Integer getTotalCount() {
-    return totalCount;
-  }
-
-  public void setTotalCount(Integer totalCount) {
-    this.totalCount = totalCount;
-  }
-
-  public AccountList pageIndex(Integer pageIndex) {
-    this.pageIndex = pageIndex;
-    return this;
-  }
-
-   /**
-   * Get pageIndex
-   * @return pageIndex
-  **/
-  @ApiModelProperty(value = "")
-  public Integer getPageIndex() {
-    return pageIndex;
-  }
-
-  public void setPageIndex(Integer pageIndex) {
-    this.pageIndex = pageIndex;
-  }
-
-  public AccountList pageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-    return this;
-  }
-
-   /**
-   * Get pageSize
-   * @return pageSize
-  **/
-  @ApiModelProperty(value = "")
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,15 +133,15 @@ public class AccountList {
       return false;
     }
     AccountList accountList = (AccountList) o;
-    return Objects.equals(this.accounts, accountList.accounts) &&
+    return Objects.equals(this.skip, accountList.skip) &&
+        Objects.equals(this.take, accountList.take) &&
         Objects.equals(this.totalCount, accountList.totalCount) &&
-        Objects.equals(this.pageIndex, accountList.pageIndex) &&
-        Objects.equals(this.pageSize, accountList.pageSize);
+        Objects.equals(this.accounts, accountList.accounts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accounts, totalCount, pageIndex, pageSize);
+    return Objects.hash(skip, take, totalCount, accounts);
   }
 
 
@@ -150,10 +150,10 @@ public class AccountList {
     StringBuilder sb = new StringBuilder();
     sb.append("class AccountList {\n");
     
-    sb.append("    accounts: ").append(toIndentedString(accounts)).append("\n");
+    sb.append("    skip: ").append(toIndentedString(skip)).append("\n");
+    sb.append("    take: ").append(toIndentedString(take)).append("\n");
     sb.append("    totalCount: ").append(toIndentedString(totalCount)).append("\n");
-    sb.append("    pageIndex: ").append(toIndentedString(pageIndex)).append("\n");
-    sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    accounts: ").append(toIndentedString(accounts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

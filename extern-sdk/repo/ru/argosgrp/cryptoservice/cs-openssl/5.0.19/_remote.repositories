@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Mar 26 09:56:49 GMT+03:00 2018
+cs-openssl-5.0.19.jar>=
+cs-openssl-5.0.19.pom>=

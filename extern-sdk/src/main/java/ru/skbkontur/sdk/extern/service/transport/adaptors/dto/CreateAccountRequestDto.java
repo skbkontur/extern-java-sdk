@@ -16,7 +16,6 @@ public class CreateAccountRequestDto {
 	public CreateAccountRequest fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto dto) {
 		CreateAccountRequest request = new CreateAccountRequest();
 		
-		request.setAccountCertificate(new AccountCertificateDto().fromDto(dto.getAccountCertificate()));
 		request.setInn(dto.getInn());
 		request.setKpp(dto.getKpp());
 		request.setOrganizationName(dto.getOrganizationName());
@@ -27,7 +26,6 @@ public class CreateAccountRequestDto {
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto toDto(CreateAccountRequest request) {
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto();
 		
-		dto.setAccountCertificate(new AccountCertificateDto().toDto(request.getAccountCertificate()));
 		dto.setInn(request.getInn());
 		dto.setKpp(request.getKpp());
 		dto.setOrganizationName(request.getOrganizationName());
