@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import org.joda.time.DateTime;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Document;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription;
@@ -338,6 +339,192 @@ public class DocflowsApi {
         }
 
         com.squareup.okhttp.Call call = docflowsGetDocflowAsyncValidateBeforeCall(accountId, docflowId, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
+        return call;
+    }
+    /**
+     * Build call for docflowsGetDocflowsAsync
+     * @param accountId Account identifier (required)
+     * @param finished Get finished docflows (optional)
+     * @param incoming Get incoming docflows (optional)
+     * @param skip Get docflows with skip elements (optional)
+     * @param take Get take docflows (optional)
+     * @param innKpp Get docflows with specified inn-kpp (optional)
+     * @param updatedFrom Get docflows with updated from specified date (optional)
+     * @param updatedTo Get docflows with updated to specified date (optional)
+     * @param createdFrom Get docflows with created from specified date (optional)
+     * @param createdTo Get docflows with created to specified date (optional)
+     * @param type Get docflows with specified type (optional)
+     * @param progressListener Progress listener
+     * @param progressRequestListener Progress request listener
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocflowsAsyncCall(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        Object localVarPostBody = null;
+        
+        // create path and map variables
+        String localVarPath = "/v1/{accountId}/docflows"
+            .replaceAll("\\{" + "accountId" + "\\}", apiClient.escapeString(accountId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        if (finished != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "finished", finished));
+        if (incoming != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "incoming", incoming));
+        if (skip != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "skip", skip));
+        if (take != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "take", take));
+        if (innKpp != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "innKpp", innKpp));
+        if (updatedFrom != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "updatedFrom", updatedFrom));
+        if (updatedTo != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "updatedTo", updatedTo));
+        if (createdFrom != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "createdFrom", createdFrom));
+        if (createdTo != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "createdTo", createdTo));
+        if (type != null)
+        localVarQueryParams.addAll(apiClient.parameterToPairs("", "type", type));
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "application/json", "text/json"
+        };
+        final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        if(progressListener != null) {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+                @Override
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                    .body(new ProgressResponseBody(originalResponse.body(), progressListener))
+                    .build();
+                }
+            });
+        }
+
+        String[] localVarAuthNames = new String[] { "apiKey", "auth.sid" };
+        return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private com.squareup.okhttp.Call docflowsGetDocflowsAsyncValidateBeforeCall(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+        
+        // verify the required parameter 'accountId' is set
+        if (accountId == null) {
+            throw new ApiException("Missing the required parameter 'accountId' when calling docflowsGetDocflowsAsync(Async)");
+        }
+        
+        
+        com.squareup.okhttp.Call call = docflowsGetDocflowsAsyncCall(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type, progressListener, progressRequestListener);
+        return call;
+
+        
+        
+        
+        
+    }
+
+    /**
+     * Get docflow page
+     * 
+     * @param accountId Account identifier (required)
+     * @param finished Get finished docflows (optional)
+     * @param incoming Get incoming docflows (optional)
+     * @param skip Get docflows with skip elements (optional)
+     * @param take Get take docflows (optional)
+     * @param innKpp Get docflows with specified inn-kpp (optional)
+     * @param updatedFrom Get docflows with updated from specified date (optional)
+     * @param updatedTo Get docflows with updated to specified date (optional)
+     * @param createdFrom Get docflows with created from specified date (optional)
+     * @param createdTo Get docflows with created to specified date (optional)
+     * @param type Get docflows with specified type (optional)
+     * @return Docflow
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public Docflow docflowsGetDocflowsAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
+        ApiResponse<Docflow> resp = docflowsGetDocflowsAsyncWithHttpInfo(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type);
+        return resp.getData();
+    }
+
+    /**
+     * Get docflow page
+     * 
+     * @param accountId Account identifier (required)
+     * @param finished Get finished docflows (optional)
+     * @param incoming Get incoming docflows (optional)
+     * @param skip Get docflows with skip elements (optional)
+     * @param take Get take docflows (optional)
+     * @param innKpp Get docflows with specified inn-kpp (optional)
+     * @param updatedFrom Get docflows with updated from specified date (optional)
+     * @param updatedTo Get docflows with updated to specified date (optional)
+     * @param createdFrom Get docflows with created from specified date (optional)
+     * @param createdTo Get docflows with created to specified date (optional)
+     * @param type Get docflows with specified type (optional)
+     * @return ApiResponse&lt;Docflow&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     */
+    public ApiResponse<Docflow> docflowsGetDocflowsAsyncWithHttpInfo(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
+        com.squareup.okhttp.Call call = docflowsGetDocflowsAsyncValidateBeforeCall(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type, null, null);
+        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
+    }
+
+    /**
+     * Get docflow page (asynchronously)
+     * 
+     * @param accountId Account identifier (required)
+     * @param finished Get finished docflows (optional)
+     * @param incoming Get incoming docflows (optional)
+     * @param skip Get docflows with skip elements (optional)
+     * @param take Get take docflows (optional)
+     * @param innKpp Get docflows with specified inn-kpp (optional)
+     * @param updatedFrom Get docflows with updated from specified date (optional)
+     * @param updatedTo Get docflows with updated to specified date (optional)
+     * @param createdFrom Get docflows with created from specified date (optional)
+     * @param createdTo Get docflows with created to specified date (optional)
+     * @param type Get docflows with specified type (optional)
+     * @param callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     */
+    public com.squareup.okhttp.Call docflowsGetDocflowsAsyncAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type, final ApiCallback<Docflow> callback) throws ApiException {
+
+        ProgressResponseBody.ProgressListener progressListener = null;
+        ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
+
+        if (callback != null) {
+            progressListener = new ProgressResponseBody.ProgressListener() {
+                @Override
+                public void update(long bytesRead, long contentLength, boolean done) {
+                    callback.onDownloadProgress(bytesRead, contentLength, done);
+                }
+            };
+
+            progressRequestListener = new ProgressRequestBody.ProgressRequestListener() {
+                @Override
+                public void onRequestProgress(long bytesWritten, long contentLength, boolean done) {
+                    callback.onUploadProgress(bytesWritten, contentLength, done);
+                }
+            };
+        }
+
+        com.squareup.okhttp.Call call = docflowsGetDocflowsAsyncValidateBeforeCall(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

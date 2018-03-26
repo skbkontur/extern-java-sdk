@@ -19,7 +19,7 @@
 		<jodatime-version>2.9.9</jodatime-version>
 		<maven-plugin-version>1.0.0</maven-plugin-version>
 		<junit-version>4.12</junit-version>
-	        <cryptoservice.version>5.0.18</cryptoservice.version>
+	        <cryptoservice.version>5.0.19</cryptoservice.version>
 	</properties>
 
     <modules>

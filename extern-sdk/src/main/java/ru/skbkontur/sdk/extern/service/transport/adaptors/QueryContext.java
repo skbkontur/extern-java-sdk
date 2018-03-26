@@ -168,6 +168,10 @@ public class QueryContext<R> implements Serializable {
 		return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null));
 	}
 	
+	public QueryContext<R> setServiceError(String message, Throwable x) {
+		return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null, x));
+	}
+	
 	public R get() {
 		if(result==null) {
 			return null;

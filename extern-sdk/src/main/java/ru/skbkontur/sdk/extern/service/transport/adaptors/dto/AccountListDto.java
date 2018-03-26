@@ -21,8 +21,8 @@ public class AccountListDto {
 			AccountDto accountDto = new AccountDto();
 			accountList.setAccounts(dto.getAccounts().stream().map(accountDto::fromDto).collect(Collectors.toList()));
 		}
-		accountList.setPageIndex(dto.getPageIndex());
-		accountList.setPageSize(dto.getPageSize());
+		accountList.setSkip(dto.getSkip());
+		accountList.setTake(dto.getTake());
 		accountList.setTotalCount(dto.getTotalCount());
 		
 		return accountList;
@@ -35,8 +35,8 @@ public class AccountListDto {
 			AccountDto accountDto = new AccountDto();
 			dto.setAccounts(accountList.getAccounts().stream().map(accountDto::toDto).collect(Collectors.toList()));
 		}
-		dto.setPageIndex(accountList.getPageIndex());
-		dto.setPageSize(accountList.getPageSize());
+		dto.setSkip(accountList.getSkip());
+		dto.setTake(accountList.getTake());
 		dto.setTotalCount(accountList.getTotalCount());
 		
 		return dto;

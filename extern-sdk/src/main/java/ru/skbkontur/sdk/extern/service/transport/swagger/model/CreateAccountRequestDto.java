@@ -22,7 +22,6 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountCertificate;
 
 /**
  * CreateAccountRequestDto
@@ -37,9 +36,6 @@ public class CreateAccountRequestDto {
 
   @SerializedName("organization-name")
   private String organizationName = null;
-
-  @SerializedName("account-certificate")
-  private AccountCertificate accountCertificate = null;
 
   public CreateAccountRequestDto inn(String inn) {
     this.inn = inn;
@@ -95,24 +91,6 @@ public class CreateAccountRequestDto {
     this.organizationName = organizationName;
   }
 
-  public CreateAccountRequestDto accountCertificate(AccountCertificate accountCertificate) {
-    this.accountCertificate = accountCertificate;
-    return this;
-  }
-
-   /**
-   * Get accountCertificate
-   * @return accountCertificate
-  **/
-  @ApiModelProperty(value = "")
-  public AccountCertificate getAccountCertificate() {
-    return accountCertificate;
-  }
-
-  public void setAccountCertificate(AccountCertificate accountCertificate) {
-    this.accountCertificate = accountCertificate;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -125,13 +103,12 @@ public class CreateAccountRequestDto {
     CreateAccountRequestDto createAccountRequestDto = (CreateAccountRequestDto) o;
     return Objects.equals(this.inn, createAccountRequestDto.inn) &&
         Objects.equals(this.kpp, createAccountRequestDto.kpp) &&
-        Objects.equals(this.organizationName, createAccountRequestDto.organizationName) &&
-        Objects.equals(this.accountCertificate, createAccountRequestDto.accountCertificate);
+        Objects.equals(this.organizationName, createAccountRequestDto.organizationName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, kpp, organizationName, accountCertificate);
+    return Objects.hash(inn, kpp, organizationName);
   }
 
 
@@ -143,7 +120,6 @@ public class CreateAccountRequestDto {
     sb.append("    inn: ").append(toIndentedString(inn)).append("\n");
     sb.append("    kpp: ").append(toIndentedString(kpp)).append("\n");
     sb.append("    organizationName: ").append(toIndentedString(organizationName)).append("\n");
-    sb.append("    accountCertificate: ").append(toIndentedString(accountCertificate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

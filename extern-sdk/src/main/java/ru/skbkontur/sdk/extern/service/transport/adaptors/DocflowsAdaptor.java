@@ -62,6 +62,32 @@ public class DocflowsAdaptor extends BaseAdaptor {
 	}
 
 	/**
+	 * Get docflow page
+	 *
+	 * GET /v1/{accountId}/docflows
+	 *
+	 * @param cxt QueryContext&lt;Docflow&gt;
+	 *
+	 * @return QueryContext&lt;Docflow&gt;
+	 */
+	/*
+	public QueryContext getDocflows(QueryContext cxt) {
+		if (cxt.isFail()) {
+			return cxt;
+		}
+		
+		try {
+			
+			transport(cxt).docflowsGetDocflowsAsync(accountId, Boolean.FALSE, Boolean.TRUE, Long.MIN_VALUE, Integer.SIZE, CONTENT, updatedFrom, updatedTo, createdFrom, createdTo, CONTENT);
+
+			return null;
+		}
+		catch (ApiException x) {
+			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+		}
+	}
+*/
+	/**
 	 * Allow API user to get Docflow object
 	 *
 	 * GET /v1/{accountId}/docflows/{docflowId}
@@ -420,9 +446,9 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
 				prepareTransport(cxt);
 				List<DocumentToSend> replies = new ArrayList<>();
-				for (Link l: docflow.getLinks()) {
+				for (Link l : docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
-						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map)submitHttpRequest(l.getHref(),"GET",null, Object.class));
+						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map) submitHttpRequest(l.getHref(), "GET", null, Object.class));
 						replies.add(documentToSend);
 					}
 				}
@@ -444,27 +470,29 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			}
 
 			DocumentToSend documentToSend = cxt.getDocumentToSend();
-			if (documentToSend == null)
+			if (documentToSend == null) {
 				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "Reply is absent in the context.", 0, null, null));
+			}
 
-			Link self = documentToSend.getLinks().stream().filter(l->l.getRel().equals("self")).findAny().orElse(null);
-			if (self == null)
+			Link self = documentToSend.getLinks().stream().filter(l -> l.getRel().equals("self")).findAny().orElse(null);
+			if (self == null) {
 				return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, "The reply does not contain a self reference.", 0, null, null));
+			}
 
 			prepareTransport(cxt);
-			
+
 			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
 			DocflowDto docflowDto = new DocflowDto();
-			
-			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(),	"POST",	documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
-			
+
+			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(), "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
+
 			return cxt.setResult(docflow, DOCFLOW);
 		}
 		catch (ru.skbkontur.sdk.extern.service.transport.invoker.ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
 		}
 	}
-	
+
 	private DocflowsApi transport(QueryContext<?> cxt) {
 		prepareTransport(cxt);
 		return api;

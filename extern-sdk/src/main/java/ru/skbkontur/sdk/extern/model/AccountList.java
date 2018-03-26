@@ -12,10 +12,13 @@ import java.util.List;
  * @author AlexS
  */
 public class AccountList {
-  private List<Account> accounts = null;
+  private Integer skip = null;
+
+  private Integer take = null;
+
   private Integer totalCount = null;
-  private Integer pageIndex = null;
-  private Integer pageSize = null;
+
+  private List<Account> accounts = null;
 
 	public List<Account> getAccounts() {
 		return accounts;
@@ -33,19 +36,19 @@ public class AccountList {
 		this.totalCount = totalCount;
 	}
 
-	public Integer getPageIndex() {
-		return pageIndex;
+	public Integer getSkip() {
+		return skip;
 	}
 
-	public void setPageIndex(Integer pageIndex) {
-		this.pageIndex = pageIndex;
+	public void setSkip(Integer skip) {
+		this.skip = skip;
 	}
 
-	public Integer getPageSize() {
-		return pageSize;
+	public Integer getTake() {
+		return take;
 	}
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
+	public void setTake(Integer take) {
+		this.take = take;
 	}
 }
