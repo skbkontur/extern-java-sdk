@@ -149,11 +149,11 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentContents  (required)
-     * @return Object
+     * @return DraftDocument
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftDocumentsAddDocument(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
-        ApiResponse<Object> resp = draftDocumentsAddDocumentWithHttpInfo(accountId, draftId, documentContents);
+    public DraftDocument draftDocumentsAddDocument(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
+        ApiResponse<DraftDocument> resp = draftDocumentsAddDocumentWithHttpInfo(accountId, draftId, documentContents);
         return resp.getData();
     }
 
@@ -163,12 +163,12 @@ public class DraftsApi {
      * @param accountId  (required)
      * @param draftId  (required)
      * @param documentContents  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;DraftDocument&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftDocumentsAddDocumentWithHttpInfo(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
+    public ApiResponse<DraftDocument> draftDocumentsAddDocumentWithHttpInfo(UUID accountId, UUID draftId, DocumentContents documentContents) throws ApiException {
         com.squareup.okhttp.Call call = draftDocumentsAddDocumentValidateBeforeCall(accountId, draftId, documentContents, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -182,7 +182,7 @@ public class DraftsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftDocumentsAddDocumentAsync(UUID accountId, UUID draftId, DocumentContents documentContents, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftDocumentsAddDocumentAsync(UUID accountId, UUID draftId, DocumentContents documentContents, final ApiCallback<DraftDocument> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -204,7 +204,7 @@ public class DraftsApi {
         }
 
         com.squareup.okhttp.Call call = draftDocumentsAddDocumentValidateBeforeCall(accountId, draftId, documentContents, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<DraftDocument>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -1751,11 +1751,11 @@ public class DraftsApi {
      * 
      * @param accountId  (required)
      * @param clientInfo  (required)
-     * @return Object
+     * @return Draft
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Object draftsCreate(UUID accountId, DraftMeta clientInfo) throws ApiException {
-        ApiResponse<Object> resp = draftsCreateWithHttpInfo(accountId, clientInfo);
+    public Draft draftsCreate(UUID accountId, DraftMeta clientInfo) throws ApiException {
+        ApiResponse<Draft> resp = draftsCreateWithHttpInfo(accountId, clientInfo);
         return resp.getData();
     }
 
@@ -1764,12 +1764,12 @@ public class DraftsApi {
      * 
      * @param accountId  (required)
      * @param clientInfo  (required)
-     * @return ApiResponse&lt;Object&gt;
+     * @return ApiResponse&lt;Draft&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Object> draftsCreateWithHttpInfo(UUID accountId, DraftMeta clientInfo) throws ApiException {
+    public ApiResponse<Draft> draftsCreateWithHttpInfo(UUID accountId, DraftMeta clientInfo) throws ApiException {
         com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(accountId, clientInfo, null, null);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<Draft>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -1782,7 +1782,7 @@ public class DraftsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call draftsCreateAsync(UUID accountId, DraftMeta clientInfo, final ApiCallback<Object> callback) throws ApiException {
+    public com.squareup.okhttp.Call draftsCreateAsync(UUID accountId, DraftMeta clientInfo, final ApiCallback<Draft> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1804,7 +1804,7 @@ public class DraftsApi {
         }
 
         com.squareup.okhttp.Call call = draftsCreateValidateBeforeCall(accountId, clientInfo, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Object>(){}.getType();
+        Type localVarReturnType = new TypeToken<Draft>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

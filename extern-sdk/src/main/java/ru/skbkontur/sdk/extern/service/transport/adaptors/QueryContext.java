@@ -89,7 +89,18 @@ public class QueryContext<R> implements Serializable {
 	public static final String ACCOUNT_ID = "accountId";
 	public static final String ACCOUNT = "account";
 	public static final String ACCOUNT_LIST = "accountList";
+	public static final String DOCFLOW_PAGE = "docflowPage";
 	public static final String CREATE_ACCOUNT_REQUEST = "createAccountRequest";
+	public static final String FINISHED = "finished";
+	public static final String INCOMING = "incoming";
+	public static final String SKIP = "skip";
+	public static final String TAKE = "take";
+	public static final String INN_KPP = "innKpp";
+	public static final String UPDATED_FROM = "updatedFrom";
+	public static final String UPDATED_TO = "updatedTo";
+	public static final String CREATED_FROM = "createdFrom";
+	public static final String CREATED_TO = "createdTo";
+	public static final String TYPE = "type";
 	public static final String NOTHING = "nothing";
 	public static final String OBJECT = "object";
 
@@ -498,6 +509,86 @@ public class QueryContext<R> implements Serializable {
 	public QueryContext<R> setDocumentToSends(List<DocumentToSend> replies) {
 		return set(DOCUMENT_TO_SENDS, replies);
 	}
+	
+	public boolean getFinished() { 
+		return (boolean)params.get(FINISHED); 
+	};
+	
+	public QueryContext<R>  setFinished(boolean finished) { 
+		return set(FINISHED, finished);
+	};
+	
+	public boolean getIncoming() { 
+		return (boolean)params.get(INCOMING); 
+	};
+	
+	public QueryContext<R>  setIncoming(boolean incoming) { 
+		return set(INCOMING, incoming);
+	};
+	
+	public long getSkip() { 
+		return (long)params.get(SKIP); 
+	};
+	
+	public QueryContext<R>  setSkip(long skip) { 
+		return set(SKIP, skip);
+	};
+	
+	public int getTake() { 
+		return (int)params.get(TAKE); 
+	};
+	
+	public QueryContext<R>  setTake(int take) { 
+		return set(TAKE, take);
+	};
+	
+	public String getInnKpp() { 
+		return (String)params.get(INN_KPP); 
+	};
+	
+	public QueryContext<R>  setInnKpp(String innKpp) { 
+		return set(INN_KPP, innKpp);
+	};
+	
+	public DateTime getUpdatedFrom() { 
+		return (DateTime)params.get(UPDATED_FROM); 
+	};
+	
+	public QueryContext<R>  setUpdatedFrom(DateTime updatedFrom) { 
+		return set(UPDATED_FROM, updatedFrom);
+	};
+	
+	public DateTime getUpdatedTo() { 
+		return (DateTime)params.get(UPDATED_TO); 
+	};
+	
+	public QueryContext<R>  setUpdatedTo(DateTime updatedTo) { 
+		return set(UPDATED_TO, updatedTo);
+	};
+
+	public DateTime getCreatedFrom() { 
+		return (DateTime)params.get(CREATED_FROM); 
+	};
+	
+	public QueryContext<R>  setCreatedFrom(DateTime createdFrom) { 
+		return set(CREATED_FROM, createdFrom);
+	};
+
+	public DateTime getCreatedTo() { 
+		return (DateTime)params.get(CREATED_TO); 
+	};
+	
+	public QueryContext<R>  setCreatedTo(DateTime createdTo) { 
+		return set(CREATED_TO, createdTo);
+	};
+	
+	public String getType() { 
+		return (String)params.get(TYPE); 
+	};
+	
+	public QueryContext<R>  setType(String type) { 
+		return set(TYPE, type);
+	};
 	
 	public QueryContext<R> set(String name, Object val) {
 		if (val != null) params.put(name, val);	else params.remove(name);

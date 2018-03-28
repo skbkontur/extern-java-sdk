@@ -69,14 +69,12 @@ public class DraftsAdaptor extends BaseAdaptor {
 		try {
 			if (cxt.isFail())	return cxt;
 			
-			UUID draftId = jsonToDTO(
-				(Map) transport(cxt)
+			UUID draftId =
+				transport(cxt)
 					.draftsCreate(
 						cxt.getAccountProvider().accountId(), 
 						new DraftMetaDto().toDto(cxt.getDraftMeta())
-					), 
-				ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.class
-			).getId();
+					).getId();
 			
 			return cxt.setResult(draftId,DRAFT_ID);
 		}
@@ -400,20 +398,20 @@ public class DraftsAdaptor extends BaseAdaptor {
 			
 			DocumentContentsDto documentContentsDto = new DocumentContentsDto();
 			
-			return cxt.setResult(new DraftDocumentDto()
-					.fromDto(
-						jsonToDTO((Map)
+			return cxt
+				.setResult(
+					new DraftDocumentDto()
+						.fromDto(
 							transport(cxt)
 								.draftDocumentsAddDocument(
 									cxt.getAccountProvider().accountId(), 
 									cxt.getDraftId(),
 									documentContentsDto.toDto(cxt.getDocumentContents())
-								),
-							ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument.class
-						)
-					),
-				DRAFT_DOCUMENT
-			).setDocumentId(cxt.getDraftDocument().getId());
+								)
+						),
+					DRAFT_DOCUMENT
+				)
+				.setDocumentId(cxt.getDraftDocument().getId());
 		}
 		catch (ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));

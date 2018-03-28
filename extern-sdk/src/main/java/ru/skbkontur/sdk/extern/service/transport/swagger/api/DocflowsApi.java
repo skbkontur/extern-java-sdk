@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import org.joda.time.DateTime;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPage;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Document;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend;
@@ -454,11 +455,11 @@ public class DocflowsApi {
      * @param createdFrom Get docflows with created from specified date (optional)
      * @param createdTo Get docflows with created to specified date (optional)
      * @param type Get docflows with specified type (optional)
-     * @return Docflow
+     * @return DocflowPage
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Docflow docflowsGetDocflowsAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
-        ApiResponse<Docflow> resp = docflowsGetDocflowsAsyncWithHttpInfo(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type);
+    public DocflowPage docflowsGetDocflowsAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
+        ApiResponse<DocflowPage> resp = docflowsGetDocflowsAsyncWithHttpInfo(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type);
         return resp.getData();
     }
 
@@ -476,12 +477,12 @@ public class DocflowsApi {
      * @param createdFrom Get docflows with created from specified date (optional)
      * @param createdTo Get docflows with created to specified date (optional)
      * @param type Get docflows with specified type (optional)
-     * @return ApiResponse&lt;Docflow&gt;
+     * @return ApiResponse&lt;DocflowPage&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Docflow> docflowsGetDocflowsAsyncWithHttpInfo(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
+    public ApiResponse<DocflowPage> docflowsGetDocflowsAsyncWithHttpInfo(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type) throws ApiException {
         com.squareup.okhttp.Call call = docflowsGetDocflowsAsyncValidateBeforeCall(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type, null, null);
-        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        Type localVarReturnType = new TypeToken<DocflowPage>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -503,7 +504,7 @@ public class DocflowsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call docflowsGetDocflowsAsyncAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type, final ApiCallback<Docflow> callback) throws ApiException {
+    public com.squareup.okhttp.Call docflowsGetDocflowsAsyncAsync(UUID accountId, Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type, final ApiCallback<DocflowPage> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -525,7 +526,7 @@ public class DocflowsApi {
         }
 
         com.squareup.okhttp.Call call = docflowsGetDocflowsAsyncValidateBeforeCall(accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo, createdFrom, createdTo, type, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Docflow>(){}.getType();
+        Type localVarReturnType = new TypeToken<DocflowPage>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

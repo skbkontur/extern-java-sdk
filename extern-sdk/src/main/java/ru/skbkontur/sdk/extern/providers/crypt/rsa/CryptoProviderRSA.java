@@ -183,7 +183,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 		// создаем сообщение PKCS#7
 		return PKCS7.createSignCMS(key.getX509().getEncoded(), signature, authenticatedAttributes, null);
 	}
-/*	
+	
 	private byte[] sign_(KeyPair key, byte[] content) throws GeneralSecurityException, Asn1Exception, CryptoException {
 		// OID для SHA & RSA 
 		String sha_rsa_oid = PKCS7.getCertificateAlgorithmOID(key.x509.getEncoded());
@@ -198,7 +198,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 		// создаем сообщение PKCS#7
 		return PKCS7.createSignCMS(key.getX509(), signature, null);
 	}
-*/	
+	
 	private KeyStore getKeyStore() throws IOException, GeneralSecurityException {
 		if (keyStore == null) {
 			// acquires an java key store instance
@@ -227,7 +227,6 @@ public class CryptoProviderRSA implements CryptoProvider {
 						if (privateKey != null) {
 							key = new KeyPair();
 							key.setPrivateKey(privateKey);
-							IOUtil.writeToFile(new File("d:\\temp\\1\\rsa.cer"), x509.getEncoded());
 							key.setX509(x509);
 							key.setSigningAlgorithm(extractSigningAlgorithm(x509));
 							cacheSignKey.put(thumbprint, key);

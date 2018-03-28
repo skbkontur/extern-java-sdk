@@ -109,7 +109,7 @@ public class ExternEngine implements AuthenticationListener {
 	}
 	
 	public AuthenticationProvider getAuthenticationProvider() {
-		return authenticationProvider;
+		return ((EngineAuthenticationProvider)authenticationProvider).getOriginAuthenticationProvider();
 	}
 	
 	public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
@@ -145,8 +145,10 @@ public class ExternEngine implements AuthenticationListener {
 		return cryptoProvider;
 	}
 	
-	public void setCryptoProvider(CryptoProvider cryptoProvider) {
+	public CryptoProvider setCryptoProvider(CryptoProvider cryptoProvider) {
+		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;
+		return current;
 	}
 	
 	private static Configuration loadConfiguration(String path) throws SDKException {

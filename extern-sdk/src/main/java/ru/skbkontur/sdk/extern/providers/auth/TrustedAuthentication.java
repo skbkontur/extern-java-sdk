@@ -24,6 +24,8 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.NOTHING;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.OBJECT;
 
 /**
  *
@@ -33,7 +35,9 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
 	private static final String EOL = System.getProperty("line.separator", "\r\n");
 	private static final String APIKEY = "apikey";
+	private static final String SERVICE_USER_ID = "serviceUserId";
 	private static final String ID = "id";
+	private static final String PHONE = "phone";
 	private static final String TIMESTAMP = "timestamp";
 	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 
@@ -160,6 +164,34 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 		return authPrefix;
 	}
 
+	public QueryContext<Void> registerExternalServiceId(String serviceUserId, String phone) {
+		QueryContext<Void> registerCxt;
+		
+		try {
+			apiClient.setBasePath(authBaseUriProvider.getUri());
+			
+			Map<String, String> queryParams = new HashMap<>();
+			
+			queryParams.put(APIKEY, apiKeyProvider.getApiKey());
+			
+			queryParams.put(SERVICE_USER_ID, serviceUserId);
+			
+			queryParams.put(PHONE, phone);
+			
+			Map<String, String> localHeaderParams = new HashMap<>();
+
+			Map<String, Object> localVarFormParams = new HashMap<>();
+
+			apiClient.submitHttpRequest("/auth/v5.9/register-external-service-id", "PUT", queryParams, null, localHeaderParams, localVarFormParams, Object.class);
+			
+			registerCxt = new QueryContext<Void>().setResult(null, NOTHING);
+		}
+		catch (ApiException x) {
+			registerCxt = new QueryContext<Void>().setServiceError(x);
+		}
+		return registerCxt;
+	}
+	
 	private QueryContext<String> authenticateRequest() {
 		
 		QueryContext<String> authCxt;
@@ -181,7 +213,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 			queryParams.put(TIMESTAMP, timestamp);
 			identityData.append(TIMESTAMP).append("=").append(timestamp).append(EOL);
 
-			queryParams.put("serviceUserId", serviceUserIdProvider.getServiceUserIdProvider());
+			queryParams.put(SERVICE_USER_ID, serviceUserIdProvider.getServiceUserIdProvider());
 
 			Map<String, String> localHeaderParams = new HashMap<>();
 
@@ -212,7 +244,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 			authCxt = new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
 		}
 		catch (ApiException x) {
-			authCxt = new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
+			authCxt = new QueryContext<String>().setServiceError(x);
 		}
 		
 		fireAuthenticationEvent(authCxt);

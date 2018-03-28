@@ -7,7 +7,9 @@ package ru.skbkontur.sdk.extern.service.impl;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.joda.time.DateTime;
 import ru.skbkontur.sdk.extern.model.Docflow;
+import ru.skbkontur.sdk.extern.model.DocflowPage;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.model.Signature;
@@ -230,5 +232,40 @@ public class DocflowServiceImpl extends BaseService implements DocflowService {
 	public QueryContext<Docflow> createReply(QueryContext<?> parent) {
 		QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
 		return cxt.apply(docflowsApi::createReply);
+	}
+
+	@Override
+	public CompletableFuture<QueryContext<DocflowPage>> getDocflows(
+		boolean finished,
+		boolean incoming,
+		long skip,
+		int take,
+		String innKpp,
+		DateTime updatedFrom,
+		DateTime updatedTo,
+		DateTime createdFrom,
+		DateTime createdTo,
+		String type
+	)
+	{
+		QueryContext<DocflowPage> cxt = createQueryContext(EN_DFW);
+		return cxt
+			.setFinished(finished)
+			.setIncoming(incoming)
+			.setSkip(skip)
+			.setTake(take)
+			.setInnKpp(innKpp)
+			.setUpdatedFrom(updatedFrom)
+			.setUpdatedTo(updatedTo)
+			.setCreatedFrom(createdFrom)
+			.setCreatedTo(createdTo)
+			.setType(type)
+			.applyAsync(docflowsApi::getDocflows);
+	}
+	
+	@Override
+	public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent) {
+		QueryContext<DocflowPage> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(docflowsApi::getDocflows);
 	}
 }

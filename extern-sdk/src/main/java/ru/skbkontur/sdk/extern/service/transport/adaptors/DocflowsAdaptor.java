@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Docflow;
+import ru.skbkontur.sdk.extern.model.DocflowPage;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.model.DocumentToSend;
@@ -19,6 +20,7 @@ import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOW;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOW_PAGE;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENTS;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_DESCRIPTION;
@@ -34,6 +36,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.api.DocflowsApi;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_TO_SENDS;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocflowPageDto;
 
 /**
  *
@@ -70,23 +73,35 @@ public class DocflowsAdaptor extends BaseAdaptor {
 	 *
 	 * @return QueryContext&lt;Docflow&gt;
 	 */
-	/*
-	public QueryContext getDocflows(QueryContext cxt) {
+	public QueryContext<DocflowPage> getDocflows(QueryContext<DocflowPage> cxt) {
 		if (cxt.isFail()) {
 			return cxt;
 		}
 		
 		try {
-			
-			transport(cxt).docflowsGetDocflowsAsync(accountId, Boolean.FALSE, Boolean.TRUE, Long.MIN_VALUE, Integer.SIZE, CONTENT, updatedFrom, updatedTo, createdFrom, createdTo, CONTENT);
-
-			return null;
+			return cxt.setResult(
+				new DocflowPageDto().fromDto(
+					transport(cxt)
+						.docflowsGetDocflowsAsync(
+							cxt.getAccountProvider().accountId(),
+							cxt.getFinished(),
+							cxt.getIncoming(),
+							cxt.getSkip(),
+							cxt.getTake(),
+							cxt.getInnKpp(),
+							cxt.getUpdatedFrom(),
+							cxt.getUpdatedTo(),
+							cxt.getCreatedFrom(),
+							cxt.getCreatedTo(),
+							cxt.getType())
+						),
+				DOCFLOW_PAGE
+			);
 		}
 		catch (ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
 		}
 	}
-*/
 	/**
 	 * Allow API user to get Docflow object
 	 *

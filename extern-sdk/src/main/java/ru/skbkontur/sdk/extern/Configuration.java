@@ -29,7 +29,11 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 	@SerializedName("pass") private String pass;
 	@SerializedName("serviceBaseUri") private String serviceBaseUri;
 	@SerializedName("authBaseUri") private String authBaseUri;
-	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate
+	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
+	@SerializedName("thumbprintCloud") private String thumbprintCloud; // a thumbprint of a signature certificate for CloudCrypto
+	@SerializedName("thumbprintRsa") private String thumbprintRsa; // a thumbprint of a signature certificate with RSA algorithm
+	@SerializedName("jksPass") private String jksPass; // a password of JKS
+	@SerializedName("rsaKeyPass") private String rsaKeyPass; // a password of a RSA key
 
 	public Configuration() {
 		authPrefix = DEFAULT_AUTH_PREFIX;
@@ -108,6 +112,38 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 
 	public void setThumbprint(String thumbprint) {
 		this.thumbprint = thumbprint;
+	}
+
+	public String getThumbprintCloud() {
+		return thumbprintCloud;
+	}
+
+	public void setThumbprintCloud(String thumbprintCloud) {
+		this.thumbprintCloud = thumbprintCloud;
+	}
+
+	public String getThumbprintRsa() {
+		return thumbprintRsa;
+	}
+
+	public void setThumbprintRsa(String thumbprintRsa) {
+		this.thumbprintRsa = thumbprintRsa;
+	}
+
+	public String getJksPass() {
+		return jksPass;
+	}
+
+	public void setJksPass(String jksPass) {
+		this.jksPass = jksPass;
+	}
+
+	public String getRsaKeyPass() {
+		return rsaKeyPass;
+	}
+
+	public void setRsaKeyPass(String rsaKeyPass) {
+		this.rsaKeyPass = rsaKeyPass;
 	}
 
 	public String getCredentialSnils() {
