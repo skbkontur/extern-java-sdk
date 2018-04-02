@@ -12,6 +12,7 @@ import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
+import ru.skbkontur.sdk.extern.providers.auth.Credential;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
   @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;
 	@SerializedName("authPrefix") private String authPrefix;
-	@SerializedName("credentialSnils") private String credentialSnils;
+	@SerializedName("credential") private Credential credential;
 	@SerializedName("serviceUserId") private String serviceUserId;
 	@SerializedName("login") private String login;
 	@SerializedName("pass") private String pass;
@@ -146,12 +147,12 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 		this.rsaKeyPass = rsaKeyPass;
 	}
 
-	public String getCredentialSnils() {
-		return credentialSnils;
+	public Credential getCredential() {
+		return credential;
 	}
 
-	public void setCredentialSnils(String credentialSnils) {
-		this.credentialSnils = credentialSnils;
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
 
 	public String getServiceUserId() {

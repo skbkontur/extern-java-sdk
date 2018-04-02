@@ -12,44 +12,38 @@ import ru.skbkontur.sdk.extern.model.AccountList;
 import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.service.AccountService;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
  *
  * @author AlexS
  */
-public class AccountServiceImpl extends BaseService implements AccountService {
+public class AccountServiceImpl extends BaseService<AccountsAdaptor> implements AccountService {
 	private static final String EN_ACC = "account";
-	
-	private AccountAdaptor accountApi;
-	
-	public void setAccountApi(AccountAdaptor accountApi) {
-		this.accountApi = accountApi;
-	}
 	
 	@Override
 	public CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync() {
 		QueryContext<List<Link>> cxt = createQueryContext(EN_ACC);
-		return cxt.applyAsync(accountApi::acquireBaseUri);
+		return cxt.applyAsync(api::acquireBaseUri);
 	}
 
 	@Override
 	public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> parent) {
 		QueryContext<List<Link>> cxt = createQueryContext(parent, EN_ACC);
-		return cxt.apply(accountApi::acquireBaseUri);
+		return cxt.apply(api::acquireBaseUri);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync() {
 		QueryContext<AccountList> cxt = createQueryContext(EN_ACC);
-		return cxt.applyAsync(accountApi::acquireAccounts);
+		return cxt.applyAsync(api::acquireAccounts);
 	}
 
 	@Override
 	public QueryContext<AccountList> acquireAccounts(QueryContext<?> parent) {
 		QueryContext<AccountList> cxt = createQueryContext(parent, EN_ACC);
-		return cxt.apply(accountApi::acquireAccounts);
+		return cxt.apply(api::acquireAccounts);
 	}
 
 	@Override
@@ -57,13 +51,13 @@ public class AccountServiceImpl extends BaseService implements AccountService {
 		QueryContext<Object> cxt = createQueryContext(EN_ACC);
 		return cxt
 			.setCreateAccountRequest(createAccountRequest)
-			.applyAsync(accountApi::createAccount);
+			.applyAsync(api::createAccount);
 	}
 
 	@Override
 	public QueryContext<Object> createrAccount(QueryContext<?> parent) {
 		QueryContext<Object> cxt = createQueryContext(parent, EN_ACC);
-		return cxt.apply(accountApi::createAccount);
+		return cxt.apply(api::createAccount);
 	}
 
 	@Override
@@ -71,12 +65,12 @@ public class AccountServiceImpl extends BaseService implements AccountService {
 		QueryContext<Account> cxt = createQueryContext(EN_ACC);
 		return cxt
 			.setAccountId(accountId)
-			.applyAsync(accountApi::getAccount);
+			.applyAsync(api::getAccount);
 	}
 
 	@Override
 	public QueryContext<Account> getAccount(QueryContext<?> parent) {
 		QueryContext<Account> cxt = createQueryContext(parent, EN_ACC);
-		return cxt.apply(accountApi::getAccount);
+		return cxt.apply(api::getAccount);
 	}
 }

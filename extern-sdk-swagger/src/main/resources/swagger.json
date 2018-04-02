@@ -1558,12 +1558,6 @@
                         }
                     }],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
                     "201": {
                         "description": "",
                         "schema": {
@@ -1958,6 +1952,152 @@
                     }]
             }
         },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_BuildContentFromFormat",
+                "consumes": ["application/json"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UsnServiceContractInfo[Object]"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_BuildContentFromFormat",
+                "consumes": ["application/json"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UsnServiceContractInfo[UsnDataV2]"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
         "/v1/{accountId}/drafts": {
             "post": {
                 "tags": ["Drafts"],
@@ -1979,12 +2119,6 @@
                         }
                     }],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
                     "201": {
                         "description": "Черновик успешно создан",
                         "schema": {
@@ -3296,6 +3430,238 @@
                     "type": "string"
                 },
                 "last-id": {
+                    "type": "string"
+                }
+            }
+        },
+        "UsnServiceContractInfo[Object]": {
+            "type": "object",
+            "properties": {
+                "period": {
+                    "$ref": "#/definitions/UsnFormatPeriod"
+                },
+                "additional-org-info": {
+                    "$ref": "#/definitions/AdditionalClientInfo"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        },
+        "UsnFormatPeriod": {
+            "type": "object",
+            "properties": {
+                "period-modifiers": {
+                    "enum": ["none", "liquidationReorganization", "taxRegimeChange", "lastPeriodForTaxRegime"],
+                    "type": "string"
+                },
+                "year": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "AdditionalClientInfo": {
+            "type": "object",
+            "properties": {
+                "signer-type": {
+                    "enum": ["unknown", "chief", "representative"],
+                    "type": "string"
+                },
+                "document-sender": {
+                    "$ref": "#/definitions/DocumentSender"
+                },
+                "taxpayer": {
+                    "$ref": "#/definitions/Taxpayer"
+                }
+            }
+        },
+        "DocumentSender": {
+            "type": "object",
+            "properties": {
+                "sender-full-name": {
+                    "type": "string"
+                }
+            }
+        },
+        "Taxpayer": {
+            "type": "object",
+            "properties": {
+                "taxpayer-chief-fio": {
+                    "type": "string"
+                },
+                "representative": {
+                    "$ref": "#/definitions/Representative"
+                },
+                "taxpayer-phone": {
+                    "type": "string"
+                },
+                "taxpayer-okved": {
+                    "type": "string"
+                },
+                "taxpayer-full-name": {
+                    "type": "string"
+                }
+            }
+        },
+        "Representative": {
+            "type": "object",
+            "properties": {
+                "representative-document": {
+                    "type": "string"
+                },
+                "passport": {
+                    "$ref": "#/definitions/PassportInfo"
+                }
+            }
+        },
+        "PassportInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "series-number": {
+                    "type": "string"
+                },
+                "issued-date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "issued-by": {
+                    "type": "string"
+                }
+            }
+        },
+        "UsnServiceContractInfo[UsnDataV2]": {
+            "type": "object",
+            "properties": {
+                "period": {
+                    "$ref": "#/definitions/UsnFormatPeriod"
+                },
+                "additional-org-info": {
+                    "$ref": "#/definitions/AdditionalClientInfo"
+                },
+                "data": {
+                    "$ref": "#/definitions/UsnDataV2"
+                }
+            }
+        },
+        "UsnDataV2": {
+            "type": "object",
+            "properties": {
+                "nom-korr": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "po-mestu": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "priz-np": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "ubyt-pred": {
+                    "type": "string"
+                },
+                "ischisl-min": {
+                    "type": "string"
+                },
+                "za-kv": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "za-pg": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "zaem": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "za-nal-per": {
+                    "$ref": "#/definitions/TaxPeriodIndicators"
+                }
+            }
+        },
+        "PeriodIndicators": {
+            "type": "object",
+            "properties": {
+                "oktmo": {
+                    "type": "string"
+                },
+                "av-pu": {
+                    "type": "string"
+                },
+                "dohod": {
+                    "type": "string"
+                },
+                "rashod": {
+                    "type": "string"
+                },
+                "nal-baza-ubyt": {
+                    "type": "string"
+                },
+                "stavka": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "umen-nal": {
+                    "type": "string"
+                },
+                "rasch-torg-sbor": {
+                    "$ref": "#/definitions/MerchantTax"
+                }
+            }
+        },
+        "TaxPeriodIndicators": {
+            "type": "object",
+            "properties": {
+                "nal-pumin": {
+                    "type": "string"
+                },
+                "oktmo": {
+                    "type": "string"
+                },
+                "av-pu": {
+                    "type": "string"
+                },
+                "dohod": {
+                    "type": "string"
+                },
+                "rashod": {
+                    "type": "string"
+                },
+                "nal-baza-ubyt": {
+                    "type": "string"
+                },
+                "stavka": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "umen-nal": {
+                    "type": "string"
+                },
+                "rasch-torg-sbor": {
+                    "$ref": "#/definitions/MerchantTax"
+                }
+            }
+        },
+        "MerchantTax": {
+            "type": "object",
+            "properties": {
+                "dohod": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "torg-sbor-fact": {
+                    "type": "string"
+                },
+                "torg-sbor-umen": {
                     "type": "string"
                 }
             }

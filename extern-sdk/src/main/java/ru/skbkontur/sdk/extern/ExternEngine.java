@@ -20,14 +20,17 @@ import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.AccountService;
+import ru.skbkontur.sdk.extern.service.CertificateService;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
 import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.service.impl.AccountServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.BaseService;
+import ru.skbkontur.sdk.extern.service.impl.CertificateServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DocflowServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DraftServiceImpl;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountsAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.CertificatesAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
@@ -48,6 +51,8 @@ public class ExternEngine implements AuthenticationListener {
 	private DraftService draftService;
 	
 	private DocflowService docflowService;
+	
+	private CertificateService certificateService;
 	
 	private ServiceBaseUriProvider serviceBaseUriProvider;
 	
@@ -102,6 +107,10 @@ public class ExternEngine implements AuthenticationListener {
 	
 	public void setDocflowService(DocflowService docflowService) {
 		this.docflowService = docflowService;
+	}
+	
+	public CertificateService getCertificateService() {
+		return certificateService;
 	}
 	
 	public void setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
@@ -173,18 +182,23 @@ public class ExternEngine implements AuthenticationListener {
 	public void configureServices() throws SDKException {
 		AccountServiceImpl accSrv = new AccountServiceImpl();
 		configureService(accSrv);
-		accSrv.setAccountApi(new AccountAdaptor());
+		accSrv.setApi(new AccountsAdaptor());
 		this.accountService = accSrv;
 		
 		DraftServiceImpl draftSrv = new DraftServiceImpl();
 		configureService(draftSrv);
-		draftSrv.setDraftsApi(new DraftsAdaptor());
+		draftSrv.setApi(new DraftsAdaptor());
 		this.draftService = draftSrv;
 		
 		DocflowServiceImpl docflowSrv = new DocflowServiceImpl();
 		configureService(docflowSrv);
-		docflowSrv.setDraftsApi(new DocflowsAdaptor());
+		docflowSrv.setApi(new DocflowsAdaptor());
 		this.docflowService = docflowSrv;
+
+		CertificateServiceImpl certificateSrvice = new CertificateServiceImpl();
+		configureService(certificateSrvice);
+		certificateSrvice.setApi(new CertificatesAdaptor());
+		this.certificateService = certificateSrvice;
 	}
 	
 	private void configureService(BaseService baseService) {

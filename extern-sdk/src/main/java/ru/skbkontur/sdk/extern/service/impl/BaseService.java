@@ -19,7 +19,13 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
  *
  * @author AlexS
  */
-public class BaseService {
+public class BaseService<T> {
+	
+	protected T api;
+	
+	public void setApi(T api) {
+		this.api = api;
+	}
 	
 	protected ServiceBaseUriProvider serviceBaseUriProvider;
 	
