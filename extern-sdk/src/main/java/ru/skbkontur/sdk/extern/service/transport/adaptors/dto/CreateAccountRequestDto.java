@@ -14,6 +14,9 @@ import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 public class CreateAccountRequestDto {
 	
 	public CreateAccountRequest fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto dto) {
+
+		if (dto == null) return null;
+
 		CreateAccountRequest request = new CreateAccountRequest();
 		
 		request.setInn(dto.getInn());
@@ -24,6 +27,9 @@ public class CreateAccountRequestDto {
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto toDto(CreateAccountRequest request) {
+
+		if (request == null) return null;
+
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto();
 		
 		dto.setInn(request.getInn());

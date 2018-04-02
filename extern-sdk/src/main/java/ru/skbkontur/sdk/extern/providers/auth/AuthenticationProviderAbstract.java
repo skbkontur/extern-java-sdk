@@ -18,6 +18,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * @author alexs
  */
 public abstract class AuthenticationProviderAbstract implements AuthenticationProvider {
+	protected static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 	
 	private final List<AuthenticationListener> authListeners;
 

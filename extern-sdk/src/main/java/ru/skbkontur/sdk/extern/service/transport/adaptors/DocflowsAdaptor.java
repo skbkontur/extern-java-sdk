@@ -384,15 +384,15 @@ public class DocflowsAdaptor extends BaseAdaptor {
 	}
 
 	/**
-	 * Allow API user to get Reply document for specified workflow
+	 * Allow API user to create Reply document for specified workflow
 	 *
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}
+	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
 	 *
 	 * @param cxt QueryContext&lt;DocumentToSend&gt; context
 	 * @return QueryContext&lt;Signature&gt; context
 	 */
 	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<DocumentToSend> cxt) {
-		try {
+/*		try {
 			if (cxt.isFail()) {
 				return cxt;
 			}
@@ -401,7 +401,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 				new DocumentToSendDto()
 					.fromDto(
 						transport(cxt)
-							.docflowsGetReplyDocumentAsync(
+							.docflowsGenerateReplyDocumentAsync(
 								cxt.getAccountProvider().accountId(),
 								cxt.getDocflowId(),
 								cxt.getDocumentType(),
@@ -414,7 +414,8 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 		catch (ApiException x) {
 			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
-		}
+		}*/
+		return null;
 	}
 
 	/**

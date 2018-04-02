@@ -17,8 +17,8 @@ public class SignatureToSendDto {
 	}
 	
 	public ru.skbkontur.sdk.extern.model.SignatureToSend fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend dto) {
-		if (dto == null)
-			return null;
+		
+		if (dto == null) return null;
 		
 		ru.skbkontur.sdk.extern.model.SignatureToSend signatureToSend = new ru.skbkontur.sdk.extern.model.SignatureToSend();
 		
@@ -29,8 +29,8 @@ public class SignatureToSendDto {
 	}
 
 	public ru.skbkontur.sdk.extern.model.SignatureToSend fromDto(Map<String,Object> dto) {
-		if (dto == null)
-			return null;
+		
+		if (dto == null) return null;
 		
 		ru.skbkontur.sdk.extern.model.SignatureToSend signatureToSend = new ru.skbkontur.sdk.extern.model.SignatureToSend();
 		
@@ -41,6 +41,9 @@ public class SignatureToSendDto {
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend toDto(ru.skbkontur.sdk.extern.model.SignatureToSend signatureToSend) {
+		
+		if (signatureToSend == null) return null;
+		
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend();
 		
 		dto.setContentData(signatureToSend.getContentData());

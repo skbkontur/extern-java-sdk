@@ -15,6 +15,9 @@ import ru.skbkontur.sdk.extern.model.DocflowPageItem;
 public class DocflowPageItemDto {
 	
 	public DocflowPageItem fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem dto) {
+
+		if (dto == null) return null;
+		
 		DocflowPageItem docflowPageItem = new DocflowPageItem();
 		
 		LinkDto linkDto = new LinkDto();
@@ -30,6 +33,9 @@ public class DocflowPageItemDto {
 	}
 	
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem toDto(DocflowPageItem docflowPageItem) {
+
+		if (docflowPageItem == null) return null;
+		
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem dto 
 			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem();
 		

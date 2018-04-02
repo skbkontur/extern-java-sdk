@@ -7,7 +7,6 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -17,12 +16,10 @@ import java.util.stream.Collectors;
 public class DocumentToSendDto {
 	private static final java.util.Base64.Decoder base64Decoder = java.util.Base64.getDecoder();
 
-	public DocumentToSendDto() {
-	}
-	
 	public ru.skbkontur.sdk.extern.model.DocumentToSend fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend dto) {
-		if (dto == null)
-			return null;
+
+		if (dto == null) return null;
+
 		
 		ru.skbkontur.sdk.extern.model.DocumentToSend documentToSend = new ru.skbkontur.sdk.extern.model.DocumentToSend();
 		
@@ -40,8 +37,7 @@ public class DocumentToSendDto {
 	}
 
 	public ru.skbkontur.sdk.extern.model.DocumentToSend fromDto(Map<String,Object> dto) {
-		if (dto == null)
-			return null;
+		if (dto == null)	return null;
 		
 		ru.skbkontur.sdk.extern.model.DocumentToSend documentToSend = new ru.skbkontur.sdk.extern.model.DocumentToSend();
 		
@@ -71,6 +67,9 @@ public class DocumentToSendDto {
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend toDto(ru.skbkontur.sdk.extern.model.DocumentToSend documentToSend) {
+
+		if (documentToSend == null) return null;
+
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend();
 		
 		dto.setContent(documentToSend.getContent());

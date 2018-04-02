@@ -11,28 +11,28 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
  */
 public class DocumentDescriptionDto {
 
-	public DocumentDescriptionDto() {
-	}
-
 	public ru.skbkontur.sdk.extern.model.DocumentDescription fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription dto) {
-		ru.skbkontur.sdk.extern.model.DocumentDescription documentDescription = null;
-		if (dto != null) {
-			documentDescription = new ru.skbkontur.sdk.extern.model.DocumentDescription();
-			documentDescription.setContentType(dto.getContentType());
-			documentDescription.setFilename(dto.getFilename());
-			documentDescription.setType(dto.getType());
-		}
+
+		if (dto == null) return null;
+
+		ru.skbkontur.sdk.extern.model.DocumentDescription documentDescription = new ru.skbkontur.sdk.extern.model.DocumentDescription();
+		documentDescription.setContentType(dto.getContentType());
+		documentDescription.setFilename(dto.getFilename());
+		documentDescription.setType(dto.getType());
+
 		return documentDescription;
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription toDto(ru.skbkontur.sdk.extern.model.DocumentDescription documentDescription) {
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription dto = null;
-		if (documentDescription != null) {
-			dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription();
-			dto.setContentType(documentDescription.getContentType());
-			dto.setFilename(documentDescription.getFilename());
-			dto.setType(documentDescription.getType());
-		}
+
+		if (documentDescription == null) return null;
+
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription dto
+			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentDescription();
+		dto.setContentType(documentDescription.getContentType());
+		dto.setFilename(documentDescription.getFilename());
+		dto.setType(documentDescription.getType());
+
 		return dto;
 	}
 }

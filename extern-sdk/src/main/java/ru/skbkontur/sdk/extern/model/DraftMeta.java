@@ -16,16 +16,16 @@ public class DraftMeta {
 	private Sender sender;
 	@SerializedName("recipient")
 	private Recipient recipient;
-	@SerializedName("organization")
-	private Organization organization;
+	@SerializedName("payer")
+	private Organization payer;
 
 	public DraftMeta() {
 	}	
 	
-	public DraftMeta(Sender sender, Recipient recipient, Organization organization) {
+	public DraftMeta(Sender sender, Recipient recipient, Organization payer) {
 		this.sender = sender;
 		this.recipient = recipient;
-		this.organization = organization;
+		this.payer = payer;
 	}
 	
 	public Sender getSender() {
@@ -44,11 +44,11 @@ public class DraftMeta {
 		this.recipient = recipient;
 	}
 
-	public Organization getOrganization() {
-		return organization;
+	public Organization getPayer() {
+		return payer;
 	}
 
-	public void setOrganization(Organization organization) {
-		this.organization = organization;
+	public void setPayer(Organization payer) {
+		this.payer = payer;
 	}
 }

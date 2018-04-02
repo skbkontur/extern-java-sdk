@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Account;
 import ru.skbkontur.sdk.extern.model.AccountList;
-import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.ACCOUNT;
@@ -28,15 +27,15 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  *
  * @author AlexS
  */
-public class AccountAdaptor extends BaseAdaptor {
+public class AccountsAdaptor extends BaseAdaptor {
 
 	private AccountsApi api;
 	
-	public AccountAdaptor(AccountsApi accountsApi) {
+	public AccountsAdaptor(AccountsApi accountsApi) {
 		this.api = accountsApi;
 	}
 	
-	public AccountAdaptor() {
+	public AccountsAdaptor() {
 		this(new AccountsApi());
 	}
 		

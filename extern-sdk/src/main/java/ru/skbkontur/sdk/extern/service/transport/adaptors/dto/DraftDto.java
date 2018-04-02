@@ -11,28 +11,28 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
  */
 public class DraftDto {
 
-	public DraftDto() {
-	}
-
 	public ru.skbkontur.sdk.extern.model.Draft fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto) {
-		ru.skbkontur.sdk.extern.model.Draft draft = null;
-		if (dto != null) {
-			draft = new ru.skbkontur.sdk.extern.model.Draft();
-			draft.setId(dto.getId());
-			draft.setStatus(dto.getStatus().getValue());
-		}
+
+		if (dto == null) return null;
+
+		ru.skbkontur.sdk.extern.model.Draft draft = new ru.skbkontur.sdk.extern.model.Draft();
+		draft.setId(dto.getId());
+		draft.setStatus(dto.getStatus().getValue());
+
 		return draft;
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft toDto(ru.skbkontur.sdk.extern.model.Draft draft) {
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto = null;
-		if (draft != null) {
-			dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft();
-			dto.setId(draft.getId());
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum status
-				= ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum.fromValue(draft.getStatus().getValue());
-			dto.setStatus(status);
-		}
+
+		if (draft == null) return null;
+
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto
+			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft();
+		dto.setId(draft.getId());
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum status
+			= ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum.fromValue(draft.getStatus().getValue());
+		dto.setStatus(status);
+
 		return dto;
 	}
 }

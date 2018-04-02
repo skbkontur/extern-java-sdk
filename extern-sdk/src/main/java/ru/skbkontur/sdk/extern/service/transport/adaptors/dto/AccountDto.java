@@ -15,6 +15,9 @@ import ru.skbkontur.sdk.extern.model.Account;
 public class AccountDto {
 	
 	public Account fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Account dto) {
+		
+		if (dto == null) return null;
+		
 		Account account = new Account();
 		
 		account.setId(dto.getId());
@@ -35,6 +38,9 @@ public class AccountDto {
 	}
 	
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Account toDto(Account account) {
+
+		if (account == null) return null;
+		
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.Account dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Account();
 		
 		dto.setId(account.getId());

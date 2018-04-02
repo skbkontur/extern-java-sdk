@@ -621,6 +621,87 @@
                     }]
             }
         },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print": {
+            "post": {
+                "tags": ["Docflows"],
+                "summary": "Allow API user to get document print from docflow",
+                "operationId": "Docflows_GetDocumentPrintAsync",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "description": "Account identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "docflowId",
+                        "in": "path",
+                        "description": "Docflow object identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "Document identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
         "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description": {
             "get": {
                 "tags": ["Docflows"],
@@ -1079,12 +1160,12 @@
                     }]
             }
         },
-        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}": {
-            "get": {
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate": {
+            "post": {
                 "tags": ["Docflows"],
                 "summary": "Allow API user to get Reply document for specified workflow",
-                "operationId": "Docflows_GetReplyDocumentAsync",
-                "consumes": [],
+                "operationId": "Docflows_GenerateReplyDocumentAsync",
+                "consumes": ["application/octet-stream"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "accountId",
@@ -1114,11 +1195,13 @@
                         "type": "string",
                         "format": "uuid"
                     }, {
-                        "name": "thumbprint",
-                        "in": "query",
-                        "description": "Signer certificate thumbprint",
-                        "required": false,
-                        "type": "string"
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
                     }],
                 "responses": {
                     "200": {
@@ -1162,7 +1245,9 @@
                         "apiKey": [],
                         "auth.sid": []
                     }]
-            },
+            }
+        },
+        "/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send": {
             "post": {
                 "tags": ["Docflows"],
                 "summary": "Allow API user to send Reply document for specified workflow",
@@ -1249,715 +1334,6 @@
                     }]
             }
         },
-        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}": {
-            "get": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_GetDocumentAsync",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/DraftDocument"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_PutDocument",
-                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentContents",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DocumentContents"
-                        }
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/DraftDocument"
-                        }
-                    },
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/DraftDocument"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "delete": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_DeleteDocument",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/print": {
-            "get": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_GetDocumentPrint",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/drafts/{draftId}/documents": {
-            "post": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_AddDocument",
-                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentContents",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DocumentContents"
-                        }
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "201": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/DraftDocument"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted": {
-            "get": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_GetDocumentContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_PutDocumentContent",
-                "consumes": ["application/octet-stream"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "content",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "format": "byte",
-                            "type": "string"
-                        }
-                    }],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted": {
-            "get": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_GetEncryptedDocumentContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature": {
-            "get": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_GetSignatureContent",
-                "consumes": [],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            },
-            "put": {
-                "tags": ["Drafts"],
-                "operationId": "DraftDocuments_PutDocumentSignature",
-                "consumes": ["application/octet-stream"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "draftId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "content",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "format": "byte",
-                            "type": "string"
-                        }
-                    }],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
         "/v1/{accountId}/drafts": {
             "post": {
                 "tags": ["Drafts"],
@@ -1979,12 +1355,6 @@
                         }
                     }],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
                     "201": {
                         "description": "Черновик успешно создан",
                         "schema": {
@@ -2488,6 +1858,855 @@
                     }]
             }
         },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "delete": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_DeleteDocument",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/print": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentPrintAsync",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_AddDocument",
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentContents",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocumentContents"
+                        }
+                    }],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/DraftDocument"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetDocumentContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentContent",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetEncryptedDocumentContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature": {
+            "get": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_GetSignatureContent",
+                "consumes": [],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            },
+            "put": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_PutDocumentSignature",
+                "consumes": ["application/octet-stream"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "format": "byte",
+                            "type": "string"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_BuildContentFromFormat",
+                "consumes": ["application/json"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UsnServiceContractInfo[Object]"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
+        "/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2": {
+            "post": {
+                "tags": ["Drafts"],
+                "operationId": "DraftDocuments_BuildContentFromFormat",
+                "consumes": ["application/json"],
+                "produces": ["application/json", "text/json"],
+                "parameters": [{
+                        "name": "accountId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "draftId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "format": "uuid"
+                    }, {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UsnServiceContractInfo[UsnDataV2]"
+                        }
+                    }],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Некорректные входные данные",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "403": {
+                        "description": "Нет доступа к ресурсу",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Не найден один из требуемых ресурсов",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Произошла внутренняя ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "security": [{
+                        "apiKey": [],
+                        "auth.sid": []
+                    }]
+            }
+        },
         "/v1/events/service": {
             "get": {
                 "tags": ["Events"],
@@ -2533,71 +2752,6 @@
                     },
                     "401": {
                         "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Не найден один из требуемых ресурсов",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Произошла внутренняя ошибка",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                },
-                "security": [{
-                        "apiKey": [],
-                        "auth.sid": []
-                    }]
-            }
-        },
-        "/v1/{accountId}/print": {
-            "post": {
-                "tags": ["Print"],
-                "operationId": "Print_GetDocumentPrint",
-                "consumes": ["application/octet-stream"],
-                "produces": ["application/json", "text/json"],
-                "parameters": [{
-                        "name": "accountId",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "format": "uuid"
-                    }, {
-                        "name": "content",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "format": "byte",
-                            "type": "string"
-                        }
-                    }],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные входные данные",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "401": {
-                        "description": "Не авторизован",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "403": {
-                        "description": "Нет доступа к ресурсу",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -2974,6 +3128,10 @@
                     "format": "byte",
                     "type": "string"
                 },
+                "print-form-content": {
+                    "format": "byte",
+                    "type": "string"
+                },
                 "filename": {
                     "type": "string"
                 },
@@ -3005,44 +3163,8 @@
                 }
             }
         },
-        "DraftDocument": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "format": "uuid",
-                    "type": "string",
-                    "example": "00000000-0000-0000-0000-000000000000"
-                },
-                "decrypted-content-link": {
-                    "$ref": "#/definitions/Link"
-                },
-                "encrypted-content-link": {
-                    "$ref": "#/definitions/Link"
-                },
-                "signature-content-link": {
-                    "$ref": "#/definitions/Link"
-                },
-                "description": {
-                    "$ref": "#/definitions/DocumentDescription"
-                }
-            }
-        },
-        "DocumentContents": {
-            "type": "object",
-            "properties": {
-                "base64-content": {
-                    "type": "string"
-                },
-                "signature": {
-                    "type": "string"
-                },
-                "description": {
-                    "$ref": "#/definitions/DocumentDescription"
-                }
-            }
-        },
         "DraftMeta": {
-            "required": ["sender", "recipient", "organization"],
+            "required": ["sender", "recipient", "payer"],
             "type": "object",
             "properties": {
                 "sender": {
@@ -3051,7 +3173,7 @@
                 "recipient": {
                     "$ref": "#/definitions/RecipientInfo"
                 },
-                "organization": {
+                "payer": {
                     "$ref": "#/definitions/AccountInfo"
                 }
             }
@@ -3265,6 +3387,42 @@
                 }
             }
         },
+        "DraftDocument": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "format": "uuid",
+                    "type": "string",
+                    "example": "00000000-0000-0000-0000-000000000000"
+                },
+                "decrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "encrypted-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "signature-content-link": {
+                    "$ref": "#/definitions/Link"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                }
+            }
+        },
+        "DocumentContents": {
+            "type": "object",
+            "properties": {
+                "base64-content": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "description": {
+                    "$ref": "#/definitions/DocumentDescription"
+                }
+            }
+        },
         "ApiEvent": {
             "type": "object",
             "properties": {
@@ -3296,6 +3454,238 @@
                     "type": "string"
                 },
                 "last-id": {
+                    "type": "string"
+                }
+            }
+        },
+        "UsnServiceContractInfo[Object]": {
+            "type": "object",
+            "properties": {
+                "period": {
+                    "$ref": "#/definitions/UsnFormatPeriod"
+                },
+                "additional-org-info": {
+                    "$ref": "#/definitions/AdditionalClientInfo"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        },
+        "UsnFormatPeriod": {
+            "type": "object",
+            "properties": {
+                "period-modifiers": {
+                    "enum": ["none", "liquidationReorganization", "taxRegimeChange", "lastPeriodForTaxRegime"],
+                    "type": "string"
+                },
+                "year": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "AdditionalClientInfo": {
+            "type": "object",
+            "properties": {
+                "signer-type": {
+                    "enum": ["unknown", "chief", "representative"],
+                    "type": "string"
+                },
+                "document-sender": {
+                    "$ref": "#/definitions/DocumentSender"
+                },
+                "taxpayer": {
+                    "$ref": "#/definitions/Taxpayer"
+                }
+            }
+        },
+        "DocumentSender": {
+            "type": "object",
+            "properties": {
+                "sender-full-name": {
+                    "type": "string"
+                }
+            }
+        },
+        "Taxpayer": {
+            "type": "object",
+            "properties": {
+                "taxpayer-chief-fio": {
+                    "type": "string"
+                },
+                "representative": {
+                    "$ref": "#/definitions/Representative"
+                },
+                "taxpayer-phone": {
+                    "type": "string"
+                },
+                "taxpayer-okved": {
+                    "type": "string"
+                },
+                "taxpayer-full-name": {
+                    "type": "string"
+                }
+            }
+        },
+        "Representative": {
+            "type": "object",
+            "properties": {
+                "representative-document": {
+                    "type": "string"
+                },
+                "passport": {
+                    "$ref": "#/definitions/PassportInfo"
+                }
+            }
+        },
+        "PassportInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "series-number": {
+                    "type": "string"
+                },
+                "issued-date": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "issued-by": {
+                    "type": "string"
+                }
+            }
+        },
+        "UsnServiceContractInfo[UsnDataV2]": {
+            "type": "object",
+            "properties": {
+                "period": {
+                    "$ref": "#/definitions/UsnFormatPeriod"
+                },
+                "additional-org-info": {
+                    "$ref": "#/definitions/AdditionalClientInfo"
+                },
+                "data": {
+                    "$ref": "#/definitions/UsnDataV2"
+                }
+            }
+        },
+        "UsnDataV2": {
+            "type": "object",
+            "properties": {
+                "nom-korr": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "po-mestu": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "priz-np": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "ubyt-pred": {
+                    "type": "string"
+                },
+                "ischisl-min": {
+                    "type": "string"
+                },
+                "za-kv": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "za-pg": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "zaem": {
+                    "$ref": "#/definitions/PeriodIndicators"
+                },
+                "za-nal-per": {
+                    "$ref": "#/definitions/TaxPeriodIndicators"
+                }
+            }
+        },
+        "PeriodIndicators": {
+            "type": "object",
+            "properties": {
+                "oktmo": {
+                    "type": "string"
+                },
+                "av-pu": {
+                    "type": "string"
+                },
+                "dohod": {
+                    "type": "string"
+                },
+                "rashod": {
+                    "type": "string"
+                },
+                "nal-baza-ubyt": {
+                    "type": "string"
+                },
+                "stavka": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "umen-nal": {
+                    "type": "string"
+                },
+                "rasch-torg-sbor": {
+                    "$ref": "#/definitions/MerchantTax"
+                }
+            }
+        },
+        "TaxPeriodIndicators": {
+            "type": "object",
+            "properties": {
+                "nal-pumin": {
+                    "type": "string"
+                },
+                "oktmo": {
+                    "type": "string"
+                },
+                "av-pu": {
+                    "type": "string"
+                },
+                "dohod": {
+                    "type": "string"
+                },
+                "rashod": {
+                    "type": "string"
+                },
+                "nal-baza-ubyt": {
+                    "type": "string"
+                },
+                "stavka": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "umen-nal": {
+                    "type": "string"
+                },
+                "rasch-torg-sbor": {
+                    "$ref": "#/definitions/MerchantTax"
+                }
+            }
+        },
+        "MerchantTax": {
+            "type": "object",
+            "properties": {
+                "dohod": {
+                    "type": "string"
+                },
+                "ischisl": {
+                    "type": "string"
+                },
+                "torg-sbor-fact": {
+                    "type": "string"
+                },
+                "torg-sbor-umen": {
                     "type": "string"
                 }
             }

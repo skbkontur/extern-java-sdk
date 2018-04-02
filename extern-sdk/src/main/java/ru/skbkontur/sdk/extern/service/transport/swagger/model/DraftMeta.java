@@ -37,8 +37,8 @@ public class DraftMeta {
   @SerializedName("recipient")
   private RecipientInfo recipient = null;
 
-  @SerializedName("organization")
-  private AccountInfo organization = null;
+  @SerializedName("payer")
+  private AccountInfo payer = null;
 
   public DraftMeta sender(Sender sender) {
     this.sender = sender;
@@ -76,22 +76,22 @@ public class DraftMeta {
     this.recipient = recipient;
   }
 
-  public DraftMeta organization(AccountInfo organization) {
-    this.organization = organization;
+  public DraftMeta payer(AccountInfo payer) {
+    this.payer = payer;
     return this;
   }
 
    /**
-   * Get organization
-   * @return organization
+   * Get payer
+   * @return payer
   **/
   @ApiModelProperty(required = true, value = "")
-  public AccountInfo getOrganization() {
-    return organization;
+  public AccountInfo getPayer() {
+    return payer;
   }
 
-  public void setOrganization(AccountInfo organization) {
-    this.organization = organization;
+  public void setPayer(AccountInfo payer) {
+    this.payer = payer;
   }
 
 
@@ -106,12 +106,12 @@ public class DraftMeta {
     DraftMeta draftMeta = (DraftMeta) o;
     return Objects.equals(this.sender, draftMeta.sender) &&
         Objects.equals(this.recipient, draftMeta.recipient) &&
-        Objects.equals(this.organization, draftMeta.organization);
+        Objects.equals(this.payer, draftMeta.payer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sender, recipient, organization);
+    return Objects.hash(sender, recipient, payer);
   }
 
 
@@ -122,7 +122,7 @@ public class DraftMeta {
     
     sb.append("    sender: ").append(toIndentedString(sender)).append("\n");
     sb.append("    recipient: ").append(toIndentedString(recipient)).append("\n");
-    sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
+    sb.append("    payer: ").append(toIndentedString(payer)).append("\n");
     sb.append("}");
     return sb.toString();
   }

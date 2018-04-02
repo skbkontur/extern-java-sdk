@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import ru.skbkontur.sdk.extern.model.Account;
 import ru.skbkontur.sdk.extern.model.AccountList;
+import ru.skbkontur.sdk.extern.model.CertificateList;
 import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.Document;
@@ -38,6 +39,8 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentica
 import ru.skbkontur.sdk.extern.model.DraftMeta;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.model.Signature;
+import ru.skbkontur.sdk.extern.model.UsnServiceContractInfo;
+import ru.skbkontur.sdk.extern.model.UsnServiceContractInfoV2;
 import ru.skbkontur.sdk.extern.providers.ServiceError.ErrorCode;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
@@ -101,6 +104,9 @@ public class QueryContext<R> implements Serializable {
 	public static final String CREATED_FROM = "createdFrom";
 	public static final String CREATED_TO = "createdTo";
 	public static final String TYPE = "type";
+	public static final String CERTIFICATE_LIST = "certificateList";
+	public static final String USN_SERVICE_CONTRACT_INFO = "usnServiceContractInfo";
+	public static final String USN_SERVICE_CONTRACT_INFO_V2 = "usnServiceContractInfoV2";
 	public static final String NOTHING = "nothing";
 	public static final String OBJECT = "object";
 
@@ -252,6 +258,10 @@ public class QueryContext<R> implements Serializable {
 
 	public UUID getDraftId() {
 		return (UUID) params.get(DRAFT_ID);
+	}
+
+	public QueryContext<R> setDraftId(UUID draftId) {
+		return set(DRAFT_ID, draftId);
 	}
 
 	public QueryContext<R> setDraftId(String draftId) {
@@ -586,10 +596,34 @@ public class QueryContext<R> implements Serializable {
 		return (String)params.get(TYPE); 
 	};
 	
-	public QueryContext<R>  setType(String type) { 
+	public QueryContext<R> setType(String type) { 
 		return set(TYPE, type);
 	};
 	
+	public CertificateList getCertificateList() { 
+		return (CertificateList)params.get(CERTIFICATE_LIST); 
+	};
+	
+	public QueryContext<R> setCertificateList(CertificateList certificateList) { 
+		return set(CERTIFICATE_LIST, certificateList);
+	};
+	
+	public UsnServiceContractInfo getUsnServiceContractInfo() { 
+		return (UsnServiceContractInfo)params.get(USN_SERVICE_CONTRACT_INFO); 
+	};
+	
+	public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) { 
+		return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
+	};
+	
+	public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() { 
+		return (UsnServiceContractInfoV2)params.get(USN_SERVICE_CONTRACT_INFO_V2); 
+	};
+
+	public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) { 
+		return set(USN_SERVICE_CONTRACT_INFO_V2, usnServiceContractInfoV2);
+	};
+
 	public QueryContext<R> set(String name, Object val) {
 		if (val != null) params.put(name, val);	else params.remove(name);
 		

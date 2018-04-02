@@ -15,63 +15,63 @@ import ru.skbkontur.sdk.extern.model.Recipient;
  */
 public class DraftMetaDto {
 
-	public DraftMetaDto() {
-	}
-
 	public ru.skbkontur.sdk.extern.model.DraftMeta fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta dto) {
-		ru.skbkontur.sdk.extern.model.DraftMeta draftMeta = null;
-		if (dto != null) {
-			draftMeta = new ru.skbkontur.sdk.extern.model.DraftMeta();
 
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender dtoSender = dto.getSender();
-			
-			ru.skbkontur.sdk.extern.model.Sender sender = new ru.skbkontur.sdk.extern.model.Sender();
-			sender.setInn(dtoSender.getInn());
-			sender.setKpp(dtoSender.getKpp());
-			sender.setCertificate(dtoSender.getCertificate() == null ? null : dtoSender.getCertificate().getContent());
-			sender.setIpaddress(dto.getSender().getIpaddress());
-			
-			draftMeta.setSender(sender);
+		if (dto == null) return null;
 
-			draftMeta.setRecipient(createRecipient(dto.getRecipient()));
+		ru.skbkontur.sdk.extern.model.DraftMeta draftMeta = new ru.skbkontur.sdk.extern.model.DraftMeta();
 
-			draftMeta.setOrganization(
-				new Organization(dto.getOrganization().getInn(), dto.getOrganization().getOrganization() == null ? null : dto.getOrganization().getOrganization().getKpp())
-			);
-		}
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender dtoSender = dto.getSender();
+
+		ru.skbkontur.sdk.extern.model.Sender sender = new ru.skbkontur.sdk.extern.model.Sender();
+		sender.setInn(dtoSender.getInn());
+		sender.setKpp(dtoSender.getKpp());
+		sender.setCertificate(dtoSender.getCertificate() == null ? null : dtoSender.getCertificate().getContent());
+		sender.setIpaddress(dto.getSender().getIpaddress());
+
+		draftMeta.setSender(sender);
+
+		draftMeta.setRecipient(createRecipient(dto.getRecipient()));
+
+		draftMeta.setPayer(
+			new Organization(dto.getPayer().getInn(), dto.getPayer().getOrganization() == null ? null : dto.getPayer().getOrganization().getKpp())
+		);
+
 		return draftMeta;
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta toDto(ru.skbkontur.sdk.extern.model.DraftMeta draftMeta) {
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta dtoDraftMeta = null;
-		if (draftMeta != null) {
-			dtoDraftMeta = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta();
 
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender dtoSender = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender();
-			dtoSender.setInn(draftMeta.getSender().getInn());
-			if (draftMeta.getSender().getKpp() != null && !draftMeta.getSender().getKpp().isEmpty()) {
-				dtoSender.setKpp(draftMeta.getSender().getKpp());
-			}
-			
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate dtoCertificate = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate();
-			
-			dtoSender.setCertificate(dtoCertificate.content(draftMeta.getSender().getCertificate()));
-			
-			dtoSender.setIpaddress(draftMeta.getSender().getIpaddress());
+		if (draftMeta == null) return null;
 
-			dtoDraftMeta.setSender(dtoSender);
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta dtoDraftMeta
+			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta();
 
-			dtoDraftMeta.setRecipient(createRecipentInfo(draftMeta.getRecipient()));
-
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountInfo dtoAccountInfo = new ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountInfo();
-			dtoAccountInfo.setInn(draftMeta.getOrganization().getInn());
-
-			ru.skbkontur.sdk.extern.service.transport.swagger.model.OrganizationInfo dtoOrganizationInfo = new ru.skbkontur.sdk.extern.service.transport.swagger.model.OrganizationInfo();
-			dtoOrganizationInfo.setKpp(draftMeta.getOrganization().getKpp());
-			dtoAccountInfo.setOrganization(dtoOrganizationInfo);
-
-			dtoDraftMeta.setOrganization(dtoAccountInfo);
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender dtoSender = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Sender();
+		dtoSender.setInn(draftMeta.getSender().getInn());
+		if (draftMeta.getSender().getKpp() != null && !draftMeta.getSender().getKpp().isEmpty()) {
+			dtoSender.setKpp(draftMeta.getSender().getKpp());
 		}
+
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate dtoCertificate = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Certificate();
+
+		dtoSender.setCertificate(dtoCertificate.content(draftMeta.getSender().getCertificate()));
+
+		dtoSender.setIpaddress(draftMeta.getSender().getIpaddress());
+
+		dtoDraftMeta.setSender(dtoSender);
+
+		dtoDraftMeta.setRecipient(createRecipentInfo(draftMeta.getRecipient()));
+
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountInfo dtoAccountInfo = new ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountInfo();
+		dtoAccountInfo.setInn(draftMeta.getPayer().getInn());
+
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.OrganizationInfo dtoOrganizationInfo = new ru.skbkontur.sdk.extern.service.transport.swagger.model.OrganizationInfo();
+		dtoOrganizationInfo.setKpp(draftMeta.getPayer().getKpp());
+		dtoAccountInfo.setOrganization(dtoOrganizationInfo);
+
+		dtoDraftMeta.setPayer(dtoAccountInfo);
+
 		return dtoDraftMeta;
 	}
 

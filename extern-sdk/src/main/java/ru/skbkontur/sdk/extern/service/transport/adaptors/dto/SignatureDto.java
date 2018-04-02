@@ -16,31 +16,35 @@ public class SignatureDto {
 	public SignatureDto() {
 	}
 
-	public ru.skbkontur.sdk.extern.model.Signature fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature signatureDto) {
-		ru.skbkontur.sdk.extern.model.Signature signature = null;
-		if (signatureDto != null) {
-			signature = new ru.skbkontur.sdk.extern.model.Signature();
+	public ru.skbkontur.sdk.extern.model.Signature fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature dto) {
 
-			LinkDto linkDto = new LinkDto();
+		if (dto == null) return null;
 
-			signature.setContentLink(linkDto.fromDto(signatureDto.getContentLink()));
-			signature.setId(signatureDto.getId());
-			signature.setLinks(signatureDto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
-		}
+		ru.skbkontur.sdk.extern.model.Signature signature
+			= new ru.skbkontur.sdk.extern.model.Signature();
+
+		LinkDto linkDto = new LinkDto();
+
+		signature.setContentLink(linkDto.fromDto(dto.getContentLink()));
+		signature.setId(dto.getId());
+		signature.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+
 		return signature;
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature toDto(ru.skbkontur.sdk.extern.model.Signature signature) {
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature dto = null;
-		if (signature != null) {
-			LinkDto linkDto = new LinkDto();
-			dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature();
-			dto.setContentLink(linkDto.toDto(signature.getContentLink()));
-			dto.setId(signature.getId());
-			if (signature.getLinks() != null) {
-				dto.setLinks(signature.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
-			}
+
+		if (signature == null) return null;
+
+		LinkDto linkDto = new LinkDto();
+		ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature dto
+			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.Signature();
+		dto.setContentLink(linkDto.toDto(signature.getContentLink()));
+		dto.setId(signature.getId());
+		if (signature.getLinks() != null) {
+			dto.setLinks(signature.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
 		}
+
 		return dto;
 	}
 }

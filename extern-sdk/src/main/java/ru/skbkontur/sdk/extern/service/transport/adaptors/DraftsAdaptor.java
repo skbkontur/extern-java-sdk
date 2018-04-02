@@ -11,7 +11,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.DraftDocument;
-import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_ID;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_META;
@@ -30,6 +29,8 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT_STRING;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOWS;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DRAFT_DOCUMENT;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.UsnServiceContractInfoDto;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.UsnServiceContractInfoV2Dto;
 
 /**
  *
@@ -79,7 +80,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			return cxt.setResult(draftId,DRAFT_ID);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -107,7 +108,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -128,7 +129,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			return cxt.setResult(null,NOTHING);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -155,7 +156,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -183,7 +184,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -208,7 +209,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -237,7 +238,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -270,7 +271,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -291,7 +292,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			return cxt.setResult(null, NOTHING);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -319,7 +320,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			).setDocumentId(cxt.getDraftDocument().getId());
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -351,7 +352,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			).setDocumentId(cxt.getDraftDocument().getId());
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -370,16 +371,16 @@ public class DraftsAdaptor extends BaseAdaptor {
 			
 			return cxt.setResult(
 				transport(cxt)
-					.draftDocumentsGetDocumentPrint(
+					.draftDocumentsGetDocumentPrintAsyncWithHttpInfo(
 						cxt.getAccountProvider().accountId(), 
 						cxt.getDraftId(), 
 						cxt.getDocumentId()
-					),
+					).getData(),
 				CONTENT_STRING
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -414,7 +415,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 				.setDocumentId(cxt.getDraftDocument().getId());
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -441,7 +442,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -468,7 +469,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			return cxt.setResult(null, NOTHING);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -494,7 +495,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -521,7 +522,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -548,7 +549,63 @@ public class DraftsAdaptor extends BaseAdaptor {
 			return cxt.setResult(null, NOTHING);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+		}
+	}
+	
+	/**
+	 * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
+	 *
+	 * Create an USN declaration, version 1
+	 *
+	 * @param cxt a context (required: draftId,documentId)
+	 * 
+	 * @return QueryContext&lt;Void&gt;
+	 */
+	public QueryContext<Void> createUSN1(QueryContext<Void> cxt) {
+		try {
+			if (cxt.isFail())	return cxt;
+			
+			transport(cxt)
+				.draftDocumentsBuildContentFromFormatWithHttpInfo(
+					cxt.getAccountProvider().accountId(), 
+					cxt.getDraftId(),
+					cxt.getDocumentId(),
+					new UsnServiceContractInfoDto().toDto(cxt.getUsnServiceContractInfo())
+				);
+			
+			return cxt.setResult(null, NOTHING);
+		}
+		catch (ApiException x) {
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+		}
+	}
+	
+	/**
+	 * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
+	 *
+	 * Create an USN declaration, version 2
+	 *
+	 * @param cxt a context (required: draftId,documentId)
+	 * 
+	 * @return QueryContext&lt;Void&gt;
+	 */
+	public QueryContext<Void> createUSN2(QueryContext<Void> cxt) {
+		try {
+			if (cxt.isFail())	return cxt;
+			
+			transport(cxt)
+				.draftDocumentsBuildContentFromFormat_0WithHttpInfo(
+					cxt.getAccountProvider().accountId(), 
+					cxt.getDraftId(),
+					cxt.getDocumentId(),
+					new UsnServiceContractInfoV2Dto().toDto(cxt.getUsnServiceContractInfoV2())
+				);
+			
+			return cxt.setResult(null, NOTHING);
+		}
+		catch (ApiException x) {
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 	

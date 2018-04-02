@@ -35,6 +35,10 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 		this.authPrefix = authPrefix;
 	}
 
+	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {
+		this(authBaseUriProvider,loginAndPasswordProvider,apiKeyProvider,DEFAULT_AUTH_PREFIX);
+	}
+
 	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
 		this.apiKeyProvider = apiKeyProvider;
 	}

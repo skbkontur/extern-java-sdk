@@ -19,15 +19,19 @@ import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
+import ru.skbkontur.sdk.extern.providers.auth.AuthenticationProviderByPass;
 import ru.skbkontur.sdk.extern.service.AccountService;
+import ru.skbkontur.sdk.extern.service.CertificateService;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
 import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.service.impl.AccountServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.BaseService;
+import ru.skbkontur.sdk.extern.service.impl.CertificateServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DocflowServiceImpl;
 import ru.skbkontur.sdk.extern.service.impl.DraftServiceImpl;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountsAdaptor;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.CertificatesAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
@@ -49,6 +53,8 @@ public class ExternEngine implements AuthenticationListener {
 	
 	private DocflowService docflowService;
 	
+	private CertificateService certificateService;
+	
 	private ServiceBaseUriProvider serviceBaseUriProvider;
 	
 	private EngineAuthenticationProvider authenticationProvider;
@@ -61,10 +67,18 @@ public class ExternEngine implements AuthenticationListener {
 	
 	private String sessionId;
 	
+	public ExternEngine() throws SDKException {
+		env = new Environment();
+		env.configuration = new Configuration();
+		this.sessionId = null;
+		configure();
+	}
+
 	public ExternEngine(Configuration configuration) throws SDKException {
 		env = new Environment();
 		env.configuration = configuration;
 		this.sessionId = null;
+		configure();
 	}
 
 	public Environment getEnvironment() {
@@ -78,6 +92,7 @@ public class ExternEngine implements AuthenticationListener {
 	public ExternEngine(String configPath) throws SDKException {
 		// loads config data from the resourse file: extern-sdk-config.json
 		this(loadConfiguration(configPath));
+		configure();
 	}
 
 	public AccountService getAccountService() {
@@ -104,6 +119,10 @@ public class ExternEngine implements AuthenticationListener {
 		this.docflowService = docflowService;
 	}
 	
+	public CertificateService getCertificateService() {
+		return certificateService;
+	}
+	
 	public void setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
 		this.serviceBaseUriProvider = serviceBaseUriProvider;
 	}
@@ -117,7 +136,7 @@ public class ExternEngine implements AuthenticationListener {
 			authenticationProvider.addAuthenticationListener(this);
 			this.authenticationProvider = new EngineAuthenticationProvider(authenticationProvider);
 		}
-		else if (authenticationProvider != null) {
+		else if (this.authenticationProvider != null) {
 			AuthenticationProvider originAuthenticationProvider = this.authenticationProvider.getOriginAuthenticationProvider();
 			originAuthenticationProvider.removeAuthenticationListener(this);
 		}
@@ -173,18 +192,23 @@ public class ExternEngine implements AuthenticationListener {
 	public void configureServices() throws SDKException {
 		AccountServiceImpl accSrv = new AccountServiceImpl();
 		configureService(accSrv);
-		accSrv.setAccountApi(new AccountAdaptor());
+		accSrv.setApi(new AccountsAdaptor());
 		this.accountService = accSrv;
 		
 		DraftServiceImpl draftSrv = new DraftServiceImpl();
 		configureService(draftSrv);
-		draftSrv.setDraftsApi(new DraftsAdaptor());
+		draftSrv.setApi(new DraftsAdaptor());
 		this.draftService = draftSrv;
 		
 		DocflowServiceImpl docflowSrv = new DocflowServiceImpl();
 		configureService(docflowSrv);
-		docflowSrv.setDraftsApi(new DocflowsAdaptor());
+		docflowSrv.setApi(new DocflowsAdaptor());
 		this.docflowService = docflowSrv;
+
+		CertificateServiceImpl certificateSrvice = new CertificateServiceImpl();
+		configureService(certificateSrvice);
+		certificateSrvice.setApi(new CertificatesAdaptor());
+		this.certificateService = certificateSrvice;
 	}
 	
 	private void configureService(BaseService baseService) {
@@ -238,6 +262,28 @@ public class ExternEngine implements AuthenticationListener {
 		@Override
 		public void raiseUnauthenticated(ServiceError x) {
 			authenticationProvider.raiseUnauthenticated(x);
+		}
+	}
+	
+	private void configure() {
+		Configuration c = env.configuration;
+		if (c != null) {
+			
+			if (c.accountId() != null && c.getAuthPrefix() != null) {
+				setAccountProvider(c);
+			}
+			
+			if (c.getApiKey() != null) {
+				setApiKeyProvider(c);
+			}
+			
+			if (c.getServiceBaseUri() != null) {
+				setServiceBaseUriProvider(c);
+			}
+			
+			if (c.getUri()!=null && c.getLogin()!=null && c.getPass()!=null && c.getApiKey()!=null && c.getAuthPrefix()!=null) {
+				setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c, c.getAuthPrefix()));
+			}
 		}
 	}
 }

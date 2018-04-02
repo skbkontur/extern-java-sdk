@@ -15,6 +15,9 @@ import ru.skbkontur.sdk.extern.model.AccountList;
 public class AccountListDto {
 
 	public AccountList fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountList dto) {
+		
+		if (dto == null) return null;
+		
 		AccountList accountList = new AccountList();
 		
 		if (dto.getAccounts() != null && !dto.getAccounts().isEmpty()) {
@@ -29,6 +32,9 @@ public class AccountListDto {
 	}
 
 	public ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountList toDto(AccountList accountList) {
+		
+		if (accountList == null) return null;
+		
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountList dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountList();
 		
 		if (accountList.getAccounts() != null && !accountList.getAccounts().isEmpty()) {

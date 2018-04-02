@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
+import ru.skbkontur.sdk.extern.providers.CredentialProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.providers.ServiceUserIdProvider;
@@ -25,7 +25,6 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.NOTHING;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.OBJECT;
 
 /**
  *
@@ -39,7 +38,6 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 	private static final String ID = "id";
 	private static final String PHONE = "phone";
 	private static final String TIMESTAMP = "timestamp";
-	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 
 	private final ApiClient apiClient;
 	private ApiKeyProvider apiKeyProvider;
@@ -49,7 +47,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 	private ServiceUserIdProvider serviceUserIdProvider;
 	private String authPrefix;
 	private String timestamp;
-	private Credential credential;
+	private CredentialProvider credentialProvider;
 
 	public TrustedAuthentication(String authPrefix) {
 		this.apiClient = new ApiClient();
@@ -134,16 +132,16 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 		this.authPrefix = authPrefix;
 	}
 
-	public Credential getCredential() {
-		return credential;
+	public CredentialProvider getCredentialProvider() {
+		return credentialProvider;
 	}
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
+	public void setCredentialProvider(CredentialProvider credentialProvider) {
+		this.credentialProvider = credentialProvider;
 	}
 
-	public TrustedAuthentication credential(Credential credential) {
-		this.credential = credential;
+	public TrustedAuthentication credentialProvider(CredentialProvider credentialProvider) {
+		this.credentialProvider = credentialProvider;
 		return this;
 	}
 
@@ -205,9 +203,9 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 			queryParams.put(APIKEY, apiKey);
 			identityData.append(APIKEY).append("=").append(apiKey).append(EOL);
 
-			if (credential != null) {
-				queryParams.put(credential.getName(), credential.getValue());
-				identityData.append(ID).append("=").append(credential.getValue()).append(EOL);
+			if (credentialProvider != null) {
+				queryParams.put(credentialProvider.getCredential().getName(), credentialProvider.getCredential().getValue());
+				identityData.append(ID).append("=").append(credentialProvider.getCredential().getValue()).append(EOL);
 			}
 
 			queryParams.put(TIMESTAMP, timestamp);

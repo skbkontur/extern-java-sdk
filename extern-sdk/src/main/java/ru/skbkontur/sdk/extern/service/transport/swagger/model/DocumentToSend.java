@@ -39,6 +39,9 @@ public class DocumentToSend {
   @SerializedName("content")
   private byte[] content = null;
 
+  @SerializedName("print-form-content")
+  private byte[] printFormContent = null;
+
   @SerializedName("filename")
   private String filename = null;
 
@@ -85,6 +88,24 @@ public class DocumentToSend {
 
   public void setContent(byte[] content) {
     this.content = content;
+  }
+
+  public DocumentToSend printFormContent(byte[] printFormContent) {
+    this.printFormContent = printFormContent;
+    return this;
+  }
+
+   /**
+   * Get printFormContent
+   * @return printFormContent
+  **/
+  @ApiModelProperty(value = "")
+  public byte[] getPrintFormContent() {
+    return printFormContent;
+  }
+
+  public void setPrintFormContent(byte[] printFormContent) {
+    this.printFormContent = printFormContent;
   }
 
   public DocumentToSend filename(String filename) {
@@ -179,6 +200,7 @@ public class DocumentToSend {
     DocumentToSend documentToSend = (DocumentToSend) o;
     return Objects.equals(this.id, documentToSend.id) &&
         Objects.equals(this.content, documentToSend.content) &&
+        Objects.equals(this.printFormContent, documentToSend.printFormContent) &&
         Objects.equals(this.filename, documentToSend.filename) &&
         Objects.equals(this.signature, documentToSend.signature) &&
         Objects.equals(this.senderIp, documentToSend.senderIp) &&
@@ -187,7 +209,7 @@ public class DocumentToSend {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, content, filename, signature, senderIp, links);
+    return Objects.hash(id, content, printFormContent, filename, signature, senderIp, links);
   }
 
 
@@ -198,6 +220,7 @@ public class DocumentToSend {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
+    sb.append("    printFormContent: ").append(toIndentedString(printFormContent)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
     sb.append("    senderIp: ").append(toIndentedString(senderIp)).append("\n");

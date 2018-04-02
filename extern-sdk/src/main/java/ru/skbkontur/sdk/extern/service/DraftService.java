@@ -18,6 +18,8 @@ import ru.skbkontur.sdk.extern.model.Organization;
 import ru.skbkontur.sdk.extern.model.PrepareResult;
 import ru.skbkontur.sdk.extern.model.Recipient;
 import ru.skbkontur.sdk.extern.model.Sender;
+import ru.skbkontur.sdk.extern.model.UsnServiceContractInfo;
+import ru.skbkontur.sdk.extern.model.UsnServiceContractInfoV2;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
@@ -80,7 +82,7 @@ public interface DraftService {
 	public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
 	public QueryContext<String> printDocument(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(String draftId, DocumentContents documentContents);
+	public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
 	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
 	
 	public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
@@ -97,4 +99,10 @@ public interface DraftService {
 
 	public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
 	public QueryContext<Void> updateSignature(QueryContext<?> cxt);
+
+	public CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
+	public QueryContext<Void> createUSN1(QueryContext<?> cxt);
+
+	public CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
+	public QueryContext<Void> createUSN2(QueryContext<?> cxt);
 }
