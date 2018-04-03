@@ -22,7 +22,7 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 
 	public ApiClient() {
 		super();
-		setUserAgent(UserAgentService.detectUserAgent());
+		setUserAgent(UserAgentService.USER_AGENT_STRING);
 	}
 
 	/**

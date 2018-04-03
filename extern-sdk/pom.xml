@@ -68,6 +68,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${parent.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
 

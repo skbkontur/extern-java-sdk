@@ -3,16 +3,20 @@ package ru.skbkontur.sdk.extern.service.transport.invoker;
 
 public class UserAgentService {
 
-    public static String detectUserAgent() {
-        return getLanguage() + "/" + getVersion();
-    }
+    public static final String SDK = "java-sdk";
 
-    private static String getVersion() {
-        return System.getProperty("java.version");
-    }
+    public static final String SDK_VERSION = getSdkVersion();
 
-    private static String getLanguage() {
-        return "java";
+    public static final String SDK_VERSION_UNDEFINED = "undefined";
+
+    public static final String USER_AGENT_STRING = SDK + "/" + SDK_VERSION;
+
+    private static String getSdkVersion() {
+        String implementationVersion = UserAgentService.class.getPackage().getImplementationVersion();
+        if (implementationVersion == null) {
+            implementationVersion = SDK_VERSION_UNDEFINED;
+        }
+        return implementationVersion;
     }
 
 }
