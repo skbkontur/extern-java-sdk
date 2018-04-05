@@ -32,7 +32,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 		this.authBaseUriProvider = authBaseUriProvider;
 		this.loginAndPasswordProvider = loginAndPasswordProvider;
 		this.apiKeyProvider = apiKeyProvider;
-		this.authPrefix = authPrefix;
+		this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
 	}
 
 	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {

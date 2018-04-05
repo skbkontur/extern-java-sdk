@@ -281,8 +281,8 @@ public class ExternEngine implements AuthenticationListener {
 				setServiceBaseUriProvider(c);
 			}
 			
-			if (c.getUri()!=null && c.getLogin()!=null && c.getPass()!=null && c.getApiKey()!=null && c.getAuthPrefix()!=null) {
-				setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c, c.getAuthPrefix()));
+			if (c.getUri()!=null && c.getLogin()!=null && c.getPass()!=null && c.getApiKey()!=null) {
+				setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c));
 			}
 		}
 	}

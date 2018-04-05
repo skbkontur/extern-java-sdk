@@ -51,7 +51,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
 	public TrustedAuthentication(String authPrefix) {
 		this.apiClient = new ApiClient();
-		this.authPrefix = authPrefix;
+		this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
 	}
 
 	public TrustedAuthentication() {
