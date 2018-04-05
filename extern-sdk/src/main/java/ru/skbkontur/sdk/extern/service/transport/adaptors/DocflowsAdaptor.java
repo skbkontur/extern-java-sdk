@@ -389,10 +389,11 @@ public class DocflowsAdaptor extends BaseAdaptor {
 	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
 	 *
 	 * @param cxt QueryContext&lt;DocumentToSend&gt; context
-	 * @return QueryContext&lt;Signature&gt; context
+	 * 
+	 * @return QueryContext&lt;DocumentToSend&gt; context
 	 */
-	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<DocumentToSend> cxt) {
-/*		try {
+	public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<DocumentToSend> cxt) {
+		try {
 			if (cxt.isFail()) {
 				return cxt;
 			}
@@ -406,16 +407,15 @@ public class DocflowsAdaptor extends BaseAdaptor {
 								cxt.getDocflowId(),
 								cxt.getDocumentType(),
 								cxt.getDocumentId(),
-								cxt.getThumbprint()
+								cxt.getCertificate()
 							)
 					),
 				DOCUMENT_TO_SEND
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
-		}*/
-		return null;
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+		}
 	}
 
 	/**
@@ -452,7 +452,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
-	public QueryContext<List<DocumentToSend>> lookupReplies(QueryContext<List<DocumentToSend>> cxt) {
+	public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
@@ -460,11 +460,15 @@ public class DocflowsAdaptor extends BaseAdaptor {
 
 			Docflow docflow = cxt.getDocflow();
 			if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
+				byte[] x509Base64 = cxt.getCertificate();
+				if (x509Base64 == null) {
+					return cxt.setServiceError("A signer certificate is absent in the context.");
+				}
 				prepareTransport(cxt);
 				List<DocumentToSend> replies = new ArrayList<>();
 				for (Link l : docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
-						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map) submitHttpRequest(l.getHref(), "GET", null, Object.class));
+						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map) submitHttpRequest(l.getHref()+"/generate", "POST", x509Base64, Object.class));
 						replies.add(documentToSend);
 					}
 				}
@@ -479,7 +483,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
-	public QueryContext<Docflow> createReply(QueryContext<Docflow> cxt) {
+	public QueryContext<Docflow> sendReply(QueryContext<Docflow> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
@@ -500,12 +504,12 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
 			DocflowDto docflowDto = new DocflowDto();
 
-			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref(), "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
+			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref()+"/send", "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
 
 			return cxt.setResult(docflow, DOCFLOW);
 		}
 		catch (ru.skbkontur.sdk.extern.service.transport.invoker.ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(x);
 		}
 	}
 

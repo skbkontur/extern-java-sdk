@@ -170,19 +170,19 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<DocumentToSend>> getDocumentTypeReplyAsync(String docflowId, String documentType, String documentId) {
+	public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, byte[] x509Base64) {
 		QueryContext<DocumentToSend> cxt = createQueryContext(EN_SGN);
 		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
 			.setDocumentId(documentId)
-			.applyAsync(api::getDocumentTypeReply);
+			.applyAsync(api::generateDocumentTypeReply);
 	}
 
 	@Override
-	public QueryContext<DocumentToSend> getDocumentTypeReply(QueryContext<?> parent) {
+	public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> parent) {
 		QueryContext<DocumentToSend> cxt = createQueryContext(parent, EN_SGN);
-		return cxt.apply(api::getDocumentTypeReply);
+		return cxt.apply(api::generateDocumentTypeReply);
 	}
 
 	@Override
@@ -203,29 +203,29 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 	}
 	
 	@Override
-	public CompletableFuture<QueryContext<List<DocumentToSend>>> getRepliesAsync(Docflow docflow) {
+	public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow) {
 		QueryContext<List<DocumentToSend>> cxt = createQueryContext(EN_DFW);
 		return cxt
 			.setDocflow(docflow)
-			.applyAsync(api::lookupReplies);
+			.applyAsync(api::generateReplies);
 	}
 
 	@Override
-	public QueryContext<List<DocumentToSend>> getReplies(QueryContext<?> parent) {
+	public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<?> parent) {
 		QueryContext<List<DocumentToSend>> cxt = createQueryContext(parent, EN_DFW);
-		return cxt.apply(api::lookupReplies);
+		return cxt.apply(api::generateReplies);
 	}
 
 	@Override
 	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow) {
 		QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
-		return cxt.applyAsync(api::createReply);
+		return cxt.applyAsync(api::sendReply);
 	}
 	
 	@Override
-	public QueryContext<Docflow> createReply(QueryContext<?> parent) {
+	public QueryContext<Docflow> sendReply(QueryContext<?> parent) {
 		QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-		return cxt.apply(api::createReply);
+		return cxt.apply(api::sendReply);
 	}
 
 	@Override

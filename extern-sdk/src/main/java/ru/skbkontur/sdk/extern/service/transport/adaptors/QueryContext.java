@@ -104,6 +104,7 @@ public class QueryContext<R> implements Serializable {
 	public static final String CREATED_FROM = "createdFrom";
 	public static final String CREATED_TO = "createdTo";
 	public static final String TYPE = "type";
+	public static final String CERTIFICATE = "certificate";
 	public static final String CERTIFICATE_LIST = "certificateList";
 	public static final String USN_SERVICE_CONTRACT_INFO = "usnServiceContractInfo";
 	public static final String USN_SERVICE_CONTRACT_INFO_V2 = "usnServiceContractInfoV2";
@@ -598,6 +599,14 @@ public class QueryContext<R> implements Serializable {
 	
 	public QueryContext<R> setType(String type) { 
 		return set(TYPE, type);
+	};
+	
+	public byte[] getCertificate() { 
+		return (byte[])params.get(CERTIFICATE); 
+	};
+	
+	public QueryContext<R> setCertificate(byte[] certificate) { 
+		return set(CERTIFICATE, certificate);
 	};
 	
 	public CertificateList getCertificateList() { 
