@@ -68,6 +68,12 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Title>${artifactId}</Implementation-Title>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
 

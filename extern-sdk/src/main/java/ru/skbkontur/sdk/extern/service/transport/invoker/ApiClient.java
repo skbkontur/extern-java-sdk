@@ -20,6 +20,11 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
  */
 public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient {
 
+	public ApiClient() {
+		super();
+		setUserAgent(UserAgentService.USER_AGENT_STRING);
+	}
+
 	/**
 	 * Serialize the given Java object into request body according to the object's class and the request Content-Type.
 	 *
