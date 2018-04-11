@@ -11,13 +11,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.skbkontur.sdk.extern.Messages;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.CredentialProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.providers.ServiceUserIdProvider;
 import ru.skbkontur.sdk.extern.providers.SignatureKeyProvider;
-import ru.skbkontur.sdk.extern.service.SDKException;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
@@ -148,7 +149,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 	@Override
 	public QueryContext<String> sessionId() {
 		if (cryptoProvider == null)
-			return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER, 0, null, null);
+			return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null);
 		
 		apiClient.setBasePath(authBaseUriProvider.getUri());
 

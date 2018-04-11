@@ -19,6 +19,7 @@ import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT_STRING;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOW;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCFLOW_PAGE;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT;
@@ -513,6 +514,28 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
+	public QueryContext<String> print(QueryContext<String> cxt) {
+		try {
+			if (cxt.isFail()) {
+				return cxt;
+			}
+			
+			return cxt.setResult(
+				transport(cxt)
+					.docflowsGetDocumentPrintAsyncWithHttpInfo(
+						cxt.getAccountProvider().accountId(),
+						cxt.getDocflowId(),
+						cxt.getDocumentId(),
+						cxt.getContent()
+					).getData(),
+					CONTENT_STRING
+				);
+		}
+		catch (ApiException x) {
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+		}
+	}
+	
 	private DocflowsApi transport(QueryContext<?> cxt) {
 		prepareTransport(cxt);
 		return api;

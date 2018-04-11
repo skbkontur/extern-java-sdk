@@ -62,7 +62,6 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 		this.apiKey = apiKey;
 	}
 
-	@Override
 	public String getAuthPrefix() {
 		return authPrefix;
 	}

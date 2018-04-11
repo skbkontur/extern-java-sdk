@@ -28,10 +28,11 @@ import java.util.function.Supplier;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.skbkontur.sdk.extern.Messages;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_KEY_NOT_FOUND;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
 
@@ -107,7 +108,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 			
 			KeyPair key = getKeyByThumbprint(thumbprint);
 			if (key == null) {
-				return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
+				return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
 			}
 			
 			byte[] content = cxt.getContent();
@@ -117,7 +118,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 			return new QueryContext<byte[]>().setResult(signature,CONTENT);
 		}
 		catch (Asn1Exception | GeneralSecurityException | CryptoException | IOException x) {
-			return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR, x.getMessage()), x);
+			return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()), x);
 		}
 	}
 

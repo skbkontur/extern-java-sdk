@@ -262,4 +262,20 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 		QueryContext<DocflowPage> cxt = createQueryContext(parent, EN_DFW);
 		return cxt.apply(api::getDocflows);
 	}
+
+	@Override
+	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, byte[] documentContent) {
+		QueryContext<String> cxt = createQueryContext(EN_DFW);
+		return cxt
+			.setDocflowId(docflowId)
+			.setDocumentId(documentId)
+			.setContent(documentContent)
+			.applyAsync(api::print);
+	}
+
+	@Override
+	public QueryContext<String> print(QueryContext<?> parent) {
+		QueryContext<String> cxt = createQueryContext(parent, EN_DFW);
+		return cxt.apply(api::print);
+	}
 }

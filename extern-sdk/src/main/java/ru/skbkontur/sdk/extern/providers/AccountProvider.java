@@ -12,6 +12,5 @@ import java.util.UUID;
  * @author AlexS
  */
 public interface AccountProvider {
-	String getAuthPrefix();
 	UUID accountId();
 }

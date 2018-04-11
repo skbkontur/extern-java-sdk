@@ -8,3 +8,5 @@ build.cmd
 install.cmd
 extern-sdk/src/test/resources/extern-sdk-config.json
 extern-sdk-test
+/extern-sdk/nb-configuration.xml
+/extern-sdk-examples/nb-configuration.xml

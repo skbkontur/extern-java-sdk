@@ -11,6 +11,7 @@ import com.squareup.okhttp.RequestBody;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
 
@@ -56,26 +57,30 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 			throw new ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException("Content type \"" + contentType + "\" is not supported");
 		}
 	}
-
+	
 	public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class<T> dtoClass) throws ApiException {
 		try {
 			String[] localVarAuthNames = new String[]{"apiKey", "auth.sid"};
-
+			
 			List<Pair> params
 				= queryParams
 					.entrySet()
 					.stream()
 					.map(e -> new Pair(e.getKey(), e.getValue()))
 					.collect(Collectors.toList());
-
+			
 			Call call = buildCall(httpRequestUri, httpMetod, params, body, headerParams, formParams, localVarAuthNames, null);
 			
 			ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiResponse<T> resp = this.execute(call, dtoClass);
-
-			return new ApiResponse<>(resp.getStatusCode(),resp.getHeaders(),resp.getData());
+			
+			return new ApiResponse<>(resp.getStatusCode(), resp.getHeaders(), resp.getData());
 		}
 		catch (ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException x) {
 			throw new ApiException(x.getMessage(), x.getCause(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
 		}
+	}
+	
+	public void setReadTimeout(int milliseconds) {
+		getHttpClient().setReadTimeout(milliseconds, TimeUnit.MILLISECONDS);
 	}
 }

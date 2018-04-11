@@ -5,7 +5,6 @@
  */
 package ru.skbkontur.sdk.extern.providers.crypt.mscapi;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -17,12 +16,12 @@ import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.skbkontur.sdk.extern.Messages;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR_INIT;
+import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
-import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.SDKException;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_INIT;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_KEY_NOT_FOUND;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
 
@@ -41,7 +40,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			cacheSignKey = new ConcurrentHashMap<>();
 		}
 		catch (CryptoException x) {
-			throw new SDKException(C_CRYPTO_ERROR_INIT, x);
+			throw new SDKException(Messages.get(C_CRYPTO_ERROR_INIT), x);
 		}
 	}
 	
@@ -67,7 +66,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			
 			Key key = getKeyByThumbprint(thumbprint);
 			if (key == null) {
-				return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
+				return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
 			}
 			
 			PKCS7 p7p = new PKCS7(cryptoService);
@@ -77,7 +76,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			return new QueryContext<byte[]>().setResult(p7p.sign(key, null, content, false),CONTENT);
 		}
 		catch (CryptoException x) {
-			return new QueryContext<byte[]>().setServiceError(ServiceError.ErrorCode.business, MessageFormat.format(C_CRYPTO_ERROR, x.getMessage()), 0, null, null);
+			return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
 		}
 	}
 
@@ -102,13 +101,13 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			
 			Key key = getKeyByThumbprint(thumbprint);
 			if (key == null) {
-				return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
+				return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
 			}
 			
 			return new QueryContext<byte[]>().setContent(key.getX509ctx());
 		}
 		catch (CryptoException x) {
-			return new QueryContext<byte[]>().setServiceError(ServiceError.ErrorCode.business, MessageFormat.format(C_CRYPTO_ERROR,x.getMessage()), 0, null, null);
+			return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR,x.getMessage()));
 		}
 	}
 	
@@ -134,7 +133,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			
 			Key key = getKeyByThumbprint(thumbprint);
 			if (key == null) {
-				return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
+				return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
 			}
 			
 			PKCS7 p7p = new PKCS7(cryptoService);
@@ -144,7 +143,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 			return new QueryContext<byte[]>().setResult(p7p.decrypt(key, null, content),CONTENT);
 		}
 		catch (CryptoException x) {
-			return new QueryContext<byte[]>().setServiceError(ServiceError.ErrorCode.business, MessageFormat.format(C_CRYPTO_ERROR, x.getMessage()), 0, null, null);
+			return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
 		}
 	}
 	

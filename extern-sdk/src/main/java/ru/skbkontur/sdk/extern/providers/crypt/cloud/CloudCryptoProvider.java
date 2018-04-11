@@ -5,7 +5,6 @@
  */
 package ru.skbkontur.sdk.extern.providers.crypt.cloud;
 
-import java.text.MessageFormat;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ContentRequest;
 import java.util.Base64;
 import java.util.Collections;
@@ -13,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import ru.skbkontur.sdk.extern.Messages;
+import static ru.skbkontur.sdk.extern.Messages.C_NO_DECRYPT;
+import static ru.skbkontur.sdk.extern.Messages.C_NO_SIGNATURE;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
@@ -20,7 +22,6 @@ import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ApprovedDecryptResponse;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.RequestResponse;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ApprovedSignaturesResponse;
-import ru.skbkontur.sdk.extern.service.SDKException;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.Query;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
@@ -150,7 +151,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 			}
 			// проверяем наличие подписи в ответе сервиса
 			if (approvedCxt.get() == null || approvedCxt.get().getSignatures() == null || approvedCxt.get().getSignatures().isEmpty()) {
-				return cxt.setServiceError(SDKException.C_NO_SIGNATURE);
+				return cxt.setServiceError(Messages.get(C_NO_SIGNATURE));
 			}
 			// ожидается только одна подпись в ответе
 			String base64 = approvedCxt.get().getSignatures().get(0).getContent();
@@ -238,7 +239,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 			}
 			// проверяем наличие контента в ответе сервиса
 			if (approvedCxt.get() == null || approvedCxt.get().getData() == null || approvedCxt.get().getData().isEmpty()) {
-				return cxt.setServiceError(SDKException.C_NO_DECRYPT);
+				return cxt.setServiceError(Messages.get(C_NO_DECRYPT));
 			}
 			// ожидается только одна подпись в ответе
 			String base64 = approvedCxt.get().getData().get(0).getContent();
@@ -360,7 +361,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 		@Override
 		public QueryContext<T> apply(QueryContext<T> context) {
 			// запрос на отправку кода подтверждения
-			final String theRequest = MessageFormat.format(request, resultId);
+			final String theRequest = java.text.MessageFormat.format(request, resultId);
 			// заголовок запроса
 			Map<String, String> headers = new HashMap<String, String>() {
 				{

@@ -667,6 +667,10 @@ public class QueryContext<R> implements Serializable {
 			.create());
 		// устанавливаем api-key
 		acceptApiKey(apiKeyProvider.getApiKey());
+		// устанавливаем таймаут соединения
+		apiClient.setConnectTimeout(60*1000);
+		// устанавливаем таймаут чтения
+		apiClient.setReadTimeout(60*1000);
 	}
 
 	public CompletableFuture<QueryContext<R>> applyAsync(Query<R> query) {

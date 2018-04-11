@@ -10,14 +10,14 @@ import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
-import ru.skbkontur.sdk.extern.service.SDKException;
-import static ru.skbkontur.sdk.extern.service.SDKException.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
 /**
  *
  * @author AlexS
+ * 
+ * @param <T> T transport service API
  */
 public class BaseService<T> {
 	
@@ -52,13 +52,13 @@ public class BaseService<T> {
 	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
 		this.apiKeyProvider = apiKeyProvider;
 	}
-
+/*
 	public CryptoProvider getCryptoProvider() throws SDKException {
 		if (cryptoProvider == null)
-			throw new SDKException(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER);
+			throw new SDKException(Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER));
 		return cryptoProvider;
 	}
-	
+*/	
 	
 	public void setCryptoProvider(CryptoProvider cryptoProvider) {
 		this.cryptoProvider = cryptoProvider;

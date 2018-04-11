@@ -63,4 +63,7 @@ public interface DocflowService {
 
 	public CompletableFuture<QueryContext<DocflowPage>> getDocflows(boolean finished,boolean incoming,long skip,int take,String innKpp,DateTime updatedFrom,DateTime updatedTo,DateTime createdFrom,DateTime createdTo,String type);
 	public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
+
+	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, byte[] documentContent);
+	public QueryContext<String> print(QueryContext<?> parent);
 }
