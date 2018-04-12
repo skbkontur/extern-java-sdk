@@ -6,11 +6,6 @@
 package ru.skbkontur.sdk.extern;
 
 import ru.skbkontur.sdk.extern.service.SDKException;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import ru.skbkontur.sdk.extern.event.AuthenticationEvent;
 import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
@@ -38,8 +33,6 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SE
  * @author AlexS
  */
 public class ExternEngine implements AuthenticationListener {
-
-	private static final Gson GSON = new Gson();
 
 	private final Environment env;
 
@@ -74,10 +67,14 @@ public class ExternEngine implements AuthenticationListener {
 	public Configuration getConfiguration() {
 		return env.configuration;
 	}
-	
+
+    /**
+     * loads config data from the resource file
+     * @param configPath resource relative path
+     * @throws SDKException see {@link Configuration#load(String)}
+     */
 	public ExternEngine(String configPath) throws SDKException {
-		// loads config data from the resourse file: extern-sdk-config.json
-		this(loadConfiguration(configPath));
+		this(Configuration.load(configPath));
 	}
 
 	public AccountService getAccountService() {
@@ -149,25 +146,6 @@ public class ExternEngine implements AuthenticationListener {
 		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;
 		return current;
-	}
-	
-	private static Configuration loadConfiguration(String path) throws SDKException {
-		try (InputStream is = ExternEngine.class.getResourceAsStream(path)) {
-			if (is == null) {
-				throw new SDKException(SDKException.C_CONFIG_NOT_FOUND);
-			}
-
-			return GSON.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
-		}
-		catch (IOException x) {
-			throw new SDKException(SDKException.C_CONFIG_LOAD, x);
-		}
-		catch (SDKException x) {
-			throw x;
-		}
-		catch (Exception x) {
-			throw new SDKException(SDKException.UNKNOWN, x);
-		}
 	}
 
 	public void configureServices() throws SDKException {

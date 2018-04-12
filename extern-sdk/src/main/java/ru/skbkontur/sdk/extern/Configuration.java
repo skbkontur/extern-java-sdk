@@ -5,13 +5,22 @@
  */
 package ru.skbkontur.sdk.extern;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.UUID;
+
+import com.google.gson.stream.JsonReader;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
+import ru.skbkontur.sdk.extern.service.SDKException;
+
 
 /**
  *
@@ -161,4 +170,24 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 	public void setServiceUserId(String serviceUserId) {
 		this.serviceUserId = serviceUserId;
 	}
+
+	public static Configuration load(String path) throws SDKException {
+		try (InputStream is = Configuration.class.getClassLoader().getResourceAsStream(path)) {
+			if (is == null) {
+				throw new SDKException(SDKException.C_CONFIG_NOT_FOUND);
+			}
+
+			return new Gson().fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+		}
+		catch (IOException x) {
+			throw new SDKException(SDKException.C_CONFIG_LOAD, x);
+		}
+		catch (SDKException x) {
+			throw x;
+		}
+		catch (Exception x) {
+			throw new SDKException(SDKException.UNKNOWN, x);
+		}
+	}
+
 }
