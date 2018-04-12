@@ -26,6 +26,9 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+
+import java.net.URL;
+
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
 
 /**
@@ -70,11 +73,11 @@ public class ExternEngine implements AuthenticationListener {
 
     /**
      * loads config data from the resource file
-     * @param configPath resource relative path
-     * @throws SDKException see {@link Configuration#load(String)}
+     * @param  configUrl url to configuration
+     * @throws SDKException see {@link Configuration#load(URL)}
      */
-	public ExternEngine(String configPath) throws SDKException {
-		this(Configuration.load(configPath));
+	public ExternEngine(URL configUrl) throws SDKException {
+		this(Configuration.load(configUrl));
 	}
 
 	public AccountService getAccountService() {

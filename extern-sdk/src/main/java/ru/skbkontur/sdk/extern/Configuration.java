@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.UUID;
 
 import com.google.gson.stream.JsonReader;
@@ -171,8 +172,8 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 		this.serviceUserId = serviceUserId;
 	}
 
-	public static Configuration load(String path) throws SDKException {
-		try (InputStream is = Configuration.class.getClassLoader().getResourceAsStream(path)) {
+	public static Configuration load(URL resourceUrl) throws SDKException {
+		try (InputStream is = resourceUrl.openStream()) {
 			if (is == null) {
 				throw new SDKException(SDKException.C_CONFIG_NOT_FOUND);
 			}
