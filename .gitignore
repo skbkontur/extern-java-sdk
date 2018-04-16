@@ -13,3 +13,4 @@ extern-sdk-test
 /extern-sdk-examples/lib
 /extern-sdk-examples/tests
 /extern-sdk-examples/nbactions.xml
+/extern-sdk-examples/nbactions-release-profile.xml

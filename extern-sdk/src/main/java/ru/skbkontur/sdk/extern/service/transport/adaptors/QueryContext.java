@@ -601,11 +601,11 @@ public class QueryContext<R> implements Serializable {
 		return set(TYPE, type);
 	};
 	
-	public byte[] getCertificate() { 
-		return (byte[])params.get(CERTIFICATE); 
+	public String getCertificate() { 
+		return (String)params.get(CERTIFICATE); 
 	};
 	
-	public QueryContext<R> setCertificate(byte[] certificate) { 
+	public QueryContext<R> setCertificate(String certificate) { 
 		return set(CERTIFICATE, certificate);
 	};
 	

@@ -170,12 +170,13 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, byte[] x509Base64) {
+	public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, String x509Base64) {
 		QueryContext<DocumentToSend> cxt = createQueryContext(EN_SGN);
 		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentType(documentType)
 			.setDocumentId(documentId)
+			.setContentString(x509Base64)
 			.applyAsync(api::generateDocumentTypeReply);
 	}
 
@@ -203,10 +204,11 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 	}
 	
 	@Override
-	public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow) {
+	public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow, String signerX509Base64) {
 		QueryContext<List<DocumentToSend>> cxt = createQueryContext(EN_DFW);
 		return cxt
 			.setDocflow(docflow)
+			.setCertificate(signerX509Base64)
 			.applyAsync(api::generateReplies);
 	}
 
@@ -264,12 +266,12 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 	}
 
 	@Override
-	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, byte[] documentContent) {
+	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, String documentContentBase64) {
 		QueryContext<String> cxt = createQueryContext(EN_DFW);
 		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
-			.setContent(documentContent)
+			.setContentString(documentContentBase64)
 			.applyAsync(api::print);
 	}
 

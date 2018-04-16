@@ -49,13 +49,13 @@ public interface DocflowService {
 	public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId);
 	public QueryContext<byte[]> getSignatureContent(QueryContext<?> parent);
 	
-	public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, byte[] x509Base64);
+	public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, String x509Base64);
 	public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> parent);
 
 	public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend);
 	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent);
 
-	public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow);
+	public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow, String signerX509Base64);
 	public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<?> parent);
 
 	public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow);
@@ -64,6 +64,6 @@ public interface DocflowService {
 	public CompletableFuture<QueryContext<DocflowPage>> getDocflows(boolean finished,boolean incoming,long skip,int take,String innKpp,DateTime updatedFrom,DateTime updatedTo,DateTime createdFrom,DateTime createdTo,String type);
 	public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
 
-	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, byte[] documentContent);
+	public CompletableFuture<QueryContext<String>> print(String docflowId, String documentId, String documentContentBase64);
 	public QueryContext<String> print(QueryContext<?> parent);
 }

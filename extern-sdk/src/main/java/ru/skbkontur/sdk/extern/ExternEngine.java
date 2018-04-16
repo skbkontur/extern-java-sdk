@@ -25,6 +25,7 @@ import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.providers.auth.AuthenticationProviderByPass;
 import ru.skbkontur.sdk.extern.service.AccountService;
+import ru.skbkontur.sdk.extern.service.BusinessDriver;
 import ru.skbkontur.sdk.extern.service.CertificateService;
 import ru.skbkontur.sdk.extern.service.DocflowService;
 import ru.skbkontur.sdk.extern.service.DraftService;
@@ -69,11 +70,14 @@ public class ExternEngine implements AuthenticationListener {
 	private CryptoProvider cryptoProvider;
 
 	private String sessionId;
+	
+	private BusinessDriver businessDriver;
 
 	public ExternEngine() throws SDKException {
-		env = new Environment();
-		env.configuration = new Configuration();
+		this.env = new Environment();
+		this.env.configuration = new Configuration();
 		this.sessionId = null;
+		this.businessDriver = new BusinessDriver(this);
 		configure();
 	}
 
@@ -291,5 +295,9 @@ public class ExternEngine implements AuthenticationListener {
 				setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c));
 			}
 		}
+	}
+	
+	public BusinessDriver getBusinessDriver() {
+		return businessDriver;
 	}
 }

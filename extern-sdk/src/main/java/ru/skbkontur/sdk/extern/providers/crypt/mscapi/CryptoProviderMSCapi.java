@@ -104,7 +104,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 				return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND,thumbprint));
 			}
 			
-			return new QueryContext<byte[]>().setContent(key.getX509ctx());
+			return new QueryContext<byte[]>().setResult(key.getX509ctx(),CONTENT);
 		}
 		catch (CryptoException x) {
 			return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR,x.getMessage()));

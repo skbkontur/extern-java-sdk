@@ -27,8 +27,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import ru.skbkontur.sdk.extern.service.transport.swagger.model.ApiEvent;
 import ru.skbkontur.sdk.extern.service.transport.swagger.model.Error;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class EventsApi {
     }
 
     /**
-     * Build call for eventsGetServiceEvents
+     * Build call for eventsGetEvents
      * @param fromId Event Id from which data is read out (required)
      * @param batchSize Max count of events to be returned (required)
      * @param progressListener Progress listener
@@ -64,11 +64,11 @@ public class EventsApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call eventsGetServiceEventsCall(String fromId, Integer batchSize, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call eventsGetEventsCall(String fromId, Integer batchSize, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
         
         // create path and map variables
-        String localVarPath = "/v1/events/service";
+        String localVarPath = "/v1/events";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         if (fromId != null)
@@ -109,20 +109,20 @@ public class EventsApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call eventsGetServiceEventsValidateBeforeCall(String fromId, Integer batchSize, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call eventsGetEventsValidateBeforeCall(String fromId, Integer batchSize, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'fromId' is set
         if (fromId == null) {
-            throw new ApiException("Missing the required parameter 'fromId' when calling eventsGetServiceEvents(Async)");
+            throw new ApiException("Missing the required parameter 'fromId' when calling eventsGetEvents(Async)");
         }
         
         // verify the required parameter 'batchSize' is set
         if (batchSize == null) {
-            throw new ApiException("Missing the required parameter 'batchSize' when calling eventsGetServiceEvents(Async)");
+            throw new ApiException("Missing the required parameter 'batchSize' when calling eventsGetEvents(Async)");
         }
         
         
-        com.squareup.okhttp.Call call = eventsGetServiceEventsCall(fromId, batchSize, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = eventsGetEventsCall(fromId, batchSize, progressListener, progressRequestListener);
         return call;
 
         
@@ -136,11 +136,11 @@ public class EventsApi {
      * 
      * @param fromId Event Id from which data is read out (required)
      * @param batchSize Max count of events to be returned (required)
-     * @return List&lt;ApiEvent&gt;
+     * @return EventsPage
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<ApiEvent> eventsGetServiceEvents(String fromId, Integer batchSize) throws ApiException {
-        ApiResponse<List<ApiEvent>> resp = eventsGetServiceEventsWithHttpInfo(fromId, batchSize);
+    public EventsPage eventsGetEvents(String fromId, Integer batchSize) throws ApiException {
+        ApiResponse<EventsPage> resp = eventsGetEventsWithHttpInfo(fromId, batchSize);
         return resp.getData();
     }
 
@@ -149,12 +149,12 @@ public class EventsApi {
      * 
      * @param fromId Event Id from which data is read out (required)
      * @param batchSize Max count of events to be returned (required)
-     * @return ApiResponse&lt;List&lt;ApiEvent&gt;&gt;
+     * @return ApiResponse&lt;EventsPage&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<ApiEvent>> eventsGetServiceEventsWithHttpInfo(String fromId, Integer batchSize) throws ApiException {
-        com.squareup.okhttp.Call call = eventsGetServiceEventsValidateBeforeCall(fromId, batchSize, null, null);
-        Type localVarReturnType = new TypeToken<List<ApiEvent>>(){}.getType();
+    public ApiResponse<EventsPage> eventsGetEventsWithHttpInfo(String fromId, Integer batchSize) throws ApiException {
+        com.squareup.okhttp.Call call = eventsGetEventsValidateBeforeCall(fromId, batchSize, null, null);
+        Type localVarReturnType = new TypeToken<EventsPage>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -167,7 +167,7 @@ public class EventsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call eventsGetServiceEventsAsync(String fromId, Integer batchSize, final ApiCallback<List<ApiEvent>> callback) throws ApiException {
+    public com.squareup.okhttp.Call eventsGetEventsAsync(String fromId, Integer batchSize, final ApiCallback<EventsPage> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -188,8 +188,8 @@ public class EventsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = eventsGetServiceEventsValidateBeforeCall(fromId, batchSize, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<List<ApiEvent>>(){}.getType();
+        com.squareup.okhttp.Call call = eventsGetEventsValidateBeforeCall(fromId, batchSize, progressListener, progressRequestListener);
+        Type localVarReturnType = new TypeToken<EventsPage>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

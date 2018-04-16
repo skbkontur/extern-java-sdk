@@ -626,7 +626,7 @@
                 "tags": ["Docflows"],
                 "summary": "Allow API user to get document print from docflow",
                 "operationId": "Docflows_GetDocumentPrintAsync",
-                "consumes": ["application/octet-stream"],
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "accountId",
@@ -650,12 +650,12 @@
                         "type": "string",
                         "format": "uuid"
                     }, {
-                        "name": "content",
+                        "name": "request",
                         "in": "body",
+                        "description": "",
                         "required": true,
                         "schema": {
-                            "format": "byte",
-                            "type": "string"
+                            "$ref": "#/definitions/PrintDocumentData"
                         }
                     }],
                 "responses": {
@@ -1165,7 +1165,7 @@
                 "tags": ["Docflows"],
                 "summary": "Allow API user to get Reply document for specified workflow",
                 "operationId": "Docflows_GenerateReplyDocumentAsync",
-                "consumes": ["application/octet-stream"],
+                "consumes": ["application/json", "text/json", "application/x-www-form-urlencoded"],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
                         "name": "accountId",
@@ -1195,12 +1195,12 @@
                         "type": "string",
                         "format": "uuid"
                     }, {
-                        "name": "content",
+                        "name": "request",
                         "in": "body",
+                        "description": "",
                         "required": true,
                         "schema": {
-                            "format": "byte",
-                            "type": "string"
+                            "$ref": "#/definitions/GenerateReplyDocumentRequestData"
                         }
                     }],
                 "responses": {
@@ -2707,11 +2707,11 @@
                     }]
             }
         },
-        "/v1/events/service": {
+        "/v1/events": {
             "get": {
                 "tags": ["Events"],
                 "summary": "Shows docflow events for all users and accounts connected with external service (e.g.: bank)",
-                "operationId": "Events_GetServiceEvents",
+                "operationId": "Events_GetEvents",
                 "consumes": [],
                 "produces": ["application/json", "text/json"],
                 "parameters": [{
@@ -2732,10 +2732,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ApiEvent"
-                            }
+                            "$ref": "#/definitions/EventsPage"
                         }
                     },
                     "403": {
@@ -3116,6 +3113,22 @@
                 }
             }
         },
+        "PrintDocumentData": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "GenerateReplyDocumentRequestData": {
+            "type": "object",
+            "properties": {
+                "certificate-base64": {
+                    "type": "string"
+                }
+            }
+        },
         "DocumentToSend": {
             "type": "object",
             "properties": {
@@ -3423,6 +3436,31 @@
                 }
             }
         },
+        "EventsPage": {
+            "type": "object",
+            "properties": {
+                "first-event-id": {
+                    "type": "string"
+                },
+                "last-event-id": {
+                    "type": "string"
+                },
+                "requested-count": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "returned-count": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "api-events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ApiEvent"
+                    }
+                }
+            }
+        },
         "ApiEvent": {
             "type": "object",
             "properties": {
@@ -3448,12 +3486,6 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
-                },
-                "next-id": {
-                    "type": "string"
-                },
-                "last-id": {
                     "type": "string"
                 }
             }
@@ -3598,7 +3630,7 @@
                 "za-pg": {
                     "$ref": "#/definitions/PeriodIndicators"
                 },
-                "zaem": {
+                "za9m": {
                     "$ref": "#/definitions/PeriodIndicators"
                 },
                 "za-nal-per": {

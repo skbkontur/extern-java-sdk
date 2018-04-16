@@ -17,7 +17,7 @@ public class UsnDataV2 {
   private String ischislMin = null;
   private PeriodIndicators zaKv = null;
   private PeriodIndicators zaPg = null;
-  private PeriodIndicators zaem = null;
+  private PeriodIndicators za9m = null;
   private TaxPeriodIndicators zaNalPer = null;
 
 	public Integer getNomKorr() {
@@ -76,12 +76,12 @@ public class UsnDataV2 {
 		this.zaPg = zaPg;
 	}
 
-	public PeriodIndicators getZaem() {
-		return zaem;
+	public PeriodIndicators getZa9m() {
+		return za9m;
 	}
 
-	public void setZaem(PeriodIndicators zaem) {
-		this.zaem = zaem;
+	public void setZa9m(PeriodIndicators za9m) {
+		this.za9m = za9m;
 	}
 
 	public TaxPeriodIndicators getZaNalPer() {

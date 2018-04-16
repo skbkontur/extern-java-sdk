@@ -30,7 +30,7 @@ public class UsnDataV2Dto {
 		v2.setZaKv(periodIndicatorsDto.fromDto(dto.getZaKv()));
 		v2.setZaNalPer(new TaxPeriodIndicatorsDto().fromDto(dto.getZaNalPer()));
 		v2.setZaPg(periodIndicatorsDto.fromDto(dto.getZaPg()));
-		v2.setZaem(periodIndicatorsDto.fromDto(dto.getZaem()));
+		v2.setZa9m(periodIndicatorsDto.fromDto(dto.getZa9m()));
 		
 		return v2;
 	}
@@ -49,10 +49,10 @@ public class UsnDataV2Dto {
 		dto.setPoMestu(v2.getPoMestu());
 		dto.setPrizNp(dto.getPrizNp());
 		dto.setUbytPred(v2.getUbytPred());
+		dto.setZa9m(periodIndicatorsDto.toDto(v2.getZa9m()));
 		dto.setZaKv(periodIndicatorsDto.toDto(v2.getZaKv()));
 		dto.setZaNalPer(new TaxPeriodIndicatorsDto().toDto(v2.getZaNalPer()));
 		dto.setZaPg(periodIndicatorsDto.toDto(v2.getZaPg()));
-		dto.setZaem(periodIndicatorsDto.toDto(v2.getZaem()));
 		
 		return dto;
 	}

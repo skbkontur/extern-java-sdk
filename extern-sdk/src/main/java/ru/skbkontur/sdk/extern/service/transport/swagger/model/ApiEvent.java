@@ -51,12 +51,6 @@ public class ApiEvent {
   @SerializedName("id")
   private String id = null;
 
-  @SerializedName("next-id")
-  private String nextId = null;
-
-  @SerializedName("last-id")
-  private String lastId = null;
-
   public ApiEvent inn(String inn) {
     this.inn = inn;
     return this;
@@ -183,42 +177,6 @@ public class ApiEvent {
     this.id = id;
   }
 
-  public ApiEvent nextId(String nextId) {
-    this.nextId = nextId;
-    return this;
-  }
-
-   /**
-   * Get nextId
-   * @return nextId
-  **/
-  @ApiModelProperty(value = "")
-  public String getNextId() {
-    return nextId;
-  }
-
-  public void setNextId(String nextId) {
-    this.nextId = nextId;
-  }
-
-  public ApiEvent lastId(String lastId) {
-    this.lastId = lastId;
-    return this;
-  }
-
-   /**
-   * Get lastId
-   * @return lastId
-  **/
-  @ApiModelProperty(value = "")
-  public String getLastId() {
-    return lastId;
-  }
-
-  public void setLastId(String lastId) {
-    this.lastId = lastId;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -235,14 +193,12 @@ public class ApiEvent {
         Objects.equals(this.docflowLink, apiEvent.docflowLink) &&
         Objects.equals(this.newState, apiEvent.newState) &&
         Objects.equals(this.eventDateTime, apiEvent.eventDateTime) &&
-        Objects.equals(this.id, apiEvent.id) &&
-        Objects.equals(this.nextId, apiEvent.nextId) &&
-        Objects.equals(this.lastId, apiEvent.lastId);
+        Objects.equals(this.id, apiEvent.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inn, kpp, docflowType, docflowLink, newState, eventDateTime, id, nextId, lastId);
+    return Objects.hash(inn, kpp, docflowType, docflowLink, newState, eventDateTime, id);
   }
 
 
@@ -258,8 +214,6 @@ public class ApiEvent {
     sb.append("    newState: ").append(toIndentedString(newState)).append("\n");
     sb.append("    eventDateTime: ").append(toIndentedString(eventDateTime)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    nextId: ").append(toIndentedString(nextId)).append("\n");
-    sb.append("    lastId: ").append(toIndentedString(lastId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

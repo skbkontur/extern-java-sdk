@@ -38,6 +38,8 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.DOCUMENT_TO_SENDS;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.DocflowPageDto;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.GenerateReplyDocumentRequestData;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.PrintDocumentData;
 
 /**
  *
@@ -408,7 +410,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 								cxt.getDocflowId(),
 								cxt.getDocumentType(),
 								cxt.getDocumentId(),
-								cxt.getCertificate()
+								new GenerateReplyDocumentRequestData().certificateBase64(cxt.getContentString())
 							)
 					),
 				DOCUMENT_TO_SEND
@@ -461,7 +463,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 
 			Docflow docflow = cxt.getDocflow();
 			if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
-				byte[] x509Base64 = cxt.getCertificate();
+				String x509Base64 = cxt.getCertificate();
 				if (x509Base64 == null) {
 					return cxt.setServiceError("A signer certificate is absent in the context.");
 				}
@@ -469,10 +471,20 @@ public class DocflowsAdaptor extends BaseAdaptor {
 				List<DocumentToSend> replies = new ArrayList<>();
 				for (Link l : docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
-						DocumentToSend documentToSend = new DocumentToSendDto().fromDto((Map) submitHttpRequest(l.getHref()+"/generate", "POST", x509Base64, Object.class));
+						DocumentToSend documentToSend 
+							= new DocumentToSendDto()
+								.fromDto(
+									(Map) submitHttpRequest(
+										l.getHref(),
+										"POST", 
+										new GenerateReplyDocumentRequestData().certificateBase64(x509Base64), 
+										Object.class
+									)
+								);
 						replies.add(documentToSend);
 					}
 				}
+				
 				return cxt.setResult(replies, DOCUMENT_TO_SENDS);
 			}
 			else {
@@ -505,7 +517,9 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
 			DocflowDto docflowDto = new DocflowDto();
 
-			Docflow docflow = docflowDto.fromDto(submitHttpRequest(self.getHref()+"/send", "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
+			String httpRequest = self.getHref().toLowerCase().replaceAll("/generate", "/send");
+			
+			Docflow docflow = docflowDto.fromDto(submitHttpRequest(httpRequest, "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
 
 			return cxt.setResult(docflow, DOCFLOW);
 		}
@@ -526,7 +540,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 						cxt.getAccountProvider().accountId(),
 						cxt.getDocflowId(),
 						cxt.getDocumentId(),
-						cxt.getContent()
+						new PrintDocumentData().content(cxt.getContentString())
 					).getData(),
 					CONTENT_STRING
 				);

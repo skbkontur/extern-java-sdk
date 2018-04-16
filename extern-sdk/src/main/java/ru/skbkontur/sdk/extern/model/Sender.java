@@ -20,6 +20,8 @@ public class Sender {
 	private String certificate;
 	@SerializedName("ipaddress")
 	private String ipaddress;
+	
+	private String thumbprint;
 
 	public Sender() {
 	}
@@ -62,4 +64,12 @@ public class Sender {
   public void setIpaddress(String ipaddress) {
     this.ipaddress = ipaddress;
   }
+
+	public String getThumbprint() {
+		return thumbprint;
+	}
+
+	public void setThumbprint(String thumbprint) {
+		this.thumbprint = thumbprint;
+	}
 }

@@ -51,8 +51,8 @@ public class UsnDataV2 {
   @SerializedName("za-pg")
   private PeriodIndicators zaPg = null;
 
-  @SerializedName("zaem")
-  private PeriodIndicators zaem = null;
+  @SerializedName("za9m")
+  private PeriodIndicators za9m = null;
 
   @SerializedName("za-nal-per")
   private TaxPeriodIndicators zaNalPer = null;
@@ -183,22 +183,22 @@ public class UsnDataV2 {
     this.zaPg = zaPg;
   }
 
-  public UsnDataV2 zaem(PeriodIndicators zaem) {
-    this.zaem = zaem;
+  public UsnDataV2 za9m(PeriodIndicators za9m) {
+    this.za9m = za9m;
     return this;
   }
 
    /**
-   * Get zaem
-   * @return zaem
+   * Get za9m
+   * @return za9m
   **/
   @ApiModelProperty(value = "")
-  public PeriodIndicators getZaem() {
-    return zaem;
+  public PeriodIndicators getZa9m() {
+    return za9m;
   }
 
-  public void setZaem(PeriodIndicators zaem) {
-    this.zaem = zaem;
+  public void setZa9m(PeriodIndicators za9m) {
+    this.za9m = za9m;
   }
 
   public UsnDataV2 zaNalPer(TaxPeriodIndicators zaNalPer) {
@@ -236,13 +236,13 @@ public class UsnDataV2 {
         Objects.equals(this.ischislMin, usnDataV2.ischislMin) &&
         Objects.equals(this.zaKv, usnDataV2.zaKv) &&
         Objects.equals(this.zaPg, usnDataV2.zaPg) &&
-        Objects.equals(this.zaem, usnDataV2.zaem) &&
+        Objects.equals(this.za9m, usnDataV2.za9m) &&
         Objects.equals(this.zaNalPer, usnDataV2.zaNalPer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nomKorr, poMestu, prizNp, ubytPred, ischislMin, zaKv, zaPg, zaem, zaNalPer);
+    return Objects.hash(nomKorr, poMestu, prizNp, ubytPred, ischislMin, zaKv, zaPg, za9m, zaNalPer);
   }
 
 
@@ -258,7 +258,7 @@ public class UsnDataV2 {
     sb.append("    ischislMin: ").append(toIndentedString(ischislMin)).append("\n");
     sb.append("    zaKv: ").append(toIndentedString(zaKv)).append("\n");
     sb.append("    zaPg: ").append(toIndentedString(zaPg)).append("\n");
-    sb.append("    zaem: ").append(toIndentedString(zaem)).append("\n");
+    sb.append("    za9m: ").append(toIndentedString(za9m)).append("\n");
     sb.append("    zaNalPer: ").append(toIndentedString(zaNalPer)).append("\n");
     sb.append("}");
     return sb.toString();

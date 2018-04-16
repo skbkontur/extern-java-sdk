@@ -28,40 +28,39 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
-import ru.argosgrp.cryptoservice.CryptoService;
-import ru.argosgrp.cryptoservice.Key;
-import ru.argosgrp.cryptoservice.mscapi.MSCapi;
-import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.ExternEngine;
 import ru.skbkontur.sdk.extern.model.Docflow;
-import ru.skbkontur.sdk.extern.model.DocumentContents;
-import ru.skbkontur.sdk.extern.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.model.FnsRecipient;
 import ru.skbkontur.sdk.extern.model.Organization;
 import ru.skbkontur.sdk.extern.model.Sender;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
 import ru.skbkontur.sdk.extern.providers.auth.AuthenticationProviderByPass;
-import ru.skbkontur.sdk.extern.service.DraftService;
+import ru.skbkontur.sdk.extern.providers.crypt.mscapi.CryptoProviderMSCapi;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
 /**
  * @author Sukhorukov A.D.
- * 
+ *
+ * Отправка документа, при этом отправитель и организация, за которую производится отправка документа, является одной и той-же организацией
+ *
+ * <pre>
+ * {@code
  * Для запуска примера необходимо в командной строке передать путь к файлу:
- * 
- * SendDocForYourself.properties 
- * 
+ *
+ * SendDocForYourself.properties
+ *
  * со следующим содержимым:
- * 
+ *
  * # URI Экстерн сервиса
  * service.base.uri = http://extern-api.testkontur.ru
  * # идентификатор аккаунта
@@ -88,12 +87,13 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * company.inn = **********
  * # КПП организации, для которой отправляется документ
  * company.kpp = *********
- * # путь к документу, который необходимо отправить
- * document.path = X:\\path documents\\NO_SRCHIS_0087_0087_XXXXXXXXXXXXXXXXXXX_20180126_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.xml
- *  
- * 
+ * # пути к документам, который необходимо отправить, разделенные через ;
+ * document.path = X:\\path documents\\NO_SRCHIS_0087_0087_XXXXXXXXXXXXXXXXXXX_20180126_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.xml;
+ * }
+ * </pre>
+ *
  */
-public class SendDocForYourself {
+public class SendDocument {
 
 	private static ExternEngine engine;
 
@@ -103,13 +103,13 @@ public class SendDocForYourself {
 			System.out.println("There is no path to the properter file in the command line.");
 			return;
 		}
-		
+		// файл с параметрами должен существовать
 		File parameterFile = new File(args[0]);
 		if (!parameterFile.exists() || !parameterFile.isFile()) {
 			System.out.println("Parameter file not found: " + args[0]);
 			return;
 		}
-		
+
 		// создаем экземляр движка для работы с API Экстерна
 		engine = new ExternEngine();
 		// загружаем параметры для отправки документа на портал Экстерна
@@ -117,9 +117,8 @@ public class SendDocForYourself {
 		try (InputStream is = new FileInputStream(parameterFile)) {
 			parameters.load(is);
 		}
-		
+
 		// КОНФИГУРИРОВАНИЕ ДВИЖКА
-		
 		// устанавливаем URI для Экстерн API
 		engine.setServiceBaseUriProvider(() -> parameters.getProperty("service.base.uri"));
 		// устанавливаем идентификатор аккаунта
@@ -131,25 +130,28 @@ public class SendDocForYourself {
 			new AuthenticationProviderByPass(
 				() -> parameters.getProperty("auth.base.uri"),
 				new LoginAndPasswordProvider() {
-					@Override
-					public String getLogin() { return parameters.getProperty("auth.login");}
-					@Override
-					public String getPass() { return parameters.getProperty("auth.pass");}
-				},
+				@Override
+				public String getLogin() {
+					return parameters.getProperty("auth.login");
+				}
+
+				@Override
+				public String getPass() {
+					return parameters.getProperty("auth.pass");
+				}
+			},
 				engine.getApiKeyProvider()
 			)
 		);
-		
+
+		// данную инициализацию делать необязательно,
+		// если используется свой криптопровайдер
+		engine.setCryptoProvider(
+			new CryptoProviderMSCapi()
+		);
+
 		engine.configureServices();
-		
-		// СОЗДАНИЕ ЧЕРНОВИКА И ОТПРАВКА ДОКУМЕНТА
-		
-		// сервис для черновиков
-		DraftService draft = engine.getDraftService();
-		
-		// ключ подписи отправителя
-		Key senderKey = findKeyByThumbprint(parameters.getProperty("sender.thumbprint"));
-		
+
 		// отправитель
 		Sender sender = new Sender();
 		// ИНН отправителя
@@ -158,95 +160,51 @@ public class SendDocForYourself {
 		sender.setKpp(parameters.getProperty("sender.kpp"));
 		// IP адресс отправителя
 		sender.setIpaddress(parameters.getProperty("sender.ip"));
-		// сертификат отправителя в кодировке BASE64
-		sender.setCertificate(senderKey == null ? null : IOUtil.encodeBase64(senderKey.getX509ctx()));
-
+		// отпечаток сертификат отправителя
+		sender.setThumbprint(parameters.getProperty("sender.thumbprint"));
 		// получатель
 		FnsRecipient recipient = new FnsRecipient();
 		// ИНН отправителя
 		recipient.setIfnsCode(parameters.getProperty("ifns.code"));
-
-		// получатель
-		Organization organization = new Organization(parameters.getProperty("company.inn"),parameters.getProperty("company.kpp"));
+		// подотчетная организация
+		Organization organization = new Organization(parameters.getProperty("company.inn"), parameters.getProperty("company.kpp"));
 
 		// путь к документу, который будем отправлять
 		String docPath = parameters.getProperty("document.path");
-		// файл документа для отправки
-		File docFile = new File(docPath);
-		
-		byte[] docContent = IOUtil.readFileContent(docFile);
-		// отправлять документ необходимо в кодировке BASE64
-		String docBase64 = IOUtil.encodeBase64(docContent);
-		// вычисляем подпись
-		byte[] sign = sign(senderKey,docContent);
-		// отправлять подпись необходимо в кодировке BASE64
-		String signBase64 = null;
-		if (sign != null)
-			signBase64 = IOUtil.encodeBase64(sign);
-		
-		// создаем описание документа
-		DocumentDescription dd = new DocumentDescription();
-		dd.setContentType("application/xml");
-		dd.setFilename(docFile.getName());
-
-		// создаем контекст документа
-		DocumentContents dc = new DocumentContents();
-		dc.setDocumentDescription(dd);
-		dc.setBase64Content(docBase64);
-		dc.setSignature(signBase64);
-		
-		// 1) создаем черновик
-		// 2) добавляем в черновик документ и подпись
-		// 3) перед отправкой выполняем проверку для получения дополнительной диагностики
-		// 4) отправляем черновик
-		QueryContext<List<Docflow>> sendCxt = draft
-			.createAsync(sender, recipient, organization)
-			.thenApply(c->draft.addDecryptedDocument(c.setDocumentContents(dc)))
-			.thenApply(draft::check)
-			.thenApply(draft::send)
-			.get();
-
-		// проверяем результат отправки 
-		if (sendCxt.isFail()) {
-			// ошибка отправки документа
-			// регистрируем ошибку в лог файл
-			System.out.println("Error sending document.\n" + sendCxt.getServiceError().toString());
+		String[] docPaths = docPath == null ? null : docPath.split(";");
+		if (docPaths != null) {
+			ru.skbkontur.sdk.extern.service.File[] files =
+				Stream
+					.of(docPaths)
+					.map(p -> new File(p))
+					.map(f -> new ru.skbkontur.sdk.extern.service.File(f.getName(), readFileContent(f))) // 
+					.collect(Collectors.toList())
+					.toArray(new ru.skbkontur.sdk.extern.service.File[docPaths.length]);
 			
-			return;
+			// отправляем документы
+			QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver().sendDocument(files, sender, recipient, organization);
+			// проверяем результат отправки
+			if (sendCxt.isFail()) {
+				// ошибка отправки документа
+				// регистрируем ошибку в лог файл
+				System.out.println("Error sending document.\n" + sendCxt.getServiceError().toString());
+						
+				return;
+			}
+					
+			// документ был отправлен
+			// в результате получаем список документооборотов (ДО)
+			// иногда один документ может вызвать несколько ДО
+			System.out.println(MessageFormat.format("The documents [{0}] was sent.", Stream.of(files).map(f->f.getFileName()).reduce((x,y)->x+"\r\n"+y)));
 		}
-		
-		// документ был отправлен
-		// в результате получаем список документооборотов (ДО)
-		// иногда один документ может вызвать несколько ДО
-		System.out.println(MessageFormat.format("The document [{0}] was sent.",docFile.getName()));
 	}
 	
-	private static byte[] sign(Key key, byte[] content) throws CryptoException {
-		byte[] signature = null;
-		// криптосервис для ГОСТ алгоритмов
-		CryptoService cryptoService = new MSCapi();
-		// PKCS#7 криптопровайдер 
-		PKCS7 p7 = new PKCS7(cryptoService);
-		// если ключ найден вычисляем подпись документа в формате PKCS#7
-		if (key != null) 
-			signature = p7.sign(key, null, content, false);
-		
-		return signature;
-	}
-	
-	private static Key findKeyByThumbprint(String thumbprint) throws CryptoException {
-		// криптосервис для ГОСТ алгоритмов
-		CryptoService cryptoService = new MSCapi();
-		// получаем ключ подписи по отпечатку сертификата открытого ключа
-		Key key = null;
-		// получаем список доступных ключей
-		Key[] keys = cryptoService.getKeys();
-		if(keys != null) {
-			// преобразуем hex  в массив байт
-			byte[] tp = IOUtil.hexToBytes(thumbprint);
-			// ищем ключ с нужным отпечатком
-			key = Stream.of(keys).filter(k->Arrays.equals(tp, k.getThumbprint())).findAny().orElse(null);
+	private static byte[] readFileContent(File file) throws RuntimeException {
+		try {
+			return IOUtil.readFileContent(file);
 		}
-		return key;
+		catch (IOException x) {
+			throw new RuntimeException(x);
+		}
 	}
 }
