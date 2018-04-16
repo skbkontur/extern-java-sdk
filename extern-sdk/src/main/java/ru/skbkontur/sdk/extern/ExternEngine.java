@@ -6,15 +6,8 @@
 package ru.skbkontur.sdk.extern;
 
 import ru.skbkontur.sdk.extern.service.SDKException;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import static ru.skbkontur.sdk.extern.Messages.C_CONFIG_LOAD;
-import static ru.skbkontur.sdk.extern.Messages.C_CONFIG_NOT_FOUND;
 import static ru.skbkontur.sdk.extern.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
-import static ru.skbkontur.sdk.extern.Messages.UNKNOWN;
 import ru.skbkontur.sdk.extern.event.AuthenticationEvent;
 import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
@@ -39,6 +32,15 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.CertificatesAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
 
 /**
@@ -46,8 +48,6 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SE
  * @author AlexS
  */
 public class ExternEngine implements AuthenticationListener {
-
-	private static final Gson GSON = new Gson();
 
 	private final Environment env;
 
@@ -74,32 +74,32 @@ public class ExternEngine implements AuthenticationListener {
 	private BusinessDriver businessDriver;
 
 	public ExternEngine() throws SDKException {
-		this.env = new Environment();
-		this.env.configuration = new Configuration();
-		this.sessionId = null;
-		this.businessDriver = new BusinessDriver(this);
-		configure();
+		this(new Configuration());
 	}
 
 	public ExternEngine(Configuration configuration) throws SDKException {
 		env = new Environment();
 		env.configuration = configuration;
 		this.sessionId = null;
-		configure();
+		this.businessDriver = new BusinessDriver(this);
+		configureProviders();
 	}
 
-	public Environment getEnvironment() {
-		return env;
+	/**
+	 * loads config data from the resource file
+	 * @param  configUrl url to configuration
+	 * @throws IOException see {@link Configuration#load(URL)}
+	 */
+	public ExternEngine(URL configUrl) throws IOException {
+		this(Configuration.load(configUrl));
 	}
 
 	public Configuration getConfiguration() {
 		return env.configuration;
 	}
 
-	public ExternEngine(String configPath) throws SDKException {
-		// loads config data from the resourse file: extern-sdk-config.json
-		this(loadConfiguration(configPath));
-		configure();
+	public Environment getEnvironment() {
+		return env;
 	}
 
 	public AccountService getAccountService() {
@@ -176,25 +176,6 @@ public class ExternEngine implements AuthenticationListener {
 		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;
 		return current;
-	}
-
-	private static Configuration loadConfiguration(String path) throws SDKException {
-		try (InputStream is = ExternEngine.class.getResourceAsStream(path)) {
-			if (is == null) {
-				throw new SDKException(Messages.get(C_CONFIG_NOT_FOUND));
-			}
-
-			return GSON.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
-		}
-		catch (IOException x) {
-			throw new SDKException(Messages.get(C_CONFIG_LOAD), x);
-		}
-		catch (SDKException x) {
-			throw x;
-		}
-		catch (Throwable x) {
-			throw new SDKException(Messages.get(UNKNOWN), x);
-		}
 	}
 
 	public void configureServices() throws SDKException {
@@ -275,21 +256,13 @@ public class ExternEngine implements AuthenticationListener {
 		}
 	}
 
-	private void configure() {
+	private void configureProviders() {
 		Configuration c = env.configuration;
 		if (c != null) {
 
-			if (c.accountId() != null) {
-				setAccountProvider(c);
-			}
-
-			if (c.getApiKey() != null) {
-				setApiKeyProvider(c);
-			}
-
-			if (c.getServiceBaseUri() != null) {
-				setServiceBaseUriProvider(c);
-			}
+			Optional.ofNullable(c.accountId()).ifPresent(value -> setAccountProvider(c));
+			Optional.ofNullable(c.getApiKey()).ifPresent(value -> setApiKeyProvider(c));
+			Optional.ofNullable(c.getServiceBaseUri()).ifPresent(value -> setServiceBaseUriProvider(c));
 
 			if (c.getUri() != null && c.getLogin() != null && c.getPass() != null && c.getApiKey() != null) {
 				setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c));

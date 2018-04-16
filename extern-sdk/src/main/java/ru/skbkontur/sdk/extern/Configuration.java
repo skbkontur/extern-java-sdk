@@ -5,14 +5,23 @@
  */
 package ru.skbkontur.sdk.extern;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.UUID;
+
+import com.google.gson.stream.JsonReader;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
 import ru.skbkontur.sdk.extern.providers.auth.Credential;
+import ru.skbkontur.sdk.extern.service.SDKException;
 
 /**
  *
@@ -161,4 +170,15 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 	public void setServiceUserId(String serviceUserId) {
 		this.serviceUserId = serviceUserId;
 	}
+
+	public static Configuration load(URL resourceUrl) throws IOException {
+		try (InputStream is = resourceUrl.openStream()) {
+			if (is == null) {
+				throw new IOException(resourceUrl.toExternalForm() + " is not found");
+			}
+
+			return new Gson().fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+		}
+	}
+
 }
