@@ -13,18 +13,12 @@
 
 package ru.skbkontur.sdk.extern.service.transport.swagger.model;
 
-import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
-import ru.skbkontur.sdk.extern.service.transport.swagger.model.CertificateDto;
+import java.util.Objects;
 
 /**
  * CertificateList
@@ -32,7 +26,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.CertificateDto;
 
 public class CertificateList {
   @SerializedName("certificates")
-  private List<CertificateDto> certificates = null;
+  private List<CertificateDto> certificates = new ArrayList<>();
 
   @SerializedName("total-count")
   private Integer totalCount = null;

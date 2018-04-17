@@ -58,7 +58,6 @@ public class CertificatesGetCertificatesTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1199
     public void testGetCertificates_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
@@ -68,7 +67,6 @@ public class CertificatesGetCertificatesTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1199
     public void testGetCertificates_CertificateList() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" + CERTIFICATE_LIST + "}");
