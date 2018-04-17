@@ -54,7 +54,6 @@ public class DraftsLookupTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1238
     public void testDraftsLookup_Empty() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
