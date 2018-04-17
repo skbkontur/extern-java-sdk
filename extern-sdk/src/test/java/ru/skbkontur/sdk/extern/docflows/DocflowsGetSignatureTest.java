@@ -56,7 +56,6 @@ public class DocflowsGetSignatureTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testGetSignature_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
@@ -66,7 +65,6 @@ public class DocflowsGetSignatureTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testGetSignature_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
@@ -75,7 +73,6 @@ public class DocflowsGetSignatureTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testGetSignature_ContentLink() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"," +

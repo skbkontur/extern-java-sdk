@@ -69,7 +69,7 @@ public class DocflowsGetDocumentsTest {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext); // todo 1237
+        docflowsAdaptor.getDocuments(queryContext);
         List<Document> documents = queryContext.get();
         StandardObjectsValidator.validateNotEmptyList(documents, "Documents");
         DocflowsValidator.validateDocument(documents.get(0), false, false, false, false);
@@ -83,7 +83,7 @@ public class DocflowsGetDocumentsTest {
                 "\"description\": " + DOCUMENT_DESCRIPTION +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext); // todo 1237
+        docflowsAdaptor.getDocuments(queryContext);
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, false, false, false);
     }
 
@@ -116,7 +116,7 @@ public class DocflowsGetDocumentsTest {
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext); // todo 1237
+        docflowsAdaptor.getDocuments(queryContext);
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, false);
     }
 
@@ -134,7 +134,7 @@ public class DocflowsGetDocumentsTest {
                 "\"links\": [" + StandardObjects.LINK + "]" +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext); // todo 1237
+        docflowsAdaptor.getDocuments(queryContext);
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, true);
     }
 

@@ -117,7 +117,7 @@ public class DocflowsLookupDocumentTest {
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
                 "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocument(queryContext); // todo 1237
+        docflowsAdaptor.lookupDocument(queryContext); 
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, false);
     }
 
@@ -135,7 +135,7 @@ public class DocflowsLookupDocumentTest {
                 "\"links\": [" + StandardObjects.LINK + "]" +
                 "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocument(queryContext); // todo 1237
+        docflowsAdaptor.lookupDocument(queryContext); 
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, true);
     }
 
