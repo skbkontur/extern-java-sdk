@@ -59,7 +59,6 @@ public class DocflowsLookupDocumentTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocument_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
@@ -69,7 +68,6 @@ public class DocflowsLookupDocumentTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocument_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
@@ -79,7 +77,6 @@ public class DocflowsLookupDocumentTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocument_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
@@ -92,7 +89,6 @@ public class DocflowsLookupDocumentTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocument_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
@@ -109,7 +105,6 @@ public class DocflowsLookupDocumentTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testLookupDocument_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
@@ -122,12 +117,11 @@ public class DocflowsLookupDocumentTest {
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
                 "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocument(queryContext);
+        docflowsAdaptor.lookupDocument(queryContext); // todo 1237
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, false);
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testLookupDocument_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
@@ -141,7 +135,7 @@ public class DocflowsLookupDocumentTest {
                 "\"links\": [" + StandardObjects.LINK + "]" +
                 "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocument(queryContext);
+        docflowsAdaptor.lookupDocument(queryContext); // todo 1237
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, true);
     }
 

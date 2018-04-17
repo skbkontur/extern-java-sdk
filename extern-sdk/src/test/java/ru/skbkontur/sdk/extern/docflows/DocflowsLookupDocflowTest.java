@@ -90,7 +90,6 @@ public class DocflowsLookupDocflowTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocflow_Docflow_Documents() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s," +
@@ -100,12 +99,11 @@ public class DocflowsLookupDocflowTest {
                 "}]" +
                 "}", DOCFLOW, StandardValues.ID));
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocflow(queryContext); // bug reported: KA-1213
+        docflowsAdaptor.lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, true, false);
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testLookupDocflow_Docflow_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +

@@ -93,7 +93,7 @@ public class DocflowsValidator {
             StandardObjectsValidator.validateNotEmptyList(document.getLinks(), "Links");
             StandardObjectsValidator.validateLink(document.getLinks().get(0));
         } else {
-            assertNull("Links must be null!", document.getLinks());
+            StandardObjectsValidator.validateEmptyList(document.getLinks(), "Links");
         }
     }
 

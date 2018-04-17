@@ -65,19 +65,17 @@ public class DocflowsGetDocumentsTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testGetDocuments_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
+        docflowsAdaptor.getDocuments(queryContext); // todo 1237
         List<Document> documents = queryContext.get();
         StandardObjectsValidator.validateNotEmptyList(documents, "Documents");
         DocflowsValidator.validateDocument(documents.get(0), false, false, false, false);
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testGetDocuments_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
@@ -85,12 +83,11 @@ public class DocflowsGetDocumentsTest {
                 "\"description\": " + DOCUMENT_DESCRIPTION +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
+        docflowsAdaptor.getDocuments(queryContext); // todo 1237
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, false, false, false);
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testGetDocuments_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
@@ -107,7 +104,6 @@ public class DocflowsGetDocumentsTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1213
     public void testGetDocuments_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
@@ -120,12 +116,11 @@ public class DocflowsGetDocumentsTest {
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
+        docflowsAdaptor.getDocuments(queryContext); // todo 1237
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, false);
     }
 
     @Test
-    @Ignore // bug reported: KA-1237
     public void testGetDocuments_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
@@ -139,7 +134,7 @@ public class DocflowsGetDocumentsTest {
                 "\"links\": [" + StandardObjects.LINK + "]" +
                 "}]");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
+        docflowsAdaptor.getDocuments(queryContext); // todo 1237
         DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, true);
     }
 
