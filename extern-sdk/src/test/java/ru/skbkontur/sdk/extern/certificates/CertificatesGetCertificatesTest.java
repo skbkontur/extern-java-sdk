@@ -2,10 +2,7 @@ package ru.skbkontur.sdk.extern.certificates;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import ru.skbkontur.sdk.extern.common.ResponseData;
 import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
 import ru.skbkontur.sdk.extern.common.TestServlet;
@@ -61,20 +58,22 @@ public class CertificatesGetCertificatesTest {
     }
 
     @Test
+    @Ignore // bug reported: KA-1199
     public void testGetCertificates_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
         CertificatesAdaptor certificatesAdaptor = new CertificatesAdaptor();
-        certificatesAdaptor.getCertificates(queryContext); // bug reported: KA-1199
+        certificatesAdaptor.getCertificates(queryContext);
         assertNotNull("Certificates must not be null!", queryContext.get());
     }
 
     @Test
+    @Ignore // bug reported: KA-1199
     public void testGetCertificates_CertificateList() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" + CERTIFICATE_LIST + "}");
         CertificatesAdaptor certificatesAdaptor = new CertificatesAdaptor();
-        certificatesAdaptor.getCertificates(queryContext); // bug reported: KA-1199
+        certificatesAdaptor.getCertificates(queryContext);
         CertificateList certificateList = queryContext.get();
         CertificatesValidator.validateCertificateList(certificateList);
         StandardObjectsValidator.validateEmptyList(certificateList.getCertificates(), "Certificates");
