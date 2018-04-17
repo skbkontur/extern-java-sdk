@@ -73,7 +73,6 @@ public class DocflowsGetDocflowsTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1211
     public void testGetDocflows_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
@@ -83,7 +82,6 @@ public class DocflowsGetDocflowsTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1211
     public void testGetDocflows_DocflowPage() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s}", DOCFLOW_PAGE));
@@ -94,15 +92,14 @@ public class DocflowsGetDocflowsTest {
     }
 
     @Test
-    @Ignore // bug reported: KA-1212
     public void testGetDocflows_DocflowPageItem() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s," +
                 "  \"docflows-page-item\": [{%s}]" +
                 "}", DOCFLOW_PAGE, DOCFLOW_PAGE_ITEM));
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocflows(queryContext); // bug reported: KA-1212
-        DocflowPage docflowPage = queryContext.get();
+        docflowsAdaptor.getDocflows(queryContext);
+        DocflowPage docflowPage = queryContext.get(); // todo 1212
         DocflowsValidator.validateDocflowPage(docflowPage, true);
     }
 
