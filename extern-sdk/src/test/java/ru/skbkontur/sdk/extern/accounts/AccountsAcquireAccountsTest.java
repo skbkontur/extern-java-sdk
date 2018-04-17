@@ -76,7 +76,7 @@ public class AccountsAcquireAccountsTest {
         accountsAdaptor.acquireAccounts(queryContext);
         AccountList accountList = queryContext.get();
         assertNotNull("accountList must not be null!", accountList);
-        assertNull("Accounts must be null!", accountList.getAccounts());
+        StandardObjectsValidator.validateEmptyList(accountList.getAccounts(), "Accounts");
     }
 
     @Test

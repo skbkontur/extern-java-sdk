@@ -6,7 +6,6 @@ import ru.skbkontur.sdk.extern.model.AccountList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
 
 class AccountsValidator {
     static void validateAccountList(AccountList accountList, boolean withAccounts) {
@@ -18,7 +17,7 @@ class AccountsValidator {
             StandardObjectsValidator.validateNotEmptyList(accountList.getAccounts(), "Accounts");
             validateAccount(accountList.getAccounts().get(0), false);
         } else {
-            assertNull("Accounts must be null!", accountList.getAccounts());
+            StandardObjectsValidator.validateEmptyList(accountList.getAccounts(), "Accounts");
         }
     }
 
@@ -32,7 +31,7 @@ class AccountsValidator {
             StandardObjectsValidator.validateNotEmptyList(account.getLinks(), "Links");
             StandardObjectsValidator.validateLink(account.getLinks().get(0));
         } else {
-            assertNull("Links must be null!", account.getLinks());
+            StandardObjectsValidator.validateEmptyList(account.getLinks(), "Links");
         }
     }
 }
