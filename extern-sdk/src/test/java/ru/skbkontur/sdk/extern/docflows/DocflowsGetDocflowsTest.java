@@ -99,7 +99,7 @@ public class DocflowsGetDocflowsTest {
                 "}", DOCFLOW_PAGE, DOCFLOW_PAGE_ITEM));
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
         docflowsAdaptor.getDocflows(queryContext);
-        DocflowPage docflowPage = queryContext.get(); // todo 1212
+        DocflowPage docflowPage = queryContext.get();
         DocflowsValidator.validateDocflowPage(docflowPage, true);
     }
 
