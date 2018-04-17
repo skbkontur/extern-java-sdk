@@ -5,8 +5,10 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
-import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.AccountList;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -19,7 +21,7 @@ public class AccountListDto {
 		if (dto == null) return null;
 		
 		AccountList accountList = new AccountList();
-		
+		accountList.setAccounts(new ArrayList<>());
 		if (dto.getAccounts() != null && !dto.getAccounts().isEmpty()) {
 			AccountDto accountDto = new AccountDto();
 			accountList.setAccounts(dto.getAccounts().stream().map(accountDto::fromDto).collect(Collectors.toList()));

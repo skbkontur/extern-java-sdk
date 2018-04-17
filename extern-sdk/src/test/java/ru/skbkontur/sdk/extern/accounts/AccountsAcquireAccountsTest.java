@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import static javax.servlet.http.HttpServletResponse.*;
 import static junit.framework.TestCase.*;
 
-public class AccountsGetAccountsTest {
+public class AccountsAcquireAccountsTest {
     private static final String LOCALHOST_ACCOUNTS = "http://localhost:8080/accounts";
     private static Server server;
 
@@ -60,7 +60,7 @@ public class AccountsGetAccountsTest {
     }
 
     @Test
-    public void testGetAccounts_Empty() {
+    public void testAcquireAccounts_Empty() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
         AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
@@ -69,7 +69,7 @@ public class AccountsGetAccountsTest {
     }
 
     @Test
-    public void testGetAccounts_EmptyArray() {
+    public void testAcquireAccounts_EmptyArray() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\"accounts\": []}");
         AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
@@ -80,7 +80,7 @@ public class AccountsGetAccountsTest {
     }
 
     @Test
-    public void testGetAccounts_AccountList() {
+    public void testAcquireAccounts_AccountList() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s}", ACCOUNT_LIST));
         AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
@@ -90,7 +90,7 @@ public class AccountsGetAccountsTest {
     }
 
     @Test
-    public void testGetAccounts_Accounts() {
+    public void testAcquireAccounts_Accounts() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
                 ACCOUNT_LIST + "," +
@@ -103,31 +103,31 @@ public class AccountsGetAccountsTest {
     }
 
     @Test
-    public void testGetAccounts_BAD_REQUEST() {
+    public void testAcquireAccounts_BAD_REQUEST() {
         ResponseData.INSTANCE.setResponseCode(SC_BAD_REQUEST); // 400
         checkResponseCode(SC_BAD_REQUEST);
     }
 
     @Test
-    public void testGetAccounts_UNAUTHORIZED() {
+    public void testAcquireAccounts_UNAUTHORIZED() {
         ResponseData.INSTANCE.setResponseCode(SC_UNAUTHORIZED); // 401
         checkResponseCode(SC_UNAUTHORIZED);
     }
 
     @Test
-    public void testGetAccounts_FORBIDDEN() {
+    public void testAcquireAccounts_FORBIDDEN() {
         ResponseData.INSTANCE.setResponseCode(SC_FORBIDDEN); // 403
         checkResponseCode(SC_FORBIDDEN);
     }
 
     @Test
-    public void testGetAccounts_NOT_FOUND() {
+    public void testAcquireAccounts_NOT_FOUND() {
         ResponseData.INSTANCE.setResponseCode(SC_NOT_FOUND); // 404
         checkResponseCode(SC_NOT_FOUND);
     }
 
     @Test
-    public void testGetAccounts_INTERNAL_SERVER_ERROR() {
+    public void testAcquireAccounts_INTERNAL_SERVER_ERROR() {
         ResponseData.INSTANCE.setResponseCode(SC_INTERNAL_SERVER_ERROR); // 500
         checkResponseCode(SC_INTERNAL_SERVER_ERROR);
     }
