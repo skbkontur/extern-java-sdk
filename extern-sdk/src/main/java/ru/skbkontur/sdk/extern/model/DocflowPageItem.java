@@ -5,67 +5,69 @@
  */
 package ru.skbkontur.sdk.extern.model;
 
-import java.util.List;
-import java.util.UUID;
 import org.joda.time.DateTime;
 
+import java.util.List;
+import java.util.UUID;
+
+
 /**
- *
  * @author alexs
  */
 public class DocflowPageItem {
-  private UUID id = null;
-  private String type = null;
-  private String status = null;
-  private List<Link> links = null;
-  private DateTime sendDate = null;
-  private DateTime lastChangeDate = null;
 
-	public UUID getId() {
-		return id;
-	}
+    private UUID id = null;
+    private String type = null;
+    private String status = null;
+    private List<Link> links = null;
+    private DateTime sendDate = null;
+    private DateTime lastChangeDate = null;
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
+    public UUID getId() {
+        return id;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public List<Link> getLinks() {
-		return links;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	public DateTime getSendDate() {
-		return sendDate;
-	}
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
-	public void setSendDate(DateTime sendDate) {
-		this.sendDate = sendDate;
-	}
+    public DateTime getSendDate() {
+        return sendDate;
+    }
 
-	public DateTime getLastChangeDate() {
-		return lastChangeDate;
-	}
+    public void setSendDate(DateTime sendDate) {
+        this.sendDate = sendDate;
+    }
 
-	public void setLastChangeDate(DateTime lastChangeDate) {
-		this.lastChangeDate = lastChangeDate;
-	}
+    public DateTime getLastChangeDate() {
+        return lastChangeDate;
+    }
+
+    public void setLastChangeDate(DateTime lastChangeDate) {
+        this.lastChangeDate = lastChangeDate;
+    }
 }

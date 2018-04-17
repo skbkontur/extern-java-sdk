@@ -25,69 +25,68 @@ package ru.skbkontur.sdk.extern.service;
 
 import java.util.stream.Stream;
 
+
 /**
- *
  * @author AlexS
  */
 public class File {
-	private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;
-	
-	public static enum ContentType {
-		XML("application/xml");
-		
-		private final String value;
-		
-		ContentType(String value) {
-			this.value = value;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-    public static ContentType fromValue(String v) {
-			return Stream.of(ContentType.values()).filter(t->t.value.equals(v)).findAny().orElse(null);
+
+    private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;
+    private ContentType contentType;
+    private String fileName;
+    private byte[] content;
+
+    public File() {
     }
-	}
-	
-	public File() {
-	}
 
-	public File(String fileName, byte[] content, ContentType contentType) {
-		this.fileName = fileName;
-		this.content = content;
-		this.contentType = contentType;
-	}
-	
-	public File(String fileName, byte[] content) {
-		this(fileName, content, DEFAULT_CONTENT_TYPE);
-	}
-	
-	private ContentType contentType;
-	private String fileName;
-	private byte[] content;
+    public File(String fileName, byte[] content, ContentType contentType) {
+        this.fileName = fileName;
+        this.content = content;
+        this.contentType = contentType;
+    }
+    public File(String fileName, byte[] content) {
+        this(fileName, content, DEFAULT_CONTENT_TYPE);
+    }
 
-	public ContentType getContentType() {
-		return contentType;
-	}
+    public ContentType getContentType() {
+        return contentType;
+    }
 
-	public void setContentType(ContentType contentType) {
-		this.contentType = contentType;
-	}
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public byte[] getContent() {
-		return content;
-	}
+    public byte[] getContent() {
+        return content;
+    }
 
-	public void setContent(byte[] content) {
-		this.content = content;
-	}
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
+    public enum ContentType {
+        XML("application/xml");
+
+        private final String value;
+
+        ContentType(String value) {
+            this.value = value;
+        }
+
+        public static ContentType fromValue(String v) {
+            return Stream.of(ContentType.values()).filter(t -> t.value.equals(v)).findAny().orElse(null);
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }

@@ -5,28 +5,30 @@
  */
 package ru.skbkontur.sdk.extern.service.impl;
 
-import java.util.concurrent.CompletableFuture;
 import ru.skbkontur.sdk.extern.model.CertificateList;
 import ru.skbkontur.sdk.extern.service.CertificateService;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.CertificatesAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
+import java.util.concurrent.CompletableFuture;
+
+
 /**
- *
  * @author alexs
  */
 public class CertificateServiceImpl extends BaseService<CertificatesAdaptor> implements CertificateService {
-	private static final String EN_CER = "certificate";
 
-	@Override
-	public CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync() {
-		QueryContext<CertificateList> cxt = createQueryContext(EN_CER);
-		return cxt.applyAsync(api::getCertificates);
-	}
+    private static final String EN_CER = "certificate";
 
-	@Override
-	public QueryContext<CertificateList> getCertificateList(QueryContext<?> parent) {
-		QueryContext<CertificateList> cxt = createQueryContext(parent, EN_CER);
-		return cxt.apply(api::getCertificates);
-	}
+    @Override
+    public CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync() {
+        QueryContext<CertificateList> cxt = createQueryContext(EN_CER);
+        return cxt.applyAsync(api::getCertificates);
+    }
+
+    @Override
+    public QueryContext<CertificateList> getCertificateList(QueryContext<?> parent) {
+        QueryContext<CertificateList> cxt = createQueryContext(parent, EN_CER);
+        return cxt.apply(api::getCertificates);
+    }
 }

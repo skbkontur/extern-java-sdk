@@ -7,72 +7,72 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 import java.util.stream.Collectors;
 
+
 /**
- *
  * @author AlexS
  */
 public class DocflowDto {
 
-	public ru.skbkontur.sdk.extern.model.Docflow fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow dto) {
+    public ru.skbkontur.sdk.extern.model.Docflow fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow dto) {
 
-		if (dto == null) return null;
+        if (dto == null) return null;
 
-		ru.skbkontur.sdk.extern.model.Docflow docflow = new ru.skbkontur.sdk.extern.model.Docflow();
+        ru.skbkontur.sdk.extern.model.Docflow docflow = new ru.skbkontur.sdk.extern.model.Docflow();
 
-		docflow.setDescription(new ru.skbkontur.sdk.extern.model.DocflowDescription());
+        docflow.setDescription(new ru.skbkontur.sdk.extern.model.DocflowDescription());
 
-		if (dto.getDocuments() != null) {
-			DocumentDto documentDto = new DocumentDto();
-			docflow.setDocuments(dto.getDocuments().stream().map(d -> documentDto.fromDto(d)).collect(Collectors.toList()));
-		}
+        if (dto.getDocuments() != null) {
+            DocumentDto documentDto = new DocumentDto();
+            docflow.setDocuments(dto.getDocuments().stream().map(d -> documentDto.fromDto(d)).collect(Collectors.toList()));
+        }
 
-		docflow.setId(dto.getId());
+        docflow.setId(dto.getId());
 
-		docflow.setLastChangeDate(dto.getLastChangeDate());
+        docflow.setLastChangeDate(dto.getLastChangeDate());
 
-		if (dto.getLinks() != null) {
-			LinkDto linkDto = new LinkDto();
-			docflow.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
-		}
+        if (dto.getLinks() != null) {
+            LinkDto linkDto = new LinkDto();
+            docflow.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+        }
 
-		docflow.setSendDate(dto.getSendDate());
+        docflow.setSendDate(dto.getSendDate());
 
-		docflow.setStatus(dto.getStatus());
+        docflow.setStatus(dto.getStatus());
 
-		docflow.setType(dto.getType());
+        docflow.setType(dto.getType());
 
-		return docflow;
-	}
+        return docflow;
+    }
 
-	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow toDto(ru.skbkontur.sdk.extern.model.Docflow docflow) {
+    public ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow toDto(ru.skbkontur.sdk.extern.model.Docflow docflow) {
 
-		if (docflow == null) return null;
+        if (docflow == null) return null;
 
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow dto
-			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow();
+        ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow dto
+                = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow();
 
-		dto.setDescription(new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowDescription());
+        dto.setDescription(new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowDescription());
 
-		if (docflow.getDocuments() != null) {
-			DocumentDto documentDto = new DocumentDto();
-			dto.setDocuments(docflow.getDocuments().stream().map(d -> documentDto.toDto(d)).collect(Collectors.toList()));
-		}
+        if (docflow.getDocuments() != null) {
+            DocumentDto documentDto = new DocumentDto();
+            dto.setDocuments(docflow.getDocuments().stream().map(d -> documentDto.toDto(d)).collect(Collectors.toList()));
+        }
 
-		dto.setId(docflow.getId());
+        dto.setId(docflow.getId());
 
-		dto.setLastChangeDate(docflow.getLastChangeDate());
+        dto.setLastChangeDate(docflow.getLastChangeDate());
 
-		if (docflow.getLinks() != null) {
-			LinkDto linkDto = new LinkDto();
-			dto.setLinks(docflow.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
-		}
+        if (docflow.getLinks() != null) {
+            LinkDto linkDto = new LinkDto();
+            dto.setLinks(docflow.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
+        }
 
-		dto.setSendDate(docflow.getSendDate());
+        dto.setSendDate(docflow.getSendDate());
 
-		dto.setStatus(docflow.getStatus());
+        dto.setStatus(docflow.getStatus());
 
-		dto.setType(docflow.getType());
+        dto.setType(docflow.getType());
 
-		return dto;
-	}
+        return dto;
+    }
 }

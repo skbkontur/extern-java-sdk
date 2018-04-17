@@ -8,110 +8,105 @@ package ru.skbkontur.sdk.extern.model;
 import java.util.List;
 import java.util.UUID;
 
+
 /**
- *
  * @author AlexS
  */
 public class Document {
 
-	private UUID id = null;
-	private DocumentDescription description = null;
-	private Content content = null;
-	private List<Signature> signatures = null;
-	private List<Link> links = null;
+    private UUID id = null;
+    private DocumentDescription description = null;
+    private Content content = null;
+    private List<Signature> signatures = null;
+    private List<Link> links = null;
 
-	public Document id(UUID id) {
-		this.id = id;
-		return this;
-	}
+    public Document id(UUID id) {
+        this.id = id;
+        return this;
+    }
 
-	/**
-	 * Get id
-	 *
-	 * @return id
-	 *
-	 */
-	public UUID getId() {
-		return id;
-	}
+    /**
+     * Get id
+     *
+     * @return id
+     */
+    public UUID getId() {
+        return id;
+    }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-	public Document description(DocumentDescription description) {
-		this.description = description;
-		return this;
-	}
+    public Document description(DocumentDescription description) {
+        this.description = description;
+        return this;
+    }
 
-	/**
-	 * Get description
-	 *
-	 * @return description
-	 *
-	 */
-	public DocumentDescription getDescription() {
-		return description;
-	}
+    /**
+     * Get description
+     *
+     * @return description
+     */
+    public DocumentDescription getDescription() {
+        return description;
+    }
 
-	public void setDescription(DocumentDescription description) {
-		this.description = description;
-	}
+    public void setDescription(DocumentDescription description) {
+        this.description = description;
+    }
 
-	public Document content(Content content) {
-		this.content = content;
-		return this;
-	}
+    public Document content(Content content) {
+        this.content = content;
+        return this;
+    }
 
-	/**
-	 * Get content
-	 *
-	 * @return content
-	 *
-	 */
-	public Content getContent() {
-		return content;
-	}
+    /**
+     * Get content
+     *
+     * @return content
+     */
+    public Content getContent() {
+        return content;
+    }
 
-	public void setContent(Content content) {
-		this.content = content;
-	}
+    public void setContent(Content content) {
+        this.content = content;
+    }
 
-	public Document signatures(List<Signature> signatures) {
-		this.signatures = signatures;
-		return this;
-	}
+    public Document signatures(List<Signature> signatures) {
+        this.signatures = signatures;
+        return this;
+    }
 
-	/**
-	 * Get signatures
-	 *
-	 * @return signatures
-	 *
-	 */
-	public List<Signature> getSignatures() {
-		return signatures;
-	}
+    /**
+     * Get signatures
+     *
+     * @return signatures
+     */
+    public List<Signature> getSignatures() {
+        return signatures;
+    }
 
-	public void setSignatures(List<Signature> signatures) {
-		this.signatures = signatures;
-	}
+    public void setSignatures(List<Signature> signatures) {
+        this.signatures = signatures;
+    }
 
-	public Document links(List<Link> links) {
-		this.links = links;
-		return this;
-	}
+    public Document links(List<Link> links) {
+        this.links = links;
+        return this;
+    }
 
-	/**
-	 * Get links
-	 *
-	 * @return links
-	 *
-	 */
-	public List<Link> getLinks() {
-		return links;
-	}
+    /**
+     * Get links
+     *
+     * @return links
+     */
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }

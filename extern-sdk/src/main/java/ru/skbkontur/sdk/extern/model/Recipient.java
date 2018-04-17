@@ -6,9 +6,8 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public interface Recipient {
-	
+
 }

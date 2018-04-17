@@ -7,72 +7,72 @@ package ru.skbkontur.sdk.extern.model;
 
 import java.util.List;
 
+
 /**
- *
  * @author AlexS
  */
 public class PrepareResult {
-	
-  public enum Status {
-    CHECKPROTOCOLHASERRORS("checkProtocolHasErrors"),
-    
-    CHECKPROTOCOLHASONLYWARNINGS("checkProtocolHasOnlyWarnings"),
-    
-    ENCRYPTIONFAILED("encryptionFailed"),
-    
-    OK("ok");
 
-    private final String value;
+    private CheckResultData checkResult = null;
+    private List<Link> links = null;
+    private Status status = null;
 
-    Status(String value) {
-      this.value = value;
+    public CheckResultData getCheckResult() {
+        return checkResult;
     }
 
-    public String getValue() {
-      return value;
+    public void setCheckResult(CheckResultData checkResult) {
+        this.checkResult = checkResult;
     }
 
-    @Override
-    public String toString() {
-      return String.valueOf(value);
+    public List<Link> getLinks() {
+        return links;
     }
 
-    public static Status fromValue(String text) {
-      for (Status b : Status.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public enum Status {
+        CHECKPROTOCOLHASERRORS("checkProtocolHasErrors"),
+
+        CHECKPROTOCOLHASONLYWARNINGS("checkProtocolHasOnlyWarnings"),
+
+        ENCRYPTIONFAILED("encryptionFailed"),
+
+        OK("ok");
+
+        private final String value;
+
+        Status(String value) {
+            this.value = value;
         }
-      }
-      return null;
+
+        public static Status fromValue(String text) {
+            for (Status b : Status.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
     }
-	}
-		
-  private CheckResultData checkResult = null;
-  private List<Link> links = null;
-  private Status status = null;
-
-	public CheckResultData getCheckResult() {
-		return checkResult;
-	}
-
-	public void setCheckResult(CheckResultData checkResult) {
-		this.checkResult = checkResult;
-	}
-
-	public List<Link> getLinks() {
-		return links;
-	}
-
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
-
-	public Status getStatus() {
-		return status;
-	}
-	
-  public void setStatus(Status status) {
-    this.status = status;
-  }
 
 }

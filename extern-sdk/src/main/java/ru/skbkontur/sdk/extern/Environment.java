@@ -7,17 +7,18 @@ package ru.skbkontur.sdk.extern;
 
 import com.google.gson.Gson;
 
+
 /**
- *
  * @author AlexS
  */
 public class Environment {
-	public final Gson gson = new Gson();
 
-	public Configuration configuration;
-	public String accessToken;
-	
-	public Environment() {
-		configuration = new Configuration();
-	}
+    public final Gson gson = new Gson();
+
+    public Configuration configuration;
+    public String accessToken;
+
+    public Environment() {
+        configuration = new Configuration();
+    }
 }

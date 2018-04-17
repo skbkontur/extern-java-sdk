@@ -5,125 +5,126 @@
  */
 package ru.skbkontur.sdk.extern.providers.auth;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
-import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
-import ru.skbkontur.sdk.extern.providers.UriProvider;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
+import ru.skbkontur.sdk.extern.providers.UriProvider;
+import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SESSION_ID;
+
+
 /**
- *
  * @author AlexS
  */
-public class AuthenticationProviderByPass extends  AuthenticationProviderAbstract {
+public class AuthenticationProviderByPass extends AuthenticationProviderAbstract {
 
-	private ApiKeyProvider apiKeyProvider;
-	private LoginAndPasswordProvider loginAndPasswordProvider;
-	private UriProvider authBaseUriProvider;
-	private final String authPrefix;
-	
-	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
-		this.authBaseUriProvider = authBaseUriProvider;
-		this.loginAndPasswordProvider = loginAndPasswordProvider;
-		this.apiKeyProvider = apiKeyProvider;
-		this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
-	}
+    private final String authPrefix;
+    private ApiKeyProvider apiKeyProvider;
+    private LoginAndPasswordProvider loginAndPasswordProvider;
+    private UriProvider authBaseUriProvider;
 
-	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {
-		this(authBaseUriProvider,loginAndPasswordProvider,apiKeyProvider,DEFAULT_AUTH_PREFIX);
-	}
+    public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
+        this.authBaseUriProvider = authBaseUriProvider;
+        this.loginAndPasswordProvider = loginAndPasswordProvider;
+        this.apiKeyProvider = apiKeyProvider;
+        this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
+    }
 
-	public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
-		this.apiKeyProvider = apiKeyProvider;
-	}
+    public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {
+        this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
+    }
 
-	public void setLoginAndPasswordProvider(LoginAndPasswordProvider loginAndPasswordProvider) {
-		this.loginAndPasswordProvider = loginAndPasswordProvider;
-	}
+    public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
+        this.apiKeyProvider = apiKeyProvider;
+    }
 
-	public void setAuthBaseUriProvider(UriProvider authBaseUriProvider) {
-		this.authBaseUriProvider = authBaseUriProvider;
-	}
+    public void setLoginAndPasswordProvider(LoginAndPasswordProvider loginAndPasswordProvider) {
+        this.loginAndPasswordProvider = loginAndPasswordProvider;
+    }
 
-	@Override
-	public QueryContext<String> sessionId() {
-		QueryContext<String> cxt = createQueryContext("loginAndPasswordAuthenticationProvider");
+    public void setAuthBaseUriProvider(UriProvider authBaseUriProvider) {
+        this.authBaseUriProvider = authBaseUriProvider;
+    }
 
-		try {
+    @Override
+    public QueryContext<String> sessionId() {
+        QueryContext<String> cxt = createQueryContext("loginAndPasswordAuthenticationProvider");
 
-			if (loginAndPasswordProvider == null) {
-				return cxt.setServiceError("Missing the login provider");
-			}
+        try {
 
-			String login = loginAndPasswordProvider.getLogin();
+            if (loginAndPasswordProvider == null) {
+                return cxt.setServiceError("Missing the login provider");
+            }
 
-			String pass = loginAndPasswordProvider.getPass();
+            String login = loginAndPasswordProvider.getLogin();
 
-			if (login == null) {
-				cxt.setServiceError("Missing the required parameter 'login'");
-			}
+            String pass = loginAndPasswordProvider.getPass();
 
-			if (pass == null) {
-				cxt.setServiceError("Missing the required parameter 'pass'");
-			}
+            if (login == null) {
+                cxt.setServiceError("Missing the required parameter 'login'");
+            }
 
-			if (apiKeyProvider == null) {
-				return cxt.setServiceError("Missing the api key provider");
-			}
+            if (pass == null) {
+                cxt.setServiceError("Missing the required parameter 'pass'");
+            }
 
-			String apiKey = apiKeyProvider.getApiKey();
-			
-			if (apiKey == null) {
-				cxt.setServiceError("Missing the required parameter 'api key'");
-			}
+            if (apiKeyProvider == null) {
+                return cxt.setServiceError("Missing the api key provider");
+            }
 
-			ApiClient apiClient = cxt.getApiClient();
-			
-			apiClient.setBasePath(authBaseUriProvider.getUri());
-			
-			Map<String, String> queryParams = new HashMap<String, String>() {
-				{
-					put("login", login);
-					put("apiKey", apiKey);
-				}
-			};
+            String apiKey = apiKeyProvider.getApiKey();
 
-			Map<String, String> headerParams = new HashMap<String, String>() {
-				{
-					put("Content-Type", "text/plain");
-				}
-			};
+            if (apiKey == null) {
+                cxt.setServiceError("Missing the required parameter 'api key'");
+            }
 
-			ApiResponse<ResponseSid> resp = apiClient.submitHttpRequest("/v5.6/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
-			
-			cxt.setResult(resp.getData().getSid(), SESSION_ID);
-		}
-		catch (ApiException x) {
-			cxt.setServiceError(x);
-		}
+            ApiClient apiClient = cxt.getApiClient();
 
-		fireAuthenticationEvent(cxt);
-		
-		return cxt;
-	}
+            apiClient.setBasePath(authBaseUriProvider.getUri());
 
-	@Override
-	public String authPrefix() {
-		return authPrefix;
-	}
+            Map<String, String> queryParams = new HashMap<String, String>() {
+                {
+                    put("login", login);
+                    put("apiKey", apiKey);
+                }
+            };
 
-	private <T> QueryContext<T> createQueryContext(String entityName) {
-		QueryContext<T> cxt = new QueryContext<>(entityName);
-		cxt.setApiClient(new ApiClient());
-		cxt.setServiceBaseUri(authBaseUriProvider.getUri());
-		cxt.setApiKeyProvider(apiKeyProvider);
-		cxt.configureApiClient();
-		return cxt;
-	}
+            Map<String, String> headerParams = new HashMap<String, String>() {
+                {
+                    put("Content-Type", "text/plain");
+                }
+            };
+
+            ApiResponse<ResponseSid> resp = apiClient.submitHttpRequest("/v5.6/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
+
+            cxt.setResult(resp.getData().getSid(), SESSION_ID);
+        } catch (ApiException x) {
+            cxt.setServiceError(x);
+        }
+
+        fireAuthenticationEvent(cxt);
+
+        return cxt;
+    }
+
+    @Override
+    public String authPrefix() {
+        return authPrefix;
+    }
+
+    private <T> QueryContext<T> createQueryContext(String entityName) {
+        QueryContext<T> cxt = new QueryContext<>(entityName);
+        cxt.setApiClient(new ApiClient());
+        cxt.setServiceBaseUri(authBaseUriProvider.getUri());
+        cxt.setApiKeyProvider(apiKeyProvider);
+        cxt.configureApiClient();
+        return cxt;
+    }
 }

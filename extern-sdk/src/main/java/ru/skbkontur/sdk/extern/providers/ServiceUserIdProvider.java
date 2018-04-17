@@ -6,9 +6,9 @@
 package ru.skbkontur.sdk.extern.providers;
 
 /**
- *
  * @author AlexS
  */
 public interface ServiceUserIdProvider {
-	String getServiceUserIdProvider();
+
+    String getServiceUserIdProvider();
 }

@@ -6,10 +6,10 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 /**
- *
  * @author AlexS
  */
 @FunctionalInterface
 public interface Query<R> {
-	QueryContext<R> apply(QueryContext<R> context);
+
+    QueryContext<R> apply(QueryContext<R> context);
 }

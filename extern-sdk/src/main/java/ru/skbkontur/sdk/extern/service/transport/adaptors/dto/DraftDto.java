@@ -6,33 +6,32 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 /**
- *
  * @author AlexS
  */
 public class DraftDto {
 
-	public ru.skbkontur.sdk.extern.model.Draft fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto) {
+    public ru.skbkontur.sdk.extern.model.Draft fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto) {
 
-		if (dto == null) return null;
+        if (dto == null) return null;
 
-		ru.skbkontur.sdk.extern.model.Draft draft = new ru.skbkontur.sdk.extern.model.Draft();
-		draft.setId(dto.getId());
-		draft.setStatus(dto.getStatus().getValue());
+        ru.skbkontur.sdk.extern.model.Draft draft = new ru.skbkontur.sdk.extern.model.Draft();
+        draft.setId(dto.getId());
+        draft.setStatus(dto.getStatus().getValue());
 
-		return draft;
-	}
+        return draft;
+    }
 
-	public ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft toDto(ru.skbkontur.sdk.extern.model.Draft draft) {
+    public ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft toDto(ru.skbkontur.sdk.extern.model.Draft draft) {
 
-		if (draft == null) return null;
+        if (draft == null) return null;
 
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto
-			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft();
-		dto.setId(draft.getId());
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum status
-			= ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum.fromValue(draft.getStatus().getValue());
-		dto.setStatus(status);
+        ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto
+                = new ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft();
+        dto.setId(draft.getId());
+        ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum status
+                = ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft.StatusEnum.fromValue(draft.getStatus().getValue());
+        dto.setStatus(status);
 
-		return dto;
-	}
+        return dto;
+    }
 }

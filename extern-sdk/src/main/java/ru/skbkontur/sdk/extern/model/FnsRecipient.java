@@ -6,25 +6,25 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public class FnsRecipient implements Recipient {
-	private String ifnsCode;
 
-	public FnsRecipient() {
-	}
-	
-	public FnsRecipient(String ifnsCode) {
-		this.ifnsCode = ifnsCode;
-	}
-	
-	public String getIfnsCode() {
-		return ifnsCode;
-	}
-	
-	public void setIfnsCode(String ifnsCode) {
-		this.ifnsCode = ifnsCode;
-	}
-	
+    private String ifnsCode;
+
+    public FnsRecipient() {
+    }
+
+    public FnsRecipient(String ifnsCode) {
+        this.ifnsCode = ifnsCode;
+    }
+
+    public String getIfnsCode() {
+        return ifnsCode;
+    }
+
+    public void setIfnsCode(String ifnsCode) {
+        this.ifnsCode = ifnsCode;
+    }
+
 }

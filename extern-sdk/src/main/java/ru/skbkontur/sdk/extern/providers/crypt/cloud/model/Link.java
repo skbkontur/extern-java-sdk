@@ -7,49 +7,50 @@ package ru.skbkontur.sdk.extern.providers.crypt.cloud.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author AlexS
  */
 public class Link {
-	@SerializedName("href")
-	private String href;
-	@SerializedName("Rel")
-	private String rel;
-	@SerializedName("Method")
-	private String method;
-	@SerializedName("InputModelExample")
-	private String inputModelExample;
 
-	public String getHref() {
-		return href;
-	}
+    @SerializedName("href")
+    private String href;
+    @SerializedName("Rel")
+    private String rel;
+    @SerializedName("Method")
+    private String method;
+    @SerializedName("InputModelExample")
+    private String inputModelExample;
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public String getRel() {
-		return rel;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public void setRel(String rel) {
-		this.rel = rel;
-	}
+    public String getRel() {
+        return rel;
+    }
 
-	public String getMethod() {
-		return method;
-	}
+    public void setRel(String rel) {
+        this.rel = rel;
+    }
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+    public String getMethod() {
+        return method;
+    }
 
-	public String getInputModelExample() {
-		return inputModelExample;
-	}
+    public void setMethod(String method) {
+        this.method = method;
+    }
 
-	public void setInputModelExample(String inputModelExample) {
-		this.inputModelExample = inputModelExample;
-	}
+    public String getInputModelExample() {
+        return inputModelExample;
+    }
+
+    public void setInputModelExample(String inputModelExample) {
+        this.inputModelExample = inputModelExample;
+    }
 }

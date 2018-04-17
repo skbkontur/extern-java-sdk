@@ -6,69 +6,65 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public class DocumentDescription {
 
-	private String type = null;
-	private String filename = null;
-	private String contentType = null;
+    private String type = null;
+    private String filename = null;
+    private String contentType = null;
 
-	public DocumentDescription type(String type) {
-		this.type = type;
-		return this;
-	}
+    public DocumentDescription type(String type) {
+        this.type = type;
+        return this;
+    }
 
-	/**
-	 * Get type
-	 *
-	 * @return type
-	 *
-	 */
-	public String getType() {
-		return type;
-	}
+    /**
+     * Get type
+     *
+     * @return type
+     */
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public DocumentDescription filename(String filename) {
-		this.filename = filename;
-		return this;
-	}
+    public DocumentDescription filename(String filename) {
+        this.filename = filename;
+        return this;
+    }
 
-	/**
-	 * Get filename
-	 *
-	 * @return filename
-	 *
-	 */
-	public String getFilename() {
-		return filename;
-	}
+    /**
+     * Get filename
+     *
+     * @return filename
+     */
+    public String getFilename() {
+        return filename;
+    }
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-	public DocumentDescription contentType(String contentType) {
-		this.contentType = contentType;
-		return this;
-	}
+    public DocumentDescription contentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
 
-	/**
-	 * Get contentType
-	 *
-	 * @return contentType
-	 *
-	 */
-	public String getContentType() {
-		return contentType;
-	}
+    /**
+     * Get contentType
+     *
+     * @return contentType
+     */
+    public String getContentType() {
+        return contentType;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 }

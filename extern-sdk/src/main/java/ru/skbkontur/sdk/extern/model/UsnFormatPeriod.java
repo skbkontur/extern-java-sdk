@@ -6,62 +6,60 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class UsnFormatPeriod {
 
-	public enum PeriodModifiersEnum {
-    NONE("none"),
-    
-    LIQUIDATIONREORGANIZATION("liquidationReorganization"),
-    
-    TAXREGIMECHANGE("taxRegimeChange"),
-    
-    LASTPERIODFORTAXREGIME("lastPeriodForTaxRegime");
+    private PeriodModifiersEnum periodModifiers = null;
+    private Integer year = null;
 
-    private final String value;
-
-    PeriodModifiersEnum(String value) {
-      this.value = value;
+    public PeriodModifiersEnum getPeriodModifiers() {
+        return periodModifiers;
     }
 
-    public String getValue() {
-      return value;
+    public void setPeriodModifiers(PeriodModifiersEnum periodModifiers) {
+        this.periodModifiers = periodModifiers;
     }
 
-    @Override
-    public String toString() {
-      return String.valueOf(value);
+    public Integer getYear() {
+        return year;
     }
 
-    public static PeriodModifiersEnum fromValue(String text) {
-      for (PeriodModifiersEnum b : PeriodModifiersEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public enum PeriodModifiersEnum {
+        NONE("none"),
+
+        LIQUIDATIONREORGANIZATION("liquidationReorganization"),
+
+        TAXREGIMECHANGE("taxRegimeChange"),
+
+        LASTPERIODFORTAXREGIME("lastPeriodForTaxRegime");
+
+        private final String value;
+
+        PeriodModifiersEnum(String value) {
+            this.value = value;
         }
-      }
-      return null;
+
+        public static PeriodModifiersEnum fromValue(String text) {
+            for (PeriodModifiersEnum b : PeriodModifiersEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
     }
-  }
-
-  private PeriodModifiersEnum periodModifiers = null;
-	
-  private Integer year = null;
-
-	public PeriodModifiersEnum getPeriodModifiers() {
-		return periodModifiers;
-	}
-
-	public void setPeriodModifiers(PeriodModifiersEnum periodModifiers) {
-		this.periodModifiers = periodModifiers;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
 }

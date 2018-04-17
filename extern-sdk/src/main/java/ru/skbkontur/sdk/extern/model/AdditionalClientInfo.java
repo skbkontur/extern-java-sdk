@@ -6,70 +6,67 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class AdditionalClientInfo {
 
-	public enum SignerTypeEnum {
-    UNKNOWN("unknown"),
-    
-    CHIEF("chief"),
-    
-    REPRESENTATIVE("representative");
+    private SignerTypeEnum signerType = null;
+    private String senderFullName = null;
+    private Taxpayer taxpayer = null;
 
-    private final String value;
-
-    SignerTypeEnum(String value) {
-      this.value = value;
+    public SignerTypeEnum getSignerType() {
+        return signerType;
     }
 
-    public String getValue() {
-      return value;
+    public void setSignerType(SignerTypeEnum signerType) {
+        this.signerType = signerType;
     }
 
-    @Override
-    public String toString() {
-      return String.valueOf(value);
+    public String getSenderFullName() {
+        return senderFullName;
     }
 
-    public static SignerTypeEnum fromValue(String text) {
-      for (SignerTypeEnum b : SignerTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
+    public void setSenderFullName(String senderFullName) {
+        this.senderFullName = senderFullName;
+    }
+
+    public Taxpayer getTaxpayer() {
+        return taxpayer;
+    }
+
+    public void setTaxpayer(Taxpayer taxpayer) {
+        this.taxpayer = taxpayer;
+    }
+
+    public enum SignerTypeEnum {
+        UNKNOWN("unknown"),
+
+        CHIEF("chief"),
+
+        REPRESENTATIVE("representative");
+
+        private final String value;
+
+        SignerTypeEnum(String value) {
+            this.value = value;
         }
-      }
-      return null;
+
+        public static SignerTypeEnum fromValue(String text) {
+            for (SignerTypeEnum b : SignerTypeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
     }
-  }
-
-  private SignerTypeEnum signerType = null;
-
-  private String senderFullName = null;
-
-  private Taxpayer taxpayer = null;
-
-	public SignerTypeEnum getSignerType() {
-		return signerType;
-	}
-
-	public void setSignerType(SignerTypeEnum signerType) {
-		this.signerType = signerType;
-	}
-
-	public String getSenderFullName() {
-		return senderFullName;
-	}
-
-	public void setSenderFullName(String  senderFullName) {
-		this.senderFullName = senderFullName;
-	}
-
-	public Taxpayer getTaxpayer() {
-		return taxpayer;
-	}
-
-	public void setTaxpayer(Taxpayer taxpayer) {
-		this.taxpayer = taxpayer;
-	}
 }

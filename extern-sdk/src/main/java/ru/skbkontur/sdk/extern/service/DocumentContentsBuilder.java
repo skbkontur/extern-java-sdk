@@ -27,23 +27,24 @@ import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.model.DocumentContents;
 import ru.skbkontur.sdk.extern.model.DocumentDescription;
 
+
 /**
- *
  * @author AlexS
  */
 public class DocumentContentsBuilder {
-	public static DocumentContents build(File file, byte[] signPKCS7) {
-		// создаем описание документа
-		DocumentDescription dd = new DocumentDescription();
-		dd.setContentType(file.getContentType().getValue());
-		dd.setFilename(file.getFileName());
 
-		// создаем контекст документа
-		DocumentContents dc = new DocumentContents();
-		dc.setDocumentDescription(dd);
-		dc.setBase64Content(file.getContent() != null ? IOUtil.encodeBase64(file.getContent()) : null);
-		dc.setSignature(signPKCS7 != null ? IOUtil.encodeBase64(signPKCS7) : null);
-		
-		return dc;
-	}
+    public static DocumentContents build(File file, byte[] signPKCS7) {
+        // создаем описание документа
+        DocumentDescription dd = new DocumentDescription();
+        dd.setContentType(file.getContentType().getValue());
+        dd.setFilename(file.getFileName());
+
+        // создаем контекст документа
+        DocumentContents dc = new DocumentContents();
+        dc.setDocumentDescription(dd);
+        dc.setBase64Content(file.getContent() != null ? IOUtil.encodeBase64(file.getContent()) : null);
+        dc.setSignature(signPKCS7 != null ? IOUtil.encodeBase64(signPKCS7) : null);
+
+        return dc;
+    }
 }

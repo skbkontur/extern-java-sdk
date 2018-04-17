@@ -7,48 +7,49 @@ package ru.skbkontur.sdk.extern.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author AlexS
  */
 public class DraftMeta {
-	@SerializedName("sender")
-	private Sender sender;
-	@SerializedName("recipient")
-	private Recipient recipient;
-	@SerializedName("payer")
-	private Organization payer;
 
-	public DraftMeta() {
-	}	
-	
-	public DraftMeta(Sender sender, Recipient recipient, Organization payer) {
-		this.sender = sender;
-		this.recipient = recipient;
-		this.payer = payer;
-	}
-	
-	public Sender getSender() {
-		return sender;
-	}
+    @SerializedName("sender")
+    private Sender sender;
+    @SerializedName("recipient")
+    private Recipient recipient;
+    @SerializedName("payer")
+    private Organization payer;
 
-	public void setSender(Sender sender) {
-		this.sender = sender;
-	}
+    public DraftMeta() {
+    }
 
-	public Recipient getRecipient() {
-		return recipient;
-	}
+    public DraftMeta(Sender sender, Recipient recipient, Organization payer) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.payer = payer;
+    }
 
-	public void setRecipient(Recipient recipient) {
-		this.recipient = recipient;
-	}
+    public Sender getSender() {
+        return sender;
+    }
 
-	public Organization getPayer() {
-		return payer;
-	}
+    public void setSender(Sender sender) {
+        this.sender = sender;
+    }
 
-	public void setPayer(Organization payer) {
-		this.payer = payer;
-	}
+    public Recipient getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
+    }
+
+    public Organization getPayer() {
+        return payer;
+    }
+
+    public void setPayer(Organization payer) {
+        this.payer = payer;
+    }
 }

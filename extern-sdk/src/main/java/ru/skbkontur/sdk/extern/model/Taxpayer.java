@@ -6,57 +6,57 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class Taxpayer {
-  private String taxpayerChiefFio = null;
 
-  private Representative representative = null;
+    private String taxpayerChiefFio = null;
 
-  private String taxpayerPhone = null;
+    private Representative representative = null;
 
-  private String taxpayerOkved = null;
+    private String taxpayerPhone = null;
 
-  private String taxpayerFullName = null;
+    private String taxpayerOkved = null;
 
-	public String getTaxpayerChiefFio() {
-		return taxpayerChiefFio;
-	}
+    private String taxpayerFullName = null;
 
-	public void setTaxpayerChiefFio(String taxpayerChiefFio) {
-		this.taxpayerChiefFio = taxpayerChiefFio;
-	}
+    public String getTaxpayerChiefFio() {
+        return taxpayerChiefFio;
+    }
 
-	public Representative getRepresentative() {
-		return representative;
-	}
+    public void setTaxpayerChiefFio(String taxpayerChiefFio) {
+        this.taxpayerChiefFio = taxpayerChiefFio;
+    }
 
-	public void setRepresentative(Representative representative) {
-		this.representative = representative;
-	}
+    public Representative getRepresentative() {
+        return representative;
+    }
 
-	public String getTaxpayerPhone() {
-		return taxpayerPhone;
-	}
+    public void setRepresentative(Representative representative) {
+        this.representative = representative;
+    }
 
-	public void setTaxpayerPhone(String taxpayerPhone) {
-		this.taxpayerPhone = taxpayerPhone;
-	}
+    public String getTaxpayerPhone() {
+        return taxpayerPhone;
+    }
 
-	public String getTaxpayerOkved() {
-		return taxpayerOkved;
-	}
+    public void setTaxpayerPhone(String taxpayerPhone) {
+        this.taxpayerPhone = taxpayerPhone;
+    }
 
-	public void setTaxpayerOkved(String taxpayerOkved) {
-		this.taxpayerOkved = taxpayerOkved;
-	}
+    public String getTaxpayerOkved() {
+        return taxpayerOkved;
+    }
 
-	public String getTaxpayerFullName() {
-		return taxpayerFullName;
-	}
+    public void setTaxpayerOkved(String taxpayerOkved) {
+        this.taxpayerOkved = taxpayerOkved;
+    }
 
-	public void setTaxpayerFullName(String taxpayerFullName) {
-		this.taxpayerFullName = taxpayerFullName;
-	}
+    public String getTaxpayerFullName() {
+        return taxpayerFullName;
+    }
+
+    public void setTaxpayerFullName(String taxpayerFullName) {
+        this.taxpayerFullName = taxpayerFullName;
+    }
 }

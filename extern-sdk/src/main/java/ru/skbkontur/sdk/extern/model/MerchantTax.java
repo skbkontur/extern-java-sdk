@@ -6,44 +6,44 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class MerchantTax {
-  private String dohod = null;
-  private String ischisl = null;
-  private String torgSborFact = null;
-  private String torgSborUmen = null;
 
-	public String getDohod() {
-		return dohod;
-	}
+    private String dohod = null;
+    private String ischisl = null;
+    private String torgSborFact = null;
+    private String torgSborUmen = null;
 
-	public void setDohod(String dohod) {
-		this.dohod = dohod;
-	}
+    public String getDohod() {
+        return dohod;
+    }
 
-	public String getIschisl() {
-		return ischisl;
-	}
+    public void setDohod(String dohod) {
+        this.dohod = dohod;
+    }
 
-	public void setIschisl(String ischisl) {
-		this.ischisl = ischisl;
-	}
+    public String getIschisl() {
+        return ischisl;
+    }
 
-	public String getTorgSborFact() {
-		return torgSborFact;
-	}
+    public void setIschisl(String ischisl) {
+        this.ischisl = ischisl;
+    }
 
-	public void setTorgSborFact(String torgSborFact) {
-		this.torgSborFact = torgSborFact;
-	}
+    public String getTorgSborFact() {
+        return torgSborFact;
+    }
 
-	public String getTorgSborUmen() {
-		return torgSborUmen;
-	}
+    public void setTorgSborFact(String torgSborFact) {
+        this.torgSborFact = torgSborFact;
+    }
 
-	public void setTorgSborUmen(String torgSborUmen) {
-		this.torgSborUmen = torgSborUmen;
-	}
+    public String getTorgSborUmen() {
+        return torgSborUmen;
+    }
+
+    public void setTorgSborUmen(String torgSborUmen) {
+        this.torgSborUmen = torgSborUmen;
+    }
 }

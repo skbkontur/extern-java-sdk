@@ -7,47 +7,48 @@ package ru.skbkontur.sdk.extern.model;
 
 import java.util.List;
 
+
 /**
- *
  * @author alexs
  */
 public class CertificateList {
-  private List<Certificate> certificates = null;
-  private Integer totalCount = null;
-  private Integer pageIndex = null;
-  private Integer pageSize = null;
 
-	public List<Certificate> getCertificates() {
-		return certificates;
-	}
+    private List<Certificate> certificates = null;
+    private Integer totalCount = null;
+    private Integer pageIndex = null;
+    private Integer pageSize = null;
 
-	public void setCertificates(List<Certificate> certificates) {
-		this.certificates = certificates;
-	}
+    public List<Certificate> getCertificates() {
+        return certificates;
+    }
 
-	public Integer getTotalCount() {
-		return totalCount;
-	}
+    public void setCertificates(List<Certificate> certificates) {
+        this.certificates = certificates;
+    }
 
-	public void setTotalCount(Integer totalCount) {
-		this.totalCount = totalCount;
-	}
+    public Integer getTotalCount() {
+        return totalCount;
+    }
 
-	public Integer getPageIndex() {
-		return pageIndex;
-	}
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
 
-	public void setPageIndex(Integer pageIndex) {
-		this.pageIndex = pageIndex;
-	}
+    public Integer getPageIndex() {
+        return pageIndex;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    public void setPageIndex(Integer pageIndex) {
+        this.pageIndex = pageIndex;
+    }
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
-	}
-	
-	
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+
 }

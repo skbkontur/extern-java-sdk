@@ -7,48 +7,49 @@ package ru.skbkontur.sdk.extern.model;
 
 import java.util.List;
 
+
 /**
- *
  * @author AlexS
  */
 public class AccountList {
-  private Integer skip = null;
 
-  private Integer take = null;
+    private Integer skip = null;
 
-  private Integer totalCount = null;
+    private Integer take = null;
 
-  private List<Account> accounts = null;
+    private Integer totalCount = null;
 
-	public List<Account> getAccounts() {
-		return accounts;
-	}
+    private List<Account> accounts = null;
 
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
-	}
+    public List<Account> getAccounts() {
+        return accounts;
+    }
 
-	public Integer getTotalCount() {
-		return totalCount;
-	}
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
-	public void setTotalCount(Integer totalCount) {
-		this.totalCount = totalCount;
-	}
+    public Integer getTotalCount() {
+        return totalCount;
+    }
 
-	public Integer getSkip() {
-		return skip;
-	}
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
 
-	public void setSkip(Integer skip) {
-		this.skip = skip;
-	}
+    public Integer getSkip() {
+        return skip;
+    }
 
-	public Integer getTake() {
-		return take;
-	}
+    public void setSkip(Integer skip) {
+        this.skip = skip;
+    }
 
-	public void setTake(Integer take) {
-		this.take = take;
-	}
+    public Integer getTake() {
+        return take;
+    }
+
+    public void setTake(Integer take) {
+        this.take = take;
+    }
 }

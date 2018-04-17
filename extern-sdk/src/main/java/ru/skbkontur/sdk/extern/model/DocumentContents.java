@@ -6,54 +6,50 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public class DocumentContents {
 
-	private String base64Content = null;
-	private String signature = null;
-	private DocumentDescription documentDescription = null;
+    private String base64Content = null;
+    private String signature = null;
+    private DocumentDescription documentDescription = null;
 
-	/**
-	 * Get base64Content
-	 *
-	 * @return base64Content
-	 *
-	 */
-	public String getBase64Content() {
-		return base64Content;
-	}
+    /**
+     * Get base64Content
+     *
+     * @return base64Content
+     */
+    public String getBase64Content() {
+        return base64Content;
+    }
 
-	public void setBase64Content(String base64Content) {
-		this.base64Content = base64Content;
-	}
+    public void setBase64Content(String base64Content) {
+        this.base64Content = base64Content;
+    }
 
-	/**
-	 * Get signature
-	 *
-	 * @return signature
-	 *
-	 */
-	public String getSignature() {
-		return signature;
-	}
+    /**
+     * Get signature
+     *
+     * @return signature
+     */
+    public String getSignature() {
+        return signature;
+    }
 
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 
-	/**
-	 * Get meta
-	 *
-	 * @return meta
-	 *
-	 */
-	public DocumentDescription getDocumentDescription() {
-		return documentDescription;
-	}
+    /**
+     * Get meta
+     *
+     * @return meta
+     */
+    public DocumentDescription getDocumentDescription() {
+        return documentDescription;
+    }
 
-	public void setDocumentDescription(DocumentDescription documentDescription) {
-		this.documentDescription = documentDescription;
-	}
+    public void setDocumentDescription(DocumentDescription documentDescription) {
+        this.documentDescription = documentDescription;
+    }
 }

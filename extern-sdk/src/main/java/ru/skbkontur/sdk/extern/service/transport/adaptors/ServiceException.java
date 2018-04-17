@@ -7,12 +7,13 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 
+
 /**
- *
  * @author AlexS
  */
 public class ServiceException extends RuntimeException {
-	public ServiceException(ServiceError serviceError) {
-		super(serviceError.toString());
-	}
+
+    public ServiceException(ServiceError serviceError) {
+        super(serviceError.toString());
+    }
 }

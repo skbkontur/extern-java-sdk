@@ -7,56 +7,56 @@ package ru.skbkontur.sdk.extern.providers.crypt.cloud.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author AlexS
  */
 public class File {
 
-	@SerializedName("Id")
-	private String id;
-	@SerializedName("Name")
-	private String name;
-	@SerializedName("Base64Content")
-	private String content;
+    @SerializedName("Id")
+    private String id;
+    @SerializedName("Name")
+    private String name;
+    @SerializedName("Base64Content")
+    private String content;
 
-	File() {
-	}
+    File() {
+    }
 
-	File(String name, String content) {
-		this.name = name;
-		this.content = content;
-	}
+    File(String name, String content) {
+        this.name = name;
+        this.content = content;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getСontent() {
-		return content;
-	}
+    public String getСontent() {
+        return content;
+    }
 
-	public void setСontent(String content) {
-		this.content = content;
-	}
+    public void setСontent(String content) {
+        this.content = content;
+    }
 }

@@ -6,43 +6,42 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 /**
- *
  * @author AlexS
  */
 public class DocumentContentsDto {
 
-	public ru.skbkontur.sdk.extern.model.DocumentContents fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents dto) {
+    public ru.skbkontur.sdk.extern.model.DocumentContents fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents dto) {
 
-		if (dto == null) return null;
+        if (dto == null) return null;
 
-		ru.skbkontur.sdk.extern.model.DocumentContents documentContents = new ru.skbkontur.sdk.extern.model.DocumentContents();
+        ru.skbkontur.sdk.extern.model.DocumentContents documentContents = new ru.skbkontur.sdk.extern.model.DocumentContents();
 
-		documentContents.setBase64Content(dto.getBase64Content());
+        documentContents.setBase64Content(dto.getBase64Content());
 
-		DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
+        DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-		documentContents.setDocumentDescription(documentDescriptionDto.fromDto(dto.getDescription()));
+        documentContents.setDocumentDescription(documentDescriptionDto.fromDto(dto.getDescription()));
 
-		documentContents.setSignature(dto.getSignature());
+        documentContents.setSignature(dto.getSignature());
 
-		return documentContents;
-	}
+        return documentContents;
+    }
 
-	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents toDto(ru.skbkontur.sdk.extern.model.DocumentContents documentContents) {
+    public ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents toDto(ru.skbkontur.sdk.extern.model.DocumentContents documentContents) {
 
-		if (documentContents == null) return null;
+        if (documentContents == null) return null;
 
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents dto
-			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents();
+        ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents dto
+                = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents();
 
-		dto.setBase64Content(documentContents.getBase64Content());
+        dto.setBase64Content(documentContents.getBase64Content());
 
-		DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
+        DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-		dto.setDescription(documentDescriptionDto.toDto(documentContents.getDocumentDescription()));
+        dto.setDescription(documentDescriptionDto.toDto(documentContents.getDocumentDescription()));
 
-		dto.setSignature(documentContents.getSignature());
+        dto.setSignature(documentContents.getSignature());
 
-		return dto;
-	}
+        return dto;
+    }
 }

@@ -6,33 +6,33 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class TaxPeriodIndicators extends PeriodIndicators {
-  private String nalPumin = null;
 
-	public TaxPeriodIndicators(String nalPumin,PeriodIndicators p) {
-		this.nalPumin = nalPumin;
-		this.avPu = p.getAvPu();
-		this.dohod = p.getDohod();
-		this.ischisl = p.getIschisl();
-		this.nalBazaUbyt = p.getNalBazaUbyt();
-		this.oktmo = p.getOktmo();
-		this.raschTorgSbor = p.getRaschTorgSbor();
-		this.rashod = p.getRashod();
-		this.stavka = p.getStavka();
-		this.umenNal = p.getUmenNal();
-	}
+    private String nalPumin = null;
 
-	public TaxPeriodIndicators() {
-	}
+    public TaxPeriodIndicators(String nalPumin, PeriodIndicators p) {
+        this.nalPumin = nalPumin;
+        this.avPu = p.getAvPu();
+        this.dohod = p.getDohod();
+        this.ischisl = p.getIschisl();
+        this.nalBazaUbyt = p.getNalBazaUbyt();
+        this.oktmo = p.getOktmo();
+        this.raschTorgSbor = p.getRaschTorgSbor();
+        this.rashod = p.getRashod();
+        this.stavka = p.getStavka();
+        this.umenNal = p.getUmenNal();
+    }
 
-	public String getNalPumin() {
-		return nalPumin;
-	}
+    public TaxPeriodIndicators() {
+    }
 
-	public void setNalPumin(String nalPumin) {
-		this.nalPumin = nalPumin;
-	}
+    public String getNalPumin() {
+        return nalPumin;
+    }
+
+    public void setNalPumin(String nalPumin) {
+        this.nalPumin = nalPumin;
+    }
 }

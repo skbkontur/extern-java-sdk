@@ -7,25 +7,25 @@ package ru.skbkontur.sdk.extern.service;
 
 import java.text.MessageFormat;
 
+
 /**
- *
  * @author AlexS
  */
 public class SDKException extends RuntimeException {
 
-	public SDKException(String message, Throwable x) {
-		super(message, x);
-	}
-	
-	public SDKException(String message) {
-		super(message);
-	}
-	
-	public SDKException(String template, Object ... params) {
-		super(MessageFormat.format(template, params));
-	}
-	
-	public SDKException(String template, Throwable x, Object ... params) {
-		super(MessageFormat.format(template, params), x);
-	}
+    public SDKException(String message, Throwable x) {
+        super(message, x);
+    }
+
+    public SDKException(String message) {
+        super(message);
+    }
+
+    public SDKException(String template, Object... params) {
+        super(MessageFormat.format(template, params));
+    }
+
+    public SDKException(String template, Throwable x, Object... params) {
+        super(MessageFormat.format(template, params), x);
+    }
 }

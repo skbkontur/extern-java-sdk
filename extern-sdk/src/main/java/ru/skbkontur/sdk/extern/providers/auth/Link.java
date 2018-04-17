@@ -7,39 +7,39 @@ package ru.skbkontur.sdk.extern.providers.auth;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author alexs
  */
 public class Link {
 
-	@SerializedName("Rel")
-	private String rel;
-	@SerializedName("Href")
-	private String href;
+    @SerializedName("Rel")
+    private String rel;
+    @SerializedName("Href")
+    private String href;
 
-	public Link() {
+    public Link() {
 
-	}
+    }
 
-	public Link(String rel, String href) {
-		this.rel = rel;
-		this.href = href;
-	}
+    public Link(String rel, String href) {
+        this.rel = rel;
+        this.href = href;
+    }
 
-	public String getRel() {
-		return rel;
-	}
+    public String getRel() {
+        return rel;
+    }
 
-	public void setRel(String rel) {
-		this.rel = rel;
-	}
+    public void setRel(String rel) {
+        this.rel = rel;
+    }
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 }

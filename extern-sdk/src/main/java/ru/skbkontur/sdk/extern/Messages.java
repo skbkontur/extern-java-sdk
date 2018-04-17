@@ -27,37 +27,37 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 /**
- *
  * @author AlexS
  */
 public class Messages {
-	public static final String UNKNOWN = "UNKNOWN";
-	public static final String S_AUTHORIZATION_BY_LOGIN = "S_AUTHORIZATION_BY_LOGIN";
-	public static final String S_SERVER_ERROR = "S_SERVER_ERROR";
-	public static final String S_ENTITY_NOT_FOUND = "S_ENTITY_NOT_FOUND";
-	public static final String C_CONFIG_NOT_FOUND = "C_CONFIG_NOT_FOUND";
-	public static final String C_CONFIG_LOAD = "C_CONFIG_LOAD";
-	public static final String C_CRYPTO_ERROR = "C_CRYPTO_ERROR";
-	public static final String C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER = "C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER";
-	public static final String C_CRYPTO_ERROR_INIT = "C_CRYPTO_ERROR_INIT";
-	public static final String C_CRYPTO_ERROR_KEY_NOT_FOUND = "C_CRYPTO_ERROR_KEY_NOT_FOUND";
-	public static final String C_RESOURCE_NOT_FOUND = "C_RESOURCE_NOT_FOUND";
-	public static final String C_NO_SIGNATURE = "C_NO_SIGNATURE";
-	public static final String C_NO_DECRYPT = "C_NO_DECRYPT";
 
-	private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("Messages", Locale.getDefault());
-	
-	public static String get(String key) {
-		try {
-			return MESSAGES.getString(key);
-		}
-		catch (RuntimeException x) {
-			return MessageFormat.format("Resourse key [{0}] not found.", key);
-		}
-	}
-	
-	public static String get(String key, Object ... p) {
-		return MessageFormat.format(get(key), p);
-	}
+    public static final String UNKNOWN = "UNKNOWN";
+    public static final String S_AUTHORIZATION_BY_LOGIN = "S_AUTHORIZATION_BY_LOGIN";
+    public static final String S_SERVER_ERROR = "S_SERVER_ERROR";
+    public static final String S_ENTITY_NOT_FOUND = "S_ENTITY_NOT_FOUND";
+    public static final String C_CONFIG_NOT_FOUND = "C_CONFIG_NOT_FOUND";
+    public static final String C_CONFIG_LOAD = "C_CONFIG_LOAD";
+    public static final String C_CRYPTO_ERROR = "C_CRYPTO_ERROR";
+    public static final String C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER = "C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER";
+    public static final String C_CRYPTO_ERROR_INIT = "C_CRYPTO_ERROR_INIT";
+    public static final String C_CRYPTO_ERROR_KEY_NOT_FOUND = "C_CRYPTO_ERROR_KEY_NOT_FOUND";
+    public static final String C_RESOURCE_NOT_FOUND = "C_RESOURCE_NOT_FOUND";
+    public static final String C_NO_SIGNATURE = "C_NO_SIGNATURE";
+    public static final String C_NO_DECRYPT = "C_NO_DECRYPT";
+
+    private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("Messages", Locale.getDefault());
+
+    public static String get(String key) {
+        try {
+            return MESSAGES.getString(key);
+        } catch (RuntimeException x) {
+            return MessageFormat.format("Resourse key [{0}] not found.", key);
+        }
+    }
+
+    public static String get(String key, Object... p) {
+        return MessageFormat.format(get(key), p);
+    }
 }

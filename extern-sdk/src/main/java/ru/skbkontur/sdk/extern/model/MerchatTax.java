@@ -6,9 +6,8 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class MerchatTax {
-	
+
 }

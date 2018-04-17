@@ -7,46 +7,47 @@ package ru.skbkontur.sdk.extern.model;
 
 import java.util.List;
 
+
 /**
- *
  * @author alexs
  */
 public class DocflowPage {
-  private Long skip = null;
-  private Long take = null;
-  private Long totalCount = null;
-  private List<DocflowPageItem> docflowsPageItem = null;
 
-	public Long getSkip() {
-		return skip;
-	}
+    private Long skip = null;
+    private Long take = null;
+    private Long totalCount = null;
+    private List<DocflowPageItem> docflowsPageItem = null;
 
-	public void setSkip(Long skip) {
-		this.skip = skip;
-	}
+    public Long getSkip() {
+        return skip;
+    }
 
-	public Long getTake() {
-		return take;
-	}
+    public void setSkip(Long skip) {
+        this.skip = skip;
+    }
 
-	public void setTake(Long take) {
-		this.take = take;
-	}
+    public Long getTake() {
+        return take;
+    }
 
-	public Long getTotalCount() {
-		return totalCount;
-	}
+    public void setTake(Long take) {
+        this.take = take;
+    }
 
-	public void setTotalCount(Long totalCount) {
-		this.totalCount = totalCount;
-	}
+    public Long getTotalCount() {
+        return totalCount;
+    }
 
-	public List<DocflowPageItem> getDocflowsPageItem() {
-		return docflowsPageItem;
-	}
+    public void setTotalCount(Long totalCount) {
+        this.totalCount = totalCount;
+    }
 
-	public void setDocflowsPageItem(List<DocflowPageItem> docflowsPageItem) {
-		this.docflowsPageItem = docflowsPageItem;
-	}
+    public List<DocflowPageItem> getDocflowsPageItem() {
+        return docflowsPageItem;
+    }
+
+    public void setDocflowsPageItem(List<DocflowPageItem> docflowsPageItem) {
+        this.docflowsPageItem = docflowsPageItem;
+    }
 
 }

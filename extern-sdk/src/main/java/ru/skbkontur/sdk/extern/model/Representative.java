@@ -6,28 +6,28 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class Representative {
-  private String representativeDocument = null;
 
-  private PassportInfo passport = null;
+    private String representativeDocument = null;
 
-	public String getRepresentativeDocument() {
-		return representativeDocument;
-	}
+    private PassportInfo passport = null;
 
-	public void setRepresentativeDocument(String representativeDocument) {
-		this.representativeDocument = representativeDocument;
-	}
+    public String getRepresentativeDocument() {
+        return representativeDocument;
+    }
 
-	public PassportInfo getPassport() {
-		return passport;
-	}
+    public void setRepresentativeDocument(String representativeDocument) {
+        this.representativeDocument = representativeDocument;
+    }
 
-	public void setPassport(PassportInfo passport) {
-		this.passport = passport;
-	}
+    public PassportInfo getPassport() {
+        return passport;
+    }
+
+    public void setPassport(PassportInfo passport) {
+        this.passport = passport;
+    }
 
 }

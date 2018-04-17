@@ -7,33 +7,33 @@ package ru.skbkontur.sdk.extern.providers.auth;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author alexs
  */
 public class ResponseLink {
 
-		@SerializedName("Link")
-		private Link link;
-		@SerializedName("Key")
-		private String key;
+    @SerializedName("Link")
+    private Link link;
+    @SerializedName("Key")
+    private String key;
 
-		public ResponseLink() {
-		}
+    public ResponseLink() {
+    }
 
-		public Link getLink() {
-			return link;
-		}
+    public Link getLink() {
+        return link;
+    }
 
-		public void setLink(Link link) {
-			this.link = link;
-		}
+    public void setLink(Link link) {
+        this.link = link;
+    }
 
-		public String getKey() {
-			return key;
-		}
+    public String getKey() {
+        return key;
+    }
 
-		public void setKey(String key) {
-			this.key = key;
-		}
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

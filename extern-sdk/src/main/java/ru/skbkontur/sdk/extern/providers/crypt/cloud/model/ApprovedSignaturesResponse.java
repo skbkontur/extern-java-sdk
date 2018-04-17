@@ -6,21 +6,23 @@
 package ru.skbkontur.sdk.extern.providers.crypt.cloud.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
+
 /**
- *
  * @author alexs
  */
 public class ApprovedSignaturesResponse {
-	@SerializedName("Signatures")
-	private List<Entry> signatures;
 
-	public List<Entry> getSignatures() {
-		return signatures;
-	}
+    @SerializedName("Signatures")
+    private List<Entry> signatures;
 
-	public void setSignatures(List<Entry> signatures) {
-		this.signatures = signatures;
-	}
+    public List<Entry> getSignatures() {
+        return signatures;
+    }
+
+    public void setSignatures(List<Entry> signatures) {
+        this.signatures = signatures;
+    }
 }

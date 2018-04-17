@@ -13,14 +13,16 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+
 import java.lang.reflect.Type;
 import java.util.Date;
 
+
 /**
- *
  * @author AlexS
  */
 public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
+
     private final ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient apiClient;
 
     /**
@@ -36,9 +38,9 @@ public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date>
     /**
      * Serialize
      *
-     * @param src Date
+     * @param src       Date
      * @param typeOfSrc Type
-     * @param context Json Serialization Context
+     * @param context   Json Serialization Context
      * @return Json Element
      */
     @Override
@@ -53,8 +55,8 @@ public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date>
     /**
      * Deserialize
      *
-     * @param json Json element
-     * @param date Type
+     * @param json    Json element
+     * @param date    Type
      * @param context Json Serialization Context
      * @return Date
      * @throws JsonParseException if fail to parse

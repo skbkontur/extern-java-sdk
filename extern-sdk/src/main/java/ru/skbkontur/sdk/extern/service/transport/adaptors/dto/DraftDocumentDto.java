@@ -6,63 +6,62 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 /**
- *
  * @author AlexS
  */
 public class DraftDocumentDto {
 
-	public ru.skbkontur.sdk.extern.model.DraftDocument fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument dto) {
+    public ru.skbkontur.sdk.extern.model.DraftDocument fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument dto) {
 
-		if (dto == null) return null;
+        if (dto == null) return null;
 
-		ru.skbkontur.sdk.extern.model.DraftDocument draftDocument = new ru.skbkontur.sdk.extern.model.DraftDocument();
+        ru.skbkontur.sdk.extern.model.DraftDocument draftDocument = new ru.skbkontur.sdk.extern.model.DraftDocument();
 
-		LinkDto linkDto = new LinkDto();
+        LinkDto linkDto = new LinkDto();
 
-		if (dto.getDecryptedContentLink() != null) {
-			draftDocument.setDecryptedContentLink(linkDto.fromDto(dto.getDecryptedContentLink()));
-		}
+        if (dto.getDecryptedContentLink() != null) {
+            draftDocument.setDecryptedContentLink(linkDto.fromDto(dto.getDecryptedContentLink()));
+        }
 
-		if (dto.getEncryptedContentLink() != null) {
-			draftDocument.setEncryptedContentLink(linkDto.fromDto(dto.getEncryptedContentLink()));
-		}
+        if (dto.getEncryptedContentLink() != null) {
+            draftDocument.setEncryptedContentLink(linkDto.fromDto(dto.getEncryptedContentLink()));
+        }
 
-		draftDocument.setId(dto.getId());
+        draftDocument.setId(dto.getId());
 
-		DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
+        DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-		draftDocument.setDocumentDescription(documentDescriptionDto.fromDto(dto.getDescription()));
+        draftDocument.setDocumentDescription(documentDescriptionDto.fromDto(dto.getDescription()));
 
-		draftDocument.setSignatureContentLink(linkDto.fromDto(dto.getSignatureContentLink()));
+        draftDocument.setSignatureContentLink(linkDto.fromDto(dto.getSignatureContentLink()));
 
-		return draftDocument;
-	}
+        return draftDocument;
+    }
 
-	public ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument toDto(ru.skbkontur.sdk.extern.model.DraftDocument draftDocument) {
+    public ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument toDto(ru.skbkontur.sdk.extern.model.DraftDocument draftDocument) {
 
-		if (draftDocument == null) return null;
+        if (draftDocument == null) return null;
 
-		ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument dto
-			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument();
+        ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument dto
+                = new ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftDocument();
 
-		LinkDto linkDto = new LinkDto();
+        LinkDto linkDto = new LinkDto();
 
-		if (draftDocument.getDecryptedContentLink() != null) {
-			dto.setDecryptedContentLink(linkDto.toDto(draftDocument.getDecryptedContentLink()));
-		}
+        if (draftDocument.getDecryptedContentLink() != null) {
+            dto.setDecryptedContentLink(linkDto.toDto(draftDocument.getDecryptedContentLink()));
+        }
 
-		if (draftDocument.getEncryptedContentLink() != null) {
-			dto.setEncryptedContentLink(linkDto.toDto(draftDocument.getEncryptedContentLink()));
-		}
+        if (draftDocument.getEncryptedContentLink() != null) {
+            dto.setEncryptedContentLink(linkDto.toDto(draftDocument.getEncryptedContentLink()));
+        }
 
-		dto.setId(draftDocument.getId());
+        dto.setId(draftDocument.getId());
 
-		DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
+        DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-		dto.setDescription(documentDescriptionDto.toDto(draftDocument.getDocumentDescription()));
+        dto.setDescription(documentDescriptionDto.toDto(draftDocument.getDocumentDescription()));
 
-		dto.setSignatureContentLink(linkDto.toDto(draftDocument.getSignatureContentLink()));
+        dto.setSignatureContentLink(linkDto.toDto(draftDocument.getSignatureContentLink()));
 
-		return dto;
-	}
+        return dto;
+    }
 }

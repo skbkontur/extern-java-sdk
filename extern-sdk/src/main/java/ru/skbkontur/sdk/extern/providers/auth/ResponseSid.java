@@ -7,20 +7,20 @@ package ru.skbkontur.sdk.extern.providers.auth;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author AlexS
  */
 public class ResponseSid {
 
-		@SerializedName("Sid")
-		private String sid;
+    @SerializedName("Sid")
+    private String sid;
 
-		public String getSid() {
-			return sid;
-		}
+    public String getSid() {
+        return sid;
+    }
 
-		public void setSid(String sid) {
-			this.sid = sid;
-		}
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
 }

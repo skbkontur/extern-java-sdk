@@ -6,35 +6,35 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public class CreateAccountRequest {
-  private String inn = null;
-  private String kpp = null;
-  private String organizationName = null;
 
-	public String getInn() {
-		return inn;
-	}
+    private String inn = null;
+    private String kpp = null;
+    private String organizationName = null;
 
-	public void setInn(String inn) {
-		this.inn = inn;
-	}
+    public String getInn() {
+        return inn;
+    }
 
-	public String getKpp() {
-		return kpp;
-	}
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
 
-	public void setKpp(String kpp) {
-		this.kpp = kpp;
-	}
+    public String getKpp() {
+        return kpp;
+    }
 
-	public String getOrganizationName() {
-		return organizationName;
-	}
+    public void setKpp(String kpp) {
+        this.kpp = kpp;
+    }
 
-	public void setOrganizationName(String organizationName) {
-		this.organizationName = organizationName;
-	}
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
 }

@@ -6,41 +6,42 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import com.google.gson.Gson;
-import java.util.HashMap;
-import java.util.Map;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
- *
  * @author AlexS
  */
 public abstract class BaseAdaptor implements ApiClientAware {
 
-	protected <T> T jsonToDTO(Map<?, ?> response, Class<T> t) {
-		Gson gson = new Gson();
-		String json = gson.toJson(response);
-		return gson.fromJson(json, t);
-	}
+    protected <T> T jsonToDTO(Map<?, ?> response, Class<T> t) {
+        Gson gson = new Gson();
+        String json = gson.toJson(response);
+        return gson.fromJson(json, t);
+    }
 
-	protected void prepareTransport(QueryContext<?> cxt) {
-		setApiClient(cxt.getApiClient());
-	}
+    protected void prepareTransport(QueryContext<?> cxt) {
+        setApiClient(cxt.getApiClient());
+    }
 
-	protected <T> T submitHttpRequest(String httpRequestUri, String httpMethod, Object body, Class<T> dtoClass) throws ApiException {
-		ApiClient apiClient = getApiClient();
-		
-		apiClient.setBasePath("");
-		
-		Map<String, String> localQueryParams = new HashMap<>();
+    protected <T> T submitHttpRequest(String httpRequestUri, String httpMethod, Object body, Class<T> dtoClass) throws ApiException {
+        ApiClient apiClient = getApiClient();
 
-		Map<String, String> localHeaderParams = new HashMap<>();
+        apiClient.setBasePath("");
 
-		Map<String, Object> localVarFormParams = new HashMap<>();
+        Map<String, String> localQueryParams = new HashMap<>();
 
-		ApiResponse<T> response = apiClient.submitHttpRequest(httpRequestUri, httpMethod, localQueryParams, body, localHeaderParams, localVarFormParams, dtoClass);
+        Map<String, String> localHeaderParams = new HashMap<>();
 
-		return response.getData();
-	}
+        Map<String, Object> localVarFormParams = new HashMap<>();
+
+        ApiResponse<T> response = apiClient.submitHttpRequest(httpRequestUri, httpMethod, localQueryParams, body, localHeaderParams, localVarFormParams, dtoClass);
+
+        return response.getData();
+    }
 }

@@ -7,69 +7,70 @@ package ru.skbkontur.sdk.extern.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author AlexS
  */
 public class Sender {
-	@SerializedName("inn")
-	private String inn;
-	@SerializedName("kpp")
-	private String kpp;
-	@SerializedName("certificate")
-	private String certificate;
-	@SerializedName("ipaddress")
-	private String ipaddress;
-	
-	private String thumbprint;
 
-	public Sender() {
-	}
+    @SerializedName("inn")
+    private String inn;
+    @SerializedName("kpp")
+    private String kpp;
+    @SerializedName("certificate")
+    private String certificate;
+    @SerializedName("ipaddress")
+    private String ipaddress;
 
-	public Sender(String inn, String kpp, String certificate, String ipaddress) {
-		this.inn = inn;
-		this.kpp = kpp;
-		this.certificate = certificate;
-		this.ipaddress = ipaddress;
-	}
-	
-	public String getInn() {
-		return inn;
-	}
+    private String thumbprint;
 
-	public void setInn(String inn) {
-		this.inn = inn;
-	}
+    public Sender() {
+    }
 
-	public String getKpp() {
-		return kpp;
-	}
+    public Sender(String inn, String kpp, String certificate, String ipaddress) {
+        this.inn = inn;
+        this.kpp = kpp;
+        this.certificate = certificate;
+        this.ipaddress = ipaddress;
+    }
 
-	public void setKpp(String kpp) {
-		this.kpp = kpp;
-	}
+    public String getInn() {
+        return inn;
+    }
 
-	public String getCertificate() {
-		return certificate;
-	}
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
 
-	public void setCertificate(String certificate) {
-		this.certificate = certificate;
-	}
+    public String getKpp() {
+        return kpp;
+    }
 
-  public String getIpaddress() {
-    return ipaddress;
-  }
+    public void setKpp(String kpp) {
+        this.kpp = kpp;
+    }
 
-  public void setIpaddress(String ipaddress) {
-    this.ipaddress = ipaddress;
-  }
+    public String getCertificate() {
+        return certificate;
+    }
 
-	public String getThumbprint() {
-		return thumbprint;
-	}
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
+    }
 
-	public void setThumbprint(String thumbprint) {
-		this.thumbprint = thumbprint;
-	}
+    public String getIpaddress() {
+        return ipaddress;
+    }
+
+    public void setIpaddress(String ipaddress) {
+        this.ipaddress = ipaddress;
+    }
+
+    public String getThumbprint() {
+        return thumbprint;
+    }
+
+    public void setThumbprint(String thumbprint) {
+        this.thumbprint = thumbprint;
+    }
 }

@@ -7,10 +7,11 @@ package ru.skbkontur.sdk.extern.providers;
 
 import java.util.UUID;
 
+
 /**
- *
  * @author AlexS
  */
 public interface AccountProvider {
-	UUID accountId();
+
+    UUID accountId();
 }

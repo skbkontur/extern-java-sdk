@@ -7,39 +7,40 @@ package ru.skbkontur.sdk.extern.providers.crypt.cloud.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 /**
- *
  * @author alexs
  */
 public class Entry {
-	@SerializedName("Id")
-	private String id;
-	@SerializedName("FileName")
-	private String fileName;
-	@SerializedName("Content")
-	private String content;
 
-	public String getId() {
-		return id;
-	}
+    @SerializedName("Id")
+    private String id;
+    @SerializedName("FileName")
+    private String fileName;
+    @SerializedName("Content")
+    private String content;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

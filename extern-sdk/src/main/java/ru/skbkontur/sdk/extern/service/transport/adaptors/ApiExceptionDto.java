@@ -7,19 +7,19 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 
+
 /**
- *
  * @author alexs
  */
 public class ApiExceptionDto {
 
-	public ApiException fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException dto) {
-		return new ApiException(dto.getCode(), dto.getMessage(), dto.getResponseHeaders(), dto.getResponseBody());
-	}
-	
-	public ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException toDto(ApiException x) {
-		return new ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException(
-			x.getCode(), x.getMessage(), x.getResponseHeaders(), x.getResponseBody()
-		);
-	}
+    public ApiException fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException dto) {
+        return new ApiException(dto.getCode(), dto.getMessage(), dto.getResponseHeaders(), dto.getResponseBody());
+    }
+
+    public ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException toDto(ApiException x) {
+        return new ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException(
+                x.getCode(), x.getMessage(), x.getResponseHeaders(), x.getResponseBody()
+        );
+    }
 }

@@ -5,22 +5,24 @@
  */
 package ru.skbkontur.sdk.extern.event;
 
-import java.util.EventObject;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
+import java.util.EventObject;
+
+
 /**
- *
  * @author alexs
  */
 public class AuthenticationEvent extends EventObject {
-	private final QueryContext<String> authCxt;
-	
-	public AuthenticationEvent(Object source, QueryContext<String> authCxt) {
-		super(source);
-		this.authCxt = authCxt;
-	}
-	
-	public QueryContext<String> getAuthCxt() {
-		return authCxt;
-	}
+
+    private final QueryContext<String> authCxt;
+
+    public AuthenticationEvent(Object source, QueryContext<String> authCxt) {
+        super(source);
+        this.authCxt = authCxt;
+    }
+
+    public QueryContext<String> getAuthCxt() {
+        return authCxt;
+    }
 }

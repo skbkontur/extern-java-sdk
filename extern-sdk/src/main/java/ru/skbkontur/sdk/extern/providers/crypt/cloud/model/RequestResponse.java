@@ -6,41 +6,43 @@
 package ru.skbkontur.sdk.extern.providers.crypt.cloud.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
+
 /**
- *
  * @author AlexS
  */
 public class RequestResponse {
-		@SerializedName("ResultId")
-		private String resultId;
-		@SerializedName("FileIds")
-		private List<File> fileIds;
-		@SerializedName("Links")
-		private List<Link> links;
 
-	public String getResultId() {
-		return resultId;
-	}
+    @SerializedName("ResultId")
+    private String resultId;
+    @SerializedName("FileIds")
+    private List<File> fileIds;
+    @SerializedName("Links")
+    private List<Link> links;
 
-	public void setResultId(String resultId) {
-		this.resultId = resultId;
-	}
+    public String getResultId() {
+        return resultId;
+    }
 
-	public List<File> getFileIds() {
-		return fileIds;
-	}
+    public void setResultId(String resultId) {
+        this.resultId = resultId;
+    }
 
-	public void setFileIds(List<File> fileIds) {
-		this.fileIds = fileIds;
-	}
+    public List<File> getFileIds() {
+        return fileIds;
+    }
 
-	public List<Link> getLinks() {
-		return links;
-	}
+    public void setFileIds(List<File> fileIds) {
+        this.fileIds = fileIds;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }

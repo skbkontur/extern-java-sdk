@@ -7,10 +7,11 @@ package ru.skbkontur.sdk.extern.providers;
 
 import ru.skbkontur.sdk.extern.providers.auth.Credential;
 
+
 /**
- *
  * @author alexs
  */
 public interface CredentialProvider {
-	Credential getCredential();
+
+    Credential getCredential();
 }

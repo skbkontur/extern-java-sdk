@@ -23,12 +23,6 @@
  */
 package ru.skbkontur.sdk.extern.service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.skbkontur.sdk.extern.ExternEngine;
 import ru.skbkontur.sdk.extern.model.Docflow;
@@ -37,53 +31,60 @@ import ru.skbkontur.sdk.extern.model.Recipient;
 import ru.skbkontur.sdk.extern.model.Sender;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
 /**
- *
  * @author AlexS
  */
 public class BusinessDriver {
 
-	private final ExternEngine engine;
+    private final ExternEngine engine;
 
-	public BusinessDriver(ExternEngine engine) {
-		this.engine = engine;
-	}
+    public BusinessDriver(ExternEngine engine) {
+        this.engine = engine;
+    }
 
-	public QueryContext<List<Docflow>> sendDocument(File[] files, Sender sender, Recipient recipient, Organization organization) throws InterruptedException, ExecutionException {
-		DraftService draft = engine.getDraftService();
-		// получаем сертификат подписанта
-		QueryContext<byte[]> x509DerCxt = engine.getCryptoProvider().getSignerCertificate(new QueryContext<byte[]>().setThumbprint(sender.getThumbprint()));
-		if (x509DerCxt.isFail()) {
-			return new QueryContext<List<Docflow>>().setServiceError(x509DerCxt);
-		}
-		sender.setCertificate(IOUtil.encodeBase64(x509DerCxt.get()));
-		// запрос на создание черновика
-		CompletableFuture<QueryContext<UUID>> draftCxtFuture = draft.createAsync(sender, recipient, organization);
-		// ожидаем создания черновика,подписываем и добавляем контент документа в черновик
-		CompletableFuture
-			.allOf(
-				Stream
-					.of(files)
-					.map(
-						f -> draftCxtFuture
-							.thenCombine(
-								engine.getCryptoProvider().signAsync(sender.getThumbprint(), f.getContent()),
-								(draftCxt, signCxt) -> draft.addDecryptedDocument(draftCxt.setDocumentContents(DocumentContentsBuilder.build(f, signCxt.get())))
-							)
-					)
-					.collect(Collectors.toList())
-					.toArray(new CompletableFuture[0])
-			)
-			// ожидаем завершения всех операций
-			.join();
-			// 1) делаем подготовку данных перед отправкой
-			// 2) отправляем черновик
-		return draftCxtFuture
-			// выполняем подготовку документа к отправке (шифрование, ...)
-			.thenApply(draft::prepare)
-			// отправляем черновик получателю, формируем ДО
-			.thenApply(draft::send)
-			// ожидаем получения результат
-			.get();
-	}
+    public QueryContext<List<Docflow>> sendDocument(File[] files, Sender sender, Recipient recipient, Organization organization) throws InterruptedException, ExecutionException {
+        DraftService draft = engine.getDraftService();
+        // получаем сертификат подписанта
+        QueryContext<byte[]> x509DerCxt = engine.getCryptoProvider().getSignerCertificate(new QueryContext<byte[]>().setThumbprint(sender.getThumbprint()));
+        if (x509DerCxt.isFail()) {
+            return new QueryContext<List<Docflow>>().setServiceError(x509DerCxt);
+        }
+        sender.setCertificate(IOUtil.encodeBase64(x509DerCxt.get()));
+        // запрос на создание черновика
+        CompletableFuture<QueryContext<UUID>> draftCxtFuture = draft.createAsync(sender, recipient, organization);
+        // ожидаем создания черновика,подписываем и добавляем контент документа в черновик
+        CompletableFuture
+                .allOf(
+                        Stream
+                                .of(files)
+                                .map(
+                                        f -> draftCxtFuture
+                                                .thenCombine(
+                                                        engine.getCryptoProvider().signAsync(sender.getThumbprint(), f.getContent()),
+                                                        (draftCxt, signCxt) -> draft.addDecryptedDocument(draftCxt.setDocumentContents(DocumentContentsBuilder.build(f, signCxt.get())))
+                                                )
+                                )
+                                .collect(Collectors.toList())
+                                .toArray(new CompletableFuture[0])
+                )
+                // ожидаем завершения всех операций
+                .join();
+        // 1) делаем подготовку данных перед отправкой
+        // 2) отправляем черновик
+        return draftCxtFuture
+                // выполняем подготовку документа к отправке (шифрование, ...)
+                .thenApply(draft::prepare)
+                // отправляем черновик получателю, формируем ДО
+                .thenApply(draft::send)
+                // ожидаем получения результат
+                .get();
+    }
 }

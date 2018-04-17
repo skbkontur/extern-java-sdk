@@ -6,36 +6,36 @@
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author alexs
  */
 public class UsnServiceContractInfo {
-  private UsnFormatPeriod period = null;
-  private AdditionalClientInfo additionalOrgInfo = null;
-  private Object data = null;
 
-	public UsnFormatPeriod getPeriod() {
-		return period;
-	}
+    private UsnFormatPeriod period = null;
+    private AdditionalClientInfo additionalOrgInfo = null;
+    private Object data = null;
 
-	public void setPeriod(UsnFormatPeriod period) {
-		this.period = period;
-	}
+    public UsnFormatPeriod getPeriod() {
+        return period;
+    }
 
-	public AdditionalClientInfo getAdditionalOrgInfo() {
-		return additionalOrgInfo;
-	}
+    public void setPeriod(UsnFormatPeriod period) {
+        this.period = period;
+    }
 
-	public void setAdditionalOrgInfo(AdditionalClientInfo additionalOrgInfo) {
-		this.additionalOrgInfo = additionalOrgInfo;
-	}
+    public AdditionalClientInfo getAdditionalOrgInfo() {
+        return additionalOrgInfo;
+    }
 
-	public Object getData() {
-		return data;
-	}
+    public void setAdditionalOrgInfo(AdditionalClientInfo additionalOrgInfo) {
+        this.additionalOrgInfo = additionalOrgInfo;
+    }
 
-	public void setData(Object data) {
-		this.data = data;
-	}
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
 
 }

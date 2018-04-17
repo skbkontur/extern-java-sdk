@@ -8,10 +8,12 @@ package ru.skbkontur.sdk.extern.service.transport.invoker;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+
+import java.io.IOException;
+
 
 /**
  * Gson TypeAdapter for Joda DateTime type

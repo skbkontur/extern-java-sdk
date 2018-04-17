@@ -6,9 +6,9 @@
 package ru.skbkontur.sdk.extern.event;
 
 /**
- *
  * @author alexs
  */
 public interface AuthenticationListener {
-	void authenticate(AuthenticationEvent authEvent);
+
+    void authenticate(AuthenticationEvent authEvent);
 }
