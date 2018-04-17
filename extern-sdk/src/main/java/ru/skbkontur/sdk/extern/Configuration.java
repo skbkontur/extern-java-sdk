@@ -1,12 +1,38 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import ru.skbkontur.sdk.extern.providers.AccountProvider;
+import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
+import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
+import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
+import ru.skbkontur.sdk.extern.providers.UriProvider;
+import ru.skbkontur.sdk.extern.providers.auth.Credential;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,171 +40,177 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.UUID;
 
-import com.google.gson.stream.JsonReader;
-import ru.skbkontur.sdk.extern.providers.AccountProvider;
-import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
-import ru.skbkontur.sdk.extern.providers.UriProvider;
-import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
-import ru.skbkontur.sdk.extern.providers.auth.Credential;
-import ru.skbkontur.sdk.extern.service.SDKException;
 
 /**
- *
  * @author AlexS
  */
 public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
-	public static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
-	
-  @SerializedName("accountId")	private UUID accountId;
-	@SerializedName("apiKey") private String apiKey;
-	@SerializedName("authPrefix") private String authPrefix;
-	@SerializedName("credential") private Credential credential;
-	@SerializedName("serviceUserId") private String serviceUserId;
-	@SerializedName("login") private String login;
-	@SerializedName("pass") private String pass;
-	@SerializedName("serviceBaseUri") private String serviceBaseUri;
-	@SerializedName("authBaseUri") private String authBaseUri;
-	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
-	@SerializedName("thumbprintCloud") private String thumbprintCloud; // a thumbprint of a signature certificate for CloudCrypto
-	@SerializedName("thumbprintRsa") private String thumbprintRsa; // a thumbprint of a signature certificate with RSA algorithm
-	@SerializedName("jksPass") private String jksPass; // a password of JKS
-	@SerializedName("rsaKeyPass") private String rsaKeyPass; // a password of a RSA key
 
-	public Configuration() {
-		authPrefix = DEFAULT_AUTH_PREFIX;
-	}
-	
-	@Override
-	public UUID accountId() {
-		return accountId;
-	}
+    public static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 
-	public void setAccountId(UUID accountId) {
-		this.accountId = accountId;
-	}
+    @SerializedName("accountId")
+    private UUID accountId;
+    @SerializedName("apiKey")
+    private String apiKey;
+    @SerializedName("authPrefix")
+    private String authPrefix;
+    @SerializedName("credential")
+    private Credential credential;
+    @SerializedName("serviceUserId")
+    private String serviceUserId;
+    @SerializedName("login")
+    private String login;
+    @SerializedName("pass")
+    private String pass;
+    @SerializedName("serviceBaseUri")
+    private String serviceBaseUri;
+    @SerializedName("authBaseUri")
+    private String authBaseUri;
+    @SerializedName("thumbprint")
+    private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
+    @SerializedName("thumbprintCloud")
+    private String thumbprintCloud; // a thumbprint of a signature certificate for CloudCrypto
+    @SerializedName("thumbprintRsa")
+    private String thumbprintRsa; // a thumbprint of a signature certificate with RSA algorithm
+    @SerializedName("jksPass")
+    private String jksPass; // a password of JKS
+    @SerializedName("rsaKeyPass")
+    private String rsaKeyPass; // a password of a RSA key
 
-	public void setAccountId(String accountId) {
-		this.accountId = UUID.fromString(accountId);
-	}
+    public Configuration() {
+        authPrefix = DEFAULT_AUTH_PREFIX;
+    }
 
-	@Override
-	public String getApiKey() {
-		return apiKey;
-	}
+    public static Configuration load(URL resourceUrl) throws IOException {
+        try (InputStream is = resourceUrl.openStream()) {
+            if (is == null) {
+                throw new IOException(resourceUrl.toExternalForm() + " is not found");
+            }
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
+            return new Gson().fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+        }
+    }
 
-	public String getAuthPrefix() {
-		return authPrefix;
-	}
+    @Override
+    public UUID accountId() {
+        return accountId;
+    }
 
-	public void setAuthPrefix(String authPrefix) {
-		this.authPrefix = authPrefix;
-	}
+    public void setAccountId(UUID accountId) {
+        this.accountId = accountId;
+    }
 
-	@Override
-	public String getLogin() {
-		return login;
-	}
+    public void setAccountId(String accountId) {
+        this.accountId = UUID.fromString(accountId);
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    @Override
+    public String getApiKey() {
+        return apiKey;
+    }
 
-	@Override
-	public String getPass() {
-		return pass;
-	}
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
+    public String getAuthPrefix() {
+        return authPrefix;
+    }
 
-	@Override
-	public String getServiceBaseUri() {
-		return serviceBaseUri;
-	}
+    public void setAuthPrefix(String authPrefix) {
+        this.authPrefix = authPrefix;
+    }
 
-	public void setServiceBaseUri(String serviceBaseUri) {
-		this.serviceBaseUri = serviceBaseUri;
-	}
+    @Override
+    public String getLogin() {
+        return login;
+    }
 
-	@Override
-	public String getUri() {
-		return authBaseUri;
-	}
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	public void setAuthBaseUri(String authBaseUri) {
-		this.authBaseUri = authBaseUri;
-	}
+    @Override
+    public String getPass() {
+        return pass;
+    }
 
-	public String getThumbprint() {
-		return thumbprint;
-	}
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
 
-	public void setThumbprint(String thumbprint) {
-		this.thumbprint = thumbprint;
-	}
+    @Override
+    public String getServiceBaseUri() {
+        return serviceBaseUri;
+    }
 
-	public String getThumbprintCloud() {
-		return thumbprintCloud;
-	}
+    public void setServiceBaseUri(String serviceBaseUri) {
+        this.serviceBaseUri = serviceBaseUri;
+    }
 
-	public void setThumbprintCloud(String thumbprintCloud) {
-		this.thumbprintCloud = thumbprintCloud;
-	}
+    @Override
+    public String getUri() {
+        return authBaseUri;
+    }
 
-	public String getThumbprintRsa() {
-		return thumbprintRsa;
-	}
+    public void setAuthBaseUri(String authBaseUri) {
+        this.authBaseUri = authBaseUri;
+    }
 
-	public void setThumbprintRsa(String thumbprintRsa) {
-		this.thumbprintRsa = thumbprintRsa;
-	}
+    public String getThumbprint() {
+        return thumbprint;
+    }
 
-	public String getJksPass() {
-		return jksPass;
-	}
+    public void setThumbprint(String thumbprint) {
+        this.thumbprint = thumbprint;
+    }
 
-	public void setJksPass(String jksPass) {
-		this.jksPass = jksPass;
-	}
+    public String getThumbprintCloud() {
+        return thumbprintCloud;
+    }
 
-	public String getRsaKeyPass() {
-		return rsaKeyPass;
-	}
+    public void setThumbprintCloud(String thumbprintCloud) {
+        this.thumbprintCloud = thumbprintCloud;
+    }
 
-	public void setRsaKeyPass(String rsaKeyPass) {
-		this.rsaKeyPass = rsaKeyPass;
-	}
+    public String getThumbprintRsa() {
+        return thumbprintRsa;
+    }
 
-	public Credential getCredential() {
-		return credential;
-	}
+    public void setThumbprintRsa(String thumbprintRsa) {
+        this.thumbprintRsa = thumbprintRsa;
+    }
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-	}
+    public String getJksPass() {
+        return jksPass;
+    }
 
-	public String getServiceUserId() {
-		return serviceUserId;
-	}
+    public void setJksPass(String jksPass) {
+        this.jksPass = jksPass;
+    }
 
-	public void setServiceUserId(String serviceUserId) {
-		this.serviceUserId = serviceUserId;
-	}
+    public String getRsaKeyPass() {
+        return rsaKeyPass;
+    }
 
-	public static Configuration load(URL resourceUrl) throws IOException {
-		try (InputStream is = resourceUrl.openStream()) {
-			if (is == null) {
-				throw new IOException(resourceUrl.toExternalForm() + " is not found");
-			}
+    public void setRsaKeyPass(String rsaKeyPass) {
+        this.rsaKeyPass = rsaKeyPass;
+    }
 
-			return new Gson().fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
-		}
-	}
+    public Credential getCredential() {
+        return credential;
+    }
+
+    public void setCredential(Credential credential) {
+        this.credential = credential;
+    }
+
+    public String getServiceUserId() {
+        return serviceUserId;
+    }
+
+    public void setServiceUserId(String serviceUserId) {
+        this.serviceUserId = serviceUserId;
+    }
 
 }

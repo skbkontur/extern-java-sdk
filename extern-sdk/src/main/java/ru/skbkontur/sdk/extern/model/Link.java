@@ -1,67 +1,86 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern.model;
 
 /**
- *
  * @author AlexS
  */
 public class Link {
-  private String href = null;
-  private String rel = null;
-  private String name = null;
-  private String title = null;
-  private String profile = null;
-  private Boolean templated = null;
 
-	public String getHref() {
-		return href;
-	}
+    private String href = null;
+    private String rel = null;
+    private String name = null;
+    private String title = null;
+    private String profile = null;
+    private Boolean templated = null;
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public String getRel() {
-		return rel;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public void setRel(String rel) {
-		this.rel = rel;
-	}
+    public String getRel() {
+        return rel;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setRel(String rel) {
+        this.rel = rel;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getProfile() {
-		return profile;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setProfile(String profile) {
-		this.profile = profile;
-	}
+    public String getProfile() {
+        return profile;
+    }
 
-	public Boolean getTemplated() {
-		return templated;
-	}
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 
-	public void setTemplated(Boolean templated) {
-		this.templated = templated;
-	}
+    public Boolean getTemplated() {
+        return templated;
+    }
+
+    public void setTemplated(Boolean templated) {
+        this.templated = templated;
+    }
 }

@@ -1,14 +1,29 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.model.DocumentContents;
 import ru.skbkontur.sdk.extern.model.Draft;
@@ -22,87 +37,112 @@ import ru.skbkontur.sdk.extern.model.UsnServiceContractInfo;
 import ru.skbkontur.sdk.extern.model.UsnServiceContractInfoV2;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+
 /**
- *
  * @author AlexS
  */
 public interface DraftService {
-	/**
-	 * Create new a draft
-	 *
-	 * POST /v1/{accountId}/drafts
-	 *
-	 * @param sender Sender отправитель декларации
-	 * @param recipient Recipient получатель декларации
-	 * @param organization Organization организация, на которую создана декларация
-	 * @return CompletableFuture&lt;QueryContext&lt;UUID&gt;&gt; идентификатор черновика 
-	 */
-	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
-	public QueryContext<UUID> create(QueryContext<?> cxt);
 
-	/**
-	 * lookup a draft by an identifier
-	 *
-	 * GET /v1/{accountId}/drafts/{draftId}
-	 *
-	 * @param draftId String a draft identifier
-	 * 
-	 * @return Draft
-	 */
-	public CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId);
-	public QueryContext<Draft> lookup(QueryContext<?> cxt);
+    /**
+     * Create new a draft
+     * <p>
+     * POST /v1/{accountId}/drafts
+     *
+     * @param sender       Sender отправитель декларации
+     * @param recipient    Recipient получатель декларации
+     * @param organization Organization организация, на которую создана декларация
+     * @return CompletableFuture&lt;QueryContext&lt;UUID&gt;&gt; идентификатор черновика
+     */
+    CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
 
-	public CompletableFuture<QueryContext<Void>> deleteAsync(String draftId);
-	public QueryContext<Void> delete(QueryContext<?> cxt);
+    QueryContext<UUID> create(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId);
-	public QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
+    /**
+     * lookup a draft by an identifier
+     * <p>
+     * GET /v1/{accountId}/drafts/{draftId}
+     *
+     * @param draftId String a draft identifier
+     * @return Draft
+     */
+    CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId);
 
-	public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
-	public QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
+    QueryContext<Draft> lookup(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Map<String,Object>>> checkAsync(String draftId);
-	public QueryContext<Map<String,Object>> check(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
-	public QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
-	public QueryContext<List<Docflow>> send(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
-	public QueryContext<Void> deleteDocument(QueryContext<?> cxt);
+    CompletableFuture<QueryContext<Void>> deleteAsync(String draftId);
 
-	public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
-	public QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
+    QueryContext<Void> delete(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
-	public QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
-	public QueryContext<String> printDocument(QueryContext<?> cxt);
+    CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId);
 
-	public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
-	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
-	public QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
-	public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
+    QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
-	public QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
-	
-	public CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
-	public QueryContext<String> getSignatureContent(QueryContext<?> cxt);
+    CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
 
-	public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
-	public QueryContext<Void> updateSignature(QueryContext<?> cxt);
+    QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
-	public QueryContext<Void> createUSN1(QueryContext<?> cxt);
+    CompletableFuture<QueryContext<Map<String, Object>>> checkAsync(String draftId);
 
-	public CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
-	public QueryContext<Void> createUSN2(QueryContext<?> cxt);
+    QueryContext<Map<String, Object>> check(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
+
+    QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
+
+    QueryContext<List<Docflow>> send(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
+
+    QueryContext<Void> deleteDocument(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
+
+    QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
+
+    QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
+
+    QueryContext<String> printDocument(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
+
+    QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
+
+    QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
+
+    QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
+
+    QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
+
+    QueryContext<String> getSignatureContent(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
+
+    QueryContext<Void> updateSignature(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
+
+    QueryContext<Void> createUSN1(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
+
+    QueryContext<Void> createUSN2(QueryContext<?> cxt);
 }
