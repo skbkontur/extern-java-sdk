@@ -12,7 +12,6 @@ import ru.skbkontur.sdk.extern.common.TestServlet;
 import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.model.Certificate;
 import ru.skbkontur.sdk.extern.model.CertificateList;
-import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
@@ -58,13 +57,7 @@ public class CertificateServiceTest {
         engine = new ExternEngine();
         engine.setServiceBaseUriProvider(() -> "http://localhost:8080/certificates");
         engine.setAccountProvider(UUID::randomUUID);
-        engine.setApiKeyProvider(new ApiKeyProvider() {
-            @Override
-            public String getApiKey() {
-                return UUID.randomUUID().toString();
-            }
-        });
-
+        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
                 new AuthenticationProvider() {
                     @Override
@@ -214,8 +207,7 @@ public class CertificateServiceTest {
 
     private void checkResponseCode(int code) {
         QueryContext<CertificateList> queryContext = engine.getCertificateService().getCertificateList(new QueryContext<CertificateList>());
-        CertificateList certificateList = queryContext.get();
-        assertNull("certificateList must be null!", certificateList);
+        assertNull("certificateList must be null!", queryContext.get());
         ServiceError serviceError = queryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
