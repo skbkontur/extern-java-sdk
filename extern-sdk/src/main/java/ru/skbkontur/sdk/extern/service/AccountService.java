@@ -5,31 +5,33 @@
  */
 package ru.skbkontur.sdk.extern.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import ru.skbkontur.sdk.extern.model.Account;
 import ru.skbkontur.sdk.extern.model.AccountList;
 import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 
 /**
- *
  * @author AlexS
  */
 public interface AccountService {
+    CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync();
 
-	public CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync();
-	public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt);
+    QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt);
 
+    CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync();
 
-	public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync();
-	public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
+    QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Object>> createrAccountAsync(CreateAccountRequest createAccountRequest);
-	public QueryContext<Object> createrAccount(QueryContext<?> cxt);
+    CompletableFuture<QueryContext<Object>> createAccountAsync(CreateAccountRequest createAccountRequest);
 
-	public CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId);
-	public QueryContext<Account> getAccount(QueryContext<?> cxt);
+    QueryContext<Object> createAccount(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId);
+
+    QueryContext<Account> getAccount(QueryContext<?> cxt);
 }
