@@ -12,12 +12,12 @@ public class StandardObjectsValidator {
         assertEquals("Id is wrong!", StandardValues.ID, id.toString());
     }
 
-    public static void validateEmptyList(List list, String listName) {
+    public static void validateEmptyList(List<?> list, String listName) {
         assertNotNull(listName + " must not be null!", list);
         assertTrue(listName + " must be empty!", list.isEmpty());
     }
 
-    public static void validateNotEmptyList(List list, String listName) {
+    public static void validateNotEmptyList(List<?> list, String listName) {
         assertNotNull(listName + " must not be null!", list);
         assertFalse(listName + " must not be empty!", list.isEmpty());
     }
