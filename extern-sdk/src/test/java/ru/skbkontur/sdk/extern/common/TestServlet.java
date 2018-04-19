@@ -13,8 +13,9 @@ public class TestServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setStatus(ResponseData.INSTANCE.getResponseCode());
+        resp.getWriter().print(ResponseData.INSTANCE.getResponseMessage());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.skbkontur.sdk.extern.accounts;
+package ru.skbkontur.sdk.extern.accounts.adaptor;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -22,7 +22,7 @@ import java.util.List;
 import static javax.servlet.http.HttpServletResponse.*;
 import static junit.framework.TestCase.*;
 
-public class AccountsGetUriTest {
+public class AccountsAcquireBaseUriTest {
     private static final String LOCALHOST_ACCOUNTS = "http://localhost:8080/accounts";
     private static Server server;
 
@@ -59,8 +59,7 @@ public class AccountsGetUriTest {
     public void testAcquireBaseUri_Empty() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[]");
-        AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
-        accountsAdaptor.acquireBaseUri(queryContext);
+        new AccountsAdaptor().acquireBaseUri(queryContext);
         assertNotNull("List of links must not be null!", queryContext.get());
     }
 

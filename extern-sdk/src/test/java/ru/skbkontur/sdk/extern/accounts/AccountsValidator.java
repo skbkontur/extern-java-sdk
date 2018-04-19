@@ -7,8 +7,8 @@ import ru.skbkontur.sdk.extern.model.AccountList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
-class AccountsValidator {
-    static void validateAccountList(AccountList accountList, boolean withAccounts) {
+public class AccountsValidator {
+    public static void validateAccountList(AccountList accountList, boolean withAccounts) {
         assertNotNull("accountList must not be null!", accountList);
         assertEquals("Skip is wrong!", 0, accountList.getSkip().intValue());
         assertEquals("Take is wrong!", 0, accountList.getTake().intValue());
@@ -21,7 +21,7 @@ class AccountsValidator {
         }
     }
 
-    static void validateAccount(Account account, boolean withLinks) {
+    public static void validateAccount(Account account, boolean withLinks) {
         assertNotNull("Account must not be null!", account);
         StandardObjectsValidator.validateId(account.getId());
         assertEquals("Inn is wrong!", "string", account.getInn());
