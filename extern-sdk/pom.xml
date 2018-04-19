@@ -12,24 +12,6 @@
 
     <packaging>jar</packaging>
 
-    <build>
-        <plugins>
-            <!-- edit manifest  -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Title>${project.artifactId}</Implementation-Title>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <repositories>
         <repository>
             <id>extern.lib</id>
@@ -66,31 +48,10 @@
             <version>${cryptoservice.version}</version>
         </dependency>
 
-        <!-- swagger dependencies -->
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-core-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>${okhttp-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>${okhttp-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${jodatime-version}</version>
+            <groupId>ru.skbkontur.sdk</groupId>
+            <artifactId>extern-swagger</artifactId>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

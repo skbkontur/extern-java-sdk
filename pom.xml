@@ -19,7 +19,7 @@
         <gson-version>2.8.1</gson-version>
         <jodatime-version>2.9.9</jodatime-version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
-        <junit.version>5.1.0</junit.version>
+        <junit.version>4.12</junit.version>
         <cryptoservice.version>5.0.19</cryptoservice.version>
         <maven-jar-plugin.version>2.2</maven-jar-plugin.version>
         <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
@@ -27,29 +27,79 @@
         <annotations.version>15.0</annotations.version>
         <hamcrest-core.version>1.3</hamcrest-core.version>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+        <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
     </properties>
 
     <modules>
         <module>extern-sdk</module>
         <module>extern-sdk-examples</module>
+        <module>extern-sdk-swagger</module>
     </modules>
 
     <build>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${maven-project-info-reports-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                                <Implementation-Title>${project.artifactId}</Implementation-Title>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-codegen-maven-plugin</artifactId>
+                    <version>${swagger-codegen-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
         <plugins>
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>${maven-project-info-reports-plugin.version}</version>
             </plugin>
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
             </plugin>
-
         </plugins>
+
     </build>
 
     <profiles>
@@ -58,17 +108,7 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
