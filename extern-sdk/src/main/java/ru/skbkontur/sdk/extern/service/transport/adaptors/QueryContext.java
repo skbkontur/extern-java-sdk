@@ -383,7 +383,7 @@ public class QueryContext<R> implements Serializable {
 
     public boolean getDeffered() {
         Object v = params.get(DEFFERED);
-        return v == null ? true : (boolean) v;
+        return v == null || (boolean) v;
     }
 
     public QueryContext<R> setDeffered(boolean deffered) {
@@ -392,7 +392,7 @@ public class QueryContext<R> implements Serializable {
 
     public boolean getForce() {
         Object v = params.get(FORCE);
-        return v == null ? true : (boolean) v;
+        return v == null || (boolean) v;
     }
 
     public QueryContext<R> setForce(boolean force) {

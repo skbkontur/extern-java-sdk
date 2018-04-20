@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
  *
  * @author AlexS
  */
-public class LinkBuilder {
+class LinkBuilder {
 
     private String href = null;
     private String rel = null;

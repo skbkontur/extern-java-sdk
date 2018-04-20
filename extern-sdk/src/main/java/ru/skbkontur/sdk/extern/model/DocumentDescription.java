@@ -24,7 +24,7 @@ public class DocumentDescription {
            this.pattern = pattern;
         }
         
-        public static Type guessType(String fileName) {
+        private static Type guessType(String fileName) {
             if (fileName == null) return UNKNOWN;
                 
             if (fileName.matches(DOV.pattern))

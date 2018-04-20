@@ -32,6 +32,6 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * @author AlexS
  */
 public interface EventService {
-	public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId,int size);
-	public QueryContext<EventsPage> getEvents(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId,int size);
+	QueryContext<EventsPage> getEvents(QueryContext<?> cxt);
 }

@@ -142,7 +142,7 @@ public class ApiEventDtoTest {
         assertEquals(result.getDocflowLink().getTitle(), L_TITLE);
     }
     
-    public static ru.skbkontur.sdk.extern.service.transport.swagger.model.Link buildLinkDto() {
+    private static ru.skbkontur.sdk.extern.service.transport.swagger.model.Link buildLinkDto() {
         LinkBuilder lb = new LinkBuilder();
         lb.setHref(L_HREF);
         lb.setName(L_NAME);
@@ -153,7 +153,7 @@ public class ApiEventDtoTest {
         return lb.buildToDto();
     }
 
-    public static ru.skbkontur.sdk.extern.model.Link buildLinkSDK() {
+    private static ru.skbkontur.sdk.extern.model.Link buildLinkSDK() {
         LinkBuilder lb = new LinkBuilder();
         lb.setHref(L_HREF);
         lb.setName(L_NAME);
