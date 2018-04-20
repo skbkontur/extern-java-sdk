@@ -1,28 +1,37 @@
 package ru.skbkontur.sdk.extern.docflows;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static ru.skbkontur.sdk.extern.common.StandardObjectsValidator.validateId;
+
 import org.joda.time.DateTime;
 import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
 import ru.skbkontur.sdk.extern.common.StandardValues;
-import ru.skbkontur.sdk.extern.model.*;
-
-import static junit.framework.TestCase.*;
-import static ru.skbkontur.sdk.extern.common.StandardObjectsValidator.validateId;
+import ru.skbkontur.sdk.extern.model.Content;
+import ru.skbkontur.sdk.extern.model.Docflow;
+import ru.skbkontur.sdk.extern.model.DocflowPage;
+import ru.skbkontur.sdk.extern.model.DocflowPageItem;
+import ru.skbkontur.sdk.extern.model.Document;
+import ru.skbkontur.sdk.extern.model.DocumentDescription;
+import ru.skbkontur.sdk.extern.model.Link;
+import ru.skbkontur.sdk.extern.model.Signature;
 
 public class DocflowsValidator {
-    static void validateDocflowPage(DocflowPage docflowPage, boolean withDocflowsPageItems) {
+    public static void validateDocflowPage(DocflowPage docflowPage, boolean withDocflowsPageItems) {
         assertNotNull("DocflowPage must not be null!", docflowPage);
         assertEquals("Skip is wrong!", 0, docflowPage.getSkip().longValue());
         assertEquals("Take is wrong!", 0, docflowPage.getTake().longValue());
         assertEquals("TotalCount is wrong!", 0, docflowPage.getTotalCount().longValue());
         if (withDocflowsPageItems) {
             StandardObjectsValidator.validateNotEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
-            validateDocflowPageItem(docflowPage.getDocflowsPageItem().get(0), false);
+            validateDocflowPageItem(docflowPage.getDocflowsPageItem().get(0));
         } else {
             StandardObjectsValidator.validateEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
         }
     }
 
-    static void validateDocflowPageItem(DocflowPageItem docflowPageItem, boolean withLinks) {
+    private static void validateDocflowPageItem(DocflowPageItem docflowPageItem) {
         assertNotNull("DocflowPageItem must not be null!", docflowPageItem);
         validateId(docflowPageItem.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflowPageItem.getType());
@@ -30,15 +39,10 @@ public class DocflowsValidator {
         assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE), docflowPageItem.getSendDate());
         assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE), docflowPageItem.getLastChangeDate());
 
-        if (withLinks) {
-            StandardObjectsValidator.validateNotEmptyList(docflowPageItem.getLinks(), "Links");
-            StandardObjectsValidator.validateLink(docflowPageItem.getLinks().get(0));
-        } else {
-            StandardObjectsValidator.validateEmptyList(docflowPageItem.getLinks(), "Links");
-        }
+        StandardObjectsValidator.validateEmptyList(docflowPageItem.getLinks(), "Links");
     }
 
-    static void validateDocflow(Docflow docflow, boolean withDescription, boolean withDocuments, boolean withLinks) {
+    public static void validateDocflow(Docflow docflow, boolean withDescription, boolean withDocuments, boolean withLinks) {
         assertNotNull("Docflow must not be null!", docflow);
         validateId(docflow.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflow.getType());
@@ -66,7 +70,7 @@ public class DocflowsValidator {
 
     }
 
-    static void validateDocument(Document document, boolean withDescription, boolean withContent, boolean withSignature, boolean withLinks) {
+    public static void validateDocument(Document document, boolean withDescription, boolean withContent, boolean withSignature, boolean withLinks) {
         assertNotNull("Document must not be null!", document);
         validateId(document.getId());
 
@@ -104,13 +108,14 @@ public class DocflowsValidator {
         assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
     }
 
-    static void validateContent(Content content) {
+    private static void validateContent(Content content) {
         assertNotNull("Content must not be null!", content);
         StandardObjectsValidator.validateLink(content.getDecrypted());
         StandardObjectsValidator.validateLink(content.getEncrypted());
     }
 
-    static void validateSignature(Signature signature, boolean withContentLink, boolean withLinks) {
+    public static void validateSignature(Signature signature, boolean withContentLink, boolean withLinks) {
+        assertNotNull("Signature must not be null!", signature);
         StandardObjectsValidator.validateId(signature.getId());
 
         if (withContentLink) {
@@ -128,6 +133,4 @@ public class DocflowsValidator {
             StandardObjectsValidator.validateEmptyList(signature.getLinks(), "Links");
         }
     }
-
-
 }
