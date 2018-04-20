@@ -145,6 +145,7 @@ public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements 
 		return cxt
 			.setDocflowId(docflowId)
 			.setDocumentId(documentId)
+			.setSignatureId(signatureId)
 			.applyAsync(api::getSignature);
 	}
 
