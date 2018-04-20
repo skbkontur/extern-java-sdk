@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author AlexS
  */
-public class Link {
+class Link {
 	@SerializedName("href")
 	private String href;
 	@SerializedName("Rel")

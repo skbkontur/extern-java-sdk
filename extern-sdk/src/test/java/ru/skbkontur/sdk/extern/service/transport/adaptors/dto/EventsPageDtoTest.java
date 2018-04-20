@@ -86,7 +86,7 @@ public class EventsPageDtoTest {
     }
     
 
-    public static ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage buildEventsPageDto() {
+    private static ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage buildEventsPageDto() {
         ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage eventsPage = new ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage();
         eventsPage.setFirstEventId("firstEventId");
         eventsPage.setLastEventId("lastEventId");

@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author AlexS
  */
-public class File {
+class File {
 
 	@SerializedName("Id")
 	private String id;

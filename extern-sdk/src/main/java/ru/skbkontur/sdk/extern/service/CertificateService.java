@@ -14,6 +14,6 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * @author alexs
  */
 public interface CertificateService {
-	public CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
-	public QueryContext<CertificateList> getCertificateList(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
+	QueryContext<CertificateList> getCertificateList(QueryContext<?> cxt);
 }

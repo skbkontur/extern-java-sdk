@@ -90,8 +90,6 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  */
 public class SendDocument {
 
-    private static ExternEngine engine;
-
     public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
         // необходимо передать путь
         if (args.length == 0) {
@@ -106,7 +104,7 @@ public class SendDocument {
         }
 
         // создаем экземляр движка для работы с API Экстерна
-        engine = new ExternEngine();
+        ExternEngine engine = new ExternEngine();
         // загружаем параметры для отправки документа на портал Экстерна
         Properties parameters = new Properties();
         try (InputStream is = new FileInputStream(parameterFile)) {

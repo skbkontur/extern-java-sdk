@@ -23,10 +23,6 @@
  */
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -44,27 +40,6 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  */
 public class EventsAdaptorTest {
     
-    public EventsAdaptorTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-  
-
     @Test
     public void testGetEvents() throws ApiException {
         System.out.println("getEvents");

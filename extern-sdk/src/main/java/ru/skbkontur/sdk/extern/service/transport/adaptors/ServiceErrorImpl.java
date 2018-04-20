@@ -67,6 +67,11 @@ public class ServiceErrorImpl implements ServiceError {
 		return message;
 	}
 
+    @Override
+    public Throwable getCause() {
+        return cause;
+    }
+    
 	@Override
 	public String toString() {
 		final String EOL = "\r\n";

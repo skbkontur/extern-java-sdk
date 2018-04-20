@@ -487,7 +487,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 			if (cxt.isFail())	return cxt;
 			
 			return cxt.setResult(transport(cxt)
-					.draftDocumentsGetDocumentContent(
+					.draftDocumentsGetEncryptedDocumentContent(
 						cxt.getAccountProvider().accountId(), 
 						cxt.getDraftId(),
 						cxt.getDocumentId()

@@ -383,7 +383,7 @@ public class QueryContext<R> implements Serializable {
 
     public boolean getDeffered() {
         Object v = params.get(DEFFERED);
-        return v == null ? true : (boolean) v;
+        return v == null || (boolean) v;
     }
 
     public QueryContext<R> setDeffered(boolean deffered) {
@@ -392,7 +392,7 @@ public class QueryContext<R> implements Serializable {
 
     public boolean getForce() {
         Object v = params.get(FORCE);
-        return v == null ? true : (boolean) v;
+        return v == null || (boolean) v;
     }
 
     public QueryContext<R> setForce(boolean force) {
@@ -538,14 +538,10 @@ public class QueryContext<R> implements Serializable {
         return (boolean) params.get(FINISHED);
     }
 
-    ;
-	
-	public QueryContext<R> setFinished(boolean finished) {
+ 	public QueryContext<R> setFinished(boolean finished) {
         return set(FINISHED, finished);
     }
 
-    ;
-	
 	public boolean getIncoming() {
         return (boolean) params.get(INCOMING);
     }
@@ -556,151 +552,101 @@ public class QueryContext<R> implements Serializable {
         return set(INCOMING, incoming);
     }
 
-    ;
-	
 	public long getSkip() {
         return (long) params.get(SKIP);
     }
 
-    ;
-	
 	public QueryContext<R> setSkip(long skip) {
         return set(SKIP, skip);
     }
 
-    ;
-	
 	public int getTake() {
         return (int) params.get(TAKE);
     }
 
-    ;
-	
 	public QueryContext<R> setTake(int take) {
         return set(TAKE, take);
     }
 
-    ;
-	
 	public String getInnKpp() {
         return (String) params.get(INN_KPP);
     }
 
-    ;
-	
 	public QueryContext<R> setInnKpp(String innKpp) {
         return set(INN_KPP, innKpp);
     }
 
-    ;
-	
 	public DateTime getUpdatedFrom() {
         return (DateTime) params.get(UPDATED_FROM);
     }
 
-    ;
-	
 	public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
         return set(UPDATED_FROM, updatedFrom);
     }
 
-    ;
-	
 	public DateTime getUpdatedTo() {
         return (DateTime) params.get(UPDATED_TO);
     }
 
-    ;
-	
 	public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
         return set(UPDATED_TO, updatedTo);
     }
-
-    ;
 
 	public DateTime getCreatedFrom() {
         return (DateTime) params.get(CREATED_FROM);
     }
 
-    ;
-	
 	public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
         return set(CREATED_FROM, createdFrom);
     }
-
-    ;
 
 	public DateTime getCreatedTo() {
         return (DateTime) params.get(CREATED_TO);
     }
 
-    ;
-	
 	public QueryContext<R> setCreatedTo(DateTime createdTo) {
         return set(CREATED_TO, createdTo);
     }
 
-    ;
-	
 	public String getType() {
         return (String) params.get(TYPE);
     }
 
-    ;
-	
 	public QueryContext<R> setType(String type) {
         return set(TYPE, type);
     }
 
-    ;
-	
 	public String getCertificate() {
         return (String) params.get(CERTIFICATE);
     }
 
-    ;
-	
 	public QueryContext<R> setCertificate(String certificate) {
         return set(CERTIFICATE, certificate);
     }
 
-    ;
-	
 	public CertificateList getCertificateList() {
         return (CertificateList) params.get(CERTIFICATE_LIST);
     }
 
-    ;
-	
 	public QueryContext<R> setCertificateList(CertificateList certificateList) {
         return set(CERTIFICATE_LIST, certificateList);
     }
 
-    ;
-	
 	public UsnServiceContractInfo getUsnServiceContractInfo() {
         return (UsnServiceContractInfo) params.get(USN_SERVICE_CONTRACT_INFO);
     }
 
-    ;
-	
 	public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
         return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
     }
 
-    ;
-	
 	public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
         return (UsnServiceContractInfoV2) params.get(USN_SERVICE_CONTRACT_INFO_V2);
     }
 
-    ;
-
 	public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
         return set(USN_SERVICE_CONTRACT_INFO_V2, usnServiceContractInfoV2);
     }
-
-    ;
 
     public String getFromId() {
         return (String) params.get(FROM_ID);

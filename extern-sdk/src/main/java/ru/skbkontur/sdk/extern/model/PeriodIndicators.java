@@ -10,21 +10,21 @@ package ru.skbkontur.sdk.extern.model;
  * @author alexs
  */
 public class PeriodIndicators {
-  protected String oktmo = null;
-  protected String avPu = null;
-  protected String dohod = null;
-  protected String rashod = null;
-  protected String nalBazaUbyt = null;
-  protected String stavka = null;
-  protected String ischisl = null;
-  protected String umenNal = null;
-  protected MerchantTax raschTorgSbor = null;
+  private String oktmo = null;
+  private String avPu = null;
+  private String dohod = null;
+  private String rashod = null;
+  private String nalBazaUbyt = null;
+  private String stavka = null;
+  private String ischisl = null;
+  private String umenNal = null;
+  private MerchantTax raschTorgSbor = null;
 
 	public String getOktmo() {
 		return oktmo;
 	}
 
-	public void setOktmo(String oktmo) {
+	public final void setOktmo(String oktmo) {
 		this.oktmo = oktmo;
 	}
 
@@ -32,7 +32,7 @@ public class PeriodIndicators {
 		return avPu;
 	}
 
-	public void setAvPu(String avPu) {
+	public final void setAvPu(String avPu) {
 		this.avPu = avPu;
 	}
 
@@ -40,7 +40,7 @@ public class PeriodIndicators {
 		return dohod;
 	}
 
-	public void setDohod(String dohod) {
+	public final void setDohod(String dohod) {
 		this.dohod = dohod;
 	}
 
@@ -48,7 +48,7 @@ public class PeriodIndicators {
 		return rashod;
 	}
 
-	public void setRashod(String rashod) {
+	public final void setRashod(String rashod) {
 		this.rashod = rashod;
 	}
 
@@ -56,7 +56,7 @@ public class PeriodIndicators {
 		return nalBazaUbyt;
 	}
 
-	public void setNalBazaUbyt(String nalBazaUbyt) {
+	public final void setNalBazaUbyt(String nalBazaUbyt) {
 		this.nalBazaUbyt = nalBazaUbyt;
 	}
 
@@ -64,7 +64,7 @@ public class PeriodIndicators {
 		return stavka;
 	}
 
-	public void setStavka(String stavka) {
+	public final void setStavka(String stavka) {
 		this.stavka = stavka;
 	}
 
@@ -72,7 +72,7 @@ public class PeriodIndicators {
 		return ischisl;
 	}
 
-	public void setIschisl(String ischisl) {
+	public final void setIschisl(String ischisl) {
 		this.ischisl = ischisl;
 	}
 
@@ -80,7 +80,7 @@ public class PeriodIndicators {
 		return umenNal;
 	}
 
-	public void setUmenNal(String umenNal) {
+	public final void setUmenNal(String umenNal) {
 		this.umenNal = umenNal;
 	}
 
@@ -88,7 +88,7 @@ public class PeriodIndicators {
 		return raschTorgSbor;
 	}
 
-	public void setRaschTorgSbor(MerchantTax raschTorgSbor) {
+	public final void setRaschTorgSbor(MerchantTax raschTorgSbor) {
 		this.raschTorgSbor = raschTorgSbor;
 	}
 }

@@ -53,7 +53,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 
 	@Override
 	public QueryContext<String> sessionId() {
-		QueryContext<String> cxt = createQueryContext("loginAndPasswordAuthenticationProvider");
+		QueryContext<String> cxt = createQueryContext();
 
 		try {
 
@@ -120,8 +120,8 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 		return authPrefix;
 	}
 
-	private <T> QueryContext<T> createQueryContext(String entityName) {
-		QueryContext<T> cxt = new QueryContext<>(entityName);
+	private <T> QueryContext<T> createQueryContext() {
+		QueryContext<T> cxt = new QueryContext<>("loginAndPasswordAuthenticationProvider");
 		cxt.setApiClient(new ApiClient());
 		cxt.setServiceBaseUri(authBaseUriProvider.getUri());
 		cxt.setApiKeyProvider(apiKeyProvider);

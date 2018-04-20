@@ -31,11 +31,13 @@ public interface ServiceError {
 		public String message() {
 			return message;
 		}
-	};
+	}
 	
 	ErrorCode getErrorCode();
 	
 	int getResponseCode();
 	
 	String getMessage();
+    
+    Throwable getCause();
 }

@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import ru.skbkontur.sdk.extern.model.Account;
 import ru.skbkontur.sdk.extern.model.AccountList;
 import ru.skbkontur.sdk.extern.model.Link;
-import ru.skbkontur.sdk.extern.providers.ServiceError;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.ACCOUNT;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.ACCOUNT_LIST;
 import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.LINKS;

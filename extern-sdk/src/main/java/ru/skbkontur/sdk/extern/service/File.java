@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 public class File {
 	private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;
 	
-	public static enum ContentType {
+	public enum ContentType {
 		XML("application/xml");
 		
 		private final String value;

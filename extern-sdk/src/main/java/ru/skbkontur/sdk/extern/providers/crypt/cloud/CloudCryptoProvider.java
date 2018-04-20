@@ -105,7 +105,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
 
-		QueryContext<byte[]> cxt = createQueryContext(SIGNATURE);
+		QueryContext<byte[]> cxt = createQueryContext();
 
 		return CompletableFuture
 			.supplyAsync(
@@ -166,7 +166,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
 
-		QueryContext<byte[]> cxt = createQueryContext(SIGNATURE);
+		QueryContext<byte[]> cxt = createQueryContext();
 
 		return CompletableFuture
 			.supplyAsync(
@@ -277,8 +277,8 @@ public class CloudCryptoProvider implements CryptoProvider {
 		return respCxt.apply(new ApprovedQuery<>(resultId, approveCode, clazz, entityName, request));
 	}
 
-	private <T> QueryContext<T> createQueryContext(String entityName) {
-		QueryContext<T> cxt = new QueryContext<>(entityName);
+	private <T> QueryContext<T> createQueryContext() {
+		QueryContext<T> cxt = new QueryContext<>(SIGNATURE);
 		cxt.setApiClient(new ApiClient());
 		cxt.setServiceBaseUri(cloudCryptoBaseUri);
 		cxt.setAuthenticationProvider(authenticationProvider);

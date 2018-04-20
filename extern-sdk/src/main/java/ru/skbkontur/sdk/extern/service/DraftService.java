@@ -37,8 +37,8 @@ public interface DraftService {
 	 * @param organization Organization организация, на которую создана декларация
 	 * @return CompletableFuture&lt;QueryContext&lt;UUID&gt;&gt; идентификатор черновика 
 	 */
-	public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
-	public QueryContext<UUID> create(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
+	QueryContext<UUID> create(QueryContext<?> cxt);
 
 	/**
 	 * lookup a draft by an identifier
@@ -49,60 +49,60 @@ public interface DraftService {
 	 * 
 	 * @return Draft
 	 */
-	public CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId);
-	public QueryContext<Draft> lookup(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId);
+	QueryContext<Draft> lookup(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Void>> deleteAsync(String draftId);
-	public QueryContext<Void> delete(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> deleteAsync(String draftId);
+	QueryContext<Void> delete(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId);
-	public QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId);
+	QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
-	public QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
+	QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Map<String,Object>>> checkAsync(String draftId);
-	public QueryContext<Map<String,Object>> check(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Map<String,Object>>> checkAsync(String draftId);
+	QueryContext<Map<String,Object>> check(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
-	public QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
+	QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
-	public QueryContext<List<Docflow>> send(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
+	QueryContext<List<Docflow>> send(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
-	public QueryContext<Void> deleteDocument(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
+	QueryContext<Void> deleteDocument(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
-	public QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
+	QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
-	public QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
+	QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
-	public QueryContext<String> printDocument(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
+	QueryContext<String> printDocument(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
-	public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
+	QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
-	public QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
+	QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
-	public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
+	QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
-	public QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
+	QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
 	
-	public CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
-	public QueryContext<String> getSignatureContent(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
+	QueryContext<String> getSignatureContent(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
-	public QueryContext<Void> updateSignature(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
+	QueryContext<Void> updateSignature(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
-	public QueryContext<Void> createUSN1(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
+	QueryContext<Void> createUSN1(QueryContext<?> cxt);
 
-	public CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
-	public QueryContext<Void> createUSN2(QueryContext<?> cxt);
+	CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
+	QueryContext<Void> createUSN2(QueryContext<?> cxt);
 }

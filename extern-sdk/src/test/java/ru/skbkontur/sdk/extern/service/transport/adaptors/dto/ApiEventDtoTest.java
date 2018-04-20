@@ -25,10 +25,6 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 
 import java.util.Date;
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -51,31 +47,12 @@ public class ApiEventDtoTest {
     private static final String E_KPP = "781001001";
     private static final String E_NEW_STATE = "new:state";
     
-    
-    public ApiEventDtoTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     @Test
     public void testFromDto() {
         System.out.println("fromDto");
         ru.skbkontur.sdk.extern.service.transport.swagger.model.ApiEvent dto = new ru.skbkontur.sdk.extern.service.transport.swagger.model.ApiEvent();
-        
+//<editor-fold defaultstate="collapsed" desc="test">        
         dto.setDocflowLink(buildLinkDto());
         dto.setDocflowType(D_TYPE);
         dto.setEventDateTime(E_DATE_TIME);
@@ -83,7 +60,7 @@ public class ApiEventDtoTest {
         dto.setInn(E_INN);
         dto.setKpp(E_KPP);
         dto.setNewState(E_NEW_STATE);
-        
+//</editor-fold>        
         ApiEventDto instance = new ApiEventDto();
         ru.skbkontur.sdk.extern.model.ApiEvent result = instance.fromDto(dto);
         
@@ -142,7 +119,7 @@ public class ApiEventDtoTest {
         assertEquals(result.getDocflowLink().getTitle(), L_TITLE);
     }
     
-    public static ru.skbkontur.sdk.extern.service.transport.swagger.model.Link buildLinkDto() {
+    private static ru.skbkontur.sdk.extern.service.transport.swagger.model.Link buildLinkDto() {
         LinkBuilder lb = new LinkBuilder();
         lb.setHref(L_HREF);
         lb.setName(L_NAME);
@@ -153,7 +130,7 @@ public class ApiEventDtoTest {
         return lb.buildToDto();
     }
 
-    public static ru.skbkontur.sdk.extern.model.Link buildLinkSDK() {
+    private static ru.skbkontur.sdk.extern.model.Link buildLinkSDK() {
         LinkBuilder lb = new LinkBuilder();
         lb.setHref(L_HREF);
         lb.setName(L_NAME);

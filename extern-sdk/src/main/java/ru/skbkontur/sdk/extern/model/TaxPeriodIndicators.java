@@ -14,15 +14,15 @@ public class TaxPeriodIndicators extends PeriodIndicators {
 
 	public TaxPeriodIndicators(String nalPumin,PeriodIndicators p) {
 		this.nalPumin = nalPumin;
-		this.avPu = p.getAvPu();
-		this.dohod = p.getDohod();
-		this.ischisl = p.getIschisl();
-		this.nalBazaUbyt = p.getNalBazaUbyt();
-		this.oktmo = p.getOktmo();
-		this.raschTorgSbor = p.getRaschTorgSbor();
-		this.rashod = p.getRashod();
-		this.stavka = p.getStavka();
-		this.umenNal = p.getUmenNal();
+		setAvPu(p.getAvPu());
+		setDohod(p.getDohod());
+		setIschisl(p.getIschisl());
+		setNalBazaUbyt(p.getNalBazaUbyt());
+		setOktmo(p.getOktmo());
+		setRaschTorgSbor(p.getRaschTorgSbor());
+		setRashod(p.getRashod());
+		setStavka(p.getStavka());
+		setUmenNal(p.getUmenNal());
 	}
 
 	public TaxPeriodIndicators() {
@@ -32,7 +32,7 @@ public class TaxPeriodIndicators extends PeriodIndicators {
 		return nalPumin;
 	}
 
-	public void setNalPumin(String nalPumin) {
+	public final void setNalPumin(String nalPumin) {
 		this.nalPumin = nalPumin;
 	}
 }
