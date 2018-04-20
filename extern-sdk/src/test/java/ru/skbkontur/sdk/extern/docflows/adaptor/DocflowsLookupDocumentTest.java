@@ -1,26 +1,38 @@
-package ru.skbkontur.sdk.extern.docflows;
+package ru.skbkontur.sdk.extern.docflows.adaptor;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+
+import java.util.UUID;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.*;
-import ru.skbkontur.sdk.extern.common.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ru.skbkontur.sdk.extern.common.ResponseData;
+import ru.skbkontur.sdk.extern.common.StandardObjects;
+import ru.skbkontur.sdk.extern.common.StandardValues;
+import ru.skbkontur.sdk.extern.common.TestServlet;
+import ru.skbkontur.sdk.extern.docflows.DocflowsValidator;
 import ru.skbkontur.sdk.extern.model.Document;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
-import java.util.List;
-import java.util.UUID;
-
-import static javax.servlet.http.HttpServletResponse.*;
-import static junit.framework.TestCase.*;
-
-public class DocflowsGetDocumentsTest {
+public class DocflowsLookupDocumentTest {
     private static final String LOCALHOST_DOCFLOWS = "http://localhost:8080/docflows";
     private static Server server;
 
-    private QueryContext<List<Document>> queryContext;
+    private QueryContext<Document> queryContext;
 
     private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
             "\"filename\": \"string\"," +
@@ -44,6 +56,7 @@ public class DocflowsGetDocumentsTest {
         queryContext.setApiClient(apiClient);
         queryContext.setAccountProvider(UUID::randomUUID);
         queryContext.setDocflowId(UUID.randomUUID());
+        queryContext.setDocumentId(UUID.randomUUID());
     }
 
     @AfterClass
@@ -56,57 +69,52 @@ public class DocflowsGetDocumentsTest {
     }
 
     @Test
-    public void testGetDocuments_Empty() {
+    public void testLookupDocument_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("[]");
+        ResponseData.INSTANCE.setResponseMessage("{}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        assertNotNull("Documents must not be null!", queryContext.get());
+        docflowsAdaptor.lookupDocument(queryContext);
+        assertNotNull("Document must not be null!", queryContext.get());
     }
 
     @Test
-    public void testGetDocuments_Document() {
+    public void testLookupDocument_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        List<Document> documents = queryContext.get();
-        StandardObjectsValidator.validateNotEmptyList(documents, "Documents");
-        DocflowsValidator.validateDocument(documents.get(0), false, false, false, false);
+        ResponseData.INSTANCE.setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
+        new DocflowsAdaptor().lookupDocument(queryContext);
+        DocflowsValidator.validateDocument(queryContext.get(), false, false, false, false);
     }
 
     @Test
-    public void testGetDocuments_Document_Description() {
+    public void testLookupDocument_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("[{" +
+        ResponseData.INSTANCE.setResponseMessage("{" +
                 "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"description\": " + DOCUMENT_DESCRIPTION +
-                "}]");
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        DocflowsValidator.validateDocument(queryContext.get().get(0), true, false, false, false);
+                "}");
+        new DocflowsAdaptor().lookupDocument(queryContext);
+        DocflowsValidator.validateDocument(queryContext.get(), true, false, false, false);
     }
 
     @Test
-    public void testGetDocuments_Document_WithContent() {
+    public void testLookupDocument_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("[{" +
+        ResponseData.INSTANCE.setResponseMessage("{" +
                 "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"description\": " + DOCUMENT_DESCRIPTION + "," +
                 "\"content\": {\n" +
                 "  \"decrypted\": " + StandardObjects.LINK + "," +
                 "  \"encrypted\": " + StandardObjects.LINK +
                 "}" +
-                "}]");
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, false, false);
+                "}");
+        new DocflowsAdaptor().lookupDocument(queryContext);
+        DocflowsValidator.validateDocument(queryContext.get(), true, true, false, false);
     }
 
     @Test
-    public void testGetDocuments_Document_Signature() {
+    public void testLookupDocument_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("[{" +
+        ResponseData.INSTANCE.setResponseMessage("{" +
                 "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"description\": " + DOCUMENT_DESCRIPTION + "," +
                 "\"content\": {\n" +
@@ -114,16 +122,15 @@ public class DocflowsGetDocumentsTest {
                 "  \"encrypted\": " + StandardObjects.LINK +
                 "}," +
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
-                "}]");
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, false);
+                "}");
+        new DocflowsAdaptor().lookupDocument(queryContext);
+        DocflowsValidator.validateDocument(queryContext.get(), true, true, true, false);
     }
 
     @Test
-    public void testGetDocuments_Document_Links() {
+    public void testLookupDocument_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("[{" +
+        ResponseData.INSTANCE.setResponseMessage("{" +
                 "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"description\": " + DOCUMENT_DESCRIPTION + "," +
                 "\"content\": {\n" +
@@ -132,10 +139,10 @@ public class DocflowsGetDocumentsTest {
                 "}," +
                 "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
                 "\"links\": [" + StandardObjects.LINK + "]" +
-                "}]");
+                "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        DocflowsValidator.validateDocument(queryContext.get().get(0), true, true, true, true);
+        docflowsAdaptor.lookupDocument(queryContext); 
+        DocflowsValidator.validateDocument(queryContext.get(), true, true, true, true);
     }
 
     @Test
@@ -170,9 +177,9 @@ public class DocflowsGetDocumentsTest {
 
     private void checkResponseCode(int code) {
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getDocuments(queryContext);
-        List<Document> documents = queryContext.get();
-        assertNull("documents must be null!", documents);
+        docflowsAdaptor.lookupDocument(queryContext);
+        Document document = queryContext.get();
+        assertNull("document must be null!", document);
         ServiceError serviceError = queryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());

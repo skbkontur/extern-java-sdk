@@ -1,28 +1,40 @@
-package ru.skbkontur.sdk.extern.docflows;
+package ru.skbkontur.sdk.extern.docflows.adaptor;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+
+import java.util.List;
+import java.util.UUID;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.skbkontur.sdk.extern.common.ResponseData;
 import ru.skbkontur.sdk.extern.common.StandardObjects;
+import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
 import ru.skbkontur.sdk.extern.common.StandardValues;
 import ru.skbkontur.sdk.extern.common.TestServlet;
+import ru.skbkontur.sdk.extern.docflows.DocflowsValidator;
 import ru.skbkontur.sdk.extern.model.Signature;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
-import java.util.UUID;
-
-import static javax.servlet.http.HttpServletResponse.*;
-import static junit.framework.TestCase.*;
-
-public class DocflowsGetSignatureTest {
+public class DocflowsGetSignaturesTest {
     private static final String LOCALHOST_DOCFLOWS = "http://localhost:8080/docflows";
     private static Server server;
 
-    private QueryContext<Signature> queryContext;
+    private QueryContext<List<Signature>> queryContext;
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -43,7 +55,6 @@ public class DocflowsGetSignatureTest {
         queryContext.setAccountProvider(UUID::randomUUID);
         queryContext.setDocflowId(UUID.randomUUID());
         queryContext.setDocumentId(UUID.randomUUID());
-        queryContext.setSignatureId(UUID.randomUUID());
     }
 
     @AfterClass
@@ -56,79 +67,82 @@ public class DocflowsGetSignatureTest {
     }
 
     @Test
-    public void testGetSignature_Empty() {
+    public void testGetSignatures_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{}");
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getSignature(queryContext);
-        assertNotNull("Signature must not be null!", queryContext.get());
+        ResponseData.INSTANCE.setResponseMessage("[]");
+        new DocflowsAdaptor().getSignatures(queryContext);
+        assertNotNull("Signatures must not be null!", queryContext.get());
     }
 
     @Test
-    public void testGetSignature_Signature() {
+    public void testGetSignatures_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
-        new DocflowsAdaptor().getSignature(queryContext);
-        DocflowsValidator.validateSignature(queryContext.get(), false, false);
+        ResponseData.INSTANCE.setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
+        new DocflowsAdaptor().getSignatures(queryContext);
+        StandardObjectsValidator.validateNotEmptyList(queryContext.get(), "Signatures");
+        DocflowsValidator.validateSignature(queryContext.get().get(0), false, false);
     }
 
     @Test
-    public void testGetSignature_ContentLink() {
+    public void testGetSignatures_Signature_ContentLink() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"," +
+        ResponseData.INSTANCE.setResponseMessage("[{" +
+                "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"content-link\":" + StandardObjects.LINK +
-                "}");
-        new DocflowsAdaptor().getSignature(queryContext);
-        DocflowsValidator.validateSignature(queryContext.get(), true, false);
+                "}]");
+        new DocflowsAdaptor().getSignatures(queryContext);
+        List<Signature> signatures = queryContext.get();
+        DocflowsValidator.validateSignature(signatures.get(0), true, false);
     }
 
     @Test
-    public void testGetSignature_Signature_Links() {
+    public void testGetSignatures_Signature_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
+        ResponseData.INSTANCE.setResponseMessage("[{" +
                 "\"id\": \"" + StandardValues.ID + "\"," +
                 "\"content-link\":" + StandardObjects.LINK + "," +
                 "\"links\": [" + StandardObjects.LINK + "]" +
-                "}");
-        new DocflowsAdaptor().getSignature(queryContext);
-        DocflowsValidator.validateSignature(queryContext.get(), true, true);
+                "}]");
+        new DocflowsAdaptor().getSignatures(queryContext);
+        List<Signature> signatures = queryContext.get();
+        DocflowsValidator.validateSignature(signatures.get(0), true, true);
     }
 
     @Test
-    public void testGetDocflows_BAD_REQUEST() {
+    public void testGetSignatures_BAD_REQUEST() {
         ResponseData.INSTANCE.setResponseCode(SC_BAD_REQUEST); // 400
         checkResponseCode(SC_BAD_REQUEST);
     }
 
     @Test
-    public void testGetDocflows_UNAUTHORIZED() {
+    public void testGetSignatures_UNAUTHORIZED() {
         ResponseData.INSTANCE.setResponseCode(SC_UNAUTHORIZED); // 401
         checkResponseCode(SC_UNAUTHORIZED);
     }
 
     @Test
-    public void testGetDocflows_FORBIDDEN() {
+    public void testGetSignatures_FORBIDDEN() {
         ResponseData.INSTANCE.setResponseCode(SC_FORBIDDEN); // 403
         checkResponseCode(SC_FORBIDDEN);
     }
 
     @Test
-    public void testGetDocflows_NOT_FOUND() {
+    public void testGetSignatures_NOT_FOUND() {
         ResponseData.INSTANCE.setResponseCode(SC_NOT_FOUND); // 404
         checkResponseCode(SC_NOT_FOUND);
     }
 
     @Test
-    public void testGetDocflows_INTERNAL_SERVER_ERROR() {
+    public void testGetSignatures_INTERNAL_SERVER_ERROR() {
         ResponseData.INSTANCE.setResponseCode(SC_INTERNAL_SERVER_ERROR); // 500
         checkResponseCode(SC_INTERNAL_SERVER_ERROR);
     }
 
     private void checkResponseCode(int code) {
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.getSignature(queryContext);
-        Signature signature = queryContext.get();
-        assertNull("documents must be null!", signature);
+        docflowsAdaptor.getSignatures(queryContext);
+        List<Signature> signatures = queryContext.get();
+        assertNull("signatures must be null!", signatures);
         ServiceError serviceError = queryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());

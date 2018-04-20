@@ -1,22 +1,32 @@
-package ru.skbkontur.sdk.extern.docflows;
+package ru.skbkontur.sdk.extern.docflows.adaptor;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+
+import java.util.UUID;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.skbkontur.sdk.extern.common.ResponseData;
 import ru.skbkontur.sdk.extern.common.StandardObjects;
 import ru.skbkontur.sdk.extern.common.StandardValues;
 import ru.skbkontur.sdk.extern.common.TestServlet;
+import ru.skbkontur.sdk.extern.docflows.DocflowsValidator;
 import ru.skbkontur.sdk.extern.model.Docflow;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
-
-import java.util.UUID;
-
-import static javax.servlet.http.HttpServletResponse.*;
-import static junit.framework.TestCase.*;
 
 public class DocflowsLookupDocflowTest {
     private static final String LOCALHOST_DOCFLOWS = "http://localhost:8080/docflows";
@@ -73,20 +83,16 @@ public class DocflowsLookupDocflowTest {
     public void testLookupDocflow_Docflow() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s}", DOCFLOW));
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocflow(queryContext);
-        Docflow docflow = queryContext.get();
-        DocflowsValidator.validateDocflow(docflow, false, false, false);
+        new DocflowsAdaptor().lookupDocflow(queryContext);
+        DocflowsValidator.validateDocflow(queryContext.get(), false, false, false);
     }
 
     @Test
     public void testLookupDocflow_Docflow_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s,\"description\": {}}", DOCFLOW));
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocflow(queryContext);
-        Docflow docflow = queryContext.get();
-        DocflowsValidator.validateDocflow(docflow, true, false, false);
+        new DocflowsAdaptor().lookupDocflow(queryContext);
+        DocflowsValidator.validateDocflow(queryContext.get(), true, false, false);
     }
 
     @Test
@@ -98,8 +104,7 @@ public class DocflowsLookupDocflowTest {
                 "   \"id\": \"%s\"" +
                 "}]" +
                 "}", DOCFLOW, StandardValues.ID));
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocflow(queryContext);
+        new DocflowsAdaptor().lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, true, false);
     }
 
@@ -112,8 +117,7 @@ public class DocflowsLookupDocflowTest {
                 "  \"documents\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
                 "  \"links\": [" + StandardObjects.LINK + "]" +
                 "}");
-        DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocflow(queryContext);
+        new DocflowsAdaptor().lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, true, true);
     }
 
