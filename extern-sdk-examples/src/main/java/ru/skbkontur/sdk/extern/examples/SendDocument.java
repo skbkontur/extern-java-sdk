@@ -3,23 +3,20 @@
  *
  * Copyright 2018 SKB Kontur
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package ru.skbkontur.sdk.extern.examples;
 
@@ -32,8 +29,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -95,116 +90,115 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  */
 public class SendDocument {
 
-	private static ExternEngine engine;
+    private static ExternEngine engine;
 
-	public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
-		// необходимо передать путь
-		if (args.length == 0) {
-			System.out.println("There is no path to the properter file in the command line.");
-			return;
-		}
-		// файл с параметрами должен существовать
-		File parameterFile = new File(args[0]);
-		if (!parameterFile.exists() || !parameterFile.isFile()) {
-			System.out.println("Parameter file not found: " + args[0]);
-			return;
-		}
+    public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
+        // необходимо передать путь
+        if (args.length == 0) {
+            System.out.println("There is no path to the properter file in the command line.");
+            return;
+        }
+        // файл с параметрами должен существовать
+        File parameterFile = new File(args[0]);
+        if (!parameterFile.exists() || !parameterFile.isFile()) {
+            System.out.println("Parameter file not found: " + args[0]);
+            return;
+        }
 
-		// создаем экземляр движка для работы с API Экстерна
-		engine = new ExternEngine();
-		// загружаем параметры для отправки документа на портал Экстерна
-		Properties parameters = new Properties();
-		try (InputStream is = new FileInputStream(parameterFile)) {
-			parameters.load(is);
-		}
+        // создаем экземляр движка для работы с API Экстерна
+        engine = new ExternEngine();
+        // загружаем параметры для отправки документа на портал Экстерна
+        Properties parameters = new Properties();
+        try (InputStream is = new FileInputStream(parameterFile)) {
+            parameters.load(is);
+        }
 
-		// КОНФИГУРИРОВАНИЕ ДВИЖКА
-		// устанавливаем URI для Экстерн API
-		engine.setServiceBaseUriProvider(() -> parameters.getProperty("service.base.uri"));
-		// устанавливаем идентификатор аккаунта
-		engine.setAccountProvider(() -> UUID.fromString(parameters.getProperty("account.id")));
-		// устанавливаем идентификатор внешнего сервиса
-		engine.setApiKeyProvider(() -> parameters.getProperty("api.key"));
-		// устанавливаем провайдер для аутентификации по логину и паролю
-		engine.setAuthenticationProvider(
-			new AuthenticationProviderByPass(
-				() -> parameters.getProperty("auth.base.uri"),
-				new LoginAndPasswordProvider() {
-				@Override
-				public String getLogin() {
-					return parameters.getProperty("auth.login");
-				}
+        // КОНФИГУРИРОВАНИЕ ДВИЖКА
+        // устанавливаем URI для Экстерн API
+        engine.setServiceBaseUriProvider(() -> parameters.getProperty("service.base.uri"));
+        // устанавливаем идентификатор аккаунта
+        engine.setAccountProvider(() -> UUID.fromString(parameters.getProperty("account.id")));
+        // устанавливаем идентификатор внешнего сервиса
+        engine.setApiKeyProvider(() -> parameters.getProperty("api.key"));
+        // провайдер логина и пароля
+        LoginAndPasswordProvider loginAndPasswordProvider = new LoginAndPasswordProvider() {
+            @Override
+            public String getLogin() {
+                return parameters.getProperty("auth.login");
+            }
 
-				@Override
-				public String getPass() {
-					return parameters.getProperty("auth.pass");
-				}
-			},
-				engine.getApiKeyProvider()
-			)
-		);
+            @Override
+            public String getPass() {
+                return parameters.getProperty("auth.pass");
+            }
+        };
+        // устанавливаем провайдер для аутентификации по логину и паролю/*
+        engine.setAuthenticationProvider(
+            new AuthenticationProviderByPass(
+                () -> parameters.getProperty("auth.base.uri"),
+                loginAndPasswordProvider,
+                engine.getApiKeyProvider()
+            )
+        );
+        // данную инициализацию делать необязательно,
+        // если используется свой криптопровайдер
+        engine.setCryptoProvider(new CryptoProviderMSCapi());
 
-		// данную инициализацию делать необязательно,
-		// если используется свой криптопровайдер
-		engine.setCryptoProvider(
-			new CryptoProviderMSCapi()
-		);
+        engine.configureServices();
 
-		engine.configureServices();
+        // отправитель
+        Sender sender = new Sender();
+        // ИНН отправителя
+        sender.setInn(parameters.getProperty("sender.inn"));
+        // КПП отправителя
+        sender.setKpp(parameters.getProperty("sender.kpp"));
+        // IP адресс отправителя
+        sender.setIpaddress(parameters.getProperty("sender.ip"));
+        // отпечаток сертификат отправителя
+        sender.setThumbprint(parameters.getProperty("sender.thumbprint"));
+        // получатель
+        FnsRecipient recipient = new FnsRecipient();
+        // ИНН отправителя
+        recipient.setIfnsCode(parameters.getProperty("ifns.code"));
+        // подотчетная организация
+        Organization organization = new Organization(parameters.getProperty("company.inn"), parameters.getProperty("company.kpp"));
 
-		// отправитель
-		Sender sender = new Sender();
-		// ИНН отправителя
-		sender.setInn(parameters.getProperty("sender.inn"));
-		// КПП отправителя
-		sender.setKpp(parameters.getProperty("sender.kpp"));
-		// IP адресс отправителя
-		sender.setIpaddress(parameters.getProperty("sender.ip"));
-		// отпечаток сертификат отправителя
-		sender.setThumbprint(parameters.getProperty("sender.thumbprint"));
-		// получатель
-		FnsRecipient recipient = new FnsRecipient();
-		// ИНН отправителя
-		recipient.setIfnsCode(parameters.getProperty("ifns.code"));
-		// подотчетная организация
-		Organization organization = new Organization(parameters.getProperty("company.inn"), parameters.getProperty("company.kpp"));
+        // путь к документу, который будем отправлять
+        String docPath = parameters.getProperty("document.path");
+        String[] docPaths = docPath == null ? null : docPath.split(";");
+        if (docPaths != null) {
+            ru.skbkontur.sdk.extern.service.File[] files
+                = Stream
+                    .of(docPaths)
+                    .map(p -> new File(p))
+                    .map(f -> new ru.skbkontur.sdk.extern.service.File(f.getName(), readFileContent(f))) //
+                    .collect(Collectors.toList())
+                    .toArray(new ru.skbkontur.sdk.extern.service.File[docPaths.length]);
 
-		// путь к документу, который будем отправлять
-		String docPath = parameters.getProperty("document.path");
-		String[] docPaths = docPath == null ? null : docPath.split(";");
-		if (docPaths != null) {
-			ru.skbkontur.sdk.extern.service.File[] files =
-				Stream
-					.of(docPaths)
-					.map(p -> new File(p))
-					.map(f -> new ru.skbkontur.sdk.extern.service.File(f.getName(), readFileContent(f))) // 
-					.collect(Collectors.toList())
-					.toArray(new ru.skbkontur.sdk.extern.service.File[docPaths.length]);
-			
-			// отправляем документы
-			QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver().sendDocument(files, sender, recipient, organization);
-			// проверяем результат отправки
-			if (sendCxt.isFail()) {
-				// ошибка отправки документа
-				// регистрируем ошибку в лог файл
-				System.out.println("Error sending document.\n" + sendCxt.getServiceError().toString());
-						
-				return;
-			}
-					
-			// документ был отправлен
-			// в результате получаем список документооборотов (ДО)
-			// иногда один документ может вызвать несколько ДО
-			System.out.println(MessageFormat.format("The documents [{0}] was sent.", Stream.of(files).map(f->f.getFileName()).reduce((x,y)->x+"\r\n"+y)));
-		}
-	}
-	
-	private static byte[] readFileContent(File file) throws RuntimeException {
-		try {
-			return IOUtil.readFileContent(file);
-		}
-		catch (IOException x) {
-			throw new RuntimeException(x);
-		}
-	}
+            // отправляем документы
+            QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver().sendDocument(files, sender, recipient, organization);
+            // проверяем результат отправки
+            if (sendCxt.isFail()) {
+                // ошибка отправки документа
+                // регистрируем ошибку в лог файл
+                System.out.println("Error sending document.\r\n" + sendCxt.getServiceError().toString());
+
+                return;
+            }
+
+            // документ был отправлен
+            // в результате получаем список документооборотов (ДО)
+            // иногда один документ может вызвать несколько ДО
+            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(f -> f.getFileName()).reduce((x, y) -> x + "\r\n" + y).orElse("")));
+        }
+    }
+
+    private static byte[] readFileContent(File file) throws RuntimeException {
+        try {
+            return IOUtil.readFileContent(file);
+        }
+        catch (IOException x) {
+            throw new RuntimeException(x);
+        }
+    }
 }

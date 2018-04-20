@@ -15,3 +15,5 @@ extern-sdk-test
 /extern-sdk-examples/nbactions.xml
 /extern-sdk-examples/nbactions-release-profile.xml
 /.idea
+/nb-configuration.xml
+/extern-sdk/nbactions.xml

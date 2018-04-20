@@ -50,7 +50,7 @@ public abstract class AuthenticationProviderAbstract implements AuthenticationPr
 	
 	@Override
 	public void raiseUnauthenticated(ServiceError x) {
-		QueryContext<String> authCxt = new QueryContext();
+		QueryContext<String> authCxt = new QueryContext<>();
 		authCxt.setServiceError(x);
 		fireAuthenticationEvent(authCxt);
 	}

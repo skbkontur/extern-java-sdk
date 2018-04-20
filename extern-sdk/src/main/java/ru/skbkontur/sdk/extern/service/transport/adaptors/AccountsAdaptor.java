@@ -66,7 +66,7 @@ public class AccountsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -87,7 +87,7 @@ public class AccountsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 	
@@ -107,7 +107,7 @@ public class AccountsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 
@@ -127,7 +127,7 @@ public class AccountsAdaptor extends BaseAdaptor {
 			);
 		}
 		catch (ApiException x) {
-			return cxt.setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody()));
+			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
 		}
 	}
 	

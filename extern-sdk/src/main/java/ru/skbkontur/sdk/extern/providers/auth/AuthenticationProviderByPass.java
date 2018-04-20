@@ -88,6 +88,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 			apiClient.setBasePath(authBaseUriProvider.getUri());
 			
 			Map<String, String> queryParams = new HashMap<String, String>() {
+                private static final long serialVersionUID = 1L;
 				{
 					put("login", login);
 					put("apiKey", apiKey);
@@ -95,6 +96,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 			};
 
 			Map<String, String> headerParams = new HashMap<String, String>() {
+                private static final long serialVersionUID = 1L;
 				{
 					put("Content-Type", "text/plain");
 				}

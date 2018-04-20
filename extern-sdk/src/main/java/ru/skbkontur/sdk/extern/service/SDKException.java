@@ -13,6 +13,8 @@ import java.text.MessageFormat;
  */
 public class SDKException extends RuntimeException {
 
+    private static final long serialVersionUID = 1813799131945186727L;
+
 	public SDKException(String message, Throwable x) {
 		super(message, x);
 	}

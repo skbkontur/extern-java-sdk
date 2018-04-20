@@ -51,7 +51,11 @@ public class LinkDto {
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.Link dto
 			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.Link();
 		setPrivateFieldValue(dto, "href", link.getHref());
+		setPrivateFieldValue(dto, "name", link.getName());
+		setPrivateFieldValue(dto, "profile", link.getProfile());
 		setPrivateFieldValue(dto, "rel", link.getRel());
+		setPrivateFieldValue(dto, "templated", link.getTemplated());
+		setPrivateFieldValue(dto, "title", link.getTitle());
 
 		return dto;
 	}

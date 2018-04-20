@@ -21,76 +21,63 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  */
 public interface DocflowService {
 
-  CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId);
+    CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId);
 
-  QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt);
+    QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt);
 
-  CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId);
+    CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId);
 
-  QueryContext<List<Document>> getDocuments(QueryContext<?> parent);
+    QueryContext<List<Document>> getDocuments(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId,
-      String documentId);
+    CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId, String documentId);
 
-  QueryContext<Document> lookupDocument(QueryContext<?> parent);
+    QueryContext<Document> lookupDocument(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(
-      String docflowId, String documentId);
+    CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(String docflowId, String documentId);
 
-  QueryContext<DocumentDescription> lookupDescription(QueryContext<?> parent);
+    QueryContext<DocumentDescription> lookupDescription(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId,
-      String documentId);
+    CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId, String documentId);
 
-  QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent);
+    QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId,
-      String documentId);
+    CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId, String documentId);
 
-  QueryContext<byte[]> getDecryptedContent(QueryContext<?> parent);
+    QueryContext<byte[]> getDecryptedContent(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId,
-      String documentId);
+    CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId, String documentId);
 
-  QueryContext<List<Signature>> getSignatures(QueryContext<?> parent);
+    QueryContext<List<Signature>> getSignatures(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId,
-      String documentId, String signatureId);
+    CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId, String documentId, String signatureId);
 
-  QueryContext<Signature> getSignature(QueryContext<?> parent);
+    QueryContext<Signature> getSignature(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId,
-      String documentId, String signatureId);
+    CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId);
 
-  QueryContext<byte[]> getSignatureContent(QueryContext<?> parent);
+    QueryContext<byte[]> getSignatureContent(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(
-      String docflowId, String documentType, String documentId, String x509Base64);
+    CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, String x509Base64);
 
-  QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> parent);
+    QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId,
-      String documentType, String documentId, DocumentToSend documentToSend);
+    CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId, String documentType, String documentId, DocumentToSend documentToSend);
 
-  QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent);
+    QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow,
-      String signerX509Base64);
+    CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow, String signerX509Base64);
 
-  QueryContext<List<DocumentToSend>> generateReplies(QueryContext<?> parent);
+    QueryContext<List<DocumentToSend>> generateReplies(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow);
+    CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow);
 
-  QueryContext<Docflow> sendReply(QueryContext<?> parent);
+    QueryContext<Docflow> sendReply(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(boolean finished,
-      boolean incoming, long skip, int take, String innKpp, DateTime updatedFrom,
-      DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type);
+    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(boolean finished, boolean incoming, long skip, int take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type);
 
-  QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
+    QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
 
-  CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
-      String documentContentBase64);
+    CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId, String documentContentBase64);
 
-  QueryContext<String> print(QueryContext<?> parent);
+    QueryContext<String> print(QueryContext<?> parent);
 }

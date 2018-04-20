@@ -364,6 +364,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 			final String theRequest = java.text.MessageFormat.format(request, resultId);
 			// заголовок запроса
 			Map<String, String> headers = new HashMap<String, String>() {
+                private static final long serialVersionUID = 1L;
 				{
 					put(SMS_CODE, approveCode);
 				}

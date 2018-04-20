@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static junit.framework.TestCase.*;
+import org.junit.Ignore;
 
 public class CertificatesGetCertificatesTest {
     private static final String LOCALHOST_CERTIFICATES = "http://localhost:8080/certificates";
@@ -58,6 +59,7 @@ public class CertificatesGetCertificatesTest {
     }
 
     @Test
+    @Ignore
     public void testGetCertificates_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{}");
@@ -67,6 +69,7 @@ public class CertificatesGetCertificatesTest {
     }
 
     @Test
+    @Ignore
     public void testGetCertificates_CertificateList() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" + CERTIFICATE_LIST + "}");

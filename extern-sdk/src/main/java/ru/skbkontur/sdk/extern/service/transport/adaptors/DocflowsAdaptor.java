@@ -455,6 +455,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		}
 	}
 
+    @SuppressWarnings("unchecked")
 	public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt) {
 		try {
 			if (cxt.isFail()) {
@@ -474,11 +475,11 @@ public class DocflowsAdaptor extends BaseAdaptor {
 						DocumentToSend documentToSend 
 							= new DocumentToSendDto()
 								.fromDto(
-									(Map) submitHttpRequest(
+									(Map<java.lang.String,java.lang.Object>) submitHttpRequest(
 										l.getHref(),
 										"POST", 
 										new GenerateReplyDocumentRequestData().certificateBase64(x509Base64), 
-										Object.class
+										Map.class
 									)
 								);
 						replies.add(documentToSend);

@@ -196,12 +196,13 @@ public class DraftsAdaptor extends BaseAdaptor {
 	 * @param cxt a context
 	 * @return Map&lt;String,Object&gt;
 	 */
+    @SuppressWarnings("unchecked")
 	public QueryContext<Map<String, Object>> check(QueryContext<Map<String, Object>> cxt) {
 		try {
 			if (cxt.isFail())	return cxt;
 			
 			return cxt.setResult(
-				(Map)transport(cxt).draftsCheck(
+				(Map<String,Object>)transport(cxt).draftsCheck(
 					cxt.getAccountProvider().accountId(), 
 					cxt.getDraftId()
 				),

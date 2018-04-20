@@ -10,6 +10,31 @@ package ru.skbkontur.sdk.extern.model;
  * @author AlexS
  */
 public class DocumentDescription {
+    private enum Type {
+        DEKL("urn:document:fns534-report","^(?i)NO_(\\w+)_(\\d{4})_(\\d{4})_(\\d{12,19})_(\\d{8})_([\\w-]{36})\\.xml$"),
+        DOV("urn:document:fns534-report-warrant","^(?i)ON_DOV_(\\d{4})_(\\d{4})_(\\d{12,19})_(\\d{8})_([\\w-]{36})\\.xml$"), 
+        APP("urn:document:fns534-report-attachment",""),
+        UNKNOWN(null,"");
+        
+        private final String   value;
+        private final String pattern;
+        
+        Type(String value, String pattern) {
+           this.value = value;
+           this.pattern = pattern;
+        }
+        
+        public static Type guessType(String fileName) {
+            if (fileName == null) return UNKNOWN;
+                
+            if (fileName.matches(DOV.pattern))
+                return DOV;
+            else if (fileName.matches(DEKL.pattern))
+                return DEKL;
+            else
+                return APP;
+        }
+    }
 
 	private String type = null;
 	private String filename = null;
@@ -51,6 +76,8 @@ public class DocumentDescription {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
+        // пытаемся угадать тип
+        this.type = Type.guessType(filename).value;
 	}
 
 	public DocumentDescription contentType(String contentType) {

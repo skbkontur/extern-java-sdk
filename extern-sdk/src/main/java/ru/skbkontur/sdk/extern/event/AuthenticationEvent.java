@@ -13,6 +13,9 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * @author alexs
  */
 public class AuthenticationEvent extends EventObject {
+
+    private static final long serialVersionUID = -161388553183748994L;
+    
 	private final QueryContext<String> authCxt;
 	
 	public AuthenticationEvent(Object source, QueryContext<String> authCxt) {
