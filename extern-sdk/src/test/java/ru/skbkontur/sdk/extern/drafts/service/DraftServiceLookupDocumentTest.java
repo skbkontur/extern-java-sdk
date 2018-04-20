@@ -1,42 +1,44 @@
-package ru.skbkontur.sdk.extern.drafts.adaptor;
+package ru.skbkontur.sdk.extern.drafts.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.fail;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.skbkontur.sdk.extern.ExternEngine;
 import ru.skbkontur.sdk.extern.common.ResponseData;
 import ru.skbkontur.sdk.extern.common.StandardValues;
 import ru.skbkontur.sdk.extern.common.TestServlet;
 import ru.skbkontur.sdk.extern.docflows.DocflowsValidator;
 import ru.skbkontur.sdk.extern.drafts.DraftsValidator;
+import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.model.DraftDocument;
+import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.DraftsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
-import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
 /**
  * @author Mikhail Pavlenko
  */
-public class DraftsLookupDocumentTest {
 
-    private static final String LOCALHOST_DRAFTS = "http://localhost:8080/drafts";
+public class DraftServiceLookupDocumentTest {
+
+    private static ExternEngine engine;
     private static Server server;
-
-    private QueryContext<DraftDocument> queryContext;
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -48,17 +50,6 @@ public class DraftsLookupDocumentTest {
         server.start();
     }
 
-    @Before
-    public void prepareQueryContext() {
-        ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath(LOCALHOST_DRAFTS);
-        queryContext = new QueryContext<>();
-        queryContext.setApiClient(apiClient);
-        queryContext.setAccountProvider(UUID::randomUUID);
-        queryContext.setDraftId(UUID.randomUUID());
-        queryContext.setDocumentId(UUID.randomUUID());
-    }
-
     @AfterClass
     public static void stopJetty() {
         try {
@@ -68,24 +59,58 @@ public class DraftsLookupDocumentTest {
         }
     }
 
-    @Test
-    public void testDraftsLookupDocument_Empty() {
-        ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{}");
-        new DraftsAdaptor().lookupDocument(queryContext);
-        assertNotNull("DraftDocument must not be null!", queryContext.get());
+    @BeforeClass
+    public static void setUpClass() {
+        engine = new ExternEngine();
+        engine.setServiceBaseUriProvider(() -> "http://localhost:8080/drafts");
+        engine.setAccountProvider(UUID::randomUUID);
+        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
+        engine.setAuthenticationProvider(
+            new AuthenticationProvider() {
+                @Override
+                public QueryContext<String> sessionId() {
+                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+                }
+
+                @Override
+                public String authPrefix() {
+                    return "auth.sid ";
+                }
+
+                @Override
+                public void addAuthenticationListener(AuthenticationListener authListener) {
+                }
+
+                @Override
+                public void removeAuthenticationListener(AuthenticationListener authListener) {
+                }
+
+                @Override
+                public void raiseUnauthenticated(ServiceError x) {
+                }
+            });
+
+        engine.configureServices();
     }
 
     @Test
-    public void testDraftsLookupDocument_DraftDocument() {
+    public void testLookupDocument_Empty() {
+        ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
+        ResponseData.INSTANCE.setResponseMessage("{}");
+        assertNotNull("DraftDocument must not be null!", getDraftDocument());
+        assertNotNull("DraftDocument must not be null!", getDraftDocumentAsync());
+    }
+
+    @Test
+    public void testLookupDocument_DraftDocument() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"}");
-        new DraftsAdaptor().lookupDocument(queryContext);
-        DraftsValidator.validateDraftDocument(queryContext.getDraftDocument(), false, false, false);
+        DraftsValidator.validateDraftDocument(getDraftDocument(), false, false, false);
+        DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, false, false);
     }
 
     @Test
-    public void testDraftsLookupDocument_DecryptedContentLink() {
+    public void testLookupDocument_DecryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
             "\"id\": \"" + StandardValues.ID + "\"," +
@@ -97,12 +122,12 @@ public class DraftsLookupDocumentTest {
             "  \"profile\": \"string\"," +
             "  \"templated\": true" +
             "}}");
-        new DraftsAdaptor().lookupDocument(queryContext);
-        DraftsValidator.validateDraftDocument(queryContext.getDraftDocument(), true, false, false);
+        DraftsValidator.validateDraftDocument(getDraftDocument(), true, false, false);
+        DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), true, false, false);
     }
 
     @Test
-    public void testDraftsLookupDocument_EncryptedContentLink() {
+    public void testLookupDocument_EncryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
             "\"id\": \"" + StandardValues.ID + "\"," +
@@ -114,12 +139,12 @@ public class DraftsLookupDocumentTest {
             "  \"profile\": \"string\"," +
             "  \"templated\": true" +
             "}}");
-        new DraftsAdaptor().lookupDocument(queryContext);
-        DraftsValidator.validateDraftDocument(queryContext.getDraftDocument(), false, true, false);
+        DraftsValidator.validateDraftDocument(getDraftDocument(), false, true, false);
+        DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, true, false);
     }
 
     @Test
-    public void testDraftsLookupDocument_SignatureContentLink() {
+    public void testLookupDocument_SignatureContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
             "\"id\": \"" + StandardValues.ID + "\"," +
@@ -131,12 +156,12 @@ public class DraftsLookupDocumentTest {
             "  \"profile\": \"string\"," +
             "  \"templated\": true" +
             "}}");
-        new DraftsAdaptor().lookupDocument(queryContext);
-        DraftsValidator.validateDraftDocument(queryContext.getDraftDocument(), false, false, true);
+        DraftsValidator.validateDraftDocument(getDraftDocument(), false, false, true);
+        DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, false, true);
     }
 
     @Test
-    public void testDraftsLookupDocument_DocumentDescription() {
+    public void testLookupDocument_DocumentDescription() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
             "\"id\": \"" + StandardValues.ID + "\"," +
@@ -145,10 +170,12 @@ public class DraftsLookupDocumentTest {
             "  \"filename\": \"string\"," +
             "  \"content-type\": \"string\"" +
             "}}");
-        DraftsAdaptor draftsAdaptor = new DraftsAdaptor();
-        draftsAdaptor.lookupDocument(queryContext);
-        DocflowsValidator
-            .validateDocumentDescription(queryContext.getDraftDocument().getDocumentDescription());
+        DocflowsValidator.validateDocumentDescription(getDraftDocument().getDocumentDescription());
+        DraftDocument draftDocumentAsync = getDraftDocumentAsync();
+        if (draftDocumentAsync != null) {
+            DocflowsValidator
+                .validateDocumentDescription(draftDocumentAsync.getDocumentDescription());
+        }
     }
 
     @Test
@@ -182,10 +209,32 @@ public class DraftsLookupDocumentTest {
     }
 
     private void checkResponseCode(int code) {
-        new DraftsAdaptor().lookupDocument(queryContext);
-        assertNull("draftDocument must be null!", queryContext.get());
-        ServiceError serviceError = queryContext.getServiceError();
+        QueryContext<DraftDocument> queryContext = new QueryContext<>();
+        queryContext.setDraftId(StandardValues.ID);
+        queryContext.setDocumentId(StandardValues.ID);
+        QueryContext<DraftDocument> draftDocumentQueryContext = engine.getDraftService()
+            .lookupDocument(queryContext);
+        assertNull("draftDocument must be null!", draftDocumentQueryContext.get());
+        ServiceError serviceError = draftDocumentQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
+    }
+
+    private DraftDocument getDraftDocument() {
+        QueryContext<DraftDocument> queryContext = new QueryContext<>();
+        queryContext.setDraftId(StandardValues.ID);
+        queryContext.setDocumentId(StandardValues.ID);
+        return engine.getDraftService().lookupDocument(queryContext).get();
+    }
+
+    private DraftDocument getDraftDocumentAsync() {
+        try {
+            return engine.getDraftService()
+                .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
+                .get().get();
+        } catch (InterruptedException | ExecutionException e) {
+            fail();
+            return null;
+        }
     }
 }
