@@ -28,15 +28,39 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author Mikhail Pavlenko
+ */
+
 public class DocflowsLookupDocumentTest {
+
     private static final String LOCALHOST_DOCFLOWS = "http://localhost:8080/docflows";
     private static Server server;
 
     private QueryContext<Document> queryContext;
 
     private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
-            "\"filename\": \"string\"," +
-            "\"content-type\": \"string\"}";
+        "\"filename\": \"string\"," +
+        "\"content-type\": \"string\"}";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -80,7 +104,8 @@ public class DocflowsLookupDocumentTest {
     @Test
     public void testLookupDocument_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
+        ResponseData.INSTANCE
+            .setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
         new DocflowsAdaptor().lookupDocument(queryContext);
         DocflowsValidator.validateDocument(queryContext.get(), false, false, false, false);
     }
@@ -89,9 +114,9 @@ public class DocflowsLookupDocumentTest {
     public void testLookupDocument_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                "\"id\": \"" + StandardValues.ID + "\"," +
-                "\"description\": " + DOCUMENT_DESCRIPTION +
-                "}");
+            "\"id\": \"" + StandardValues.ID + "\"," +
+            "\"description\": " + DOCUMENT_DESCRIPTION +
+            "}");
         new DocflowsAdaptor().lookupDocument(queryContext);
         DocflowsValidator.validateDocument(queryContext.get(), true, false, false, false);
     }
@@ -100,13 +125,13 @@ public class DocflowsLookupDocumentTest {
     public void testLookupDocument_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                "\"id\": \"" + StandardValues.ID + "\"," +
-                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-                "\"content\": {\n" +
-                "  \"decrypted\": " + StandardObjects.LINK + "," +
-                "  \"encrypted\": " + StandardObjects.LINK +
-                "}" +
-                "}");
+            "\"id\": \"" + StandardValues.ID + "\"," +
+            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+            "\"content\": {\n" +
+            "  \"decrypted\": " + StandardObjects.LINK + "," +
+            "  \"encrypted\": " + StandardObjects.LINK +
+            "}" +
+            "}");
         new DocflowsAdaptor().lookupDocument(queryContext);
         DocflowsValidator.validateDocument(queryContext.get(), true, true, false, false);
     }
@@ -115,14 +140,14 @@ public class DocflowsLookupDocumentTest {
     public void testLookupDocument_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                "\"id\": \"" + StandardValues.ID + "\"," +
-                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-                "\"content\": {\n" +
-                "  \"decrypted\": " + StandardObjects.LINK + "," +
-                "  \"encrypted\": " + StandardObjects.LINK +
-                "}," +
-                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
-                "}");
+            "\"id\": \"" + StandardValues.ID + "\"," +
+            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+            "\"content\": {\n" +
+            "  \"decrypted\": " + StandardObjects.LINK + "," +
+            "  \"encrypted\": " + StandardObjects.LINK +
+            "}," +
+            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
+            "}");
         new DocflowsAdaptor().lookupDocument(queryContext);
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, false);
     }
@@ -131,17 +156,17 @@ public class DocflowsLookupDocumentTest {
     public void testLookupDocument_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                "\"id\": \"" + StandardValues.ID + "\"," +
-                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-                "\"content\": {\n" +
-                "  \"decrypted\": " + StandardObjects.LINK + "," +
-                "  \"encrypted\": " + StandardObjects.LINK +
-                "}," +
-                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
-                "\"links\": [" + StandardObjects.LINK + "]" +
-                "}");
+            "\"id\": \"" + StandardValues.ID + "\"," +
+            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+            "\"content\": {\n" +
+            "  \"decrypted\": " + StandardObjects.LINK + "," +
+            "  \"encrypted\": " + StandardObjects.LINK +
+            "}," +
+            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
+            "\"links\": [" + StandardObjects.LINK + "]" +
+            "}");
         DocflowsAdaptor docflowsAdaptor = new DocflowsAdaptor();
-        docflowsAdaptor.lookupDocument(queryContext); 
+        docflowsAdaptor.lookupDocument(queryContext);
         DocflowsValidator.validateDocument(queryContext.get(), true, true, true, true);
     }
 

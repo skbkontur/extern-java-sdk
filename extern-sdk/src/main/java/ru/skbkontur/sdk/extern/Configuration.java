@@ -158,6 +158,10 @@ public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndP
 		return serviceUserId;
 	}
 
+    /**
+     * Устанавливает идентификатор пользователя во внешней системе
+     * @param serviceUserId идетификатор пользователя во внешней системе
+     */
 	public void setServiceUserId(String serviceUserId) {
 		this.serviceUserId = serviceUserId;
 	}

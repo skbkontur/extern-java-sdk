@@ -28,17 +28,41 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.DocflowsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author Mikhail Pavlenko
+ */
+
 public class DocflowsLookupDocflowTest {
+
     private static final String LOCALHOST_DOCFLOWS = "http://localhost:8080/docflows";
     private static Server server;
 
     private QueryContext<Docflow> queryContext;
 
     private final static String DOCFLOW = "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"type\": \"urn:nss:nid\"," +
-            "\"status\": \"urn:nss:nid\"," +
-            "\"send-date\": \"" + StandardValues.DATE + "\"," +
-            "\"last-change-date\": \"" + StandardValues.DATE + "\"";
+        "\"type\": \"urn:nss:nid\"," +
+        "\"status\": \"urn:nss:nid\"," +
+        "\"send-date\": \"" + StandardValues.DATE + "\"," +
+        "\"last-change-date\": \"" + StandardValues.DATE + "\"";
 
 
     @BeforeClass
@@ -90,7 +114,8 @@ public class DocflowsLookupDocflowTest {
     @Test
     public void testLookupDocflow_Docflow_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage(String.format("{%s,\"description\": {}}", DOCFLOW));
+        ResponseData.INSTANCE
+            .setResponseMessage(String.format("{%s,\"description\": {}}", DOCFLOW));
         new DocflowsAdaptor().lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, false, false);
     }
@@ -99,11 +124,11 @@ public class DocflowsLookupDocflowTest {
     public void testLookupDocflow_Docflow_Documents() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s," +
-                "\"description\": {}," +
-                "\"documents\": [{" +
-                "   \"id\": \"%s\"" +
-                "}]" +
-                "}", DOCFLOW, StandardValues.ID));
+            "\"description\": {}," +
+            "\"documents\": [{" +
+            "   \"id\": \"%s\"" +
+            "}]" +
+            "}", DOCFLOW, StandardValues.ID));
         new DocflowsAdaptor().lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, true, false);
     }
@@ -112,11 +137,11 @@ public class DocflowsLookupDocflowTest {
     public void testLookupDocflow_Docflow_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                DOCFLOW + "," +
-                "  \"description\": {}," +
-                "  \"documents\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
-                "  \"links\": [" + StandardObjects.LINK + "]" +
-                "}");
+            DOCFLOW + "," +
+            "  \"description\": {}," +
+            "  \"documents\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
+            "  \"links\": [" + StandardObjects.LINK + "]" +
+            "}");
         new DocflowsAdaptor().lookupDocflow(queryContext);
         DocflowsValidator.validateDocflow(queryContext.get(), true, true, true);
     }

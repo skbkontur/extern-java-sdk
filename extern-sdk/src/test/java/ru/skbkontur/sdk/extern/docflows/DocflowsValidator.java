@@ -17,17 +17,43 @@ import ru.skbkontur.sdk.extern.model.DocumentDescription;
 import ru.skbkontur.sdk.extern.model.Link;
 import ru.skbkontur.sdk.extern.model.Signature;
 
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author Mikhail Pavlenko
+ */
+
 public class DocflowsValidator {
+
     public static void validateDocflowPage(DocflowPage docflowPage, boolean withDocflowsPageItems) {
         assertNotNull("DocflowPage must not be null!", docflowPage);
         assertEquals("Skip is wrong!", 0, docflowPage.getSkip().longValue());
         assertEquals("Take is wrong!", 0, docflowPage.getTake().longValue());
         assertEquals("TotalCount is wrong!", 0, docflowPage.getTotalCount().longValue());
         if (withDocflowsPageItems) {
-            StandardObjectsValidator.validateNotEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
+            StandardObjectsValidator
+                .validateNotEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
             validateDocflowPageItem(docflowPage.getDocflowsPageItem().get(0));
         } else {
-            StandardObjectsValidator.validateEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
+            StandardObjectsValidator
+                .validateEmptyList(docflowPage.getDocflowsPageItem(), "DocflowsPageItems");
         }
     }
 
@@ -36,19 +62,24 @@ public class DocflowsValidator {
         validateId(docflowPageItem.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflowPageItem.getType());
         assertEquals("Status is wrong!", "urn:nss:nid", docflowPageItem.getStatus());
-        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE), docflowPageItem.getSendDate());
-        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE), docflowPageItem.getLastChangeDate());
+        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE),
+            docflowPageItem.getSendDate());
+        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE),
+            docflowPageItem.getLastChangeDate());
 
         StandardObjectsValidator.validateEmptyList(docflowPageItem.getLinks(), "Links");
     }
 
-    public static void validateDocflow(Docflow docflow, boolean withDescription, boolean withDocuments, boolean withLinks) {
+    public static void validateDocflow(Docflow docflow, boolean withDescription,
+        boolean withDocuments, boolean withLinks) {
         assertNotNull("Docflow must not be null!", docflow);
         validateId(docflow.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflow.getType());
         assertEquals("Status is wrong!", "urn:nss:nid", docflow.getStatus());
-        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE), docflow.getSendDate());
-        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE), docflow.getLastChangeDate());
+        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE),
+            docflow.getSendDate());
+        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE),
+            docflow.getLastChangeDate());
 
         if (withDescription) {
             assertNotNull("Description must not be null!", docflow.getDescription());
@@ -70,7 +101,8 @@ public class DocflowsValidator {
 
     }
 
-    public static void validateDocument(Document document, boolean withDescription, boolean withContent, boolean withSignature, boolean withLinks) {
+    public static void validateDocument(Document document, boolean withDescription,
+        boolean withContent, boolean withSignature, boolean withLinks) {
         assertNotNull("Document must not be null!", document);
         validateId(document.getId());
 
@@ -114,7 +146,8 @@ public class DocflowsValidator {
         StandardObjectsValidator.validateLink(content.getEncrypted());
     }
 
-    public static void validateSignature(Signature signature, boolean withContentLink, boolean withLinks) {
+    public static void validateSignature(Signature signature, boolean withContentLink,
+        boolean withLinks) {
         assertNotNull("Signature must not be null!", signature);
         StandardObjectsValidator.validateId(signature.getId());
 
