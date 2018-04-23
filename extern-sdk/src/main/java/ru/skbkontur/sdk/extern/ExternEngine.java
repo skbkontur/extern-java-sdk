@@ -94,6 +94,7 @@ public class ExternEngine implements AuthenticationListener {
      * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
      * @see ru.skbkontur.sdk.extern.Configuration 
      */
+    @SuppressWarnings("unchecked")
 	public ExternEngine(Configuration configuration) {
 		env = new Environment();
 		env.configuration = configuration;
@@ -125,6 +126,7 @@ public class ExternEngine implements AuthenticationListener {
      * @throws SDKException непроверяемое исключение может возникнуть при загрузки данных из файла
      * @see ru.skbkontur.sdk.extern.service.SDKException
      */
+    @SuppressWarnings("unchecked")
 	public ExternEngine(String configPath) throws SDKException {
 		// loads config data from the resourse file: extern-sdk-config.json
 		this(loadConfiguration(configPath));
@@ -319,6 +321,7 @@ public class ExternEngine implements AuthenticationListener {
      * @return CryptoProvider
      * @see ru.skbkontur.sdk.extern.providers.CryptoProvider
      */
+    @SuppressWarnings("unchecked")
 	public CryptoProvider setCryptoProvider(CryptoProvider cryptoProvider) {
 		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;
@@ -401,7 +404,7 @@ public class ExternEngine implements AuthenticationListener {
 			this.authenticationProvider = authenticationProvider;
 		}
 
-		public AuthenticationProvider getOriginAuthenticationProvider() {
+		private AuthenticationProvider getOriginAuthenticationProvider() {
 			return authenticationProvider;
 		}
 

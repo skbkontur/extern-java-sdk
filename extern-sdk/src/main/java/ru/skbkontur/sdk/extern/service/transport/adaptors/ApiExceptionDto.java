@@ -11,7 +11,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
  *
  * @author alexs
  */
-public class ApiExceptionDto {
+class ApiExceptionDto {
 
 	public ApiException fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException dto) {
 		return new ApiException(dto.getCode(), dto.getMessage(), dto.getResponseHeaders(), dto.getResponseBody());

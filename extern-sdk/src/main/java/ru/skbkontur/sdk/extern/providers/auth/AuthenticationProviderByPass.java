@@ -28,6 +28,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 	private UriProvider authBaseUriProvider;
 	private final String authPrefix;
 	
+    @SuppressWarnings("unchecked")
 	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
 		this.authBaseUriProvider = authBaseUriProvider;
 		this.loginAndPasswordProvider = loginAndPasswordProvider;

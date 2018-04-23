@@ -11,7 +11,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
  *
  * @author AlexS
  */
-public interface ApiClientAware {
+interface ApiClientAware {
 	ApiClient getApiClient();
 	void setApiClient(ApiClient apiClient);
 }

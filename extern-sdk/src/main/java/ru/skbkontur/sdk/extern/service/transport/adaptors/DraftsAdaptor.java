@@ -44,6 +44,7 @@ public class DraftsAdaptor extends BaseAdaptor {
 		this(new DraftsApi());
 	}
 	
+    @SuppressWarnings("unchecked")
 	public DraftsAdaptor(DraftsApi api) {
 		this.api = api;
 	}

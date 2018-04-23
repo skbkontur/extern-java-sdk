@@ -23,7 +23,7 @@ public class DocflowDto {
 
 		if (dto.getDocuments() != null) {
 			DocumentDto documentDto = new DocumentDto();
-			docflow.setDocuments(dto.getDocuments().stream().map(d -> documentDto.fromDto(d)).collect(Collectors.toList()));
+			docflow.setDocuments(dto.getDocuments().stream().map(documentDto::fromDto).collect(Collectors.toList()));
 		}
 
 		docflow.setId(dto.getId());
@@ -32,7 +32,7 @@ public class DocflowDto {
 
 		if (dto.getLinks() != null) {
 			LinkDto linkDto = new LinkDto();
-			docflow.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+			docflow.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
 		}
 
 		docflow.setSendDate(dto.getSendDate());
@@ -55,7 +55,7 @@ public class DocflowDto {
 
 		if (docflow.getDocuments() != null) {
 			DocumentDto documentDto = new DocumentDto();
-			dto.setDocuments(docflow.getDocuments().stream().map(d -> documentDto.toDto(d)).collect(Collectors.toList()));
+			dto.setDocuments(docflow.getDocuments().stream().map(documentDto::toDto).collect(Collectors.toList()));
 		}
 
 		dto.setId(docflow.getId());
@@ -64,7 +64,7 @@ public class DocflowDto {
 
 		if (docflow.getLinks() != null) {
 			LinkDto linkDto = new LinkDto();
-			dto.setLinks(docflow.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
+			dto.setLinks(docflow.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
 		}
 
 		dto.setSendDate(docflow.getSendDate());

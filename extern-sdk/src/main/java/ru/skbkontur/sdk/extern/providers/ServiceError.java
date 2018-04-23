@@ -39,5 +39,6 @@ public interface ServiceError {
 	
 	String getMessage();
     
+    @SuppressWarnings("unchecked")
     Throwable getCause();
 }

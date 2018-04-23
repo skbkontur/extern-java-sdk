@@ -36,7 +36,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  */
 public class EventsAdaptor extends BaseAdaptor {
 
-    private EventsApi api;
+    private final EventsApi api;
 
     public EventsAdaptor(EventsApi eventsApi) {
         this.api = eventsApi;

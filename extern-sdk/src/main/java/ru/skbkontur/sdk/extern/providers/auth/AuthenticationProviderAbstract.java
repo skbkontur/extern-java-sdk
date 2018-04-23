@@ -17,8 +17,8 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author alexs
  */
-public abstract class AuthenticationProviderAbstract implements AuthenticationProvider {
-	protected static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
+abstract class AuthenticationProviderAbstract implements AuthenticationProvider {
+	static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 	
 	private final List<AuthenticationListener> authListeners;
 
@@ -43,7 +43,7 @@ public abstract class AuthenticationProviderAbstract implements AuthenticationPr
 	private List<AuthenticationListener> getAuthenticationListener() {
 		List<AuthenticationListener> cloned = new ArrayList<>();
 		synchronized (authListeners) {
-			authListeners.forEach(a->cloned.add(a));
+            cloned.addAll(authListeners);
 		}
 		return cloned;
 	}

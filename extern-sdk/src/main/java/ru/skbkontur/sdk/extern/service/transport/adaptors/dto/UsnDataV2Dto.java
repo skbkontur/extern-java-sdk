@@ -11,7 +11,7 @@ import ru.skbkontur.sdk.extern.model.UsnDataV2;
  *
  * @author alexs
  */
-public class UsnDataV2Dto {
+class UsnDataV2Dto {
 
 
 	public UsnDataV2 fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.UsnDataV2 dto) {

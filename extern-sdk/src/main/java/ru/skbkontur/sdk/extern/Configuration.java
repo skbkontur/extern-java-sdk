@@ -19,9 +19,9 @@ import ru.skbkontur.sdk.extern.providers.auth.Credential;
  * @author AlexS
  */
 public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
-	public static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
+	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 	
-  @SerializedName("accountId")	private UUID accountId;
+    @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;
 	@SerializedName("authPrefix") private String authPrefix;
 	@SerializedName("credential") private Credential credential;

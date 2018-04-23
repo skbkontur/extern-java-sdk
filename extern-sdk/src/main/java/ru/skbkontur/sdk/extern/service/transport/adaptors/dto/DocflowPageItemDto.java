@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author alexs
  */
-public class DocflowPageItemDto {
+class DocflowPageItemDto {
 
     public DocflowPageItem fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem dto) {
 

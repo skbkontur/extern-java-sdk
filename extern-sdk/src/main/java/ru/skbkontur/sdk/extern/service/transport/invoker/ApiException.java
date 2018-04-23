@@ -50,6 +50,7 @@ public class ApiException extends Exception {
 		this((String) null, (Throwable) null, code, responseHeaders, responseBody);
 	}
 
+    @SuppressWarnings("unchecked")
 	public ApiException(int code, String message) {
 		super(message);
 		this.code = code;

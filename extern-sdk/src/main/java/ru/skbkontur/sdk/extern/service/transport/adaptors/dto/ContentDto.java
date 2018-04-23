@@ -9,7 +9,7 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
  *
  * @author AlexS
  */
-public class ContentDto {
+class ContentDto {
 
 	public ru.skbkontur.sdk.extern.model.Content fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Content dto) {
 

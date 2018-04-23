@@ -21,7 +21,7 @@ public class PrepareResultDto {
 		LinkDto linkDto = new LinkDto();
 		ru.skbkontur.sdk.extern.model.PrepareResult prepareResult = new ru.skbkontur.sdk.extern.model.PrepareResult();
 		prepareResult.setCheckResult(checkResultDataDto.fromDto(dto.getCheckResult()));
-		prepareResult.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+		prepareResult.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
 		prepareResult.setStatus(ru.skbkontur.sdk.extern.model.PrepareResult.Status.fromValue(dto.getStatus().getValue()));
 
 		return prepareResult;
@@ -36,7 +36,7 @@ public class PrepareResultDto {
 		ru.skbkontur.sdk.extern.service.transport.swagger.model.PrepareResult dto
 			= new ru.skbkontur.sdk.extern.service.transport.swagger.model.PrepareResult();
 		dto.setCheckResult(checkResultDataDto.toDto(prepareResult.getCheckResult()));
-		dto.setLinks(prepareResult.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
+		dto.setLinks(prepareResult.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
 		dto.setStatus(ru.skbkontur.sdk.extern.service.transport.swagger.model.PrepareResult.StatusEnum.fromValue(prepareResult.getStatus().getValue()));
 
 		return dto;

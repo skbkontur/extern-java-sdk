@@ -46,17 +46,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 	
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
-		return CompletableFuture
-			.supplyAsync(
-				()->
-					{
-						return sign(
-							new QueryContext<byte[]>()
-								.setThumbprint(thumbprint)
-								.setContent(content)
-						);
-					}
-			);
+		return CompletableFuture.supplyAsync(()->sign(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
 	}
 	
 	@Override
@@ -82,16 +72,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
-		return CompletableFuture
-			.supplyAsync(
-				()->
-					{
-						return getSignerCertificate(
-							new QueryContext<byte[]>()
-								.setThumbprint(thumbprint)
-						);
-					}
-			);
+		return CompletableFuture.supplyAsync(()->getSignerCertificate(new QueryContext<byte[]>().setThumbprint(thumbprint)));
 	}
 	
 	@Override
@@ -113,17 +94,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 	
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content) {
-		return CompletableFuture
-			.supplyAsync(
-				()->
-					{
-						return decrypt(
-							new QueryContext<byte[]>()
-								.setThumbprint(thumbprint)
-								.setContent(content)
-						);
-					}
-			);
+		return CompletableFuture.supplyAsync(()->decrypt(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
 	}
 	
 	@Override

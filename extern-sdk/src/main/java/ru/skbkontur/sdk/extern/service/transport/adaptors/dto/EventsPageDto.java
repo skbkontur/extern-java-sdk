@@ -39,7 +39,7 @@ public class EventsPageDto {
         
         ApiEventDto apiEventsDto = new ApiEventDto();
         
-        ep.setApiEvents(dto.getApiEvents().stream().map(e->apiEventsDto.fromDto(e)).collect(Collectors.toList()));
+        ep.setApiEvents(dto.getApiEvents().stream().map(apiEventsDto::fromDto).collect(Collectors.toList()));
         ep.setFirstEventId(dto.getFirstEventId());
         ep.setLastEventId(dto.getLastEventId());
         ep.setRequestedCount(dto.getRequestedCount());
@@ -55,7 +55,7 @@ public class EventsPageDto {
         
         ApiEventDto apiEventsDto = new ApiEventDto();
         
-        dto.setApiEvents(ep.getApiEvents().stream().map(e->apiEventsDto.toDto(e)).collect(Collectors.toList()));
+        dto.setApiEvents(ep.getApiEvents().stream().map(apiEventsDto::toDto).collect(Collectors.toList()));
         dto.setFirstEventId(ep.getFirstEventId());
         dto.setLastEventId(ep.getLastEventId());
         dto.setRequestedCount(ep.getRequestedCount());

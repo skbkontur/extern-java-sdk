@@ -88,7 +88,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  * </pre>
  *
  */
-public class SendDocument {
+class SendDocument {
 
     public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
         // необходимо передать путь
@@ -168,7 +168,7 @@ public class SendDocument {
             ru.skbkontur.sdk.extern.service.File[] files
                 = Stream
                     .of(docPaths)
-                    .map(p -> new File(p))
+                    .map(File::new)
                     .map(f -> new ru.skbkontur.sdk.extern.service.File(f.getName(), readFileContent(f))) //
                     .collect(Collectors.toList())
                     .toArray(new ru.skbkontur.sdk.extern.service.File[docPaths.length]);
@@ -187,7 +187,7 @@ public class SendDocument {
             // документ был отправлен
             // в результате получаем список документооборотов (ДО)
             // иногда один документ может вызвать несколько ДО
-            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(f -> f.getFileName()).reduce((x, y) -> x + "\r\n" + y).orElse("")));
+            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.skbkontur.sdk.extern.service.File::getFileName).reduce((x, y) -> x + "\r\n" + y).orElse("")));
         }
     }
 

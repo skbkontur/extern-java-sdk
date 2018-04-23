@@ -26,12 +26,12 @@ public class DocumentDto {
         document.setDescription(documentDescriptionDto.fromDto(dto.getDescription()));
         document.setId(dto.getId());
         if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
-            document.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+            document.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
         } else {
             document.setLinks(new ArrayList<>());
         }
         if (dto.getSignatures() != null && !dto.getSignatures().isEmpty()) {
-            document.setSignatures(dto.getSignatures().stream().map(s -> signatureDto.fromDto(s)).collect(Collectors.toList()));
+            document.setSignatures(dto.getSignatures().stream().map(signatureDto::fromDto).collect(Collectors.toList()));
         } else {
             document.setSignatures(new ArrayList<>());
         }
@@ -53,9 +53,9 @@ public class DocumentDto {
         dto.setDescription(documentDescriptionDto.toDto(document.getDescription()));
         dto.setId(document.getId());
         if (document.getLinks() != null) {
-            dto.setLinks(document.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
+            dto.setLinks(document.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
         }
-        dto.setSignatures(document.getSignatures().stream().map(s -> signatureDto.toDto(s)).collect(Collectors.toList()));
+        dto.setSignatures(document.getSignatures().stream().map(signatureDto::toDto).collect(Collectors.toList()));
 
         return dto;
     }

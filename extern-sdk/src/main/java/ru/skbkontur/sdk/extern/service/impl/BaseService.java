@@ -27,15 +27,15 @@ public class BaseService<T> {
 		this.api = api;
 	}
 	
-	protected ServiceBaseUriProvider serviceBaseUriProvider;
+	private ServiceBaseUriProvider serviceBaseUriProvider;
 	
-	protected AuthenticationProvider authenticationProvider;
+	private AuthenticationProvider authenticationProvider;
 	
-	protected AccountProvider accountProvider;
+	private AccountProvider accountProvider;
 
-	protected ApiKeyProvider apiKeyProvider;
+	private ApiKeyProvider apiKeyProvider;
 	
-	protected CryptoProvider cryptoProvider;
+	private CryptoProvider cryptoProvider;
 	
 	public void setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
 		this.serviceBaseUriProvider = serviceBaseUriProvider;

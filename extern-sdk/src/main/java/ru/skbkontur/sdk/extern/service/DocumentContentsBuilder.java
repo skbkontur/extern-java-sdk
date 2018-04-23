@@ -31,7 +31,7 @@ import ru.skbkontur.sdk.extern.model.DocumentDescription;
  *
  * @author AlexS
  */
-public class DocumentContentsBuilder {
+class DocumentContentsBuilder {
 	public static DocumentContents build(File file, byte[] signPKCS7) {
 		// создаем описание документа
 		DocumentDescription dd = new DocumentDescription();

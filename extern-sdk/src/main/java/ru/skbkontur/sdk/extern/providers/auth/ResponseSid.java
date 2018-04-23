@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author AlexS
  */
-public class ResponseSid {
+class ResponseSid {
 
 		@SerializedName("Sid")
 		private String sid;

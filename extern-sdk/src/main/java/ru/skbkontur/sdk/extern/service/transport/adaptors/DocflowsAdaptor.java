@@ -7,6 +7,7 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public class DocflowsAdaptor extends BaseAdaptor {
 		this(new DocflowsApi());
 	}
 
+    @SuppressWarnings("unchecked")
 	public DocflowsAdaptor(DocflowsApi api) {
 		this.api = api;
 	}
@@ -475,12 +477,19 @@ public class DocflowsAdaptor extends BaseAdaptor {
 						DocumentToSend documentToSend 
 							= new DocumentToSendDto()
 								.fromDto(
-									(Map<java.lang.String,java.lang.Object>) submitHttpRequest(
-										l.getHref(),
-										"POST", 
-										new GenerateReplyDocumentRequestData().certificateBase64(x509Base64), 
-										Map.class
-									)
+                                    cxt
+                                        .getApiClient()
+                                        .setBasePath("")
+                                        .submitHttpRequest(
+                                            l.getHref(), 
+                                            "POST",
+                                            new HashMap<>(), 
+                                            new GenerateReplyDocumentRequestData().certificateBase64(x509Base64), 
+                                            new HashMap<>(), 
+                                            new HashMap<>(),
+                                            Map.class
+                                        )
+                                        .getData()
 								);
 						replies.add(documentToSend);
 					}
@@ -519,9 +528,24 @@ public class DocflowsAdaptor extends BaseAdaptor {
 			DocflowDto docflowDto = new DocflowDto();
 
 			String httpRequest = self.getHref().toLowerCase().replaceAll("/generate", "/send");
-			
-			Docflow docflow = docflowDto.fromDto(submitHttpRequest(httpRequest, "POST", documentToSendDto.toDto(documentToSend), ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class));
-
+            Docflow docflow 
+                = docflowDto
+                    .fromDto(
+                        cxt
+                            .getApiClient()
+                            .setBasePath("")
+                            .submitHttpRequest(
+                                httpRequest, 
+                                "POST", 
+                                new HashMap<>(), 
+                                documentToSendDto.toDto(documentToSend), 
+                                new HashMap<>(), 
+                                new HashMap<>(),
+                                ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow.class
+                            )
+                            .getData()
+                    );
+                
 			return cxt.setResult(docflow, DOCFLOW);
 		}
 		catch (ru.skbkontur.sdk.extern.service.transport.invoker.ApiException x) {

@@ -51,12 +51,4 @@ class File {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getСontent() {
-		return content;
-	}
-
-	public void setСontent(String content) {
-		this.content = content;
-	}
 }

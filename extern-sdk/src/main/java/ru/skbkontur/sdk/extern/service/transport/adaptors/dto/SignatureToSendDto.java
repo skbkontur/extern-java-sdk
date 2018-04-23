@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author AlexS
  */
-public class SignatureToSendDto {
+class SignatureToSendDto {
 
 	public SignatureToSendDto() {
 	}

@@ -88,17 +88,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 	
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
-		return CompletableFuture
-			.supplyAsync(
-				()->
-					{
-						return sign(
-							new QueryContext<byte[]>()
-								.setThumbprint(thumbprint)
-								.setContent(content)
-						);
-					}
-			);
+		return CompletableFuture.supplyAsync(()->sign(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
 	}
 
 	@Override
@@ -124,16 +114,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 
 	@Override
 	public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
-		return CompletableFuture
-			.supplyAsync(
-				()->
-					{
-						return getSignerCertificate(
-							new QueryContext<byte[]>()
-								.setThumbprint(thumbprint)
-						);
-					}
-			);
+		return CompletableFuture.supplyAsync(()->getSignerCertificate(new QueryContext<byte[]>().setThumbprint(thumbprint)));
 	}
 
 	@Override
@@ -267,19 +248,19 @@ public class CryptoProviderRSA implements CryptoProvider {
 		
 		private String signingAlgorithm;
 
-		public PrivateKey getPrivateKey() {
+		private PrivateKey getPrivateKey() {
 			return privateKey;
 		}
 
-		public void setPrivateKey(PrivateKey privateKey) {
+		private void setPrivateKey(PrivateKey privateKey) {
 			this.privateKey = privateKey;
 		}
 
-		public X509Certificate getX509() {
+		private X509Certificate getX509() {
 			return x509;
 		}
 
-		public void setX509(X509Certificate x509) {
+		private void setX509(X509Certificate x509) {
 			this.x509 = x509;
 		}
 		
@@ -287,7 +268,7 @@ public class CryptoProviderRSA implements CryptoProvider {
 			return signingAlgorithm;
 		}
 
-		public void setSigningAlgorithm(String signingAlgorithm) {
+		private void setSigningAlgorithm(String signingAlgorithm) {
 			this.signingAlgorithm = signingAlgorithm;
 		}
 	}

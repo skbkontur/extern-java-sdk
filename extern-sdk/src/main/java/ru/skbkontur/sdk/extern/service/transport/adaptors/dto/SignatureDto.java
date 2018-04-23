@@ -28,7 +28,7 @@ public class SignatureDto {
         signature.setContentLink(linkDto.fromDto(dto.getContentLink()));
         signature.setId(dto.getId());
         if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
-            signature.setLinks(dto.getLinks().stream().map(l -> linkDto.fromDto(l)).collect(Collectors.toList()));
+            signature.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
         } else {
             signature.setLinks(new ArrayList<>());
         }
@@ -46,7 +46,7 @@ public class SignatureDto {
         dto.setContentLink(linkDto.toDto(signature.getContentLink()));
         dto.setId(signature.getId());
         if (signature.getLinks() != null) {
-            dto.setLinks(signature.getLinks().stream().map(l -> linkDto.toDto(l)).collect(Collectors.toList()));
+            dto.setLinks(signature.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
         }
 
         return dto;

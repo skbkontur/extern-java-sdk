@@ -11,7 +11,7 @@ import ru.skbkontur.sdk.extern.model.Certificate;
  *
  * @author alexs
  */
-public class CertificateDto {
+class CertificateDto {
 	public Certificate fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CertificateDto dto) {
 		
 		if (dto == null) return null;

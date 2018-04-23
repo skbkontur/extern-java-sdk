@@ -15,17 +15,17 @@ import ru.skbkontur.sdk.extern.providers.ServiceError;
  */
 public class ServiceErrorImpl implements ServiceError {
 
-	private ErrorCode errorCode;
+	private final ErrorCode errorCode;
 
-	private String message;
+	private final String message;
 
-	private int responseCode;
+	private final int responseCode;
 
-	private Map<String, List<String>> responseHeaders;
+	private final Map<String, List<String>> responseHeaders;
 
-	private String responseBody = null;
+	private final String responseBody;
 	
-	private Throwable cause;
+	private final Throwable cause;
 
 	public ServiceErrorImpl(ErrorCode errorCode, String message, int responseCode, Map<String, List<String>> responseHeaders, String responseBody, Throwable cause) {
 		this.errorCode = errorCode;

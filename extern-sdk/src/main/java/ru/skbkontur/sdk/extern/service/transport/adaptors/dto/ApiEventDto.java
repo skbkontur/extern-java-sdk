@@ -31,7 +31,7 @@ import ru.skbkontur.sdk.extern.model.ApiEvent;
  *
  * @author AlexS
  */
-public class ApiEventDto {
+class ApiEventDto {
     
     public ApiEvent fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.ApiEvent dto) {
 		if (dto == null) return null;

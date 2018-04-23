@@ -21,6 +21,11 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
  */
 public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient {
 
+    @Override
+    public ApiClient setBasePath(String basePath) {
+        super.setBasePath(basePath);
+        return this;
+    }
 	/**
 	 * Serialize the given Java object into request body according to the object's class and the request Content-Type.
 	 *

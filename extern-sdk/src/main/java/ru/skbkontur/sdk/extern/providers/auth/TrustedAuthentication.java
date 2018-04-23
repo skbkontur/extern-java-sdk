@@ -103,6 +103,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 		return cryptoProvider;
 	}
 
+    @SuppressWarnings("unchecked")
 	public void setCryptoProvider(CryptoProvider cryptoProvider) {
 		this.cryptoProvider = cryptoProvider;
 	}
@@ -116,6 +117,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 		return signatureKeyProvider;
 	}
 
+    @SuppressWarnings("unchecked")
 	public void setSignatureKeyProvider(SignatureKeyProvider signatureKeyProvider) {
 		this.signatureKeyProvider = signatureKeyProvider;
 	}

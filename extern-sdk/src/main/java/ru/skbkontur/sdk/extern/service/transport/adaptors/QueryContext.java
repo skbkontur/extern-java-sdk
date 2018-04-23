@@ -54,6 +54,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage;
  * Api Query Context
  * @param <R> some return type
  */
+@SuppressWarnings("unchecked")
 public class QueryContext<R> implements Serializable {
 
     private static final long serialVersionUID = -2919303896965835578L;
@@ -546,8 +547,6 @@ public class QueryContext<R> implements Serializable {
         return (boolean) params.get(INCOMING);
     }
 
-    ;
-	
 	public QueryContext<R> setIncoming(boolean incoming) {
         return set(INCOMING, incoming);
     }
@@ -695,7 +694,7 @@ public class QueryContext<R> implements Serializable {
     private void acceptApiKey(String apiKey) {
         if (apiKey != null && !apiKey.isEmpty()) {
             Authentication apiKeyAuth = apiClient.getAuthentication("apiKey");
-            if (apiKeyAuth != null) {
+            if (apiKeyAuth != null && apiKeyAuth instanceof ApiKeyAuth) {
                 ((ApiKeyAuth) apiKeyAuth).setApiKey(apiKey);
             }
         }
@@ -783,7 +782,7 @@ public class QueryContext<R> implements Serializable {
     private void acceptAccessToken(String sessionId) {
         if (sessionId != null && !sessionId.isEmpty()) {
             Authentication apiKeyAuth = apiClient.getAuthentication("auth.sid");
-            if (apiKeyAuth != null) {
+            if (apiKeyAuth != null && apiKeyAuth instanceof ApiKeyAuth) {
                 ((ApiKeyAuth) apiKeyAuth).setApiKey(sessionId);
                 ((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(getAuthenticationProvider().authPrefix());
             }

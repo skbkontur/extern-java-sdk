@@ -28,12 +28,13 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  */
 public class AccountsAdaptor extends BaseAdaptor {
 
-	private AccountsApi api;
+	private final AccountsApi api;
 	
 	public AccountsAdaptor(AccountsApi accountsApi) {
 		this.api = accountsApi;
 	}
 	
+    @SuppressWarnings("unchecked")
 	public AccountsAdaptor() {
 		this(new AccountsApi());
 	}

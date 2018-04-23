@@ -33,7 +33,8 @@ public class File {
 	private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;
 	
 	public enum ContentType {
-		XML("application/xml");
+		XML("application/xml"),
+        PDF("application/pdf");
 		
 		private final String value;
 		

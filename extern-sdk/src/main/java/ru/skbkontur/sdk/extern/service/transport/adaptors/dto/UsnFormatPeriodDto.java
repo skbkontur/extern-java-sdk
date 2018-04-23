@@ -12,7 +12,7 @@ import ru.skbkontur.sdk.extern.model.UsnFormatPeriod.PeriodModifiersEnum;
  *
  * @author alexs
  */
-public class UsnFormatPeriodDto {
+class UsnFormatPeriodDto {
 	
 	public UsnFormatPeriod fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.UsnFormatPeriod dto) {
 		

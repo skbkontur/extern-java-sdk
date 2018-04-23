@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  *
  * @author AlexS
  */
-public class CheckResultDataDto {
+class CheckResultDataDto {
 
 	public ru.skbkontur.sdk.extern.model.CheckResultData fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CheckResultData dto) {
 
@@ -24,13 +24,13 @@ public class CheckResultDataDto {
 		CheckErrorDto checkErrorDto = new CheckErrorDto();
 
 		if (dto.getCommonErrors() != null) {
-			checkResultData.setCommonErrors(dto.getCommonErrors().stream().map(e -> checkErrorDto.fromDto(e)).collect(Collectors.toList()));
+			checkResultData.setCommonErrors(dto.getCommonErrors().stream().map(checkErrorDto::fromDto).collect(Collectors.toList()));
 		}
 
 		if (dto.getDocumentsErrors() != null) {
 			checkResultData.setDocumentsErrors(
 				dto.getDocumentsErrors().entrySet().stream().collect(
-					Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(e -> checkErrorDto.fromDto(e)).collect(Collectors.toList()))
+					Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(checkErrorDto::fromDto).collect(Collectors.toList()))
 				)
 			);
 		}
@@ -47,13 +47,13 @@ public class CheckResultDataDto {
 		CheckErrorDto checkErrorDto = new CheckErrorDto();
 
 		if (checkResultData.getCommonErrors() != null) {
-			dto.setCommonErrors(checkResultData.getCommonErrors().stream().map(e -> checkErrorDto.toDto(e)).collect(Collectors.toList()));
+			dto.setCommonErrors(checkResultData.getCommonErrors().stream().map(checkErrorDto::toDto).collect(Collectors.toList()));
 		}
 
 		if (checkResultData.getDocumentsErrors() != null) {
 			dto.setDocumentsErrors(
 				checkResultData.getDocumentsErrors().entrySet().stream().collect(
-					Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(e -> checkErrorDto.toDto(e)).collect(Collectors.toList()))
+					Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(checkErrorDto::toDto).collect(Collectors.toList()))
 				)
 			);
 		}
