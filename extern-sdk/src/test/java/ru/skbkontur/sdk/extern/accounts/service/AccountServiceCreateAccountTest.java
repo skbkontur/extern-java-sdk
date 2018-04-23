@@ -1,5 +1,18 @@
 package ru.skbkontur.sdk.extern.accounts.service;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.fail;
+
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
@@ -7,7 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.skbkontur.sdk.extern.ExternEngine;
 import ru.skbkontur.sdk.extern.common.ResponseData;
-import ru.skbkontur.sdk.extern.common.StandardValues;
 import ru.skbkontur.sdk.extern.common.TestServlet;
 import ru.skbkontur.sdk.extern.event.AuthenticationListener;
 import ru.skbkontur.sdk.extern.model.AccountList;
@@ -17,24 +29,32 @@ import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-
-import static javax.servlet.http.HttpServletResponse.*;
-import static junit.framework.TestCase.*;
-
 /**
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  * @author Mikhail Pavlenko
  */
 
-public class AccountServicecCreaterAccountTest {
+public class AccountServiceCreateAccountTest {
     private static ExternEngine engine;
     private static Server server;
-
-    private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"inn\": \"string\"," +
-            "\"kpp\": \"string\"," +
-            "\"organization-name\": \"string\"";
 
     @BeforeClass
     public static void startJetty() throws Exception {
