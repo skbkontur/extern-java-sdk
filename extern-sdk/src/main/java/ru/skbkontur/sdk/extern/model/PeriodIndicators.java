@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class PeriodIndicators {
   private String oktmo = null;
   private String avPu = null;

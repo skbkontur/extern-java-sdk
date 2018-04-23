@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.providers.auth;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Credential {
 	private String name;
 	private String value;

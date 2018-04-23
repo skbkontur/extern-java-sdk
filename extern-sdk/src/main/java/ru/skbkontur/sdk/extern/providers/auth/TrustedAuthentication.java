@@ -31,6 +31,7 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.NO
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
 	private static final String EOL = System.getProperty("line.separator", "\r\n");

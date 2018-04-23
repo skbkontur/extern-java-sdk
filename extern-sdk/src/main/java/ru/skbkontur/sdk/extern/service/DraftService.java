@@ -26,6 +26,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public interface DraftService {
 	/**
 	 * Create new a draft

@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class CertificateList {
   private List<Certificate> certificates = null;
   private Integer totalCount = null;

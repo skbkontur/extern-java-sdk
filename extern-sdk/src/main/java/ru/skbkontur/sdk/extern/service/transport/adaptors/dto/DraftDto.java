@@ -8,6 +8,7 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
 /**
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DraftDto {
 
     public ru.skbkontur.sdk.extern.model.Draft fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Draft dto) {

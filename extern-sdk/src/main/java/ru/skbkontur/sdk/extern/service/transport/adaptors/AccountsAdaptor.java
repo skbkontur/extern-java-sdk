@@ -26,6 +26,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AccountsAdaptor extends BaseAdaptor {
 
 	private final AccountsApi api;

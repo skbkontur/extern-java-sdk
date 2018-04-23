@@ -15,6 +15,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class CertificateServiceImpl extends BaseService<CertificatesAdaptor> implements CertificateService {
 	private static final String EN_CER = "certificate";
 

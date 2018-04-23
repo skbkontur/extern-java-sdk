@@ -17,6 +17,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentToSendAdapter extends TypeAdapter<DocumentToSend> {
 
 	private static final java.util.Base64.Encoder ENCODER = java.util.Base64.getEncoder();

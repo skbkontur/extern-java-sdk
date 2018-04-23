@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.PassportInfo;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class PassportInfoDto {
 	
 	public PassportInfo fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.PassportInfo dto) {

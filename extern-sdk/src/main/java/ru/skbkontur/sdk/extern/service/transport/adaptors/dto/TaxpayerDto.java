@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.Taxpayer;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class TaxpayerDto {
 	
 	public Taxpayer fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Taxpayer dto) {

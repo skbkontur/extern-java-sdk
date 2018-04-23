@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class UsnDataV2 {
   private Integer nomKorr = null;
   private Integer poMestu = null;

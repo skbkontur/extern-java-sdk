@@ -54,7 +54,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage;
  * Api Query Context
  * @param <R> some return type
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("unused")
 public class QueryContext<R> implements Serializable {
 
     private static final long serialVersionUID = -2919303896965835578L;

@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.providers.ServiceError;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ServiceException extends RuntimeException {
 
     private static final long serialVersionUID = 2635312453073147688L;

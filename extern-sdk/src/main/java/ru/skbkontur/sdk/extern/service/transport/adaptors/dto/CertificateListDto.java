@@ -12,6 +12,7 @@ import ru.skbkontur.sdk.extern.model.CertificateList;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class CertificateListDto {
 	
 	public CertificateList fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CertificateList dto) {

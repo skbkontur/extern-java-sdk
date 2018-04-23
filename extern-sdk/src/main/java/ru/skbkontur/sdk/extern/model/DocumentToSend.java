@@ -13,6 +13,7 @@ import java.util.UUID;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentToSend {
 
 	@SerializedName("id")

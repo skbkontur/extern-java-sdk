@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class CreateAccountRequest {
   private String inn = null;
   private String kpp = null;

@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DraftMeta {
 	@SerializedName("sender")
 	private Sender sender;

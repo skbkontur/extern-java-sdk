@@ -13,6 +13,7 @@ import ru.skbkontur.sdk.extern.model.Link;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Signature {
 
 	private UUID id = null;

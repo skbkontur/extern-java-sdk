@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class ApprovedSignaturesResponse {
 	@SerializedName("Signatures")
 	private List<Entry> signatures;

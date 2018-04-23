@@ -46,6 +46,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.PrintDocumentData
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocflowsAdaptor extends BaseAdaptor {
 
 	private final DocflowsApi api;

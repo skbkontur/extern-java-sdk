@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 class CheckResultDataDto {
 
 	public ru.skbkontur.sdk.extern.model.CheckResultData fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CheckResultData dto) {

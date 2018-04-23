@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author alexs
  */
+@SuppressWarnings("unused")
 class DocflowPageItemDto {
 
     public DocflowPageItem fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocflowPageItem dto) {

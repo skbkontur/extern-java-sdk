@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentContentsDto {
 
 	public ru.skbkontur.sdk.extern.model.DocumentContents fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentContents dto) {

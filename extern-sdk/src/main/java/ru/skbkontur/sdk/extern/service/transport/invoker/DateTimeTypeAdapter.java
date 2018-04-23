@@ -16,6 +16,7 @@ import org.joda.time.format.ISODateTimeFormat;
 /**
  * Gson TypeAdapter for Joda DateTime type
  */
+@SuppressWarnings("unused")
 public class DateTimeTypeAdapter extends TypeAdapter<DateTime> {
 
     private final DateTimeFormatter parseFormatter = ISODateTimeFormat.dateOptionalTimeParser();

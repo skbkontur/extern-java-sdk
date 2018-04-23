@@ -29,6 +29,7 @@ import java.util.stream.Stream;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class File {
 	private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;
 	

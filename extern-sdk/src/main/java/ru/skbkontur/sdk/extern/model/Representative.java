@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class Representative {
   private String representativeDocument = null;
 

@@ -36,6 +36,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.dto.UsnServiceContract
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DraftsAdaptor extends BaseAdaptor {
 
 	private final DraftsApi api;

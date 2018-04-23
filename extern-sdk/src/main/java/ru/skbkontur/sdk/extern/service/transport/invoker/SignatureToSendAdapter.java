@@ -17,6 +17,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class SignatureToSendAdapter extends TypeAdapter<SignatureToSend> {
 
 	private static final java.util.Base64.Encoder ENCODER = java.util.Base64.getEncoder();

@@ -12,6 +12,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public interface CryptoProvider {
 	CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content);
 	QueryContext<byte[]> sign(QueryContext<byte[]> cxt);

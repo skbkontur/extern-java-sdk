@@ -12,6 +12,7 @@ import java.util.UUID;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Account {
   private UUID id = null;
   private String inn = null;

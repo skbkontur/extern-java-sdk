@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class UsnServiceContractInfoV2 {
   private UsnFormatPeriod period = null;
   private AdditionalClientInfo additionalOrgInfo = null;

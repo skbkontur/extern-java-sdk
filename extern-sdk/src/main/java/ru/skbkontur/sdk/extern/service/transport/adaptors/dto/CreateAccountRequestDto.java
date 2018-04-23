@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class CreateAccountRequestDto {
 	
 	public CreateAccountRequest fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CreateAccountRequestDto dto) {

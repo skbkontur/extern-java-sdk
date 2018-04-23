@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.Representative;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class RepresentativeDto {
 
 	public Representative fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Representative dto) {

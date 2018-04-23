@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AccountList {
   private Integer skip = null;
 

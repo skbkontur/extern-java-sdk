@@ -11,6 +11,7 @@ import java.util.Map;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 class SignatureToSendDto {
 
 	public SignatureToSendDto() {

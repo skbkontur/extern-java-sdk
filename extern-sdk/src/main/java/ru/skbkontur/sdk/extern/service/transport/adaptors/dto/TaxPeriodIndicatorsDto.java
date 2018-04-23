@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.TaxPeriodIndicators;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class TaxPeriodIndicatorsDto {
 
 	public TaxPeriodIndicators fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.TaxPeriodIndicators dto) {

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AccountDto {
 
     public Account fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Account dto) {

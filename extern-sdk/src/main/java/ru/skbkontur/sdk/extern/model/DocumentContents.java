@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentContents {
 
 	private String base64Content = null;

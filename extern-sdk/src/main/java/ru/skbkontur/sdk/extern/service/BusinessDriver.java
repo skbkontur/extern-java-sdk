@@ -43,6 +43,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class BusinessDriver {
 
     private final ExternEngine engine;

@@ -29,6 +29,7 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CO
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class CryptoProviderMSCapi implements CryptoProvider {
 	
 	private final CryptoService cryptoService;

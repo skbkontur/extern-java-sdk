@@ -11,6 +11,7 @@ import java.util.UUID;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Draft {
 
     public enum Status {

@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.UsnDataV2;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class UsnDataV2Dto {
 
 

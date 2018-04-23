@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentToSendDto {
 
     private static final java.util.Base64.Decoder BASE64DECODER = java.util.Base64.getDecoder();

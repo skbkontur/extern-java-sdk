@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class ResponseLink {
 
 		@SerializedName("Link")

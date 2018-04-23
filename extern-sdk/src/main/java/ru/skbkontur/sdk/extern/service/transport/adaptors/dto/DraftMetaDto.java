@@ -13,6 +13,7 @@ import ru.skbkontur.sdk.extern.model.Recipient;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DraftMetaDto {
 
 	public ru.skbkontur.sdk.extern.model.DraftMeta fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.DraftMeta dto) {

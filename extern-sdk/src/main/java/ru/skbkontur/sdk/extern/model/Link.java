@@ -11,6 +11,7 @@ import java.util.Objects;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Link {
 
     private String href = null;

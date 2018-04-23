@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AccountServiceImpl extends BaseService<AccountsAdaptor> implements AccountService {
 	private static final String EN_ACC = "account";
 	

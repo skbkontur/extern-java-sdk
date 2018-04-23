@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class Entry {
 	@SerializedName("Id")
 	private String id;

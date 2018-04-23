@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class SignatureDto {
 
     public SignatureDto() {

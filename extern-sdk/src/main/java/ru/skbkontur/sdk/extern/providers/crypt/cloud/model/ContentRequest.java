@@ -14,6 +14,7 @@ import java.util.UUID;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ContentRequest {
 
 	@SerializedName("CertificateThumbprint")

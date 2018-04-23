@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class PassportInfo {
   private String code = null;
 

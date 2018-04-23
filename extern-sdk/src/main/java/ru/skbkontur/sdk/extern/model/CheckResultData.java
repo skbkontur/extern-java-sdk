@@ -13,6 +13,7 @@ import java.util.Map;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class CheckResultData {
 
 	private Map<String, List<CheckError>> documentsErrors = null;

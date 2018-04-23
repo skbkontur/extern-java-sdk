@@ -19,6 +19,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
  * 
  * @param <T> T transport service API
  */
+@SuppressWarnings("unused")
 public class BaseService<T> {
 	
 	protected T api;

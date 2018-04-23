@@ -12,6 +12,7 @@ import java.util.Map;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class LinkDto {
 
 	public ru.skbkontur.sdk.extern.model.Link fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Link dto) {

@@ -19,6 +19,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.Pair;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient {
 
     @Override

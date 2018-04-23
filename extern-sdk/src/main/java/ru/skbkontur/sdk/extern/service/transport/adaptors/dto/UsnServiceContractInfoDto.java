@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.UsnServiceContractInfo;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class UsnServiceContractInfoDto {
 	
 	public UsnServiceContractInfo fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.UsnServiceContractInfoObject dto) {

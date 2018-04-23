@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class PrepareResult {
 	
   public enum Status {

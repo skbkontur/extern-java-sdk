@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.AdditionalClientInfo;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class AdditionalClientInfoDto {
 
 	public AdditionalClientInfo fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.AdditionalClientInfo dto) {

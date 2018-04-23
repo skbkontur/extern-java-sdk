@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.MerchantTax;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class MerchantTaxDto {
 
 	public MerchantTax fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.MerchantTax dto) {

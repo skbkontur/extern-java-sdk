@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Docflow {
 
 	private UUID id = null;

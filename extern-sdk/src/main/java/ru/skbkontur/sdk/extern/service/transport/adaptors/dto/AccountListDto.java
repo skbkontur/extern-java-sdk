@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AccountListDto {
 
 	public AccountList fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.AccountList dto) {

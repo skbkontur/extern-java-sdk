@@ -12,6 +12,7 @@ import java.util.Map;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ApiResponse<T> {
 
 	final private int statusCode;

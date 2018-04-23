@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.Certificate;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class CertificateDto {
 	public Certificate fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.CertificateDto dto) {
 		

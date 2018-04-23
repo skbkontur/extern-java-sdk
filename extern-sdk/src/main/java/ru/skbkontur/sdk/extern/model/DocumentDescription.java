@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.model;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocumentDescription {
     private enum Type {
         DEKL("urn:document:fns534-report","^(?i)NO_(\\w+)_(\\d{4})_(\\d{4})_(\\d{12,19})_(\\d{8})_([\\w-]{36})\\.xml$"),

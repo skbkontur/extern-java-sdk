@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class DocflowPage {
   private Long skip = null;
   private Long take = null;

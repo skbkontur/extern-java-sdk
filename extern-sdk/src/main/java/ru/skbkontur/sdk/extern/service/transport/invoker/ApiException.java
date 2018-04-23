@@ -12,6 +12,7 @@ import java.util.Map;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class ApiException extends Exception {
 
     private static final long serialVersionUID = 7069199494247540112L;

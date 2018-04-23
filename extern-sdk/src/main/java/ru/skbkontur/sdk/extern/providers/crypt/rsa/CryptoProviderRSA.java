@@ -40,6 +40,7 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CO
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class CryptoProviderRSA implements CryptoProvider {
 	private final Map<String,String> DIGEST_ALGORITHMS = new HashMap<String,String>() {
 		private static final long serialVersionUID = 1L;

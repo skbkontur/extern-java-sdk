@@ -20,6 +20,7 @@ import java.util.Date;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
     private final ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiClient apiClient;
 

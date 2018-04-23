@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.providers;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public interface ServiceError {
 	enum ErrorCode {
 		server(1,"A server side error."), 

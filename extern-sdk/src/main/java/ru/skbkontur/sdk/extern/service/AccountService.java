@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public interface AccountService {
     CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync();
 

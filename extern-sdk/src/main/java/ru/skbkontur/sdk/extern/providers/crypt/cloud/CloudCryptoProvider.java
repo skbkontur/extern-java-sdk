@@ -35,6 +35,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentica
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class CloudCryptoProvider implements CryptoProvider {
 
     private static final String SIGNATURE = "подпись";

@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class ApprovedDecryptResponse {
 	@SerializedName("Data")
 	private List<Entry> data;

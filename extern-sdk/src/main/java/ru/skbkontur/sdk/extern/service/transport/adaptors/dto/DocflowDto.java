@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocflowDto {
 
 	public ru.skbkontur.sdk.extern.model.Docflow fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.Docflow dto) {

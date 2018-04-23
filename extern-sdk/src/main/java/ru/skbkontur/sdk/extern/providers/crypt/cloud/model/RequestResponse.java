@@ -12,6 +12,7 @@ import java.util.List;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class RequestResponse {
 		@SerializedName("ResultId")
 		private String resultId;

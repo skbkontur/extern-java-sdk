@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class ApiExceptionDto {
 
 	public ApiException fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException dto) {

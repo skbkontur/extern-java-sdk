@@ -13,6 +13,7 @@ import ru.skbkontur.sdk.extern.providers.ServiceError;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ServiceErrorImpl implements ServiceError {
 
 	private final ErrorCode errorCode;

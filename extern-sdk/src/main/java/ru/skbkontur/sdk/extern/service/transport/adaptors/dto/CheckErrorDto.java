@@ -9,6 +9,7 @@ package ru.skbkontur.sdk.extern.service.transport.adaptors.dto;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 class CheckErrorDto {
 
 	public CheckErrorDto() {

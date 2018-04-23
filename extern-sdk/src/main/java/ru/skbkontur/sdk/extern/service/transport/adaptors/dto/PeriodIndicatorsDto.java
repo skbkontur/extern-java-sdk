@@ -11,6 +11,7 @@ import ru.skbkontur.sdk.extern.model.PeriodIndicators;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 class PeriodIndicatorsDto {
 
 	public PeriodIndicators fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.PeriodIndicators dto) {

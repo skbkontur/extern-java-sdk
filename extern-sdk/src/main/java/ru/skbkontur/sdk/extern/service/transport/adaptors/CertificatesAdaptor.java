@@ -17,6 +17,7 @@ import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.ApiException;
  *
  * @author alexs
  */
+@SuppressWarnings("unused")
 public class CertificatesAdaptor extends BaseAdaptor {
 
 	private final CertificatesApi api;

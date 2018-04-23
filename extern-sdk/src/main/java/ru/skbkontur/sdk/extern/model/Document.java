@@ -12,6 +12,7 @@ import java.util.UUID;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Document {
 
 	private UUID id = null;

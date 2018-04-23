@@ -21,6 +21,7 @@ import ru.skbkontur.sdk.extern.model.DocumentToSend;
 /**
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DocflowServiceImpl extends BaseService<DocflowsAdaptor> implements DocflowService {
 
   private static final String EN_DFW = "Документооборот";

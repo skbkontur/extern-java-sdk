@@ -28,6 +28,7 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class DraftServiceImpl extends BaseService<DraftsAdaptor> implements DraftService {
 
 	private static final String EN_DFT = "Черновик";
