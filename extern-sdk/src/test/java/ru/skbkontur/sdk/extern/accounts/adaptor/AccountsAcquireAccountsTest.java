@@ -1,5 +1,15 @@
 package ru.skbkontur.sdk.extern.accounts.adaptor;
 
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+
+import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
@@ -7,31 +17,53 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.skbkontur.sdk.extern.accounts.AccountsValidator;
-import ru.skbkontur.sdk.extern.common.*;
+import ru.skbkontur.sdk.extern.common.ResponseData;
+import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
+import ru.skbkontur.sdk.extern.common.StandardValues;
+import ru.skbkontur.sdk.extern.common.TestServlet;
 import ru.skbkontur.sdk.extern.model.AccountList;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.AccountsAdaptor;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static javax.servlet.http.HttpServletResponse.*;
-import static junit.framework.TestCase.*;
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author Mikhail Pavlenko
+ */
 
 public class AccountsAcquireAccountsTest {
+
     private static final String LOCALHOST_ACCOUNTS = "http://localhost:8080/accounts";
     private static Server server;
 
     private QueryContext<AccountList> queryContext;
 
     private final static String ACCOUNT_LIST = "\"skip\": 0, " +
-            "\"take\": 0, " +
-            "\"total-count\": 0 ";
+        "\"take\": 0, " +
+        "\"total-count\": 0 ";
     private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"inn\": \"string\"," +
-            "\"kpp\": \"string\"," +
-            "\"organization-name\": \"string\"";
+        "\"inn\": \"string\"," +
+        "\"kpp\": \"string\"," +
+        "\"organization-name\": \"string\"";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -94,9 +126,9 @@ public class AccountsAcquireAccountsTest {
     public void testAcquireAccounts_Accounts() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                ACCOUNT_LIST + "," +
-                "\"accounts\": [{" + ACCOUNT + "}]" +
-                "}");
+            ACCOUNT_LIST + "," +
+            "\"accounts\": [{" + ACCOUNT + "}]" +
+            "}");
         AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
         accountsAdaptor.acquireAccounts(queryContext);
         AccountList accountList = queryContext.get();
