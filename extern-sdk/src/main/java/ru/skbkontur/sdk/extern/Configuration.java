@@ -18,6 +18,7 @@ import ru.skbkontur.sdk.extern.providers.auth.Credential;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
 	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
 	
