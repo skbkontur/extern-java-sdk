@@ -1,13 +1,4 @@
-package ru.skbkontur.sdk.extern.accounts;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-
-import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
-import ru.skbkontur.sdk.extern.model.Account;
-import ru.skbkontur.sdk.extern.model.AccountList;
-
-/**
+/*
  * MIT License
  *
  * Copyright (c) 2018 SKB Kontur
@@ -26,7 +17,18 @@ import ru.skbkontur.sdk.extern.model.AccountList;
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
+ */
+
+package ru.skbkontur.sdk.extern.accounts;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+
+import ru.skbkontur.sdk.extern.common.StandardObjectsValidator;
+import ru.skbkontur.sdk.extern.model.Account;
+import ru.skbkontur.sdk.extern.model.AccountList;
+
+/**
  * @author Mikhail Pavlenko
  */
 
