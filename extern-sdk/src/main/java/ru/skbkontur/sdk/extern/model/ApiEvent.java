@@ -1,7 +1,7 @@
 /*
- * The MIT License
+ * MIT License
  *
- * Copyright 2018 SKB Kontur
+ * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,27 +10,27 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern.model;
 
 import java.util.Date;
 import java.util.Objects;
 
+
 /**
- *
  * @author AlexS
  */
-@SuppressWarnings("unused")
 public class ApiEvent {
 
     private String inn = null;
@@ -107,12 +107,12 @@ public class ApiEvent {
         }
         ApiEvent apiEvent = (ApiEvent) o;
         return Objects.equals(this.inn, apiEvent.inn)
-            && Objects.equals(this.kpp, apiEvent.kpp)
-            && Objects.equals(this.docflowType, apiEvent.docflowType)
-            && Objects.equals(this.docflowLink, apiEvent.docflowLink)
-            && Objects.equals(this.newState, apiEvent.newState)
-            && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
-            && Objects.equals(this.id, apiEvent.id);
+                && Objects.equals(this.kpp, apiEvent.kpp)
+                && Objects.equals(this.docflowType, apiEvent.docflowType)
+                && Objects.equals(this.docflowLink, apiEvent.docflowLink)
+                && Objects.equals(this.newState, apiEvent.newState)
+                && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
+                && Objects.equals(this.id, apiEvent.id);
     }
 
     @Override

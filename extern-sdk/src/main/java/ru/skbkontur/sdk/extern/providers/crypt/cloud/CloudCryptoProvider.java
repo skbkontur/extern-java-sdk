@@ -1,41 +1,61 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern.providers.crypt.cloud;
 
-import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ContentRequest;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import ru.skbkontur.sdk.extern.Messages;
-import static ru.skbkontur.sdk.extern.Messages.C_NO_DECRYPT;
-import static ru.skbkontur.sdk.extern.Messages.C_NO_SIGNATURE;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
 import ru.skbkontur.sdk.extern.providers.CryptoProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceError;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ApprovedDecryptResponse;
-import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.RequestResponse;
 import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ApprovedSignaturesResponse;
+import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.ContentRequest;
+import ru.skbkontur.sdk.extern.providers.crypt.cloud.model.RequestResponse;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.Query;
 import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
-import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
 import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
 
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+
+import static ru.skbkontur.sdk.extern.Messages.C_NO_DECRYPT;
+import static ru.skbkontur.sdk.extern.Messages.C_NO_SIGNATURE;
+import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.CONTENT;
+
+
 /**
- *
  * @author AlexS
  */
-@SuppressWarnings("unused")
 public class CloudCryptoProvider implements CryptoProvider {
 
     private static final String SIGNATURE = "подпись";
@@ -65,6 +85,16 @@ public class CloudCryptoProvider implements CryptoProvider {
 
     public CloudCryptoProvider(String cloudCryptoBaseUri) {
         this.cloudCryptoBaseUri = cloudCryptoBaseUri;
+    }
+
+    private static void acceptAccessToken(QueryContext<?> cxt) { //String apiKeyPrefix, String accessToken) {
+        if (cxt.getSessionId() != null && !cxt.getSessionId().isEmpty()) {
+            Authentication apiKeyAuth = cxt.getApiClient().getAuthentication("auth.sid");
+            if (apiKeyAuth != null && apiKeyAuth instanceof ApiKeyAuth) {
+                ((ApiKeyAuth) apiKeyAuth).setApiKey(cxt.getSessionId());
+                ((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(cxt.getAuthenticationProvider().authPrefix());
+            }
+        }
     }
 
     public void setApproveCodeProvider(Function<String, String> approveCodeProvider) {
@@ -155,15 +185,15 @@ public class CloudCryptoProvider implements CryptoProvider {
         QueryContext<byte[]> cxt = createQueryContext();
 
         return CompletableFuture
-            .supplyAsync(
-                ()
-                -> {
-                return getSignerCertificate(
-                    cxt
-                        .setThumbprint(thumbprint)
+                .supplyAsync(
+                        ()
+                                -> {
+                            return getSignerCertificate(
+                                    cxt
+                                            .setThumbprint(thumbprint)
+                            );
+                        }
                 );
-            }
-            );
     }
 
     @Override
@@ -268,15 +298,6 @@ public class CloudCryptoProvider implements CryptoProvider {
         return cxt;
     }
 
-    private static void acceptAccessToken(QueryContext<?> cxt) { //String apiKeyPrefix, String accessToken) {
-        if (cxt.getSessionId() != null && !cxt.getSessionId().isEmpty()) {
-            Authentication apiKeyAuth = cxt.getApiClient().getAuthentication("auth.sid");
-            if (apiKeyAuth != null && apiKeyAuth instanceof ApiKeyAuth) {
-                ((ApiKeyAuth) apiKeyAuth).setApiKey(cxt.getSessionId());
-                ((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(cxt.getAuthenticationProvider().authPrefix());
-            }
-        }
-    }
 
     static class RequestResponseQuery implements Query<RequestResponse> {
 
@@ -294,24 +315,24 @@ public class CloudCryptoProvider implements CryptoProvider {
                 acceptAccessToken(context);
 
                 ApiResponse<RequestResponse> resp
-                    = context
+                        = context
                         .getApiClient()
                         .submitHttpRequest(request,
-                            "POST",
-                            Collections.emptyMap(),
-                            contentRequest,
-                            new HashMap<>(),
-                            Collections.emptyMap(),
-                            RequestResponse.class
+                                "POST",
+                                Collections.emptyMap(),
+                                contentRequest,
+                                new HashMap<>(),
+                                Collections.emptyMap(),
+                                RequestResponse.class
                         );
 
                 return context.setResult(resp.getData(), REQUEST_RESPONSE);
-            }
-            catch (ApiException x) {
+            } catch (ApiException x) {
                 return context.setServiceError(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
             }
         }
     }
+
 
     static class ApprovedQuery<T> implements Query<T> {
 
@@ -346,21 +367,20 @@ public class CloudCryptoProvider implements CryptoProvider {
                 acceptAccessToken(context);
 
                 ApiResponse<T> resp
-                    = context
+                        = context
                         .getApiClient()
                         .submitHttpRequest(
-                            theRequest,
-                            "GET",
-                            Collections.emptyMap(),
-                            null,
-                            headers,
-                            Collections.emptyMap(),
-                            clazz
+                                theRequest,
+                                "GET",
+                                Collections.emptyMap(),
+                                null,
+                                headers,
+                                Collections.emptyMap(),
+                                clazz
                         );
 
                 return context.setResult(resp.getData(), entityName);
-            }
-            catch (ApiException x) {
+            } catch (ApiException x) {
                 return context.setServiceError(ServiceError.ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
             }
         }

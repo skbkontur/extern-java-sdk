@@ -8,12 +8,11 @@ build.cmd
 install.cmd
 extern-sdk/src/test/resources/extern-sdk-config.json
 extern-sdk-test
+**/*.iml
+.idea
 /extern-sdk/nb-configuration.xml
 /extern-sdk-examples/nb-configuration.xml
 /extern-sdk-examples/lib
 /extern-sdk-examples/tests
 /extern-sdk-examples/nbactions.xml
 /extern-sdk-examples/nbactions-release-profile.xml
-/.idea
-/nb-configuration.xml
-/extern-sdk/nbactions.xml

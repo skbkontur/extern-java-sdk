@@ -1,11 +1,50 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import com.google.gson.GsonBuilder;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import ru.skbkontur.sdk.extern.model.*;
+import ru.skbkontur.sdk.extern.providers.AccountProvider;
+import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
+import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
+import ru.skbkontur.sdk.extern.providers.ServiceError;
+import ru.skbkontur.sdk.extern.providers.ServiceError.ErrorCode;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
+import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
+import ru.skbkontur.sdk.extern.service.transport.invoker.DateAdapter;
+import ru.skbkontur.sdk.extern.service.transport.invoker.DateTimeTypeAdapter;
+import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
+import ru.skbkontur.sdk.extern.service.transport.invoker.LocalDateTypeAdapter;
+import ru.skbkontur.sdk.extern.service.transport.invoker.SignatureToSendAdapter;
+import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
+import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
+import ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage;
+
+import javax.net.ssl.HttpsURLConnection;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -13,54 +52,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.net.ssl.HttpsURLConnection;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import ru.skbkontur.sdk.extern.model.Account;
-import ru.skbkontur.sdk.extern.model.AccountList;
-import ru.skbkontur.sdk.extern.model.CertificateList;
-import ru.skbkontur.sdk.extern.model.CreateAccountRequest;
-import ru.skbkontur.sdk.extern.model.Docflow;
-import ru.skbkontur.sdk.extern.model.Document;
-import ru.skbkontur.sdk.extern.model.DocumentContents;
-import ru.skbkontur.sdk.extern.model.DocumentDescription;
-import ru.skbkontur.sdk.extern.model.DocumentToSend;
-import ru.skbkontur.sdk.extern.model.DraftDocument;
-import ru.skbkontur.sdk.extern.providers.AccountProvider;
-import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
-import ru.skbkontur.sdk.extern.providers.AuthenticationProvider;
-import ru.skbkontur.sdk.extern.providers.ServiceError;
-import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
-import ru.skbkontur.sdk.extern.service.transport.invoker.DateAdapter;
-import ru.skbkontur.sdk.extern.service.transport.invoker.DateTimeTypeAdapter;
-import ru.skbkontur.sdk.extern.service.transport.invoker.LocalDateTypeAdapter;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.ApiKeyAuth;
-import ru.skbkontur.sdk.extern.service.transport.swagger.invoker.auth.Authentication;
-import ru.skbkontur.sdk.extern.model.DraftMeta;
-import ru.skbkontur.sdk.extern.model.Link;
-import ru.skbkontur.sdk.extern.model.Signature;
-import ru.skbkontur.sdk.extern.model.UsnServiceContractInfo;
-import ru.skbkontur.sdk.extern.model.UsnServiceContractInfoV2;
-import ru.skbkontur.sdk.extern.providers.ServiceError.ErrorCode;
-import ru.skbkontur.sdk.extern.service.transport.invoker.ApiException;
-import ru.skbkontur.sdk.extern.service.transport.invoker.DocumentToSendAdapter;
-import ru.skbkontur.sdk.extern.service.transport.invoker.SignatureToSendAdapter;
-import ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage;
+
 
 /**
- *
- * @author AlexS
- *
- * Api Query Context
  * @param <R> some return type
+ * @author AlexS
+ * <p>
+ * Api Query Context
  */
-@SuppressWarnings("unused")
 public class QueryContext<R> implements Serializable {
-
-    private static final long serialVersionUID = -2919303896965835578L;
-	
-
-    private final Map<String, Object> params;
 
     public static final String SESSION_ID = "sessionId";
     public static final String ENTITY_NAME = "entityName";
@@ -118,7 +118,8 @@ public class QueryContext<R> implements Serializable {
     public static final String EVENTS_PAGE = "eventsPage";
     public static final String NOTHING = "nothing";
     public static final String OBJECT = "object";
-
+    private static final long serialVersionUID = -2919303896965835578L;
+    private final Map<String, Object> params;
     private String result;
 
     private ServiceError serviceError;
@@ -150,10 +151,6 @@ public class QueryContext<R> implements Serializable {
         this.setEntityName(entityName);
     }
 
-    public void setApiClient(ApiClient apiClient) {
-        this.apiClient = apiClient;
-    }
-
     public QueryContext<R> setResult(R result, String key) {
         this.result = key;
         this.serviceError = null;
@@ -162,6 +159,10 @@ public class QueryContext<R> implements Serializable {
 
     public ServiceError getServiceError() {
         return serviceError;
+    }
+
+    public QueryContext<R> setServiceError(String message) {
+        return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null));
     }
 
     public QueryContext<R> setServiceError(QueryContext<?> queryContext) {
@@ -190,10 +191,6 @@ public class QueryContext<R> implements Serializable {
         return setServiceError(new ServiceErrorImpl(errorCode, message, code, responseHeaders, responseBody));
     }
 
-    public QueryContext<R> setServiceError(String message) {
-        return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null));
-    }
-
     public QueryContext<R> setServiceError(String message, Throwable x) {
         return setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.business, message, 0, null, null, x));
     }
@@ -213,15 +210,8 @@ public class QueryContext<R> implements Serializable {
         return serviceError != null;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setServiceBaseUri(String serviceBaseUri) {
         this.apiClient.setBasePath(serviceBaseUri);
-        return this;
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public QueryContext<R> setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
         return this;
     }
 
@@ -229,11 +219,15 @@ public class QueryContext<R> implements Serializable {
         return authenticationProvider;
     }
 
+    public QueryContext<R> setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+        this.authenticationProvider = authenticationProvider;
+        return this;
+    }
+
     public AccountProvider getAccountProvider() {
         return accountProvider;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setAccountProvider(AccountProvider accountProvider) {
         this.accountProvider = accountProvider;
         return this;
@@ -243,7 +237,6 @@ public class QueryContext<R> implements Serializable {
         return apiKeyProvider;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
         return this;
@@ -253,19 +246,18 @@ public class QueryContext<R> implements Serializable {
         return (String) params.get(SESSION_ID);
     }
 
-    public QueryContext<R> setSessionId(QueryContext<?> queryContext) {
-        return set(SESSION_ID, UUID.fromString(queryContext.getSessionId()));
-    }
-
     public QueryContext<R> setSessionId(String sessionId) {
         return set(SESSION_ID, sessionId);
+    }
+
+    public QueryContext<R> setSessionId(QueryContext<?> queryContext) {
+        return set(SESSION_ID, UUID.fromString(queryContext.getSessionId()));
     }
 
     public String getEntityName() {
         return (String) params.get(ENTITY_NAME);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public final QueryContext<R> setEntityName(String entityName) {
         return set(ENTITY_NAME, entityName);
     }
@@ -274,29 +266,28 @@ public class QueryContext<R> implements Serializable {
         return (UUID) params.get(DRAFT_ID);
     }
 
-    public QueryContext<R> setDraftId(UUID draftId) {
-        return set(DRAFT_ID, draftId);
-    }
-
     public QueryContext<R> setDraftId(String draftId) {
         return set(DRAFT_ID, UUID.fromString(draftId));
+    }
+
+    public QueryContext<R> setDraftId(UUID draftId) {
+        return set(DRAFT_ID, draftId);
     }
 
     public Docflow getDocflow() {
         return (Docflow) params.get(DOCFLOW);
     }
 
+    public QueryContext<R> setDocflow(List<Docflow> docflows) {
+        return set(DOCFLOWS, docflows);
+    }
+
     public QueryContext<R> setDocflow(Docflow docflow) {
         return set(DOCFLOW, docflow);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Docflow> getDocflows() {
         return (List<Docflow>) params.get(DOCFLOWS);
-    }
-
-    public QueryContext<R> setDocflow(List<Docflow> docflows) {
-        return set(DOCFLOWS, docflows);
     }
 
     public UUID getDocflowId() {
@@ -310,41 +301,40 @@ public class QueryContext<R> implements Serializable {
         return docflowId;
     }
 
-    public QueryContext<R> setDocflowId(String docflowId) {
-        return set(DOCFLOW_ID, UUID.fromString(docflowId));
-    }
-
     public QueryContext<R> setDocflowId(UUID docflowId) {
         return set(DOCFLOW_ID, docflowId);
+    }
+
+    public QueryContext<R> setDocflowId(String docflowId) {
+        return set(DOCFLOW_ID, UUID.fromString(docflowId));
     }
 
     public UUID getDocumentId() {
         return (UUID) params.get(DOCUMENT_ID);
     }
 
-    public QueryContext<R> setDocumentId(String documentId) {
-        return set(DOCUMENT_ID, UUID.fromString(documentId));
-    }
-
     public QueryContext<R> setDocumentId(UUID documentId) {
         return set(DOCUMENT_ID, documentId);
+    }
+
+    public QueryContext<R> setDocumentId(String documentId) {
+        return set(DOCUMENT_ID, UUID.fromString(documentId));
     }
 
     public Document getDocument() {
         return (Document) params.get(DOCUMENT);
     }
 
+    public QueryContext<R> setDocument(List<Document> documents) {
+        return set(DOCUMENTS, documents);
+    }
+
     public QueryContext<R> setDocument(Document document) {
         return set(DOCUMENT, document);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Document> getDocuments() {
         return (List<Document>) params.get(DOCUMENTS);
-    }
-
-    public QueryContext<R> setDocument(List<Document> documents) {
-        return set(DOCUMENTS, documents);
     }
 
     public DocumentDescription getDocumentDescription() {
@@ -409,12 +399,12 @@ public class QueryContext<R> implements Serializable {
         return (byte[]) params.get(CONTENT_BYTES);
     }
 
-    public String getContentString() {
-        return (String) params.get(CONTENT_STRING);
-    }
-
     public QueryContext<R> setContentBytes(byte[] documentContent) {
         return set(CONTENT_BYTES, documentContent);
+    }
+
+    public String getContentString() {
+        return (String) params.get(CONTENT_STRING);
     }
 
     public QueryContext<R> setContentString(String documentContent) {
@@ -441,25 +431,24 @@ public class QueryContext<R> implements Serializable {
         return (byte[]) params.get(CONTENT);
     }
 
-    public DraftDocument getDraftDocument() {
-        return (DraftDocument) params.get(DRAFT_DOCUMENT);
-    }
-
     public QueryContext<R> setContent(byte[] content) {
         return set(CONTENT, content);
+    }
+
+    public DraftDocument getDraftDocument() {
+        return (DraftDocument) params.get(DRAFT_DOCUMENT);
     }
 
     public UUID getSignatureId() {
         return (UUID) params.get(SIGNATURE_ID);
     }
 
-    public QueryContext<R> setSignatureId(String signatureId) {
-        return set(SIGNATURE_ID, UUID.fromString(signatureId));
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setSignatureId(UUID signatureId) {
         return set(SIGNATURE_ID, signatureId);
+    }
+
+    public QueryContext<R> setSignatureId(String signatureId) {
+        return set(SIGNATURE_ID, UUID.fromString(signatureId));
     }
 
     public String getThumbprint() {
@@ -470,7 +459,6 @@ public class QueryContext<R> implements Serializable {
         return set(THUMBPRINT, thumbprint);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Link> getLinks() {
         return (List<Link>) params.get(LINKS);
     }
@@ -483,12 +471,12 @@ public class QueryContext<R> implements Serializable {
         return (UUID) params.get(ACCOUNT_ID);
     }
 
-    public QueryContext<R> setAccountId(UUID accountId) {
-        return set(ACCOUNT_ID, accountId);
-    }
-
     public QueryContext<R> setAccountId(String accountId) {
         return set(ACCOUNT_ID, UUID.fromString(accountId));
+    }
+
+    public QueryContext<R> setAccountId(UUID accountId) {
+        return set(ACCOUNT_ID, accountId);
     }
 
     public Account getAccount() {
@@ -523,7 +511,6 @@ public class QueryContext<R> implements Serializable {
         return set(SIGNATURE, signature);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Signature> getSignatures() {
         return (List<Signature>) params.get(SIGNATURES);
     }
@@ -532,7 +519,6 @@ public class QueryContext<R> implements Serializable {
         return set(SIGNATURES, signatures);
     }
 
-    @SuppressWarnings("unchecked")
     public List<DocumentToSend> getDocumentToSends() {
         return (List<DocumentToSend>) params.get(DOCUMENT_TO_SENDS);
     }
@@ -545,111 +531,111 @@ public class QueryContext<R> implements Serializable {
         return (boolean) params.get(FINISHED);
     }
 
- 	public QueryContext<R> setFinished(boolean finished) {
+    public QueryContext<R> setFinished(boolean finished) {
         return set(FINISHED, finished);
     }
 
-	public boolean getIncoming() {
+    public boolean getIncoming() {
         return (boolean) params.get(INCOMING);
     }
 
-	public QueryContext<R> setIncoming(boolean incoming) {
+    public QueryContext<R> setIncoming(boolean incoming) {
         return set(INCOMING, incoming);
     }
 
-	public long getSkip() {
+    public long getSkip() {
         return (long) params.get(SKIP);
     }
 
-	public QueryContext<R> setSkip(long skip) {
+    public QueryContext<R> setSkip(long skip) {
         return set(SKIP, skip);
     }
 
-	public int getTake() {
+    public int getTake() {
         return (int) params.get(TAKE);
     }
 
-	public QueryContext<R> setTake(int take) {
+    public QueryContext<R> setTake(int take) {
         return set(TAKE, take);
     }
 
-	public String getInnKpp() {
+    public String getInnKpp() {
         return (String) params.get(INN_KPP);
     }
 
-	public QueryContext<R> setInnKpp(String innKpp) {
+    public QueryContext<R> setInnKpp(String innKpp) {
         return set(INN_KPP, innKpp);
     }
 
-	public DateTime getUpdatedFrom() {
+    public DateTime getUpdatedFrom() {
         return (DateTime) params.get(UPDATED_FROM);
     }
 
-	public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
+    public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
         return set(UPDATED_FROM, updatedFrom);
     }
 
-	public DateTime getUpdatedTo() {
+    public DateTime getUpdatedTo() {
         return (DateTime) params.get(UPDATED_TO);
     }
 
-	public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
+    public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
         return set(UPDATED_TO, updatedTo);
     }
 
-	public DateTime getCreatedFrom() {
+    public DateTime getCreatedFrom() {
         return (DateTime) params.get(CREATED_FROM);
     }
 
-	public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
+    public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
         return set(CREATED_FROM, createdFrom);
     }
 
-	public DateTime getCreatedTo() {
+    public DateTime getCreatedTo() {
         return (DateTime) params.get(CREATED_TO);
     }
 
-	public QueryContext<R> setCreatedTo(DateTime createdTo) {
+    public QueryContext<R> setCreatedTo(DateTime createdTo) {
         return set(CREATED_TO, createdTo);
     }
 
-	public String getType() {
+    public String getType() {
         return (String) params.get(TYPE);
     }
 
-	public QueryContext<R> setType(String type) {
+    public QueryContext<R> setType(String type) {
         return set(TYPE, type);
     }
 
-	public String getCertificate() {
+    public String getCertificate() {
         return (String) params.get(CERTIFICATE);
     }
 
-	public QueryContext<R> setCertificate(String certificate) {
+    public QueryContext<R> setCertificate(String certificate) {
         return set(CERTIFICATE, certificate);
     }
 
-	public CertificateList getCertificateList() {
+    public CertificateList getCertificateList() {
         return (CertificateList) params.get(CERTIFICATE_LIST);
     }
 
-	public QueryContext<R> setCertificateList(CertificateList certificateList) {
+    public QueryContext<R> setCertificateList(CertificateList certificateList) {
         return set(CERTIFICATE_LIST, certificateList);
     }
 
-	public UsnServiceContractInfo getUsnServiceContractInfo() {
+    public UsnServiceContractInfo getUsnServiceContractInfo() {
         return (UsnServiceContractInfo) params.get(USN_SERVICE_CONTRACT_INFO);
     }
 
-	public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
+    public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
         return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
     }
 
-	public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
+    public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
         return (UsnServiceContractInfoV2) params.get(USN_SERVICE_CONTRACT_INFO_V2);
     }
 
-	public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
+    public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
         return set(USN_SERVICE_CONTRACT_INFO_V2, usnServiceContractInfoV2);
     }
 
@@ -680,21 +666,23 @@ public class QueryContext<R> implements Serializable {
     public QueryContext<R> set(String name, Object val) {
         if (val != null) {
             params.put(name, val);
-        }
-        else {
+        } else {
             params.remove(name);
         }
 
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T get(String name) {
         return (T) params.get(name);
     }
 
     public ApiClient getApiClient() {
         return apiClient;
+    }
+
+    public void setApiClient(ApiClient apiClient) {
+        this.apiClient = apiClient;
     }
 
     private void acceptApiKey(String apiKey) {
@@ -708,13 +696,13 @@ public class QueryContext<R> implements Serializable {
 
     public void configureApiClient() {
         apiClient.getJSON().setGson(new GsonBuilder()
-            .disableHtmlEscaping()
-            .registerTypeAdapter(Date.class, new DateAdapter(apiClient))
-            .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
-            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend.class, new SignatureToSendAdapter())
-            .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend.class, new DocumentToSendAdapter())
-            .create());
+                .disableHtmlEscaping()
+                .registerTypeAdapter(Date.class, new DateAdapter(apiClient))
+                .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend.class, new SignatureToSendAdapter())
+                .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend.class, new DocumentToSendAdapter())
+                .create());
         // устанавливаем api-key
         acceptApiKey(apiKeyProvider.getApiKey());
         // устанавливаем таймаут соединения
@@ -732,8 +720,7 @@ public class QueryContext<R> implements Serializable {
 
         if (isSuccess()) {
             return CompletableFuture.supplyAsync(() -> query.apply(this));
-        }
-        else {
+        } else {
             return CompletableFuture.completedFuture(this);
         }
     }
@@ -753,8 +740,7 @@ public class QueryContext<R> implements Serializable {
                 }
             }
             return r;
-        }
-        else {
+        } else {
             return this;
         }
     }
@@ -767,19 +753,16 @@ public class QueryContext<R> implements Serializable {
         String sessionId = getSessionId();
         if (sessionId != null && !sessionId.isEmpty()) {
             acceptAccessToken(sessionId);
-        }
-        else {
+        } else {
             if (authenticationProvider != null) {
                 QueryContext<String> authQuery = authenticationProvider.sessionId();
                 if (authQuery.isFail()) {
                     setServiceError(authQuery);
-                }
-                else {
+                } else {
                     sessionId = setSessionId(authQuery.get()).getSessionId();
                     acceptAccessToken(sessionId);
                 }
-            }
-            else {
+            } else {
                 setServiceError(new ServiceErrorImpl(ServiceError.ErrorCode.unknownAuth));
             }
         }

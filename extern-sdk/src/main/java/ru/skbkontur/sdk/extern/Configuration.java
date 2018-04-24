@@ -1,13 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package ru.skbkontur.sdk.extern;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
-import java.util.UUID;
+import com.google.gson.stream.JsonReader;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
 import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
@@ -15,157 +34,189 @@ import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
 import ru.skbkontur.sdk.extern.providers.auth.Credential;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.net.URL;
+import java.util.UUID;
+
+
 /**
- *
  * @author AlexS
  */
-@SuppressWarnings("unused")
 public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
-	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
+
+    private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
     private static final long serialVersionUID = -1659495610747854951L;
-	
-    @SerializedName("accountId")	private UUID accountId;
-	@SerializedName("apiKey") private String apiKey;
-	@SerializedName("authPrefix") private String authPrefix;
-	@SerializedName("credential") private Credential credential;
-	@SerializedName("serviceUserId") private String serviceUserId;
-	@SerializedName("login") private String login;
-	@SerializedName("pass") private String pass;
-	@SerializedName("serviceBaseUri") private String serviceBaseUri;
-	@SerializedName("authBaseUri") private String authBaseUri;
-	@SerializedName("thumbprint") private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
-	@SerializedName("thumbprintCloud") private String thumbprintCloud; // a thumbprint of a signature certificate for CloudCrypto
-	@SerializedName("thumbprintRsa") private String thumbprintRsa; // a thumbprint of a signature certificate with RSA algorithm
-	@SerializedName("jksPass") private String jksPass; // a password of JKS
-	@SerializedName("rsaKeyPass") private String rsaKeyPass; // a password of a RSA key
 
-	public Configuration() {
-		authPrefix = DEFAULT_AUTH_PREFIX;
-	}
-	
-	@Override
-	public UUID accountId() {
-		return accountId;
-	}
+    @SerializedName("accountId")
+    private UUID accountId;
+    @SerializedName("apiKey")
+    private String apiKey;
+    @SerializedName("authPrefix")
+    private String authPrefix;
+    @SerializedName("credential")
+    private Credential credential;
+    @SerializedName("serviceUserId")
+    private String serviceUserId;
+    @SerializedName("login")
+    private String login;
+    @SerializedName("pass")
+    private String pass;
+    @SerializedName("serviceBaseUri")
+    private String serviceBaseUri;
+    @SerializedName("authBaseUri")
+    private String authBaseUri;
+    @SerializedName("thumbprint")
+    private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
+    @SerializedName("thumbprintCloud")
+    private String thumbprintCloud; // a thumbprint of a signature certificate for CloudCrypto
+    @SerializedName("thumbprintRsa")
+    private String thumbprintRsa; // a thumbprint of a signature certificate with RSA algorithm
+    @SerializedName("jksPass")
+    private String jksPass; // a password of JKS
+    @SerializedName("rsaKeyPass")
+    private String rsaKeyPass; // a password of a RSA key
 
-	public void setAccountId(UUID accountId) {
-		this.accountId = accountId;
-	}
+    public Configuration() {
+        authPrefix = DEFAULT_AUTH_PREFIX;
+    }
 
-	public void setAccountId(String accountId) {
-		this.accountId = UUID.fromString(accountId);
-	}
+    @Override
+    public UUID accountId() {
+        return accountId;
+    }
 
-	@Override
-	public String getApiKey() {
-		return apiKey;
-	}
+    public void setAccountId(UUID accountId) {
+        this.accountId = accountId;
+    }
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
+    public void setAccountId(String accountId) {
+        this.accountId = UUID.fromString(accountId);
+    }
 
-	public String getAuthPrefix() {
-		return authPrefix;
-	}
+    @Override
+    public String getApiKey() {
+        return apiKey;
+    }
 
-	public void setAuthPrefix(String authPrefix) {
-		this.authPrefix = authPrefix;
-	}
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
-	@Override
-	public String getLogin() {
-		return login;
-	}
+    public String getAuthPrefix() {
+        return authPrefix;
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public void setAuthPrefix(String authPrefix) {
+        this.authPrefix = authPrefix;
+    }
 
-	@Override
-	public String getPass() {
-		return pass;
-	}
+    @Override
+    public String getLogin() {
+        return login;
+    }
 
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	@Override
-	public String getServiceBaseUri() {
-		return serviceBaseUri;
-	}
+    @Override
+    public String getPass() {
+        return pass;
+    }
 
-	public void setServiceBaseUri(String serviceBaseUri) {
-		this.serviceBaseUri = serviceBaseUri;
-	}
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
 
-	@Override
-	public String getUri() {
-		return authBaseUri;
-	}
+    @Override
+    public String getServiceBaseUri() {
+        return serviceBaseUri;
+    }
 
-	public void setAuthBaseUri(String authBaseUri) {
-		this.authBaseUri = authBaseUri;
-	}
+    public void setServiceBaseUri(String serviceBaseUri) {
+        this.serviceBaseUri = serviceBaseUri;
+    }
 
-	public String getThumbprint() {
-		return thumbprint;
-	}
+    @Override
+    public String getUri() {
+        return authBaseUri;
+    }
 
-	public void setThumbprint(String thumbprint) {
-		this.thumbprint = thumbprint;
-	}
+    public void setAuthBaseUri(String authBaseUri) {
+        this.authBaseUri = authBaseUri;
+    }
 
-	public String getThumbprintCloud() {
-		return thumbprintCloud;
-	}
+    public String getThumbprint() {
+        return thumbprint;
+    }
 
-	public void setThumbprintCloud(String thumbprintCloud) {
-		this.thumbprintCloud = thumbprintCloud;
-	}
+    public void setThumbprint(String thumbprint) {
+        this.thumbprint = thumbprint;
+    }
 
-	public String getThumbprintRsa() {
-		return thumbprintRsa;
-	}
+    public String getThumbprintCloud() {
+        return thumbprintCloud;
+    }
 
-	public void setThumbprintRsa(String thumbprintRsa) {
-		this.thumbprintRsa = thumbprintRsa;
-	}
+    public void setThumbprintCloud(String thumbprintCloud) {
+        this.thumbprintCloud = thumbprintCloud;
+    }
 
-	public String getJksPass() {
-		return jksPass;
-	}
+    public String getThumbprintRsa() {
+        return thumbprintRsa;
+    }
 
-	public void setJksPass(String jksPass) {
-		this.jksPass = jksPass;
-	}
+    public void setThumbprintRsa(String thumbprintRsa) {
+        this.thumbprintRsa = thumbprintRsa;
+    }
 
-	public String getRsaKeyPass() {
-		return rsaKeyPass;
-	}
+    public String getJksPass() {
+        return jksPass;
+    }
 
-	public void setRsaKeyPass(String rsaKeyPass) {
-		this.rsaKeyPass = rsaKeyPass;
-	}
+    public void setJksPass(String jksPass) {
+        this.jksPass = jksPass;
+    }
 
-	public Credential getCredential() {
-		return credential;
-	}
+    public String getRsaKeyPass() {
+        return rsaKeyPass;
+    }
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-	}
+    public void setRsaKeyPass(String rsaKeyPass) {
+        this.rsaKeyPass = rsaKeyPass;
+    }
 
-	public String getServiceUserId() {
-		return serviceUserId;
-	}
+    public Credential getCredential() {
+        return credential;
+    }
+
+    public void setCredential(Credential credential) {
+        this.credential = credential;
+    }
+
+    public String getServiceUserId() {
+        return serviceUserId;
+    }
 
     /**
      * Устанавливает идентификатор пользователя во внешней системе
+     *
      * @param serviceUserId идетификатор пользователя во внешней системе
      */
-	public void setServiceUserId(String serviceUserId) {
-		this.serviceUserId = serviceUserId;
-	}
+    public void setServiceUserId(String serviceUserId) {
+        this.serviceUserId = serviceUserId;
+    }
+
+    public static Configuration load(URL resourceUrl) throws IOException {
+        try (InputStream is = resourceUrl.openStream()) {
+            if (is == null) {
+                throw new IOException(resourceUrl.toExternalForm() + " is not found");
+            }
+
+            return new Gson().fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+        }
+    }
 }
