@@ -19,7 +19,7 @@ import ru.skbkontur.sdk.extern.providers.auth.Credential;
  *
  * @author AlexS
  */
-
+@SuppressWarnings("unused")
 public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
 	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
     private static final long serialVersionUID = -1659495610747854951L;
