@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.skbkontur.sdk</groupId>
         <artifactId>extern</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-sdk</artifactId>
@@ -290,6 +290,11 @@
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.skbkontur.sdk</groupId>
+            <artifactId>extern-swagger</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <!--properties>
