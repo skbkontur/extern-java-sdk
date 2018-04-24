@@ -66,6 +66,7 @@ public class AccountsAcquireAccountsTest {
         "\"organization-name\": \"string\"";
 
     @BeforeClass
+    @SuppressWarnings("Duplicates")
     public static void startJetty() throws Exception {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
