@@ -1,3 +1,24 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package ru.skbkontur.sdk.extern.accounts.adaptor;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -28,38 +49,20 @@ import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
 import ru.skbkontur.sdk.extern.service.transport.invoker.ApiClient;
 
 /**
- * MIT License
- *
- * Copyright (c) 2018 SKB Kontur
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
- * associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
- * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  * @author Mikhail Pavlenko
  */
 
 public class AccountsGetAccountTest {
+
     private static final String LOCALHOST_ACCOUNTS = "http://localhost:8080/accounts";
     private static Server server;
 
     private QueryContext<Account> queryContext;
 
     private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"inn\": \"string\"," +
-            "\"kpp\": \"string\"," +
-            "\"organization-name\": \"string\"";
+        "\"inn\": \"string\"," +
+        "\"kpp\": \"string\"," +
+        "\"organization-name\": \"string\"";
 
     @BeforeClass
     @SuppressWarnings("Duplicates")
@@ -113,9 +116,9 @@ public class AccountsGetAccountTest {
     public void testGetAccount_Links() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-                ACCOUNT + "," +
-                "\"links\": [" + StandardObjects.LINK + "]" +
-                "}");
+            ACCOUNT + "," +
+            "\"links\": [" + StandardObjects.LINK + "]" +
+            "}");
         AccountsAdaptor accountsAdaptor = new AccountsAdaptor();
         accountsAdaptor.getAccount(queryContext);
         Account account = queryContext.get();
