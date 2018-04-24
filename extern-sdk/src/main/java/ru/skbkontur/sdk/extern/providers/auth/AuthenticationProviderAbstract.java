@@ -58,7 +58,7 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
 	void fireAuthenticationEvent(QueryContext<String> authCxt) {
 		List<AuthenticationListener> clonedAuthListeners = getAuthenticationListener();
 		if (clonedAuthListeners != null) {
-			clonedAuthListeners.stream().forEach(l->l.authenticate(new AuthenticationEvent(AuthenticationProviderAbstract.this, authCxt)));
+            clonedAuthListeners.forEach(l->l.authenticate(new AuthenticationEvent(AuthenticationProviderAbstract.this, authCxt)));
 		}
 	}
 }

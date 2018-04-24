@@ -322,7 +322,7 @@ public class ExternEngine implements AuthenticationListener {
      * @return CryptoProvider
      * @see ru.skbkontur.sdk.extern.providers.CryptoProvider
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("UnusedReturnValue")
 	public CryptoProvider setCryptoProvider(CryptoProvider cryptoProvider) {
 		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;
