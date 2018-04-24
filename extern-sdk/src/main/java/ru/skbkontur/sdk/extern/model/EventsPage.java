@@ -31,6 +31,7 @@ import java.util.Objects;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class EventsPage {
 
     private String firstEventId = null;
@@ -79,6 +80,7 @@ public class EventsPage {
         this.apiEvents = apiEvents;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public EventsPage addApiEventsItem(ApiEvent apiEventsItem) {
         if (this.apiEvents == null) {
             this.apiEvents = new ArrayList<>();

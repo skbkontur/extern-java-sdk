@@ -51,6 +51,7 @@ import static ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext.SE
  * 
  * @author Сухоруков А., St.Petersburg 20/04/2018
  */
+@SuppressWarnings("unused")
 public class ExternEngine implements AuthenticationListener {
 
 	private static final Gson GSON = new Gson();
@@ -94,7 +95,7 @@ public class ExternEngine implements AuthenticationListener {
      * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
      * @see ru.skbkontur.sdk.extern.Configuration 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("WeakerAccess")
 	public ExternEngine(Configuration configuration) {
 		env = new Environment();
 		env.configuration = configuration;
@@ -126,7 +127,7 @@ public class ExternEngine implements AuthenticationListener {
      * @throws SDKException непроверяемое исключение может возникнуть при загрузки данных из файла
      * @see ru.skbkontur.sdk.extern.service.SDKException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("WeakerAccess")
 	public ExternEngine(String configPath) throws SDKException {
 		// loads config data from the resourse file: extern-sdk-config.json
 		this(loadConfiguration(configPath));
@@ -321,7 +322,7 @@ public class ExternEngine implements AuthenticationListener {
      * @return CryptoProvider
      * @see ru.skbkontur.sdk.extern.providers.CryptoProvider
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("UnusedReturnValue")
 	public CryptoProvider setCryptoProvider(CryptoProvider cryptoProvider) {
 		CryptoProvider current = this.cryptoProvider;
 		this.cryptoProvider = cryptoProvider;

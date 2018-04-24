@@ -22,7 +22,7 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
 	
 	private final List<AuthenticationListener> authListeners;
 
-	protected AuthenticationProviderAbstract() {
+	AuthenticationProviderAbstract() {
 		this.authListeners = new ArrayList<>();
 	}
 	
@@ -55,10 +55,10 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
 		fireAuthenticationEvent(authCxt);
 	}
 	
-	protected void fireAuthenticationEvent(QueryContext<String> authCxt) {
+	void fireAuthenticationEvent(QueryContext<String> authCxt) {
 		List<AuthenticationListener> clonedAuthListeners = getAuthenticationListener();
 		if (clonedAuthListeners != null) {
-			clonedAuthListeners.stream().forEach(l->l.authenticate(new AuthenticationEvent(AuthenticationProviderAbstract.this, authCxt)));
+            clonedAuthListeners.forEach(l->l.authenticate(new AuthenticationEvent(AuthenticationProviderAbstract.this, authCxt)));
 		}
 	}
 }

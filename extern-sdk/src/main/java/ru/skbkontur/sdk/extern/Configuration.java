@@ -6,12 +6,13 @@
 package ru.skbkontur.sdk.extern;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import java.util.UUID;
 import ru.skbkontur.sdk.extern.providers.AccountProvider;
 import ru.skbkontur.sdk.extern.providers.ApiKeyProvider;
+import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
 import ru.skbkontur.sdk.extern.providers.ServiceBaseUriProvider;
 import ru.skbkontur.sdk.extern.providers.UriProvider;
-import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
 import ru.skbkontur.sdk.extern.providers.auth.Credential;
 
 /**
@@ -19,8 +20,9 @@ import ru.skbkontur.sdk.extern.providers.auth.Credential;
  * @author AlexS
  */
 @SuppressWarnings("unused")
-public class Configuration implements AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
+public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
 	private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
+    private static final long serialVersionUID = -1659495610747854951L;
 	
     @SerializedName("accountId")	private UUID accountId;
 	@SerializedName("apiKey") private String apiKey;

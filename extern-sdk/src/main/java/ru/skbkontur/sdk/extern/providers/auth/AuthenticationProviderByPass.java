@@ -21,6 +21,7 @@ import ru.skbkontur.sdk.extern.service.transport.invoker.ApiResponse;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class AuthenticationProviderByPass extends  AuthenticationProviderAbstract {
 
 	private ApiKeyProvider apiKeyProvider;
@@ -28,7 +29,7 @@ public class AuthenticationProviderByPass extends  AuthenticationProviderAbstrac
 	private UriProvider authBaseUriProvider;
 	private final String authPrefix;
 	
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("WeakerAccess")
 	public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
 		this.authBaseUriProvider = authBaseUriProvider;
 		this.loginAndPasswordProvider = loginAndPasswordProvider;

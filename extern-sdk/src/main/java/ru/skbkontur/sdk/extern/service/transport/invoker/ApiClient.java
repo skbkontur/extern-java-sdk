@@ -64,6 +64,7 @@ public class ApiClient extends ru.skbkontur.sdk.extern.service.transport.swagger
 		}
 	}
 	
+    @SuppressWarnings("unchecked")
 	public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class<T> dtoClass) throws ApiException {
 		try {
 			String[] localVarAuthNames = new String[]{"apiKey", "auth.sid"};
