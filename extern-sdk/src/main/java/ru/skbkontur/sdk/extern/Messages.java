@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class Messages {
 	public static final String UNKNOWN = "UNKNOWN";
 	public static final String S_AUTHORIZATION_BY_LOGIN = "S_AUTHORIZATION_BY_LOGIN";

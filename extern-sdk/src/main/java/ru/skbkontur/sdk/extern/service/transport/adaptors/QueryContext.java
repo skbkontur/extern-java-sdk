@@ -213,11 +213,13 @@ public class QueryContext<R> implements Serializable {
         return serviceError != null;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setServiceBaseUri(String serviceBaseUri) {
         this.apiClient.setBasePath(serviceBaseUri);
         return this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
         return this;
@@ -231,6 +233,7 @@ public class QueryContext<R> implements Serializable {
         return accountProvider;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setAccountProvider(AccountProvider accountProvider) {
         this.accountProvider = accountProvider;
         return this;
@@ -240,6 +243,7 @@ public class QueryContext<R> implements Serializable {
         return apiKeyProvider;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
         return this;
@@ -261,6 +265,7 @@ public class QueryContext<R> implements Serializable {
         return (String) params.get(ENTITY_NAME);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public final QueryContext<R> setEntityName(String entityName) {
         return set(ENTITY_NAME, entityName);
     }
@@ -452,6 +457,7 @@ public class QueryContext<R> implements Serializable {
         return set(SIGNATURE_ID, UUID.fromString(signatureId));
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public QueryContext<R> setSignatureId(UUID signatureId) {
         return set(SIGNATURE_ID, signatureId);
     }

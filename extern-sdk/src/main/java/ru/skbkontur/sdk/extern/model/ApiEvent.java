@@ -30,6 +30,7 @@ import java.util.Objects;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class ApiEvent {
 
     private String inn = null;

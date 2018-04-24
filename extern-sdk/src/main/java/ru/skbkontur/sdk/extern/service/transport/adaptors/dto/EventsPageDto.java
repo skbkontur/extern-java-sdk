@@ -30,6 +30,7 @@ import ru.skbkontur.sdk.extern.model.EventsPage;
  *
  * @author AlexS
  */
+@SuppressWarnings("unused")
 public class EventsPageDto {
     
     public EventsPage fromDto(ru.skbkontur.sdk.extern.service.transport.swagger.model.EventsPage dto) {

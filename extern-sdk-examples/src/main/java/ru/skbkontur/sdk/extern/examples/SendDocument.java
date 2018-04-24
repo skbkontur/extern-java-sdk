@@ -187,7 +187,7 @@ class SendDocument {
             // документ был отправлен
             // в результате получаем список документооборотов (ДО)
             // иногда один документ может вызвать несколько ДО
-            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.skbkontur.sdk.extern.service.File::getFileName).reduce((x, y) -> x + "\r\n" + y).orElse("")));
+            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.skbkontur.sdk.extern.service.File::getFileName).reduce("",(x, y) -> x + "\r\n" + y)));
         }
     }
 
