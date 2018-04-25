@@ -25,6 +25,7 @@
 package ru.skbkontur.sdk.extern.service.transport.adaptors;
 
 import com.google.gson.GsonBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import ru.skbkontur.sdk.extern.model.*;
@@ -210,7 +211,7 @@ public class QueryContext<R> implements Serializable {
         return serviceError != null;
     }
 
-    public QueryContext<R> setServiceBaseUri(String serviceBaseUri) {
+    public QueryContext<R> setServiceBaseUri(@NotNull String serviceBaseUri) {
         this.apiClient.setBasePath(serviceBaseUri);
         return this;
     }
@@ -219,7 +220,7 @@ public class QueryContext<R> implements Serializable {
         return authenticationProvider;
     }
 
-    public QueryContext<R> setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+    public QueryContext<R> setAuthenticationProvider(@NotNull AuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
         return this;
     }
@@ -228,7 +229,7 @@ public class QueryContext<R> implements Serializable {
         return accountProvider;
     }
 
-    public QueryContext<R> setAccountProvider(AccountProvider accountProvider) {
+    public QueryContext<R> setAccountProvider(@NotNull AccountProvider accountProvider) {
         this.accountProvider = accountProvider;
         return this;
     }
@@ -237,7 +238,7 @@ public class QueryContext<R> implements Serializable {
         return apiKeyProvider;
     }
 
-    public QueryContext<R> setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
+    public QueryContext<R> setApiKeyProvider(@NotNull ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
         return this;
     }
@@ -531,111 +532,111 @@ public class QueryContext<R> implements Serializable {
         return (boolean) params.get(FINISHED);
     }
 
-    public QueryContext<R> setFinished(boolean finished) {
+ 	public QueryContext<R> setFinished(boolean finished) {
         return set(FINISHED, finished);
     }
 
-    public boolean getIncoming() {
+	public boolean getIncoming() {
         return (boolean) params.get(INCOMING);
     }
 
-    public QueryContext<R> setIncoming(boolean incoming) {
+	public QueryContext<R> setIncoming(boolean incoming) {
         return set(INCOMING, incoming);
     }
 
-    public long getSkip() {
+	public long getSkip() {
         return (long) params.get(SKIP);
     }
 
-    public QueryContext<R> setSkip(long skip) {
+	public QueryContext<R> setSkip(long skip) {
         return set(SKIP, skip);
     }
 
-    public int getTake() {
+	public int getTake() {
         return (int) params.get(TAKE);
     }
 
-    public QueryContext<R> setTake(int take) {
+	public QueryContext<R> setTake(int take) {
         return set(TAKE, take);
     }
 
-    public String getInnKpp() {
+	public String getInnKpp() {
         return (String) params.get(INN_KPP);
     }
 
-    public QueryContext<R> setInnKpp(String innKpp) {
+	public QueryContext<R> setInnKpp(String innKpp) {
         return set(INN_KPP, innKpp);
     }
 
-    public DateTime getUpdatedFrom() {
+	public DateTime getUpdatedFrom() {
         return (DateTime) params.get(UPDATED_FROM);
     }
 
-    public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
+	public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
         return set(UPDATED_FROM, updatedFrom);
     }
 
-    public DateTime getUpdatedTo() {
+	public DateTime getUpdatedTo() {
         return (DateTime) params.get(UPDATED_TO);
     }
 
-    public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
+	public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
         return set(UPDATED_TO, updatedTo);
     }
 
-    public DateTime getCreatedFrom() {
+	public DateTime getCreatedFrom() {
         return (DateTime) params.get(CREATED_FROM);
     }
 
-    public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
+	public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
         return set(CREATED_FROM, createdFrom);
     }
 
-    public DateTime getCreatedTo() {
+	public DateTime getCreatedTo() {
         return (DateTime) params.get(CREATED_TO);
     }
 
-    public QueryContext<R> setCreatedTo(DateTime createdTo) {
+	public QueryContext<R> setCreatedTo(DateTime createdTo) {
         return set(CREATED_TO, createdTo);
     }
 
-    public String getType() {
+	public String getType() {
         return (String) params.get(TYPE);
     }
 
-    public QueryContext<R> setType(String type) {
+	public QueryContext<R> setType(String type) {
         return set(TYPE, type);
     }
 
-    public String getCertificate() {
+	public String getCertificate() {
         return (String) params.get(CERTIFICATE);
     }
 
-    public QueryContext<R> setCertificate(String certificate) {
+	public QueryContext<R> setCertificate(String certificate) {
         return set(CERTIFICATE, certificate);
     }
 
-    public CertificateList getCertificateList() {
+	public CertificateList getCertificateList() {
         return (CertificateList) params.get(CERTIFICATE_LIST);
     }
 
-    public QueryContext<R> setCertificateList(CertificateList certificateList) {
+	public QueryContext<R> setCertificateList(CertificateList certificateList) {
         return set(CERTIFICATE_LIST, certificateList);
     }
 
-    public UsnServiceContractInfo getUsnServiceContractInfo() {
+	public UsnServiceContractInfo getUsnServiceContractInfo() {
         return (UsnServiceContractInfo) params.get(USN_SERVICE_CONTRACT_INFO);
     }
 
-    public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
+	public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
         return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
     }
 
-    public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
+	public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
         return (UsnServiceContractInfoV2) params.get(USN_SERVICE_CONTRACT_INFO_V2);
     }
 
-    public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
+	public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
         return set(USN_SERVICE_CONTRACT_INFO_V2, usnServiceContractInfoV2);
     }
 
@@ -696,13 +697,13 @@ public class QueryContext<R> implements Serializable {
 
     public void configureApiClient() {
         apiClient.getJSON().setGson(new GsonBuilder()
-                .disableHtmlEscaping()
-                .registerTypeAdapter(Date.class, new DateAdapter(apiClient))
-                .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-                .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend.class, new SignatureToSendAdapter())
-                .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend.class, new DocumentToSendAdapter())
-                .create());
+            .disableHtmlEscaping()
+            .registerTypeAdapter(Date.class, new DateAdapter(apiClient))
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
+            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+            .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.SignatureToSend.class, new SignatureToSendAdapter())
+            .registerTypeAdapter(ru.skbkontur.sdk.extern.service.transport.swagger.model.DocumentToSend.class, new DocumentToSendAdapter())
+            .create());
         // устанавливаем api-key
         acceptApiKey(apiKeyProvider.getApiKey());
         // устанавливаем таймаут соединения
