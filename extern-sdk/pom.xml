@@ -47,7 +47,11 @@
             <artifactId>cs-util</artifactId>
             <version>${cryptoservice.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>[13.0,]</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
