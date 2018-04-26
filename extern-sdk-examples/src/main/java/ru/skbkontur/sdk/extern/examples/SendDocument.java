@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package ru.skbkontur.sdk.extern.examples;
+package ru.kontur.extern_api.sdk.examples;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,15 +37,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
-import ru.skbkontur.sdk.extern.ExternEngine;
-import ru.skbkontur.sdk.extern.model.Docflow;
-import ru.skbkontur.sdk.extern.model.FnsRecipient;
-import ru.skbkontur.sdk.extern.model.Organization;
-import ru.skbkontur.sdk.extern.model.Sender;
-import ru.skbkontur.sdk.extern.providers.LoginAndPasswordProvider;
-import ru.skbkontur.sdk.extern.providers.auth.AuthenticationProviderByPass;
-import ru.skbkontur.sdk.extern.providers.crypt.mscapi.CryptoProviderMSCapi;
-import ru.skbkontur.sdk.extern.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.Sender;
+import ru.kontur.extern_api.sdk.providers.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.providers.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.providers.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
 
 /**
  * @author Sukhorukov A.D.
@@ -169,13 +169,13 @@ class SendDocument {
         String docPath = parameters.getProperty("document.path");
         String[] docPaths = docPath == null ? null : docPath.split(";");
         if (docPaths != null) {
-            ru.skbkontur.sdk.extern.service.File[] files
+            ru.kontur.extern_api.sdk.service.File[] files
                 = Stream
                     .of(docPaths)
                     .map(File::new)
-                    .map(f -> new ru.skbkontur.sdk.extern.service.File(f.getName(), readFileContent(f))) //
+                    .map(f -> new ru.kontur.extern_api.sdk.service.File(f.getName(), readFileContent(f))) //
                     .collect(Collectors.toList())
-                    .toArray(new ru.skbkontur.sdk.extern.service.File[docPaths.length]);
+                    .toArray(new ru.kontur.extern_api.sdk.service.File[docPaths.length]);
 
             // отправляем документы
             QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver().sendDocument(files, sender, recipient, organization);
@@ -191,7 +191,7 @@ class SendDocument {
             // документ был отправлен
             // в результате получаем список документооборотов (ДО)
             // иногда один документ может вызвать несколько ДО
-            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.skbkontur.sdk.extern.service.File::getFileName).reduce("",(x, y) -> x + "\r\n" + y)));
+            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.kontur.extern_api.sdk.service.File::getFileName).reduce("",(x, y) -> x + "\r\n" + y)));
         }
     }
 

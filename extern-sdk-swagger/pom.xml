@@ -74,7 +74,7 @@
     </dependencies>
 
     <properties>
-        <base-package>ru.skbkontur.sdk.extern</base-package>
+        <base-package>ru.kontur.extern_api.sdk.service.transport.swagger</base-package>
     </properties>
 
     <profiles>
@@ -97,11 +97,9 @@
                                     <inputSpec>${project.basedir}/src/main/resources/swagger.json</inputSpec>
                                     <language>java</language>
                                     <configOptions>
-                                        <modelPackage>${base-package}.service.transport.swagger.model
-                                        </modelPackage>
-                                        <apiPackage>${base-package}.service.transport.swagger.api</apiPackage>
-                                        <invokerPackage>${base-package}.service.transport.swagger.invoker
-                                        </invokerPackage>
+                                        <modelPackage>${base-package}.model</modelPackage>
+                                        <apiPackage>${base-package}.api</apiPackage>
+                                        <invokerPackage>${base-package}.invoker</invokerPackage>
                                     </configOptions>
                                 </configuration>
                             </execution>
