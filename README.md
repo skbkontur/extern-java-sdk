@@ -24,12 +24,11 @@
 
 - добавить в maven-проект (pom.xml) артефакт extern-sdk:
 ```xml
-                <dependency>
-                    <groupId>ru.skbkontur.sdk</groupId>
-                    <artifactId>extern-sdk</artifactId>
-                    <version>1.1</version>
-                </dependency>
-
+<dependency>
+    <groupId>ru.kontur.extern-api</groupId>
+    <artifactId>extern-api-java-sdk</artifactId>
+    <version>${extern-api-java-sdk.version}</version>
+</dependency>
 ```
 
 ## 3. Конфигурирование
