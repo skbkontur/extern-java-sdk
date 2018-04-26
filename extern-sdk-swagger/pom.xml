@@ -63,13 +63,6 @@
             <artifactId>joda-time</artifactId>
             <version>${jodatime-version}</version>
         </dependency>
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
@@ -96,6 +89,8 @@
                                 <configuration>
                                     <inputSpec>${project.basedir}/src/main/resources/swagger.json</inputSpec>
                                     <language>java</language>
+                                    <generateApiTests>false</generateApiTests>
+                                    <generateApiTests>false</generateApiTests>
                                     <configOptions>
                                         <modelPackage>${base-package}.model</modelPackage>
                                         <apiPackage>${base-package}.api</apiPackage>
