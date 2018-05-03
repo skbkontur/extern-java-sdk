@@ -35,6 +35,6 @@ public class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 2635312453073147688L;
 
     public ServiceException(ServiceError serviceError) {
-        super(serviceError.toString());
+        super(serviceError.toString(), serviceError.getCause());
     }
 }

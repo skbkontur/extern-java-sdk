@@ -185,11 +185,15 @@ public class QueryContext<R> implements Serializable {
     }
 
     public QueryContext<R> setServiceError(ApiException x) {
-        return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody());
+        return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody(), x);
     }
 
     public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         return setServiceError(new ServiceErrorImpl(errorCode, message, code, responseHeaders, responseBody));
+    }
+
+    public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message, int code, Map<String, List<String>> responseHeaders, String responseBody, ApiException cause) {
+        return setServiceError(new ServiceErrorImpl(errorCode, message, code, responseHeaders, responseBody, cause));
     }
 
     public QueryContext<R> setServiceError(String message, Throwable x) {
@@ -777,5 +781,13 @@ public class QueryContext<R> implements Serializable {
                 ((ApiKeyAuth) apiKeyAuth).setApiKeyPrefix(getAuthenticationProvider().authPrefix());
             }
         }
+    }
+
+    public static <T> QueryContext<T> fromResult(T result, String key) {
+        return new QueryContext<T>().setResult(result, key);
+    }
+
+    public static <T> QueryContext<T> fromError(ApiException e) {
+        return new QueryContext<T>().setServiceError(e);
     }
 }
