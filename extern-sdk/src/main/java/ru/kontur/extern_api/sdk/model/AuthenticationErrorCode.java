@@ -21,14 +21,20 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.util;
+package ru.kontur.extern_api.sdk.model;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.gson.annotations.SerializedName;
 
-public class TypeNotSuppliedException extends RuntimeException {
+public class AuthenticationErrorCode {
 
-    public <T> TypeNotSuppliedException(@NotNull Class<T> type) {
-        super(type.getCanonicalName() + " instance is required.");
+    @SerializedName("Code")
+    private String code;
+
+    public String getCode() {
+        return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

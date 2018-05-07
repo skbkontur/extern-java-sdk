@@ -40,11 +40,13 @@ import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.model.AuthInitResponse;
 import ru.kontur.extern_api.sdk.model.CertSessionCredentials;
 import ru.kontur.extern_api.sdk.providers.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.providers.AuthenticationServiceError;
 import ru.kontur.extern_api.sdk.providers.CryptoProvider;
-import ru.kontur.extern_api.sdk.util.TypeLookup;
 import ru.kontur.extern_api.sdk.providers.ServiceBaseUriProvider;
+import ru.kontur.extern_api.sdk.providers.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.providers.SignatureKeyProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptors.ServiceErrorImpl;
 import ru.kontur.extern_api.sdk.service.transport.invoker.ApiClient;
 import ru.kontur.extern_api.sdk.service.transport.invoker.ApiException;
 
@@ -56,7 +58,7 @@ import ru.kontur.extern_api.sdk.service.transport.invoker.ApiException;
  *
  * @author Ostanin Igor
  */
-public class CertificateAuthentication extends AuthenticationProviderAbstract {
+public final class CertificateAuthenticationProvider extends AuthenticationProviderAbstract {
 
     private static final Decoder b64decoder = Base64.getDecoder();
 
@@ -70,6 +72,7 @@ public class CertificateAuthentication extends AuthenticationProviderAbstract {
     private final URL certificateUrl;
     private final ApiClient apiClient;
     private final String skipCertValidation;
+
     private final ApiKeyProvider apiKeyProvider;
     private final ServiceBaseUriProvider serviceBaseUriProvider;
     private final CryptoProvider cryptoProvider;
@@ -77,34 +80,20 @@ public class CertificateAuthentication extends AuthenticationProviderAbstract {
 
     private CertSessionCredentials credentials;
 
-    /**
-     * @see CertificateAuthentication#CertificateAuthentication(URL, TypeLookup, boolean)
-     */
-    public CertificateAuthentication(
-            @NotNull URL certificateUrl,
-            @NotNull TypeLookup typeLookup) {
-        this(certificateUrl, typeLookup, false);
-    }
+    private CertificateAuthenticationProvider(
+            URL certificateUrl,
+            boolean skipCertValidation,
+            ApiKeyProvider apiKeyProvider,
+            ServiceBaseUriProvider serviceBaseUriProvider,
+            CryptoProvider cryptoProvider,
+            SignatureKeyProvider signatureKeyProvider) {
 
-    /**
-     * @param certificateUrl URL используемого для аутентификации сертификата
-     * @param typeLookup with {@link ApiKeyProvider}, {@link CryptoProvider}, authentication
-     * {@link ServiceBaseUriProvider} and {@link SignatureKeyProvider}
-     * @param skipCertValidation {@code true} - не проверять валидность сертификата, по умолчанию -
-     * {@code false}
-     */
-    public CertificateAuthentication(
-            @NotNull URL certificateUrl,
-            @NotNull TypeLookup typeLookup,
-            boolean skipCertValidation) {
+        this.apiKeyProvider = apiKeyProvider;
+        this.serviceBaseUriProvider = serviceBaseUriProvider;
+        this.cryptoProvider = cryptoProvider;
+        this.signatureKeyProvider = signatureKeyProvider;
 
-        Objects.requireNonNull(certificateUrl);
-        Objects.requireNonNull(typeLookup);
         this.certificateUrl = certificateUrl;
-        this.apiKeyProvider = typeLookup.require(ApiKeyProvider.class);
-        this.cryptoProvider = typeLookup.require(CryptoProvider.class);
-        this.serviceBaseUriProvider = typeLookup.require(ServiceBaseUriProvider.class);
-        this.signatureKeyProvider = typeLookup.require(SignatureKeyProvider.class);
         this.apiClient = new ApiClient();
         this.skipCertValidation = Boolean.valueOf(skipCertValidation).toString();
     }
@@ -125,11 +114,24 @@ public class CertificateAuthentication extends AuthenticationProviderAbstract {
         String thumbprint = signatureKeyProvider.getThumbprint();
 
         CertSessionCredentials credentials;
+        AuthInitResponse initialResp;
         try {
-            AuthInitResponse initialResp = initAuth(cert, apiKey, skipCertValidation);
+            initialResp = initAuth(cert, apiKey, skipCertValidation);
             credentials = confirmAuth(initialResp, apiKey, thumbprint);
         } catch (ApiException e) {
-            return QueryContext.fromError(e);
+            switch (e.getCode()) {
+                case 403:
+                    return new QueryContext<String>().setServiceError(
+                            AuthenticationServiceError.fromAuthenticationException(e));
+                default:
+                    return QueryContext.fromException(e);
+            }
+        } catch (RuntimeException e) {
+            return new QueryContext<String>()
+                    .setServiceError(new ServiceErrorImpl(
+                            ErrorCode.server, e.getMessage(),
+                            500, null, "", e
+                    ));
         }
 
         this.credentials = credentials;
@@ -207,4 +209,76 @@ public class CertificateAuthentication extends AuthenticationProviderAbstract {
         return DEFAULT_AUTH_PREFIX;
     }
 
+    /**
+     * @param certificateUrl URL используемого для аутентификации сертификата
+     * @param skipCertValidation {@code true} - не проверять валидность сертификата, по умолчанию -
+     * {@code false}
+     */
+    public static CertificateAuthenticationProviderBuilder usingCertificate(
+            @NotNull URL certificateUrl,
+            boolean skipCertValidation) {
+        return new CertificateAuthenticationProviderBuilder(certificateUrl, skipCertValidation);
+    }
+
+    /**
+     * @param certificateUrl URL используемого для аутентификации сертификата
+     * @see CertificateAuthenticationProvider#usingCertificate(URL, boolean)
+     */
+    public static CertificateAuthenticationProviderBuilder usingCertificate(
+            @NotNull URL certificateUrl) {
+        return usingCertificate(certificateUrl, false);
+    }
+
+    public static final class CertificateAuthenticationProviderBuilder {
+
+        private final URL certUrl;
+        private final boolean skipValidation;
+
+        private ApiKeyProvider apiKeyProvider;
+        private ServiceBaseUriProvider serviceBaseUriProvider;
+        private CryptoProvider cryptoProvider;
+        private SignatureKeyProvider signatureKeyProvider;
+
+        CertificateAuthenticationProviderBuilder(
+                @NotNull URL certUrl,
+                boolean skipValidation) {
+            this.certUrl = certUrl;
+            this.skipValidation = skipValidation;
+        }
+
+        public CertificateAuthenticationProviderBuilder setApiKeyProvider(
+                @NotNull ApiKeyProvider apiKeyProvider) {
+            this.apiKeyProvider = apiKeyProvider;
+            return this;
+        }
+
+        public CertificateAuthenticationProviderBuilder setServiceBaseUriProvider(
+                @NotNull ServiceBaseUriProvider serviceBaseUriProvider) {
+            this.serviceBaseUriProvider = serviceBaseUriProvider;
+            return this;
+        }
+
+        public CertificateAuthenticationProviderBuilder setCryptoProvider(
+                @NotNull CryptoProvider cryptoProvider) {
+            this.cryptoProvider = cryptoProvider;
+            return this;
+        }
+
+        public CertificateAuthenticationProviderBuilder setSignatureKeyProvider(
+                @NotNull SignatureKeyProvider signatureKeyProvider) {
+            this.signatureKeyProvider = signatureKeyProvider;
+            return this;
+        }
+
+        public CertificateAuthenticationProvider buildAuthenticationProvider() {
+            return new CertificateAuthenticationProvider(
+                    Objects.requireNonNull(certUrl),
+                    skipValidation,
+                    Objects.requireNonNull(apiKeyProvider),
+                    Objects.requireNonNull(serviceBaseUriProvider),
+                    Objects.requireNonNull(cryptoProvider),
+                    Objects.requireNonNull(signatureKeyProvider)
+            );
+        }
+    }
 }

@@ -41,7 +41,7 @@ public interface ServiceError {
         server(1, "A server side error."),
         auth(2, "An authentication error."),
         unknownAuth(3, "Unknown authenticator."),
-        business(4, "Unkonow business error.");
+        business(4, "Unknown business error.");
 
         private final int value;
         private final String message;

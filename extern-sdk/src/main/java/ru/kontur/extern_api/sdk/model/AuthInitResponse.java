@@ -29,16 +29,16 @@ import ru.kontur.extern_api.sdk.providers.auth.Link;
 public class AuthInitResponse {
 
     @SerializedName("Link")
-    private ru.kontur.extern_api.sdk.providers.auth.Link link;
+    private Link link;
 
     @SerializedName("EncryptedKey")
-    private String encryptedKey;
+    private String encryptedKey = "";
 
 
     public AuthInitResponse() {
     }
 
-    public ru.kontur.extern_api.sdk.providers.auth.Link getLink() {
+    public Link getLink() {
         return link;
     }
 

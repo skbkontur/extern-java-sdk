@@ -30,7 +30,7 @@ public class CertSessionCredentials {
     @SerializedName("Sid")
     private String sid;
 
-    @SerializedName("RefreshToken ")
+    @SerializedName("RefreshToken")
     private String refreshToken;
 
     public String getSid() {
