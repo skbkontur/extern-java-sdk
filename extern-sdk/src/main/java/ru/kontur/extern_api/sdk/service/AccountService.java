@@ -28,16 +28,17 @@ import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
  * @author AlexS
  */
-public interface AccountService {
+public interface AccountService extends Providers {
 
     CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync();
 

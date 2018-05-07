@@ -44,6 +44,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.accounts.AccountsValidator;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
@@ -52,14 +53,12 @@ import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.providers.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.providers.ServiceError;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
-
 public class AccountServiceGetAccountTest {
     private static ExternEngine engine;
     private static Server server;
@@ -118,8 +117,6 @@ public class AccountServiceGetAccountTest {
                     public void raiseUnauthenticated(ServiceError x) {
                     }
                 });
-
-        engine.configureServices();
     }
 
     @Test

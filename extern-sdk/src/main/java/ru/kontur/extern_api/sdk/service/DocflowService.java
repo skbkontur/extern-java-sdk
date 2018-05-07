@@ -31,16 +31,22 @@ import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocumentToSend;
 import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.provider.UriProvider;
+import ru.kontur.extern_api.sdk.provider.Providers;
 
 
 /**
  * @author AlexS
  */
-public interface DocflowService {
+public interface DocflowService extends Providers {
 
     CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId);
 

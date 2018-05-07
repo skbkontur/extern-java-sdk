@@ -43,6 +43,11 @@
             <artifactId>extern-api-java-sdk</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.skbkontur.sdk</groupId>
+            <artifactId>extern-sdk-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

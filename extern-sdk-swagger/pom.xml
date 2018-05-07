@@ -28,11 +28,11 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-generated-client</artifactId>
-    <name>Extern Api Generated REST Client for Java SDK</name>
+    <name>Extern Api Generated REST Swagger Client for Java SDK</name>
 
     <packaging>jar</packaging>
 
@@ -63,7 +63,6 @@
             <artifactId>joda-time</artifactId>
             <version>${jodatime-version}</version>
         </dependency>
-
     </dependencies>
 
     <properties>
@@ -83,7 +82,7 @@
                     <plugin>
                         <groupId>io.swagger</groupId>
                         <artifactId>swagger-codegen-maven-plugin</artifactId>
-                        <version>${swagger-codegen-maven-plugin.version}</version>
+                        <!--                        <version>${swagger-codegen-maven-plugin.version}</version>-->
                         <executions>
                             <execution>
                                 <configuration>
@@ -100,7 +99,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
 

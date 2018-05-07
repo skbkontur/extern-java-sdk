@@ -36,7 +36,9 @@
     </description>
     <url>https://github.com/skbkontur/extern-java-sdk</url>
 
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
+    
+    <packaging>pom</packaging>
 
     <licenses>
         <license>
@@ -45,15 +47,14 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
+    
     <developers>
         <developer>
             <organization>SKB Kontur</organization>
             <organizationUrl>https://kontur.ru/</organizationUrl>
         </developer>
     </developers>
-
-
+    
     <scm>
         <url>https://github.com/skbkontur/extern-java-sdk</url>
         <connection>scm:git:git://github.com/skbkontur/extern-java-sdk.git</connection>
@@ -71,7 +72,7 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
+    
     <prerequisites>
         <maven>3.2</maven>
     </prerequisites>
@@ -120,8 +121,10 @@
 
     <modules>
         <module>extern-sdk</module>
+        <module>extern-sdk-common</module>
         <module>extern-sdk-examples</module>
         <module>extern-sdk-swagger</module>
+        <module>extern-sdk-swagger-adaptor</module>
     </modules>
 
     <build>
@@ -268,7 +271,7 @@
         </plugins>
 
     </build>
-
+    
     <profiles>
         <profile>
             <id>release</id>
