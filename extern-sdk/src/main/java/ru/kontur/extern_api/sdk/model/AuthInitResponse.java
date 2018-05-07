@@ -9,10 +9,8 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,21 +18,43 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
-package ru.kontur.extern_api.sdk.service.transport.adaptors;
+package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.providers.ServiceError;
+import com.google.gson.annotations.SerializedName;
+import ru.kontur.extern_api.sdk.providers.auth.Link;
+
+public class AuthInitResponse {
+
+    @SerializedName("Link")
+    private Link link;
+
+    @SerializedName("EncryptedKey")
+    private String encryptedKey = "";
 
 
-/**
- * @author AlexS
- */
-public class ServiceException extends RuntimeException {
-
-    private static final long serialVersionUID = 2635312453073147688L;
-
-    public ServiceException(ServiceError serviceError) {
-        super(serviceError.toString(), serviceError.getCause());
+    public AuthInitResponse() {
     }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
+    /**
+     * @return base64 encoded secret
+     */
+    public String getEncryptedKey() {
+        return encryptedKey;
+    }
+
+    public void setEncryptedKey(String key) {
+        this.encryptedKey = key;
+    }
+
 }

@@ -18,3 +18,4 @@ extern-sdk-test
 /extern-sdk-examples/nbactions-release-profile.xml
 /nb-configuration.xml
 /extern-sdk/nbactions.xml
+extern-java-sdk-test-runner

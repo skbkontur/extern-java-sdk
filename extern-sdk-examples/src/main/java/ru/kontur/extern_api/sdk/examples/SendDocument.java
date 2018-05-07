@@ -92,7 +92,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
  * </pre>
  *
  */
-class SendDocument {
+public class SendDocument {
 
     public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
         // необходимо передать путь
