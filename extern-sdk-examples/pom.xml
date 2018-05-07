@@ -16,7 +16,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>extern-java-sdk</artifactId>
+            <artifactId>extern-sdk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.skbkontur.sdk</groupId>
+            <artifactId>extern-sdk-common</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
