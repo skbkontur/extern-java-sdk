@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.providers.auth;
 
+import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -40,16 +41,17 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
-import ru.kontur.extern_api.sdk.model.AuthInitResponse;
-import ru.kontur.extern_api.sdk.providers.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
+import ru.kontur.extern_api.sdk.provider.auth.Link;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class CertificateAuthenticationTest {
 
-    private static final Header jsonContentType = new Header("Content-Type", "application/json");
+    private static final Header JSON_CONTENT_TYPE = new Header("Content-Type", "application/json");
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
-    private static final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
 
     private static ClientAndServer mockServer;
     private CertificateAuthenticationProvider auth;
@@ -75,7 +77,7 @@ public class CertificateAuthenticationTest {
         link.setHref(href);
         link.setRel(rel);
         authInitResponse.setLink(link);
-        return gson.toJson(authInitResponse);
+        return GSON.toJson(authInitResponse);
     }
 
     private void createAnswerForInitiation(int code, String body) {
@@ -85,7 +87,7 @@ public class CertificateAuthenticationTest {
                         exactly(1))
                 .respond(response()
                         .withStatusCode(code)
-                        .withHeader(jsonContentType)
+                        .withHeader(JSON_CONTENT_TYPE)
                         .withBody(body)
                 );
     }
@@ -94,7 +96,7 @@ public class CertificateAuthenticationTest {
         new MockServerClient(HOST, PORT)
                 .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
                 .respond(
-                        response().withStatusCode(code).withHeader(jsonContentType).withBody(body)
+                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
                 );
     }
 

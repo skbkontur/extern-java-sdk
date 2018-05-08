@@ -26,18 +26,57 @@ package ru.kontur.extern_api.sdk.service.impl;
 
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.EventService;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.EventsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.annotation.Component;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 
 /**
  * @author AlexS
  */
-public class EventServiceImpl extends BaseService<EventsAdaptor> implements EventService {
+public class EventServiceImpl extends AbstractService<EventsAdaptor> implements EventService {
 
     private static final String EN_EVENT = "event";
+
+    @Component("eventsAdaptor")
+    private EventsAdaptor eventsAdaptor;
+    
+    @Override
+	public EventService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
+		super.serviceBaseUriProvider = serviceBaseUriProvider;
+        return this;
+	}
+
+    @Override
+	public EventService authenticationProvider(AuthenticationProvider authenticationProvider) {
+		super.authenticationProvider = authenticationProvider;
+        return this;
+	}
+
+    @Override
+	public EventService accountProvider(AccountProvider accountProvider) {
+		super.accountProvider = accountProvider;
+        return this;
+	}
+
+    @Override
+	public EventService apiKeyProvider(ApiKeyProvider apiKeyProvider) {
+		super.apiKeyProvider = apiKeyProvider;
+        return this;
+	}
+
+    @Override
+	public EventService cryptoProvider(CryptoProvider cryptoProvider) {
+		super.cryptoProvider = cryptoProvider;
+        return this;
+	}
 
     @Override
     public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size) {
@@ -45,13 +84,12 @@ public class EventServiceImpl extends BaseService<EventsAdaptor> implements Even
         return cxt
                 .setFromId(fromId)
                 .setSize(size)
-                .applyAsync(api::getEvents);
+                .applyAsync(eventsAdaptor::getEvents);
     }
 
     @Override
     public QueryContext<EventsPage> getEvents(QueryContext<?> parent) {
         QueryContext<EventsPage> cxt = createQueryContext(parent, EN_EVENT);
-        return cxt.apply(api::getEvents);
+        return cxt.apply(eventsAdaptor::getEvents);
     }
-
 }

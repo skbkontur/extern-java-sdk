@@ -21,22 +21,31 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.providers;
+package ru.kontur.extern_api.sdk.provider.auth;
 
 import com.google.gson.Gson;
-import ru.kontur.extern_api.sdk.model.AuthenticationErrorCode;
-import ru.kontur.extern_api.sdk.service.transport.invoker.ApiException;
+import com.google.gson.JsonSyntaxException;
+import java.util.List;
+import java.util.Map;
+import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 
 final public class AuthenticationServiceError implements ServiceError {
 
-    private static final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
 
     private final ApiException cause;
-    private final String code;
+    private final int code;
+    private final String message;
+    private final Map<String, List<String>> responseHeaders;
+    private final String responseBody;
 
-    private AuthenticationServiceError(ApiException cause, String code) {
-        this.cause = cause;
+    private AuthenticationServiceError(int code, String message, String responseBody, Map<String, List<String>> responseHeaders, ApiException cause) {
         this.code = code;
+        this.message = message;
+        this.responseBody = responseBody;
+        this.responseHeaders = responseHeaders;
+        this.cause = cause;
     }
 
     @Override
@@ -46,12 +55,12 @@ final public class AuthenticationServiceError implements ServiceError {
 
     @Override
     public int getResponseCode() {
-        return 403;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return code;
+        return message;
     }
 
     @Override
@@ -63,14 +72,33 @@ final public class AuthenticationServiceError implements ServiceError {
      * При возникновении ошибки на любом шаге аутентификации, сервер высылает ответ с кодом 403
      * (Forbidden). В теле ответа код ошибки.
      *
+     * @param e ApiException исключение транспортного уровня
+     * @return AuthenticationServiceError объект, реализующий интерфейс ServiceError
      * @throws com.google.gson.JsonSyntaxException – если возвращённый json невозможно распарсить в
      * {@link AuthenticationErrorCode}
      */
     public static AuthenticationServiceError fromAuthenticationException(ApiException e) {
 
-        AuthenticationErrorCode code = gson
-                .fromJson(e.getResponseBody(), AuthenticationErrorCode.class);
+        try {
+            GSON.fromJson(e.getResponseBody(), Map.class);
+        
+            String code = (String)GSON.fromJson(e.getResponseBody(), Map.class).get("Code");
 
-        return new AuthenticationServiceError(e, code.getCode());
+        
+            return new AuthenticationServiceError(e.getCode(), code, e.getResponseBody(), e.getResponseHeaders(), e);
+        }
+        catch (JsonSyntaxException x) {
+            return new AuthenticationServiceError(e.getCode(), e.getResponseBody(), e.getResponseBody(), e.getResponseHeaders(), e);
+        }
+    }
+
+    @Override
+    public Map<String, List<String>> getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    @Override
+    public String getResponseBody() {
+        return responseBody;
     }
 }

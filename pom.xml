@@ -117,8 +117,6 @@
         <mockserver-netty.version>5.3.0</mockserver-netty.version>
     </properties>
 
-    <packaging>pom</packaging>
-
     <modules>
         <module>extern-sdk</module>
         <module>extern-sdk-common</module>

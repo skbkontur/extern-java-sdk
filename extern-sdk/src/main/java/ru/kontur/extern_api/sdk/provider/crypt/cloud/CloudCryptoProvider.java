@@ -43,6 +43,7 @@ import java.util.function.Function;
 
 import static ru.kontur.extern_api.sdk.Messages.C_NO_DECRYPT;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_SIGNATURE;
+import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AdaptorContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
@@ -285,14 +286,14 @@ public class CloudCryptoProvider implements CryptoProvider {
         QueryContext<T> cxt = new QueryContext<>(SIGNATURE);
         cxt.setAuthenticationProvider(authenticationProvider);
         cxt.setApiKeyProvider(apiKeyProvider);
-        return cxt;
+        return acquireSessionId(cxt);
     }
 
     private <T> QueryContext<T> createQueryContext(QueryContext<?> parent, String entityName) {
         QueryContext<T> cxt = new QueryContext<>(parent, entityName);
         cxt.setAuthenticationProvider(authenticationProvider);
         cxt.setApiKeyProvider(apiKeyProvider);
-        return cxt;
+        return acquireSessionId(cxt);
     }
 
     private Map<String, String> acceptAccessToken(QueryContext<?> context, Map<String, String> headerParams) {
@@ -301,6 +302,26 @@ public class CloudCryptoProvider implements CryptoProvider {
         return headerParams;
     }
 
+    private <T> QueryContext<T> acquireSessionId(QueryContext<T> cxt) {
+        String sessionId = cxt.getSessionId();
+        if (sessionId == null || sessionId.isEmpty()) {
+            if (authenticationProvider != null) {
+                QueryContext<String> authQuery = authenticationProvider.sessionId();
+                if (authQuery.isFail()) {
+                    cxt.setServiceError(authQuery);
+                }
+                else {
+                    cxt.setSessionId(authQuery.get()).getSessionId();
+                    cxt.setAuthPrefix(authenticationProvider.authPrefix());
+                }
+            }
+            else {
+                cxt.setServiceError(ServiceError.ErrorCode.unknownAuth);
+            }
+        }
+        return cxt;
+    }
+    
     class RequestResponseQuery implements Query<RequestResponse> {
 
         private final ContentRequest contentRequest;

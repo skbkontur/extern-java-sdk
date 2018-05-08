@@ -21,20 +21,40 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.provider.auth;
 
 import com.google.gson.annotations.SerializedName;
+import ru.kontur.extern_api.sdk.provider.auth.Link;
 
-public class AuthenticationErrorCode {
+public class AuthInitResponse {
 
-    @SerializedName("Code")
-    private String code;
+    @SerializedName("Link")
+    private Link link;
 
-    public String getCode() {
-        return code;
+    @SerializedName("EncryptedKey")
+    private String encryptedKey = "";
+
+
+    public AuthInitResponse() {
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public Link getLink() {
+        return link;
     }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
+    /**
+     * @return base64 encoded secret
+     */
+    public String getEncryptedKey() {
+        return encryptedKey;
+    }
+
+    public void setEncryptedKey(String key) {
+        this.encryptedKey = key;
+    }
+
 }
