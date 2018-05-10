@@ -32,22 +32,19 @@
         <version>1.4-SNAPSHOT</version>
     </parent>
 
-    <artifactId>extern-sdk-swagger-adaptor</artifactId>
+    <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-sdk-common</artifactId>
-            <version>1.4-SNAPSHOT</version>
-            <type>jar</type>
+            <artifactId>extern-api-java-sdk-common</artifactId>
         </dependency>
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-generated-client</artifactId>
             <version>${project.version}</version>
-             
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

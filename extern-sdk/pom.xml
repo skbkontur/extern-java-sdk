@@ -79,13 +79,12 @@
 
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-sdk-common</artifactId>
-            <version>${project.version}</version>
+            <artifactId>extern-api-java-sdk-common</artifactId>
         </dependency>
 
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-sdk-swagger-adaptor</artifactId>
+            <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
             <version>${project.version}</version>
         </dependency>
 

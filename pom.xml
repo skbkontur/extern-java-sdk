@@ -339,6 +339,11 @@
                 <version>${mockserver-netty.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 
         </dependencies>
