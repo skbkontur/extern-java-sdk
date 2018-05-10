@@ -80,8 +80,6 @@ final public class AuthenticationServiceError implements ServiceError {
     public static AuthenticationServiceError fromAuthenticationException(ApiException e) {
 
         try {
-            GSON.fromJson(e.getResponseBody(), Map.class);
-        
             String code = (String)GSON.fromJson(e.getResponseBody(), Map.class).get("Code");
 
         
