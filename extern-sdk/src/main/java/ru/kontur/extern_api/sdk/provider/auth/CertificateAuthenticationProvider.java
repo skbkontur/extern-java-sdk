@@ -42,6 +42,7 @@ import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.SignatureKeyProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -165,7 +166,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         String apiKey,
         String skipCertValidation) throws ApiException {
 
-        Map<String, String> queryParams = new HashMap<>(2);
+        Map<String, Object> queryParams = new HashMap<>(2);
         queryParams.put(APIKEY_QUERY_PARAM, apiKey);
         queryParams.put(SKIP_VALIDATION_QUERY_PARAM, skipCertValidation);
 
@@ -179,14 +180,14 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
 
         byte[] decodedSecret = decodeSecret(initial.getEncryptedKey(), thumbprint);
 
-        Map<String, String> queryParams = new HashMap<>(2);
+        Map<String, Object> queryParams = new HashMap<>(2);
         queryParams.put(APIKEY_QUERY_PARAM, apiKey);
         queryParams.put(THUMBPRINT_QUERY_PARAM, thumbprint);
 
         return post(APPROVE_CERT_PATH, queryParams, decodedSecret, CertSessionCredentials.class);
     }
 
-    private <T> T post(String path, Map<String, String> queryParams, Object body, Class<T> outType)
+    private <T> T post(String path, Map<String, Object> queryParams, Object body, Class<T> outType)
         throws ApiException {
 
         Map<String, Object> forms = Collections.emptyMap();
@@ -195,9 +196,9 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
             headers.put("Content-Type", "application/octet-stream");
         }
 
-        return httpClient
-            .submitHttpRequest(path, "POST", queryParams, body, headers, forms, outType)
-            .getData();
+				ApiResponse<T> response = httpClient.submitHttpRequest(path, "POST", queryParams, body, headers, forms, outType);
+				
+        return response.getData();
     }
 
     @Override

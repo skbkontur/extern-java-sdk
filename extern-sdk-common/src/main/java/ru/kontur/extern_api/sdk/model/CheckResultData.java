@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,9 @@ import java.util.Map;
  */
 public class CheckResultData {
 
+		@SerializedName("documents-errors")
     private Map<String, List<CheckError>> documentsErrors = null;
+		@SerializedName("common-errors")
     private List<CheckError> commonErrors = null;
 
     public CheckResultData documentsErrors(Map<String, List<CheckError>> documentsErrors) {

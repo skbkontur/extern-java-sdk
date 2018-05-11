@@ -21,15 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
+
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 
 /**
  * @author alexs
  */
 public class AdditionalClientInfo {
 
+    @SerializedName("signer-type")
     private SignerTypeEnum signerType = null;
+    @SerializedName("sender-full-name")
     private String senderFullName = null;
     private Taxpayer taxpayer = null;
 
@@ -57,11 +65,10 @@ public class AdditionalClientInfo {
         this.taxpayer = taxpayer;
     }
 
+    @JsonAdapter(SignerTypeEnum.Adapter.class)
     public enum SignerTypeEnum {
         UNKNOWN("unknown"),
-
         CHIEF("chief"),
-
         REPRESENTATIVE("representative");
 
         private final String value;
@@ -86,6 +93,20 @@ public class AdditionalClientInfo {
         @Override
         public String toString() {
             return String.valueOf(value);
+        }
+
+        public static class Adapter extends TypeAdapter<SignerTypeEnum> {
+
+            @Override
+            public void write(final JsonWriter jsonWriter, final SignerTypeEnum enumeration) throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public SignerTypeEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return SignerTypeEnum.fromValue(String.valueOf(value));
+            }
         }
     }
 }
