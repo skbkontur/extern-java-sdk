@@ -24,12 +24,12 @@
 
 package ru.kontur.extern_api.sdk.docflows;
 
+import java.util.Date;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static ru.kontur.extern_api.sdk.common.StandardObjectsValidator.validateId;
 
-import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.model.Content;
@@ -67,9 +67,9 @@ public class DocflowsValidator {
         validateId(docflowPageItem.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflowPageItem.getType());
         assertEquals("Status is wrong!", "urn:nss:nid", docflowPageItem.getStatus());
-        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE),
+        assertEquals("SendDate is wrong!", StandardValues.standardDate(),
             docflowPageItem.getSendDate());
-        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE),
+        assertEquals("LastChangeDate is wrong!", StandardValues.standardDate(),
             docflowPageItem.getLastChangeDate());
 
         StandardObjectsValidator.validateEmptyList(docflowPageItem.getLinks(), "Links");
@@ -81,9 +81,9 @@ public class DocflowsValidator {
         validateId(docflow.getId());
         assertEquals("Type is wrong!", "urn:nss:nid", docflow.getType());
         assertEquals("Status is wrong!", "urn:nss:nid", docflow.getStatus());
-        assertEquals("SendDate is wrong!", new DateTime(StandardValues.DATE),
+        assertEquals("SendDate is wrong!", StandardValues.standardDate(),
             docflow.getSendDate());
-        assertEquals("LastChangeDate is wrong!", new DateTime(StandardValues.DATE),
+        assertEquals("LastChangeDate is wrong!", StandardValues.standardDate(),
             docflow.getLastChangeDate());
 
         if (withDescription) {

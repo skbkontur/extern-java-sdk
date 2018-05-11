@@ -23,7 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import org.joda.time.DateTime;
+import java.util.Date;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -304,10 +304,10 @@ public class DocflowServiceImpl extends AbstractService<DocflowsAdaptor> impleme
         long skip,
         int take,
         String innKpp,
-        DateTime updatedFrom,
-        DateTime updatedTo,
-        DateTime createdFrom,
-        DateTime createdTo,
+        Date updatedFrom,
+        Date updatedTo,
+        Date createdFrom,
+        Date createdTo,
         String type
     ) {
         QueryContext<DocflowPage> cxt = createQueryContext(EN_DFW);

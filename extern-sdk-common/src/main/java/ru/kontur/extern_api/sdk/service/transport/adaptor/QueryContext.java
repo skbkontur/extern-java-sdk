@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.HttpsURLConnection;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
@@ -635,35 +635,35 @@ public class QueryContext<R> implements Serializable {
         return set(INN_KPP, innKpp);
     }
 
-    public DateTime getUpdatedFrom() {
-        return (DateTime) params.get(UPDATED_FROM);
+    public Date getUpdatedFrom() {
+        return (Date) params.get(UPDATED_FROM);
     }
 
-    public QueryContext<R> setUpdatedFrom(DateTime updatedFrom) {
+    public QueryContext<R> setUpdatedFrom(Date updatedFrom) {
         return set(UPDATED_FROM, updatedFrom);
     }
 
-    public DateTime getUpdatedTo() {
-        return (DateTime) params.get(UPDATED_TO);
+    public Date getUpdatedTo() {
+        return (Date) params.get(UPDATED_TO);
     }
 
-    public QueryContext<R> setUpdatedTo(DateTime updatedTo) {
+    public QueryContext<R> setUpdatedTo(Date updatedTo) {
         return set(UPDATED_TO, updatedTo);
     }
 
-    public DateTime getCreatedFrom() {
-        return (DateTime) params.get(CREATED_FROM);
+    public Date getCreatedFrom() {
+        return (Date) params.get(CREATED_FROM);
     }
 
-    public QueryContext<R> setCreatedFrom(DateTime createdFrom) {
+    public QueryContext<R> setCreatedFrom(Date createdFrom) {
         return set(CREATED_FROM, createdFrom);
     }
 
-    public DateTime getCreatedTo() {
-        return (DateTime) params.get(CREATED_TO);
+    public Date getCreatedTo() {
+        return (Date) params.get(CREATED_TO);
     }
 
-    public QueryContext<R> setCreatedTo(DateTime createdTo) {
+    public QueryContext<R> setCreatedTo(Date createdTo) {
         return set(CREATED_TO, createdTo);
     }
 

@@ -24,7 +24,9 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
+import java.util.Date;
 import java.util.stream.Collectors;
+import org.joda.time.DateTime;
 
 
 /**
@@ -47,14 +49,14 @@ public class DocflowDto {
 
         docflow.setId(dto.getId());
 
-        docflow.setLastChangeDate(dto.getLastChangeDate());
+        docflow.setLastChangeDate(dto.getLastChangeDate()==null ? null : new Date(dto.getLastChangeDate().getMillis()));
 
         if (dto.getLinks() != null) {
             LinkDto linkDto = new LinkDto();
             docflow.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
         }
 
-        docflow.setSendDate(dto.getSendDate());
+        docflow.setSendDate(dto.getSendDate()==null ? null : new Date(dto.getSendDate().getMillis()));
 
         docflow.setStatus(dto.getStatus());
 
@@ -79,14 +81,14 @@ public class DocflowDto {
 
         dto.setId(docflow.getId());
 
-        dto.setLastChangeDate(docflow.getLastChangeDate());
+        dto.setLastChangeDate(docflow.getLastChangeDate()==null ? null : new DateTime(docflow.getLastChangeDate().getTime()));
 
         if (docflow.getLinks() != null) {
             LinkDto linkDto = new LinkDto();
             dto.setLinks(docflow.getLinks().stream().map(linkDto::toDto).collect(Collectors.toList()));
         }
 
-        dto.setSendDate(docflow.getSendDate());
+        dto.setSendDate(docflow.getSendDate()==null ? null : new DateTime(docflow.getSendDate().getTime()));
 
         dto.setStatus(docflow.getStatus());
 

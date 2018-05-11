@@ -45,6 +45,7 @@
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-generated-client</artifactId>
             <version>${project.version}</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * @author alexs
  */
 @Target({ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Component {
     String value();
 }

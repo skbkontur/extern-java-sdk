@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
+import java.util.Date;
+import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.PassportInfo;
 
 
@@ -40,7 +42,7 @@ class PassportInfoDto {
 
         passportInfo.setCode(dto.getCode());
         passportInfo.setIssuedBy(dto.getIssuedBy());
-        passportInfo.setIssuedDate(dto.getIssuedDate());
+        passportInfo.setIssuedDate(dto.getIssuedDate()==null ? null : new Date(dto.getIssuedDate().getMillis()));
         passportInfo.setSeriesNumber(dto.getSeriesNumber());
 
         return passportInfo;
@@ -55,7 +57,7 @@ class PassportInfoDto {
 
         dto.setCode(passportInfo.getCode());
         dto.setIssuedBy(passportInfo.getIssuedBy());
-        dto.setIssuedDate(passportInfo.getIssuedDate());
+        dto.setIssuedDate(passportInfo.getIssuedDate()==null ? null : new DateTime(passportInfo.getIssuedDate().getTime()));
         dto.setSeriesNumber(passportInfo.getSeriesNumber());
 
         return dto;

@@ -24,6 +24,10 @@
 
 package ru.kontur.extern_api.sdk.common;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * MIT License
  *
@@ -51,4 +55,13 @@ public interface StandardValues {
 
     String DATE = "2018-04-03T06:24:33.459Z";
     String ID = "00000000-0000-0000-0000-000000000000";
+		
+		static Date standardDate() {
+			try {
+				return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(DATE);
+			}
+			catch (ParseException x) {
+				return new Date();
+			}
+		}
 }

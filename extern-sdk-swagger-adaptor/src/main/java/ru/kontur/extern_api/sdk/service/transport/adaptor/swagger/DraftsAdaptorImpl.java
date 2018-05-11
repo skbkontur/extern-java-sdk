@@ -214,6 +214,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @param cxt a context
      * @return Map&lt;String,Object&gt;
      */
+		@SuppressWarnings("unchecked")
     @Override
     public QueryContext<Map<String, Object>> check(QueryContext<Map<String, Object>> cxt) {
         try {

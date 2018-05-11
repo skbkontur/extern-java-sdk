@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -91,10 +92,10 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                             cxt.getSkip(),
                             cxt.getTake(),
                             cxt.getInnKpp(),
-                            cxt.getUpdatedFrom(),
-                            cxt.getUpdatedTo(),
-                            cxt.getCreatedFrom(),
-                            cxt.getCreatedTo(),
+                            cxt.getUpdatedFrom()==null ? null : new DateTime(cxt.getUpdatedFrom().getTime()),
+                            cxt.getUpdatedTo()==null ? null : new DateTime(cxt.getUpdatedTo().getTime()),
+                            cxt.getCreatedFrom()==null ? null : new DateTime(cxt.getCreatedFrom().getTime()),
+                            cxt.getCreatedTo()==null ? null : new DateTime(cxt.getCreatedTo().getTime()),
                             cxt.getType())
                 ),
                 DOCFLOW_PAGE
@@ -465,6 +466,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
+		@SuppressWarnings("unchecked")
     @Override
     public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt) {
         try {

@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.docflows.service;
 
+import java.util.Date;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
@@ -39,7 +40,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -189,10 +189,10 @@ public class DocflowServiceGetDocflowsTest {
         queryContext.setSkip(0);
         queryContext.setTake(0);
         queryContext.setInnKpp("string");
-        queryContext.setUpdatedFrom(new DateTime());
-        queryContext.setUpdatedTo(new DateTime());
-        queryContext.setCreatedFrom(new DateTime());
-        queryContext.setCreatedTo(new DateTime());
+        queryContext.setUpdatedFrom(new Date());
+        queryContext.setUpdatedTo(new Date());
+        queryContext.setCreatedFrom(new Date());
+        queryContext.setCreatedTo(new Date());
         queryContext.setType("string");
         QueryContext<DocflowPage> docflowPageQueryContext = engine.getDocflowService()
             .getDocflows(queryContext);
@@ -211,10 +211,10 @@ public class DocflowServiceGetDocflowsTest {
         queryContext.setSkip(0);
         queryContext.setTake(0);
         queryContext.setInnKpp("string");
-        queryContext.setUpdatedFrom(new DateTime());
-        queryContext.setUpdatedTo(new DateTime());
-        queryContext.setCreatedFrom(new DateTime());
-        queryContext.setCreatedTo(new DateTime());
+        queryContext.setUpdatedFrom(new Date());
+        queryContext.setUpdatedTo(new Date());
+        queryContext.setCreatedFrom(new Date());
+        queryContext.setCreatedTo(new Date());
         queryContext.setType("string");
         return engine.getDocflowService().getDocflows(queryContext).get();
     }
@@ -222,8 +222,8 @@ public class DocflowServiceGetDocflowsTest {
     private DocflowPage getDocflowPageAsync() {
         try {
             return engine.getDocflowService()
-                .getDocflowsAsync(true, true, 0, 0, "string", new DateTime(), new DateTime(),
-                    new DateTime(), new DateTime(), "string").get().get();
+                .getDocflowsAsync(true, true, 0, 0, "string", new Date(), new Date(),
+                    new Date(), new Date(), "string").get().get();
         } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;

@@ -57,6 +57,7 @@ public class DocumentToSendDto {
         return documentToSend;
     }
 
+		@SuppressWarnings("unchecked")
     public ru.kontur.extern_api.sdk.model.DocumentToSend fromDto(Map<String, Object> dto) {
         if (dto == null) {
             return null;

@@ -24,7 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import org.joda.time.DateTime;
+import java.util.Date;
 
 
 /**
@@ -36,7 +36,7 @@ public class PassportInfo {
 
     private String seriesNumber = null;
 
-    private DateTime issuedDate = null;
+    private Date issuedDate = null;
 
     private String issuedBy = null;
 
@@ -56,11 +56,11 @@ public class PassportInfo {
         this.seriesNumber = seriesNumber;
     }
 
-    public DateTime getIssuedDate() {
+    public Date getIssuedDate() {
         return issuedDate;
     }
 
-    public void setIssuedDate(DateTime issuedDate) {
+    public void setIssuedDate(Date issuedDate) {
         this.issuedDate = issuedDate;
     }
 

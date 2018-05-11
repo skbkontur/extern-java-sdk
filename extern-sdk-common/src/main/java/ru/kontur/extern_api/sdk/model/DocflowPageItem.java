@@ -24,8 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import org.joda.time.DateTime;
-
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,8 +38,8 @@ public class DocflowPageItem {
     private String type = null;
     private String status = null;
     private List<Link> links = null;
-    private DateTime sendDate = null;
-    private DateTime lastChangeDate = null;
+    private Date sendDate = null;
+    private Date lastChangeDate = null;
 
     public UUID getId() {
         return id;
@@ -74,19 +73,19 @@ public class DocflowPageItem {
         this.links = links;
     }
 
-    public DateTime getSendDate() {
+    public Date getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(DateTime sendDate) {
+    public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
     }
 
-    public DateTime getLastChangeDate() {
+    public Date getLastChangeDate() {
         return lastChangeDate;
     }
 
-    public void setLastChangeDate(DateTime lastChangeDate) {
+    public void setLastChangeDate(Date lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
     }
 }
