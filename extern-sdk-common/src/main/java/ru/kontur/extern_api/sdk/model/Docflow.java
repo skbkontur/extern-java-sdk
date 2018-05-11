@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -40,7 +41,9 @@ public class Docflow {
     private DocflowDescription description = null;
     private List<Document> documents = null;
     private List<Link> links = null;
+		@SerializedName("send-date")
     private Date sendDate = null;
+		@SerializedName("last-change-date")
     private Date lastChangeDate = null;
 
     /**

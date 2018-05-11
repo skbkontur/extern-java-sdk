@@ -21,65 +21,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 
 /**
  * @author AlexS
  */
 public class Account {
 
-    private UUID id = null;
-    private String inn = null;
-    private String kpp = null;
-    private String organizationName = null;
-    private List<Link> links = null;
+	private UUID id = null;
+	private String inn = null;
+	private String kpp = null;
+	@SerializedName("organization-name")
+	private String organizationName = null;
+	private List<Link> links = new ArrayList<>();
 
-    public UUID getId() {
-        return id;
-    }
+	public UUID getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = UUID.fromString(id);
-    }
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
+	}
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-    public String getInn() {
-        return inn;
-    }
+	public String getInn() {
+		return inn;
+	}
 
-    public void setInn(String inn) {
-        this.inn = inn;
-    }
+	public void setInn(String inn) {
+		this.inn = inn;
+	}
 
-    public String getKpp() {
-        return kpp;
-    }
+	public String getKpp() {
+		return kpp;
+	}
 
-    public void setKpp(String kpp) {
-        this.kpp = kpp;
-    }
+	public void setKpp(String kpp) {
+		this.kpp = kpp;
+	}
 
-    public String getOrganizationName() {
-        return organizationName;
-    }
+	public String getOrganizationName() {
+		return organizationName;
+	}
 
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
-    }
+	public void setOrganizationName(String organizationName) {
+		this.organizationName = organizationName;
+	}
 
-    public List<Link> getLinks() {
-        return links;
-    }
+	public List<Link> getLinks() {
+		return links;
+	}
 
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 }

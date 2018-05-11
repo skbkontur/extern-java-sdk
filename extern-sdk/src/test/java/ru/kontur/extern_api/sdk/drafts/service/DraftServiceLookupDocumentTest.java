@@ -192,11 +192,11 @@ public class DraftServiceLookupDocumentTest {
             "  \"filename\": \"string\"," +
             "  \"content-type\": \"string\"" +
             "}}");
-        DocflowsValidator.validateDocumentDescription(getDraftDocument().getDocumentDescription());
+        DocflowsValidator.validateDocumentDescription(getDraftDocument().getDescription());
         DraftDocument draftDocumentAsync = getDraftDocumentAsync();
         if (draftDocumentAsync != null) {
             DocflowsValidator
-                .validateDocumentDescription(draftDocumentAsync.getDocumentDescription());
+                .validateDocumentDescription(draftDocumentAsync.getDescription());
         }
     }
 

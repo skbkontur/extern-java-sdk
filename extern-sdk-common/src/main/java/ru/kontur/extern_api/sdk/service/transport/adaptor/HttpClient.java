@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -33,5 +34,5 @@ public interface HttpClient {
     HttpClient setServiceBaseUri(String uri);
     HttpClient acceptAccessToken(String authPrefix, String sessionId);
     HttpClient acceptApiKey(String apiKey);
-    <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class<T> dtoClass) throws ApiException;
+    <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException;
 }

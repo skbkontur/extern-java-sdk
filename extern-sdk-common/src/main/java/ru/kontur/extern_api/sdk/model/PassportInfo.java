@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 
@@ -34,10 +35,13 @@ public class PassportInfo {
 
     private String code = null;
 
+		@SerializedName("series-number")
     private String seriesNumber = null;
 
+		@SerializedName("issued-date")
     private Date issuedDate = null;
 
+		@SerializedName("issued-by")
     private String issuedBy = null;
 
     public String getCode() {

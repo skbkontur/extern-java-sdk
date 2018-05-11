@@ -190,7 +190,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
         try {
             httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
 
-            Map<String, String> queryParams = new HashMap<>();
+            Map<String, Object> queryParams = new HashMap<>();
 
             queryParams.put(APIKEY, apiKeyProvider.getApiKey());
 
@@ -220,7 +220,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
         try {
             StringBuilder identityData = new StringBuilder();
 
-            Map<String, String> queryParams = new HashMap<>();
+            Map<String, Object> queryParams = new HashMap<>();
 
             String apiKey = apiKeyProvider.getApiKey().toLowerCase();
             queryParams.put(APIKEY, apiKey);

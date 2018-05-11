@@ -49,7 +49,7 @@ public class DraftDocumentDto {
 
         DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-        draftDocument.setDocumentDescription(documentDescriptionDto.fromDto(dto.getDescription()));
+        draftDocument.setDescription(documentDescriptionDto.fromDto(dto.getDescription()));
 
         draftDocument.setSignatureContentLink(linkDto.fromDto(dto.getSignatureContentLink()));
 
@@ -77,7 +77,7 @@ public class DraftDocumentDto {
 
         DocumentDescriptionDto documentDescriptionDto = new DocumentDescriptionDto();
 
-        dto.setDescription(documentDescriptionDto.toDto(draftDocument.getDocumentDescription()));
+        dto.setDescription(documentDescriptionDto.toDto(draftDocument.getDescription()));
 
         dto.setSignatureContentLink(linkDto.toDto(draftDocument.getSignatureContentLink()));
 

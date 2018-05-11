@@ -26,10 +26,13 @@ THE SOFTWARE.
 
 <beans>
     
-    <bean id="accountsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.AccountsAdaptorImpl" scope="singletone"/>
-    <bean id="certificatesAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.CertificatesAdaptorImpl" scope="singletone"/>
+    <!--bean id="accountsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.AccountsAdaptorImpl" scope="singletone"/-->
+    <bean id="accountsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.AccountsAdaptorImpl" scope="singletone"/>
+    <!--bean id="certificatesAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.CertificatesAdaptorImpl" scope="singletone"/-->
+    <bean id="certificatesAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.CertificatesAdaptorImpl" scope="singletone"/>
     <bean id="docflowsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.DocflowsAdaptorImpl" scope="singletone"/>
-    <bean id="draftsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.DraftsAdaptorImpl" scope="singletone"/>
+    <!--bean id="draftsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.DraftsAdaptorImpl" scope="singletone"/-->
+    <bean id="draftsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.DraftsAdaptorImpl" scope="singletone"/>
     <bean id="eventsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.EventsAdaptorImpl" scope="singletone"/>
     <bean id="httpClient" class="ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.ApiClient" scope="prototype"/>
     
