@@ -21,14 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
+
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 
 /**
  * @author alexs
  */
 public class UsnFormatPeriod {
 
+    @SerializedName("period-modifiers")
     private PeriodModifiersEnum periodModifiers = null;
     private Integer year = null;
 
@@ -48,13 +55,11 @@ public class UsnFormatPeriod {
         this.year = year;
     }
 
+    @JsonAdapter(PeriodModifiersEnum.Adapter.class)
     public enum PeriodModifiersEnum {
         NONE("none"),
-
         LIQUIDATIONREORGANIZATION("liquidationReorganization"),
-
         TAXREGIMECHANGE("taxRegimeChange"),
-
         LASTPERIODFORTAXREGIME("lastPeriodForTaxRegime");
 
         private final String value;
@@ -79,6 +84,20 @@ public class UsnFormatPeriod {
         @Override
         public String toString() {
             return String.valueOf(value);
+        }
+
+        public static class Adapter extends TypeAdapter<PeriodModifiersEnum> {
+
+            @Override
+            public void write(final JsonWriter jsonWriter, final PeriodModifiersEnum enumeration) throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public PeriodModifiersEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return PeriodModifiersEnum.fromValue(String.valueOf(value));
+            }
         }
     }
 }

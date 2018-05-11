@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,10 +35,15 @@ import java.util.Objects;
  */
 public class EventsPage {
 
+		@SerializedName("first-event-id")
     private String firstEventId = null;
+		@SerializedName("last-event-id")
     private String lastEventId = null;
+		@SerializedName("requested-count")
     private Integer requestedCount = null;
+		@SerializedName("returned-count")
     private Integer returnedCount = null;
+		@SerializedName("api-events")
     private List<ApiEvent> apiEvents = null;
 
     public String getFirstEventId() {

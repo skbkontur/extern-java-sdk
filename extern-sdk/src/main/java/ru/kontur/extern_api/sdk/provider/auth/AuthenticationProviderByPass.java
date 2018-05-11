@@ -110,7 +110,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
             httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
 
-            Map<String, String> queryParams = new HashMap<String, String>() {
+            Map<String, Object> queryParams = new HashMap<String, Object>() {
                 private static final long serialVersionUID = 1L;
 
                 {

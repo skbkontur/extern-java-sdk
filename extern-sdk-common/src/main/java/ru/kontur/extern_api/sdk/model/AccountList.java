@@ -21,54 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * @author AlexS
  */
 public class AccountList {
 
-    private Integer skip = null;
+	private Integer skip = null;
 
-    private Integer take = null;
+	private Integer take = null;
 
-    private Integer totalCount = null;
+	@SerializedName("total-count")
+	private Integer totalCount = null;
 
-    private List<Account> accounts = null;
+	private List<Account> accounts = new ArrayList<>();
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
+	public List<Account> getAccounts() {
+		return accounts;
+	}
 
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
 
-    public Integer getTotalCount() {
-        return totalCount;
-    }
+	public Integer getTotalCount() {
+		return totalCount;
+	}
 
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
 
-    public Integer getSkip() {
-        return skip;
-    }
+	public Integer getSkip() {
+		return skip;
+	}
 
-    public void setSkip(Integer skip) {
-        this.skip = skip;
-    }
+	public void setSkip(Integer skip) {
+		this.skip = skip;
+	}
 
-    public Integer getTake() {
-        return take;
-    }
+	public Integer getTake() {
+		return take;
+	}
 
-    public void setTake(Integer take) {
-        this.take = take;
-    }
+	public void setTake(Integer take) {
+		this.take = take;
+	}
 }

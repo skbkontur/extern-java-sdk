@@ -24,17 +24,20 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author AlexS
  */
 public class Organization {
 
     private String inn;
-    private String kpp;
+    @SerializedName("organization")
+    private final OrganizationInfo organization;
 
     public Organization(String inn, String kpp) {
         this.inn = inn;
-        this.kpp = kpp;
+        this.organization = new OrganizationInfo(kpp);
     }
 
     public String getInn() {
@@ -46,12 +49,26 @@ public class Organization {
     }
 
     public String getKpp() {
-        return kpp;
+        return organization.getKpp();
     }
 
     public void setKpp(String kpp) {
-        this.kpp = kpp;
+        this.organization.setKpp(kpp);
     }
 
+    public static class OrganizationInfo {
+        private String kpp;
+        
+        public OrganizationInfo(String kpp) {
+            this.kpp = kpp;
+        }
+        
+        public String getKpp() {
+            return kpp;
+        }
 
+        public void setKpp(String kpp) {
+            this.kpp = kpp;
+        }
+    }
 }

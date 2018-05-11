@@ -50,6 +50,10 @@ public class ApiException extends Exception {
         super(message);
     }
 
+    public ApiException(String message, Throwable x) {
+        super(message, x);
+    }
+
     public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         super(message, throwable);
         this.code = code;

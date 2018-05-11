@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.Objects;
 
@@ -35,9 +36,13 @@ public class ApiEvent {
 
     private String inn = null;
     private String kpp = null;
+		@SerializedName("docflow-type")
     private String docflowType = null;
+		@SerializedName("docflow-link")
     private Link docflowLink = null;
+		@SerializedName("new-state")
     private String newState = null;
+		@SerializedName("event-date-time")
     private Date eventDateTime = null;
     private String id = null;
 
