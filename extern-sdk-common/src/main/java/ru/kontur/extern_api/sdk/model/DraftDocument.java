@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
-
 
 /**
  * @author AlexS
@@ -33,10 +32,14 @@ import java.util.UUID;
 public class DraftDocument {
 
     private UUID id = null;
+    @SerializedName("decrypted-content-link")
     private Link decryptedContentLink = null;
+    @SerializedName("encrypted-content-link")
     private Link encryptedContentLink = null;
+    @SerializedName("signature-content-link")
     private Link signatureContentLink = null;
-    private DocumentDescription documentDescription = null;
+    @SerializedName("description")
+    private DocumentDescription description = null;
 
     /**
      * Get id
@@ -90,16 +93,11 @@ public class DraftDocument {
         this.signatureContentLink = signatureContentLink;
     }
 
-    /**
-     * Get meta
-     *
-     * @return meta
-     */
-    public DocumentDescription getDocumentDescription() {
-        return documentDescription;
+    public DocumentDescription getDescription() {
+        return description;
     }
 
-    public void setDocumentDescription(DocumentDescription documentDescription) {
-        this.documentDescription = documentDescription;
+    public void setDescription(DocumentDescription description) {
+        this.description = description;
     }
 }

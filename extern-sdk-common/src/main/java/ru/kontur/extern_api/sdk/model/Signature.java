@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ import java.util.UUID;
 public class Signature {
 
     private UUID id = null;
+		@SerializedName("content-link")
     private Link contentLink = null;
     private List<Link> links = null;
 

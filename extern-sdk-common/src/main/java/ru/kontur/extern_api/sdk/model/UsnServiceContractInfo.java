@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * @author alexs
@@ -30,6 +31,7 @@ package ru.kontur.extern_api.sdk.model;
 public class UsnServiceContractInfo {
 
     private UsnFormatPeriod period = null;
+    @SerializedName("additional-org-info")
     private AdditionalClientInfo additionalOrgInfo = null;
     private Object data = null;
 

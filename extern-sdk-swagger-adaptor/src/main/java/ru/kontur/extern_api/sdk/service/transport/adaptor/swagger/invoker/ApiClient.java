@@ -29,6 +29,7 @@ import com.squareup.okhttp.RequestBody;
 import ru.kontur.extern_api.sdk.service.transport.swagger.invoker.Pair;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -116,7 +117,7 @@ public class ApiClient extends ru.kontur.extern_api.sdk.service.transport.swagge
     }
 
     @Override
-    public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, String> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Class<T> dtoClass) throws ApiException {
+    public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException {
         try {
             String[] localVarAuthNames = new String[]{"apiKey", "auth.sid"};
 
@@ -124,12 +125,12 @@ public class ApiClient extends ru.kontur.extern_api.sdk.service.transport.swagge
                 = queryParams
                     .entrySet()
                     .stream()
-                    .map(e -> new Pair(e.getKey(), e.getValue()))
+                    .map(e -> new Pair(e.getKey(), e.getValue().toString()))
                     .collect(Collectors.toList());
 
             Call call = buildCall(httpRequestUri, httpMetod, params, body, headerParams, formParams, localVarAuthNames, null);
 
-            ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiResponse<T> resp = this.execute(call, dtoClass);
+            ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiResponse<T> resp = this.execute(call, type);
 
             return new ApiResponse<>(resp.getStatusCode(), resp.getHeaders(), resp.getData());
         }

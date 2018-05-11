@@ -91,33 +91,33 @@ public class DraftServiceLookupDocumentTest {
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
             new AuthenticationProvider() {
-            @Override
-            public QueryContext<String> sessionId() {
-                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-            }
+                @Override
+                public QueryContext<String> sessionId() {
+                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+                }
 
-            @Override
-            public String authPrefix() {
-                return "auth.sid ";
-            }
+                @Override
+                public String authPrefix() {
+                    return "auth.sid ";
+                }
 
-            @Override
+                @Override
             public AuthenticationProvider httpClient(HttpClient httpClient) {
                 return this;
             }
 
             @Override
-            public void addAuthenticationListener(AuthenticationListener authListener) {
-            }
+                public void addAuthenticationListener(AuthenticationListener authListener) {
+                }
 
-            @Override
-            public void removeAuthenticationListener(AuthenticationListener authListener) {
-            }
+                @Override
+                public void removeAuthenticationListener(AuthenticationListener authListener) {
+                }
 
-            @Override
-            public void raiseUnauthenticated(ServiceError x) {
-            }
-        });
+                @Override
+                public void raiseUnauthenticated(ServiceError x) {
+                }
+            });
     }
 
     @Test
@@ -197,11 +197,11 @@ public class DraftServiceLookupDocumentTest {
             + "  \"filename\": \"string\","
             + "  \"content-type\": \"string\""
             + "}}");
-        DocflowsValidator.validateDocumentDescription(getDraftDocument().getDocumentDescription());
+        DocflowsValidator.validateDocumentDescription(getDraftDocument().getDescription());
         DraftDocument draftDocumentAsync = getDraftDocumentAsync();
         if (draftDocumentAsync != null) {
             DocflowsValidator
-                .validateDocumentDescription(draftDocumentAsync.getDocumentDescription());
+                .validateDocumentDescription(draftDocumentAsync.getDescription());
         }
     }
 

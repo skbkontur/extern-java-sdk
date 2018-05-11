@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +39,9 @@ public class DocflowPageItem {
     private String type = null;
     private String status = null;
     private List<Link> links = null;
+		@SerializedName("send-date")
     private Date sendDate = null;
+		@SerializedName("last-change-date")
     private Date lastChangeDate = null;
 
     public UUID getId() {
