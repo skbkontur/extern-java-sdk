@@ -27,12 +27,9 @@ package ru.kontur.extern_api.sdk;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
-import ru.kontur.extern_api.sdk.providers.AccountProvider;
-import ru.kontur.extern_api.sdk.providers.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.providers.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.providers.ServiceBaseUriProvider;
-import ru.kontur.extern_api.sdk.providers.UriProvider;
-import ru.kontur.extern_api.sdk.providers.auth.Credential;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,12 +37,13 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.model.Credential;
 
 
 /**
  * @author AlexS
  */
-public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider, UriProvider, ServiceBaseUriProvider {
+public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider {
 
     private static final String DEFAULT_AUTH_PREFIX = "auth.sid ";
     private static final long serialVersionUID = -1659495610747854951L;
@@ -131,7 +129,6 @@ public class Configuration implements Serializable, AccountProvider, ApiKeyProvi
         this.pass = pass;
     }
 
-    @Override
     public String getServiceBaseUri() {
         return serviceBaseUri;
     }
@@ -140,8 +137,7 @@ public class Configuration implements Serializable, AccountProvider, ApiKeyProvi
         this.serviceBaseUri = serviceBaseUri;
     }
 
-    @Override
-    public String getUri() {
+    public String getAuthBaseUri() {
         return authBaseUri;
     }
 

@@ -25,15 +25,16 @@
 package ru.kontur.extern_api.sdk.service;
 
 import ru.kontur.extern_api.sdk.model.EventsPage;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
 
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
  * @author AlexS
  */
-public interface EventService {
+public interface EventService extends Providers {
 
     CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size);
 

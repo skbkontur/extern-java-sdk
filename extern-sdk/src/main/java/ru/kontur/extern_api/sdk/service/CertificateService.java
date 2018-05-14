@@ -25,15 +25,16 @@
 package ru.kontur.extern_api.sdk.service;
 
 import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.provider.Providers;
 
 
 /**
  * @author alexs
  */
-public interface CertificateService {
+public interface CertificateService extends Providers {
 
     CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
 

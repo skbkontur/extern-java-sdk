@@ -24,16 +24,16 @@
 package ru.kontur.extern_api.sdk.providers.auth;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.providers.CryptoProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class MockCryptoProvider implements CryptoProvider {
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
         return CompletableFuture.supplyAsync(
-                () -> QueryContext
-                        .fromResult(content, QueryContext.CONTENT)
+                () -> new QueryContext<byte[]>()
+                        .setResult(content, QueryContext.CONTENT)
                         .setThumbprint(thumbprint)
         );
     }
@@ -46,7 +46,9 @@ public class MockCryptoProvider implements CryptoProvider {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
         return CompletableFuture.supplyAsync(
-                () -> QueryContext.fromResult(new byte[]{}, QueryContext.CONTENT)
+                () -> new QueryContext<byte[]>()
+                        .setResult(new byte[0], QueryContext.CONTENT)
+                        .setThumbprint(thumbprint)
         );
     }
 
@@ -58,7 +60,8 @@ public class MockCryptoProvider implements CryptoProvider {
     @Override
     public CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content) {
         return CompletableFuture.supplyAsync(
-                () -> QueryContext.fromResult(content, QueryContext.CONTENT)
+                () -> new QueryContext<byte[]>()
+                        .setResult(content, QueryContext.CONTENT)
         );
     }
 
