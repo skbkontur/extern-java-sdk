@@ -26,12 +26,16 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import ru.kontur.extern_api.sdk.service.transport.swagger.model.DocumentToSend;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.LinkDto;
+import ru.kontur.extern_api.sdk.service.transport.swagger.model.DocumentToSend;
+import ru.kontur.extern_api.sdk.service.transport.swagger.model.Link;
 
 
 /**
@@ -45,7 +49,7 @@ public class DocumentToSendAdapter extends TypeAdapter<DocumentToSend> {
     private final SignatureToSendAdapter signatureToSendAdapter = new SignatureToSendAdapter();
 
     @Override
-    public void write(JsonWriter out, DocumentToSend d) throws IOException {
+    public void write(final JsonWriter out, final DocumentToSend d) throws IOException {
         if (d == null) {
             out.nullValue();
         } else {
@@ -60,21 +64,19 @@ public class DocumentToSendAdapter extends TypeAdapter<DocumentToSend> {
     }
 
     @Override
-    public DocumentToSend read(JsonReader in) throws IOException {
-        if (in.peek() != JsonToken.BEGIN_OBJECT) {
-            return null;
-        }
-
-        DocumentToSend d = new DocumentToSend();
-
+    public DocumentToSend read(final JsonReader in) throws IOException {
+        in.beginObject();
+        final DocumentToSend d = new DocumentToSend();
         while (in.hasNext()) {
-            String name = in.nextName();
-            switch (name) {
+            switch (in.nextName()) {
                 case "id":
                     d.setId(UUID.fromString(in.nextString()));
                     break;
                 case "content":
                     d.setContent(DECODER.decode(in.nextString()));
+                    break;
+                case "print-form-content":
+                    d.setPrintFormContent(DECODER.decode(in.nextString()));
                     break;
                 case "filename":
                     d.setFilename(in.nextString());
@@ -82,8 +84,47 @@ public class DocumentToSendAdapter extends TypeAdapter<DocumentToSend> {
                 case "signature":
                     d.setSignature(signatureToSendAdapter.read(in));
                     break;
+                case "sender-ip":
+                    d.setSenderIp(in.nextString());
+                    break;
+                case "links":
+                    in.beginArray();
+                    final List<Link> links = new ArrayList<>();
+                    while (in.hasNext()) {
+                        in.beginObject();
+                        Map<String, Object> map = new HashMap<>();
+                        while (in.hasNext()) {
+                            switch (in.nextName()) {
+                                case "href":
+                                    map.put("href", in.nextString());
+                                    break;
+                                case "rel":
+                                    map.put("rel", in.nextString());
+                                    break;
+                                case "name":
+                                    map.put("name", in.nextString());
+                                    break;
+                                case "title":
+                                    map.put("title", in.nextString());
+                                    break;
+                                case "profile":
+                                    map.put("profile", in.nextString());
+                                    break;
+                                case "templated":
+                                    map.put("href", in.nextBoolean());
+                                    break;
+                            }
+                        }
+                        in.endObject();
+                        LinkDto linkDto = new LinkDto();
+                        links.add(linkDto.toDto(linkDto.fromDto(map)));
+                    }
+                    in.endArray();
+                    d.setLinks(links);
+                    break;
             }
         }
+        in.endObject();
 
         return d;
     }
