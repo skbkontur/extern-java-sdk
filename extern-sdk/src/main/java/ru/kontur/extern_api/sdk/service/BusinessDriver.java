@@ -24,6 +24,12 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -32,14 +38,6 @@ import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-
-import java.lang.reflect.Array;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -51,6 +49,11 @@ public class BusinessDriver {
 
     public BusinessDriver(ExternEngine engine) {
         this.engine = engine;
+    }
+
+    public QueryContext<List<Docflow>> sendDocument(File file, Sender sender, Recipient recipient,
+        Organization organization) throws InterruptedException, ExecutionException {
+        return sendDocument(new File[]{file}, sender, recipient, organization);
     }
 
     public QueryContext<List<Docflow>> sendDocument(File[] files, Sender sender, Recipient recipient, Organization organization) throws InterruptedException, ExecutionException {
