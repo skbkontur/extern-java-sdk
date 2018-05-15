@@ -1,7 +1,7 @@
 /*
- * MIT License
+ * The MIT License
  *
- * Copyright (c) 2018 SKB Kontur
+ * Copyright 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,31 +10,40 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_LOAD;
+import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_NOT_FOUND;
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
+import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
+import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.providers.AccountProvider;
-import ru.kontur.extern_api.sdk.providers.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.providers.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.providers.CryptoProvider;
-import ru.kontur.extern_api.sdk.providers.ServiceBaseUriProvider;
-import ru.kontur.extern_api.sdk.providers.ServiceError;
-import ru.kontur.extern_api.sdk.providers.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.UriProvider;
+import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.provider.auth.EngineAuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.BusinessDriver;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -42,53 +51,18 @@ import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.service.impl.AccountServiceImpl;
-import ru.kontur.extern_api.sdk.service.impl.BaseService;
-import ru.kontur.extern_api.sdk.service.impl.CertificateServiceImpl;
-import ru.kontur.extern_api.sdk.service.impl.DocflowServiceImpl;
-import ru.kontur.extern_api.sdk.service.impl.DraftServiceImpl;
-import ru.kontur.extern_api.sdk.service.impl.EventServiceImpl;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.AccountsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.CertificatesAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.DocflowsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.EventsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_LOAD;
-import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_NOT_FOUND;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
-import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
-import static ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext.SESSION_ID;
-
 
 /**
- * {@code ExternEngine} класс предоставляет инструмент для работы с API Контур Экстерна
  *
- * @author Сухоруков А., St.Petersburg 20/04/2018
- * @since 1.1
+ * @author alexs
  */
 public class ExternEngine implements AuthenticationListener {
 
     private static final Gson GSON = new Gson();
 
-    private final Environment env;
+    private Environment env;
 
-    private AccountService accountService;
-
-    private DraftService draftService;
-
-    private DocflowService docflowService;
-
-    private CertificateService certificateService;
-
-    private EventService eventService;
-
-    private ServiceBaseUriProvider serviceBaseUriProvider;
+    private UriProvider serviceBaseUriProvider;
 
     private EngineAuthenticationProvider authenticationProvider;
 
@@ -99,6 +73,21 @@ public class ExternEngine implements AuthenticationListener {
     private CryptoProvider cryptoProvider;
 
     private BusinessDriver businessDriver;
+    
+    @Component("accountService")
+    private AccountService accountService;
+
+    @Component("certificateService")
+    private CertificateService certificateService;
+
+    @Component("docflowService")
+    private DocflowService docflowService;
+
+    @Component("draftService")
+    private DraftService draftService;
+
+    @Component("eventService")
+    private EventService eventService;
 
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
@@ -107,6 +96,26 @@ public class ExternEngine implements AuthenticationListener {
         this(new Configuration());
     }
 
+    private void init() {
+        ExternContext.getInstance().bind(this);
+        configureService(accountService);
+        configureService(certificateService);
+        configureService(eventService);
+        configureService(docflowService);
+        configureService(draftService);
+    }
+
+    private void configureService(Providers serviceProviders) {
+        if (serviceProviders != null) {
+            serviceProviders
+                .accountProvider(accountProvider)
+                .apiKeyProvider(apiKeyProvider)
+                .authenticationProvider(authenticationProvider)
+                .cryptoProvider(cryptoProvider)
+                .serviceBaseUriProvider(serviceBaseUriProvider);
+        }
+    }
+    
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
      *
@@ -114,10 +123,35 @@ public class ExternEngine implements AuthenticationListener {
      * @see ru.kontur.extern_api.sdk.Configuration
      */
     public ExternEngine(Configuration configuration) {
-        this.businessDriver = new BusinessDriver(this);
+        init();
         this.env = new Environment();
         this.env.configuration = configuration;
-        configure();
+        if (configuration != null) {
+            setAccountProvider(configuration);
+            setApiKeyProvider(configuration);
+            setAuthenticationProvider(authenticationProvider);
+            if (configuration.getLogin() != null && !configuration.getLogin().isEmpty() && configuration.getPass() != null && !configuration.getPass().isEmpty()) {
+                setAuthenticationProvider(
+                    new AuthenticationProviderByPass(
+                        () -> ExternEngine.this.env.configuration.getAuthBaseUri(),
+                        new LoginAndPasswordProvider() {
+                            @Override
+                            public String getLogin() {
+                                return configuration.getLogin();
+                            }
+
+                            @Override
+                                public String getPass() {
+                                    return configuration.getPass();
+                                }
+                        },
+                        () -> configuration.getApiKey()
+                    )
+                );
+            }
+            setServiceBaseUriProvider(() -> configuration.getServiceBaseUri());
+        }
+        this.businessDriver = new BusinessDriver(this);
     }
 
     /**
@@ -140,11 +174,14 @@ public class ExternEngine implements AuthenticationListener {
             }
 
             return GSON.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
-        } catch (IOException x) {
+        }
+        catch (IOException x) {
             throw new SDKException(Messages.get(C_CONFIG_LOAD), x);
-        } catch (SDKException x) {
+        }
+        catch (SDKException x) {
             throw x;
-        } catch (Throwable x) {
+        }
+        catch (Throwable x) {
             throw new SDKException(Messages.get(UNKNOWN), x);
         }
     }
@@ -190,6 +227,46 @@ public class ExternEngine implements AuthenticationListener {
     }
 
     /**
+     * Возвращает экземпляр класса AccountService
+     *
+     * @return CertificateService сервис предназначен для работы с сертификатами пользователей
+     * @see ru.kontur.extern_api.sdk.service.CertificateService
+     */
+    public CertificateService getCertificateService() {
+        return certificateService;
+    }
+
+    /**
+     * Устанавливает экземпляр класса CertificateService
+     *
+     * @param certificateService сервис предназначен для работы с сертификатами пользователей
+     * @see ru.kontur.extern_api.sdk.service.CertificateService
+     */
+    public void setCertificateService(CertificateService certificateService) {
+        this.certificateService = certificateService;
+    }
+
+    /**
+     * Возвращает экземпляр класса DocflowService
+     *
+     * @return DocflowService сервис предназначен для работы с документоборотами
+     * @see ru.kontur.extern_api.sdk.service.DocflowService
+     */
+    public DocflowService getDocflowService() {
+        return docflowService;
+    }
+
+    /**
+     * Устанавливает экземпляр класса DocflowService
+     *
+     * @param docflowService сервис предназначен для работы с документоборотами
+     * @see ru.kontur.extern_api.sdk.service.DocflowService
+     */
+    public void setDocflowService(DocflowService docflowService) {
+        this.docflowService = docflowService;
+    }
+
+    /**
      * Возвращает экземпляр класса DraftService
      *
      * @return DraftService сервис предназначен для работы с черновиками
@@ -207,46 +284,6 @@ public class ExternEngine implements AuthenticationListener {
      */
     public void setDraftService(DraftService draftService) {
         this.draftService = draftService;
-    }
-
-    /**
-     * Возвращает экземпляр класса DocflowService
-     *
-     * @return DocflowService сервис предназначен для работы с документооборотами
-     * @see ru.kontur.extern_api.sdk.service.DocflowService
-     */
-    public DocflowService getDocflowService() {
-        return docflowService;
-    }
-
-    /**
-     * Устанавливает экземпляр класса DocflowService
-     *
-     * @param docflowService сервис предназначен для работы с документооборотами
-     * @see ru.kontur.extern_api.sdk.service.DocflowService
-     */
-    public void setDocflowService(DocflowService docflowService) {
-        this.docflowService = docflowService;
-    }
-
-    /**
-     * Возвращает экземпляр класса CertificateService
-     *
-     * @return CertificateService сервис предназначен для работы с сертификатами пользователей
-     * @see ru.kontur.extern_api.sdk.service.CertificateService
-     */
-    public CertificateService getCertificateService() {
-        return certificateService;
-    }
-
-    /**
-     * Устанавливает экземпляр класса CertificateService
-     *
-     * @param certificateService сервис предназначен для работы с сертификатами пользователей
-     * @see ru.kontur.extern_api.sdk.service.CertificateService
-     */
-    public void setCertificateService(CertificateService certificateService) {
-        this.certificateService = certificateService;
     }
 
     /**
@@ -275,7 +312,7 @@ public class ExternEngine implements AuthenticationListener {
      * @return serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
      * @see ru.kontur.extern_api.sdk.providers.ServiceBaseUriProvider
      */
-    public ServiceBaseUriProvider getServiceBaseUriProvider() {
+    public UriProvider getServiceBaseUriProvider() {
         return serviceBaseUriProvider;
     }
 
@@ -285,8 +322,13 @@ public class ExternEngine implements AuthenticationListener {
      * @param serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
      * @see ru.kontur.extern_api.sdk.providers.ServiceBaseUriProvider
      */
-    public void setServiceBaseUriProvider(ServiceBaseUriProvider serviceBaseUriProvider) {
+    public final void setServiceBaseUriProvider(UriProvider serviceBaseUriProvider) {
         this.serviceBaseUriProvider = serviceBaseUriProvider;
+        this.accountService.serviceBaseUriProvider(serviceBaseUriProvider);
+        this.certificateService.serviceBaseUriProvider(serviceBaseUriProvider);
+        this.docflowService.serviceBaseUriProvider(serviceBaseUriProvider);
+        this.draftService.serviceBaseUriProvider(serviceBaseUriProvider);
+        this.eventService.serviceBaseUriProvider(serviceBaseUriProvider);
     }
 
     /**
@@ -296,7 +338,7 @@ public class ExternEngine implements AuthenticationListener {
      * @see ru.kontur.extern_api.sdk.providers.AuthenticationProvider
      */
     public AuthenticationProvider getAuthenticationProvider() {
-        return authenticationProvider.getOriginAuthenticationProvider();
+        return authenticationProvider;
     }
 
     /**
@@ -305,13 +347,25 @@ public class ExternEngine implements AuthenticationListener {
      * @param authenticationProvider предназначен для получения токена аутентификации
      * @see ru.kontur.extern_api.sdk.providers.AuthenticationProvider
      */
-    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+    public final void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
         if (authenticationProvider != null) {
             authenticationProvider.addAuthenticationListener(this);
-            this.authenticationProvider = new EngineAuthenticationProvider(authenticationProvider);
-        } else if (this.authenticationProvider != null) {
+            this.authenticationProvider = new EngineAuthenticationProvider(authenticationProvider,env);
+            this.accountService.authenticationProvider(this.authenticationProvider);
+            this.certificateService.authenticationProvider(this.authenticationProvider);
+            this.docflowService.authenticationProvider(this.authenticationProvider);
+            this.draftService.authenticationProvider(this.authenticationProvider);
+            this.eventService.authenticationProvider(this.authenticationProvider);
+        }
+        else if (this.authenticationProvider != null) {
             AuthenticationProvider originAuthenticationProvider = this.authenticationProvider.getOriginAuthenticationProvider();
             originAuthenticationProvider.removeAuthenticationListener(this);
+            this.authenticationProvider = null;
+            this.accountService.authenticationProvider(null);
+            this.certificateService.authenticationProvider(null);
+            this.docflowService.authenticationProvider(null);
+            this.draftService.authenticationProvider(null);
+            this.eventService.authenticationProvider(null);
         }
     }
 
@@ -331,8 +385,13 @@ public class ExternEngine implements AuthenticationListener {
      * @param accountProvider AccountProvider предназначен для получения учетной записи пользователя
      * @see ru.kontur.extern_api.sdk.providers.AuthenticationProvider
      */
-    public void setAccountProvider(AccountProvider accountProvider) {
+    public final void setAccountProvider(AccountProvider accountProvider) {
         this.accountProvider = accountProvider;
+        this.accountService.accountProvider(accountProvider);
+        this.certificateService.accountProvider(accountProvider);
+        this.docflowService.accountProvider(accountProvider);
+        this.draftService.accountProvider(accountProvider);
+        this.eventService.accountProvider(accountProvider);
     }
 
     /**
@@ -351,8 +410,13 @@ public class ExternEngine implements AuthenticationListener {
      * @param apiKeyProvider ApiKeyProvider предназначен для получения идентификатора внешнего сервиса
      * @see ru.kontur.extern_api.sdk.providers.ApiKeyProvider
      */
-    public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
+    public final void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
+        this.accountService.apiKeyProvider(apiKeyProvider);
+        this.certificateService.apiKeyProvider(apiKeyProvider);
+        this.docflowService.apiKeyProvider(apiKeyProvider);
+        this.draftService.apiKeyProvider(apiKeyProvider);
+        this.eventService.apiKeyProvider(apiKeyProvider);
     }
 
     /**
@@ -379,79 +443,24 @@ public class ExternEngine implements AuthenticationListener {
     public CryptoProvider setCryptoProvider(CryptoProvider cryptoProvider) {
         CryptoProvider current = this.cryptoProvider;
         this.cryptoProvider = cryptoProvider;
+        accountService.cryptoProvider(cryptoProvider);
+        certificateService.cryptoProvider(cryptoProvider);
+        docflowService.cryptoProvider(cryptoProvider);
+        draftService.cryptoProvider(cryptoProvider);
+        eventService.cryptoProvider(cryptoProvider);
         return current;
     }
 
     /**
-     * Метод конфигурирует экземпляр класса ExternEngine и должен быть вызван после установки всех провайдеров или загрузки конфигурации
+     * Больше не используется
      */
+    @Deprecated
     public void configureServices() {
-        AccountServiceImpl accSrv = new AccountServiceImpl();
-        configureService(accSrv);
-        accSrv.setApi(new AccountsAdaptor());
-        this.accountService = accSrv;
-
-        DraftServiceImpl draftSrv = new DraftServiceImpl();
-        configureService(draftSrv);
-        draftSrv.setApi(new DraftsAdaptor());
-        this.draftService = draftSrv;
-
-        DocflowServiceImpl docflowSrv = new DocflowServiceImpl();
-        configureService(docflowSrv);
-        docflowSrv.setApi(new DocflowsAdaptor());
-        this.docflowService = docflowSrv;
-
-        CertificateServiceImpl certificateSrv = new CertificateServiceImpl();
-        configureService(certificateSrv);
-        certificateSrv.setApi(new CertificatesAdaptor());
-        this.certificateService = certificateSrv;
-
-        EventServiceImpl eventSrv = new EventServiceImpl();
-        configureService(eventSrv);
-        eventSrv.setApi(new EventsAdaptor());
-        this.eventService = eventSrv;
     }
-
-    private void configureService(BaseService<?> baseService) {
-        baseService.setServiceBaseUriProvider(this.serviceBaseUriProvider);
-        baseService.setAuthenticationProvider(this.authenticationProvider);
-        baseService.setAccountProvider(this.accountProvider);
-        baseService.setApiKeyProvider(this.apiKeyProvider);
-        baseService.setCryptoProvider(this.cryptoProvider);
-    }
-
-    /**
-     * Метод, реализующий интерфейс AuthenticationListener, предназначенный для обоаботки события аутентификации пользователя.
-     * В случае если пользователь аутентифицировался, то токен аутентификации (ТА) сохраняется в окружении. В противном случае устанавливается null.
-     *
-     * @param authEvent событие, которое передается в данный метод
-     * @see ru.kontur.extern_api.sdk.event.AuthenticationListener
-     */
+    
     @Override
-    public synchronized void authenticate(AuthenticationEvent authEvent) {
+    public void authenticate(AuthenticationEvent authEvent) {
         env.accessToken = authEvent.getAuthCxt().isSuccess() ? authEvent.getAuthCxt().get() : null;
-    }
-
-    private void configure() {
-        Configuration c = env.configuration;
-        if (c != null) {
-
-            if (c.accountId() != null) {
-                setAccountProvider(c);
-            }
-
-            if (c.getApiKey() != null) {
-                setApiKeyProvider(c);
-            }
-
-            if (c.getServiceBaseUri() != null) {
-                setServiceBaseUriProvider(c);
-            }
-
-            if (c.getUri() != null && c.getLogin() != null && c.getPass() != null && c.getApiKey() != null) {
-                setAuthenticationProvider(new AuthenticationProviderByPass(c, c, c));
-            }
-        }
     }
 
     /**
@@ -467,48 +476,5 @@ public class ExternEngine implements AuthenticationListener {
      */
     public BusinessDriver getBusinessDriver() {
         return businessDriver;
-    }
-
-
-    class EngineAuthenticationProvider implements AuthenticationProvider {
-
-        private final AuthenticationProvider authenticationProvider;
-
-        private EngineAuthenticationProvider(AuthenticationProvider authenticationProvider) {
-            this.authenticationProvider = authenticationProvider;
-        }
-
-        private AuthenticationProvider getOriginAuthenticationProvider() {
-            return authenticationProvider;
-        }
-
-        @Override
-        public QueryContext<String> sessionId() {
-            if (env.accessToken == null) {
-                return authenticationProvider.sessionId();
-            } else {
-                return new QueryContext<String>().setResult(env.accessToken, SESSION_ID);
-            }
-        }
-
-        @Override
-        public String authPrefix() {
-            return authenticationProvider.authPrefix();
-        }
-
-        @Override
-        public void addAuthenticationListener(AuthenticationListener authListener) {
-            authenticationProvider.addAuthenticationListener(authListener);
-        }
-
-        @Override
-        public void removeAuthenticationListener(AuthenticationListener authListener) {
-            authenticationProvider.removeAuthenticationListener(authListener);
-        }
-
-        @Override
-        public void raiseUnauthenticated(ServiceError x) {
-            authenticationProvider.raiseUnauthenticated(x);
-        }
     }
 }

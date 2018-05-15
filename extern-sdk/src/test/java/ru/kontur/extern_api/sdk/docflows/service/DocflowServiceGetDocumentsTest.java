@@ -45,6 +45,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
@@ -54,9 +55,8 @@ import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.providers.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.providers.ServiceError;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -120,8 +120,6 @@ public class DocflowServiceGetDocumentsTest {
                 public void raiseUnauthenticated(ServiceError x) {
                 }
             });
-
-        engine.configureServices();
     }
 
     @Test

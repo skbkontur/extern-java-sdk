@@ -24,23 +24,24 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import org.joda.time.DateTime;
+import java.util.Date;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocumentToSend;
 import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.provider.Providers;
 
 
 /**
  * @author AlexS
  */
-public interface DocflowService {
+public interface DocflowService extends Providers {
 
     CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId);
 
@@ -94,7 +95,7 @@ public interface DocflowService {
 
     QueryContext<Docflow> sendReply(QueryContext<?> parent);
 
-    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(boolean finished, boolean incoming, long skip, int take, String innKpp, DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo, String type);
+    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(boolean finished, boolean incoming, long skip, int take, String innKpp, Date updatedFrom, Date updatedTo, Date createdFrom, Date createdTo, String type);
 
     QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
 

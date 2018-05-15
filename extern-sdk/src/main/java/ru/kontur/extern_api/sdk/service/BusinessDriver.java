@@ -31,7 +31,7 @@ import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
-import ru.kontur.extern_api.sdk.service.transport.adaptors.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -75,15 +75,9 @@ public class BusinessDriver {
                                 )
                 )
                 .collect(Collectors.toList());
-        // массив задач: создание черновика и подпись документов
-        // преобразовываем список в массив по-тупому, чтобы не было WARNING
-        CompletableFuture<QueryContext<DraftDocument>>[] dda = (CompletableFuture<QueryContext<DraftDocument>>[]) Array.newInstance(CompletableFuture.class, ddl.size());
-        for (int i = 0; i < ddl.size(); i++) {
-            dda[i] = ddl.get(i);
-        }
         // ожидаем: создание черновика и подписи документов
         CompletableFuture
-                .allOf(dda)
+                .allOf(ddl.toArray(new CompletableFuture<?>[ddl.size()]))
                 // ожидаем завершения всех операций
                 .join();
         // 1) делаем подготовку данных перед отправкой
