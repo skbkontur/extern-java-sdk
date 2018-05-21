@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -52,9 +51,12 @@ public class DocflowServiceImpl extends AbstractService<DocflowsAdaptor> impleme
     private static final String EN_DOC = "Документ";
     private static final String EN_SGN = "Подпись";
 
-    @Component("docflowsAdaptor")
-    private DocflowsAdaptor docflowsAdaptor;
+    private final DocflowsAdaptor docflowsAdaptor;
 
+    public DocflowServiceImpl(DocflowsAdaptor docflowsAdaptor) {
+        this.docflowsAdaptor = docflowsAdaptor;
+    }
+    
     @Override
 	public DocflowService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
 		super.serviceBaseUriProvider = serviceBaseUriProvider;

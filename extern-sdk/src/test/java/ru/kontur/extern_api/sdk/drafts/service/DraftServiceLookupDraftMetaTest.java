@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.drafts.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -52,12 +51,12 @@ import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
-
 public class DraftServiceLookupDraftMetaTest {
 
     private static ExternEngine engine;
@@ -77,7 +76,8 @@ public class DraftServiceLookupDraftMetaTest {
     public static void stopJetty() {
         try {
             server.stop();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,52 +90,57 @@ public class DraftServiceLookupDraftMetaTest {
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
             new AuthenticationProvider() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
+            @Override
+            public QueryContext<String> sessionId() {
+                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+            }
 
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
+            @Override
+            public String authPrefix() {
+                return "auth.sid ";
+            }
 
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public AuthenticationProvider httpClient(HttpClient httpClient) {
+                return this;
+            }
 
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public void addAuthenticationListener(AuthenticationListener authListener) {
+            }
 
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
-                }
-            });
+            @Override
+            public void removeAuthenticationListener(AuthenticationListener authListener) {
+            }
+
+            @Override
+            public void raiseUnauthenticated(ServiceError x) {
+            }
+        });
     }
 
     @Test
     public void testDraftsLookup() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"sender\": {" +
-            "  \"inn\": \"string\"," +
-            "  \"kpp\": \"string\"," +
-            "  \"certificate\": {" +
-            "    \"content\": \"string\"" +
-            "  }," +
-            "  \"ipaddress\": \"string\"" +
-            "}," +
-            "\"recipient\": {" +
-            "  \"ifns-code\": \"string\"" +
-            "}," +
-            "\"payer\": {" +
-            "  \"inn\": \"string\"," +
-            "  \"organization\": {" +
-            "    \"kpp\": \"string\"" +
-            "  }" +
-            "}" +
-            "}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + "\"sender\": {"
+            + "  \"inn\": \"string\","
+            + "  \"kpp\": \"string\","
+            + "  \"certificate\": {"
+            + "    \"content\": \"string\""
+            + "  },"
+            + "  \"ipaddress\": \"string\""
+            + "},"
+            + "\"recipient\": {"
+            + "  \"ifns-code\": \"string\""
+            + "},"
+            + "\"payer\": {"
+            + "  \"inn\": \"string\","
+            + "  \"organization\": {"
+            + "    \"kpp\": \"string\""
+            + "  }"
+            + "}"
+            + "}");
         DraftsValidator.validateDraftMeta(getDraftMeta());
         DraftsValidator.validateDraftMeta(getDraftMetaAsync());
     }
@@ -190,7 +195,8 @@ public class DraftServiceLookupDraftMetaTest {
     private DraftMeta getDraftMetaAsync() {
         try {
             return engine.getDraftService().lookupDraftMetaAsync(StandardValues.ID).get().get();
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

@@ -53,6 +53,7 @@ import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -109,6 +110,11 @@ public class AccountServiceAcquireAccountsTest {
                     return "auth.sid ";
                 }
 
+                @Override
+                public AuthenticationProvider httpClient(HttpClient httpClient){
+                    return this;
+                }
+                
                 @Override
                 public void addAuthenticationListener(AuthenticationListener authListener) {
                 }

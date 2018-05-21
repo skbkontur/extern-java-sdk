@@ -30,7 +30,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -45,8 +44,11 @@ public class EventServiceImpl extends AbstractService<EventsAdaptor> implements 
 
     private static final String EN_EVENT = "event";
 
-    @Component("eventsAdaptor")
-    private EventsAdaptor eventsAdaptor;
+    private final EventsAdaptor eventsAdaptor;
+    
+    public EventServiceImpl(EventsAdaptor eventsAdaptor) {
+        this.eventsAdaptor = eventsAdaptor;
+    }
     
     @Override
 	public EventService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
