@@ -44,6 +44,12 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Mikhail Pavlenko
  */
 
+
+/*
+    Пример описыват полный цикл работы с документооборотом - от создания черновика до заверншения документаоборотаю
+    Пример касается документооборота ФНС типа Декларация.
+    В качестве аргумента необходимо передавать путь к файлу с параметрами
+*/
 public class DocflowExample {
 
     private static final String STATUS_RESPONSE_ARRIVED = "urn:docflow-common-status:response-arrived";
@@ -58,7 +64,11 @@ public class DocflowExample {
         }
 
         // настраиваем engine сервис
-        ConfiguratorService configuratorService = new ConfiguratorService(getProperties(args[0]));
+        Properties properties = getProperties(args[0]);
+        if (properties == null) {
+            return;
+        }
+        ConfiguratorService configuratorService = new ConfiguratorService(properties);
         ExternEngine externEngine = configuratorService.getExternEngine();
 
         // 1. После отправки черновика мы получаем идентификатор документооборота
@@ -72,7 +82,6 @@ public class DocflowExample {
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
             System.out.println("Error sending document: " + sendCxt.getServiceError().toString());
-            docflowIds.add("8248b9de-1fc5-4a10-a8c2-59a293c06fdf");
         } else { // запоминаем для дальнейшей обработки
             docflowIds = sendCxt.getDocflows().stream().map(d -> d.getId().toString())
                 .collect(Collectors.toList());
@@ -111,7 +120,7 @@ public class DocflowExample {
                 QueryContext sendDocflowCtx = new QueryContext();
                 // подписываем каждый документ
                 SignatureToSend signature = new SignatureToSend();
-                signature.setContentData("signature" .getBytes());
+                signature.setContentData("signature".getBytes());
                 // signature.setContentData(docToSend.getContent());
                 docToSend.setSignature(signature);
                 sendDocflowCtx.setDocumentToSend(docToSend);
@@ -127,7 +136,7 @@ public class DocflowExample {
 
     }
 
-    // получаем парамеьры из файла конфигурации
+    // получаем параметры из файла конфигурации
     @Nullable
     private static Properties getProperties(@NotNull String path) throws IOException {
         File parameterFile = new File(path);

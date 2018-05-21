@@ -22,10 +22,18 @@
 
 package ru.kontur.extern_api.sdk.examples;
 
+import com.sun.javafx.fxml.PropertyNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
@@ -41,17 +49,25 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Mikhail Pavlenko
  *
  * Данный класс позволяет получить сконфигурированные на основе переданный в конструктор параметров
- * объекты классов, необходимых длz документооборота
+ * объекты классов, необходимых длz документооборота. Если данные по налогой или организации не были
+ * указаны в параметрах, то в таком случае они берутся из документа.
  */
 
 class ConfiguratorService {
 
+    @NotNull
     private final Properties parameters;
 
-    ConfiguratorService(Properties parameters) {
+    ConfiguratorService(@NotNull Properties parameters) {
         this.parameters = parameters;
+        if (parameters.getProperty("company.inn") == null
+            || parameters.getProperty("company.kpp") == null
+            || parameters.getProperty("ifns.code") == null) {
+            fillParametersFromFile();
+        }
     }
 
+    @NotNull
     ExternEngine getExternEngine() {
         // создаем экземляр движка для работы с API Экстерна
         ExternEngine engine = new ExternEngine();
@@ -96,6 +112,7 @@ class ConfiguratorService {
      *
      * @return Sender
      */
+    @NotNull
     Sender getSender() {
         Sender sender = new Sender();
         // ИНН отправителя
@@ -119,6 +136,7 @@ class ConfiguratorService {
      * @return FnsRecipient
      */
 
+    @NotNull
     FnsRecipient getRecipient() {
         FnsRecipient recipient = new FnsRecipient();
         // ИНН отправителя
@@ -131,6 +149,7 @@ class ConfiguratorService {
      *
      * @return Organization
      */
+    @NotNull
     Organization getOrganization() {
         return new Organization(parameters.getProperty("company.inn"),
             parameters.getProperty("company.kpp"));
@@ -141,6 +160,7 @@ class ConfiguratorService {
      *
      * @return ru.skbkontur.sdk.extern.service.File
      */
+    @NotNull
     ru.kontur.extern_api.sdk.service.File getFile() {
         File file = new File(parameters.getProperty("document.path"));
         return new ru.kontur.extern_api.sdk.service.File(file.getName(),
@@ -155,4 +175,69 @@ class ConfiguratorService {
         }
     }
 
+    private void fillParametersFromFile() {
+        try {
+            File docFile = new File(parameters.getProperty("document.path"));
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = null;
+            docBuilder = docFactory.newDocumentBuilder();
+            Document doc = docBuilder.parse(docFile);
+            if (parameters.getProperty("company.inn") == null
+                || parameters.getProperty("company.kpp") == null) {
+                fillOrganizationParameters(doc);
+            }
+
+            if (parameters.getProperty("ifns.code") == null) {
+                fillRecipient(doc);
+            }
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fillOrganizationParameters(@NotNull Document doc) {
+        // define organization(НПЮЛ) or individual(НПФЛ)
+        if (doc.getElementsByTagName("НПЮЛ") != null) { // organization
+            Node node = doc.getElementsByTagName("НПЮЛ").item(0);
+            parameters.setProperty("company.inn",
+                node.getAttributes().getNamedItem("ИННЮЛ").getNodeValue());
+            parameters.setProperty("company.kpp",
+                node.getAttributes().getNamedItem("КПП").getNodeValue());
+        } else if (doc.getElementsByTagName("НПФЛ") != null) {
+            Node node = doc.getElementsByTagName("НПЮЛ").item(0);
+            parameters.setProperty("company.inn",
+                node.getAttributes().getNamedItem("ИННФЛ").getNodeValue());
+        } else {
+            throw new PropertyNotFoundException(); // error! we not found required info
+        }
+    }
+
+    private void fillRecipient(@NotNull Document doc) {
+        // try to get "ifns.code" from attribute "КодНО" of element "Документ"
+        // if this attribute is absence then we can try to get from filename
+        // filename we can get from attribute "ИдФайл" of element "Файл"
+        if (doc.getElementsByTagName("Документ") != null) {
+            Node ifnsCode = doc.getElementsByTagName("Документ").item(0).getAttributes()
+                .getNamedItem("КодНО");
+            if (ifnsCode != null) {
+                parameters.setProperty("ifns.code", ifnsCode.getNodeValue());
+                return;
+            }
+        }
+
+        // get file name
+        // element "Файл" and attribute "ИдФайл" are mandatory
+        String filename = doc.getElementsByTagName("Файл").item(0).getAttributes()
+            .getNamedItem("ИдФайл").getNodeValue();
+        String[] fileParts = filename.split("_");
+
+        // filename consists of
+        // R_Т_A_K_О_GGGGMMDD_N, where:
+        // R_Т – prefix
+        // A_K – where A – id of recipient and K – id of final recipient
+        // ... and other
+        // so we need third part of file
+        parameters.setProperty("ifns.code", fileParts[2]);
+    }
 }
