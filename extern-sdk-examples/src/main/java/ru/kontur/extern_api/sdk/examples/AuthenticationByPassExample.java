@@ -34,10 +34,8 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
- */
 
-/*
-    пример аутентификации при помощи логина и пароля
+  пример аутентификации при помощи логина и пароля
  */
 public class AuthenticationByPassExample {
 

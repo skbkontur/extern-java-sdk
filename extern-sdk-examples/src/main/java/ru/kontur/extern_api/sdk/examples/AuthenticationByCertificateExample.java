@@ -33,9 +33,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
- */
 
-/*
     пример аутентификации по сертификату
  */
 public class AuthenticationByCertificateExample {
