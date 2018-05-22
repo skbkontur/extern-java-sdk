@@ -32,7 +32,6 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.AdaptorContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -47,14 +46,6 @@ public class AbstractService<T> {
     protected AccountProvider accountProvider;
     protected ApiKeyProvider apiKeyProvider;
     protected CryptoProvider cryptoProvider;
-
-    public AbstractService() {
-        init();
-    }
-
-    private void init() {
-        AdaptorContext.getInstance().bind(this);
-    }
 
     public CryptoProvider getCryptoProvider() throws SDKException {
         if (cryptoProvider == null) {

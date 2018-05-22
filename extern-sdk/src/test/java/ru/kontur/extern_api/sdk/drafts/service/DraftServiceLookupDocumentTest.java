@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.drafts.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -53,12 +52,12 @@ import ru.kontur.extern_api.sdk.drafts.DraftsValidator;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
-
 public class DraftServiceLookupDocumentTest {
 
     private static ExternEngine engine;
@@ -78,7 +77,8 @@ public class DraftServiceLookupDocumentTest {
     public static void stopJetty() {
         try {
             server.stop();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,28 +91,33 @@ public class DraftServiceLookupDocumentTest {
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
             new AuthenticationProvider() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
+            @Override
+            public QueryContext<String> sessionId() {
+                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+            }
 
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
+            @Override
+            public String authPrefix() {
+                return "auth.sid ";
+            }
 
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public AuthenticationProvider httpClient(HttpClient httpClient) {
+                return this;
+            }
 
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public void addAuthenticationListener(AuthenticationListener authListener) {
+            }
 
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
-                }
-            });
+            @Override
+            public void removeAuthenticationListener(AuthenticationListener authListener) {
+            }
+
+            @Override
+            public void raiseUnauthenticated(ServiceError x) {
+            }
+        });
     }
 
     @Test
@@ -134,16 +139,16 @@ public class DraftServiceLookupDocumentTest {
     @Test
     public void testLookupDocument_DecryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"decrypted-content-link\": {" +
-            "  \"href\": \"string\"," +
-            "  \"rel\": \"string\"," +
-            "  \"name\": \"string\"," +
-            "  \"title\": \"string\"," +
-            "  \"profile\": \"string\"," +
-            "  \"templated\": true" +
-            "}}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + "\"id\": \"" + StandardValues.ID + "\","
+            + "\"decrypted-content-link\": {"
+            + "  \"href\": \"string\","
+            + "  \"rel\": \"string\","
+            + "  \"name\": \"string\","
+            + "  \"title\": \"string\","
+            + "  \"profile\": \"string\","
+            + "  \"templated\": true"
+            + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), true, false, false);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), true, false, false);
     }
@@ -151,16 +156,16 @@ public class DraftServiceLookupDocumentTest {
     @Test
     public void testLookupDocument_EncryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"encrypted-content-link\": {" +
-            "  \"href\": \"string\"," +
-            "  \"rel\": \"string\"," +
-            "  \"name\": \"string\"," +
-            "  \"title\": \"string\"," +
-            "  \"profile\": \"string\"," +
-            "  \"templated\": true" +
-            "}}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + "\"id\": \"" + StandardValues.ID + "\","
+            + "\"encrypted-content-link\": {"
+            + "  \"href\": \"string\","
+            + "  \"rel\": \"string\","
+            + "  \"name\": \"string\","
+            + "  \"title\": \"string\","
+            + "  \"profile\": \"string\","
+            + "  \"templated\": true"
+            + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), false, true, false);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, true, false);
     }
@@ -168,16 +173,16 @@ public class DraftServiceLookupDocumentTest {
     @Test
     public void testLookupDocument_SignatureContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"signature-content-link\": {" +
-            "  \"href\": \"string\"," +
-            "  \"rel\": \"string\"," +
-            "  \"name\": \"string\"," +
-            "  \"title\": \"string\"," +
-            "  \"profile\": \"string\"," +
-            "  \"templated\": true" +
-            "}}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + "\"id\": \"" + StandardValues.ID + "\","
+            + "\"signature-content-link\": {"
+            + "  \"href\": \"string\","
+            + "  \"rel\": \"string\","
+            + "  \"name\": \"string\","
+            + "  \"title\": \"string\","
+            + "  \"profile\": \"string\","
+            + "  \"templated\": true"
+            + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), false, false, true);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, false, true);
     }
@@ -185,13 +190,13 @@ public class DraftServiceLookupDocumentTest {
     @Test
     public void testLookupDocument_DocumentDescription() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": {" +
-            "  \"type\": \"urn:nss:nid\"," +
-            "  \"filename\": \"string\"," +
-            "  \"content-type\": \"string\"" +
-            "}}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + "\"id\": \"" + StandardValues.ID + "\","
+            + "\"description\": {"
+            + "  \"type\": \"urn:nss:nid\","
+            + "  \"filename\": \"string\","
+            + "  \"content-type\": \"string\""
+            + "}}");
         DocflowsValidator.validateDocumentDescription(getDraftDocument().getDocumentDescription());
         DraftDocument draftDocumentAsync = getDraftDocumentAsync();
         if (draftDocumentAsync != null) {
@@ -254,7 +259,8 @@ public class DraftServiceLookupDocumentTest {
             return engine.getDraftService()
                 .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
                 .get().get();
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

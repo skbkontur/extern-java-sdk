@@ -27,6 +27,7 @@ import ru.kontur.extern_api.sdk.Environment;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
 
@@ -64,6 +65,11 @@ public class EngineAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
+    public AuthenticationProvider httpClient(HttpClient httpClient) {
+        return authenticationProvider.httpClient(httpClient);
+    }
+    
+    @Override
     public void addAuthenticationListener(AuthenticationListener authListener) {
         authenticationProvider.addAuthenticationListener(authListener);
     }
@@ -78,3 +84,4 @@ public class EngineAuthenticationProvider implements AuthenticationProvider {
         authenticationProvider.raiseUnauthenticated(x);
     }
 }
+ 

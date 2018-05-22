@@ -31,7 +31,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -47,7 +46,6 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
     private LoginAndPasswordProvider loginAndPasswordProvider;
     private UriProvider authBaseUriProvider;
 
-    @Component("httpClient")
     private HttpClient httpClient;
 
     public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
@@ -61,6 +59,11 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
     }
 
+    public AuthenticationProviderByPass httpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        return this;
+    }
+    
     public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
     }

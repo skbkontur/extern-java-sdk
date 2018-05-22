@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.docflows.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -52,23 +51,22 @@ import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
-
 public class DocflowServiceLookupDocflowTest {
 
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String DOCFLOW = "\"id\": \"" + StandardValues.ID + "\"," +
-        "\"type\": \"urn:nss:nid\"," +
-        "\"status\": \"urn:nss:nid\"," +
-        "\"send-date\": \"" + StandardValues.DATE + "\"," +
-        "\"last-change-date\": \"" + StandardValues.DATE + "\"";
-
+    private final static String DOCFLOW = "\"id\": \"" + StandardValues.ID + "\","
+        + "\"type\": \"urn:nss:nid\","
+        + "\"status\": \"urn:nss:nid\","
+        + "\"send-date\": \"" + StandardValues.DATE + "\","
+        + "\"last-change-date\": \"" + StandardValues.DATE + "\"";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -84,7 +82,8 @@ public class DocflowServiceLookupDocflowTest {
     public static void stopJetty() {
         try {
             server.stop();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,28 +96,33 @@ public class DocflowServiceLookupDocflowTest {
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
             new AuthenticationProvider() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
+            @Override
+            public QueryContext<String> sessionId() {
+                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+            }
 
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
+            @Override
+            public String authPrefix() {
+                return "auth.sid ";
+            }
 
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public AuthenticationProvider httpClient(HttpClient httpClient) {
+                return this;
+            }
 
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public void addAuthenticationListener(AuthenticationListener authListener) {
+            }
 
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
-                }
-            });
+            @Override
+            public void removeAuthenticationListener(AuthenticationListener authListener) {
+            }
+
+            @Override
+            public void raiseUnauthenticated(ServiceError x) {
+            }
+        });
     }
 
     @Test
@@ -149,12 +153,12 @@ public class DocflowServiceLookupDocflowTest {
     @Test
     public void testLookupDocflow_Docflow_Documents() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage(String.format("{%s," +
-            "\"description\": {}," +
-            "\"documents\": [{" +
-            "   \"id\": \"%s\"" +
-            "}]" +
-            "}", DOCFLOW, StandardValues.ID));
+        ResponseData.INSTANCE.setResponseMessage(String.format("{%s,"
+            + "\"description\": {},"
+            + "\"documents\": [{"
+            + "   \"id\": \"%s\""
+            + "}]"
+            + "}", DOCFLOW, StandardValues.ID));
         DocflowsValidator.validateDocflow(getDocflow(), true, true, false);
         DocflowsValidator.validateDocflow(getDocflowAsync(), true, true, false);
     }
@@ -162,12 +166,12 @@ public class DocflowServiceLookupDocflowTest {
     @Test
     public void testLookupDocflow_Docflow_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-            DOCFLOW + "," +
-            "  \"description\": {}," +
-            "  \"documents\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
-            "  \"links\": [" + StandardObjects.LINK + "]" +
-            "}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + DOCFLOW + ","
+            + "  \"description\": {},"
+            + "  \"documents\": [{\"id\": \"" + StandardValues.ID + "\"}],"
+            + "  \"links\": [" + StandardObjects.LINK + "]"
+            + "}");
         DocflowsValidator.validateDocflow(getDocflow(), true, true, true);
         DocflowsValidator.validateDocflow(getDocflowAsync(), true, true, true);
     }
@@ -222,7 +226,8 @@ public class DocflowServiceLookupDocflowTest {
     private Docflow getDocflowAsync() {
         try {
             return engine.getDocflowService().lookupDocflowAsync(StandardValues.ID).get().get();
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

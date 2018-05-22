@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.docflows.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -52,20 +51,20 @@ import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
-
 public class DocflowServiceLookupDescriptionTest {
 
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
-        "\"filename\": \"string\"," +
-        "\"content-type\": \"string\"}";
+    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\","
+        + "\"filename\": \"string\","
+        + "\"content-type\": \"string\"}";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -81,7 +80,8 @@ public class DocflowServiceLookupDescriptionTest {
     public static void stopJetty() {
         try {
             server.stop();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -94,28 +94,33 @@ public class DocflowServiceLookupDescriptionTest {
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
             new AuthenticationProvider() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
+            @Override
+            public QueryContext<String> sessionId() {
+                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+            }
 
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
+            @Override
+            public String authPrefix() {
+                return "auth.sid ";
+            }
 
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public AuthenticationProvider httpClient(HttpClient httpClient) {
+                return this;
+            }
 
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
+            @Override
+            public void addAuthenticationListener(AuthenticationListener authListener) {
+            }
 
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
-                }
-            });
+            @Override
+            public void removeAuthenticationListener(AuthenticationListener authListener) {
+            }
+
+            @Override
+            public void raiseUnauthenticated(ServiceError x) {
+            }
+        });
     }
 
     @Test
@@ -189,7 +194,8 @@ public class DocflowServiceLookupDescriptionTest {
             return engine.getDocflowService()
                 .lookupDescriptionAsync(StandardValues.ID, StandardValues.ID)
                 .get().get();
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

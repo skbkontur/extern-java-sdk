@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.accounts.service;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -54,19 +53,21 @@ import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
  */
 public class AccountServiceGetAccountTest {
+
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"inn\": \"string\"," +
-            "\"kpp\": \"string\"," +
-            "\"organization-name\": \"string\"";
+    private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\","
+        + "\"inn\": \"string\","
+        + "\"kpp\": \"string\","
+        + "\"organization-name\": \"string\"";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -82,7 +83,8 @@ public class AccountServiceGetAccountTest {
     public static void stopJetty() {
         try {
             server.stop();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -94,29 +96,34 @@ public class AccountServiceGetAccountTest {
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
-                new AuthenticationProvider() {
-                    @Override
-                    public QueryContext<String> sessionId() {
-                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                    }
+            new AuthenticationProvider() {
+            @Override
+            public QueryContext<String> sessionId() {
+                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+            }
 
-                    @Override
-                    public String authPrefix() {
-                        return "auth.sid ";
-                    }
+            @Override
+            public String authPrefix() {
+                return "auth.sid ";
+            }
 
-                    @Override
-                    public void addAuthenticationListener(AuthenticationListener authListener) {
-                    }
+            @Override
+            public AuthenticationProvider httpClient(HttpClient httpClient) {
+                return this;
+            }
 
-                    @Override
-                    public void removeAuthenticationListener(AuthenticationListener authListener) {
-                    }
+            @Override
+            public void addAuthenticationListener(AuthenticationListener authListener) {
+            }
 
-                    @Override
-                    public void raiseUnauthenticated(ServiceError x) {
-                    }
-                });
+            @Override
+            public void removeAuthenticationListener(AuthenticationListener authListener) {
+            }
+
+            @Override
+            public void raiseUnauthenticated(ServiceError x) {
+            }
+        });
     }
 
     @Test
@@ -134,7 +141,8 @@ public class AccountServiceGetAccountTest {
         ResponseData.INSTANCE.setResponseMessage("{}");
         try {
             assertNotNull("Account must not be null!", engine.getAccountService().getAccountAsync(StandardValues.ID).get().get());
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
         }
     }
@@ -154,7 +162,8 @@ public class AccountServiceGetAccountTest {
         ResponseData.INSTANCE.setResponseMessage("{" + ACCOUNT + "}");
         try {
             AccountsValidator.validateAccount(engine.getAccountService().getAccountAsync(StandardValues.ID).get().get(), false);
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
         }
     }
@@ -162,10 +171,10 @@ public class AccountServiceGetAccountTest {
     @Test
     public void testGetAccount_Links() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-                ACCOUNT + "," +
-                "\"links\": [" + StandardObjects.LINK + "]" +
-                "}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + ACCOUNT + ","
+            + "\"links\": [" + StandardObjects.LINK + "]"
+            + "}");
         QueryContext<CertificateList> queryContext = new QueryContext<>();
         queryContext.set(QueryContext.ACCOUNT_ID, UUID.fromString(StandardValues.ID));
         AccountsValidator.validateAccount(engine.getAccountService().getAccount(queryContext).get(), true);
@@ -174,13 +183,14 @@ public class AccountServiceGetAccountTest {
     @Test
     public void testGetAccountAsync_Links() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{" +
-                ACCOUNT + "," +
-                "\"links\": [" + StandardObjects.LINK + "]" +
-                "}");
+        ResponseData.INSTANCE.setResponseMessage("{"
+            + ACCOUNT + ","
+            + "\"links\": [" + StandardObjects.LINK + "]"
+            + "}");
         try {
             AccountsValidator.validateAccount(engine.getAccountService().getAccountAsync(StandardValues.ID).get().get(), true);
-        } catch (InterruptedException | ExecutionException e) {
+        }
+        catch (InterruptedException | ExecutionException e) {
             fail();
         }
     }

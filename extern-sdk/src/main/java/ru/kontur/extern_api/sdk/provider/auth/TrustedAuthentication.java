@@ -41,7 +41,7 @@ import java.util.Map;
 
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.annotation.Component;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -68,8 +68,6 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
     private String authPrefix;
     private String timestamp;
     private CredentialProvider credentialProvider;
-
-    @Component("httpClient")
     private HttpClient httpClient;
 
     public TrustedAuthentication(String authPrefix) {
@@ -184,6 +182,12 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
         return authPrefix;
     }
 
+    @Override
+    public AuthenticationProvider httpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        return this;
+    }
+    
     public QueryContext<Void> registerExternalServiceId(String serviceUserId, String phone) {
         QueryContext<Void> registerCxt;
 

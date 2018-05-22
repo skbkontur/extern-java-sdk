@@ -44,6 +44,7 @@ import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
 import ru.kontur.extern_api.sdk.provider.auth.Link;
+import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class CertificateAuthenticationTest {
@@ -119,6 +120,7 @@ public class CertificateAuthenticationTest {
                 .setApiKeyProvider(() -> "apikey")
                 .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
                 .setSignatureKeyProvider(() -> "signature")
+                .setHttpClient(new DefaultServicesFactory().getHttpClient())
                 .buildAuthenticationProvider();
     }
 
