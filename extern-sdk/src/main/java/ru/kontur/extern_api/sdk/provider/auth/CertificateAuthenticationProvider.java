@@ -36,8 +36,8 @@ import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.Messages;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.SignatureKeyProvider;
@@ -65,7 +65,6 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     private static final String APPROVE_CERT_PATH = "/auth/v5.9/approve-cert";
 
     private final URL certificateUrl;
-    @Component("httpClient")
     private HttpClient httpClient;
     private final String skipCertValidation;
 
@@ -82,12 +81,14 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         ApiKeyProvider apiKeyProvider,
         UriProvider serviceBaseUriProvider,
         CryptoProvider cryptoProvider,
-        SignatureKeyProvider signatureKeyProvider) {
+        SignatureKeyProvider signatureKeyProvider,
+        HttpClient httpClient) {
 
         this.apiKeyProvider = apiKeyProvider;
         this.serviceBaseUriProvider = serviceBaseUriProvider;
         this.cryptoProvider = cryptoProvider;
         this.signatureKeyProvider = signatureKeyProvider;
+        this.httpClient = httpClient;
 
         this.certificateUrl = certificateUrl;
         this.skipCertValidation = Boolean.toString(skipCertValidation);
@@ -144,6 +145,12 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         return new QueryContext<String>().setResult(credentials.getSid(), QueryContext.SESSION_ID);
     }
 
+    @Override
+    public AuthenticationProvider httpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        return this;
+    }
+    
     private byte[] decodeSecret(String encryptedKey, String thumbprint) {
         byte[] decodedEncryptedKey = B64DECODER.decode(encryptedKey);
         return cryptoProvider.decrypt(
@@ -228,6 +235,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         private UriProvider serviceBaseUriProvider;
         private CryptoProvider cryptoProvider;
         private SignatureKeyProvider signatureKeyProvider;
+        private HttpClient httpClient;
 
         CertificateAuthenticationProviderBuilder(
             @NotNull URL certUrl,
@@ -260,6 +268,11 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
             return this;
         }
 
+        public CertificateAuthenticationProviderBuilder setHttpClient(@NotNull HttpClient httpClient) {
+            this.httpClient = httpClient;
+            return this;
+        }
+        
         public CertificateAuthenticationProvider buildAuthenticationProvider() {
             return new CertificateAuthenticationProvider(
                 Objects.requireNonNull(certUrl),
@@ -267,7 +280,8 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
                 Objects.requireNonNull(apiKeyProvider),
                 Objects.requireNonNull(serviceBaseUriProvider),
                 Objects.requireNonNull(cryptoProvider),
-                Objects.requireNonNull(signatureKeyProvider)
+                Objects.requireNonNull(signatureKeyProvider),
+                Objects.requireNonNull(httpClient)
             );
         }
     }

@@ -44,8 +44,6 @@ import java.util.function.Function;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_DECRYPT;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_SIGNATURE;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.annotation.Component;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.AdaptorContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -81,18 +79,12 @@ public class CloudCryptoProvider implements CryptoProvider {
 
     private Function<String, byte[]> certificateProvider;
 
-    @Component("httpClient")
     private HttpClient httpClient;
 
     public CloudCryptoProvider(String cloudCryptoBaseUri) {
         this.cloudCryptoBaseUri = cloudCryptoBaseUri;
-        init();
     }
 
-    private void init() {
-        AdaptorContext.getInstance().bind(this);
-    }
-    
     public String getCloudCryptoBaseUri() {
         return cloudCryptoBaseUri;
     }
@@ -135,6 +127,15 @@ public class CloudCryptoProvider implements CryptoProvider {
 
     public HttpClient getHttpClient() {
         return httpClient;
+    }
+
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+    
+    public CloudCryptoProvider httpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        return this;
     }
     
     @Override

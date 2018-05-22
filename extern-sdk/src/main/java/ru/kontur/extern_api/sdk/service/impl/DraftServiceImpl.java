@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -60,8 +59,11 @@ public class DraftServiceImpl extends AbstractService<DraftsAdaptor> implements 
     private static final String EN_DOC = "Документ";
     private static final String EN_SIGN = "Подпись";
 
-    @Component("draftsAdaptor")
-    private DraftsAdaptor draftsAdaptor;
+    private final DraftsAdaptor draftsAdaptor;
+    
+    public DraftServiceImpl(DraftsAdaptor draftsAdaptor) {
+        this.draftsAdaptor = draftsAdaptor;
+    }
     
     @Override
 	public DraftService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {

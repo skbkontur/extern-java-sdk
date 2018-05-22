@@ -31,7 +31,6 @@ import ru.kontur.extern_api.sdk.model.Link;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.annotation.Component;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -49,8 +48,11 @@ public class AccountServiceImpl extends AbstractService<AccountsAdaptor> impleme
 
     private static final String EN_ACC = "account";
 
-    @Component("accountsAdaptor")
-    private AccountsAdaptor accountsAdaptor;
+    private final AccountsAdaptor accountsAdaptor;
+
+    public AccountServiceImpl(AccountsAdaptor accountsAdaptor) {
+        this.accountsAdaptor = accountsAdaptor;
+    }
     
     @Override
 	public AccountService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {

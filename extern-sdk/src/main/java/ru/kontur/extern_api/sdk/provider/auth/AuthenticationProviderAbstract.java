@@ -32,7 +32,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import java.util.ArrayList;
 import java.util.List;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.AdaptorContext;
 
 
 /**
@@ -46,13 +45,8 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
 
     AuthenticationProviderAbstract() {
         this.authListeners = new ArrayList<>();
-        init();
     }
 
-    private void init() {
-        AdaptorContext.getInstance().bind(this);
-    }
-    
     @Override
     public void addAuthenticationListener(AuthenticationListener authenticationListener) {
         synchronized (authListeners) {
