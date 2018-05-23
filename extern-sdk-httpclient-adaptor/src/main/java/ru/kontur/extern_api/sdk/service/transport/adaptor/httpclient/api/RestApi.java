@@ -61,7 +61,7 @@ public class RestApi {
 
     private static final Gson JSON = configuredGson();
 
-    private static final HttpClient HTTPCLIENT = configuredHttpClient();
+    protected static final HttpClient HTTPCLIENT = configuredHttpClient();
 
     protected RestApi() {
         Class<?> clazz = getClass();
