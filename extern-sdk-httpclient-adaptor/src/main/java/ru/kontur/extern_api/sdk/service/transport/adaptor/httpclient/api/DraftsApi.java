@@ -46,23 +46,26 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 
 /**
- *
  * @author alexs
  */
 public class DraftsApi extends RestApi {
+
     /**
      * Create new a draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param clientInfo DraftMeta draft meta data
      * @return ApiResponse &lt;UUID&gt; draft identifier
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
-	@Path("/v1/{accountId}/drafts")
+    @Path("/v1/{accountId}/drafts")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Draft> createDraft(@PathParam("accountId") String accountId, DraftMeta clientInfo) throws ApiException {
-        return invoke("createDraft", clientInfo, new TypeToken<Draft>(){}.getType(), accountId);
+    public ApiResponse<Draft> createDraft(@PathParam("accountId") String accountId,
+        DraftMeta clientInfo) throws ApiException {
+        return invoke("createDraft", clientInfo, new TypeToken<Draft>() {
+        }.getType(), accountId);
     }
 
     /**
@@ -73,302 +76,389 @@ public class DraftsApi extends RestApi {
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
-	@Path("/v1/{accountId}/drafts/{draftId}")
+    @Path("/v1/{accountId}/drafts/{draftId}")
     @DELETE
-    public ApiResponse<Void> delete(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("delete", null, new TypeToken<Void>(){}.getType(), accountId, draftId);
+    public ApiResponse<Void> delete(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId) throws ApiException {
+        return invoke("delete", null, new TypeToken<Void>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * lookup a draft by an identifier
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;Draft&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Draft> lookup(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("lookup", null, new TypeToken<Draft>(){}.getType(), accountId, draftId);
+    public ApiResponse<Draft> lookup(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId) throws ApiException {
+        return invoke("lookup", null, new TypeToken<Draft>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * lookup a draft meta by an identifier
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;DraftMeta&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/meta")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DraftMeta> lookupDraftMeta(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("lookupDraftMeta", null, new TypeToken<DraftMeta>(){}.getType(), accountId, draftId);
+    public ApiResponse<DraftMeta> lookupDraftMeta(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId) throws ApiException {
+        return invoke("lookupDraftMeta", null, new TypeToken<DraftMeta>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * update a draft meta
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param clientInfo DraftMeta draft meta data
      * @return ApiResponse&lt;DraftMeta&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/meta")
     @PUT
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DraftMeta> updateDraftMeta(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, DraftMeta clientInfo) throws ApiException {
-        return invoke("updateDraftMeta", clientInfo, new TypeToken<DraftMeta>(){}.getType(), accountId, draftId);
+    public ApiResponse<DraftMeta> updateDraftMeta(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, DraftMeta clientInfo) throws ApiException {
+        return invoke("updateDraftMeta", clientInfo, new TypeToken<DraftMeta>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * Operate CHECK
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;Map&lt;String, Object&gt;&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/check")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Map<String, Object>> check(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("check", null, new TypeToken<Map<String, Object>>(){}.getType(), accountId, draftId);
+    public ApiResponse<Map<String, Object>> check(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId) throws ApiException {
+        return invoke("check", null, new TypeToken<Map<String, Object>>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * Operate PREPARE
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;PrepareResult&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/prepare")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<PrepareResult> prepare(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("prepare", null, new TypeToken<PrepareResult>(){}.getType(), accountId, draftId);
+    public ApiResponse<PrepareResult> prepare(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId) throws ApiException {
+        return invoke("prepare", null, new TypeToken<PrepareResult>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * Send the draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param deferred boolean
      * @param force boolean
      * @return ApiResponse&lt;List&lt;Docflow&gt;&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/send")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<List<Docflow>> send(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred, @QueryParam("force") boolean force) throws ApiException {
-        return invoke("send", null, new TypeToken<List<Docflow>>(){}.getType(), accountId, draftId, deferred, force);
+    public ApiResponse<List<Docflow>> send(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred,
+        @QueryParam("force") boolean force) throws ApiException {
+        return invoke("send", null, new TypeToken<List<Docflow>>() {
+        }.getType(), accountId, draftId, deferred, force);
     }
 
     /**
      * Delete a document from the draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     @DELETE
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> deleteDocument(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("deleteDocument", null, new TypeToken<List<Docflow>>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<Void> deleteDocument(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("deleteDocument", null, new TypeToken<List<Docflow>>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * lookup a document from the draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;DraftDocument&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DraftDocument> lookupDocument(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("lookupDocument", null, new TypeToken<DraftDocument>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<DraftDocument> lookupDocument(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("lookupDocument", null, new TypeToken<DraftDocument>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Update a draft document Update the document
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @param documentContents DocumentContents
      * @return ApiResponse&lt;DraftDocument&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     @PUT
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DraftDocument> updateDocument(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId, DocumentContents documentContents) throws ApiException {
-        return invoke("updateDocument", documentContents, new TypeToken<DraftDocument>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<DraftDocument> updateDocument(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+        DocumentContents documentContents) throws ApiException {
+        return invoke("updateDocument", documentContents, new TypeToken<DraftDocument>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * print a document from the draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;String&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<String> printDocument(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("printDocument", null, new TypeToken<String>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<String> printDocument(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("printDocument", null, new TypeToken<String>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Add a new document to the draft
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
-     * @param documentId String document identifier
      * @param documentContents DocumentContents
      * @return ApiResponse&lt;DraftDocument&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DraftDocument> addDecryptedDocument(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, DocumentContents documentContents) throws ApiException {
-        return invoke("addDecryptedDocument", documentContents, new TypeToken<DraftDocument>(){}.getType(), accountId, draftId);
+    public ApiResponse<DraftDocument> addDecryptedDocument(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, DocumentContents documentContents)
+        throws ApiException {
+        return invoke("addDecryptedDocument", documentContents, new TypeToken<DraftDocument>() {
+        }.getType(), accountId, draftId);
     }
 
     /**
      * Get a decrypted document content
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;String&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<String> getDecryptedDocumentContent(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("getDecryptedDocumentContent", null, new TypeToken<String>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<String> getDecryptedDocumentContent(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("getDecryptedDocumentContent", null, new TypeToken<String>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Update a decrypted document content
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @param content byte[], base64 decrypted document content
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted")
     @PUT
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> updateDecryptedDocumentContent(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId, byte[] content) throws ApiException {
-        return invoke("updateDecryptedDocumentContent", content, new TypeToken<Void>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<Void> updateDecryptedDocumentContent(
+        @PathParam("accountId") String accountId, @PathParam("draftId") String draftId,
+        @PathParam("documentId") String documentId, byte[] content) throws ApiException {
+        return invoke("updateDecryptedDocumentContent", content, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Get a encrypted document content
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;String&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<String> getEncryptedDocumentContent(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("getEncryptedDocumentContent", null, new TypeToken<String>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<String> getEncryptedDocumentContent(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("getEncryptedDocumentContent", null, new TypeToken<String>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Get a document signature
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @return ApiResponse&lt;String&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<String> getSignatureContent(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId) throws ApiException {
-        return invoke("getSignatureContent", null, new TypeToken<String>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<String> getSignatureContent(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+        throws ApiException {
+        return invoke("getSignatureContent", null, new TypeToken<String>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Update a document signature
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @param content byte[], base64 signature content
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
     @PUT
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> updateSignature(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId, byte[] content) throws ApiException {
-        return invoke("updateSignature", content, new TypeToken<Void>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<Void> updateSignature(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+        byte[] content) throws ApiException {
+        return invoke("updateSignature", content, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Create an USN declaration, version 1
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @param usn UsnServiceContractInfo meta data of an USN document
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> createUSN1(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId, UsnServiceContractInfo usn) throws ApiException {
-        return invoke("createUSN1", usn, new TypeToken<Void>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<Void> createUSN1(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+        UsnServiceContractInfo usn) throws ApiException {
+        return invoke("createUSN1", usn, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, documentId);
     }
 
     /**
      * Create an USN declaration, version 2
      * <p>
+     *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @param documentId String document identifier
      * @param usn UsnServiceContractInfo meta data of an USN document
      * @return ApiResponse&lt;Void&gt;
-     * @throws ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException transport exception
+     * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> createUSN2(@PathParam("accountId") String accountId, @PathParam("draftId") String draftId, @PathParam("documentId") String documentId, UsnServiceContractInfoV2 usn) throws ApiException {
-        return invoke("createUSN2", usn, new TypeToken<Void>(){}.getType(), accountId, draftId, documentId);
+    public ApiResponse<Void> createUSN2(@PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+        UsnServiceContractInfoV2 usn) throws ApiException {
+        return invoke("createUSN2", usn, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, documentId);
+    }
+
+    /**
+     * @param accountId (required)
+     * @param draftId (required)
+     * @param type (required)
+     * @param version (required)
+     * @param content (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException transport exception
+     */
+    public ApiResponse<Void> createType(
+        @PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId,
+        @PathParam("type") String type,
+        @PathParam("version") Integer version,
+        String content) throws ApiException {
+        return invoke("createType", content, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, type, version);
     }
 }

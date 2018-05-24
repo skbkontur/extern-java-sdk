@@ -23,6 +23,16 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOWS;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_DOCUMENT;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_ID;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_META;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.MAP;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NOTHING;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PREPARE_RESULT;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,19 +44,9 @@ import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOWS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_DOCUMENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_ID;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_META;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.MAP;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NOTHING;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PREPARE_RESULT;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DraftsApi;
 
 /**
- *
  * @author alexs
  */
 public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
@@ -74,15 +74,14 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
 
             UUID draftId
                 = transport(cxt)
-                    .createDraft(
-                        cxt.getAccountProvider().accountId().toString(),
-                        cxt.getDraftMeta()
-                    )
-                    .getData().getId();
+                .createDraft(
+                    cxt.getAccountProvider().accountId().toString(),
+                    cxt.getDraftMeta()
+                )
+                .getData().getId();
 
             return cxt.setResult(draftId, DRAFT_ID);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -111,8 +110,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -132,11 +130,11 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 return cxt;
             }
 
-            transport(cxt).delete(cxt.getAccountProvider().accountId().toString(), cxt.getDraftId().toString());
+            transport(cxt).delete(cxt.getAccountProvider().accountId().toString(),
+                cxt.getDraftId().toString());
 
             return cxt.setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -166,8 +164,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                         .getData(),
                     DRAFT_META
                 );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -197,8 +194,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_META
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -228,8 +224,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 MAP
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -259,8 +254,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 PREPARE_RESULT
             );
 
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -291,8 +285,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DOCFLOWS
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -319,8 +312,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             );
 
             return cxt.setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -350,8 +342,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -382,8 +373,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -413,8 +403,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -444,8 +433,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -475,8 +463,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -505,8 +492,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -536,8 +522,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -567,8 +552,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -597,8 +581,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -627,8 +610,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -657,8 +639,36 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
+        } catch (ApiException x) {
+            return cxt.setServiceError(x);
         }
-        catch (ApiException x) {
+    }
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}
+     * <p>
+     *
+     * @param cxt a context
+     * @return QueryContext&lt;Void&gt;
+     */
+    @Override
+    public QueryContext<Void> createType(QueryContext<Void> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            transport(cxt)
+                .createType(
+                    cxt.getAccountProvider().accountId().toString(),
+                    cxt.getDraftId().toString(),
+                    cxt.getType(),
+                    cxt.getVersion(),
+                    cxt.getContentString()
+                );
+
+            return cxt.setResult(null, NOTHING);
+        } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }

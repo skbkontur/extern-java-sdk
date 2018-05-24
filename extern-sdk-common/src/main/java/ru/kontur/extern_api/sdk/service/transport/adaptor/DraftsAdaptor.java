@@ -234,4 +234,15 @@ public interface DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     QueryContext<Void> createUSN2(QueryContext<Void> cxt);
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}
+     * <p>
+     *
+     * @param cxt a context
+     * @return QueryContext&lt;Void&gt;
+     */
+    QueryContext<Void> createType(QueryContext<Void> cxt);
+
+
 }
