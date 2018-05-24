@@ -35,16 +35,16 @@ import java.util.Objects;
  */
 public class EventsPage {
 
-		@SerializedName("first-event-id")
+    @SerializedName("first-event-id")
     private String firstEventId = null;
-		@SerializedName("last-event-id")
+    @SerializedName("last-event-id")
     private String lastEventId = null;
-		@SerializedName("requested-count")
+    @SerializedName("requested-count")
     private Integer requestedCount = null;
-		@SerializedName("returned-count")
+    @SerializedName("returned-count")
     private Integer returnedCount = null;
-		@SerializedName("api-events")
-    private List<ApiEvent> apiEvents = null;
+    @SerializedName("api-events")
+    private List<ApiEvent> apiEvents = new ArrayList<>();
 
     public String getFirstEventId() {
         return firstEventId;
@@ -104,10 +104,10 @@ public class EventsPage {
         }
         EventsPage eventsPage = (EventsPage) o;
         return Objects.equals(this.firstEventId, eventsPage.firstEventId)
-                && Objects.equals(this.lastEventId, eventsPage.lastEventId)
-                && Objects.equals(this.requestedCount, eventsPage.requestedCount)
-                && Objects.equals(this.returnedCount, eventsPage.returnedCount)
-                && Objects.equals(this.apiEvents, eventsPage.apiEvents);
+            && Objects.equals(this.lastEventId, eventsPage.lastEventId)
+            && Objects.equals(this.requestedCount, eventsPage.requestedCount)
+            && Objects.equals(this.returnedCount, eventsPage.returnedCount)
+            && Objects.equals(this.apiEvents, eventsPage.apiEvents);
     }
 
     @Override
