@@ -127,6 +127,7 @@ public class QueryContext<R> implements Serializable {
     public static final String EVENTS_PAGE = "eventsPage";
     public static final String NOTHING = "nothing";
     public static final String OBJECT = "object";
+    public static final String VERSION = "version";
 
     private final Map<String, Object> params;
 
@@ -627,6 +628,7 @@ public class QueryContext<R> implements Serializable {
         return set(TAKE, take);
     }
 
+
     public String getInnKpp() {
         return (String) params.get(INN_KPP);
     }
@@ -729,6 +731,14 @@ public class QueryContext<R> implements Serializable {
 
     public QueryContext<R> setEventsPageSize(EventsPage eventsPage) {
         return set(EVENTS_PAGE, eventsPage);
+    }
+
+    public int getVersion() {
+        return (int) params.get(VERSION);
+    }
+
+    public QueryContext<R> setVersion(int version) {
+        return set(VERSION, version);
     }
 
     public QueryContext<R> set(String name, Object val) {
