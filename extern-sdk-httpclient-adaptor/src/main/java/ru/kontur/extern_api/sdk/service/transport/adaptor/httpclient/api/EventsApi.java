@@ -43,7 +43,7 @@ public class EventsApi extends RestApi {
      * @return ApiResponse&lt;EventsPage&gt;
      * @throws ApiException transport exception
      */
-    @Path("GET /v1/events")
+    @Path("/v1/events")
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<EventsPage> getEvents(String fromId, Integer batchSize) throws ApiException {
