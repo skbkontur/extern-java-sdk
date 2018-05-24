@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 SKB Kontur
+ * Copyright 2018 alexs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor;
+package ru.kontur.extern_api.sdk.provider;
 
 /**
  *
  * @author alexs
  */
-public interface CloudCryptoAdaptor {
-    public static final String APPROVE_CODE_PROVIDER = "approveCodeProvider";
-    
-    QueryContext<byte[]> sign(QueryContext<byte[]> cxt);
-
-    QueryContext<byte[]> getSignerCertificate(QueryContext<byte[]> cxt);
-
-    QueryContext<byte[]> decrypt(QueryContext<byte[]> cxt);
+public interface UserAgentProvider {
+    String getVersion();
 }

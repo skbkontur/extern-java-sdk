@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -66,7 +68,7 @@ public class ApiClient extends ru.kontur.extern_api.sdk.service.transport.swagge
         }
         return this;
     }
-    
+
     @Override
     public HttpClient acceptApiKey(String apiKey) {
         if (apiKey != null && !apiKey.isEmpty()) {
@@ -77,8 +79,7 @@ public class ApiClient extends ru.kontur.extern_api.sdk.service.transport.swagge
         }
         return this;
     }
-    
-    
+
     /**
      * Serialize the given Java object into request body according to the object's class and the request Content-Type.
      *
@@ -139,7 +140,25 @@ public class ApiClient extends ru.kontur.extern_api.sdk.service.transport.swagge
         }
     }
 
+    @Override
     public void setReadTimeout(int milliseconds) {
         getHttpClient().setReadTimeout(milliseconds, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public HttpClient userAgentProvider(UserAgentProvider userAgentProvider) {
+        super.setUserAgent(userAgentProvider.getVersion());
+        return this;
+    }
+    
+    @Override
+    public HttpClient setGson(Gson gson) {
+        super.getJSON().setGson(gson);
+        return this;
+    }
+
+    @Override
+    public void setConnectWaiting(int millisocond) {
+        super.setConnectTimeout(millisocond);
     }
 }

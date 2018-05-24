@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 SKB Kontur
+ * Copyright 2018 alexs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,13 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
-import java.util.List;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
-import ru.kontur.extern_api.sdk.model.Link;
+import java.util.function.Supplier;
 
 /**
  *
  * @author alexs
  */
-public interface AccountsAdaptor extends Adaptor {
-
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt);
-
-    public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt);
-
-    public QueryContext<Object> createAccount(QueryContext<Object> cxt);
-
-    public QueryContext<Account> getAccount(QueryContext<Account> cxt);
+public interface Adaptor {
+    HttpClient getHttpClient();
+    void setHttpClient(Supplier<HttpClient> httpClient);
 }

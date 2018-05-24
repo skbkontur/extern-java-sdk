@@ -18,10 +18,12 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PR
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowDto;
@@ -52,14 +54,16 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     @Override
-    public ApiClient getApiClient() {
-        return (ApiClient) api.getApiClient();
+    @SuppressWarnings("unchecked")
+    public HttpClient getHttpClient() {
+        return (ApiClient)api.getApiClient();
     }
 
     @Override
-    public void setApiClient(ApiClient apiClient) {
-        api.setApiClient(apiClient);
+    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
+        super.httpClientSupplier = httpClientSupplier;
     }
+
 
     /**
      * Create new a draft
@@ -680,7 +684,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     private DraftsApi transport(QueryContext<?> cxt) {
-        super.prepareTransport(cxt);
+		api.setApiClient((ApiClient)prepareTransport(cxt));
         return api;
     }
 }

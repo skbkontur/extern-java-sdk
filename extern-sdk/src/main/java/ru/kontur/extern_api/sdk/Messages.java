@@ -47,6 +47,7 @@ public class Messages {
     public static final String C_RESOURCE_NOT_FOUND = "C_RESOURCE_NOT_FOUND";
     public static final String C_NO_SIGNATURE = "C_NO_SIGNATURE";
     public static final String C_NO_DECRYPT = "C_NO_DECRYPT";
+    public static final String C_NO_USER_AGENT_PROVIDER = "C_NO_USER_AGENT_PROVIDER";
 
     private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("Messages", Locale.getDefault());
 

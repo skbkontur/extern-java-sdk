@@ -25,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
@@ -46,8 +48,8 @@ public class EventsApi extends RestApi {
     @Path("/v1/events")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<EventsPage> getEvents(String fromId, Integer batchSize) throws ApiException {
-        return invoke("getEvents", null, new TypeToken<EventsPage>() {
-        }.getType(), fromId, batchSize);
+    @Produces("application/json; charset=utf-8")
+    public ApiResponse<EventsPage> getEvents(@QueryParam("fromId") String fromId, @QueryParam("batchSize") Integer batchSize) throws ApiException {
+        return invoke("getEvents", null, new TypeToken<EventsPage>() {}.getType(), fromId, batchSize);
     }
 }

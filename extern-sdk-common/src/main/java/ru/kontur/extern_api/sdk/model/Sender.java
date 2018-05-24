@@ -72,7 +72,7 @@ public class Sender {
 	}
 
 	public void setCertificate(String certificate) {
-		this.certificate.content(certificate);
+		this.certificate = new Certificate(certificate);
 	}
 
 	public String getIpaddress() {
