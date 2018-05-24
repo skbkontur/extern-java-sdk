@@ -21,3 +21,4 @@ extern-sdk-test
 /extern-sdk-swagger-adaptor/nb-configuration.xml
 /extern-sdk-common/nb-configuration.xml
 extern-java-sdk-test-runner
+/extern-sdk-examples/nbactions-Proxy.example.xml
