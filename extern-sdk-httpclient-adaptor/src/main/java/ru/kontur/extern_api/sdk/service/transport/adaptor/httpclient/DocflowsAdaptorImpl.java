@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.joda.time.DateTime;
+import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -52,6 +52,7 @@ import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DocflowsApi;
 
@@ -67,6 +68,16 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         api = new DocflowsApi();
     }
 
+    @Override
+    public HttpClient getHttpClient() {
+        return api.getHttpClient();
+    }
+
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClient) {
+        super.httpClientSupplier = httpClient;
+    }
+    
     /**
      * Get docflow page
      * <p>
@@ -91,14 +102,10 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                         cxt.getSkip(),
                         cxt.getTake(),
                         cxt.getInnKpp(),
-                        cxt.getUpdatedFrom() == null ? null
-                            : new DateTime(cxt.getUpdatedFrom().getTime()),
-                        cxt.getUpdatedTo() == null ? null
-                            : new DateTime(cxt.getUpdatedTo().getTime()),
-                        cxt.getCreatedFrom() == null ? null
-                            : new DateTime(cxt.getCreatedFrom().getTime()),
-                        cxt.getCreatedTo() == null ? null
-                            : new DateTime(cxt.getCreatedTo().getTime()),
+                        cxt.getUpdatedFrom(),
+                        cxt.getUpdatedTo(),
+                        cxt.getCreatedFrom(),
+                        cxt.getCreatedTo(),
                         cxt.getType())
                     .getData(),
                 DOCFLOW_PAGE
@@ -455,16 +462,17 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 for (Link l : docflow.getLinks()) {
                     if (l.getRel().equals("reply")) {
                         ApiResponse<Map<String, Object>> response
-                            = api.getHttpClient()
+                            = transport(cxt)
+                            .getHttpClient()
+							.setServiceBaseUri("")
                             .submitHttpRequest(
                                 l.getHref(),
                                 "POST",
                                 new HashMap<>(),
-                                new GenerateReplyDocumentRequestData()
-                                    .certificateBase64(x509Base64),
+                                new GenerateReplyDocumentRequestData().certificateBase64(x509Base64),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<Map<String, Object>>() {
+                                new TypeToken<DocumentToSend>() {
                                 }.getType()
                             );
                         replies.add((DocumentToSend) response.getData());
@@ -549,7 +557,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     private DocflowsApi transport(QueryContext<?> cxt) {
-        configureTransport(api.getHttpClient(), cxt);
+        api.setHttpClient(configureTransport(cxt));
         return api;
     }
 }

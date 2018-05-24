@@ -24,11 +24,13 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import java.util.List;
+import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT_LIST;
@@ -48,6 +50,16 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
         this.api = new AccountsApi();
     }
 
+    @Override
+    public HttpClient getHttpClient() {
+        return api.getHttpClient();
+    }
+
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClient) {
+        super.httpClientSupplier = httpClient;
+    }
+    
 	@Override
 	public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
         try {
@@ -111,7 +123,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
 	}
     
     private AccountsApi transport(QueryContext<?> cxt) {
-        configureTransport(api.getHttpClient(), cxt);
+        api.setHttpClient(configureTransport(cxt));
         return api;
     }
 }

@@ -22,6 +22,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,7 +30,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -70,7 +70,7 @@ public class DocflowsApi extends RestApi {
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DocflowPage> getDocflows(@PathParam("accountId") String accountId,
         Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp,
-        DateTime updatedFrom, DateTime updatedTo, DateTime createdFrom, DateTime createdTo,
+        Date updatedFrom, Date updatedTo, Date createdFrom, Date createdTo,
         String type) throws ApiException {
         return invoke("getDocflows", null, new TypeToken<DocflowPage>() {
             }.getType(), accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo,
@@ -331,7 +331,8 @@ public class DocflowsApi extends RestApi {
 
 
     @NotNull
+    @Override
     public HttpClient getHttpClient() {
-        return HTTPCLIENT;
+        return httpClient;
     }
 }

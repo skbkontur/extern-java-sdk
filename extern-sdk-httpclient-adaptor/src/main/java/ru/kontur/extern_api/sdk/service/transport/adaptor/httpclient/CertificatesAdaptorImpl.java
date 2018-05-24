@@ -23,11 +23,13 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
+import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.CertificatesAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.CertificatesApi;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
  *
@@ -41,6 +43,16 @@ public class CertificatesAdaptorImpl extends BaseAdaptor implements Certificates
         this.api = new CertificatesApi();
     }
 
+    @Override
+    public HttpClient getHttpClient() {
+        return api.getHttpClient();
+    }
+
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClient) {
+        super.httpClientSupplier = httpClient;
+    }
+    
     @Override
     public QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt) {
         try {
@@ -56,7 +68,7 @@ public class CertificatesAdaptorImpl extends BaseAdaptor implements Certificates
     }
 
     private CertificatesApi transport(QueryContext<?> cxt) {
-        configureTransport(api.getHttpClient(), cxt);
+        api.setHttpClient(configureTransport(cxt));
         return api;
     }
 }

@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -43,7 +44,8 @@ public class HttpClientImpl implements HttpClient {
 		this.httpClient = new ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl();
 	}
 	
-    public HttpClientImpl setJson(Gson json) {
+    @Override
+    public HttpClientImpl setGson(Gson json) {
         httpClient.setJson(json);
         return this;
     }
@@ -76,5 +78,21 @@ public class HttpClientImpl implements HttpClient {
         catch (HttpClientException x) {
             throw new ApiException(x.getMessage(), x, x.getCode(), x.getResponseHeaders(), x.getResponseBody());
         }
+    }
+
+    @Override
+    public HttpClient userAgentProvider(UserAgentProvider userAgentProvider) {
+        httpClient.setUserAgent(userAgentProvider.getVersion());
+        return this;
+    }
+
+    @Override
+    public void setConnectWaiting(int millisocond) {
+        httpClient.setConnectTimeout(millisocond);
+    }
+
+    @Override
+    public void setReadTimeout(int millisocond) {
+        httpClient.setReadTimeout(millisocond);
     }
 }

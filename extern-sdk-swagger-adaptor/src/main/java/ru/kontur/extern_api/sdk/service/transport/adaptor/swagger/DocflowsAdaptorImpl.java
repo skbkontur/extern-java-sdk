@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -22,6 +23,7 @@ import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
@@ -59,15 +61,17 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 		this.api = new DocflowsApi();
 	}
 
-	@Override
-	public ApiClient getApiClient() {
-		return (ApiClient) api.getApiClient();
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public HttpClient getHttpClient() {
+        return (ApiClient)api.getApiClient();
+    }
 
-	@Override
-	public void setApiClient(ApiClient apiClient) {
-		api.setApiClient(apiClient);
-	}
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
+        super.httpClientSupplier = httpClientSupplier;
+    }
+
 
 	/**
 	 * Get docflow page
@@ -482,13 +486,13 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 				if (x509Base64 == null) {
 					return cxt.setServiceError("A signer certificate is absent in the context.");
 				}
-				prepareTransport(cxt);
+				HttpClient httpClient = prepareTransport(cxt);
 				List<DocumentToSend> replies = new ArrayList<>();
 				for (Link l : docflow.getLinks()) {
 					if (l.getRel().equals("reply")) {
 						
 							ApiResponse<Map<String, Object>> response
-									= getApiClient()
+									= httpClient
 										.setServiceBaseUri("")
 										.submitHttpRequest(
 											l.getHref(),
@@ -535,7 +539,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 				return cxt.setServiceError("The reply does not contain a self reference.");
 			}
 
-			prepareTransport(cxt);
+			HttpClient httpClient = prepareTransport(cxt);
 
 			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
 			DocflowDto docflowDto = new DocflowDto();
@@ -543,7 +547,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 			String httpRequest = self.getHref().toLowerCase().replaceAll("/generate", "/send");
 
 			ApiResponse<ru.kontur.extern_api.sdk.service.transport.swagger.model.Docflow> response
-				= getApiClient()
+				= httpClient
 					.setServiceBaseUri("")
 					.submitHttpRequest(
 						httpRequest,
@@ -589,7 +593,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 	}
 
 	private DocflowsApi transport(QueryContext<?> cxt) {
-		prepareTransport(cxt);
+		api.setApiClient((ApiClient)prepareTransport(cxt));
 		return api;
 	}
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 SKB Kontur
+ * Copyright 2018 alexs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor;
+package ru.kontur.extern_api.sdk.provider.userAgent;
 
-import java.util.List;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
-import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  *
  * @author alexs
  */
-public interface AccountsAdaptor extends Adaptor {
-
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt);
-
-    public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt);
-
-    public QueryContext<Object> createAccount(QueryContext<Object> cxt);
-
-    public QueryContext<Account> getAccount(QueryContext<Account> cxt);
+public class DefaultUserAgentProvider implements UserAgentProvider {
+    private static final String DEFAULT_VERSION = "unknown";
+    private static final String DEFAULT_ARTIFACTID = "unknown";
+    
+    
+    @Override
+    public String getVersion() {
+        Package p = ExternEngine.class.getPackage();
+        if (p != null) {
+            String artifactId = p.getName();
+            if (artifactId == null) {
+                artifactId = DEFAULT_ARTIFACTID;
+            }
+            String version = p.getImplementationVersion();
+            if (version == null) {
+                version = DEFAULT_VERSION;
+            }
+            return artifactId + "/" + version;
+        }
+        return DEFAULT_ARTIFACTID + "/" + DEFAULT_VERSION;
+    }
 }

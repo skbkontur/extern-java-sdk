@@ -23,8 +23,10 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
+import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  *
@@ -34,5 +36,9 @@ public interface HttpClient {
     HttpClient setServiceBaseUri(String uri);
     HttpClient acceptAccessToken(String authPrefix, String sessionId);
     HttpClient acceptApiKey(String apiKey);
+    void setConnectWaiting(int millisocond);
+    void setReadTimeout(int millisocond);
+    HttpClient userAgentProvider(UserAgentProvider userAgentProvider);
     <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException;
+    HttpClient setGson(Gson gson);
 }

@@ -21,11 +21,13 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
+import java.util.function.Supplier;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.EVENTS_PAGE;
 
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.EventsApi;
 
@@ -41,6 +43,16 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
         api = new EventsApi();
     }
 
+    @Override
+    public HttpClient getHttpClient() {
+        return api.getHttpClient();
+    }
+
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClient) {
+        super.httpClientSupplier = httpClient;
+    }
+    
     @Override
     public QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt) {
         try {
@@ -62,7 +74,7 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
     }
 
     private EventsApi transport(QueryContext<?> cxt) {
-        configureTransport(api.getHttpClient(), cxt);
+        api.setHttpClient(configureTransport(cxt));
         return api;
     }
 }

@@ -61,7 +61,7 @@ public class RestApi {
 
     private static final Gson JSON = configuredGson();
 
-    protected static final HttpClient HTTPCLIENT = configuredHttpClient();
+    protected HttpClient httpClient; // = configuredHttpClient();
 
     protected RestApi() {
         Class<?> clazz = getClass();
@@ -126,9 +126,15 @@ public class RestApi {
     }
 
     public HttpClient getHttpClient() {
-        return HTTPCLIENT;
+        return httpClient;
     }
 
+    public HttpClient setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        this.httpClient.setGson(JSON);
+        return this.httpClient;
+    }
+    
     protected <T> ApiResponse<T> invoke(String methodName, Object body, Type type, Object... args) throws ApiException {
         Map<String, RestQuery> restApi = REST_QUERIES.get(this.getClass());
         if (restApi != null) {
@@ -144,7 +150,7 @@ public class RestApi {
                 headerParams.put(CONTENT_TYPE, restQuery.getContentType());
             }
 
-            return HTTPCLIENT.submitHttpRequest(
+            return httpClient.submitHttpRequest(
                 path,
                 restQuery.getHttpMethod(),
                 queryParams,
@@ -209,8 +215,8 @@ public class RestApi {
             .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
             .create();
     }
-
-    private static HttpClient configuredHttpClient() {
-        return new HttpClientImpl().setJson(JSON);
-    }
+/*
+    private HttpClient configuredHttpClient() {
+        return httpClient.setGson(JSON);
+    }*/
 }

@@ -38,8 +38,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +53,7 @@ public class HttpClientImpl {
     private static final String AUTHORIZATION = "Authorization";
     private static final String AUTH_PREFIX = "auth.sid ";
     private static final String APIKEY = "X-Kontur-Apikey";
+    private static final String USER_AGENT = "User-Agent";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
@@ -62,9 +61,11 @@ public class HttpClientImpl {
     private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = ThreadLocal.withInitial(() -> new ConcurrentHashMap<String, String>());
     private static final ThreadLocal<String> SERVICE_BASE_URI = ThreadLocal.withInitial(() -> "");
 
+    private String userAgent;
     private int connectTimeout;
     private int readTimeout;
     private Gson json;
+    private boolean keepAlive;
 
     public HttpClientImpl() {
         this("");
@@ -72,11 +73,21 @@ public class HttpClientImpl {
 
     public HttpClientImpl(String serviceBaseUri) {
         SERVICE_BASE_URI.set(serviceBaseUri);
-        this.connectTimeout = 10_000;
-        this.readTimeout = 10_000;
+        this.connectTimeout = 60_000;
+        this.readTimeout = 60_000;
         this.json = new Gson();
+        this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive","false"));
     }
 
+    public HttpClientImpl setKeepAlive(boolean keepAlive) {
+        this.keepAlive = keepAlive;
+        return this;
+    }
+    
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+    
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
         SERVICE_BASE_URI.set(serviceBaseUri);
         return this;
@@ -117,7 +128,7 @@ public class HttpClientImpl {
         try {
             URL url = buildUrl(path, queryParams);
 
-            HttpURLConnection connect = (HttpURLConnection) url.openConnection(getProxy());
+            HttpURLConnection connect = (HttpURLConnection) url.openConnection();
             
 
             // setup default headers
@@ -128,13 +139,15 @@ public class HttpClientImpl {
                 .forEach(e -> connect.setRequestProperty(e.getKey(), e.getValue()));
             // content type
             headerParams.putIfAbsent(CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
+            // user agent
+            headerParams.putIfAbsent(USER_AGENT, userAgent);
             // setup request headers
             headerParams
                 .entrySet()
                 .stream()
                 .forEach(e -> connect.setRequestProperty(e.getKey(), e.getValue()));
 
-            connect.setRequestProperty("Connection", "close");
+            connect.setRequestProperty("Connection", (keepAlive ? "keep-alive" : "close"));
             connect.setConnectTimeout(connectTimeout);
             connect.setReadTimeout(readTimeout);
             connect.setRequestMethod(httpMethod);

@@ -59,6 +59,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
     }
 
+    @Override
     public AuthenticationProviderByPass httpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
         return this;
