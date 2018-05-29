@@ -432,6 +432,7 @@ public class HttpClientImpl {
         while ((length = bis.read(buffer)) != -1) {
             bos.write(buffer, 0, length);
         }
+        is.close();
         return bos.toByteArray();
     }
 
