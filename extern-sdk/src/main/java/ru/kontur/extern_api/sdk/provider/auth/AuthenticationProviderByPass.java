@@ -59,6 +59,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
     }
 
+    @Override
     public AuthenticationProviderByPass httpClient(HttpClient httpClient) {
         this.httpClient = httpClient;
         return this;
@@ -110,7 +111,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
             httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
 
-            Map<String, String> queryParams = new HashMap<String, String>() {
+            Map<String, Object> queryParams = new HashMap<String, Object>() {
                 private static final long serialVersionUID = 1L;
 
                 {

@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author alexs
  */
@@ -33,10 +35,13 @@ public class PeriodIndicators {
     private String avPu = null;
     private String dohod = null;
     private String rashod = null;
+		@SerializedName("nal-baza-ubyt")
     private String nalBazaUbyt = null;
     private String stavka = null;
     private String ischisl = null;
+		@SerializedName("umen-nal")
     private String umenNal = null;
+		@SerializedName("rasch-torg-sbor")
     private MerchantTax raschTorgSbor = null;
 
     public String getOktmo() {

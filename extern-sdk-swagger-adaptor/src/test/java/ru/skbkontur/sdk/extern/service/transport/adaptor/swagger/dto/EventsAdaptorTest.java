@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import static org.mockito.Mockito.*;
 import ru.kontur.extern_api.sdk.model.ApiEvent;
 import ru.kontur.extern_api.sdk.model.EventsPage;
@@ -40,6 +41,7 @@ import ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiException;
  *
  * @author AlexS
  */
+@Ignore
 public class EventsAdaptorTest {
     
     @Test

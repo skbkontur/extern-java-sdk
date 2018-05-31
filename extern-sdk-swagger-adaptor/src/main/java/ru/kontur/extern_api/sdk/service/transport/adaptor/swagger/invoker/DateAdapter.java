@@ -34,6 +34,8 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -41,18 +43,7 @@ import java.util.Date;
  * @author AlexS
  */
 public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
-
-    private final ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiClient apiClient;
-
-    /**
-     * Constructor for DateAdapter
-     *
-     * @param apiClient Api client
-     */
-    public DateAdapter(ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiClient apiClient) {
-        super();
-        this.apiClient = apiClient;
-    }
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
 
     /**
      * Serialize
@@ -67,7 +58,7 @@ public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date>
         if (src == null) {
             return JsonNull.INSTANCE;
         } else {
-            return new JsonPrimitive(apiClient.formatDatetime(src));
+            return new JsonPrimitive(formatDatetime(src));
         }
     }
 
@@ -84,9 +75,28 @@ public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date>
     public Date deserialize(JsonElement json, Type date, JsonDeserializationContext context) throws JsonParseException {
         String str = json.getAsJsonPrimitive().getAsString();
         try {
-            return apiClient.parseDateOrDatetime(str);
+            return parseDateOrDatetime(str);
         } catch (RuntimeException e) {
             throw new JsonParseException(e);
+        }
+    }
+    
+    /**
+     * Format the given Date object into string (Datetime format).
+     *
+     * @param date Date object
+     * @return Formatted datetime in string representation
+     */
+    public String formatDatetime(Date date) {
+        return new SimpleDateFormat(DATE_FORMAT).format(date);
+    }
+
+    public Date parseDateOrDatetime(String str) {
+        try {
+            return new SimpleDateFormat(DATE_FORMAT).parse(str);
+        }
+        catch (ParseException x) {
+            return null;
         }
     }
 }

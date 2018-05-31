@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
+import java.util.ArrayList;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class EventsPageDto {
 
         ApiEventDto apiEventsDto = new ApiEventDto();
 
-        ep.setApiEvents(dto.getApiEvents().stream().map(apiEventsDto::fromDto).collect(Collectors.toList()));
+        ep.setApiEvents(dto.getApiEvents() == null ? new ArrayList<>() : dto.getApiEvents().stream().map(apiEventsDto::fromDto).collect(Collectors.toList()));
         ep.setFirstEventId(dto.getFirstEventId());
         ep.setLastEventId(dto.getLastEventId());
         ep.setRequestedCount(dto.getRequestedCount());

@@ -24,12 +24,15 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author alexs
  */
 public class UsnServiceContractInfoV2 {
 
     private UsnFormatPeriod period = null;
+		@SerializedName("additional-org-info")
     private AdditionalClientInfo additionalOrgInfo = null;
     private UsnDataV2 data = null;
 

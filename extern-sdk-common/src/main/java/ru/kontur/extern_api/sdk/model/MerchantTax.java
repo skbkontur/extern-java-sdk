@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author alexs
  */
@@ -31,7 +33,9 @@ public class MerchantTax {
 
     private String dohod = null;
     private String ischisl = null;
+		@SerializedName("torg-sbor-fact")
     private String torgSborFact = null;
+		@SerializedName("torg-sbor-umen")
     private String torgSborUmen = null;
 
     public String getDohod() {
