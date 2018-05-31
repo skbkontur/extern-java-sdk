@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
@@ -32,6 +33,7 @@ import java.util.List;
  */
 public class PrepareResult {
 
+		@SerializedName("check-result")
     private CheckResultData checkResult = null;
     private List<Link> links = null;
     private Status status = null;

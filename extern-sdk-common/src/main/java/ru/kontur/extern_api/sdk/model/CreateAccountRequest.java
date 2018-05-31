@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author AlexS
  */
@@ -31,6 +33,7 @@ public class CreateAccountRequest {
 
     private String inn = null;
     private String kpp = null;
+		@SerializedName("organization-name")
     private String organizationName = null;
 
     public String getInn() {

@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author alexs
  */
@@ -32,8 +34,11 @@ public class Certificate {
     private String fio = null;
     private String inn = null;
     private String kpp = null;
+		@SerializedName("is-valid")
     private Boolean isValid = null;
+		@SerializedName("is-cloud")
     private Boolean isCloud = null;
+		@SerializedName("is-qualified")
     private Boolean isQualified = null;
     private String content = null;
 

@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,9 +34,12 @@ import java.util.List;
  */
 public class CertificateList {
 
-    private List<Certificate> certificates = null;
+    private List<Certificate> certificates = new ArrayList<>();
+		@SerializedName("total-count")
     private Integer totalCount = null;
+		@SerializedName("page-index")
     private Integer pageIndex = null;
+		@SerializedName("page-size")
     private Integer pageSize = null;
 
     public List<Certificate> getCertificates() {

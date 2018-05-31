@@ -6,11 +6,13 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AccountsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT_LIST;
@@ -38,15 +40,16 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
     }
 
     @Override
-    public ApiClient getApiClient() {
-        return (ApiClient) api.getApiClient();
+    @SuppressWarnings("unchecked")
+    public HttpClient getHttpClient() {
+        return (ApiClient)api.getApiClient();
     }
 
     @Override
-    public void setApiClient(ApiClient apiClient) {
-        api.setApiClient(apiClient);
+    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
+        super.httpClientSupplier = httpClientSupplier;
     }
-
+    
     @Override
     public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
         try {
@@ -137,8 +140,9 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
         }
     }
 
+    @SuppressWarnings("unchecked")
     private AccountsApi transport(QueryContext<?> cxt) {
-        super.prepareTransport(cxt);
+        api.setApiClient((ApiClient)super.prepareTransport(cxt));
         return api;
     }
 }

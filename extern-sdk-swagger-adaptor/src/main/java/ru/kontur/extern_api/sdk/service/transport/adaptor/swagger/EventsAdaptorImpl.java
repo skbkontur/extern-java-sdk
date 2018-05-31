@@ -5,8 +5,10 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
+import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.EVENTS_PAGE;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
@@ -32,14 +34,16 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
     }
 
     @Override
-    public ApiClient getApiClient() {
-        return (ApiClient) api.getApiClient();
+    @SuppressWarnings("unchecked")
+    public HttpClient getHttpClient() {
+        return (ApiClient)api.getApiClient();
     }
 
     @Override
-    public void setApiClient(ApiClient apiClient) {
-        api.setApiClient(apiClient);
+    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
+        super.httpClientSupplier = httpClientSupplier;
     }
+
 
     @Override
     public QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt) {
@@ -66,7 +70,7 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
     }
 
     private EventsApi transport(QueryContext<?> cxt) {
-        super.prepareTransport(cxt);
+        api.setApiClient((ApiClient)super.prepareTransport(cxt));
         return api;
     }
 }

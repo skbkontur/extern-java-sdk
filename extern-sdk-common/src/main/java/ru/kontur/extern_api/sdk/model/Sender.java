@@ -21,75 +21,96 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 package ru.kontur.extern_api.sdk.model;
 
 import com.google.gson.annotations.SerializedName;
-
 
 /**
  * @author AlexS
  */
 public class Sender {
 
-    @SerializedName("inn")
-    private String inn;
-    @SerializedName("kpp")
-    private String kpp;
-    @SerializedName("certificate")
-    private String certificate;
-    @SerializedName("ipaddress")
-    private String ipaddress;
+	@SerializedName("inn")
+	private String inn;
+	@SerializedName("kpp")
+	private String kpp;
+	@SerializedName("certificate")
+	private Certificate certificate;
+	@SerializedName("ipaddress")
+	private String ipaddress;
 
-    private String thumbprint;
+	private String thumbprint;
 
-    public Sender() {
-    }
+	public Sender() {
+	}
 
-    public Sender(String inn, String kpp, String certificate, String ipaddress) {
-        this.inn = inn;
-        this.kpp = kpp;
-        this.certificate = certificate;
-        this.ipaddress = ipaddress;
-    }
+	public Sender(String inn, String kpp, String certificate, String ipaddress) {
+		this.inn = inn;
+		this.kpp = kpp;
+		this.certificate = new Certificate(certificate);
+		this.ipaddress = ipaddress;
+	}
 
-    public String getInn() {
-        return inn;
-    }
+	public String getInn() {
+		return inn;
+	}
 
-    public void setInn(String inn) {
-        this.inn = inn;
-    }
+	public void setInn(String inn) {
+		this.inn = inn;
+	}
 
-    public String getKpp() {
-        return kpp;
-    }
+	public String getKpp() {
+		return kpp;
+	}
 
-    public void setKpp(String kpp) {
-        this.kpp = kpp;
-    }
+	public void setKpp(String kpp) {
+		this.kpp = kpp;
+	}
 
-    public String getCertificate() {
-        return certificate;
-    }
+	public String getCertificate() {
+		return certificate.content;
+	}
 
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
+	public void setCertificate(String certificate) {
+		this.certificate = new Certificate(certificate);
+	}
 
-    public String getIpaddress() {
-        return ipaddress;
-    }
+	public String getIpaddress() {
+		return ipaddress;
+	}
 
-    public void setIpaddress(String ipaddress) {
-        this.ipaddress = ipaddress;
-    }
+	public void setIpaddress(String ipaddress) {
+		this.ipaddress = ipaddress;
+	}
 
-    public String getThumbprint() {
-        return thumbprint;
-    }
+	public String getThumbprint() {
+		return thumbprint;
+	}
 
-    public void setThumbprint(String thumbprint) {
-        this.thumbprint = thumbprint;
-    }
+	public void setThumbprint(String thumbprint) {
+		this.thumbprint = thumbprint;
+	}
+
+	public static class Certificate {
+
+		@SerializedName("content")
+		private String content = null;
+
+		public Certificate(String content) {
+			this.content = content;
+		}
+		
+		public Certificate content(String content) {
+			this.content = content;
+			return this;
+		}
+
+		public String getContent() {
+			return content;
+		}
+
+		public void setContent(String content) {
+			this.content = content;
+		}
+	}
 }

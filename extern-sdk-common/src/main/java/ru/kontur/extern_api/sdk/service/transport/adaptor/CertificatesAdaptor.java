@@ -29,6 +29,6 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
  *
  * @author alexs
  */
-public interface CertificatesAdaptor {
+public interface CertificatesAdaptor extends Adaptor {
     QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt);
 }

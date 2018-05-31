@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,8 +36,10 @@ public class DocflowPage {
 
     private Long skip = null;
     private Long take = null;
+    @SerializedName("total-count")
     private Long totalCount = null;
-    private List<DocflowPageItem> docflowsPageItem = null;
+    @SerializedName("docflows-page-item")
+    private List<DocflowPageItem> docflowsPageItem = new ArrayList<>();
 
     public Long getSkip() {
         return skip;

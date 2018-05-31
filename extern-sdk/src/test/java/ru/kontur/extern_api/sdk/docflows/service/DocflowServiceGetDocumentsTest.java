@@ -252,6 +252,7 @@ public class DocflowServiceGetDocumentsTest {
 
     private List<Document> getDocuments() {
         QueryContext<Docflow> queryContext = new QueryContext<>();
+        queryContext.setAccountId(StandardValues.ID);
         queryContext.setDocflowId(StandardValues.ID);
         return engine.getDocflowService().getDocuments(queryContext).get();
     }

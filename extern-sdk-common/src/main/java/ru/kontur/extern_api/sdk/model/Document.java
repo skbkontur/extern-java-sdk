@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,8 +37,8 @@ public class Document {
     private UUID id = null;
     private DocumentDescription description = null;
     private Content content = null;
-    private List<Signature> signatures = null;
-    private List<Link> links = null;
+    private List<Signature> signatures = new ArrayList<>();
+    private List<Link> links = new ArrayList<>();
 
     public Document id(UUID id) {
         this.id = id;
