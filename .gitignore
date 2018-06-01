@@ -22,3 +22,5 @@ extern-sdk-test
 /extern-sdk-common/nb-configuration.xml
 extern-java-sdk-test-runner
 /extern-sdk-examples/nbactions-Proxy.example.xml
+/extern-sdk-examples/nbactions-SendDocument.example.xml
+/extern-sdk-httpclient/src/main/java/sun

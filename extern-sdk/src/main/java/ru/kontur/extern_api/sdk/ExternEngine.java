@@ -114,7 +114,7 @@ public class ExternEngine implements AuthenticationListener {
                     }
                 },
                     () -> configuration.getApiKey()
-                ).httpClient(servicesFactory.getHttpClient())
+                )
             );
         }
         setServiceBaseUriProvider(() -> configuration.getServiceBaseUri());
@@ -275,6 +275,7 @@ public class ExternEngine implements AuthenticationListener {
     public final void setAuthenticationProvider(@NotNull AuthenticationProvider authenticationProvider) {
         authenticationProvider.addAuthenticationListener(this);
         this.servicesFactory.setAuthenticationProvider(new EngineAuthenticationProvider(authenticationProvider, env));
+        authenticationProvider.httpClient(this.getHttpClient());
     }
 
     /**

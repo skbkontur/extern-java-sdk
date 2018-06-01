@@ -157,7 +157,7 @@ public class SendDocument {
         sender.setThumbprint(parameters.getProperty("sender.thumbprint"));
         // получатель
         FnsRecipient recipient = new FnsRecipient();
-        // ИНН отправителя
+        // Код ФНС
         recipient.setIfnsCode(parameters.getProperty("ifns.code"));
         // подотчетная организация
         Organization organization = new Organization(parameters.getProperty("company.inn"), parameters.getProperty("company.kpp"));

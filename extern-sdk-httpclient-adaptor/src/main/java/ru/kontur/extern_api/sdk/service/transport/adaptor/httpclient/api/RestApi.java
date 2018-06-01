@@ -44,6 +44,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
@@ -61,60 +62,65 @@ public class RestApi {
 
     private static final Gson JSON = configuredGson();
 
-    protected HttpClient httpClient; // = configuredHttpClient();
+    protected HttpClient httpClient;
 
     protected RestApi() {
-        Class<?> clazz = getClass();
+        buildRestApi(getClass());
+    }
+
+    private void buildRestApi(@NotNull Class<?> clazz) {
         Map<String, RestQuery> restApi = REST_QUERIES.get(clazz);
-        if (restApi == null) {
-            restApi = new HashMap<>();
-            REST_QUERIES.put(clazz, restApi);
-            Method[] methods = this.getClass().getDeclaredMethods();
-            for (Method m : methods) {
-                Path pa = m.getAnnotation(Path.class);
-
-                if (pa == null) {
-                    continue;
-                }
-
-                RestQuery restQuery = new RestQuery();
-                restApi.put(m.getName(), restQuery);
-
-                restQuery.setPath(pa.value());
-
-                if (isAnnotation(m, GET.class)) {
-                    restQuery.setHttpMethod("GET");
-                }
-                else if (isAnnotation(m, POST.class)) {
-                    restQuery.setHttpMethod("POST");
-                }
-                else if (isAnnotation(m, PUT.class)) {
-                    restQuery.setHttpMethod("PUT");
-                }
-                else if (isAnnotation(m, DELETE.class)) {
-                    restQuery.setHttpMethod("DELETE");
-                }
-
-                extractContentType(m, restQuery);
-
-                Parameter[] methodParams = m.getParameters();
-
-                List<Param> params = new ArrayList<>();
-
-                restQuery.setParams(params);
-
-                for (Parameter p : methodParams) {
-                    PathParam ppa = p.getAnnotation(PathParam.class);
-                    if (ppa != null) {
-                        params.add(new Param(Param.Type.PATH_PARAM, ppa.value()));
+        synchronized (clazz) {
+            if (restApi == null) {
+                restApi = new HashMap<>();
+                REST_QUERIES.put(clazz, restApi);
+                Method[] methods = this.getClass().getDeclaredMethods();
+                for (Method m : methods) {
+                    Path pa = m.getAnnotation(Path.class);
+                    
+                    if (pa == null) {
+                        continue;
                     }
-                    QueryParam qpa = p.getAnnotation(QueryParam.class);
-                    if (qpa != null) {
-                        params.add(new Param(Param.Type.QUERY_PARAM, qpa.value()));
+                    
+                    RestQuery restQuery = new RestQuery();
+                    restApi.put(m.getName(), restQuery);
+                    
+                    restQuery.setPath(pa.value());
+                    
+                    if (isAnnotation(m, GET.class)) {
+                        restQuery.setHttpMethod("GET");
                     }
-                    HeaderParam hpa = p.getAnnotation(HeaderParam.class);
-                    if (hpa != null) {
-                        params.add(new Param(Param.Type.HEADER_PARAM, hpa.value()));
+                    else if (isAnnotation(m, POST.class)) {
+                        restQuery.setHttpMethod("POST");
+                    }
+                    else if (isAnnotation(m, PUT.class)) {
+                        restQuery.setHttpMethod("PUT");
+                    }
+                    else if (isAnnotation(m, DELETE.class)) {
+                        restQuery.setHttpMethod("DELETE");
+                    }
+                    
+                    extractContentType(m, restQuery);
+                    
+                    Parameter[] methodParams = m.getParameters();
+                    
+                    List<Param> params = new ArrayList<>();
+                    
+                    restQuery.setParams(params);
+                    
+                    for (Parameter p : methodParams) {
+                        PathParam ppa = p.getAnnotation(PathParam.class);
+                        if (ppa != null) {
+                            params.add(new Param(Param.Type.PATH_PARAM, ppa.value()));
+                        }
+                        QueryParam qpa = p.getAnnotation(QueryParam.class);
+                        if (qpa != null) {
+                            params.add(new Param(Param.Type.QUERY_PARAM, qpa.value()));
+                        }
+                        HeaderParam hpa = p.getAnnotation(HeaderParam.class);
+                        if (hpa != null) {
+                            params.add(new Param(Param.Type.HEADER_PARAM, hpa.value()));
+                        }
                     }
                 }
             }
@@ -134,7 +140,7 @@ public class RestApi {
         this.httpClient.setGson(JSON);
         return this.httpClient;
     }
-    
+
     protected <T> ApiResponse<T> invoke(String methodName, Object body, Type type, Object... args) throws ApiException {
         Map<String, RestQuery> restApi = REST_QUERIES.get(this.getClass());
         if (restApi != null) {
@@ -215,7 +221,7 @@ public class RestApi {
             .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
             .create();
     }
-/*
+    /*
     private HttpClient configuredHttpClient() {
         return httpClient.setGson(JSON);
     }*/

@@ -138,7 +138,6 @@ public class ProxyExample {
                 .credentialProvider(() -> new Credential(parameters.getProperty("credential.name"), parameters.getProperty("credential.value")))
                 .signatureKeyProvider(() -> parameters.getProperty("thumbprint.rsa"))
                 .cryptoProvider(new CryptoProviderRSA(parameters.getProperty("jks.pass"), parameters.getProperty("rsa.key.pass")))
-                .httpClient(engine.getHttpClient())
         );
         engine.setCryptoProvider(
             new CloudCryptoProvider("https://cc.testkontur.ru/")
