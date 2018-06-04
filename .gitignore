@@ -16,3 +16,11 @@ extern-sdk-test
 /extern-sdk-examples/tests
 /extern-sdk-examples/nbactions.xml
 /extern-sdk-examples/nbactions-release-profile.xml
+/nb-configuration.xml
+/extern-sdk/nbactions.xml
+/extern-sdk-swagger-adaptor/nb-configuration.xml
+/extern-sdk-common/nb-configuration.xml
+extern-java-sdk-test-runner
+/extern-sdk-examples/nbactions-Proxy.example.xml
+/extern-sdk-examples/nbactions-SendDocument.example.xml
+/extern-sdk-httpclient/src/main/java/sun
