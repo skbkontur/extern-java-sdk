@@ -80,6 +80,10 @@ public class Draft {
         this.status = status;
     }
 
+    public DraftMeta getMeta() {
+        return meta;
+    }
+    
     @JsonAdapter(StatusEnum.Adapter.class)
     public enum StatusEnum {
         NEW("new"),

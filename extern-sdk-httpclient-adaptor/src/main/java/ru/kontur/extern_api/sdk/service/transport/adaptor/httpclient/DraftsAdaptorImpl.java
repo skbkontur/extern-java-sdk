@@ -68,7 +68,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     public void setHttpClient(Supplier<HttpClient> httpClient) {
         super.httpClientSupplier = httpClient;
     }
-    
+
     /**
      * Create new a draft
      * <p>
@@ -84,16 +84,17 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 return cxt;
             }
 
-            UUID draftId
+            Draft draft
                 = transport(cxt)
-                .createDraft(
-                    cxt.getAccountProvider().accountId().toString(),
-                    cxt.getDraftMeta()
-                )
-                .getData().getId();
+                    .createDraft(
+                        cxt.getAccountProvider().accountId().toString(),
+                        cxt.getDraftMeta()
+                    )
+                    .getData();
 
-            return cxt.setResult(draftId, DRAFT_ID);
-        } catch (ApiException x) {
+            return cxt.setDraft(draft).setResult(draft.getId(), DRAFT_ID);
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -122,7 +123,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -146,7 +148,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 cxt.getDraftId().toString());
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -176,7 +179,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                         .getData(),
                     DRAFT_META
                 );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -206,7 +210,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_META
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -236,7 +241,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 MAP
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -266,7 +272,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 PREPARE_RESULT
             );
 
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -297,7 +304,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DOCFLOWS
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -324,7 +332,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -354,7 +363,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -385,7 +395,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -415,7 +426,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -445,7 +457,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 DRAFT_DOCUMENT
             ).setDocumentId(cxt.getDraftDocument().getId());
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -475,7 +488,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -504,7 +518,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -534,7 +549,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -564,7 +580,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .getData(),
                 CONTENT_STRING
             );
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -593,7 +610,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -622,7 +640,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -651,7 +670,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
@@ -680,7 +700,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                 );
 
             return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
+        }
+        catch (ApiException x) {
             return cxt.setServiceError(x);
         }
     }
