@@ -55,6 +55,7 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.ServiceException;
+import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
@@ -336,6 +337,14 @@ public class QueryContext<R> implements Serializable {
 
     public QueryContext<R> setDraftId(UUID draftId) {
         return set(DRAFT_ID, draftId);
+    }
+
+    public Draft getDraft() {
+        return (Draft) params.get(DRAFT);
+    }
+
+    public QueryContext<R> setDraft(Draft draft) {
+        return set(DRAFT, draft);
     }
 
     public Docflow getDocflow() {
