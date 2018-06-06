@@ -20,7 +20,6 @@
  * SOFTWARE.
  *
  */
-
 package ru.kontur.extern_api.sdk.providers.auth;
 
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
@@ -32,7 +31,11 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 import com.google.gson.Gson;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,7 +44,10 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
+import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
 import ru.kontur.extern_api.sdk.provider.auth.Link;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
@@ -55,7 +61,7 @@ public class CertificateAuthenticationTest {
     private static final Gson GSON = new Gson();
 
     private static ClientAndServer mockServer;
-    private CertificateAuthenticationProvider auth;
+    private AuthenticationProvider auth;
 
     @BeforeClass
     public static void startJetty() {
@@ -83,22 +89,22 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForInitiation(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(
-                        request().withMethod("POST").withPath("/v5.9/authenticate-by-cert"),
-                        exactly(1))
-                .respond(response()
-                        .withStatusCode(code)
-                        .withHeader(JSON_CONTENT_TYPE)
-                        .withBody(body)
-                );
+            .when(
+                request().withMethod("POST").withPath("/v5.9/authenticate-by-cert"),
+                exactly(1))
+            .respond(response()
+                .withStatusCode(code)
+                .withHeader(JSON_CONTENT_TYPE)
+                .withBody(body)
+            );
     }
 
     private void createAnswerForApprove(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
-                .respond(
-                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
-                );
+            .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
+            .respond(
+                response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
+            );
     }
 
     private void createAnswerForValidInitiation() {
@@ -112,16 +118,27 @@ public class CertificateAuthenticationTest {
     @Before
     public void setupProvider() {
 
-        URL resource = getClass().getClassLoader().getResource("certificate.cer");
-        assert resource != null;
+        CertificateProvider certificateProvider = (String thumbprint) -> {
+            URL resource1 = CertificateAuthenticationTest.this.getClass().getClassLoader().getResource(thumbprint + ".cer");
+            if (resource1 == null) {
+                return new QueryContext<byte[]>().setServiceError(Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint));
+            }
 
-        auth = CertificateAuthenticationProvider.usingCertificate(resource)
-                .setCryptoProvider(new MockCryptoProvider())
-                .setApiKeyProvider(() -> "apikey")
-                .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
-                .setSignatureKeyProvider(() -> "signature")
-                .setHttpClient(new DefaultServicesFactory().getHttpClient())
-                .buildAuthenticationProvider();
+            try {
+                return new QueryContext<byte[]>().setResult(Files.readAllBytes(Paths.get(resource1.toURI())), QueryContext.CONTENT);
+            }
+            catch (URISyntaxException | IOException x) {
+                return new QueryContext<byte[]>().setServiceError(Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint), x);
+            }
+        };
+
+        auth = CertificateAuthenticationProvider.usingCertificate(certificateProvider)
+            .setCryptoProvider(new MockCryptoProvider())
+            .setApiKeyProvider(() -> "apikey")
+            .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
+            .setSignatureKeyProvider(() -> "certificate")
+            .buildAuthenticationProvider()
+            .httpClient(new DefaultServicesFactory().getHttpClient());
     }
 
     @Test
