@@ -44,6 +44,7 @@ import java.util.function.Function;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_DECRYPT;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_SIGNATURE;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -77,7 +78,7 @@ public class CloudCryptoProvider implements CryptoProvider {
 
     private Function<String, String> approveCodeProvider;
 
-    private Function<String, byte[]> certificateProvider;
+    private CertificateProvider certificateProvider;
 
     private HttpClient httpClient;
 
@@ -116,11 +117,11 @@ public class CloudCryptoProvider implements CryptoProvider {
         return this;
     }
 
-    public void setCertificateProvider(Function<String, byte[]> certificateProvider) {
+    public void setCertificateProvider(CertificateProvider certificateProvider) {
         this.certificateProvider = certificateProvider;
     }
 
-    public CloudCryptoProvider certificateProvider(Function<String, byte[]> certificateProvider) {
+    public CloudCryptoProvider certificateProvider(CertificateProvider certificateProvider) {
         this.certificateProvider = certificateProvider;
         return this;
     }
@@ -211,7 +212,13 @@ public class CloudCryptoProvider implements CryptoProvider {
 
         String thumbprint = cxt.getThumbprint();
 
-        return cxt.setResult(certificateProvider.apply(thumbprint), CONTENT);
+        QueryContext<byte[]> certCxt = certificateProvider.getCertificate(thumbprint);
+        
+        if (certCxt.isFail()) {
+            return cxt.setServiceError(certCxt);
+        }
+        
+        return cxt.setResult(certCxt.get(), CONTENT);
     }
 
     @Override

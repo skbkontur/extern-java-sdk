@@ -43,6 +43,7 @@ import static ru.kontur.extern_api.sdk.Messages.C_RESOURCE_NOT_FOUND;
 import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
 import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Credential;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
@@ -246,23 +247,23 @@ public class ProxyExample {
         assert (signCxt.get() != null);
     }
 
-    static class CertificateProviderImpl implements Function<String, byte[]> {
+    static class CertificateProviderImpl implements CertificateProvider {
 
         @Override
-        public byte[] apply(String thumbprint) {
+        public QueryContext<byte[]> getCertificate(String thumbprint) {
             String certPath = "/certs/" + thumbprint + ".cer";
             try (InputStream is = getClass().getResourceAsStream(certPath)) {
                 if (is != null) {
                     ByteArrayOutputStream os = new ByteArrayOutputStream();
                     ru.argosgrp.cryptoservice.utils.IOUtil.copyStream(is, os);
-                    return os.toByteArray();
+                    return new QueryContext<byte[]>().setResult(os.toByteArray(),QueryContext.CONTENT);
                 }
                 else {
-                    throw new SDKException(Messages.get(C_RESOURCE_NOT_FOUND, certPath));
+                    return new QueryContext<byte[]>().setServiceError(Messages.get(C_RESOURCE_NOT_FOUND, certPath));
                 }
             }
             catch (IOException x) {
-                throw new SDKException(Messages.get(UNKNOWN), x);
+                return new QueryContext<byte[]>().setServiceError(Messages.get(UNKNOWN), x);
             }
         }
 
