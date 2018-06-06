@@ -44,6 +44,8 @@ public class Messages {
     public static final String C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER = "C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER";
     public static final String C_CRYPTO_ERROR_INIT = "C_CRYPTO_ERROR_INIT";
     public static final String C_CRYPTO_ERROR_KEY_NOT_FOUND = "C_CRYPTO_ERROR_KEY_NOT_FOUND";
+    public static final String C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND = "C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND";
+
     public static final String C_RESOURCE_NOT_FOUND = "C_RESOURCE_NOT_FOUND";
     public static final String C_NO_SIGNATURE = "C_NO_SIGNATURE";
     public static final String C_NO_DECRYPT = "C_NO_DECRYPT";
