@@ -38,7 +38,7 @@ public interface AccountsAdaptor extends Adaptor {
 
     public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt);
 
-    public QueryContext<Object> createAccount(QueryContext<Object> cxt);
+    public QueryContext<Account> createAccount(QueryContext<Account> cxt);
 
     public QueryContext<Account> getAccount(QueryContext<Account> cxt);
 }

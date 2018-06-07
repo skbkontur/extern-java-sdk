@@ -36,6 +36,8 @@ import static junit.framework.TestCase.fail;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
@@ -44,8 +46,11 @@ import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.common.ResponseData;
+import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
+import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
+import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
@@ -58,6 +63,11 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  */
 public class AccountServiceCreateAccountTest {
 
+    private final static String ACCOUNT = "\"id\": \"" + StandardValues.ID + "\"," +
+        "\"inn\": \"string\"," +
+        "\"kpp\": \"string\"," +
+        "\"organization-name\": \"string\"";
+    
     private static ExternEngine engine;
     private static Server server;
 
@@ -121,33 +131,31 @@ public class AccountServiceCreateAccountTest {
     @Test
     public void testCreateAccount() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("OK");
+        ResponseData.INSTANCE.setResponseMessage(String.format("{%s}" , ACCOUNT));
         QueryContext<CertificateList> queryContext = new QueryContext<>();
         CreateAccountRequest accountRequest = new CreateAccountRequest();
         accountRequest.setInn("string");
         accountRequest.setKpp("string");
         accountRequest.setOrganizationName("string");
         queryContext.setCreateAccountRequest(accountRequest);
-        Object object = engine.getAccountService().createAccount(queryContext).get();
-        assertNotNull("Account must not be null!", object);
-        assertEquals("Object is wrong!", "OK", object);
+        Account account = engine.getAccountService().createAccount(queryContext).get();
+        validateAccount(account, false);
     }
 
     @Test
     public void testCreateAccountAsync() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("OK");
+        ResponseData.INSTANCE.setResponseMessage(String.format("{%s}" , ACCOUNT));
         CreateAccountRequest accountRequest = new CreateAccountRequest();
         accountRequest.setInn("string");
         accountRequest.setKpp("string");
         accountRequest.setOrganizationName("string");
         try {
-            Object object = engine.getAccountService().createAccountAsync(accountRequest).get().get();
-            assertNotNull("Account must not be null!", object);
-            assertEquals("Object is wrong!", "OK", object);
+            Account account = engine.getAccountService().createAccountAsync(accountRequest).get().get();
+            validateAccount(account, false);
         }
         catch (InterruptedException | ExecutionException e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -189,4 +197,18 @@ public class AccountServiceCreateAccountTest {
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
 
+
+    public static void validateAccount(Account account, boolean withLinks) {
+        assertNotNull("Account must not be null!", account);
+        StandardObjectsValidator.validateId(account.getId());
+        assertEquals("Inn is wrong!", "string", account.getInn());
+        assertEquals("Kpp is wrong!", "string", account.getKpp());
+        assertEquals("OrganizationName is wrong!", "string", account.getOrganizationName());
+        if (withLinks) {
+            StandardObjectsValidator.validateNotEmptyList(account.getLinks(), "Links");
+            StandardObjectsValidator.validateLink(account.getLinks().get(0));
+        } else {
+            StandardObjectsValidator.validateEmptyList(account.getLinks(), "Links");
+        }
+    }
 }

@@ -48,9 +48,9 @@ public interface AccountService extends Providers {
 
     QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Object>> createAccountAsync(CreateAccountRequest createAccountRequest);
+    CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest);
 
-    QueryContext<Object> createAccount(QueryContext<?> cxt);
+    QueryContext<Account> createAccount(QueryContext<?> cxt);
 
     CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId);
 

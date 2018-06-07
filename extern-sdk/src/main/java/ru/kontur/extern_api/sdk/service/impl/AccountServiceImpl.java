@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -110,16 +109,16 @@ public class AccountServiceImpl extends AbstractService<AccountsAdaptor> impleme
     }
 
     @Override
-    public CompletableFuture<QueryContext<Object>> createAccountAsync(CreateAccountRequest createAccountRequest) {
-        QueryContext<Object> cxt = createQueryContext(EN_ACC);
+    public CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest) {
+        QueryContext<Account> cxt = createQueryContext(EN_ACC);
         return cxt
                 .setCreateAccountRequest(createAccountRequest)
                 .applyAsync(accountsAdaptor::createAccount);
     }
 
     @Override
-    public QueryContext<Object> createAccount(QueryContext<?> parent) {
-        QueryContext<Object> cxt = createQueryContext(parent, EN_ACC);
+    public QueryContext<Account> createAccount(QueryContext<?> parent) {
+        QueryContext<Account> cxt = createQueryContext(parent, EN_ACC);
         return cxt.apply(accountsAdaptor::createAccount);
     }
 
