@@ -22,12 +22,7 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import static ru.kontur.extern_api.sdk.Messages.C_RESOURCE_NOT_FOUND;
-
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Collections;
@@ -35,9 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.SignatureKeyProvider;
@@ -65,7 +60,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     private static final String AUTH_BY_CERT_PATH = "/auth/v5.9/authenticate-by-cert";
     private static final String APPROVE_CERT_PATH = "/auth/v5.9/approve-cert";
 
-    private final URL certificateUrl;
+    private final CertificateProvider certificateProvider;
     private HttpClient httpClient;
     private final String skipCertValidation;
 
@@ -77,43 +72,36 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     private CertSessionCredentials credentials;
 
     private CertificateAuthenticationProvider(
-        URL certificateUrl,
+        CertificateProvider certificateProvider,
         boolean skipCertValidation,
         ApiKeyProvider apiKeyProvider,
         UriProvider serviceBaseUriProvider,
         CryptoProvider cryptoProvider,
-        SignatureKeyProvider signatureKeyProvider,
-        HttpClient httpClient) {
+        SignatureKeyProvider signatureKeyProvider) {
 
         this.apiKeyProvider = apiKeyProvider;
         this.serviceBaseUriProvider = serviceBaseUriProvider;
         this.cryptoProvider = cryptoProvider;
         this.signatureKeyProvider = signatureKeyProvider;
-        this.httpClient = httpClient;
 
-        this.certificateUrl = certificateUrl;
+        this.certificateProvider = certificateProvider;
         this.skipCertValidation = Boolean.toString(skipCertValidation);
     }
 
     private QueryContext<String> acquireSessionId() {
         httpClient.setServiceBaseUri(serviceBaseUriProvider.getUri());
 
-        byte[] cert;
-        try {
-            cert = Files.readAllBytes(new File(certificateUrl.getFile()).toPath());
-        }
-        catch (IOException e) {
-            return new QueryContext<String>()
-                .setServiceError(Messages.get(C_RESOURCE_NOT_FOUND), e);
-        }
-
         String apiKey = apiKeyProvider.getApiKey();
         String thumbprint = signatureKeyProvider.getThumbprint();
+        QueryContext<byte[]> certCxt = certificateProvider.getCertificate(thumbprint);
+        if (certCxt.isFail()) {
+            return new QueryContext<String>().setServiceError(certCxt);
+        }
 
         CertSessionCredentials localCredentials;
         AuthInitResponse initialResp;
         try {
-            initialResp = initAuth(cert, apiKey, skipCertValidation);
+            initialResp = initAuth(certCxt.get(), apiKey, skipCertValidation);
             localCredentials = confirmAuth(initialResp, apiKey, thumbprint);
         }
         catch (ApiException e) {
@@ -131,7 +119,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         QueryContext<String> authContext = new QueryContext<String>().setResult(localCredentials.getSid(), QueryContext.SESSION_ID);
 
         fireAuthenticationEvent(authContext);
-        
+
         return authContext;
     }
 
@@ -151,7 +139,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         this.httpClient = httpClient;
         return this;
     }
-    
+
     private byte[] decodeSecret(String encryptedKey, String thumbprint) {
         byte[] decodedEncryptedKey = B64DECODER.decode(encryptedKey);
         return cryptoProvider.decrypt(
@@ -196,8 +184,8 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
             headers.put("Content-Type", "application/octet-stream");
         }
 
-				ApiResponse<T> response = httpClient.submitHttpRequest(path, "POST", queryParams, body, headers, forms, outType);
-				
+        ApiResponse<T> response = httpClient.submitHttpRequest(path, "POST", queryParams, body, headers, forms, outType);
+
         return response.getData();
     }
 
@@ -207,41 +195,38 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     }
 
     /**
-     * @param certificateUrl URL используемого для аутентификации сертификата
+     * @param certificateProvider Supplier<byte[]> поставляет сертификат, которым производится аутентификация
      * @param skipCertValidation {@code true} - не проверять валидность сертификата, по умолчанию - {@code false}
      * @return CertificateAuthenticationProviderBuilder
      */
-    public static CertificateAuthenticationProviderBuilder usingCertificate(
-        @NotNull URL certificateUrl,
+    public static CertificateAuthenticationProviderBuilder usingCertificate(@NotNull CertificateProvider certificateProvider,
         boolean skipCertValidation) {
-        return new CertificateAuthenticationProviderBuilder(certificateUrl, skipCertValidation);
+        return new CertificateAuthenticationProviderBuilder(certificateProvider, skipCertValidation);
     }
 
     /**
-     * @param certificateUrl URL используемого для аутентификации сертификата
+     * @param certificateProvider Supplier<byte[]> поставляет сертификат, которым производится аутентификация
      * @return CertificateAuthenticationProviderBuilder
      * @see CertificateAuthenticationProvider#usingCertificate(URL, boolean)
      */
-    public static CertificateAuthenticationProviderBuilder usingCertificate(
-        @NotNull URL certificateUrl) {
-        return usingCertificate(certificateUrl, false);
+    public static CertificateAuthenticationProviderBuilder usingCertificate(@NotNull CertificateProvider certificateProvider) {
+        return usingCertificate(certificateProvider, false);
     }
 
     public static final class CertificateAuthenticationProviderBuilder {
 
-        private final URL certUrl;
+        private final CertificateProvider certificateProvider;
         private final boolean skipValidation;
 
         private ApiKeyProvider apiKeyProvider;
         private UriProvider serviceBaseUriProvider;
         private CryptoProvider cryptoProvider;
         private SignatureKeyProvider signatureKeyProvider;
-        private HttpClient httpClient;
 
         CertificateAuthenticationProviderBuilder(
-            @NotNull URL certUrl,
+            @NotNull CertificateProvider certificateProvider,
             boolean skipValidation) {
-            this.certUrl = certUrl;
+            this.certificateProvider = certificateProvider;
             this.skipValidation = skipValidation;
         }
 
@@ -269,20 +254,14 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
             return this;
         }
 
-        public CertificateAuthenticationProviderBuilder setHttpClient(@NotNull HttpClient httpClient) {
-            this.httpClient = httpClient;
-            return this;
-        }
-        
         public CertificateAuthenticationProvider buildAuthenticationProvider() {
             return new CertificateAuthenticationProvider(
-                Objects.requireNonNull(certUrl),
+                Objects.requireNonNull(certificateProvider),
                 skipValidation,
                 Objects.requireNonNull(apiKeyProvider),
                 Objects.requireNonNull(serviceBaseUriProvider),
                 Objects.requireNonNull(cryptoProvider),
-                Objects.requireNonNull(signatureKeyProvider),
-                Objects.requireNonNull(httpClient)
+                Objects.requireNonNull(signatureKeyProvider)
             );
         }
     }
