@@ -259,11 +259,11 @@ public class ProxyExample {
                     return new QueryContext<byte[]>().setResult(os.toByteArray(),QueryContext.CONTENT);
                 }
                 else {
-                    throw new SDKException(Messages.get(C_RESOURCE_NOT_FOUND, certPath));
+                    return new QueryContext<byte[]>().setServiceError(Messages.get(C_RESOURCE_NOT_FOUND, certPath));
                 }
             }
             catch (IOException x) {
-                throw new SDKException(Messages.get(UNKNOWN), x);
+                return new QueryContext<byte[]>().setServiceError(Messages.get(UNKNOWN), x);
             }
         }
 
