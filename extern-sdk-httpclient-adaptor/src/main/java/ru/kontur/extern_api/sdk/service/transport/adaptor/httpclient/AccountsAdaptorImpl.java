@@ -35,7 +35,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT_LIST;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.LINKS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.OBJECT;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.AccountsApi;
 
 /**
@@ -95,13 +94,13 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
 	}
 
 	@Override
-	public QueryContext<Object> createAccount(QueryContext<Object> cxt) {
+	public QueryContext<Account> createAccount(QueryContext<Account> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
             }
 
-            return cxt.setResult(transport(cxt).createAccount(cxt.getCreateAccountRequest()).getData(), OBJECT);
+            return cxt.setResult(transport(cxt).createAccount(cxt.getCreateAccountRequest()).getData(), ACCOUNT);
         }
         catch (ApiException x) {
             return cxt.setServiceError(x);
