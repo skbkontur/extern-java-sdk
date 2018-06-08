@@ -44,6 +44,11 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Mikhail Pavlenko
  */
 
+/*
+    Пример описывает полный цикл работы со списком существующих документооборотом.
+Пример касается документооборота ФНС типа Декларация.
+В качестве аргумента необходимо передавать путь к файлу с параметрами
+*/
 public class DocflowListExample {
 
     private static final String STATUS_RESPONSE_ARRIVED = "urn:docflow-common-status:response-arrived";
