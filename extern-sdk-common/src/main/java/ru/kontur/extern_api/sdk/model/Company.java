@@ -21,14 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor;
+package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.model.CertificateList;
+import com.google.gson.annotations.SerializedName;
+import java.util.UUID;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
-public interface CertificatesAdaptor {
-    QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt);
+public class Company {
+    @SerializedName("id")
+    private UUID id;
+    @SerializedName("general")
+    private CompanyGeneral general = null;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setId(String id) {
+        this.id = UUID.fromString(id);
+    }
+
+    public CompanyGeneral getGeneral() {
+        return general;
+    }
+
+    public void setGeneral(CompanyGeneral general) {
+        this.general = general;
+    }
 }

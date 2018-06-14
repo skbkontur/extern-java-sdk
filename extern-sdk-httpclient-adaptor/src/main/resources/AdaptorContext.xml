@@ -31,6 +31,7 @@ THE SOFTWARE.
     <bean id="docflowsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.DocflowsAdaptorImpl" scope="singleton"/>
     <bean id="draftsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.DraftsAdaptorImpl" scope="singleton"/>
     <bean id="eventsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.EventsAdaptorImpl" scope="singleton"/>
+    <bean id="organizationsAdaptor" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.OrganizationsAdaptorImpl" scope="singleton"/>
     <bean id="httpClient" class="ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.HttpClientImpl" scope="singleton"/>
     
 </beans>

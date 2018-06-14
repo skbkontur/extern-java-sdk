@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import java.util.function.Supplier;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.Adaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -31,7 +32,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *
  * @author alexs
  */
-class BaseAdaptor {
+class BaseAdaptor implements Adaptor {
     protected Supplier<HttpClient> httpClientSupplier;
     
     protected HttpClient configureTransport(QueryContext<?> cxt) {
@@ -41,5 +42,20 @@ class BaseAdaptor {
             .acceptAccessToken(cxt.getAuthPrefix(),cxt.getSessionId()) // устанавливаем access tocken
             .acceptApiKey(cxt.getApiKeyProvider().getApiKey()); // устанавливаем api-key
         return httpClient;
+    }
+
+    @Override
+    public HttpClient getHttpClient() {
+        if (httpClientSupplier != null) {
+            return httpClientSupplier.get();
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setHttpClient(Supplier<HttpClient> httpClient) {
+        httpClientSupplier = httpClient;
     }
 }

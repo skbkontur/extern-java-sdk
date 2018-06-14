@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -129,6 +131,10 @@ public class QueryContext<R> implements Serializable {
     public static final String NOTHING = "nothing";
     public static final String OBJECT = "object";
     public static final String VERSION = "version";
+    public static final String COMPANY_ID = "companyId";
+    public static final String COMPANY = "company";
+    public static final String COMPANY_GENERAL = "companyGeneral";
+    public static final String NAME = "name";
 
     private final Map<String, Object> params;
 
@@ -724,6 +730,42 @@ public class QueryContext<R> implements Serializable {
 
     public QueryContext<R> setFromId(String fromId) {
         return set(FROM_ID, fromId);
+    }
+
+    public UUID getCompanyId() {
+        return (UUID) params.get(COMPANY_ID);
+    }
+
+    public QueryContext<R> setCompanyId(String companyId) {
+        return set(COMPANY_ID, UUID.fromString(companyId));
+    }
+
+    public QueryContext<R> setCompanyId(UUID companyId) {
+        return set(COMPANY_ID, companyId);
+    }
+
+    public Company getCompany() {
+        return (Company) params.get(COMPANY);
+    }
+
+    public QueryContext<R> setCompany(Company company) {
+        return set(COMPANY, company);
+    }
+
+    public CompanyGeneral getCompanyGeneral() {
+        return (CompanyGeneral) params.get(COMPANY_GENERAL);
+    }
+
+    public QueryContext<R> setCompanyGeneral(CompanyGeneral companyGeneral) {
+        return set(COMPANY_GENERAL, companyGeneral);
+    }
+
+    public String getName() {
+        return (String) params.get(NAME);
+    }
+
+    public QueryContext<R> setName(String name) {
+        return set(NAME, name);
     }
 
     public int getSize() {

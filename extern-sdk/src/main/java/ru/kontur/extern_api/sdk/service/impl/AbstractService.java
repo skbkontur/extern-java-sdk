@@ -30,6 +30,7 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.provider.Providers;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
@@ -40,7 +41,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *
  * @author alexs
  */
-public class AbstractService<T> {
+public class AbstractService {
 
     protected UriProvider serviceBaseUriProvider;
     protected AuthenticationProvider authenticationProvider;
@@ -115,5 +116,25 @@ public class AbstractService<T> {
             }
         }
         return cxt;
+    }
+
+    public void serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
+        this.serviceBaseUriProvider = serviceBaseUriProvider;
+    }
+
+    public void authenticationProvider(AuthenticationProvider authenticationProvider) {
+        this.authenticationProvider = authenticationProvider;
+    }
+
+    public void accountProvider(AccountProvider accountProvider) {
+        this.accountProvider = accountProvider;
+    }
+
+    public void apiKeyProvider(ApiKeyProvider apiKeyProvider) {
+        this.apiKeyProvider = apiKeyProvider;
+    }
+
+    public void cryptoProvider(CryptoProvider cryptoProvider) {
+        this.cryptoProvider = cryptoProvider;
     }
 }
