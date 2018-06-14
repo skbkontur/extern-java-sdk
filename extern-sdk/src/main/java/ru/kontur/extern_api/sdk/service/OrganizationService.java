@@ -21,14 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor;
+package ru.kontur.extern_api.sdk.service;
 
-import ru.kontur.extern_api.sdk.model.CertificateList;
+import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
-public interface CertificatesAdaptor {
-    QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt);
+public interface OrganizationService extends Providers {
+    CompletableFuture<QueryContext<Company>> lookupAsync(String companyId);
+
+    QueryContext<Company> lookup(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral);
+
+    QueryContext<Company> create(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name);
+
+    QueryContext<Company> update(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> deleteAsync(String companyId);
+
+    QueryContext<Void> delete(QueryContext<?> cxt);
 }

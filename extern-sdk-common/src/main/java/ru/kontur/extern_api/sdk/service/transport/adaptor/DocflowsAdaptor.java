@@ -35,7 +35,7 @@ import ru.kontur.extern_api.sdk.model.Signature;
  *
  * @author alexs
  */
-public interface DocflowsAdaptor extends Adaptor {
+public interface DocflowsAdaptor {
     
     /**
      * Get docflow page

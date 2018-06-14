@@ -24,18 +24,12 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Link;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -44,7 +38,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 /**
  * @author AlexS
  */
-public class AccountServiceImpl extends AbstractService<AccountsAdaptor> implements AccountService {
+public class AccountServiceImpl extends AbstractService implements AccountService {
 
     private static final String EN_ACC = "account";
 
@@ -54,36 +48,6 @@ public class AccountServiceImpl extends AbstractService<AccountsAdaptor> impleme
         this.accountsAdaptor = accountsAdaptor;
     }
     
-    @Override
-	public AccountService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
-		super.serviceBaseUriProvider = serviceBaseUriProvider;
-        return this;
-	}
-
-    @Override
-	public AccountService authenticationProvider(AuthenticationProvider authenticationProvider) {
-		super.authenticationProvider = authenticationProvider;
-        return this;
-	}
-
-    @Override
-	public AccountService accountProvider(AccountProvider accountProvider) {
-		super.accountProvider = accountProvider;
-        return this;
-	}
-
-    @Override
-	public AccountService apiKeyProvider(ApiKeyProvider apiKeyProvider) {
-		super.apiKeyProvider = apiKeyProvider;
-        return this;
-	}
-
-    @Override
-	public AccountService cryptoProvider(CryptoProvider cryptoProvider) {
-		super.cryptoProvider = cryptoProvider;
-        return this;
-	}
-
     @Override
     public CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync() {
         QueryContext<List<Link>> cxt = createQueryContext(EN_ACC);

@@ -24,6 +24,10 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
@@ -39,22 +43,11 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
-
 
 /**
  * @author AlexS
  */
-public class DraftServiceImpl extends AbstractService<DraftsAdaptor> implements DraftService {
+public class DraftServiceImpl extends AbstractService implements DraftService {
 
     private static final String EN_DFT = "Черновик";
     private static final String EN_DOC = "Документ";
@@ -66,36 +59,6 @@ public class DraftServiceImpl extends AbstractService<DraftsAdaptor> implements 
         this.draftsAdaptor = draftsAdaptor;
     }
     
-    @Override
-	public DraftService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
-		super.serviceBaseUriProvider = serviceBaseUriProvider;
-        return this;
-	}
-
-    @Override
-	public DraftService authenticationProvider(AuthenticationProvider authenticationProvider) {
-		super.authenticationProvider = authenticationProvider;
-        return this;
-	}
-
-    @Override
-	public DraftService accountProvider(AccountProvider accountProvider) {
-		super.accountProvider = accountProvider;
-        return this;
-	}
-
-    @Override
-	public DraftService apiKeyProvider(ApiKeyProvider apiKeyProvider) {
-		super.apiKeyProvider = apiKeyProvider;
-        return this;
-	}
-
-    @Override
-	public DraftService cryptoProvider(CryptoProvider cryptoProvider) {
-		super.cryptoProvider = cryptoProvider;
-        return this;
-	}
-
     @Override
     public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization) {
         QueryContext<UUID> cxt = createQueryContext(EN_DFT);

@@ -70,6 +70,7 @@ public class AccountDto {
         account.setId((String)dto.get("id"));
         account.setInn((String)dto.get("inn"));
         account.setKpp((String)dto.get("kpp"));
+        account.setOrganizationName((String)dto.get("organization-name"));
         account.setLinks(new ArrayList<>());
         List<Map<String,Object>> dtoLinks = (List<Map<String,Object>>)dto.get("links");
         if (dtoLinks != null) {

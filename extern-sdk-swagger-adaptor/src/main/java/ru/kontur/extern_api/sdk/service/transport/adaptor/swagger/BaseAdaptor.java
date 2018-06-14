@@ -8,8 +8,10 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 import com.google.gson.GsonBuilder;
 import java.util.Date;
 import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.Adaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.DateAdapter;
@@ -22,7 +24,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.Signat
  *
  * @author alexs
  */
-public abstract class BaseAdaptor {
+public abstract class BaseAdaptor implements Adaptor {
     
     protected Supplier<HttpClient> httpClientSupplier;
     
@@ -49,5 +51,20 @@ public abstract class BaseAdaptor {
         httpClient.acceptApiKey(cxt.getApiKeyProvider().getApiKey());
         
         return httpClient;
+    }
+
+    @Override
+    public HttpClient getHttpClient() {
+        if (httpClientSupplier != null) {
+            return httpClientSupplier.get();
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setHttpClient(@NotNull Supplier<HttpClient> httpClientSupplier) {
+        this.httpClientSupplier = httpClientSupplier;
     }
 }

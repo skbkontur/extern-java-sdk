@@ -33,7 +33,7 @@ import ru.kontur.extern_api.sdk.model.DraftDocument;
  *
  * @author alexs
  */
-public interface DraftsAdaptor extends Adaptor {
+public interface DraftsAdaptor {
     
     /**
      * Create new a draft
