@@ -47,7 +47,9 @@ public interface ServicesFactory {
 	DraftService getDraftService();
     
 	EventService getEventService();
-    
+
+    OrganizationService getOrganizationService();
+
     HttpClient getHttpClient();
     
     /**

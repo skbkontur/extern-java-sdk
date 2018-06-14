@@ -61,18 +61,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 		this.api = new DocflowsApi();
 	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient)api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-
-
 	/**
 	 * Get docflow page
 	 * <p>

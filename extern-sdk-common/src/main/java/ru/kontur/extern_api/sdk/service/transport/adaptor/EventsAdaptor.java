@@ -29,7 +29,7 @@ import ru.kontur.extern_api.sdk.model.EventsPage;
  *
  * @author alexs
  */
-public interface EventsAdaptor extends Adaptor {
+public interface EventsAdaptor {
     
     QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt);
 }

@@ -50,6 +50,7 @@ import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
+import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
@@ -65,11 +66,6 @@ public class ExternEngine implements AuthenticationListener {
 
     private Environment env;
 
-//    private UriProvider serviceBaseUriProvider;
-//    private EngineAuthenticationProvider authenticationProvider;
-//    private AccountProvider accountProvider;
-//    private ApiKeyProvider apiKeyProvider;
-//    private CryptoProvider cryptoProvider;
     private BusinessDriver businessDriver;
 
     private ServicesFactory servicesFactory;
@@ -234,6 +230,16 @@ public class ExternEngine implements AuthenticationListener {
      */
     public EventService getEventService() {
         return servicesFactory.getEventService();
+    }
+
+    /**
+     * Возвращает экземпляр класса OrganizationService
+     *
+     * @return OrganizationService сервис предназначен для управления организациями (CRUD)
+     * @see ru.kontur.extern_api.sdk.service.OrganizationService
+     */
+    public OrganizationService getOrganizationService() {
+        return servicesFactory.getOrganizationService();
     }
 
     /**

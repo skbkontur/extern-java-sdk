@@ -32,7 +32,7 @@ import ru.kontur.extern_api.sdk.model.Link;
  *
  * @author alexs
  */
-public interface AccountsAdaptor extends Adaptor {
+public interface AccountsAdaptor {
 
     public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt);
 

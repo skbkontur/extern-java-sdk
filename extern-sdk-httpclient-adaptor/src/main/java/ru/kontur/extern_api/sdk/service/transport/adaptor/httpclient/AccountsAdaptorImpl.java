@@ -114,7 +114,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
                 return cxt;
             }
 
-            return cxt.setResult(transport(cxt).accountsGet(cxt.getAccountId().toString()).getData(), ACCOUNT);
+            return cxt.setResult(transport(cxt).accountsGet(cxt.getAccountProvider().accountId().toString()).getData(), ACCOUNT);
         }
         catch (ApiException x) {
             return cxt.setServiceError(x);

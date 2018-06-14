@@ -40,17 +40,6 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient)api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-    
-    @Override
     public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
         try {
             if (cxt.isFail()) {
@@ -132,7 +121,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             return cxt.setResult(
                 accountDto
                     .fromDto(
-                        transport(cxt).accountsGet(cxt.getAccountId())
+                        transport(cxt).accountsGet(cxt.getAccountProvider().accountId())
                     ),
                  ACCOUNT
             );

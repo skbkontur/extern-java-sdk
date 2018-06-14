@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -34,19 +36,10 @@ import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
-
 /**
  * @author AlexS
  */
-public class DocflowServiceImpl extends AbstractService<DocflowsAdaptor> implements DocflowService {
+public class DocflowServiceImpl extends AbstractService implements DocflowService {
 
     private static final String EN_DFW = "Документооборот";
     private static final String EN_DOC = "Документ";
@@ -58,36 +51,6 @@ public class DocflowServiceImpl extends AbstractService<DocflowsAdaptor> impleme
         this.docflowsAdaptor = docflowsAdaptor;
     }
     
-    @Override
-	public DocflowService serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
-		super.serviceBaseUriProvider = serviceBaseUriProvider;
-        return this;
-	}
-
-    @Override
-	public DocflowService authenticationProvider(AuthenticationProvider authenticationProvider) {
-		super.authenticationProvider = authenticationProvider;
-        return this;
-	}
-
-    @Override
-	public DocflowService accountProvider(AccountProvider accountProvider) {
-		super.accountProvider = accountProvider;
-        return this;
-	}
-
-    @Override
-	public DocflowService apiKeyProvider(ApiKeyProvider apiKeyProvider) {
-		super.apiKeyProvider = apiKeyProvider;
-        return this;
-	}
-
-    @Override
-	public DocflowService cryptoProvider(CryptoProvider cryptoProvider) {
-		super.cryptoProvider = cryptoProvider;
-        return this;
-	}
-
     /**
      * Allow API user to get Docflow object
      * <p>
