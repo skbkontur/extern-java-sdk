@@ -68,8 +68,8 @@ public class AccountsApi extends RestApi {
 	@Path("/v1")
     @POST
     @Consumes("application/json; charset=utf-8")
-	public ApiResponse<Object> createAccount(CreateAccountRequest createAccountRequest) throws ApiException {
-        return invoke("createAccount", createAccountRequest, new TypeToken<Object>(){}.getType());
+	public ApiResponse<Account> createAccount(CreateAccountRequest createAccountRequest) throws ApiException {
+        return invoke("createAccount", createAccountRequest, new TypeToken<Account>(){}.getType());
 	}
 
 }

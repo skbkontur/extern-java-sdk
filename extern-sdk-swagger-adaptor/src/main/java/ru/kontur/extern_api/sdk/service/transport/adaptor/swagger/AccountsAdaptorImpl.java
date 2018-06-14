@@ -6,6 +6,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import ru.kontur.extern_api.sdk.model.Account;
@@ -17,7 +18,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.ACCOUNT_LIST;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.LINKS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.OBJECT;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.AccountDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.AccountListDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
@@ -39,17 +39,6 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
         this.api = new AccountsApi();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient)api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-    
     @Override
     public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
         try {
@@ -97,7 +86,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
     }
 
     @Override
-    public QueryContext<Object> createAccount(QueryContext<Object> cxt) {
+    public QueryContext<Account> createAccount(QueryContext<Account> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -106,11 +95,13 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             CreateAccountRequestDto createAccountRequestDto = new CreateAccountRequestDto();
 
             return cxt.setResult(
-                transport(cxt).accountsCreate(
-                    createAccountRequestDto
-                        .toDto(cxt.getCreateAccountRequest())
+                new AccountDto().fromDto(
+                    (Map)transport(cxt).accountsCreate(
+                        createAccountRequestDto
+                            .toDto(cxt.getCreateAccountRequest())
+                    )
                 ),
-                OBJECT
+                ACCOUNT
             );
         }
         catch (ApiException x) {
@@ -130,7 +121,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             return cxt.setResult(
                 accountDto
                     .fromDto(
-                        transport(cxt).accountsGet(cxt.getAccountId())
+                        transport(cxt).accountsGet(cxt.getAccountProvider().accountId())
                     ),
                  ACCOUNT
             );

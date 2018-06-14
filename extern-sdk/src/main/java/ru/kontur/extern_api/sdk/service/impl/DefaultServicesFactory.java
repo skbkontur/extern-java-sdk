@@ -47,6 +47,7 @@ import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
+import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.Adaptor;
@@ -68,6 +69,7 @@ public class DefaultServicesFactory implements ServicesFactory {
         DOCFLOW("docflowsAdaptor"),
         DRAFT("draftsAdaptor"),
         EVENT("eventsAdaptor"),
+        ORGANIZATION("organizationsAdaptor"),
         HTTPCLIENT("httpClient");
 
         private final String adaptorId;
@@ -80,7 +82,7 @@ public class DefaultServicesFactory implements ServicesFactory {
             return adaptorId;
         }
 
-    };
+    }
 
     private static final String ADAPTOR_CONTEXT = "/AdaptorContext.xml";
 
@@ -107,6 +109,8 @@ public class DefaultServicesFactory implements ServicesFactory {
     private DraftService draftService;
 
     private EventService eventService;
+
+    private OrganizationService organizationService;
 
     private HttpClient httpClient;
 
@@ -222,6 +226,15 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
+    public OrganizationService getOrganizationService() {
+        if (organizationService == null) {
+            organizationService = new OrganizationServiceImpl(getAdaptor(Service.ORGANIZATION));
+            setProviders(organizationService);
+        }
+        return organizationService;
+    }
+
+    @Override
     public HttpClient getHttpClient() {
         if (httpClient == null) {
             httpClient = getAdaptor(Service.HTTPCLIENT);
@@ -233,7 +246,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Object> T getAdaptor(Service service) {
+    private <T> T getAdaptor(Service service) {
 
         T adaptor = (T) ADAPTORS.get(service.getAdaptorId());
 
@@ -243,7 +256,7 @@ public class DefaultServicesFactory implements ServicesFactory {
                 try {
                     adaptor = (T) Class.forName(m.className).newInstance();
                     if (adaptor instanceof Adaptor) {
-                        ((Adaptor) adaptor).setHttpClient(() -> getHttpClient());
+                        ((Adaptor) adaptor).setHttpClient(this::getHttpClient);
                     }
                     if (SCOPE_SINGLETON.equals(m.scope)) {
                         ADAPTORS.put(service.getAdaptorId(), adaptor);
@@ -293,7 +306,7 @@ public class DefaultServicesFactory implements ServicesFactory {
             id = e.getAttribute("id");
             className = e.getAttribute("class");
             scope = e.getAttribute("scope");
-            if (scope == null || !SCOPE_PROTOTYPE.equals(scope)) {
+            if (!SCOPE_PROTOTYPE.equals(scope)) {
                 scope = SCOPE_SINGLETON;
             }
         }

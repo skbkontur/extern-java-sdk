@@ -39,13 +39,13 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
  * @author alexs
  */
 public interface Providers {
-	Providers serviceBaseUriProvider(UriProvider serviceBaseUriProvider);
+	void serviceBaseUriProvider(UriProvider serviceBaseUriProvider);
     
-	Providers authenticationProvider(AuthenticationProvider authenticationProvider);
+	void authenticationProvider(AuthenticationProvider authenticationProvider);
     
-	Providers accountProvider(AccountProvider accountProvider);
+	void accountProvider(AccountProvider accountProvider);
     
-	Providers apiKeyProvider(ApiKeyProvider apiKeyProvider);
+	void apiKeyProvider(ApiKeyProvider apiKeyProvider);
     
-	Providers cryptoProvider(CryptoProvider cryptoProvider);
+	void cryptoProvider(CryptoProvider cryptoProvider);
 }

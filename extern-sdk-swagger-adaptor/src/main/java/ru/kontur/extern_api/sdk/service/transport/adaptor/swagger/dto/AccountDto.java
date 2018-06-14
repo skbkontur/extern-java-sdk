@@ -26,7 +26,9 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
 import ru.kontur.extern_api.sdk.model.Account;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -59,6 +61,26 @@ public class AccountDto {
         return account;
     }
 
+    public Account fromDto(Map<String,Object> dto) {
+
+        if (dto == null) return null;
+
+        Account account = new Account();
+        
+        account.setId((String)dto.get("id"));
+        account.setInn((String)dto.get("inn"));
+        account.setKpp((String)dto.get("kpp"));
+        account.setOrganizationName((String)dto.get("organization-name"));
+        account.setLinks(new ArrayList<>());
+        List<Map<String,Object>> dtoLinks = (List<Map<String,Object>>)dto.get("links");
+        if (dtoLinks != null) {
+            LinkDto linkDto = new LinkDto();
+            account.setLinks(dtoLinks.stream().map(linkDto::fromDto).collect(Collectors.toList()));
+        }
+        
+        return account;
+    }
+    
     public ru.kontur.extern_api.sdk.service.transport.swagger.model.Account toDto(Account account) {
 
         if (account == null) return null;

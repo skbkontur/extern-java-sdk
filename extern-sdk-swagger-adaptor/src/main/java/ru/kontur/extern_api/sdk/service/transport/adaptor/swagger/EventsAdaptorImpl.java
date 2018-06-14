@@ -34,18 +34,6 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient)api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-
-
-    @Override
     public QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt) {
         try {
             if (cxt.isFail()) {

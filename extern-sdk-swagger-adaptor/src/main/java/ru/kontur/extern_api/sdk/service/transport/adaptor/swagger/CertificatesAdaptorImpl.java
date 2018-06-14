@@ -30,17 +30,6 @@ public class CertificatesAdaptorImpl extends BaseAdaptor implements Certificates
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient)api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-
-    @Override
     public QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt) {
         try {
             if (cxt.isFail()) {

@@ -54,17 +54,6 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
         this.api = api;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public HttpClient getHttpClient() {
-        return (ApiClient) api.getApiClient();
-    }
-
-    @Override
-    public void setHttpClient(Supplier<HttpClient> httpClientSupplier) {
-        super.httpClientSupplier = httpClientSupplier;
-    }
-
     /**
      * Create new a draft
      * <p>
