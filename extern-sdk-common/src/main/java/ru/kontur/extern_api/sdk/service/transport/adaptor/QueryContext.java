@@ -116,6 +116,8 @@ public class QueryContext<R> implements Serializable {
     public static final String SKIP = "skip";
     public static final String TAKE = "take";
     public static final String INN_KPP = "innKpp";
+    public static final String INN = "inn";
+    public static final String KPP = "kpp";
     public static final String UPDATED_FROM = "updatedFrom";
     public static final String UPDATED_TO = "updatedTo";
     public static final String CREATED_FROM = "createdFrom";
@@ -135,6 +137,7 @@ public class QueryContext<R> implements Serializable {
     public static final String COMPANY = "company";
     public static final String COMPANY_GENERAL = "companyGeneral";
     public static final String NAME = "name";
+    public static final String COMPANY_BATCH = "companyBatch";
 
     private final Map<String, Object> params;
 
@@ -627,22 +630,38 @@ public class QueryContext<R> implements Serializable {
         return set(INCOMING, incoming);
     }
 
-    public long getSkip() {
-        return (long) params.get(SKIP);
+    public Long getSkip() {
+        return (Long) params.get(SKIP);
     }
 
-    public QueryContext<R> setSkip(long skip) {
+    public QueryContext<R> setSkip(Long skip) {
         return set(SKIP, skip);
     }
 
-    public int getTake() {
-        return (int) params.get(TAKE);
+    public Integer getTake() {
+        return (Integer) params.get(TAKE);
     }
 
-    public QueryContext<R> setTake(int take) {
+    public QueryContext<R> setTake(Integer take) {
         return set(TAKE, take);
     }
 
+
+    public String getInn() {
+        return (String) params.get(INN);
+    }
+
+    public QueryContext<R> setInn(String inn) {
+        return set(INN, inn);
+    }
+
+    public String getKpp() {
+        return (String) params.get(KPP);
+    }
+
+    public QueryContext<R> setKpp(String kpp) {
+        return set(KPP, kpp);
+    }
 
     public String getInnKpp() {
         return (String) params.get(INN_KPP);

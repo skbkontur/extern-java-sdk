@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.OrganizationsAdaptor;
@@ -99,4 +100,22 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
         QueryContext<Void> cxt = createQueryContext(parent,EN_ORG);
         return cxt.apply(organizationsAdaptor::delete);
     }
+
+    @Override
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
+        QueryContext<CompanyBatch> cxt = createQueryContext(EN_ORG);
+        return cxt
+            .setInn(inn)
+            .setKpp(kpp)
+            .setSkip(skip)
+            .setTake(take)
+            .applyAsync(organizationsAdaptor::search);
+    }
+
+    @Override
+    public QueryContext<CompanyBatch> search(QueryContext<?> parent) {
+        QueryContext<CompanyBatch> cxt = createQueryContext(parent,EN_ORG);
+        return cxt.apply(organizationsAdaptor::search);
+    }
+
 }

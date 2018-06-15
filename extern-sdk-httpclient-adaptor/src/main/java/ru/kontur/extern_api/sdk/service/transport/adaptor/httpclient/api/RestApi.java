@@ -176,7 +176,7 @@ public class RestApi {
             for (int i = 0; i < args.length; i++) {
                 if (i < params.size()) {
                     Param p = params.get(i);
-                    if (p.getType() == Param.Type.PATH_PARAM) {
+                    if (p.getType() == Param.Type.PATH_PARAM && args[i] != null) {
                         path = path.replaceFirst("\\{\\b*" + params.get(i).getName() + "\\b*\\}", args[i].toString());
                     }
                 }
@@ -193,7 +193,7 @@ public class RestApi {
             for (int i = 0; i < args.length; i++) {
                 if (i < params.size()) {
                     Param p = params.get(i);
-                    if (p.getType() == type) {
+                    if (p.getType() == type && args[i] != null) {
                         result.put(p.getName(), (T) args[i]);
                     }
                 }

@@ -24,8 +24,10 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY_BATCH;
 
 import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -36,7 +38,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.Organiz
  */
 public class OrganizationsAdaptorImpl extends BaseAdaptor implements OrganizationsAdaptor {
 
-    private OrganizationsApi api;
+    private final OrganizationsApi api;
 
     public OrganizationsAdaptorImpl() {
         this.api = new OrganizationsApi();
@@ -49,7 +51,14 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                 return cxt;
             }
 
-            return cxt.setResult(transport(cxt).lookup(cxt.getAccountProvider().accountId().toString(), cxt.getCompanyId().toString()).getData(), COMPANY);
+            return cxt.setResult(
+                transport(cxt)
+                    .lookup(
+                        cxt.getAccountProvider().accountId().toString(),
+                        cxt.getCompanyId().toString()
+                    ).getData(),
+                COMPANY
+            );
         } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
@@ -83,8 +92,15 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                 return cxt;
             }
 
-            return cxt.setResult(transport(cxt).update(cxt.getAccountProvider().accountId().toString(), cxt.getCompanyId().toString(), cxt.getName()).getData(),
-                COMPANY);
+            return cxt.setResult(
+                transport(cxt)
+                    .update(
+                        cxt.getAccountProvider().accountId().toString(),
+                        cxt.getCompanyId().toString(),
+                        cxt.getName()
+                    ).getData(),
+                COMPANY
+            );
         } catch (ApiException x) {
             return cxt.setServiceError(x);
         }
@@ -97,7 +113,36 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                 return cxt;
             }
 
-            transport(cxt).delete(cxt.getAccountProvider().accountId().toString(), cxt.getCompanyId().toString());
+            transport(cxt)
+                .delete(
+                    cxt.getAccountProvider().accountId().toString(),
+                    cxt.getCompanyId().toString()
+                );
+
+            return cxt;
+        } catch (ApiException x) {
+            return cxt.setServiceError(x);
+        }
+    }
+
+    @Override
+    public QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            cxt.setResult(
+                transport(cxt)
+                    .search(
+                        cxt.getAccountProvider().accountId().toString(),
+                        cxt.getInn(),
+                        cxt.getKpp(),
+                        cxt.getSkip(),
+                        cxt.getTake()
+                    ).getData()
+                , COMPANY_BATCH
+            );
 
             return cxt;
         } catch (ApiException x) {
