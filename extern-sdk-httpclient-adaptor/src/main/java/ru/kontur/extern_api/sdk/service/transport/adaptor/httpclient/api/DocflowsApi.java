@@ -29,6 +29,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
@@ -68,10 +69,19 @@ public class DocflowsApi extends RestApi {
     @Path("/v1/{accountId}/docflows")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DocflowPage> getDocflows(@PathParam("accountId") String accountId,
-        Boolean finished, Boolean incoming, Long skip, Integer take, String innKpp,
-        Date updatedFrom, Date updatedTo, Date createdFrom, Date createdTo,
-        String type) throws ApiException {
+    public ApiResponse<DocflowPage> getDocflows(
+        @PathParam("accountId") final String accountId,
+        @QueryParam("finished") final Boolean finished, 
+        @QueryParam("incoming") final Boolean incoming, 
+        @QueryParam("skip") final Long skip, 
+        @QueryParam("take") final Integer take, 
+        @QueryParam("innKpp") final String innKpp,
+        @QueryParam("updatedFrom") final Date updatedFrom, 
+        @QueryParam("updatedTo") final Date updatedTo, 
+        @QueryParam("createdFrom") final Date createdFrom, 
+        @QueryParam("createdTo") final Date createdTo,
+        @QueryParam("type") String type
+    ) throws ApiException {
         return invoke("getDocflows", null, new TypeToken<DocflowPage>() {
             }.getType(), accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo,
             createdFrom, createdTo, type);

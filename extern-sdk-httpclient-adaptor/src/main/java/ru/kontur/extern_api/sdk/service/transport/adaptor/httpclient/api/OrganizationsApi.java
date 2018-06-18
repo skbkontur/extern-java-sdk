@@ -33,7 +33,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
@@ -72,5 +74,18 @@ public class OrganizationsApi extends RestApi {
     @DELETE
     public ApiResponse<Void> delete(@PathParam("accountId") final String accountId, @PathParam("orgId") final String orgId) throws ApiException {
         return invoke("delete", null, new TypeToken<Void>(){}.getType(), accountId, orgId);
+    }
+
+    @Path("/v1/{accountId}/organizations")
+    @GET
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<CompanyBatch> search(
+        @PathParam("accountId") final String accountId,
+        @QueryParam("inn") final String inn,
+        @QueryParam("kpp") final String kpp,
+        @QueryParam("skip") final Long skip,
+        @QueryParam("take") final Integer take
+    ) throws ApiException {
+        return invoke("search", null, new TypeToken<CompanyBatch>(){}.getType(), accountId, inn, kpp, skip, take);
     }
 }

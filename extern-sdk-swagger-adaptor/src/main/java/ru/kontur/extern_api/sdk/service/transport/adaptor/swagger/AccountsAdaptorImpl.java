@@ -85,6 +85,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public QueryContext<Account> createAccount(QueryContext<Account> cxt) {
         try {
@@ -96,7 +97,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
 
             return cxt.setResult(
                 new AccountDto().fromDto(
-                    (Map)transport(cxt).accountsCreate(
+                    (Map<String,Object>)transport(cxt).accountsCreate(
                         createAccountRequestDto
                             .toDto(cxt.getCreateAccountRequest())
                     )

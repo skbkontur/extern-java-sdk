@@ -51,6 +51,7 @@ public class OrganizationDto {
         return company;
     }
 
+    @SuppressWarnings("unchecked")
     public Company fromDto(Map<String,Object> dto) {
         if (dto == null) return null;
 
