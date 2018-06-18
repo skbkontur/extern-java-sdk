@@ -21,36 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service;
+package ru.kontur.extern_api.sdk.model;
 
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyBatch;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.provider.Providers;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Aleksey Sukhorukov
  */
-public interface OrganizationService extends Providers {
-    CompletableFuture<QueryContext<Company>> lookupAsync(String companyId);
+public class CompanyBatch {
+    @SerializedName("organizations")
+    private List<Company> companies;
 
-    QueryContext<Company> lookup(QueryContext<?> cxt);
+    @SerializedName("total-count")
+    private int totalCount;
 
-    CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral);
+    public CompanyBatch() {
+        companies = new ArrayList<>();
+        totalCount = 0;
+    }
 
-    QueryContext<Company> create(QueryContext<?> cxt);
+    public List<Company> getCompanies() {
+        return companies;
+    }
 
-    CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name);
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
+    }
 
-    QueryContext<Company> update(QueryContext<?> cxt);
+    public int getTotalCount() {
+        return totalCount;
+    }
 
-    CompletableFuture<QueryContext<Void>> deleteAsync(String companyId);
-
-    QueryContext<Void> delete(QueryContext<?> cxt);
-
-    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take);
-
-    QueryContext<CompanyBatch> search(QueryContext<?> cxt);
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
 }
