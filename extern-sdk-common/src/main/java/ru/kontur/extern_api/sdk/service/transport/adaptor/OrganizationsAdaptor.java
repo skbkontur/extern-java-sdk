@@ -24,12 +24,12 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
 
 /**
  * @author Aleksey Sukhorukov
  */
-public interface OrganizationsAdaptor extends Adaptor {
+public interface OrganizationsAdaptor {
 
     /**
      * Lookups an organization by an identifier
@@ -50,7 +50,7 @@ public interface OrganizationsAdaptor extends Adaptor {
     QueryContext<Company> create(QueryContext<Company> cxt);
 
     /**
-     * Upfates a name of an organization
+     * Updates a name of an organization
      *
      * @param cxt QueryContext&lt;Company&gt; a context of query which mast contains a name of organization
      *
@@ -66,4 +66,13 @@ public interface OrganizationsAdaptor extends Adaptor {
      * @return QueryContext&lt;Void&gt; a context of query. Needs check isFail result.
      */
     QueryContext<Void> delete(QueryContext<Void> cxt);
+
+    /**
+     * Searches organizations by critaries: inn, kpp
+     *
+     * @param cxt QueryContext&lt;CompanyBatch&gt; a context of query whick may contains inn, kpp, skip and take parameters
+     *
+     * @return QueryContext&lt;CompanyBatch&gt; a context with a result
+     */
+    QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt);
 }

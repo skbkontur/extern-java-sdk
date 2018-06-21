@@ -61,6 +61,7 @@ public class AccountDto {
         return account;
     }
 
+    @SuppressWarnings("unchecked")
     public Account fromDto(Map<String,Object> dto) {
 
         if (dto == null) return null;

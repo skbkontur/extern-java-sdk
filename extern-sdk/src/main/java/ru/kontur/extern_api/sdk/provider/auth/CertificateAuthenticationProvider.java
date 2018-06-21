@@ -145,7 +145,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
             new QueryContext<byte[]>()
                 .setThumbprint(thumbprint)
                 .setContent(decodedEncryptedKey)
-        ).get();
+        ).ensureSuccess().get();
     }
 
     private AuthInitResponse initAuth(

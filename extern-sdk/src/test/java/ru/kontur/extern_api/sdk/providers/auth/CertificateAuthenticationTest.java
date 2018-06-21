@@ -150,7 +150,7 @@ public class CertificateAuthenticationTest {
 
         QueryContext<String> sessionId = auth.sessionId();
 
-        sessionId.failure();
+        sessionId.ensureSuccess();
 
         String actualSid = sessionId.getSessionId();
         assertThat(actualSid, equalTo(expectedSid));

@@ -24,15 +24,16 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY_BATCH;
 
 import java.util.Map;
-import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.OrganizationBatchDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.OrganizationDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.ApiClient;
 import ru.kontur.extern_api.sdk.service.transport.swagger.api.OrganizationsApi;
@@ -71,6 +72,7 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public QueryContext<Company> create(QueryContext<Company> cxt) {
         try {
@@ -130,6 +132,34 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
             return cxt;
         }
         catch (ApiException x) {
+            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
+
+    @Override
+    public QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            cxt.setResult(
+                new OrganizationBatchDto()
+                    .fromDto(
+                        transport(cxt).organizationsSearch(
+                            cxt.getAccountProvider().accountId(),
+                            cxt.getInn(),
+                            cxt.getKpp(),
+                            cxt.getSkip() == null ? null : cxt.getSkip().intValue(), /* to do: after change Integer type to Long needa remove intValue*/
+                            cxt.getTake()
+                        )
+                    )
+                ,
+                COMPANY_BATCH
+            );
+
+            return cxt;
+        } catch (ApiException x) {
             return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }

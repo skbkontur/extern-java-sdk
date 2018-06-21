@@ -125,7 +125,6 @@
         <module>extern-sdk-httpclient-adaptor</module>
         <module>extern-sdk-swagger</module>
         <module>extern-sdk-swagger-adaptor</module>
-        <module>extern-java-sdk-test-runner</module>
     </modules>
 
     <build>
