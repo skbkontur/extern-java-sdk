@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
 
 /**
  *
@@ -244,5 +246,8 @@ public interface DraftsAdaptor {
      */
     QueryContext<Void> createType(QueryContext<Void> cxt);
 
+    QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt);
+
+    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt, String smsCode);
 
 }

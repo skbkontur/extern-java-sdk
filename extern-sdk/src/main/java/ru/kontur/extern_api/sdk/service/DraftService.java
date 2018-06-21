@@ -33,6 +33,8 @@ import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -146,4 +148,12 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
 
     QueryContext<Void> createUSN2(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignAsync(String draftId);
+
+    QueryContext<SignInitiation> cloudSign(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(String draftId, String requestId, String code);
+
+    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt, String code);
 }

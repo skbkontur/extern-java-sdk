@@ -34,36 +34,36 @@ public interface OrganizationsAdaptor extends Adaptor {
     /**
      * Lookups an organization by an identifier
      *
-     * @param cxt QueryContext<Company> a context of query which mast contains an organization identifier
+     * @param cxt QueryContext&lt;Company&gt; a context of query which mast contains an organization identifier
      *
-     * @return QueryContext<Company> a context of query with an organization object
+     * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
     QueryContext<Company> lookup(QueryContext<Company> cxt);
 
     /**
      * Creates an organization
      *
-     * @param cxt QueryContext<CompanyGeneral> a context of query which mast contains a CompanyGeneral object
+     * @param cxt QueryContext&lt;CompanyGeneral&gt; a context of query which mast contains a CompanyGeneral object
      *
-     * @return QueryContext<Company> a context of query with an organization object
+     * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
     QueryContext<Company> create(QueryContext<Company> cxt);
 
     /**
      * Upfates a name of an organization
      *
-     * @param cxt QueryContext<Company> a context of query which mast contains a name of organization
+     * @param cxt QueryContext&lt;Company&gt; a context of query which mast contains a name of organization
      *
-     * @return QueryContext<Company> a context of query with an organization object
+     * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
     QueryContext<Company> update(QueryContext<Company> cxt);
 
     /**
      * Deletes an organization by an identifier
      *
-     * @param cxt QueryContext<Company> a context of query which mast contains an organization identifier
+     * @param cxt QueryContext&lt;Company&gt; a context of query which mast contains an organization identifier
      *
-     * @return QueryContext<Void> a context of query. Needs check isFail result.
+     * @return QueryContext&lt;Void&gt; a context of query. Needs check isFail result.
      */
     QueryContext<Void> delete(QueryContext<Void> cxt);
 }

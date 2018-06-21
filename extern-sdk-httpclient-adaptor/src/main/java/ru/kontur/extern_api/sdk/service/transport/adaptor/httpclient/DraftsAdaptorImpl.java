@@ -42,7 +42,10 @@ import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -675,6 +678,68 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             return cxt.setServiceError(x);
         }
     }
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/cloudSign
+     * <p>
+     * Initiates the process of cloud signing of the draft
+     *
+     * @param cxt a context (required: draftId, documentId)
+     * @return QueryContext&lt;Void&gt;
+     */
+    @Override
+    public QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            ApiResponse<SignInitiation> response = transport(cxt)
+                    .cloudSignDraft(
+                            cxt.getAccountProvider().accountId().toString(),
+                            cxt.getDraftId().toString()
+                    );
+
+            return cxt
+                    .set("requestId", response.getData().getRequestId())
+                    .setResult(response.getData(), "sign request data");
+        }
+        catch (ApiException x) {
+            return cxt.setServiceError(x);
+        }
+    }
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm
+     * <p>
+     * Initiates the process of cloud signing of the draft
+     *
+     * @param cxt a context (required: draftId, documentId, requestId)
+     * @param smsCode the code for signing confirmation
+     * @return QueryContext&lt;Void&gt;
+     */
+    @Override
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt, String smsCode) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            ApiResponse<SignedDraft> response = transport(cxt)
+                    .confirmCloudSigning(
+                            cxt.getAccountProvider().accountId().toString(),
+                            cxt.getDraftId().toString(),
+                            cxt.get("requestId"),
+                            smsCode
+                    );
+
+            return cxt.setResult(response.getData(), "signed documents");
+        }
+        catch (ApiException x) {
+            return cxt.setServiceError(x);
+        }
+    }
+
 
     /**
      * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}

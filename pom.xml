@@ -125,6 +125,7 @@
         <module>extern-sdk-httpclient-adaptor</module>
         <module>extern-sdk-swagger</module>
         <module>extern-sdk-swagger-adaptor</module>
+        <module>extern-java-sdk-test-runner</module>
     </modules>
 
     <build>
@@ -147,7 +148,7 @@
                         <target>${java.version}</target>
                         <compilerArgs>
                             <arg>-Xlint:all</arg>
-                            <!-- TODO: we MUST get rid of lintng errors -->
+                            <!-- TODO: we MUST get rid of linting errors -->
                             <!-- <arg>-Werror</arg> -->
                             <arg>-Xlint:-options</arg>
                             <arg>-Xlint:-processing</arg>

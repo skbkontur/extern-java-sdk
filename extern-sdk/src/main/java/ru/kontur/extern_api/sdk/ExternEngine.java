@@ -246,7 +246,6 @@ public class ExternEngine implements AuthenticationListener {
      * Возвращает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
      *
      * @return serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     * @see ru.kontur.extern_api.sdk.provider.ServiceBaseUriProvider
      */
     public UriProvider getServiceBaseUriProvider() {
         return servicesFactory.getServiceBaseUriProvider();
@@ -256,7 +255,6 @@ public class ExternEngine implements AuthenticationListener {
      * Устанавливает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
      *
      * @param serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     * @see ru.kontur.extern_api.sdk.provider.ServiceBaseUriProvider
      */
     public final void setServiceBaseUriProvider(UriProvider serviceBaseUriProvider) {
         this.servicesFactory.setServiceBaseUriProvider(serviceBaseUriProvider);

@@ -37,6 +37,8 @@ import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.service.DraftService;
@@ -357,6 +359,39 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     public QueryContext<Void> createUSN2(QueryContext<?> parent) {
         QueryContext<Void> cxt = createQueryContext(parent, EN_DOC);
         return cxt.apply(draftsAdaptor::createUSN2);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignAsync(String draftId) {
+        QueryContext<SignInitiation> cxt = createQueryContext("");
+        return cxt
+                .setDraftId(draftId)
+                .applyAsync(draftsAdaptor::cloudSign);
+
+    }
+
+    @Override
+    public QueryContext<SignInitiation> cloudSign(QueryContext<?> parent) {
+        QueryContext<SignInitiation> queryContext = createQueryContext(parent, "");
+        return queryContext.apply(draftsAdaptor::cloudSign);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(
+            String draftId, String requestId, String code) {
+
+        QueryContext<SignedDraft> cxt = createQueryContext("");
+
+        return cxt
+                .setDraftId(draftId)
+                .set("requestId", requestId)
+                .applyAsync(context -> draftsAdaptor.cloudSignConfirm(context, code));
+    }
+
+    @Override
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> parent, String code) {
+        QueryContext<SignedDraft> queryContext = createQueryContext(parent, "");
+        return queryContext.apply(context -> draftsAdaptor.cloudSignConfirm(context, code));
     }
 
 }

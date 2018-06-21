@@ -30,15 +30,11 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.Providers;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
- * @param <T> adaptor API
- *
  * @author alexs
  */
 public class AbstractService {

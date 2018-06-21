@@ -22,7 +22,6 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import java.net.URL;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Collections;
@@ -43,7 +42,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * Провайдер аутентификации по сертификату.
- * <a href="https://github.com/skbkontur/extern-api-docs/blob/master/Аутентификация.md#1">
+ * <a href="https://github.com/skbkontur/extern-api-docs/blob/master/">
  * Описание процесса.
  * </a>
  *
@@ -195,7 +194,7 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     }
 
     /**
-     * @param certificateProvider Supplier<byte[]> поставляет сертификат, которым производится аутентификация
+     * @param certificateProvider Supplier&lt;byte[]&gt; поставляет сертификат, которым производится аутентификация
      * @param skipCertValidation {@code true} - не проверять валидность сертификата, по умолчанию - {@code false}
      * @return CertificateAuthenticationProviderBuilder
      */
@@ -205,9 +204,9 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     }
 
     /**
-     * @param certificateProvider Supplier<byte[]> поставляет сертификат, которым производится аутентификация
+     * @param certificateProvider Supplier&lt;byte[]&gt; поставляет сертификат, которым производится аутентификация
      * @return CertificateAuthenticationProviderBuilder
-     * @see CertificateAuthenticationProvider#usingCertificate(URL, boolean)
+     * @see CertificateAuthenticationProvider#usingCertificate(CertificateProvider)
      */
     public static CertificateAuthenticationProviderBuilder usingCertificate(@NotNull CertificateProvider certificateProvider) {
         return usingCertificate(certificateProvider, false);
