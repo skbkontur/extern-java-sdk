@@ -47,9 +47,6 @@ import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -74,8 +71,7 @@ public class DraftServiceGetEncryptedDocumentContentTest {
     public static void stopJetty() {
         try {
             server.stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -86,33 +82,10 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         engine.setServiceBaseUriProvider(() -> "http://localhost:8080/drafts");
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(
-            new AuthenticationProvider() {
+        engine.setAuthenticationProvider(new AuthenticationProviderAdapter() {
             @Override
             public QueryContext<String> sessionId() {
                 return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-            }
-
-            @Override
-            public String authPrefix() {
-                return "auth.sid ";
-            }
-
-            @Override
-            public AuthenticationProvider httpClient(HttpClient httpClient) {
-                return this;
-            }
-
-            @Override
-            public void addAuthenticationListener(AuthenticationListener authListener) {
-            }
-
-            @Override
-            public void removeAuthenticationListener(AuthenticationListener authListener) {
-            }
-
-            @Override
-            public void raiseUnauthenticated(ServiceError x) {
             }
         });
     }
@@ -130,9 +103,9 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"}");
         assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-            getString());
+                getString());
         assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-            getStringAsync());
+                getStringAsync());
     }
 
     @Test
@@ -170,7 +143,7 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         queryContext.setDraftId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         QueryContext<String> stringQueryContext = engine.getDraftService()
-            .getEncryptedDocumentContent(queryContext);
+                .getEncryptedDocumentContent(queryContext);
         assertNull(stringQueryContext.get());
         ServiceError serviceError = stringQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
@@ -187,9 +160,9 @@ public class DraftServiceGetEncryptedDocumentContentTest {
     private String getStringAsync() {
         try {
             return engine.getDraftService()
-                .getEncryptedDocumentContentAsync(StandardValues.ID, StandardValues.ID).get().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+                    .getEncryptedDocumentContentAsync(StandardValues.ID, StandardValues.ID).get()
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

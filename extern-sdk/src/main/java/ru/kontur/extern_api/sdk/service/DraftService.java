@@ -24,11 +24,16 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -37,13 +42,8 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
@@ -56,12 +56,13 @@ public interface DraftService extends Providers {
      * <p>
      * POST /v1/{accountId}/drafts
      *
-     * @param sender       Sender отправитель декларации
-     * @param recipient    Recipient получатель декларации
+     * @param sender Sender отправитель декларации
+     * @param recipient Recipient получатель декларации
      * @param organization Organization организация, на которую создана декларация
      * @return CompletableFuture&lt;QueryContext&lt;UUID&gt;&gt; идентификатор черновика
      */
-    CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
+    CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient,
+            Organization organization);
 
     QueryContext<UUID> create(QueryContext<?> cxt);
 
@@ -85,7 +86,8 @@ public interface DraftService extends Providers {
 
     QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
+    CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId,
+            DraftMeta draftMeta);
 
     QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
 
@@ -105,11 +107,13 @@ public interface DraftService extends Providers {
 
     QueryContext<Void> deleteDocument(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
+    CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId,
+            String documentId);
 
     QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
+    CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId,
+            String documentId, DocumentContents documentContents);
 
     QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
 
@@ -117,35 +121,43 @@ public interface DraftService extends Providers {
 
     QueryContext<String> printDocument(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
+    CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId,
+            DocumentContents documentContents);
 
     QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
+    CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId,
+            String documentId);
 
     QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
+    CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId,
+            String documentId, byte[] content);
 
     QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
+    CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId,
+            String documentId);
 
     QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
+    CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId,
+            String documentId);
 
     QueryContext<String> getSignatureContent(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
+    CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId,
+            byte[] content);
 
     QueryContext<Void> updateSignature(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
+    CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId,
+            UsnServiceContractInfo usn);
 
     QueryContext<Void> createUSN1(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
+    CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId,
+            UsnServiceContractInfoV2 usn);
 
     QueryContext<Void> createUSN2(QueryContext<?> cxt);
 
@@ -153,7 +165,27 @@ public interface DraftService extends Providers {
 
     QueryContext<SignInitiation> cloudSign(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(String draftId, String requestId, String code);
+    CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(String draftId,
+            String requestId, String code);
 
-    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt, String code);
+    /**
+     * See {@link DraftService#cloudSignConfirmAsync(String, String, String)}. DraftId,
+     * requestId and confirmation code should be in the context.
+     * @param cxt context with 'draftId', 'requestId' and 'code'
+     * @return signed draft model
+     */
+    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt);
+
+    /**
+     * Chain of {@link DraftService#cloudSignAsync(String)} and {@link
+     * DraftService#cloudSignConfirmAsync(String, String, String)} where the confirmation `code` is
+     * supplied by `codeProvider`
+     * @param draftId ID of the draft that should be signed
+     * @param codeProvider confirmation code provider (code from sms).
+     * @return future which will complete when the full signing cycle completes
+     */
+    CompletableFuture<QueryContext<SignedDraft>> cloudSignAsync(
+            String draftId,
+            ISmsCodeProvider codeProvider
+    );
 }

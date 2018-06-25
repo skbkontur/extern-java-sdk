@@ -248,6 +248,6 @@ public interface DraftsAdaptor {
 
     QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt);
 
-    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt, String smsCode);
+    QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt);
 
 }

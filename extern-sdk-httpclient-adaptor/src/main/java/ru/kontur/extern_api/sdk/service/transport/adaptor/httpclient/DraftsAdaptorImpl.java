@@ -530,7 +530,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     /**
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
      * <p>
-     * Get a ecrypted document content
+     * Get a encrypted document content
      *
      * @param cxt a context (required: draftId,documentId)
      * @return String
@@ -715,11 +715,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * Initiates the process of cloud signing of the draft
      *
      * @param cxt a context (required: draftId, documentId, requestId)
-     * @param smsCode the code for signing confirmation
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt, String smsCode) {
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -730,7 +729,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getAccountProvider().accountId().toString(),
                             cxt.getDraftId().toString(),
                             cxt.get("requestId"),
-                            smsCode
+                            cxt.get("code")
                     );
 
             return cxt.setResult(response.getData(), "signed documents");

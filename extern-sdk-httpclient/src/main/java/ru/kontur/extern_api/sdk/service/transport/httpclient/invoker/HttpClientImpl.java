@@ -43,7 +43,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -178,7 +177,7 @@ public class HttpClientImpl {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");
                 if (redirectToUrl == null || redirectToUrl.isEmpty()) {
-                    throw new HttpClientException("Redirect address is out!", responseCode, responseHeaders, response.bodyToString());
+                    throw new HttpClientException("Redirect address is empty", responseCode, responseHeaders, response.bodyToString());
                 }
                 return sendHttpRequest(redirectToUrl, httpMethod, queryParams, body, headerParams, type);
             }

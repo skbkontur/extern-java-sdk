@@ -33,6 +33,7 @@ import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -56,13 +57,14 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     private static final String EN_SIGN = "Подпись";
 
     private final DraftsAdaptor draftsAdaptor;
-    
+
     public DraftServiceImpl(DraftsAdaptor draftsAdaptor) {
         this.draftsAdaptor = draftsAdaptor;
     }
-    
+
     @Override
-    public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization) {
+    public CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient,
+            Organization organization) {
         QueryContext<UUID> cxt = createQueryContext(EN_DFT);
         return cxt
                 .setDraftMeta(new DraftMeta(sender, recipient, organization))
@@ -118,7 +120,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta) {
+    public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId,
+            DraftMeta draftMeta) {
         QueryContext<DraftMeta> cxt = createQueryContext(EN_DFT);
         return cxt
                 .setDraftId(draftId)
@@ -177,7 +180,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId,
+            String documentId) {
         QueryContext<Void> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -192,7 +196,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId,
+            String documentId) {
         QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -207,7 +212,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents) {
+    public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId,
+            String documentId, DocumentContents documentContents) {
         QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -223,7 +229,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId,
+            String documentId) {
         QueryContext<String> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -238,7 +245,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents) {
+    public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId,
+            DocumentContents documentContents) {
         QueryContext<DraftDocument> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -253,7 +261,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId,
+            String documentId) {
         QueryContext<String> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -268,7 +277,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content) {
+    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId,
+            String documentId, byte[] content) {
         QueryContext<Void> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -284,7 +294,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId,
+            String documentId) {
         QueryContext<String> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -299,7 +310,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId) {
+    public CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId,
+            String documentId) {
         QueryContext<String> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -314,7 +326,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content) {
+    public CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId,
+            String documentId, byte[] content) {
         QueryContext<Void> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -330,7 +343,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn) {
+    public CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId,
+            UsnServiceContractInfo usn) {
         QueryContext<Void> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -346,7 +360,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn) {
+    public CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId,
+            UsnServiceContractInfoV2 usn) {
         QueryContext<Void> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDraftId(draftId)
@@ -385,13 +400,25 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
         return cxt
                 .setDraftId(draftId)
                 .set("requestId", requestId)
-                .applyAsync(context -> draftsAdaptor.cloudSignConfirm(context, code));
+                .set("code", code)
+                .applyAsync(draftsAdaptor::cloudSignConfirm);
     }
 
     @Override
-    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> parent, String code) {
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> parent) {
         QueryContext<SignedDraft> queryContext = createQueryContext(parent, "");
-        return queryContext.apply(context -> draftsAdaptor.cloudSignConfirm(context, code));
+        return queryContext.apply(draftsAdaptor::cloudSignConfirm);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignedDraft>> cloudSignAsync(
+            String draftId,
+            ISmsCodeProvider codeProvider
+    ) {
+        return cloudSignAsync(draftId)
+                .thenApplyAsync(cxt -> cxt.set("code", codeProvider.getCode(cxt)))
+                .thenApplyAsync(this::cloudSignConfirm);
+
     }
 
 }

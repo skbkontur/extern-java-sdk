@@ -720,7 +720,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     @Override
-    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt, String code) {
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -730,7 +730,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     cxt.getAccountProvider().accountId(),
                     cxt.getDraftId(),
                     cxt.get("requestId"),
-                    code
+                    cxt.get("code")
             );
 
             return cxt.setResult(new SignConfirmDto().fromDto(signInitResult), "signed documents");
