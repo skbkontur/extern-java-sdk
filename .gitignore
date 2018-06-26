@@ -25,5 +25,5 @@ extern-java-sdk-test-runner
 /extern-sdk-examples/nbactions-SendDocument.example.xml
 /extern-sdk-httpclient/src/main/java/sun
 /extern-sdk/nbactions-swagger.xml
-*.releaseBackup
+*.*Backup
 release.properties
