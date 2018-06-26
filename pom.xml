@@ -147,7 +147,7 @@
                         <target>${java.version}</target>
                         <compilerArgs>
                             <arg>-Xlint:all</arg>
-                            <!-- TODO: we MUST get rid of lintng errors -->
+                            <!-- TODO: we MUST get rid of linting errors -->
                             <!-- <arg>-Werror</arg> -->
                             <arg>-Xlint:-options</arg>
                             <arg>-Xlint:-processing</arg>

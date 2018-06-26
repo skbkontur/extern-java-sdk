@@ -75,7 +75,7 @@ final public class AuthenticationServiceError implements ServiceError {
      * @param e ApiException исключение транспортного уровня
      * @return AuthenticationServiceError объект, реализующий интерфейс ServiceError
      * @throws com.google.gson.JsonSyntaxException – если возвращённый json невозможно распарсить в
-     * {@link AuthenticationErrorCode}
+     * {@link AuthenticationServiceError}
      */
     public static AuthenticationServiceError fromAuthenticationException(ApiException e) {
 

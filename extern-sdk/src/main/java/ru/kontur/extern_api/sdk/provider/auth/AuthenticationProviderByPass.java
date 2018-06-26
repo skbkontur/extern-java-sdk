@@ -128,7 +128,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
                 }
             };
 
-            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/v5.6/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
+            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
 
             cxt.setResult(resp.getData().getSid(), SESSION_ID);
         }

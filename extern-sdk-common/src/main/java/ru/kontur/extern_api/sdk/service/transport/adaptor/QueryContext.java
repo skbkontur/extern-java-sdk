@@ -853,6 +853,12 @@ public class QueryContext<R> implements Serializable {
         throw new ServiceException(getServiceError());
     }
 
+    public QueryContext<R> ensureSuccess() {
+        if (isFail())
+            throw failure();
+        return this;
+    }
+
     private String prettyErrorPrint(ServiceError se) {
         final String EOL = "\r\n";
 

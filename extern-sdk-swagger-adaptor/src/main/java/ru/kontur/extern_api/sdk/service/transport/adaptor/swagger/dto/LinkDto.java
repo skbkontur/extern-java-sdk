@@ -25,6 +25,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Map;
 
 

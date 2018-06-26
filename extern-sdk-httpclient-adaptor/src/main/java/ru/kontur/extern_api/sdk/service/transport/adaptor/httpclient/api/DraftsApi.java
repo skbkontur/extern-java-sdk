@@ -40,6 +40,8 @@ import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
@@ -441,6 +443,58 @@ public class DraftsApi extends RestApi {
         UsnServiceContractInfoV2 usn) throws ApiException {
         return invoke("createUSN2", usn, new TypeToken<Void>() {
         }.getType(), accountId, draftId, documentId);
+    }
+
+    /**
+     *  Initiates the process of cloud signing of the draft
+     *
+     * @param accountId String private account identifier
+     * @param draftId String draft identifier
+     * @return ApiResponse&lt;SignInitiation&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<SignInitiation> cloudSignDraft(
+            @PathParam("accountId") String accountId,
+            @PathParam("draftId") String draftId)
+            throws ApiException {
+        return invoke(
+                "cloudSignDraft", null,
+                TypeToken.get(SignInitiation.class).getType(),
+                accountId,
+                draftId
+        );
+    }
+
+    /**
+     * Confirms given sign operation by requestId via sms-code.
+     *
+     * @param accountId String private account identifier
+     * @param draftId String draft identifier
+     * @param requestId Sign operation identifier
+     * @param code Confirmation code from sms
+     * @return ApiResponse&lt;SignedDraft&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign/confirm")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<SignedDraft> confirmCloudSigning(
+            @PathParam("accountId") String accountId,
+            @PathParam("draftId") String draftId,
+            @QueryParam("requestId") String requestId,
+            @QueryParam("code") String code)
+            throws ApiException {
+
+        return invoke("confirmCloudSigning", null,
+                TypeToken.get(SignedDraft.class).getType(),
+                accountId,
+                draftId,
+                requestId,
+                code
+        );
     }
 
     /**

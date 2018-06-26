@@ -56,7 +56,7 @@ public interface ServicesFactory {
      * Возвращает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
      *
      * @return serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     * @see ru.kontur.extern_api.sdk.provider.ServiceBaseUriProvider
+     * @see ru.kontur.extern_api.sdk.provider.UriProvider
      */
     UriProvider getServiceBaseUriProvider();
     
@@ -64,7 +64,7 @@ public interface ServicesFactory {
      * Устанавливает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
      *
      * @param serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     * @see ru.kontur.extern_api.sdk.provider.ServiceBaseUriProvider
+     * @see ru.kontur.extern_api.sdk.provider.UriProvider
      */
     void setServiceBaseUriProvider(UriProvider serviceBaseUriProvider);
     
@@ -129,7 +129,6 @@ public interface ServicesFactory {
      * Устанавливает экземпляр класса, реализующий интерфейс CryptoProvider
      *
      * @param cryptoProvider CryptoProvider предназначен выполнения криптографических операций
-     * @return CryptoProvider
      * @see ru.kontur.extern_api.sdk.provider.CryptoProvider
      */
     void setCryptoProvider(CryptoProvider cryptoProvider);

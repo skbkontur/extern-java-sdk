@@ -58,7 +58,7 @@ public class HttpClientImpl implements HttpClient {
 
 	@Override
 	public HttpClient acceptAccessToken(String authPrefix, String sessionId) {
-		httpClient.acceptAccessToken(authPrefix, sessionId);
+		httpClient.acceptAccessToken(sessionId);
 		return this;
 	}
 
