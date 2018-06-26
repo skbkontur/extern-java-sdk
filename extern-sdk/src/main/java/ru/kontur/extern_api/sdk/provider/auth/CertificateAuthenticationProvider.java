@@ -56,8 +56,8 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
     private static final String SKIP_VALIDATION_QUERY_PARAM = "free";
     private static final String THUMBPRINT_QUERY_PARAM = "thumbprint";
 
-    private static final String AUTH_BY_CERT_PATH = "/auth/v5.9/authenticate-by-cert";
-    private static final String APPROVE_CERT_PATH = "/auth/v5.9/approve-cert";
+    private static final String AUTH_BY_CERT_PATH = "/authenticate-by-cert";
+    private static final String APPROVE_CERT_PATH = "/approve-cert";
 
     private final CertificateProvider certificateProvider;
     private HttpClient httpClient;

@@ -206,7 +206,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
             Map<String, Object> localVarFormParams = new HashMap<>();
 
-            httpClient.submitHttpRequest("/auth/v5.9/register-external-service-id", "PUT", queryParams, null, localHeaderParams, localVarFormParams, Object.class);
+            httpClient.submitHttpRequest("/register-external-service-id", "PUT", queryParams, null, localHeaderParams, localVarFormParams, Object.class);
 
             registerCxt = new QueryContext<Void>().setResult(null, NOTHING);
         }
@@ -254,7 +254,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
                 return new QueryContext<String>().setServiceError(signature);
             }
 
-            ApiResponse<ResponseLink> responseLink = httpClient.submitHttpRequest("/v5.9/authenticate-by-truster", "POST", queryParams, signature.get(), localHeaderParams, localVarFormParams, ResponseLink.class);
+            ApiResponse<ResponseLink> responseLink = httpClient.submitHttpRequest("/authenticate-by-truster", "POST", queryParams, signature.get(), localHeaderParams, localVarFormParams, ResponseLink.class);
 
             httpClient.setServiceBaseUri("");
 
