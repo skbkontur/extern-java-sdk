@@ -580,6 +580,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 		}
 	}
 
+
+
 	private DocflowsApi transport(QueryContext<?> cxt) {
 		api.setApiClient((ApiClient)prepareTransport(cxt));
 		return api;

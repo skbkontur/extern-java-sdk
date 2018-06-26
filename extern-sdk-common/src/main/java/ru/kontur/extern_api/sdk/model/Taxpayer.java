@@ -31,18 +31,18 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Taxpayer {
 
-		@SerializedName("taxpayer-chief-fio")
+    @SerializedName("taxpayer-chief-fio")
     private String taxpayerChiefFio = null;
 
     private Representative representative = null;
 
-		@SerializedName("taxpayer-phone")
+    @SerializedName("taxpayer-phone")
     private String taxpayerPhone = null;
 
-		@SerializedName("taxpayer-okved")
+    @SerializedName("taxpayer-okved")
     private String taxpayerOkved = null;
 
-		@SerializedName("taxpayer-full-name")
+    @SerializedName("taxpayer-full-name")
     private String taxpayerFullName = null;
 
     public String getTaxpayerChiefFio() {

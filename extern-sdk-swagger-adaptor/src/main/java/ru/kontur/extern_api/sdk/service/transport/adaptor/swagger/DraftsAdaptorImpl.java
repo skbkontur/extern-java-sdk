@@ -18,13 +18,13 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PR
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowDto;
@@ -33,11 +33,15 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DraftDocum
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DraftDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DraftMetaDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.PrepareResultDto;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.SignConfirmDto;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.SignInitResultDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.UsnServiceContractInfoDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.UsnServiceContractInfoV2Dto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.ApiClient;
 import ru.kontur.extern_api.sdk.service.transport.swagger.api.DraftsApi;
 import ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.swagger.model.SignConfirmResult;
+import ru.kontur.extern_api.sdk.service.transport.swagger.model.SignInitResult;
 
 /**
  * @author alexs
@@ -692,6 +696,45 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             return cxt.setResult(null, NOTHING);
         }
         catch (ApiException x) {
+            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
+
+    @Override
+    public QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            SignInitResult signInitResult = transport(cxt).draftsSign(
+                    cxt.getAccountProvider().accountId(),
+                    cxt.getDraftId()
+            );
+
+            cxt.set("requestId", signInitResult.getRequestId());
+            return cxt.setResult(new SignInitResultDto().fromDto(signInitResult), "sign init");
+        } catch (ApiException x) {
+            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
+
+    @Override
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            SignConfirmResult signInitResult = transport(cxt).draftsSignConfirm(
+                    cxt.getAccountProvider().accountId(),
+                    cxt.getDraftId(),
+                    cxt.get("requestId"),
+                    cxt.get("code")
+            );
+
+            return cxt.setResult(new SignConfirmDto().fromDto(signInitResult), "signed documents");
+        } catch (ApiException x) {
             return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }

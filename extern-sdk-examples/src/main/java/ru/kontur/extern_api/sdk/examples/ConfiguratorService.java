@@ -87,7 +87,6 @@ class ConfiguratorService {
         // если используется свой криптопровайдер
         engine.setCryptoProvider(new CryptoProviderMSCapi());
 
-        engine.configureServices();
         return engine;
     }
 

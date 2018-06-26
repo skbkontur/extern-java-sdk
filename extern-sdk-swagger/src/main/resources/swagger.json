@@ -4,9 +4,9 @@
     "version": "v1",
     "title": "Kontur.Extern.Api.Public"
   },
-  "host": "extern-api.staging3.testkontur.ru",
+  "host": "extern-api.testkontur.ru",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/": {
@@ -3113,6 +3113,164 @@
         ]
       }
     },
+    "/v1/{accountId}/drafts/{draftId}/cloudSign": {
+      "post": {
+        "tags": [
+          "Drafts"
+        ],
+        "operationId": "Drafts_Sign",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "draftId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SignInitResult"
+            }
+          },
+          "400": {
+            "description": "Некорректные входные данные",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Не авторизован",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Нет доступа к ресурсу",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Не найден один из требуемых ресурсов",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Произошла внутренняя ошибка",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "auth.sid": []
+          }
+        ]
+      }
+    },
+    "/v1/{accountId}/drafts/{draftId}/cloudSign/confirm": {
+      "post": {
+        "tags": [
+          "Drafts"
+        ],
+        "operationId": "Drafts_SignConfirm",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "draftId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "requestId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SignConfirmResult"
+            }
+          },
+          "400": {
+            "description": "Некорректные входные данные",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Не авторизован",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Нет доступа к ресурсу",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Не найден один из требуемых ресурсов",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Произошла внутренняя ошибка",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "auth.sid": []
+          }
+        ]
+      }
+    },
     "/v1/{accountId}/drafts/{draftId}/prepare": {
       "post": {
         "tags": [
@@ -4420,6 +4578,37 @@
         },
         "id": {
           "type": "string"
+        }
+      }
+    },
+    "SignInitResult": {
+      "type": "object",
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "documents-to-sign": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "request-id": {
+          "type": "string"
+        }
+      }
+    },
+    "SignConfirmResult": {
+      "type": "object",
+      "properties": {
+        "signed-documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
         }
       }
     },

@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  *
@@ -58,8 +60,10 @@ public class HttpClientImpl {
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
-    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = ThreadLocal.withInitial(() -> new ConcurrentHashMap<String, String>());
-    private static final ThreadLocal<String> SERVICE_BASE_URI = ThreadLocal.withInitial(() -> "");
+    private final Map<String, String> defaultParams = new ConcurrentHashMap<>();
+    private final Supplier<Map<String, String>> DEFAULT_HEADER_PARAMS = () -> defaultParams;
+
+    private static Supplier<String> SERVICE_BASE_URI = () -> "";
 
     private String userAgent;
     private int connectTimeout;
@@ -72,11 +76,11 @@ public class HttpClientImpl {
     }
 
     public HttpClientImpl(String serviceBaseUri) {
-        SERVICE_BASE_URI.set(serviceBaseUri);
+        SERVICE_BASE_URI = () -> serviceBaseUri;
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
         this.json = new Gson();
-        this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive","false"));
+        this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive","true"));
     }
 
     public HttpClientImpl setKeepAlive(boolean keepAlive) {
@@ -89,11 +93,11 @@ public class HttpClientImpl {
     }
     
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
-        SERVICE_BASE_URI.set(serviceBaseUri);
+        SERVICE_BASE_URI = () -> serviceBaseUri;
         return this;
     }
 
-    public HttpClientImpl acceptAccessToken(String authPrefix, String sessionId) {
+    public HttpClientImpl acceptAccessToken(String sessionId) {
         DEFAULT_HEADER_PARAMS.get().put(AUTHORIZATION, AUTH_PREFIX + sessionId);
         return this;
     }
@@ -132,20 +136,12 @@ public class HttpClientImpl {
             
 
             // setup default headers
-            DEFAULT_HEADER_PARAMS
-                .get()
-                .entrySet()
-                .stream()
-                .forEach(e -> connect.setRequestProperty(e.getKey(), e.getValue()));
-            // content type
+            DEFAULT_HEADER_PARAMS.get().forEach(connect::setRequestProperty);
+
             headerParams.putIfAbsent(CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
-            // user agent
             headerParams.putIfAbsent(USER_AGENT, userAgent);
-            // setup request headers
-            headerParams
-                .entrySet()
-                .stream()
-                .forEach(e -> connect.setRequestProperty(e.getKey(), e.getValue()));
+
+            headerParams.forEach(connect::setRequestProperty);
 
             connect.setRequestProperty("Connection", (keepAlive ? "keep-alive" : "close"));
             connect.setConnectTimeout(connectTimeout);
@@ -154,12 +150,16 @@ public class HttpClientImpl {
             connect.setAllowUserInteraction(false);
             connect.setUseCaches(false);
             connect.setDefaultUseCaches(false);
+
             if (httpMethod.equalsIgnoreCase("POST") || httpMethod.equalsIgnoreCase("PUT")) {
                 connect.setDoOutput(true);
                 byte[] preparedBody = acquireBodyAsByteArray(body, headerParams.get(CONTENT_TYPE));
-                connect.setFixedLengthStreamingMode(preparedBody.length);
+                // todo: handle auth errors when fixed streaming enabled.
+                // connect.setFixedLengthStreamingMode(preparedBody.length);
                 // write request body
-                writeData(preparedBody, connect.getOutputStream());
+                try (OutputStream outputStream = connect.getOutputStream()) {
+                    writeData(preparedBody, outputStream);
+                }
             }
             // read server answer
             int responseCode = connect.getResponseCode();
@@ -177,7 +177,7 @@ public class HttpClientImpl {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");
                 if (redirectToUrl == null || redirectToUrl.isEmpty()) {
-                    throw new HttpClientException("Redirect address is out!", responseCode, responseHeaders, response.bodyToString());
+                    throw new HttpClientException("Redirect address is empty", responseCode, responseHeaders, response.bodyToString());
                 }
                 return sendHttpRequest(redirectToUrl, httpMethod, queryParams, body, headerParams, type);
             }
@@ -185,6 +185,9 @@ public class HttpClientImpl {
                 // error 400 - 500
                 throw new HttpClientException(responseMessage, null, responseCode, responseHeaders, response.bodyToString());
             }
+        }
+        catch (HttpRetryException e) {
+            throw new HttpClientException(e.responseCode(), e.getLocation());
         }
         catch (IOException x) {
             throw new HttpClientException(x);
