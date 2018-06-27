@@ -47,7 +47,7 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     private final DocflowsAdaptor docflowsAdaptor;
 
-    public DocflowServiceImpl(DocflowsAdaptor docflowsAdaptor) {
+    DocflowServiceImpl(DocflowsAdaptor docflowsAdaptor) {
         this.docflowsAdaptor = docflowsAdaptor;
     }
     
@@ -168,8 +168,7 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId,
-        String documentId, String signatureId) {
+    public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId, String documentId, String signatureId) {
         QueryContext<Signature> cxt = createQueryContext(EN_SGN);
         return cxt
             .setDocflowId(docflowId)
@@ -190,6 +189,7 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         return cxt
             .setDocflowId(docflowId)
             .setDocumentId(documentId)
+            .setSignatureId(signatureId)
             .applyAsync(docflowsAdaptor::getSignatureContent);
     }
 
@@ -218,7 +218,7 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<Docflow>> addDocumentTypeReplyAsync(String docflowId,
+    public CompletableFuture<QueryContext<Docflow>> sendDocumentTypeReplyAsync(String docflowId,
         String documentType, String documentId, DocumentToSend documentToSend) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DOC);
         return cxt
@@ -226,13 +226,13 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             .setDocumentType(documentType)
             .setDocumentId(documentId)
             .setDocumentToSend(documentToSend)
-            .applyAsync(docflowsAdaptor::addDocumentTypeReply);
+            .applyAsync(docflowsAdaptor::sendDocumentTypeReply);
     }
 
     @Override
-    public QueryContext<Docflow> addDocumentTypeReply(QueryContext<?> parent) {
+    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> parent) {
         QueryContext<Docflow> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::addDocumentTypeReply);
+        return cxt.apply(docflowsAdaptor::sendDocumentTypeReply);
     }
 
     @Override
@@ -252,15 +252,17 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<Docflow>> createReplyAsync(Docflow docflow) {
+    public CompletableFuture<QueryContext<Docflow>> sendRepliesAsync(DocumentToSend documentToSend) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
-        return cxt.applyAsync(docflowsAdaptor::sendReply);
+        return cxt
+            .setDocumentToSend(documentToSend)
+            .applyAsync(docflowsAdaptor::sendReplies);
     }
 
     @Override
-    public QueryContext<Docflow> sendReply(QueryContext<?> parent) {
+    public QueryContext<Docflow> sendReplies(QueryContext<?> parent) {
         QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::sendReply);
+        return cxt.apply(docflowsAdaptor::sendReplies);
     }
 
     @Override

@@ -34,14 +34,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.impl.AbstractService;
-import ru.kontur.extern_api.sdk.service.impl.DraftServiceImpl;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.DraftsAdaptorImpl;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.HttpClientImpl;
 
 public class DraftServiceCloudSignTest {
 
@@ -55,10 +56,40 @@ public class DraftServiceCloudSignTest {
     public static void startMock() {
         mockServer = ClientAndServer.startClientAndServer(PORT);
 
-        DraftsAdaptorImpl draftsAdaptor = new DraftsAdaptorImpl();
-        draftsAdaptor.setHttpClient(HttpClientImpl::new);
-        draftService = configureService(new DraftServiceImpl(draftsAdaptor));
+        ExternEngine engine = new ExternEngine();
+        engine.setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT);
+        engine.setAccountProvider(UUID::randomUUID);
+        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
+        engine.setAuthenticationProvider(
+            new AuthenticationProvider() {
+                @Override
+                public QueryContext<String> sessionId() {
+                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+                }
 
+                @Override
+                public String authPrefix() {
+                    return "auth.sid ";
+                }
+
+                @Override
+                public AuthenticationProvider httpClient(HttpClient httpClient) {
+                    return this;
+                }
+
+                @Override
+                public void addAuthenticationListener(AuthenticationListener authListener) {
+                }
+
+                @Override
+                public void removeAuthenticationListener(AuthenticationListener authListener) {
+                }
+
+                @Override
+                public void raiseUnauthenticated(ServiceError x) {
+                }
+            });
+        draftService = engine.getDraftService();
     }
 
     @AfterClass
@@ -81,7 +112,7 @@ public class DraftServiceCloudSignTest {
                 .setDraftId(UUID.randomUUID());
 
         QueryContext<SignInitiation> queryContext = draftService
-                .cloudSign(context)
+                .cloudSignQuery(context)
                 .ensureSuccess();
 
         SignInitiation signInitiation = queryContext.get();
@@ -161,14 +192,4 @@ public class DraftServiceCloudSignTest {
                     }
                 });
     }
-
-    private static <T extends AbstractService> T configureService(T service) {
-        QueryContext context = magicContext();
-        service.serviceBaseUriProvider(context.getServiceBaseUriProvider());
-        service.authenticationProvider(context.getAuthenticationProvider());
-        service.accountProvider(context.getAccountProvider());
-        service.apiKeyProvider(context.getApiKeyProvider());
-        return service;
-    }
-
 }

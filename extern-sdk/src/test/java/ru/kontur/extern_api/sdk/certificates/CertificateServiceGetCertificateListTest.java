@@ -67,8 +67,8 @@ public class CertificateServiceGetCertificateListTest {
 
     private final static String CERTIFICATE_LIST = "" +
         "\"total-count\": 0," +
-        "\"page-index\": 0," +
-        "\"page-size\": 0";
+        "\"skip\": 0," +
+        "\"take\": 0";
 
     @BeforeClass
     public static void startJetty() throws Exception {
