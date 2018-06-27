@@ -45,7 +45,7 @@ public class AccountListDto {
             AccountDto accountDto = new AccountDto();
             accountList.setAccounts(dto.getAccounts().stream().map(accountDto::fromDto).collect(Collectors.toList()));
         }
-        accountList.setSkip(dto.getSkip());
+        accountList.setSkip(dto.getSkip() == null ? 0 : dto.getSkip());
         accountList.setTake(dto.getTake());
         accountList.setTotalCount(dto.getTotalCount());
 
@@ -62,7 +62,7 @@ public class AccountListDto {
             AccountDto accountDto = new AccountDto();
             dto.setAccounts(accountList.getAccounts().stream().map(accountDto::toDto).collect(Collectors.toList()));
         }
-        dto.setSkip(accountList.getSkip());
+        dto.setSkip(accountList.getSkip() == null ? 0 : accountList.getSkip());
         dto.setTake(accountList.getTake());
         dto.setTotalCount(accountList.getTotalCount());
 

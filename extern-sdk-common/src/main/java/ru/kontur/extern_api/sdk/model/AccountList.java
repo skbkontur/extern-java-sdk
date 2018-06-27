@@ -29,47 +29,84 @@ import java.util.List;
 
 /**
  * @author AlexS
+ *
+ * Класс реализует постраничное чтение списка учетных записей
+ * Используется в группе запросов {@code AccountService}
  */
 public class AccountList {
 
-	private Integer skip = null;
+	private Long skip = null;
 
-	private Integer take = null;
+	private Long take = null;
 
 	@SerializedName("total-count")
-	private Integer totalCount = null;
+	private Long totalCount = null;
 
 	private List<Account> accounts = new ArrayList<>();
 
+	/**
+	 * Метод возвращает список объектов класса Account
+	 * @return List&lt;Account&gt; список объектов класса Account
+	 * @see Account
+	 */
 	public List<Account> getAccounts() {
 		return accounts;
 	}
 
+	/**
+	 * Метод устанавливает список объектов класса Account
+	 * @param accounts List&lt;Account&gt; список объектов класса
+	 * @see Account
+	 */
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
 	}
 
-	public Integer getTotalCount() {
+	/**
+	 * Метод возвращает общее количество учетных записей
+	 * @return общее количество учетных записей
+	 */
+	public Long getTotalCount() {
 		return totalCount;
 	}
 
-	public void setTotalCount(Integer totalCount) {
+	/**
+	 * Метод устанавливает общее количество учетных записей
+	 * @param totalCount общее количество учетных записей
+	 */
+	public void setTotalCount(Long totalCount) {
 		this.totalCount = totalCount;
 	}
 
-	public Integer getSkip() {
+	/**
+	 * Метод возвращает порядковый номер первой записи в коллекции accounts
+	 * @return порядковый номер первой записи в коллекции accounts
+	 */
+	public Long getSkip() {
 		return skip;
 	}
 
-	public void setSkip(Integer skip) {
+	/**
+	 * Метод устанавливает порядковый номер первой записи в коллекции accounts
+	 * @param skip порядковый номер первой записи в коллекции accounts
+	 */
+	public void setSkip(Long skip) {
 		this.skip = skip;
 	}
 
-	public Integer getTake() {
+	/**
+	 * Метод возврвщвет максимальное количество элементов в возвращаемой коллекции accounts
+	 * @return максимальное количество элементов в возвращаемой коллекции accounts
+	 */
+	public Long getTake() {
 		return take;
 	}
 
-	public void setTake(Integer take) {
+	/**
+	 * Метод устанавливает максимальное количество элементов в возвращаемой коллекции accounts
+	 * @param take максимальное количество элементов в возвращаемой коллекции accounts
+	 */
+	public void setTake(Long take) {
 		this.take = take;
 	}
 }

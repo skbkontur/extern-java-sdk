@@ -246,7 +246,7 @@ public interface DraftsAdaptor {
      */
     QueryContext<Void> createType(QueryContext<Void> cxt);
 
-    QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt);
+    QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt);
 
     QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt);
 

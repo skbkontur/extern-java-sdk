@@ -30,6 +30,7 @@ import java.util.UUID;
 
 /**
  * @author AlexS
+ * Класс содержит информацию об учетной записи организации
  */
 public class Account {
 
@@ -40,46 +41,94 @@ public class Account {
 	private String organizationName = null;
 	private List<Link> links = new ArrayList<>();
 
+	/**
+	 * Метод возвращает идентификатор учетной записи
+	 * @return UUID идентификатор учетной записи
+	 * @see java.util.UUID
+	 */
 	public UUID getId() {
 		return id;
 	}
 
+	/**
+	 * Метод устанавливает идентификатор учетной записи
+	 * @param id идентификатор учетной записи в формате UUID (@see http://www.faqs.org/rfcs/rfc4122.html)
+	 */
 	public void setId(String id) {
 		this.id = UUID.fromString(id);
 	}
 
+	/**
+	 * Метод устанавливает идентификатор учетной записи
+	 * @param id идентификатор учетной записи в формате UUID
+	 * @see java.util.UUID
+	 */
 	public void setId(UUID id) {
 		this.id = id;
 	}
 
+	/**
+	 * Метод возвращает ИНН организации учетной записи
+	 * @return ИНН
+	 */
 	public String getInn() {
 		return inn;
 	}
 
+	/**
+	 * Метод устанавливает ИНН организации учетной записи
+	 * @param inn ИНН
+	 */
 	public void setInn(String inn) {
 		this.inn = inn;
 	}
 
+	/**
+	 * Метод возвращает КПП организации учетной записи
+	 * @return КПП
+	 */
 	public String getKpp() {
 		return kpp;
 	}
 
+	/**
+	 * Метод устанавливает КПП организации учетной записи
+	 * @param kpp КПП
+	 */
 	public void setKpp(String kpp) {
 		this.kpp = kpp;
 	}
 
+	/**
+	 * Метод возвращает имя организации учетной записи
+	 * @return имя организации
+	 */
 	public String getOrganizationName() {
 		return organizationName;
 	}
 
+	/**
+	 * Метод устанавливает имя организации учетной записи
+	 * @param organizationName имя организации
+	 */
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
 	}
 
+	/**
+	 * Метод возвращает список объектов Link.
+	 * В текущей реализации не несет дополнительной информации.
+	 * @see Link
+	 * @return список объектов Link
+	 */
 	public List<Link> getLinks() {
 		return links;
 	}
 
+	/**
+	 * Устанавливает список объектов Link
+	 * @param links список объектов Link
+	 */
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}

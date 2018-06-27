@@ -688,7 +688,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt) {
+    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -701,7 +701,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     );
 
             return cxt
-                    .set("requestId", response.getData().getRequestId())
+                    .setRequestId(response.getData().getRequestId())
                     .setResult(response.getData(), "sign request data");
         }
         catch (ApiException x) {
@@ -728,8 +728,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .confirmCloudSigning(
                             cxt.getAccountProvider().accountId().toString(),
                             cxt.getDraftId().toString(),
-                            cxt.get("requestId"),
-                            cxt.get("code")
+                            cxt.getRequestId(),
+                            cxt.getSmsCode()
                     );
 
             return cxt.setResult(response.getData(), "signed documents");
