@@ -150,16 +150,16 @@ public interface DocflowsAdaptor {
     /**
      * Allow API user to send Reply document for specified workflow
      * <p>
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send
      *
      * @param cxt QueryContext&lt;Signature&gt; context
      * @return QueryContext&lt;Signature&gt; context
      */
-    public QueryContext<Docflow> addDocumentTypeReply(QueryContext<Docflow> cxt);
+    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<Docflow> cxt);
 
     public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt);
 
-    public QueryContext<Docflow> sendReply(QueryContext<Docflow> cxt);
+    public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt);
 
     public QueryContext<String> print(QueryContext<String> cxt);
 }

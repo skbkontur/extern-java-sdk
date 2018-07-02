@@ -5,13 +5,24 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_PAGE;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENTS;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_DESCRIPTION;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SEND;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SENDS;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
+
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -25,17 +36,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_PAGE;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENTS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_DESCRIPTION;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SEND;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SENDS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowPageDto;
@@ -428,13 +428,13 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 	/**
 	 * Allow API user to send Reply document for specified workflow
 	 * <p>
-	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}
+	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send
 	 *
 	 * @param cxt QueryContext&lt;Signature&gt; context
 	 * @return QueryContext&lt;Signature&gt; context
 	 */
 	@Override
-	public QueryContext<Docflow> addDocumentTypeReply(QueryContext<Docflow> cxt) {
+	public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<Docflow> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;
@@ -511,7 +511,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 	}
 
 	@Override
-	public QueryContext<Docflow> sendReply(QueryContext<Docflow> cxt) {
+	public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt) {
 		try {
 			if (cxt.isFail()) {
 				return cxt;

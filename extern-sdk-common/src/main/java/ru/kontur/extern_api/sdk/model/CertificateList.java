@@ -35,12 +35,12 @@ import java.util.List;
 public class CertificateList {
 
     private List<Certificate> certificates = new ArrayList<>();
-		@SerializedName("total-count")
-    private Integer totalCount = null;
-		@SerializedName("page-index")
-    private Integer pageIndex = null;
-		@SerializedName("page-size")
-    private Integer pageSize = null;
+    @SerializedName("total-count")
+    private Long totalCount = null;
+    @SerializedName("skip")
+    private Long skip = null;
+    @SerializedName("take")
+    private Long take = null;
 
     public List<Certificate> getCertificates() {
         return certificates;
@@ -50,28 +50,28 @@ public class CertificateList {
         this.certificates = certificates;
     }
 
-    public Integer getTotalCount() {
+    public Long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(Integer totalCount) {
+    public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 
-    public Integer getPageIndex() {
-        return pageIndex;
+    public Long getSkip() {
+        return skip;
     }
 
-    public void setPageIndex(Integer pageIndex) {
-        this.pageIndex = pageIndex;
+    public void setSkip(Long skip) {
+        this.skip = skip;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
+    public Long getTake() {
+        return take;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setTake(Long take) {
+        this.take = take;
     }
 
 
