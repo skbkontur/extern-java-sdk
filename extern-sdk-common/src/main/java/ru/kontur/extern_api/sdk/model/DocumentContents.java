@@ -28,50 +28,61 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author AlexS
+ *
+ * Класс предназначен для передачи контента документа и его подписи
  */
 public class DocumentContents {
 
-		@SerializedName("base64-content")
+    @SerializedName("base64-content")
     private String base64Content = null;
     private String signature = null;
-		@SerializedName("document-description")
+    @SerializedName("document-description")
     private DocumentDescription documentDescription = null;
 
     /**
-     * Get base64Content
-     *
-     * @return base64Content
+     * Возвращает контент незашифрованного документа в кодировке BASE64
+     * @return base64Content контент незашифрованного документа в кодировке BASE64
      */
     public String getBase64Content() {
         return base64Content;
     }
 
+    /**
+     * Устанавливает контент незашифрованного документа в кодировке BASE64
+     * @param base64Content контент незашифрованного документа в кодировке BASE64
+     */
     public void setBase64Content(String base64Content) {
         this.base64Content = base64Content;
     }
 
     /**
-     * Get signature
-     *
-     * @return signature
+     * Возвращает контент подписи в кодировке BASE64
+     * @return signature контент подписи в кодировке BASE64
      */
     public String getSignature() {
         return signature;
     }
 
+    /**
+     * Устанавливает контент подписи в кодировке BASE64
+     * @param signature контент подписи в кодировке BASE64
+     */
     public void setSignature(String signature) {
         this.signature = signature;
     }
 
     /**
-     * Get meta
-     *
-     * @return meta
+     * Возвращает дескриптор документа {@link DocumentDescription}
+     * @return дескриптор документа
      */
     public DocumentDescription getDocumentDescription() {
         return documentDescription;
     }
 
+    /**
+     * Устанавливает дескриптор документа {@link DocumentDescription}
+     * @param documentDescription дескриптор документа
+     */
     public void setDocumentDescription(DocumentDescription documentDescription) {
         this.documentDescription = documentDescription;
     }

@@ -28,6 +28,9 @@ import java.util.UUID;
 
 /**
  * @author Aleksey Sukhorukov
+ *
+ * Класс содержит информацию об организации.
+ * Используется в сервисе {@code OrganizationService}
  */
 public class Company {
     @SerializedName("id")
@@ -35,22 +38,43 @@ public class Company {
     @SerializedName("general")
     private CompanyGeneral general = null;
 
+    /**
+     * Возвращает идентификатор организации
+     * @return идентификатор организации
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор организации
+     * @param id идентификатор организации
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Устанавливает идентификатор организации
+     * @param id идентификатор организации
+     */
     public void setId(String id) {
         this.id = UUID.fromString(id);
     }
 
+    /**
+     * Возвращает структуру данных с информацией об организации {@link CompanyGeneral}
+     * @return структуру данных с информацией об организации
+     * @see CompanyGeneral
+     */
     public CompanyGeneral getGeneral() {
         return general;
     }
 
+    /**
+     * Устанавливает структуру данных с информацией об организации {@link CompanyGeneral}
+     * @param general структура данных с информацией об организации
+     */
     public void setGeneral(CompanyGeneral general) {
         this.general = general;
     }

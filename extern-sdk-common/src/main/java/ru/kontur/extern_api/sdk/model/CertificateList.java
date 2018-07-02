@@ -31,6 +31,9 @@ import java.util.List;
 
 /**
  * @author alexs
+ *
+ * Класс реализует постраничное чтение сертификатов
+ * Используется в группе запросов {@code CertificateService}
  */
 public class CertificateList {
 
@@ -42,37 +45,69 @@ public class CertificateList {
     @SerializedName("take")
     private Long take = null;
 
+    /**
+     * Метод возвращает список объектов класса Certificate
+     * @return список объектов класса Certificate
+     * @see Certificate
+     */
     public List<Certificate> getCertificates() {
         return certificates;
     }
 
+    /**
+     * Метод устанавливает список объектов класса Certificate
+     * @param certificates список объектов класса
+     * @see Certificate
+     */
     public void setCertificates(List<Certificate> certificates) {
         this.certificates = certificates;
     }
 
+    /**
+     * Метод возвращает общее количество учетных записей
+     * @return общее количество учетных записей
+     */
     public Long getTotalCount() {
         return totalCount;
     }
 
+    /**
+     * Метод устанавливает общее количество учетных записей
+     * @param totalCount общее количество учетных записей
+     */
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 
+    /**
+     * Метод возвращает порядковый номер первой записи в коллекции accounts
+     * @return порядковый номер первой записи в коллекции accounts
+     */
     public Long getSkip() {
         return skip;
     }
 
+    /**
+     * Метод устанавливает порядковый номер первой записи в коллекции accounts
+     * @param skip порядковый номер первой записи в коллекции accounts
+     */
     public void setSkip(Long skip) {
         this.skip = skip;
     }
 
+    /**
+     * Метод возврвщвет максимальное количество элементов в возвращаемой коллекции accounts
+     * @return максимальное количество элементов в возвращаемой коллекции accounts
+     */
     public Long getTake() {
         return take;
     }
 
+    /**
+     * Метод устанавливает максимальное количество элементов в возвращаемой коллекции accounts
+     * @param take максимальное количество элементов в возвращаемой коллекции accounts
+     */
     public void setTake(Long take) {
         this.take = take;
     }
-
-
 }

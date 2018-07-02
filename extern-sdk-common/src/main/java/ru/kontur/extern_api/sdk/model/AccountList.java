@@ -46,7 +46,7 @@ public class AccountList {
 
 	/**
 	 * Метод возвращает список объектов класса Account
-	 * @return List&lt;Account&gt; список объектов класса Account
+	 * @return список объектов класса Account
 	 * @see Account
 	 */
 	public List<Account> getAccounts() {
@@ -55,7 +55,7 @@ public class AccountList {
 
 	/**
 	 * Метод устанавливает список объектов класса Account
-	 * @param accounts List&lt;Account&gt; список объектов класса
+	 * @param accounts список объектов класса
 	 * @see Account
 	 */
 	public void setAccounts(List<Account> accounts) {

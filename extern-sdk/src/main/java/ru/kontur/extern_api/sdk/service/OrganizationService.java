@@ -35,14 +35,14 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Aleksey Sukhorukov
  *
  * Группа методов предоставляет доступ к операциям для работы с организациями:
- * - найти организацию по ее внутреннему идентификатору {@link OrganizationService#lookupAsync} | {@link OrganizationService#lookup};
- * - создать организацию {@link OrganizationService#createAsync} | {@link OrganizationService#create};
- * - изменить наименования организации {@link OrganizationService#updateAsync} | {@link OrganizationService#update};
+ * <p>- найти организацию по ее внутреннему идентификатору {@link OrganizationService#lookupAsync} | {@link OrganizationService#lookup};</p>
+ * <p>- создать организацию {@link OrganizationService#createAsync} | {@link OrganizationService#create};</p>
+ * <p>- изменить наименования организации {@link OrganizationService#updateAsync} | {@link OrganizationService#update};</p>
  */
 public interface OrganizationService extends Providers {
 
     /**
-     * GET /v1/{accountId}/organizations/{orgId}
+     * <p>GET /v1/{accountId}/organizations/{orgId}</p>
      * Асинхронный метод возвращает организацию по ее внутреннему идентификатору
      * @param companyId идентификатор организации
      * @return организация
@@ -51,17 +51,17 @@ public interface OrganizationService extends Providers {
     CompletableFuture<QueryContext<Company>> lookupAsync(String companyId);
 
     /**
-     * GET /v1/{accountId}/organizations/{orgId}
+     * <p>GET /v1/{accountId}/organizations/{orgId}</p>
      * Синхронный метод возвращает организацию по ее внутреннему идентификатору
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId};
+     * <p>-  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId};</p>
      * @return организация
      * @see Company
      */
     QueryContext<Company> lookup(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/organizations
+     * <p>POST /v1/{accountId}/organizations</p>
      * Асинхронный метод создает новую организацию
      * @param companyGeneral данные новой организации {@link CompanyGeneral}
      * @return организация
@@ -70,17 +70,17 @@ public interface OrganizationService extends Providers {
     CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral);
 
     /**
-     * POST /v1/{accountId}/organizations
+     * <p>POST /v1/{accountId}/organizations</p>
      * Асинхронный метод создает новую организацию
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  данные новой организации {@link CompanyGeneral}. Для установки необходимо использовать метод {@link QueryContext#setCompanyGeneral};
+     * <p>-  данные новой организации {@link CompanyGeneral}. Для установки необходимо использовать метод {@link QueryContext#setCompanyGeneral};</p>
      * @return организация
      * @see Company
      */
     QueryContext<Company> create(QueryContext<?> cxt);
 
     /**
-     * PUT /v1/{accountId}/organizations/{orgId}
+     * <p>PUT /v1/{accountId}/organizations/{orgId}</p>
      * Асинхронный метод для обновления наименования организации
      * @param companyId идентификатор организации
      * @param name наименование организации
@@ -90,17 +90,17 @@ public interface OrganizationService extends Providers {
     CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name);
 
     /**
-     * PUT /v1/{accountId}/organizations/{orgId}
+     * <p>PUT /v1/{accountId}/organizations/{orgId}</p>
      * Синхронный метод для обновления наименования организации
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId}.
+     * <p>-  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId}.</p>
      * @return организация
      * @see Company
      */
     QueryContext<Company> update(QueryContext<?> cxt);
 
     /**
-     * DELETE /v1/{accountId}/organizations/{orgId}
+     * <p>DELETE /v1/{accountId}/organizations/{orgId}</p>
      * Cинхронный метод для удаления организации
      * @param companyId идентификатор организации
      * @return Void
@@ -108,16 +108,16 @@ public interface OrganizationService extends Providers {
     CompletableFuture<QueryContext<Void>> deleteAsync(String companyId);
 
     /**
-     * DELETE /v1/{accountId}/organizations/{orgId}
+     * <p>DELETE /v1/{accountId}/organizations/{orgId}</p>
      * Cинхронный метод для удаления организации
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId}.
+     * <p>-  идентификатор организации. Для установки необходимо использовать метод {@link QueryContext#setCompanyId}.</p>
      * @return Void
      */
     QueryContext<Void> delete(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/organizations
+     * <p>GET /v1/{accountId}/organizations</p>
      * Асинхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
      * @param inn ИНН
      * @param kpp КПП
@@ -129,13 +129,13 @@ public interface OrganizationService extends Providers {
     CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take);
 
     /**
-     * GET /v1/{accountId}/organizations
+     * <p>GET /v1/{accountId}/organizations</p>
      * Синхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  ИНН. Для установки необходимо использовать метод {@link QueryContext#setInn};
-     *  -  КПП. Для установки необходимо использовать метод {@link QueryContext#setKpp};
-     *  -  смещение от начала списка. Для установки необходимо использовать метод {@link QueryContext#setSkip};
-     *  -  максимальное количество организаций в возвращаемом списке. Для установки необходимо использовать метод {@link QueryContext#setTake}.
+     * <p>-  ИНН. Для установки необходимо использовать метод {@link QueryContext#setInn};</p>
+     * <p>-  КПП. Для установки необходимо использовать метод {@link QueryContext#setKpp};</p>
+     * <p>-  смещение от начала списка. Для установки необходимо использовать метод {@link QueryContext#setSkip};</p>
+     * <p>-  максимальное количество организаций в возвращаемом списке. Для установки необходимо использовать метод {@link QueryContext#setTake}.</p>
      * @return список организаций
      * @see CompanyBatch
      */
