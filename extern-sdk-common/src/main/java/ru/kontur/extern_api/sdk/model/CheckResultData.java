@@ -32,12 +32,16 @@ import java.util.Map;
 
 /**
  * @author AlexS
+ *
+ * Класс предназначен для получения информации о результатах проверки черновика перед отправкой.
+ * Используется в методах: {@code DraftService.check} и {@code DraftService.prepare}
+ * @see CheckError
  */
 public class CheckResultData {
 
-		@SerializedName("documents-errors")
+    @SerializedName("documents-errors")
     private Map<String, List<CheckError>> documentsErrors = null;
-		@SerializedName("common-errors")
+    @SerializedName("common-errors")
     private List<CheckError> commonErrors = null;
 
     public CheckResultData documentsErrors(Map<String, List<CheckError>> documentsErrors) {
@@ -46,23 +50,37 @@ public class CheckResultData {
     }
 
     /**
-     * Get documentsErrors
-     *
-     * @return documentsErrors
+     * Возвращает карту для списков ошибок по документам (например ошибки ФЛК)
+     * @return documentsErrors карта для списков ошибок
+     * @see CheckError
      */
     public Map<String, List<CheckError>> getDocumentsErrors() {
         return documentsErrors;
     }
 
+    /**
+     * Устанавливает карту для списков ошибок по документам (например ошибки ФЛК)
+     * @param documentsErrors карту для списков ошибок по документам
+     */
     public void setDocumentsErrors(Map<String, List<CheckError>> documentsErrors) {
         this.documentsErrors = documentsErrors;
     }
 
+    /**
+     * Устанавливает список ошибок по результату проверки черновика
+     * @param commonErrors список ошибок по результату проверки черновика
+     * @return {@link CheckResultData}
+     */
     public CheckResultData commonErrors(List<CheckError> commonErrors) {
         this.commonErrors = commonErrors;
         return this;
     }
 
+    /**
+     * Дщбавляет ошибку в список
+     * @param commonErrorsItem ошибка {@link CheckError}
+     * @return {@link CheckResultData}
+     */
     public CheckResultData addCommonErrorsItem(CheckError commonErrorsItem) {
         if (this.commonErrors == null) {
             this.commonErrors = new ArrayList<>();
@@ -72,14 +90,18 @@ public class CheckResultData {
     }
 
     /**
-     * Get commonErrors
-     *
-     * @return commonErrors
+     * Возвращает список ошибок по результату проверки черновика
+     * @return commonErrors список ошибок
+     * @see CheckError
      */
     public List<CheckError> getCommonErrors() {
         return commonErrors;
     }
 
+    /**
+     * Устанавливает список ошибок по результату проверки черновика
+     * @param commonErrors список ошибок
+     */
     public void setCommonErrors(List<CheckError> commonErrors) {
         this.commonErrors = commonErrors;
     }

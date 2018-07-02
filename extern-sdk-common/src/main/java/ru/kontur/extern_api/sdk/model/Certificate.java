@@ -28,72 +28,130 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author alexs
+ *
+ * Класс предназначен для хронения информации сертификата см. класс {@code CertifcateService}
  */
 public class Certificate {
 
     private String fio = null;
     private String inn = null;
     private String kpp = null;
-		@SerializedName("is-valid")
+    @SerializedName("is-valid")
     private Boolean isValid = null;
-		@SerializedName("is-cloud")
+    @SerializedName("is-cloud")
     private Boolean isCloud = null;
-		@SerializedName("is-qualified")
+    @SerializedName("is-qualified")
     private Boolean isQualified = null;
     private String content = null;
 
+    /**
+     * Возвращает ФИО владельца сертификата
+     * @return ФИО владельца сертификата
+     */
     public String getFio() {
         return fio;
     }
 
+    /**
+     * Устанавливает ФИО владельца сертификата
+     * @param fio
+     */
     public void setFio(String fio) {
         this.fio = fio;
     }
 
+    /**
+     * Возвращает ИНН
+     * @return ИНН
+     */
     public String getInn() {
         return inn;
     }
 
+    /**
+     * Устанавливает ИНН
+     * @param inn ИНН
+     */
     public void setInn(String inn) {
         this.inn = inn;
     }
 
+    /**
+     * Возвращает КПП
+     * @return КПП
+     */
     public String getKpp() {
         return kpp;
     }
 
+    /**
+     * Устанавливает КПП
+     * @param kpp КПП
+     */
     public void setKpp(String kpp) {
         this.kpp = kpp;
     }
 
+    /**
+     * Возвращает признак действительности сертификата
+     * @return признак действительности сертификата. True - действителен, иначе - недействителен.
+     */
     public Boolean getIsValid() {
         return isValid;
     }
 
+    /**
+     * Устанавливает признак действительности сертификата
+     * @param isValid признак действительности сертификата. True - действителен, иначе - недействителен.
+     */
     public void setIsValid(Boolean isValid) {
         this.isValid = isValid;
     }
 
+    /**
+     * Возвращает признак облочного сертификата
+     * @return признак облочного сертификата. True - облачный, иначе - не облачный
+     */
     public Boolean getIsCloud() {
         return isCloud;
     }
 
+    /**
+     * Устанавливает признак облочного сертификата
+     * @param isCloud признак облочного сертификата. True - облачный, иначе - не облачный
+     */
     public void setIsCloud(Boolean isCloud) {
         this.isCloud = isCloud;
     }
 
+    /**
+     * Возвращает признак квалифицированного сертификата
+     * @return признак квалифицированного сертификата. True - квалифицированный, иначе - не квалифицированный
+     */
     public Boolean getIsQualified() {
         return isQualified;
     }
 
+    /**
+     * Устанавливает признак квалифицированного сертификата
+     * @param isQualified признак квалифицированного сертификата. True - квалифицированный, иначе - не квалифицированный
+     */
     public void setIsQualified(Boolean isQualified) {
         this.isQualified = isQualified;
     }
 
+    /**
+     * Возвращает контент сертификата в кодировке BASE64 без тегов
+     * @return контент сертификата в кодировке BASE64 без тегов
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * Устанавливает контент сертификата в кодировке BASE64 без тегов
+     * @param content контент сертификата в кодировке BASE64 без тегов
+     */
     public void setContent(String content) {
         this.content = content;
     }

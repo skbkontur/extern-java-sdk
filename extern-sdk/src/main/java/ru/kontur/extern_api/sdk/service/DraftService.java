@@ -50,33 +50,33 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author AlexS
  *
  * Группа методов предоставляет доступ к операциям для работы с черновиками:
- *  - создание черновика {@link DraftService#createAsync} | {@link DraftService#createAsync};
- *  - поиск черновика по идентификатору {@link DraftService#lookupAsync | {@link DraftService#lookup};
- *  - удаление черновика {@link DraftService#deleteAsync} | {@link DraftService#delete};
- *  - поиск мета-данных черновика {@link DraftService#lookupDraftMetaAsync | {@link DraftService#lookupDraftMeta};
- *  - обновление мета-данных черновика {@link DraftService#updateDraftMetaAsync | {@link DraftService#updateDraftMeta};
- *  - проверка черновика {@link DraftService#checkAsync} | {@link DraftService#check};
- *  - подготовка черновика к отправке {@link DraftService#prepareAsync | {@link DraftService##prepare};
- *  - отправка черновика в контролирующий орган {@link DraftService#sendAsync} | {@link DraftService#send};
- *  - удаление документа из черновика {@link DraftService#deleteDocumentAsync} | {@link DraftService#deleteDocument};
- *  - поиска документа в черновике по идентификатору {@link DraftService#lookupDocumentAsync} | {@link DraftService#lookupDocument};
- *  - метод обновления документа {@link DraftService#updateDocumentAsync} | {@link DraftService#updateDocument};
- *  - создания печатной формы документа {@link DraftService#printDocumentAsync} | {@link DraftService#printDocument};
- *  - метод добавления незашифрованного контента документа в черновик {@link DraftService#addDecryptedDocumentAsync} | {@link DraftService#addDecryptedDocument};
- *  - метод обновления незашифрованного контента документа {@link DraftService#updateDecryptedDocumentContentAsync} | {@link DraftService#updateDecryptedDocumentContent};
- *  - метод получения зашифрованного контента {@link DraftService#getEncryptedDocumentContentAsync} | {@link DraftService#getEncryptedDocumentContent};
- *  - метод получения контента подписи {@link DraftService#getSignatureContentAsync} | {@link DraftService#getSignatureContent};
- *  - метод обновления контента подписи {@link DraftService#updateSignatureAsync} | {@link DraftService#updateSignature};
- *  - метод создания УСН декларации по JSON описанию {@link DraftService#createUSN1Async} | {@link DraftService#createUSN1};
- *  - метод создания УСН декларации с помощью объектной модели {@link DraftService#createUSN2Async} | {@link DraftService#createUSN2};
- *  - метод для создания запроса на облачную подпись {@link DraftService#cloudSignQueryAsync} | {@link DraftService#cloudSignQuery};
- *  - метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync} | {@link DraftService#cloudSignConfirm};
- *  - метод для создания облачных подписей документов {@link DraftService#cloudSignAsync}};
+ *<p>- создание черновика {@link DraftService#createAsync} | {@link DraftService#createAsync};</p>
+ *<p>- поиск черновика по идентификатору {@link DraftService#lookupAsync | {@link DraftService#lookup};</p>
+ *<p>- удаление черновика {@link DraftService#deleteAsync} | {@link DraftService#delete};</p>
+ *<p>- поиск мета-данных черновика {@link DraftService#lookupDraftMetaAsync | {@link DraftService#lookupDraftMeta};</p>
+ *<p>- обновление мета-данных черновика {@link DraftService#updateDraftMetaAsync | {@link DraftService#updateDraftMeta};</p>
+ *<p>- проверка черновика {@link DraftService#checkAsync} | {@link DraftService#check};</p>
+ *<p>- подготовка черновика к отправке {@link DraftService#prepareAsync | {@link DraftService##prepare};</p>
+ *<p>- отправка черновика в контролирующий орган {@link DraftService#sendAsync} | {@link DraftService#send};</p>
+ *<p>- удаление документа из черновика {@link DraftService#deleteDocumentAsync} | {@link DraftService#deleteDocument};</p>
+ *<p>- поиска документа в черновике по идентификатору {@link DraftService#lookupDocumentAsync} | {@link DraftService#lookupDocument};</p>
+ *<p>- метод обновления документа {@link DraftService#updateDocumentAsync} | {@link DraftService#updateDocument};</p>
+ *<p>- создания печатной формы документа {@link DraftService#printDocumentAsync} | {@link DraftService#printDocument};</p>
+ *<p>- метод добавления незашифрованного контента документа в черновик {@link DraftService#addDecryptedDocumentAsync} | {@link DraftService#addDecryptedDocument};</p>
+ *<p>- метод обновления незашифрованного контента документа {@link DraftService#updateDecryptedDocumentContentAsync} | {@link DraftService#updateDecryptedDocumentContent};</p>
+ *<p>- метод получения зашифрованного контента {@link DraftService#getEncryptedDocumentContentAsync} | {@link DraftService#getEncryptedDocumentContent};</p>
+ *<p>- метод получения контента подписи {@link DraftService#getSignatureContentAsync} | {@link DraftService#getSignatureContent};</p>
+ *<p>- метод обновления контента подписи {@link DraftService#updateSignatureAsync} | {@link DraftService#updateSignature};</p>
+ *<p>- метод создания УСН декларации по JSON описанию {@link DraftService#createUSN1Async} | {@link DraftService#createUSN1};</p>
+ *<p>- метод создания УСН декларации с помощью объектной модели {@link DraftService#createUSN2Async} | {@link DraftService#createUSN2};</p>
+ *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignQueryAsync} | {@link DraftService#cloudSignQuery};</p>
+ *<p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync} | {@link DraftService#cloudSignConfirm};</p>
+ *<p>- метод для создания облачных подписей документов {@link DraftService#cloudSignAsync}};</p>
  */
 public interface DraftService extends Providers {
 
     /**
-     * POST /v1/{accountId}/drafts
+     *<p>POST /v1/{accountId}/drafts</p>
      * Асинхронный метод создает черновик
      * @param sender отправитель декларации {@link Sender}
      * @param recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient}
@@ -86,20 +86,23 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<UUID>> createAsync(Sender sender, Recipient recipient, Organization organization);
 
     /**
-     * POST /v1/{accountId}/drafts
+     *<p>POST /v1/{accountId}/drafts</p>
      * Синхронный метод создает черновик
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - объект мета-данные черновика, полученный с помощью конструктора {@link DraftMeta#DraftMeta(Sender, Recipient, Organization)}, где:
-     *      - sender отправитель декларации {@link Sender};
-     *      - recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient};
-     *      - organization организация, на которую создана декларация {@link Organization}.
-     *      Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.
+     *<p>- объект мета-данные черновика, полученный с помощью конструктора {@link DraftMeta#DraftMeta(Sender, Recipient, Organization)}, где:</p>
+     * <div>
+     *  <li>sender отправитель декларации {@link Sender};</li>
+     *  <li>recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient};</li>
+     *  <li>organization организация, на которую создана декларация {@link Organization}.</li>
+     *</div>
+     *<p>Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.</p>
+     *
      * @return идентификатор черновика
      */
     QueryContext<UUID> create(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}
+     *<p>GET /v1/{accountId}/drafts/{draftId}</p>
      * Асинхронный метод поиска черновика по идентификатору
      * @param draftId идентификатор черновика
      * @return черновик
@@ -108,16 +111,16 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Draft>> lookupAsync(String draftId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}
+     *<p>GET /v1/{accountId}/drafts/{draftId}</p>
      * Синхронный метод поиска черновика по идентификатору
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return идентификатор черновика
      */
     QueryContext<Draft> lookup(QueryContext<?> cxt);
 
     /**
-     * DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод удаления черновика
      * @param draftId идентификатор черновика
      * @return {@link Void}
@@ -125,16 +128,16 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> deleteAsync(String draftId);
 
     /**
-     * DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод удаления черновика
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return {@link Void}
      */
     QueryContext<Void> delete(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/meta
+     *<p>GET /v1/{accountId}/drafts/{draftId}/meta</p>
      * Асинхронный метод поиска мета-данных черновика
      * @param draftId идентификатор черновика
      * @return мета-данные черновика
@@ -143,17 +146,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<DraftMeta>> lookupDraftMetaAsync(String draftId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/meta
+     *<p>GET /v1/{accountId}/drafts/{draftId}/meta</p>
      * Асинхронный метод поиска мета-данных черновика
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return мета-данные черновика
      * @see DraftMeta
      */
     QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/meta
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/meta</p>
      * Асинхронный метод обновления мета-данных черновика
      * @param draftId идентификатор черновика
      * @param draftMeta мета-данные черновика
@@ -163,18 +166,18 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(String draftId, DraftMeta draftMeta);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/meta
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/meta</p>
      * Синхронный метод обновления мета-данных черновика
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - мета-данные черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.
+     *<p>  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>  - мета-данные черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.</p>
      * @return мета-данные черновика
      * @see DraftMeta
      */
     QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/check
+     *<P>POST /v1/{accountId}/drafts/{draftId}/check</P>
      * Асинхронный метод проверки черновика
      * @param draftId идентификатор черновика
      * @return протокол проверки
@@ -182,16 +185,16 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Map<String, Object>>> checkAsync(String draftId);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/check
+     *<p>POST /v1/{accountId}/drafts/{draftId}/check</p>
      * Асинхронный метод проверки черновика
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return протокол проверки
      */
     QueryContext<Map<String, Object>> check(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/prepare
+     *<p>POST /v1/{accountId}/drafts/{draftId}/prepare</p>
      * Асинхронный метод подготовки черновика к отправке
      * @param draftId идентификатор черновика
      * @return результат подготовки
@@ -200,17 +203,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<PrepareResult>> prepareAsync(String draftId);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/prepare
+     *<p>POST /v1/{accountId}/drafts/{draftId}/prepare</p>
      * Синхронный метод подготовки черновика к отправке
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return результат подготовки
      * @see PrepareResult
      */
     QueryContext<PrepareResult> prepare(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/send
+     *<p>POST /v1/{accountId}/drafts/{draftId}/send</p>
      * Асинхронный метод отправки черновика в контролиоующий орган
      * @param draftId идентификатор черновика
      * @return список документооборотов
@@ -219,17 +222,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/send
+     *<p>POST /v1/{accountId}/drafts/{draftId}/send</p>
      * Синхронный метод отправки черновика в контролиоующий орган
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return список документооборотов
      * @see Docflow
      */
     QueryContext<List<Docflow>> send(QueryContext<?> cxt);
 
     /**
-     * DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод удаления документа из черновика
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -238,17 +241,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> deleteDocumentAsync(String draftId, String documentId);
 
     /**
-     * DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Синхронный метод удаления документа из черновика
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}/
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return {@link Void}
      */
     QueryContext<Void> deleteDocument(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод поиска документа в черновике по идентификатору
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -258,18 +261,18 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(String draftId, String documentId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Синхронный метод поиска документа в черновике по идентификатору
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return документ
      * @see DraftDocument
      */
     QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод обновления документа
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -280,12 +283,12 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(String draftId, String documentId, DocumentContents documentContents);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
      * Асинхронный метод обновления документа
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};
-     *  - мета-данные документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentContents} .
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};</p>
+     *<p>- мета-данные документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentContents}</p>
      * @return документ
      * @see DocumentContents
      * @see DraftDocument
@@ -293,7 +296,7 @@ public interface DraftService extends Providers {
     QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print</p>
      * Асинхронный метод создания печатной формы документа.
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -302,17 +305,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<String>> printDocumentAsync(String draftId, String documentId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print</p>
      * Синхронный метод создания печатной формы документа.
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return строка BASE64 от PDF.
      */
     QueryContext<String> printDocument(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents</p>
      * Асинхронный метод добавления незашифрованного контента документа в черновик
      * @param draftId идентификатор черновика
      * @param documentContents объект с незашифрованным контентом документа
@@ -322,11 +325,11 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(UUID draftId, DocumentContents documentContents);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents</p>
      * Синхронный метод добавления незашифрованного контента документа в черновик
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - объект с незашифрованным контентом документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentContents}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- объект с незашифрованным контентом документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentContents}.</p>
      * @return документ
      * @see DocumentContents
      * @see DraftDocument
@@ -334,7 +337,7 @@ public interface DraftService extends Providers {
     QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Асинхронный метод получения расшифрованного контента документа
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -343,17 +346,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(String draftId, String documentId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод получения расшифрованного контента документа
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return контент документа в кодировке BASE64
      */
     QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Асинхронный метод обновления незашифрованного контента документа
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -363,18 +366,18 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(String draftId, String documentId, byte[] content);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод обновления незашифрованного контента документа
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};
-     *  - массив байт незашифрованного контента документа. Для установки необходимо использовать метод {@link QueryContext#setContent};
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};</p>
+     *<p>- массив байт незашифрованного контента документа. Для установки необходимо использовать метод {@link QueryContext#setContent};</p>
      * @return {@link Void}
      */
     QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Асинхронный метод получения зашифрованного контента
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -383,17 +386,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(String draftId, String documentId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Синхронный метод получения зашифрованного контента
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return зашифрованный контент в кодировке BASE64
      */
     QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature</p>
      * Асинхронный метод получения контента подписи
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -402,17 +405,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<String>> getSignatureContentAsync(String draftId, String documentId);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
+     *<p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature</p>
      * Асинхронный метод получения контента подписи
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId}.</p>
      * @return контент подписи в кодировке BASE64
      */
     QueryContext<String> getSignatureContent(QueryContext<?> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature</p>
      * Асинхронный метод обновления контента подписи
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -422,18 +425,18 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> updateSignatureAsync(String draftId, String documentId, byte[] content);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
+     *<p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature</p>
      * Синхронный метод обновления контента подписи
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};
-     *  - массив байт контента подписи в формате PKCS#7. Для установки необходимо использовать метод {@link QueryContext#setContent}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};</p>
+     *<p>- массив байт контента подписи в формате PKCS#7. Для установки необходимо использовать метод {@link QueryContext#setContent}.</p>
      * @return {@link Void}
      */
     QueryContext<Void> updateSignature(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1</p>
      * Асинхронный метод создания УСН декларации по JSON описанию
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -444,19 +447,19 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> createUSN1Async(String draftId, String documentId, UsnServiceContractInfo usn);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1</p>
      * Синхронный метод создания УСН декларации по JSON описанию
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};
-     *  - описание УСН декрации. Для установки необходимо использовать метод {@link QueryContext#setUsnServiceContractInfo}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};</p>
+     *<p>- описание УСН декрации. Для установки необходимо использовать метод {@link QueryContext#setUsnServiceContractInfo}.</p>
      * @return {@link Void}
      * @see UsnServiceContractInfo
      */
     QueryContext<Void> createUSN1(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2</p>
      * Асинхронный метод создания УСН декларации с помощью объектной модели
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -467,19 +470,19 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<Void>> createUSN2Async(String draftId, String documentId, UsnServiceContractInfoV2 usn);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
+     *<p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2</p>
      * Синхронный метод создания УСН декларации с помощью объектной модели
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};
-     *  - описание УСН декрации. Для установки необходимо использовать метод {@link QueryContext#setUsnServiceContractInfoV2};
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор документа. Для установки необходимо использовать метод {@link QueryContext#setDocumentId};</p>
+     *<p>- описание УСН декрации. Для установки необходимо использовать метод {@link QueryContext#setUsnServiceContractInfoV2};</p>
      * @return {@link Void}
      * @see UsnServiceContractInfoV2
      */
     QueryContext<Void> createUSN2(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign</p>
      * Асинхронный метод для создания запроса на облачную подпись
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @return запрос на облачную
@@ -487,17 +490,17 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<SignInitiation>> cloudSignQueryAsync(String draftId);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign</p>
      * Cинхронный метод для создания запроса на облачную подпись
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return запрос на облачную
      * @see SignInitiation
      */
     QueryContext<SignInitiation> cloudSignQuery(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
      * Асинхронный метод для подтверждения запроса на облачную подпись
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @param requestId идентификатор запроса, см. {@link SignInitiation}
@@ -508,20 +511,19 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(String draftId, String requestId, String code);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
      * Синхронный метод для подтверждения запроса на облачную подпись
      * @param cxt контекст. Должен содержать следующие данные:
-     *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};
-     *  - идентификатор запроса, см. {@link SignInitiation}. Для установки необходимо использовать метод {@link QueryContext#setRequestId};
-     *  - смс-код подтверждения. Для установки необходимо использовать метод {@link QueryContext#setSmsCode};
+     *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
+     *<p>- идентификатор запроса, см. {@link SignInitiation}. Для установки необходимо использовать метод {@link QueryContext#setRequestId};</p>
+     *<p>- смс-код подтверждения. Для установки необходимо использовать метод {@link QueryContext#setSmsCode};</p>
      * @return список подписанных документов
      * @see SignedDraft
      */
     QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
      * Асинхронный метод для создания облачных подписей документов
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @param codeProvider провайдер для получения смс-кода подтверждения {@link ISmsCodeProvider}
