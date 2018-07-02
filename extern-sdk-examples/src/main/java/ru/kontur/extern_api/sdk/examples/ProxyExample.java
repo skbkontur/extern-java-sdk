@@ -41,6 +41,8 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.Messages;
 import static ru.kontur.extern_api.sdk.Messages.C_RESOURCE_NOT_FOUND;
 import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
+
+import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Credential;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
@@ -241,7 +243,7 @@ public class ProxyExample {
                 );
 
         if (signCxt.isFail()) {
-            throw signCxt.failure();
+            signCxt.failure();
         }
 
         assert (signCxt.get() != null);
@@ -335,7 +337,7 @@ public class ProxyExample {
                 );
 
             if (approvedCxt.isFail()) {
-                ServiceException e = approvedCxt.failure();
+                ServiceError e = approvedCxt.getServiceError();
                 System.out.println(MessageFormat.format("Method: {0}" + EOL + "Details:" + EOL + "{1}" + EOL, new Object[]{"ApproveCodeProviderImpl", e.toString()}));
                 return "";
             }

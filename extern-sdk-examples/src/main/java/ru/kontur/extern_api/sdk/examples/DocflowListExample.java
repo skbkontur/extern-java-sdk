@@ -113,7 +113,7 @@ public class DocflowListExample {
                 docToSend.setSignature(signature);
                 sendDocflowCtx.setDocumentToSend(docToSend);
                 // и отправляем его
-                docflowService.sendReply(sendDocflowCtx);
+                docflowService.sendReplies(sendDocflowCtx);
                 System.out.println("DocumentToSend sent");
             }
             System.out.println("All documents sent");

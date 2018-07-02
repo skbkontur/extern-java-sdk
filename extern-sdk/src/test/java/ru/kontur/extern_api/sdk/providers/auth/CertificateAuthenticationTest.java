@@ -89,22 +89,22 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForInitiation(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(
-                        request().withMethod("POST").withPath("/v5.9/authenticate-by-cert"),
-                        exactly(1))
-                .respond(response()
-                        .withStatusCode(code)
-                        .withHeader(JSON_CONTENT_TYPE)
-                        .withBody(body)
-                );
+            .when(
+                request().withMethod("POST").withPath("/v5.9/authenticate-by-cert"),
+                exactly(1))
+            .respond(response()
+                .withStatusCode(code)
+                .withHeader(JSON_CONTENT_TYPE)
+                .withBody(body)
+            );
     }
 
     private void createAnswerForApprove(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
-                .respond(
-                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
-                );
+            .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
+            .respond(
+                response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
+            );
     }
 
     private void createAnswerForValidInitiation() {
@@ -137,12 +137,12 @@ public class CertificateAuthenticationTest {
         };
 
         auth = CertificateAuthenticationProvider.usingCertificate(certificateProvider)
-                .setCryptoProvider(new MockCryptoProvider())
-                .setApiKeyProvider(() -> "apikey")
-                .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
-                .setSignatureKeyProvider(() -> "certificate")
-                .buildAuthenticationProvider()
-                .httpClient(new DefaultServicesFactory().getHttpClient());
+            .setCryptoProvider(new MockCryptoProvider())
+            .setApiKeyProvider(() -> "apikey")
+            .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
+            .setSignatureKeyProvider(() -> "certificate")
+            .buildAuthenticationProvider()
+            .httpClient(new DefaultServicesFactory().getHttpClient());
     }
 
     @Test

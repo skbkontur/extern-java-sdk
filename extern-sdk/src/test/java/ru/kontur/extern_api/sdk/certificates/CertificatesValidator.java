@@ -40,8 +40,8 @@ class CertificatesValidator {
     static void validateCertificateList(CertificateList certificateList) {
         assertNotNull("CertificateList must not be null!", certificateList);
         assertEquals("TotalCount is wrong!", 0, certificateList.getTotalCount().intValue());
-        assertEquals("PageIndex is wrong!", 0, certificateList.getPageIndex().intValue());
-        assertEquals("PageSize is wrong!", 0, certificateList.getPageSize().intValue());
+        assertEquals("Skip is wrong!", 0L, certificateList.getSkip().longValue());
+        assertEquals("Take is wrong!", 0, certificateList.getTake().longValue());
     }
 
     static void validateCertificate(Certificate certificate) {

@@ -35,11 +35,11 @@ public class CompanyBatch {
     private List<Company> companies;
 
     @SerializedName("total-count")
-    private int totalCount;
+    private Long totalCount;
 
     public CompanyBatch() {
         companies = new ArrayList<>();
-        totalCount = 0;
+        totalCount = 0L;
     }
 
     public List<Company> getCompanies() {
@@ -50,11 +50,11 @@ public class CompanyBatch {
         this.companies = companies;
     }
 
-    public int getTotalCount() {
+    public Long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 }

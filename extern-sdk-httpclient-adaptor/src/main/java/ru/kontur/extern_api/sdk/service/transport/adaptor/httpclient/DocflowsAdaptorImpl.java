@@ -421,7 +421,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
      * @return QueryContext&lt;Signature&gt; context
      */
     @Override
-    public QueryContext<Docflow> addDocumentTypeReply(QueryContext<Docflow> cxt) {
+    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<Docflow> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -429,7 +429,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 
             return cxt.setResult(
                 transport(cxt)
-                    .addDocumentTypeReply(
+                    .sendReplyDocument(
                         cxt.getAccountProvider().accountId().toString(),
                         cxt.getDocflowId().toString(),
                         cxt.getDocumentType(),
@@ -489,7 +489,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     @Override
-    public QueryContext<Docflow> sendReply(QueryContext<Docflow> cxt) {
+    public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;

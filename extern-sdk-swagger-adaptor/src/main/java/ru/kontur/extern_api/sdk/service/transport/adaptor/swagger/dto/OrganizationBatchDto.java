@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
 import java.util.stream.Collectors;
-import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 
 /**
@@ -44,7 +43,7 @@ public class OrganizationBatchDto {
                 dto.getOrganizations()
                     .stream()
                     .map(organizationDto::fromDto)
-                    .collect(Collectors.<Company>toList())
+                    .collect(Collectors.toList())
             );
         }
 
@@ -66,7 +65,7 @@ public class OrganizationBatchDto {
                 batch.getCompanies()
                     .stream()
                     .map(organizationDto::toDto)
-                    .collect(Collectors.<ru.kontur.extern_api.sdk.service.transport.swagger.model.Organization>toList())
+                    .collect(Collectors.toList())
             );
         }
 
