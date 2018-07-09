@@ -25,9 +25,9 @@
 package ru.kontur.extern_api.sdk.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
@@ -179,7 +179,7 @@ public interface DraftService extends Providers {
      * @param draftId идентификатор черновика
      * @return протокол проверки
      */
-    CompletableFuture<QueryContext<Map<String, Object>>> checkAsync(String draftId);
+    CompletableFuture<QueryContext<CheckResultData>> checkAsync(String draftId);
 
     /**
      * POST /v1/{accountId}/drafts/{draftId}/check
@@ -188,7 +188,7 @@ public interface DraftService extends Providers {
      *  - индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.
      * @return протокол проверки
      */
-    QueryContext<Map<String, Object>> check(QueryContext<?> cxt);
+    QueryContext<CheckResultData> check(QueryContext<?> cxt);
 
     /**
      * POST /v1/{accountId}/drafts/{draftId}/prepare

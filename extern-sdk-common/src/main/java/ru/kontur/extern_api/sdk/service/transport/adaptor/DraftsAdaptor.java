@@ -24,12 +24,12 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
 
 /**
  *
@@ -95,7 +95,7 @@ public interface DraftsAdaptor {
      * @param cxt a context
      * @return Map&lt;String,Object&gt;
      */
-    QueryContext<Map<String, Object>> check(QueryContext<Map<String, Object>> cxt);
+    QueryContext<CheckResultData> check(QueryContext<CheckResultData> cxt);
 
     /**
      * Operate PREPARE

@@ -25,7 +25,6 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
 import java.util.List;
-import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -34,14 +33,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
@@ -149,15 +149,15 @@ public class DraftsApi extends RestApi {
      *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
-     * @return ApiResponse&lt;Map&lt;String, Object&gt;&gt;
+     * @return ApiResponse&lt;CheckResultData&gt;
      * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/drafts/{draftId}/check")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Map<String, Object>> check(@PathParam("accountId") String accountId,
+    public ApiResponse<CheckResultData> check(@PathParam("accountId") String accountId,
         @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("check", null, new TypeToken<Map<String, Object>>() {
+        return invoke("check", null, new TypeToken<CheckResultData>() {
         }.getType(), accountId, draftId);
     }
 

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * @author AlexS
  */
-class CheckResultDataDto {
+public class CheckResultDataDto {
 
     public ru.kontur.extern_api.sdk.model.CheckResultData fromDto(ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData dto) {
 
