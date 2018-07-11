@@ -29,9 +29,12 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
  */
 public class DraftDto {
 
-    public ru.kontur.extern_api.sdk.model.Draft fromDto(ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft dto) {
+    public ru.kontur.extern_api.sdk.model.Draft fromDto(
+        ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft dto) {
 
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
 
         ru.kontur.extern_api.sdk.model.Draft draft = new ru.kontur.extern_api.sdk.model.Draft();
         draft.setId(dto.getId());
@@ -39,18 +42,26 @@ public class DraftDto {
             draft.setStatus(dto.getStatus().getValue());
         }
 
+        if (dto.getMeta() != null) {
+            draft.setMeta(new DraftMetaDto().fromDto(dto.getMeta()));
+        }
+
         return draft;
     }
 
-    public ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft toDto(ru.kontur.extern_api.sdk.model.Draft draft) {
+    public ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft toDto(
+        ru.kontur.extern_api.sdk.model.Draft draft) {
 
-        if (draft == null) return null;
+        if (draft == null) {
+            return null;
+        }
 
         ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft dto
-                = new ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft();
+            = new ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft();
         dto.setId(draft.getId());
         ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft.StatusEnum status
-                = ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft.StatusEnum.fromValue(draft.getStatus().getValue());
+            = ru.kontur.extern_api.sdk.service.transport.swagger.model.Draft.StatusEnum
+            .fromValue(draft.getStatus().getValue());
         dto.setStatus(status);
 
         return dto;
