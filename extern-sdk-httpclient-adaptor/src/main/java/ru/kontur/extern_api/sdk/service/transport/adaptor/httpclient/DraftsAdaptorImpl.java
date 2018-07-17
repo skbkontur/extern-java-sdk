@@ -748,14 +748,14 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> createType(QueryContext<Void> cxt) {
+    public QueryContext<Void> createDeclOfType(QueryContext<Void> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
             }
 
             transport(cxt)
-                .createType(
+                .createDeclOfType(
                     cxt.getAccountProvider().accountId().toString(),
                     cxt.getDraftId().toString(),
                     cxt.getType(),
