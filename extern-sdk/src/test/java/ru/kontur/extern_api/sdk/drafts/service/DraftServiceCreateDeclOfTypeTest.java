@@ -74,11 +74,6 @@ public class DraftServiceCreateDeclOfTypeTest {
             public QueryContext<String> sessionId() {
                 return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
             }
-
-            @Override
-            public String authPrefix() {
-                return "auth.sid";
-            }
         });
     }
 
