@@ -23,27 +23,27 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CHECK_RESULT_DATA;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOWS;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_DOCUMENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_META;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.MAP;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NOTHING;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PREPARE_RESULT;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
@@ -225,11 +225,11 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * POST /v1/{accountId}/drafts/{draftId}/check
      *
      * @param cxt a context
-     * @return Map&lt;String,Object&gt;
+     * @return CheckResultData
      */
     @SuppressWarnings("unchecked")
     @Override
-    public QueryContext<Map<String, Object>> check(QueryContext<Map<String, Object>> cxt) {
+    public QueryContext<CheckResultData> check(QueryContext<CheckResultData> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -242,7 +242,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                         cxt.getDraftId().toString()
                     )
                     .getData(),
-                MAP
+                CHECK_RESULT_DATA
             );
         }
         catch (ApiException x) {

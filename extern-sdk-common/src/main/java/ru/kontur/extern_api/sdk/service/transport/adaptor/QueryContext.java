@@ -139,6 +139,8 @@ public class QueryContext<R> implements Serializable {
     public static final String MAP = "map";
     /** Объект {@link ru.kontur.extern_api.sdk.model.PrepareResult} */
     public static final String PREPARE_RESULT = "prepareResult";
+    /** Объект {@link ru.kontur.extern_api.sdk.model.CheckResultData} */
+    public static final String CHECK_RESULT_DATA = "checkResultData";
     /** Объект "Дескриптор документа" {@link DocumentDescription} */
     public static final String DOCUMENT_DESCRIPTION = "documentDescription";
     /** Идентификатор подписи */
