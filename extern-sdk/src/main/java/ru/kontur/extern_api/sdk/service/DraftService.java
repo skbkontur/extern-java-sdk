@@ -480,7 +480,7 @@ public interface DraftService extends Providers {
     QueryContext<Void> updateSignature(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1 Асинхронный
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1 Асинхронный
      * метод создания УСН декларации по JSON описанию
      *
      * @param draftId идентификатор черновика
@@ -493,7 +493,7 @@ public interface DraftService extends Providers {
         UsnServiceContractInfo usn);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1 Синхронный
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1 Синхронный
      * метод создания УСН декларации по JSON описанию
      *
      * @param cxt контекст. Должен содержать следующие данные: - индентификатор черновика. Для
@@ -507,7 +507,7 @@ public interface DraftService extends Providers {
     QueryContext<Void> createUSN1(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2 Асинхронный
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2 Асинхронный
      * метод создания УСН декларации с помощью объектной модели
      *
      * @param draftId идентификатор черновика
@@ -520,7 +520,7 @@ public interface DraftService extends Providers {
         UsnServiceContractInfoV2 usn);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2 Синхронный
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2 Синхронный
      * метод создания УСН декларации с помощью объектной модели
      *
      * @param cxt контекст. Должен содержать следующие данные: - индентификатор черновика. Для
@@ -534,7 +534,7 @@ public interface DraftService extends Providers {
     QueryContext<Void> createUSN2(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version} Синхронный
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version Синхронный
      * метод создания УСН декларации различных версий
      *
      * @param cxt контекст. Должен содержать следующие данные: - индентификатор черновика. Для
@@ -548,7 +548,7 @@ public interface DraftService extends Providers {
     QueryContext<Void> createUSN(QueryContext<?> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version} Асинхронный
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version Асинхронный
      * метод создания УСН декларации различных версий
      *
      * @param draftId идентификатор черновика

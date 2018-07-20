@@ -218,7 +218,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> updateSignature(QueryContext<Void> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1
      * <p>
      * Create an USN declaration, version 1
      *
@@ -228,7 +228,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> createUSN1(QueryContext<Void> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2
      * <p>
      * Create an USN declaration, version 2
      *
@@ -238,7 +238,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> createUSN2(QueryContext<Void> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version
      * <p>
      *
      * @param cxt a context
