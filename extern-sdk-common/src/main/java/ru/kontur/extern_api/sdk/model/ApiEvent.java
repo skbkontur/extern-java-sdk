@@ -31,73 +31,138 @@ import java.util.Objects;
 
 /**
  * @author AlexS
+ *
+ * Класс предназначен для хронения информации ленты событий документооборотов см. класс EventService
  */
 public class ApiEvent {
 
     private String inn = null;
     private String kpp = null;
-		@SerializedName("docflow-type")
+    @SerializedName("docflow-type")
     private String docflowType = null;
-		@SerializedName("docflow-link")
+    @SerializedName("docflow-link")
     private Link docflowLink = null;
-		@SerializedName("new-state")
+    @SerializedName("new-state")
     private String newState = null;
-		@SerializedName("event-date-time")
+    @SerializedName("event-date-time")
     private Date eventDateTime = null;
     private String id = null;
 
+    /**
+     * Возвращает ИНН подотчетной организации
+     * @return ИНН подотчетной организации
+     */
     public String getInn() {
         return inn;
     }
 
+    /**
+     * Устанавливает ИНН подотчетной организации
+     * @param inn ИНН подотчетной организации
+     */
     public void setInn(String inn) {
         this.inn = inn;
     }
 
+    /**
+     * Возвращает КПП подотчетной организации
+     * @return КПП подотчетной организации
+     */
     public String getKpp() {
         return kpp;
     }
 
+    /**
+     * Устанавливает КПП подотчетной организации
+     * @param kpp КПП подотчетной организации
+     */
     public void setKpp(String kpp) {
         this.kpp = kpp;
     }
 
+    /**
+     * Возвращает тип документооборота
+     * <li>urn:docflow-type:ke-fns-report</li>
+     * @return тип документооборота
+     */
     public String getDocflowType() {
         return docflowType;
     }
 
+    /**
+     * Устанавливает тип документооборота
+     * @param docflowType
+     */
     public void setDocflowType(String docflowType) {
         this.docflowType = docflowType;
     }
 
+    /**
+     * Возвращает ссылку на документооборот
+     * @return ссылка на документооборот
+     */
     public Link getDocflowLink() {
         return docflowLink;
     }
 
+    /**
+     * Устанавливает ссылку на документооборот
+     * @param docflowLink ссылка на документооборот
+     */
     public void setDocflowLink(Link docflowLink) {
         this.docflowLink = docflowLink;
     }
 
+    /**
+     * Возвращает состояние документооборота:
+     *  <li>urn:transaction:report</li>
+     *  <li>urn:transaction:acceptance-result-positive</li>
+     *  <li>urn:transaction:processing-result-ok</li>
+     * @return состояние документооборота
+     */
     public String getNewState() {
         return newState;
     }
 
+    /**
+     * Устанавливает состояние документооборота
+     *  <li>urn:transaction:report</li>
+     *  <li>urn:transaction:acceptance-result-positive</li>
+     *  <li>urn:transaction:processing-result-ok</li>
+     * @param newState состояние документооборота
+     */
     public void setNewState(String newState) {
         this.newState = newState;
     }
 
+    /**
+     * Возвращает дату события документооборота
+     * @return дата события
+     */
     public Date getEventDateTime() {
         return eventDateTime;
     }
 
+    /**
+     * Устанавливает дату события документооборота
+     * @param eventDateTime дата события документооборота
+     */
     public void setEventDateTime(Date eventDateTime) {
         this.eventDateTime = eventDateTime;
     }
 
+    /**
+     * Возвращает идентификатор события
+     * @return идентификатор события
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор события
+     * @param id идентификатор события
+     */
     public void setId(String id) {
         this.id = id;
     }
@@ -112,12 +177,12 @@ public class ApiEvent {
         }
         ApiEvent apiEvent = (ApiEvent) o;
         return Objects.equals(this.inn, apiEvent.inn)
-                && Objects.equals(this.kpp, apiEvent.kpp)
-                && Objects.equals(this.docflowType, apiEvent.docflowType)
-                && Objects.equals(this.docflowLink, apiEvent.docflowLink)
-                && Objects.equals(this.newState, apiEvent.newState)
-                && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
-                && Objects.equals(this.id, apiEvent.id);
+            && Objects.equals(this.kpp, apiEvent.kpp)
+            && Objects.equals(this.docflowType, apiEvent.docflowType)
+            && Objects.equals(this.docflowLink, apiEvent.docflowLink)
+            && Objects.equals(this.newState, apiEvent.newState)
+            && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
+            && Objects.equals(this.id, apiEvent.id);
     }
 
     @Override

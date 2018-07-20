@@ -26,44 +26,63 @@ package ru.kontur.extern_api.sdk.model;
 
 /**
  * @author AlexS
+ *
+ * Класс ДТО для получения ссылок на расшифрованный и зашифрованный контенты документов документооборота.
+ * Объект данного класса инкопсулированы в объект {@link Document}. Используется в методах {@code DocflowService}.
  */
 public class Content {
 
     private Link decrypted = null;
     private Link encrypted = null;
 
+    /**
+     * Устанавливает ссылку на расшифрованный контент
+     * @param decrypted ссылка на расшифрованный контент
+     * @return {@link Content}
+     */
     public Content decrypted(Link decrypted) {
         this.decrypted = decrypted;
         return this;
     }
 
     /**
-     * Get decrypted
-     *
-     * @return decrypted
+     * Возвращает ссылку на расшифрованный контент
+     * @return decrypted ссылка на расшифрованный контент
      */
     public Link getDecrypted() {
         return decrypted;
     }
 
+    /**
+     * Устанавливает ссылку на расшифрованный контент
+     * @param decrypted ссылка на расшифрованный контент
+     */
     public void setDecrypted(Link decrypted) {
         this.decrypted = decrypted;
     }
 
+    /**
+     * Устанавливает ссылку на зашифрованный контент
+     * @param encrypted ссылка на зашифрованный контент
+     * @return {@link Content}
+     */
     public Content encrypted(Link encrypted) {
         this.encrypted = encrypted;
         return this;
     }
 
     /**
-     * Get encrypted
-     *
-     * @return encrypted
+     * Возвращает ссылку на зашифрованный контент
+     * @return encrypted ссылка на зашифрованный контент
      */
     public Link getEncrypted() {
         return encrypted;
     }
 
+    /**
+     * Устанавливает ссылку на зашифрованный контент
+     * @param encrypted ссылка на зашифрованный контент
+     */
     public void setEncrypted(Link encrypted) {
         this.encrypted = encrypted;
     }

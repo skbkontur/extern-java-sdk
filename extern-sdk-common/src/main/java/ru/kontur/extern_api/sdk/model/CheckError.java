@@ -26,6 +26,8 @@ package ru.kontur.extern_api.sdk.model;
 
 /**
  * @author AlexS
+ *
+ * Класс содержит описание проблемы, который может вернуть метод {@code DraftService.check}
  */
 public class CheckError {
 
@@ -36,110 +38,168 @@ public class CheckError {
     private String tags = null;
     private String id = null;
 
+    /**
+     * Устанавливает описание проблемы
+     * @param description описание проблемы
+     * @return {@link CheckError}
+     */
     public CheckError description(String description) {
         this.description = description;
         return this;
     }
 
     /**
-     * Get description
-     *
-     * @return description
+     * Возвращает описание проблемы
+     * @return description описание проблемы
      */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Устанавливает описание проблемы
+     * @param description описание проблемы
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Устанавливает источник проблемы
+     * @param source источник проблемы
+     * @return {@link CheckError}
+     */
     public CheckError source(String source) {
         this.source = source;
         return this;
     }
 
     /**
-     * Get source
-     *
-     * @return source
+     * Возвращает источник проблемы
+     * @return source источник проблемы
      */
     public String getSource() {
         return source;
     }
 
+    /**
+     * Устанавливает источник проблемы
+     * @param source источник проблемы
+     */
     public void setSource(String source) {
         this.source = source;
     }
 
+    /**
+     * Устанавливает уровень серьезности проблемы
+     * @param level <p>уровень серьезности проблемы
+     * <li>error - ошибка</li>
+     * <li>warning - предупреждение</li>
+     * </p>
+     * @return {@link CheckError}
+     */
     public CheckError level(String level) {
         this.level = level;
         return this;
     }
 
     /**
-     * Get level
-     *
-     * @return level
+     * Возвращает уровень серьезности проблемы
+     * @return level <p>уровень серьезности проблемы
+     * <li>error - ошибка</li>
+     * <li>warning - предупреждение</li>
+     * </p>
      */
     public String getLevel() {
         return level;
     }
 
+    /**
+     * Устанавливает уровень серьезности проблемы
+     * @param level <p>уровень серьезности проблемы
+     * <li>error - ошибка</li>
+     * <li>warning - предупреждение</li>
+     * </p>
+     */
     public void setLevel(String level) {
         this.level = level;
     }
 
+    /**
+     * Устанавливает тип проблемы
+     * @param type тип проблемы
+     * @return {@link CheckError}
+     */
     public CheckError type(String type) {
         this.type = type;
         return this;
     }
 
     /**
-     * Get type
-     *
-     * @return type
+     * Возвращает  тип проблемы
+     * @return type  тип проблемы
      */
     public String getType() {
         return type;
     }
 
+    /**
+     * Устанавливает тип проблемы
+     * @param type тип проблемы
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Устанавливает метки для проблемы
+     * @param tags метки для проблемы
+     * @return {@link CheckError}
+     */
     public CheckError tags(String tags) {
         this.tags = tags;
         return this;
     }
 
     /**
-     * Get tags
-     *
-     * @return tags
+     * Возвращает метки для проблемы
+     * @return tags метки для проблемы
      */
     public String getTags() {
         return tags;
     }
 
+    /**
+     * Устанавливает метки для проблемы
+     * @param tags метки для проблемы
+     * @param tags
+     */
     public void setTags(String tags) {
         this.tags = tags;
     }
 
+    /**
+     * Устанавливает идентификатор проблемы
+     * @param id идентификатор проблемы
+     * @return {@link CheckError}
+     */
     public CheckError id(String id) {
         this.id = id;
         return this;
     }
 
     /**
-     * Get id
-     *
-     * @return id
+     * Возврашает идентификатор проблемы
+     * @return id идентификатор проблемы
      */
     public String getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор проблемы
+     * @param id идентификатор проблемы
+     */
     public void setId(String id) {
         this.id = id;
     }
