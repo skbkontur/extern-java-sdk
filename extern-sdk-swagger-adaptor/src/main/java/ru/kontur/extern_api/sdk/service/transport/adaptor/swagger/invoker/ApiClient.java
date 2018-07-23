@@ -137,7 +137,8 @@ public class ApiClient extends
 
             ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiResponse<T> resp = this
                 .execute(call, type);
-            if (System.getProperties().get("ru.extern_api.logHttpRequest").equals("true")) {
+            Object logHttpRequest = System.getProperties().get("ru.extern_api.logHttpRequest");
+            if (logHttpRequest != null && logHttpRequest.equals("true")) {
                 ServiceLogger.getInstance()
                     .logHttpRequest(httpRequestUri, httpMetod, queryParams, body, headerParams,
                         formParams, type, resp.getStatusCode(), resp.getHeaders(), resp.getData());
