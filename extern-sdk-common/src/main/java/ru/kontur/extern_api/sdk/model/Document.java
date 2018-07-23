@@ -31,6 +31,8 @@ import java.util.UUID;
 
 /**
  * @author AlexS
+ *
+ * Класс содержит информацию документа документооборота
  */
 public class Document {
 
@@ -46,86 +48,127 @@ public class Document {
     }
 
     /**
-     * Get id
-     *
-     * @return id
+     * Возвращает идентификатор документа
+     * @return id идентификатор документа
      */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор документа
+     * @param id идентификатор документа
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Устанавливает дескриптор документа {@link DocumentDescription}
+     * @param description дескриптор документа
+     * @return {@link Document}
+     */
     public Document description(DocumentDescription description) {
         this.description = description;
         return this;
     }
 
     /**
-     * Get description
-     *
-     * @return description
+     * Возвращает дескриптор документа {@link DocumentDescription}
+     * @return description дескриптор документа
      */
     public DocumentDescription getDescription() {
         return description;
     }
 
+    /**
+     * Устанавливает дескриптор документа {@link DocumentDescription}
+     * @param description дескриптор документа
+     */
     public void setDescription(DocumentDescription description) {
         this.description = description;
     }
 
+    /**
+     * Устанавливает контент документа {@link Content}
+     * @param content контент документа
+     * @return {@link Document}
+     */
     public Document content(Content content) {
         this.content = content;
         return this;
     }
 
     /**
-     * Get content
-     *
-     * @return content
+     * Возвращает контент документа {@link Content}
+     * @return content контент документа
+     * @see Content
      */
     public Content getContent() {
         return content;
     }
 
+    /**
+     * Устанавливает контент документа {@link Content}
+     * @param content контент документа
+     * @see Content
+     */
     public void setContent(Content content) {
         this.content = content;
     }
 
+    /**
+     * Устанавливает список подписей документа {@link Signature}
+     * @param signatures список подписей документа
+     * @return {@link Document}
+     */
     public Document signatures(List<Signature> signatures) {
         this.signatures = signatures;
         return this;
     }
 
     /**
-     * Get signatures
-     *
-     * @return signatures
+     * Возвращает список подписей документа {@link Signature}
+     * @return signatures список подписей
+     * @see Signature
      */
     public List<Signature> getSignatures() {
         return signatures;
     }
 
+    /**
+     * Устанавливает список подписей документа {@link Signature}
+     * @param signatures список подписей документа
+     * @see Signature
+     */
     public void setSignatures(List<Signature> signatures) {
         this.signatures = signatures;
     }
 
+    /**
+     * Устанавливает список ссылок на ресурсы документооборота {@link Link}
+     * @param links список ссылок на ресурсы документооборота
+     * @return {@link Document}
+     */
     public Document links(List<Link> links) {
         this.links = links;
         return this;
     }
 
     /**
-     * Get links
-     *
-     * @return links
+     * Возвращает список ссылок на ресурсы документооборота {@link Link}
+     * @return links список ссылок на ресурсы документооборота
+     * @see Link
      */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * Устанавливает список ссылок на ресурсы документооборота {@link Link}
+     * @param links список ссылок на ресурсы документооборота
+     * @see Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }

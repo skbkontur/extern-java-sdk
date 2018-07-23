@@ -29,6 +29,8 @@ import java.util.List;
 
 /**
  * @author Aleksey Sukhorukov
+ *
+ * Класс содержит список компаний, возвращаемый сервисом {@code OrganizationService.search}
  */
 public class CompanyBatch {
     @SerializedName("organizations")
@@ -42,18 +44,36 @@ public class CompanyBatch {
         totalCount = 0L;
     }
 
+    /**
+     * Возвращает список организаций
+     * @return список организаций
+     * @see Company
+     */
     public List<Company> getCompanies() {
         return companies;
     }
 
+    /**
+     * Устанавливает список организаций
+     * @param companies список организаций
+     * @see Company
+     */
     public void setCompanies(List<Company> companies) {
         this.companies = companies;
     }
 
+    /**
+     * Возвращает общее количество организаций удовлетворяющих критерию поиска
+     * @return общее количество организаций удовлетворяющих критерию поиска
+     */
     public Long getTotalCount() {
         return totalCount;
     }
 
+    /**
+     * Устанавливает общее количество организаций удовлетворяющих критерию поиска
+     * @param totalCount
+     */
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }

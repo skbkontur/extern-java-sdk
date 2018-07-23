@@ -28,28 +28,47 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author alexs
+ *
+ * Класс содержит информацию для представителя организации
  */
 public class Representative {
 
-		@SerializedName("representative-document")
+    @SerializedName("representative-document")
     private String representativeDocument = null;
 
     private PassportInfo passport = null;
 
+    /**
+     * Возвращает наименования документа представителя
+     * @return наименования документа представителя
+     */
     public String getRepresentativeDocument() {
         return representativeDocument;
     }
 
+    /**
+     * Устанавливает наименования документа представителя
+     * @param representativeDocument
+     */
     public void setRepresentativeDocument(String representativeDocument) {
         this.representativeDocument = representativeDocument;
     }
 
+    /**
+     * Возвращает паспортные данные представителя
+     * @return паспортные данные представителя
+     * @see PassportInfo
+     */
     public PassportInfo getPassport() {
         return passport;
     }
 
+    /**
+     * Устанавливат паспортные данные представителя
+     * @param passport паспортные данные представителя
+     * @see PassportInfo
+     */
     public void setPassport(PassportInfo passport) {
         this.passport = passport;
     }
-
 }

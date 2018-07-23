@@ -31,6 +31,8 @@ import java.util.List;
 
 /**
  * @author alexs
+ * Класс предназначен для постраничного получение списка документооборотов {@link DocflowPageItem}
+ * Используетс в {@code DocflowService}
  */
 public class DocflowPage {
 
@@ -41,36 +43,69 @@ public class DocflowPage {
     @SerializedName("docflows-page-item")
     private List<DocflowPageItem> docflowsPageItem = new ArrayList<>();
 
+    /**
+     * Возвращает смещение от начала списка
+     * @return смещение от начала списка
+     */
     public Long getSkip() {
         return skip;
     }
 
+    /**
+     * Устанавливает смещение от начала списка
+     * @param skip смещение от начала списка
+     */
     public void setSkip(Long skip) {
         this.skip = skip;
     }
 
+    /**
+     * Возвращает максимальный размер возвращаемого списка
+     * @return максимальный размер возвращаемого списка
+     */
     public Long getTake() {
         return take;
     }
 
+    /**
+     * Устанавливает максимальный размер возвращаемого списка
+     * @param take максимальный размер возвращаемого списка
+     */
     public void setTake(Long take) {
         this.take = take;
     }
 
+    /**
+     * Возвращает общее количество ДО
+     * @return общее количество ДО
+     */
     public Long getTotalCount() {
         return totalCount;
     }
 
+    /**
+     * Устанавливает общее количество ДО
+     * @param totalCount общее количество ДО
+     */
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }
 
+    /**
+     * Возвращает список для получения ДО {@link DocflowPageItem}
+     * @return список для получения ДО
+     * @see DocflowPageItem
+     */
     public List<DocflowPageItem> getDocflowsPageItem() {
         return docflowsPageItem;
     }
 
+    /**
+     * Устанавливает список для получения ДО {@link DocflowPageItem}
+     * @param docflowsPageItem список для получения ДО
+     * @see DocflowPageItem
+     */
     public void setDocflowsPageItem(List<DocflowPageItem> docflowsPageItem) {
         this.docflowsPageItem = docflowsPageItem;
     }
-
 }

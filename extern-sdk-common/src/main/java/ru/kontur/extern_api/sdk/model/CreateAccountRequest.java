@@ -73,7 +73,7 @@ public class CreateAccountRequest {
 
     /**
      * Метод возвращает имя организации новой учетной записи
-     * @return
+     * @return имя организации новой учетной записи
      */
     public String getOrganizationName() {
         return organizationName;
@@ -81,7 +81,7 @@ public class CreateAccountRequest {
 
     /**
      * Метод устанавливает имя организации новой учетной записи
-     * @param organizationName
+     * @param organizationName имя организации новой учетной записи
      */
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
