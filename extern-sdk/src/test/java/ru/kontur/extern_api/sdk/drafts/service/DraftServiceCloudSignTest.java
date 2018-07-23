@@ -27,6 +27,8 @@ import static org.mockserver.matchers.Times.exactly;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.UUID;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -47,7 +49,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 public class DraftServiceCloudSignTest {
 
     private static final String HOST = "localhost";
-    private static final int PORT = 1080;
+    private static final int PORT = getFreePort();
 
     private static ClientAndServer mockServer;
     private static DraftService draftService;
@@ -191,5 +193,13 @@ public class DraftServiceCloudSignTest {
                         return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
                     }
                 });
+    }
+
+    private static int getFreePort() {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
