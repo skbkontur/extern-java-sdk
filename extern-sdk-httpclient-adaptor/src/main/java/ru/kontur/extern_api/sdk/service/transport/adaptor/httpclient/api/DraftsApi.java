@@ -414,7 +414,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> createUSN1(@PathParam("accountId") String accountId,
@@ -435,7 +435,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> createUSN2(@PathParam("accountId") String accountId,
@@ -443,6 +443,28 @@ public class DraftsApi extends RestApi {
         UsnServiceContractInfoV2 usn) throws ApiException {
         return invoke("createUSN2", usn, new TypeToken<Void>() {
         }.getType(), accountId, draftId, documentId);
+    }
+
+    /**
+     * @param accountId (required)
+     * @param draftId (required)
+     * @param type (required)
+     * @param version (required)
+     * @param content (required)
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<Void> createDeclOfType(
+        @PathParam("accountId") String accountId,
+        @PathParam("draftId") String draftId,
+        @PathParam("type") String type,
+        @PathParam("version") Integer version,
+        String content) throws ApiException {
+        return invoke("createDeclOfType", content, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, type, version);
     }
 
     /**
@@ -495,24 +517,5 @@ public class DraftsApi extends RestApi {
                 requestId,
                 code
         );
-    }
-
-    /**
-     * @param accountId (required)
-     * @param draftId (required)
-     * @param type (required)
-     * @param version (required)
-     * @param content (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException transport exception
-     */
-    public ApiResponse<Void> createType(
-        @PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId,
-        @PathParam("type") String type,
-        @PathParam("version") Integer version,
-        String content) throws ApiException {
-        return invoke("createType", content, new TypeToken<Void>() {
-        }.getType(), accountId, draftId, type, version);
     }
 }

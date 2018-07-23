@@ -678,7 +678,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> createType(QueryContext<Void> cxt) {
+    public QueryContext<Void> createDeclOfType(QueryContext<Void> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -701,7 +701,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     @Override
-    public QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt) {
+    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -712,7 +712,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     cxt.getDraftId()
             );
 
-            cxt.set("requestId", signInitResult.getRequestId());
+            cxt.setRequestId(signInitResult.getRequestId());
             return cxt.setResult(new SignInitResultDto().fromDto(signInitResult), "sign init");
         } catch (ApiException x) {
             return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
@@ -729,8 +729,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             SignConfirmResult signInitResult = transport(cxt).draftsSignConfirm(
                     cxt.getAccountProvider().accountId(),
                     cxt.getDraftId(),
-                    cxt.get("requestId"),
-                    cxt.get("code")
+                    cxt.getRequestId(),
+                    cxt.getSmsCode()
             );
 
             return cxt.setResult(new SignConfirmDto().fromDto(signInitResult), "signed documents");

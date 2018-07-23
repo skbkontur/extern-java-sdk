@@ -49,8 +49,8 @@ public class CertificateListDto {
                 new ArrayList<>() :
                 dto.getCertificates().stream().map(certificateDto::fromDto).collect(Collectors.toList())
         );
-		certs.setPageIndex(dto.getPageIndex());
-		certs.setPageSize(dto.getPageSize());
+		certs.setSkip(dto.getSkip() == null ? 0 : dto.getSkip());
+		certs.setTake(dto.getTake());
 		certs.setTotalCount(dto.getTotalCount());
 		
 		return certs;
@@ -66,8 +66,8 @@ public class CertificateListDto {
 		CertificateDto certificateDto = new CertificateDto();
 		
 		dto.setCertificates(certs.getCertificates().stream().map(certificateDto::toDto).collect(Collectors.toList()));
-		dto.setPageIndex(certs.getPageIndex());
-		dto.setPageSize(certs.getPageSize());
+		dto.setSkip(certs.getSkip() == null ? 0 : certs.getSkip());
+		dto.setTake(certs.getTake());
 		dto.setTotalCount(certs.getTotalCount());
 		
 		return dto;

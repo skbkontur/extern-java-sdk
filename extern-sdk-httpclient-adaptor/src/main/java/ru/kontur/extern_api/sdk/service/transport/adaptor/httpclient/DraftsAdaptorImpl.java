@@ -620,7 +620,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1
      * <p>
      * Create an USN declaration, version 1
      *
@@ -650,7 +650,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2
      * <p>
      * Create an USN declaration, version 2
      *
@@ -680,6 +680,36 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version
+     * <p>
+     *
+     * @param cxt a context
+     * @return QueryContext&lt;Void&gt;
+     */
+    @Override
+    public QueryContext<Void> createDeclOfType(QueryContext<Void> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return cxt;
+            }
+
+            transport(cxt)
+                .createDeclOfType(
+                    cxt.getAccountProvider().accountId().toString(),
+                    cxt.getDraftId().toString(),
+                    cxt.getType(),
+                    cxt.getVersion(),
+                    cxt.getContentString()
+                );
+
+            return cxt.setResult(null, NOTHING);
+        }
+        catch (ApiException x) {
+            return cxt.setServiceError(x);
+        }
+    }
+
+    /**
      * POST /v1/{accountId}/drafts/{draftId}/cloudSign
      * <p>
      * Initiates the process of cloud signing of the draft
@@ -688,7 +718,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<SignInitiation> cloudSign(QueryContext<SignInitiation> cxt) {
+    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt) {
         try {
             if (cxt.isFail()) {
                 return cxt;
@@ -701,7 +731,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     );
 
             return cxt
-                    .set("requestId", response.getData().getRequestId())
+                    .setRequestId(response.getData().getRequestId())
                     .setResult(response.getData(), "sign request data");
         }
         catch (ApiException x) {
@@ -728,42 +758,11 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     .confirmCloudSigning(
                             cxt.getAccountProvider().accountId().toString(),
                             cxt.getDraftId().toString(),
-                            cxt.get("requestId"),
-                            cxt.get("code")
+                            cxt.getRequestId(),
+                            cxt.getSmsCode()
                     );
 
             return cxt.setResult(response.getData(), "signed documents");
-        }
-        catch (ApiException x) {
-            return cxt.setServiceError(x);
-        }
-    }
-
-
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}
-     * <p>
-     *
-     * @param cxt a context
-     * @return QueryContext&lt;Void&gt;
-     */
-    @Override
-    public QueryContext<Void> createType(QueryContext<Void> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return cxt;
-            }
-
-            transport(cxt)
-                .createType(
-                    cxt.getAccountProvider().accountId().toString(),
-                    cxt.getDraftId().toString(),
-                    cxt.getType(),
-                    cxt.getVersion(),
-                    cxt.getContentString()
-                );
-
-            return cxt.setResult(null, NOTHING);
         }
         catch (ApiException x) {
             return cxt.setServiceError(x);

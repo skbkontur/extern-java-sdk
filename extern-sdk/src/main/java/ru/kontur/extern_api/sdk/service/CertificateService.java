@@ -33,10 +33,27 @@ import ru.kontur.extern_api.sdk.provider.Providers;
 
 /**
  * @author alexs
+ *
+ * Предназначен для получения списка сертификатов
+ *
+ * @see QueryContext
  */
 public interface CertificateService extends Providers {
 
+    /**
+     * GET /v1/{accountId}/certificates
+     * Асинхронный метод возвращает список сертификатов
+     * @return список сертификатов
+     * @see CertificateList
+     */
     CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
 
+    /**
+     * GET /v1/{accountId}/certificates
+     * Синхронный метод возвращает список сертификатов
+     * @param cxt контекст
+     * @return список сертификатов
+     * @see CertificateList
+     */
     QueryContext<CertificateList> getCertificateList(QueryContext<?> cxt);
 }

@@ -303,10 +303,10 @@ public class DocflowsApi extends RestApi {
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}")
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Docflow> addDocumentTypeReply(
+    public ApiResponse<Docflow> sendReplyDocument(
         @PathParam("accountId") String accountId,
         @PathParam("docflowId") String docflowId,
         @PathParam("documentId") String documentId,
