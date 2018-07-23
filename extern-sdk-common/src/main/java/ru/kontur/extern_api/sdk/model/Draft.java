@@ -83,7 +83,11 @@ public class Draft {
     public DraftMeta getMeta() {
         return meta;
     }
-    
+
+    public void setMeta(DraftMeta draftMeta) {
+        meta = draftMeta;
+    }
+
     @JsonAdapter(StatusEnum.Adapter.class)
     public enum StatusEnum {
         NEW("new"),
@@ -118,7 +122,8 @@ public class Draft {
         public static class Adapter extends TypeAdapter<StatusEnum> {
 
             @Override
-            public void write(final JsonWriter jsonWriter, final StatusEnum enumeration) throws IOException {
+            public void write(final JsonWriter jsonWriter, final StatusEnum enumeration)
+                throws IOException {
                 jsonWriter.value(enumeration.getValue());
             }
 
