@@ -27,6 +27,8 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Aleksey Sukhorukov
+ *
+ * Класс содержит данные организации. Используется для создании новой организации или получения информации о новой в {@code OrganizationService}
  */
 public class CompanyGeneral {
     @SerializedName("inn")
@@ -38,26 +40,50 @@ public class CompanyGeneral {
     @SerializedName("name")
     private String name = null;
 
+    /**
+     * Возвращает ИНН
+     * @return ИНН
+     */
     public String getInn() {
         return inn;
     }
 
+    /**
+     * Устанавливает ИНН
+     * @param inn ИНН
+     */
     public void setInn(String inn) {
         this.inn = inn;
     }
 
+    /**
+     * Возвращает КПП
+     * @return КПП
+     */
     public String getKpp() {
         return kpp;
     }
 
+    /**
+     * Устанавливает КПП
+     * @param kpp
+     */
     public void setKpp(String kpp) {
         this.kpp = kpp;
     }
 
+    /**
+     * Возвращает имя организации
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Устанавливает имя организации
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }

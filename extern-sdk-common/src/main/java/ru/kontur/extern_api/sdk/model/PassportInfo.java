@@ -30,50 +30,83 @@ import java.util.Date;
 
 /**
  * @author alexs
+ *
+ * Класс для хранения паспортных данных
  */
 public class PassportInfo {
 
     private String code = null;
 
-		@SerializedName("series-number")
+    @SerializedName("series-number")
     private String seriesNumber = null;
 
-		@SerializedName("issued-date")
+    @SerializedName("issued-date")
     private Date issuedDate = null;
 
-		@SerializedName("issued-by")
+    @SerializedName("issued-by")
     private String issuedBy = null;
 
+    /**
+     * Возвращает код подразделения
+     * @return код подразделения
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Устанавливает код подразделения
+     * @param code код подразделения
+     */
     public void setCode(String code) {
         this.code = code;
     }
 
+    /**
+     * Возвращает серию паспорта
+     * @return серии паспорта
+     */
     public String getSeriesNumber() {
         return seriesNumber;
     }
 
+    /**
+     * Устанавливает серию паспорта
+     * @param seriesNumber серия паспорта
+     */
     public void setSeriesNumber(String seriesNumber) {
         this.seriesNumber = seriesNumber;
     }
 
+    /**
+     * Возвращает дату выдачи
+     * @return дата выдачи
+     */
     public Date getIssuedDate() {
         return issuedDate;
     }
 
+    /**
+     * Устанвливает дату выдачи
+     * @param issuedDate дата выдачи
+     */
     public void setIssuedDate(Date issuedDate) {
         this.issuedDate = issuedDate;
     }
 
+    /**
+     * Возвращает имя учереждения, выдавщего паспорт
+     * @return имя учереждения, выдавщего паспорт
+     */
     public String getIssuedBy() {
         return issuedBy;
     }
 
+    /**
+     * Устанавливает имя учереждения, выдавщего паспорт
+     * @param issuedBy имя учереждения, выдавщего паспорт
+     */
     public void setIssuedBy(String issuedBy) {
         this.issuedBy = issuedBy;
     }
-
 }

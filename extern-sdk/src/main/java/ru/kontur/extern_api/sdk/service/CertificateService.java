@@ -41,7 +41,7 @@ import ru.kontur.extern_api.sdk.provider.Providers;
 public interface CertificateService extends Providers {
 
     /**
-     * GET /v1/{accountId}/certificates
+     * <p>GET /v1/{accountId}/certificates</p>
      * Асинхронный метод возвращает список сертификатов
      * @return список сертификатов
      * @see CertificateList
@@ -49,7 +49,7 @@ public interface CertificateService extends Providers {
     CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
 
     /**
-     * GET /v1/{accountId}/certificates
+     * <p>GET /v1/{accountId}/certificates</p>
      * Синхронный метод возвращает список сертификатов
      * @param cxt контекст
      * @return список сертификатов

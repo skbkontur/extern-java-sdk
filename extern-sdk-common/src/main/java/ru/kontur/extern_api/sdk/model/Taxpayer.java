@@ -28,6 +28,8 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author alexs
+ *
+ * Класс содержит информацию о налогоплательщике
  */
 public class Taxpayer {
 
@@ -45,42 +47,84 @@ public class Taxpayer {
     @SerializedName("taxpayer-full-name")
     private String taxpayerFullName = null;
 
+    /**
+     * Возвращает ФИО руководителя
+     * @return ФИО руководителя
+     */
     public String getTaxpayerChiefFio() {
         return taxpayerChiefFio;
     }
 
+    /**
+     * Устанавливает ФИО руководителя
+     * @param taxpayerChiefFio
+     */
     public void setTaxpayerChiefFio(String taxpayerChiefFio) {
         this.taxpayerChiefFio = taxpayerChiefFio;
     }
 
+    /**
+     * Возвращает представителя организации. Если отсутствует, то возвращает null
+     * @return представитель организации
+     * @see Representative
+     */
     public Representative getRepresentative() {
         return representative;
     }
 
+    /**
+     * Устанавливает представителя организации.
+     * @param representative представитель организации
+     * @see Representative
+     */
     public void setRepresentative(Representative representative) {
         this.representative = representative;
     }
 
+    /**
+     * Возвращает телефон организации
+     * @return телефон организации
+     */
     public String getTaxpayerPhone() {
         return taxpayerPhone;
     }
 
+    /**
+     * Устанавливает телефон организации
+     * @param taxpayerPhone телефон организации
+     */
     public void setTaxpayerPhone(String taxpayerPhone) {
         this.taxpayerPhone = taxpayerPhone;
     }
 
+    /**
+     * Возвращает ОКВЭД организации
+     * @return ОКВЭД организации
+     */
     public String getTaxpayerOkved() {
         return taxpayerOkved;
     }
 
+    /**
+     * Устанавливает ОКВЕД организации
+     * @param taxpayerOkved ОКВЭД организации
+     */
     public void setTaxpayerOkved(String taxpayerOkved) {
         this.taxpayerOkved = taxpayerOkved;
     }
 
+    /**
+     * Возвращает полное имя организации
+     * @return полное имя организации
+     */
     public String getTaxpayerFullName() {
         return taxpayerFullName;
     }
 
+    /**
+     * Устанавливает полное имя организации
+     * @param taxpayerFullName полное имя организации
+     */
     public void setTaxpayerFullName(String taxpayerFullName) {
         this.taxpayerFullName = taxpayerFullName;
     }

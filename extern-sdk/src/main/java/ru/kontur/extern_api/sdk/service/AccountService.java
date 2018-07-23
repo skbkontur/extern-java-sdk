@@ -40,16 +40,16 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author AlexS
  *
  * Группа методов предоставляет доступ к операциям для работы с учетными записями:
- *  - получение списка учетных записей;
- *  - создать учетную запись
- *  - получить учетную запись по идентификатору
+ *<p>- получение списка учетных записей;</p>
+ *<p>- создать учетную записьж</p>
+ *<p>- получить учетную запись по идентификатору.</p>
  *
  * @see QueryContext
  */
 public interface AccountService extends Providers {
 
     /**
-     * GET /
+     * <p>GET /</p>
      * Асинхронный метод возвращает список ссылок на доступные ресурсы.
      * Для выполнения аутентификация не требуется.
      * @return список ссылок
@@ -58,7 +58,7 @@ public interface AccountService extends Providers {
     CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync();
 
     /**
-     * GET /
+     * <p>GET /</p>
      * Синхронный метод возвращает список ссылок на доступные ресурсы.
      * Для выполнения аутентификация не требуется.
      * @return список ссылок
@@ -67,7 +67,7 @@ public interface AccountService extends Providers {
     QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt);
 
     /**
-     * GET /v1
+     * <p>GET /v1</p>
      * Асинхронный метод возвращает список учетных записей с разбивкой по страницам
      * @return список учетных записей
      * @see AccountList
@@ -75,7 +75,7 @@ public interface AccountService extends Providers {
     CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync();
 
     /**
-     * GET /v1
+     * <p>GET /v1</p>
      * Синхронный метод возвращает список учетных записей с разбивкой по страницам
      * @return список учетных записей
      * @see AccountList
@@ -83,7 +83,7 @@ public interface AccountService extends Providers {
     QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
 
     /**
-     * POST /v1
+     * <p>POST /v1</p>
      * Асинхронный метод предназначен для создания новой учетной записи
      * @param createAccountRequest {@link CreateAccountRequest} структура данных, содержащая информацию для создания новой учетной записи
      * @return новая учетная запись {@link Account}
@@ -91,16 +91,16 @@ public interface AccountService extends Providers {
     CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest);
 
     /**
-     * POST /v1
+     * <p>POST /v1</p>
      * Синхронный метод предназначен для создания новой учетной записи
      * @param cxt контекст, содержащий следующие параметры:
-     *  - структура данных {@link CreateAccountRequest}. Для установки необходимо использовать метод {@link QueryContext#setCreateAccountRequest(CreateAccountRequest)}
+     *<p>- структура данных {@link CreateAccountRequest}. Для установки необходимо использовать метод {@link QueryContext#setCreateAccountRequest(CreateAccountRequest)}</p>
      * @return новая учетная запись {@link Account}
      */
     QueryContext<Account> createAccount(QueryContext<?> cxt);
 
     /**
-     * GET /v1/{accountId}
+     * <p>GET /v1/{accountId}</p>
      * Асинхронный метод предназначен для получения учетной записи
      * @param accountId идентификатор учетной записи
      * @return учетная запись
@@ -109,10 +109,10 @@ public interface AccountService extends Providers {
     CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId);
 
     /**
-     * GET /v1/{accountId}
+     * <p>GET /v1/{accountId}</p>
      * Асинхронный метод предназначен для получения учетной записи
      * @param cxt контекст, содержащий следующие параметры:
-     *  - идентификатор учетной записи. Для установки необходимо использовать метод {@link QueryContext#setAccountId}
+     *<p>- идентификатор учетной записи. Для установки необходимо использовать метод {@link QueryContext#setAccountId}</p>
      * @return учетная запись
      * @see Account
      */

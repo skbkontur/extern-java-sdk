@@ -32,6 +32,16 @@ import java.io.IOException;
 
 /**
  * @author alexs
+ *
+ * Класс предназначен для отправки информации об отправителе и подотчетной организации
+ * при создании декларации. Класс инкопсулирует в себе следующие структуры:
+ * <p>
+ *     {@link SignerTypeEnum} тип подписанта, возможные значения:
+ *     <li>UNKNOWN - должность подписанта неизвестен;</li>
+ *     <li>CHIEF - руководитель;</li>
+ *     <li>REPRESENTATIVE - представитель</li>
+ * </p>
+ * <p>{@link Taxpayer} - подотчетная организация</p>
  */
 public class AdditionalClientInfo {
 
@@ -41,34 +51,68 @@ public class AdditionalClientInfo {
     private String senderFullName = null;
     private Taxpayer taxpayer = null;
 
+    /**
+     * Возвращает тип подписанта
+     * @return тип подписанта
+     * @see SignerTypeEnum
+     */
     public SignerTypeEnum getSignerType() {
         return signerType;
     }
 
+    /**
+     * Устанавливает тип подписанта
+     * @param signerType тип подписанта
+     * @see SignerTypeEnum
+     */
     public void setSignerType(SignerTypeEnum signerType) {
         this.signerType = signerType;
     }
 
+    /**
+     * Возвращает полное имя отправителя
+     * @return полное имя отправителя
+     */
     public String getSenderFullName() {
         return senderFullName;
     }
 
+    /**
+     * Устанавливает полное имя отправителя
+     * @param senderFullName полное имя отправителя
+     */
     public void setSenderFullName(String senderFullName) {
         this.senderFullName = senderFullName;
     }
 
+    /**
+     * Возвращает данные подотчетной организации
+     * @return данные подотчетной организации
+     * @see Taxpayer
+     */
     public Taxpayer getTaxpayer() {
         return taxpayer;
     }
 
+    /**
+     * Устанавливает данные подотчетной организации
+     * @param taxpayer данные подотчетной организации
+     * @see Taxpayer
+     */
     public void setTaxpayer(Taxpayer taxpayer) {
         this.taxpayer = taxpayer;
     }
 
     @JsonAdapter(SignerTypeEnum.Adapter.class)
+    /**
+     * Тип подписанта
+     */
     public enum SignerTypeEnum {
+        /** неизвестный */
         UNKNOWN("unknown"),
+        /** руководитель */
         CHIEF("chief"),
+        /** представитель */
         REPRESENTATIVE("representative");
 
         private final String value;
@@ -77,6 +121,12 @@ public class AdditionalClientInfo {
             this.value = value;
         }
 
+        /**
+         * Возвращает тип подписанта по его значению.
+         * Если значение не найдено, то тип будет null.
+         * @param text значение типа: "unknown","chief","representative"
+         * @return тип подписанта
+         */
         public static SignerTypeEnum fromValue(String text) {
             for (SignerTypeEnum b : SignerTypeEnum.values()) {
                 if (String.valueOf(b.value).equals(text)) {
@@ -86,10 +136,18 @@ public class AdditionalClientInfo {
             return null;
         }
 
+        /**
+         * Возвращает значение типа
+         * @return значение типа
+         */
         public String getValue() {
             return value;
         }
 
+        /**
+         * Возвращает значение типа
+         * @return значение типа
+         */
         @Override
         public String toString() {
             return String.valueOf(value);

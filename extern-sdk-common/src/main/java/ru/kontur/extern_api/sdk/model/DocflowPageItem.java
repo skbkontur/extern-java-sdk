@@ -33,6 +33,8 @@ import java.util.UUID;
 
 /**
  * @author alexs
+ *
+ * Класс является элементом списка {@link DocflowPage} и представляет документооборот (ДО)
  */
 public class DocflowPageItem {
 
@@ -45,50 +47,118 @@ public class DocflowPageItem {
     @SerializedName("last-change-date")
     private Date lastChangeDate = null;
 
+    /**
+     * Возвращает идентификатор ДО
+     * @return идентификатор ДО
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор ДО
+     * @param id идентификатор ДО
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Возвращает тип ДО:
+     * <li>urn:docflow:fns534-report</li>
+     * @return тип ДО
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Устанавливает тип ДО
+     * <li>urn:docflow:fns534-report</li>
+     * @param type тип ДО
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Возвращает состояние ДО
+     *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
+     *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
+     *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
+     *  <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
+     *  <li>urn:urn:docflow-common-status:received - документ получен КО</li>
+     *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
+     *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
+     *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * @return состояние ДО
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Устанавливает состояние ДО
+     *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
+     *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
+     *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
+     *  <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
+     *  <li>urn:urn:docflow-common-status:received - документ получен КО</li>
+     *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
+     *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
+     *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * @param status состояние ДО
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     * Возвращает список ссылок на документообороты
+     * @return список ссылок на документообороты
+     * @see Link
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * Устанавливает список ссылок на документообороты
+     * @param links список ссылок на документообороты
+     * @Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }
 
+    /**
+     * Возвращает дату отправки ДО
+     * @return дата отправки ДО
+     */
     public Date getSendDate() {
         return sendDate;
     }
 
+    /**
+     * Устанавливает дату отправки ДО
+     * @param sendDate дата отправки ДО
+     */
     public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
     }
 
+    /**
+     * Возвращает дату обновления ДО
+     * @return дата обновления ДО
+     */
     public Date getLastChangeDate() {
         return lastChangeDate;
     }
 
+    /**
+     * Устанавливает дату обновления ДО
+     * @param lastChangeDate дата обновления ДО
+     */
     public void setLastChangeDate(Date lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
     }

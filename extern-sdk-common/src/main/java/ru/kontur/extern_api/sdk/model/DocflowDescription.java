@@ -26,6 +26,8 @@ package ru.kontur.extern_api.sdk.model;
 
 /**
  * @author AlexS
+ *
+ * Класс зарезервирован для будущего использования
  */
 public class DocflowDescription {
 
