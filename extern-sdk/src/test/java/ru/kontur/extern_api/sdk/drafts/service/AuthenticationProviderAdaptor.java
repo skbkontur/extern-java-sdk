@@ -28,7 +28,7 @@ import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
-public abstract class AuthenticationProviderAdapter implements AuthenticationProvider {
+public abstract class AuthenticationProviderAdaptor implements AuthenticationProvider {
 
     @Override
     public String authPrefix() {
