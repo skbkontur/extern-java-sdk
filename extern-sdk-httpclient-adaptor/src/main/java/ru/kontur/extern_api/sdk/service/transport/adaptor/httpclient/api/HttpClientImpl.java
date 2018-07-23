@@ -76,7 +76,8 @@ public class HttpClientImpl implements HttpClient {
             ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.ApiResponse<T> resp
                 = httpClient
                 .sendHttpRequest(path, httpMetod, queryParams, body, headerParams, type);
-            if (System.getProperties().get("ru.extern_api.logHttpRequest").equals("true")) {
+            Object logHttpRequest = System.getProperties().get("ru.extern_api.logHttpRequest");
+            if (logHttpRequest != null && logHttpRequest.equals("true")) {
                 ServiceLogger.getInstance()
                     .logHttpRequest(path, httpMetod, queryParams, body, headerParams, formParams,
                         type,
