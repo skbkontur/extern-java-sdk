@@ -62,17 +62,13 @@ public class CertificateAuthenticationExample {
         // сертификатом в DER-кодировке или ошибку
         CertificateProvider certificateProvider = (String thumbprint) -> {
             URL resource = CertificateAuthenticationExample.class.getResource("/" + thumbprint);
-            if (resource == null) {
-                return new QueryContext<byte[]>().setServiceError(Messages
-                    .get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint));
-            }
             try {
                 return new QueryContext<byte[]>()
-                    .setResult(Files.readAllBytes(Paths.get(resource.toURI())),
-                        QueryContext.CONTENT);
+                        .setResult(Files.readAllBytes(Paths.get(resource.toURI())),
+                                QueryContext.CONTENT);
             } catch (URISyntaxException | IOException e) {
                 return new QueryContext<byte[]>().setServiceError(
-                    Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint), e);
+                        Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint), e);
             }
         };
 
@@ -82,19 +78,19 @@ public class CertificateAuthenticationExample {
         // Дополнительно можно передать параметр skipCertValidation, задающий режим отмены валидации сертификата.
         // Если параметр не задан, то сертификат будет проходить процедуру валидации.
         CertificateAuthenticationProviderBuilder certificateAuthenticationProviderBuilder = CertificateAuthenticationProvider
-            .usingCertificate(certificateProvider);
+                .usingCertificate(certificateProvider);
 
         // 4. Теперь необходимо установить следующие провайдеры:
         CertificateAuthenticationProvider certificateAuthenticationProvider = certificateAuthenticationProviderBuilder
-            // ApiKeyProvider - провайдер для получения идентификатора сервиса.
-            .setApiKeyProvider(() -> properties.getProperty("api.key"))
-            // CryptoProvider - реализацию криптографического провайдера.
-            .setCryptoProvider(new CryptoProviderMSCapi())
-            // ServiceBaseUriProvider - провайдер, возвращающий адрес сервиса аутентификации в Интернет.
-            .setServiceBaseUriProvider(() -> properties.getProperty("auth.base.uri"))
-            // SignatureKeyProvider - провайдер, предоставляющий отпечаток сертификата личного ключа.
-            .setSignatureKeyProvider(() -> "fd3e438933387026ee46c03691f20743d7d34766")
-            .buildAuthenticationProvider();
+                // ApiKeyProvider - провайдер для получения идентификатора сервиса.
+                .setApiKeyProvider(() -> properties.getProperty("api.key"))
+                // CryptoProvider - реализацию криптографического провайдера.
+                .setCryptoProvider(new CryptoProviderMSCapi())
+                // ServiceBaseUriProvider - провайдер, возвращающий адрес сервиса аутентификации в Интернет.
+                .setServiceBaseUriProvider(() -> properties.getProperty("auth.base.uri"))
+                // SignatureKeyProvider - провайдер, предоставляющий отпечаток сертификата личного ключа.
+                .setSignatureKeyProvider(() -> "fd3e438933387026ee46c03691f20743d7d34766")
+                .buildAuthenticationProvider();
 
         // Для того чтобы начать работу с SDK, необходимо создать и сконфигурировать объект ExternEngine.
         ExternEngine engine = new ExternEngine();
@@ -107,13 +103,13 @@ public class CertificateAuthenticationExample {
         engine.setApiKeyProvider(() -> properties.getProperty("api.key"));
         // AuthenticationProvider — предоставляет аутентификатор.
         engine.setAuthenticationProvider(certificateAuthenticationProvider
-            .httpClient(new DefaultServicesFactory().getHttpClient()));
+                .httpClient(new DefaultServicesFactory().getHttpClient()));
 
         // теперь можно использовать engine для дальнейшей работы
         QueryContext<AccountList> cxt = new QueryContext<>();
         cxt.setAccountId(UUID.fromString(properties.getProperty("account.id")));
         QueryContext<AccountList> queryContext = engine.getAccountService()
-            .acquireAccounts(cxt);
+                .acquireAccounts(cxt);
     }
 
     // получаем параметры из файла конфигурации
@@ -121,14 +117,14 @@ public class CertificateAuthenticationExample {
     private static Properties getProperties() throws IOException {
         if (CertificateAuthenticationExample.class.getResource("/prop.properties") == null) {
             System.out.println(
-                String.format("Parameter file %s not found in resources", "prop.properties"));
+                    String.format("Parameter file %s not found in resources", "prop.properties"));
             return null;
         }
 
         // loads properties
         Properties properties = new Properties();
         try (InputStream is = CertificateAuthenticationExample.class
-            .getResourceAsStream("/prop.properties")) {
+                .getResourceAsStream("/prop.properties")) {
             properties.load(is);
         }
 
