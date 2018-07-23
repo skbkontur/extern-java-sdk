@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.ServiceLogger;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
@@ -33,50 +34,58 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientException;
 
 /**
- *
  * @author alexs
  */
 public class HttpClientImpl implements HttpClient {
 
-	private final ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl httpClient;
-	
-	public HttpClientImpl() {
-		this.httpClient = new ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl();
-	}
-	
+    private final ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl httpClient;
+
+    public HttpClientImpl() {
+        this.httpClient = new ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl();
+    }
+
     @Override
     public HttpClientImpl setGson(Gson json) {
         httpClient.setJson(json);
         return this;
     }
-    
-	@Override
-	public HttpClient setServiceBaseUri(String uri) {
-		httpClient.setServiceBaseUri(uri);
-		return this;
-	}
-
-	@Override
-	public HttpClient acceptAccessToken(String authPrefix, String sessionId) {
-		httpClient.acceptAccessToken(sessionId);
-		return this;
-	}
-
-	@Override
-	public HttpClient acceptApiKey(String apiKey) {
-		httpClient.acceptApiKey(apiKey);
-		return this;
-	}
 
     @Override
-    public <T> ApiResponse<T> submitHttpRequest(String path, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException {
+    public HttpClient setServiceBaseUri(String uri) {
+        httpClient.setServiceBaseUri(uri);
+        return this;
+    }
+
+    @Override
+    public HttpClient acceptAccessToken(String authPrefix, String sessionId) {
+        httpClient.acceptAccessToken(sessionId);
+        return this;
+    }
+
+    @Override
+    public HttpClient acceptApiKey(String apiKey) {
+        httpClient.acceptApiKey(apiKey);
+        return this;
+    }
+
+    @Override
+    public <T> ApiResponse<T> submitHttpRequest(String path, String httpMetod,
+        Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
+        Map<String, Object> formParams, Type type) throws ApiException {
         try {
             ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.ApiResponse<T> resp
-                = httpClient.sendHttpRequest(path, httpMetod, queryParams, body, headerParams, type);
-            return new ApiResponse<>(resp.getStatusCode(),resp.getHeaders(),resp.getData());
-        }
-        catch (HttpClientException x) {
-            throw new ApiException(x.getMessage(), x, x.getCode(), x.getResponseHeaders(), x.getResponseBody());
+                = httpClient
+                .sendHttpRequest(path, httpMetod, queryParams, body, headerParams, type);
+            if (System.getProperties().get("ru.extern_api.logHttpRequest").equals("true")) {
+                ServiceLogger.getInstance()
+                    .logHttpRequest(path, httpMetod, queryParams, body, headerParams, formParams,
+                        type,
+                        resp.getStatusCode(), resp.getHeaders(), resp.getData());
+            }
+            return new ApiResponse<>(resp.getStatusCode(), resp.getHeaders(), resp.getData());
+        } catch (HttpClientException x) {
+            throw new ApiException(x.getMessage(), x, x.getCode(), x.getResponseHeaders(),
+                x.getResponseBody());
         }
     }
 
