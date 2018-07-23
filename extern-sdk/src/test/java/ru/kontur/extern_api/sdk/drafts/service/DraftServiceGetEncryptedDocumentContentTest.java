@@ -82,7 +82,7 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         engine.setServiceBaseUriProvider(() -> "http://localhost:8080/drafts");
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(new AuthenticationProviderAdapter() {
+        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor() {
             @Override
             public QueryContext<String> sessionId() {
                 return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);

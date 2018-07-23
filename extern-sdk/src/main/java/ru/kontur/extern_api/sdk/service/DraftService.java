@@ -482,8 +482,36 @@ public interface DraftService extends Providers {
     QueryContext<Void> createUSN2(QueryContext<?> cxt);
 
     /**
-     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign</p>
-     * Асинхронный метод для создания запроса на облачную подпись
+     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version} Синхронный
+     * метод создания УСН декларации различных версий
+     *
+     * @param cxt контекст. Должен содержать следующие данные: - индентификатор черновика. Для
+     * установки необходимо использовать метод {@link QueryContext#setDraftId}; - версия УСН
+     * декрации. Для установки необходимо использовать метод {@link QueryContext#setVersion}; -
+     * описание УСН декрации. Для установки необходимо использовать метод {@link
+     * QueryContext#setUsnServiceContractInfo};
+     * @return {@link Void}
+     * @see UsnServiceContractInfo
+     */
+    QueryContext<Void> createUSN(QueryContext<?> cxt);
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version} Асинхронный
+     * метод создания УСН декларации различных версий
+     *
+     * @param draftId идентификатор черновика
+     * @param version версия декларации
+     * @param usn описание УСН декрации
+     * @return {@link Void}
+     * @see UsnServiceContractInfo
+     */
+    CompletableFuture<QueryContext<Void>> createUSNAsync(String draftId, int version,
+        UsnServiceContractInfo usn);
+
+    /**
+     * POST /v1/{accountId}/drafts/{draftId}/cloudSign Асинхронный метод для создания запроса на
+     * облачную подпись
+     *
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @return запрос на облачную
      */
