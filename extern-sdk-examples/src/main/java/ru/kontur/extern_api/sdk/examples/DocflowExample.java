@@ -50,7 +50,7 @@ public class DocflowExample {
     private static final String STATUS_RESPONSE_FINISHED = "urn:docflow-common-status:finished";
 
     public static void main(String[] args)
-        throws IOException, InterruptedException, ExecutionException {
+            throws IOException, InterruptedException, ExecutionException {
         // first argument is a path to property file
         if (args.length == 0) {
             System.out.println("There is no path to the property file in the command line.");
@@ -64,10 +64,10 @@ public class DocflowExample {
         // 1. После отправки черновика мы получаем идентификатор документооборота
         // (в некоторых случаях их может быть несколько)
         QueryContext<List<Docflow>> sendCxt = externEngine.getBusinessDriver()
-            .sendDocument(configuratorService.getFile(),
-                configuratorService.getSender(),
-                configuratorService.getRecipient(),
-                configuratorService.getOrganization());
+                .sendDocument(configuratorService.getFile(),
+                        configuratorService.getSender(),
+                        configuratorService.getRecipient(),
+                        configuratorService.getOrganization());
         System.out.println("Draft sent");
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
@@ -75,7 +75,7 @@ public class DocflowExample {
             docflowIds.add("8248b9de-1fc5-4a10-a8c2-59a293c06fdf");
         } else { // запоминаем для дальнейшей обработки
             docflowIds = sendCxt.getDocflows().stream().map(d -> d.getId().toString())
-                .collect(Collectors.toList());
+                    .collect(Collectors.toList());
             System.out.println("Id collected:");
             docflowIds.forEach(System.out::println);
         }
@@ -102,16 +102,16 @@ public class DocflowExample {
             listDocToSendCtx.setDocflow(docflow);
             listDocToSendCtx.setCertificate(configuratorService.getSender().getCertificate());
             List<DocumentToSend> listDocToSend = docflowService.generateReplies(listDocToSendCtx)
-                .get();
+                    .get();
             System.out.println("List of DocumentToSend received");
             for (DocumentToSend docToSend : listDocToSend) {
                 System.out.println(
-                    "Start sending DocumentToSend: id = " + docToSend.getId().toString()
-                        + ", filename = " + docToSend.getFilename());
+                        "Start sending DocumentToSend: id = " + docToSend.getId().toString()
+                                + ", filename = " + docToSend.getFilename());
                 QueryContext sendDocflowCtx = new QueryContext();
                 // подписываем каждый документ
                 SignatureToSend signature = new SignatureToSend();
-                signature.setContentData("signature" .getBytes());
+                signature.setContentData("signature".getBytes());
                 // signature.setContentData(docToSend.getContent());
                 docToSend.setSignature(signature);
                 sendDocflowCtx.setDocumentToSend(docToSend);
@@ -149,8 +149,8 @@ public class DocflowExample {
 
     // ждем пока документооборот не изменит статус на указанный
     private static void waitStatus(@NotNull String docflowId, @NotNull String status,
-        @NotNull DocflowService docflowService)
-        throws InterruptedException {
+            @NotNull DocflowService docflowService)
+            throws InterruptedException {
         System.out.println("Start waiting: docflow = " + docflowId + ", status = " + status);
         while (true) {
             QueryContext<Docflow> docflowCtx = new QueryContext<>();

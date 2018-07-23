@@ -25,9 +25,9 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
@@ -136,16 +136,16 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Map<String, Object>>> checkAsync(String draftId) {
-        QueryContext<Map<String, Object>> cxt = createQueryContext(EN_DFT);
+    public CompletableFuture<QueryContext<CheckResultData>> checkAsync(String draftId) {
+        QueryContext<CheckResultData> cxt = createQueryContext(EN_DFT);
         return cxt
             .setDraftId(draftId)
             .applyAsync(draftsAdaptor::check);
     }
 
     @Override
-    public QueryContext<Map<String, Object>> check(QueryContext<?> parent) {
-        QueryContext<Map<String, Object>> cxt = createQueryContext(parent, EN_DFT);
+    public QueryContext<CheckResultData> check(QueryContext<?> parent) {
+        QueryContext<CheckResultData> cxt = createQueryContext(parent, EN_DFT);
         return cxt.apply(draftsAdaptor::check);
     }
 

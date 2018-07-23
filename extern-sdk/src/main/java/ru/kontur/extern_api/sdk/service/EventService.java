@@ -36,12 +36,12 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *
  * Группа методов предоставляет доступ к операциям для работы с событиями,
  * связанными с докуметооборотами (ДО):
- * - получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};
+ * <p>- получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};</p>
  */
 public interface EventService extends Providers {
 
     /**
-     * GET /v1/events
+     * <p>GET /v1/events</p>
      * Асинхронный метод возвращает список событий
      * @param fromId идентификатор последнего обработанного события.
      *  Для первого обращения к ленте событий необходимо передать значение "0"
@@ -52,11 +52,11 @@ public interface EventService extends Providers {
     CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size);
 
     /**
-     * GET /v1/events
+     * <p>GET /v1/events</p>
      * Синхронный метод возвращает список событий
      * @param cxt контекст. Должен содержать следующие данные:
-     *  -  идентификатор последнего обработанного события. Для установки необходимо использовать метод {@link QueryContext#setFromId};
-     *  -  максимальное количество возращаемых событий. Для установки необходимо использовать метод {@link QueryContext#setSize(int)}.
+     * <p>-  идентификатор последнего обработанного события. Для установки необходимо использовать метод {@link QueryContext#setFromId};</p>
+     * <p>-  максимальное количество возращаемых событий. Для установки необходимо использовать метод {@link QueryContext#setSize(int)}.</p>
      * @return страница событий
      * @see EventsPage
      */

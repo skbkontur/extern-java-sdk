@@ -30,30 +30,57 @@ import java.util.List;
 
 /**
  * @author AlexS
+ *
+ * Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к отправке (шифрования, упаковки, проверка подписи и др.)
+ *
+ * см. метод DraftService.prepare
  */
 public class PrepareResult {
 
-		@SerializedName("check-result")
+    @SerializedName("check-result")
     private CheckResultData checkResult = null;
     private List<Link> links = null;
     private Status status = null;
 
+    /**
+     * Возвращает результат проверки {@link CheckResultData}
+     * @return результат проверки
+     * @see CheckResultData
+     */
     public CheckResultData getCheckResult() {
         return checkResult;
     }
 
+    /**
+     * Устанавливает результат проверки {@link CheckResultData}
+     * @param checkResult результат проверки
+     */
     public void setCheckResult(CheckResultData checkResult) {
         this.checkResult = checkResult;
     }
 
+    /**
+     * Возвращает список ссылок на документы
+     * @return список ссылок на документы
+     * @see Link
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * Устанавливает список ссылок на документы
+     * @param links список ссылок на документы
+     * @see Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }
 
+    /**
+     *
+     * @return
+     */
     public Status getStatus() {
         return status;
     }

@@ -9,10 +9,8 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,21 +18,37 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
-package ru.skbkontur.sdk.extern.service.transport.invoker;
+package ru.kontur.extern_api.sdk.drafts.service;
 
+import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.event.AuthenticationListener;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
-public class UserAgentService {
+public abstract class AuthenticationProviderAdaptor implements AuthenticationProvider {
 
-    public static final String USER_AGENT_STRING = getUserAgentString();
-
-    private static String getUserAgentString() {
-        Package aPackage = UserAgentService.class.getPackage();
-        String version = aPackage.getImplementationVersion();
-        String title = aPackage.getImplementationTitle();
-        return title + "/" + version;
+    @Override
+    public String authPrefix() {
+        return "auth.sid ";
     }
 
+    @Override
+    public AuthenticationProvider httpClient(HttpClient httpClient) {
+        return this;
+    }
 
+    @Override
+    public void addAuthenticationListener(AuthenticationListener authListener) {
+    }
+
+    @Override
+    public void removeAuthenticationListener(AuthenticationListener authListener) {
+    }
+
+    @Override
+    public void raiseUnauthenticated(ServiceError x) {
+    }
 }

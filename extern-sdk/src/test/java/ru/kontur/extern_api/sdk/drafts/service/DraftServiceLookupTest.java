@@ -76,8 +76,7 @@ public class DraftServiceLookupTest {
     public static void stopJetty() {
         try {
             server.stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -89,34 +88,34 @@ public class DraftServiceLookupTest {
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
-            new AuthenticationProvider() {
-            @Override
-            public QueryContext<String> sessionId() {
-                return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-            }
+                new AuthenticationProvider() {
+                    @Override
+                    public QueryContext<String> sessionId() {
+                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+                    }
 
-            @Override
-            public String authPrefix() {
-                return "auth.sid ";
-            }
+                    @Override
+                    public String authPrefix() {
+                        return "auth.sid ";
+                    }
 
-            @Override
-            public AuthenticationProvider httpClient(HttpClient httpClient) {
-                return this;
-            }
+                    @Override
+                    public AuthenticationProvider httpClient(HttpClient httpClient) {
+                        return this;
+                    }
 
-            @Override
-            public void addAuthenticationListener(AuthenticationListener authListener) {
-            }
+                    @Override
+                    public void addAuthenticationListener(AuthenticationListener authListener) {
+                    }
 
-            @Override
-            public void removeAuthenticationListener(AuthenticationListener authListener) {
-            }
+                    @Override
+                    public void removeAuthenticationListener(AuthenticationListener authListener) {
+                    }
 
-            @Override
-            public void raiseUnauthenticated(ServiceError x) {
-            }
-        });
+                    @Override
+                    public void raiseUnauthenticated(ServiceError x) {
+                    }
+                });
     }
 
     @Test
@@ -131,9 +130,9 @@ public class DraftServiceLookupTest {
     public void testDraftsLookup_Draft() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\n"
-            + "\"id\": \"" + StandardValues.ID + "\","
-            + "\"status\": \"new\""
-            + "}");
+                + "\"id\": \"" + StandardValues.ID + "\","
+                + "\"status\": \"new\""
+                + "}");
         DraftsValidator.validateDraft(getDraft());
         DraftsValidator.validateDraft(getDraftAsync());
     }
@@ -188,8 +187,7 @@ public class DraftServiceLookupTest {
     private Draft getDraftAsync() {
         try {
             return engine.getDraftService().lookupAsync(StandardValues.ID).get().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

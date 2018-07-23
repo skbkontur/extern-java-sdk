@@ -63,12 +63,12 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
 /**
  * {@code QueryContext} класс предоставляет контекст функционального интерфейса
  * Предназначен для:
- *  - установки входных параметров для операций;
- *  - установки результата операции;
- *  - установки ошибки;
- *  - передачи параметров операции от от одного контекста другому;
- *  - установки правайдеров: аутентификации, адреса сервиса и апи-кей;
- *  - выполнения операций в синхронном и асинхронном режиме. Для этого опреация должна удовлетворять функциональному интерфейсу {@link Query<R>}
+ *<p>- установки входных параметров для операций;</p>
+ *<p>- установки результата операции;</p>
+ *<p>- установки ошибки;</p>
+ *<p>- передачи параметров операции от от одного контекста другому;</p>
+ *<p>- установки правайдеров: аутентификации, адреса сервиса и апи-кей;</p>
+ *<p>- выполнения операций в синхронном и асинхронном режиме. Для этого опреация должна удовлетворять функциональному интерфейсу {@code Query<R>}</p>
  *
  * Перечисленные свойства контекста позволяют строить цепочку выполнения операций с использованием парадигмы FORK & JOIN.
  *
@@ -139,6 +139,8 @@ public class QueryContext<R> implements Serializable {
     public static final String MAP = "map";
     /** Объект {@link ru.kontur.extern_api.sdk.model.PrepareResult} */
     public static final String PREPARE_RESULT = "prepareResult";
+    /** Объект {@link ru.kontur.extern_api.sdk.model.CheckResultData} */
+    public static final String CHECK_RESULT_DATA = "checkResultData";
     /** Объект "Дескриптор документа" {@link DocumentDescription} */
     public static final String DOCUMENT_DESCRIPTION = "documentDescription";
     /** Идентификатор подписи */
