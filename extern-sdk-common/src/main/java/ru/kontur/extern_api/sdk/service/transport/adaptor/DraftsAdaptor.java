@@ -244,7 +244,7 @@ public interface DraftsAdaptor {
      * @param cxt a context
      * @return QueryContext&lt;Void&gt;
      */
-    QueryContext<Void> createType(QueryContext<Void> cxt);
+    QueryContext<Void> createDeclOfType(QueryContext<Void> cxt);
 
     QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt);
 

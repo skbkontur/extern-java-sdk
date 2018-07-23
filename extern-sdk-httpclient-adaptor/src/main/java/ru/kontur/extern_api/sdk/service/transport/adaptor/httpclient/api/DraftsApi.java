@@ -506,13 +506,16 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException transport exception
      */
-    public ApiResponse<Void> createType(
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<Void> createDeclOfType(
         @PathParam("accountId") String accountId,
         @PathParam("draftId") String draftId,
         @PathParam("type") String type,
         @PathParam("version") Integer version,
         String content) throws ApiException {
-        return invoke("createType", content, new TypeToken<Void>() {
+        return invoke("createDeclOfType", content, new TypeToken<Void>() {
         }.getType(), accountId, draftId, type, version);
     }
 }
