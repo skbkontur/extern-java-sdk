@@ -187,7 +187,7 @@ public class DraftServiceCloudSignTest {
                 .setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT)
                 .setAccountProvider(UUID::randomUUID)
                 .setApiKeyProvider(() -> UUID.randomUUID().toString())
-                .setAuthenticationProvider(new AuthenticationProviderAdapter() {
+                .setAuthenticationProvider(new AuthenticationProviderAdaptor() {
                     @Override
                     public QueryContext<String> sessionId() {
                         return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
