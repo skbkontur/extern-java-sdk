@@ -29,7 +29,9 @@ import com.google.gson.annotations.SerializedName;
 /**
  * @author AlexS
  *
+ * <p>
  * Класс предназначен для передачи контента документа и его подписи
+ * </p>
  */
 public class DocumentContents {
 

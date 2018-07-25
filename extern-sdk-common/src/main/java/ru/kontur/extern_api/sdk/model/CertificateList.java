@@ -31,9 +31,10 @@ import java.util.List;
 
 /**
  * @author alexs
- *
+ * <p>
  * Класс реализует постраничное чтение сертификатов
  * Используется в группе запросов {@code CertificateService}
+ * </p>
  */
 public class CertificateList {
 

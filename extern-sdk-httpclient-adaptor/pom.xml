@@ -32,6 +32,7 @@
     </parent>
 
     <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+    <name>Extern Api SDK for Java - Http Client Adaptor</name>
 
     <packaging>jar</packaging>
 

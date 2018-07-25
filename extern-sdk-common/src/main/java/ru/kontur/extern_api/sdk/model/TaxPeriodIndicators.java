@@ -28,10 +28,13 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author alexs
+ * <p>
+ * Класс предназначен для формирования разделов УСН декларации
+ * </p>
  */
 public class TaxPeriodIndicators extends PeriodIndicators {
 
-		@SerializedName("nal-pumin")
+    @SerializedName("nal-pumin")
     private String nalPumin = null;
 
     public TaxPeriodIndicators(String nalPumin, PeriodIndicators p) {
@@ -50,10 +53,18 @@ public class TaxPeriodIndicators extends PeriodIndicators {
     public TaxPeriodIndicators() {
     }
 
+    /**
+     * <p>Возвращает значение поля "НалПУМин"</p>
+     * @return значение поля "НалПУМин"
+     */
     public String getNalPumin() {
         return nalPumin;
     }
 
+    /**
+     * <p>Устанавливает значение поля "НалПУМин"</p>
+     * @param nalPumin значение поля "НалПУМин"
+     */
     public final void setNalPumin(String nalPumin) {
         this.nalPumin = nalPumin;
     }

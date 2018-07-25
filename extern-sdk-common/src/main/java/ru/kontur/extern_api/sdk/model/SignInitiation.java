@@ -26,6 +26,9 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
+/**
+ * <p>Объект данного класс возвращается сервисом облачной криптографии для подтверждения операции подписантом</p>
+ */
 public class SignInitiation {
 
     @SerializedName("links")
@@ -35,26 +38,54 @@ public class SignInitiation {
     @SerializedName("request-id")
     private String requestId;
 
+    /**
+     * <p>Возвращает список ссылок на сущности</p>
+     * @return список ссылок на сущности
+     * @see Link
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * <p>Устанавливает список ссылок на сущности. Устанавливается сервисом.</p>
+     * @param links список ссылок на сущности
+     * @see Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }
 
+    /**
+     * <p>Возвращает список ссылок на документы, которые будут подписаны.</p>
+     * @return список ссылок на документы, которые будут подписаны
+     * @see Link
+     */
     public List<Link> getDocumentsToSign() {
         return documentsToSign;
     }
 
+    /**
+     * <p>Устанавливает список ссылок на документы, которые будут подписаны. Устанавливается сервисом.</p>
+     * @param documentsToSign список ссылок на документы, которые будут подписаны
+     * @see Link
+     */
     public void setDocumentsToSign(List<Link> documentsToSign) {
         this.documentsToSign = documentsToSign;
     }
 
+    /**
+     * <p>Возвращает идентификатор запроса на подпись</p>
+     * @return идентификатор запроса на подпись
+     */
     public String getRequestId() {
         return requestId;
     }
 
+    /**
+     * <p>Устанавливает идентификатор запроса на подпись</p>
+     * @param requestId идентификатор запроса на подпись
+     */
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
