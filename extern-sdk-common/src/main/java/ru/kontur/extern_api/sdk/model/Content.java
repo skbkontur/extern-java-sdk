@@ -26,9 +26,10 @@ package ru.kontur.extern_api.sdk.model;
 
 /**
  * @author AlexS
- *
+ * <p>
  * Класс ДТО для получения ссылок на расшифрованный и зашифрованный контенты документов документооборота.
  * Объект данного класса инкопсулированы в объект {@link Document}. Используется в методах {@code DocflowService}.
+ * </p>
  */
 public class Content {
 

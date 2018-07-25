@@ -34,6 +34,9 @@ import java.util.UUID;
 
 /**
  * @author AlexS
+ * <p>
+ *     Класс содержит описания черновика.
+ * </p>
  */
 public class Draft {
 
@@ -60,26 +63,71 @@ public class Draft {
         this.status = status;
     }
 
+    /**
+     * Возвращает идентификатор черновика
+     * @return идентификатор черновика
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор черновика
+     * @param id идентификатор черновика
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Возвращает статус черновика {@link StatusEnum}:
+     * <ul>
+     *     <li>NEW - создан новый черновик</li>
+     *     <li>CHECKED - черновик был проверен</li>
+     *     <li>READYTOSEND - черновик был проверен и подготовлен к отправке</li>
+     *     <li>SENT - черновик был отправлен</li>
+     * </ul>
+     * @return статус черновика
+     */
     public StatusEnum getStatus() {
         return status;
     }
 
+    /**
+     * Устанавливает статус черновика
+     * @param status String статус черновика:
+     * <ul>
+     *     <li>NEW - создан новый черновик</li>
+     *     <li>CHECKED - черновик был проверен</li>
+     *     <li>READYTOSEND - черновик был проверен и подготовлен к отправке</li>
+     *     <li>SENT - черновик был отправлен</li>
+     * </ul>
+     * @see StatusEnum
+     */
     public void setStatus(String status) {
         this.status = StatusEnum.fromValue(status);
     }
 
+    /**
+     * Устанавливает статус черновика
+     * @param status StatusEnum статус черновика:
+     * <ul>
+     *     <li>NEW - создан новый черновик</li>
+     *     <li>CHECKED - черновик был проверен</li>
+     *     <li>READYTOSEND - черновик был проверен и подготовлен к отправке</li>
+     *     <li>SENT - черновик был отправлен</li>
+     * </ul>
+     * @see StatusEnum
+     */
     public void setStatus(StatusEnum status) {
         this.status = status;
     }
 
+    /**
+     * Возвращает мета-данные черновика
+     * @return мета-данные черновика
+     * @see DraftMeta
+     */
     public DraftMeta getMeta() {
         return meta;
     }
@@ -134,5 +182,4 @@ public class Draft {
             }
         }
     }
-
 }

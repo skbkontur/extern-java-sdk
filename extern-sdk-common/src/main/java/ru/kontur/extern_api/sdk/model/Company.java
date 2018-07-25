@@ -28,9 +28,10 @@ import java.util.UUID;
 
 /**
  * @author Aleksey Sukhorukov
- *
+ * <p>
  * Класс содержит информацию об организации.
  * Используется в сервисе {@code OrganizationService}
+ * </p>
  */
 public class Company {
     @SerializedName("id")

@@ -61,8 +61,8 @@ import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
- * {@code QueryContext} класс предоставляет контекст функционального интерфейса
- * Предназначен для:
+ * {@code QueryContext} класс предоставляет контекст функционального интерфейса.
+ *<p>Предназначен для:</p>
  *<p>- установки входных параметров для операций;</p>
  *<p>- установки результата операции;</p>
  *<p>- установки ошибки;</p>
@@ -70,7 +70,7 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
  *<p>- установки правайдеров: аутентификации, адреса сервиса и апи-кей;</p>
  *<p>- выполнения операций в синхронном и асинхронном режиме. Для этого опреация должна удовлетворять функциональному интерфейсу {@code Query<R>}</p>
  *
- * Перечисленные свойства контекста позволяют строить цепочку выполнения операций с использованием парадигмы FORK & JOIN.
+ * <pre>Перечисленные свойства контекста позволяют строить цепочку выполнения операций с использованием парадигмы FORK &amp; JOIN.</pre>
  *
  * @author Сухоруков А., St.Petersburg 25/04/2018
  *
@@ -1412,7 +1412,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект {@link UsnServiceContractInfo}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации
+     * Предназначен для передачи данных на сервер, для создания УСН декларации.
      * Объект включает в себя JSON с данными УСН декларации.
      * @return объект {@link UsnServiceContractInfo}
      */
@@ -1432,8 +1432,8 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации
+     * Метод возвращает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации.
+     * Предназначен для передачи данных на сервер, для создания УСН декларации.
      * @return объект {@link UsnServiceContractInfo}
      */
     public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
@@ -1441,7 +1441,7 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации
+     * Метод устанавливает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации.
      * Предназначен для передачи данных на сервер, для создания УСН декларации.
      * @param usnServiceContractInfoV2 объект, содержащий информацию о УСН декларации
      * @return контекст
@@ -1471,7 +1471,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор организации.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @return идентификатор организации
      */
     public UUID getCompanyId() {
@@ -1480,7 +1480,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор организации.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @param companyId идентификатор организации
      * @return контекст
      */
@@ -1499,8 +1499,8 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Организация" {@link Company}
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод возвращает объект "Организация" {@link Company}.
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @return объект "Организация"
      */
     public Company getCompany() {
@@ -1508,8 +1508,8 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект "Организация" {@link Company}
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод устанавливает объект "Организация" {@link Company}.
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @param company объект "Организация"
      * @return контекст
      */
@@ -1519,8 +1519,8 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект "Новая организация" {@link CompanyGeneral}.
-     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации.
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @return объект "Новая организация"
      */
     public CompanyGeneral getCompanyGeneral() {
@@ -1529,8 +1529,8 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект "Новая организация" {@link CompanyGeneral}.
-     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации.
+     * Используется в группе запросов для работы с организациями {@code OrganizationService}.
      * @param companyGeneral объект "Новая организация"
      * @return контекст
      */
@@ -1648,10 +1648,10 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает параметр с именем "name", приводя его к типу переменной
+     * Метод возвращает параметр с именем "name", приводя его к типу переменной.
      * @param name имя параметра
      * @param <T> задекларированный тип переменной
-     * @return
+     * @return возвращает параметр с именем "name", приводя его к типу переменной
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String name) {
@@ -1659,8 +1659,8 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query<R>} в отдельном потоке.
-     * Операция принимает в качестве параметра данный контекст
+     * Метод выполняет операцию типа {@link Query} в отдельном потоке.
+     * Операция принимает в качестве параметра данный контекст.
      * @param query операция
      * @return квитанция на результат операции
      */
@@ -1673,8 +1673,8 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query<R>} в текущем потоке.
-     * Операция принимает в качестве параметра данный контекст
+     * Метод выполняет операцию типа {@link Query} в текущем потоке.
+     * Операция принимает в качестве параметра данный контекст.
      * @param query операция
      * @return контекст с результатом операции
      */

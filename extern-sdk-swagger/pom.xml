@@ -31,7 +31,7 @@
     </parent>
 
     <artifactId>extern-api-java-sdk-generated-client</artifactId>
-    <name>Extern Api Generated REST Swagger Client for Java SDK</name>
+    <name>Extern Api SDK for Java - Generated Swagger Client</name>
 
     <packaging>jar</packaging>
 

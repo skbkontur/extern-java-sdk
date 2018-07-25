@@ -28,9 +28,10 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author AlexS
- *
+ * <p>
  * Класс предназначен для отправки информации на сервер о новой учетной записи
  * Используется в группе запросов {@code AccountService}
+ * </p>
  */
 public class CreateAccountRequest {
 

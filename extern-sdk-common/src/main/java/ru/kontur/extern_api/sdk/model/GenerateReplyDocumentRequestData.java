@@ -25,6 +25,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Mikhail Pavlenko
+ * <p>
+ *     Класс содержит сертификат подписанта в кодировке BASE64
+ * </p>
  */
 
 public class GenerateReplyDocumentRequestData {
@@ -37,12 +40,21 @@ public class GenerateReplyDocumentRequestData {
         return this;
     }
 
+    /**
+     * <p>Возвращает сертификат в кодировке BASE64</p>
+     *
+     * @return сертификат в кодировке BASE64
+     */
     public String getCertificateBase64() {
         return certificateBase64;
     }
 
+    /**
+     * <p>Устанавливает сертификат в кодировке BASE64</p>
+     *
+     * @param certificateBase64 сертификат в кодировке BASE64
+     */
     public void setCertificateBase64(String certificateBase64) {
         this.certificateBase64 = certificateBase64;
     }
-
 }

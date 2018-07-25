@@ -32,6 +32,7 @@
     </parent>
 
     <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
+    <name>Extern Api SDK for Java - Swagger Client Adaptor</name>
 
     <packaging>jar</packaging>
 
