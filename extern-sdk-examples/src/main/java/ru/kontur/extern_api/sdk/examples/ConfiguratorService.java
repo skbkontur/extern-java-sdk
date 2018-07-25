@@ -138,7 +138,7 @@ class ConfiguratorService {
     /**
      * Возвращает файл для отправки
      *
-     * @return ru.skbkontur.sdk.extern.service.File
+     * @return ru.kontur.extern_api.sdk.service.File
      */
     ru.kontur.extern_api.sdk.service.File getFile() {
         File file = new File(parameters.getProperty("document.path"));

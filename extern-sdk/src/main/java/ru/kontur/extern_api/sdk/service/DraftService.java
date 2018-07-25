@@ -69,9 +69,9 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *<p>- метод обновления контента подписи {@link DraftService#updateSignatureAsync} | {@link DraftService#updateSignature};</p>
  *<p>- метод создания УСН декларации по JSON описанию {@link DraftService#createUSN1Async} | {@link DraftService#createUSN1};</p>
  *<p>- метод создания УСН декларации с помощью объектной модели {@link DraftService#createUSN2Async} | {@link DraftService#createUSN2};</p>
- *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignQueryAsync} | {@link DraftService#cloudSignQuery};</p>
+ *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignInitAsync } | {@link DraftService#cloudSignInit };</p>
  *<p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync} | {@link DraftService#cloudSignConfirm};</p>
- *<p>- метод для создания облачных подписей документов {@link DraftService#cloudSignAsync}};</p>
+ *<p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}};</p>
  */
 public interface DraftService extends Providers {
 
@@ -509,26 +509,26 @@ public interface DraftService extends Providers {
         UsnServiceContractInfo usn);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign Асинхронный метод для создания запроса на
+     * POST /v1/{accountId}/drafts/{draftId}/cloud-sign Асинхронный метод для создания запроса на
      * облачную подпись
      *
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @return запрос на облачную
      */
-    CompletableFuture<QueryContext<SignInitiation>> cloudSignQueryAsync(String draftId);
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignInitAsync(String draftId);
 
     /**
-     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign</p>
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloud-sign</p>
      * Cинхронный метод для создания запроса на облачную подпись
      * @param cxt контекст. Должен содержать следующие данные:
      *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId}.</p>
      * @return запрос на облачную
      * @see SignInitiation
      */
-    QueryContext<SignInitiation> cloudSignQuery(QueryContext<?> cxt);
+    QueryContext<SignInitiation> cloudSignInit(QueryContext<?> cxt);
 
     /**
-     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloud-sign-confirm</p>
      * Асинхронный метод для подтверждения запроса на облачную подпись
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @param requestId идентификатор запроса, см. {@link SignInitiation}
@@ -539,7 +539,7 @@ public interface DraftService extends Providers {
     CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(String draftId, String requestId, String code);
 
     /**
-     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
+     *<p>POST /v1/{accountId}/drafts/{draftId}/cloud-sign-confirm</p>
      * Синхронный метод для подтверждения запроса на облачную подпись
      * @param cxt контекст. Должен содержать следующие данные:
      *<p>- индентификатор черновика. Для установки необходимо использовать метод {@link QueryContext#setDraftId};</p>
@@ -551,7 +551,9 @@ public interface DraftService extends Providers {
     QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt);
 
     /**
-     *<p>POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm</p>
+     * <p>POST /v1/{accountId}/drafts/{draftId}/cloud-sign</p>
+     * далее, используя {@code codeProvider} для получения смс кода, подтверждает подпись
+     * <p>POST /v1/{accountId}/drafts/{draftId}/cloud-sign-confirm</p>
      * Асинхронный метод для создания облачных подписей документов
      * @param draftId идентификатор черновика, документы которого необходимо подписать
      * @param codeProvider провайдер для получения смс-кода подтверждения {@link ISmsCodeProvider}

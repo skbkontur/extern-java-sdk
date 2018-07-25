@@ -475,7 +475,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;SignInitiation&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign")
+    @Path("/v1/{accountId}/drafts/{draftId}/cloud-sign")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<SignInitiation> cloudSignDraft(
@@ -500,7 +500,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;SignedDraft&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign/confirm")
+    @Path("/v1/{accountId}/drafts/{draftId}/cloud-sign-confirm")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<SignedDraft> confirmCloudSigning(
