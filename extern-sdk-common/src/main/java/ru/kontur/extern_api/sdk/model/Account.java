@@ -30,8 +30,10 @@ import java.util.UUID;
 
 /**
  * @author AlexS
+ * <p>
  * Класс содержит информацию об учетной записи организации.
  * Используется методами сервиса {@code AccountService}
+ * </p>
  */
 public class Account {
 

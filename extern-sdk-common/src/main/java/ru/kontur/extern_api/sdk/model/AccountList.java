@@ -29,9 +29,10 @@ import java.util.List;
 
 /**
  * @author AlexS
- *
+ * <p>
  * Класс реализует постраничное чтение списка учетных записей
  * Используется в группе запросов {@code AccountService}
+ * </p>
  */
 public class AccountList {
 

@@ -32,6 +32,9 @@ import java.io.IOException;
 
 /**
  * @author alexs
+ * <p>
+ * Класс предназначен для формирования разделов УСН декларации
+ * </p>
  */
 public class UsnFormatPeriod {
 
@@ -39,18 +42,46 @@ public class UsnFormatPeriod {
     private PeriodModifiersEnum periodModifiers = null;
     private Integer year = null;
 
+    /**
+     * <p>Возвращает налоговый период. Возможны следующие значения:</p>
+     * <ul>
+     *     <li>NONE - календарный год;</li>
+     *     <li>LIQUIDATIONREORGANIZATION - последний налоговый период при реорганизации (ликвидации) организации (при прекращении деятельности в качестве индивидуального предпринимателя);</li>
+     *     <li>TAXREGIMECHANGE - последний налоговый период при переходе на иной режим налогообложения;</li>
+     *     <li>LASTPERIODFORTAXREGIME - последний налоговый период при прекращении предпринимательской деятельности, в отношении которой налогоплательщиком применялась упрощенная система налогообложения.</li>
+     * </ul>
+     * @return налоговый период
+     */
     public PeriodModifiersEnum getPeriodModifiers() {
         return periodModifiers;
     }
 
+    /**
+     * <p>Устанавливает налоговый период.</p>
+     * @param periodModifiers налоговый период. Возможны следующие значения:
+     * <ul>
+     *     <li>NONE - календарный год;</li>
+     *     <li>LIQUIDATIONREORGANIZATION - последний налоговый период при реорганизации (ликвидации) организации (при прекращении деятельности в качестве индивидуального предпринимателя);</li>
+     *     <li>TAXREGIMECHANGE - последний налоговый период при переходе на иной режим налогообложения;</li>
+     *     <li>LASTPERIODFORTAXREGIME - последний налоговый период при прекращении предпринимательской деятельности, в отношении которой налогоплательщиком применялась упрощенная система налогообложения.</li>
+     * </ul>
+     */
     public void setPeriodModifiers(PeriodModifiersEnum periodModifiers) {
         this.periodModifiers = periodModifiers;
     }
 
+    /**
+     * <p>Возвращает отчетный год</p>
+     * @return отчетный год
+     */
     public Integer getYear() {
         return year;
     }
 
+    /**
+     * <p>Устанавливает отчетный год</p>
+     * @param year отчетный год
+     */
     public void setYear(Integer year) {
         this.year = year;
     }

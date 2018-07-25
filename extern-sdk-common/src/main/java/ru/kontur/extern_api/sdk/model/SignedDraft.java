@@ -26,14 +26,25 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
+/**
+ * <p>Объект данного класс возвращает сервис облачной подписи в ответ на запрос</p>
+ */
 public class SignedDraft {
     @SerializedName("signed-documents")
     private List<Link> signedDocuments;
 
+    /**
+     * <p>Возвращает список ссылок на подписанные документы</p>
+     * @return список ссылок на подписанные документы
+     */
     public List<Link> getSignedDocuments() {
         return signedDocuments;
     }
 
+    /**
+     * <p>Устанавливает список ссылок на подписанные документы. Устанавливается облачным сервисом</p>
+     * @param signedDocuments список ссылок на подписанные документы
+     */
     public void setSignedDocuments(List<Link> signedDocuments) {
         this.signedDocuments = signedDocuments;
     }

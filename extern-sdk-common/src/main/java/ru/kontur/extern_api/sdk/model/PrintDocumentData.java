@@ -25,23 +25,32 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Mikhail Pavlenko
+ *
+ * <p>Класс контент печатной формы документа в PDF формате в кодировке BASE64</p>
  */
 
 public class PrintDocumentData {
-        @SerializedName("content")
-        private String content = null;
+    @SerializedName("content")
+    private String content = null;
 
-        public PrintDocumentData content(String content) {
-            this.content = content;
-            return this;
-        }
+    public PrintDocumentData content(String content) {
+        this.content = content;
+        return this;
+    }
 
-        public String getContent() {
-            return content;
-        }
+    /**
+     * Возвращает контент печатной формы документа в PDF формате в кодировке BASE64
+     * @return контент печатной формы документа в PDF формате в кодировке BASE64
+     */
+    public String getContent() {
+        return content;
+    }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
-
+    /**
+     * Устанавливает контент печатной формы документа в PDF формате в кодировке BASE64
+     * @param content контент печатной формы документа в PDF формате в кодировке BASE64
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

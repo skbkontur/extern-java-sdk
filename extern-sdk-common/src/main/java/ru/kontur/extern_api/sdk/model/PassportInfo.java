@@ -31,7 +31,7 @@ import java.util.Date;
 /**
  * @author alexs
  *
- * Класс для хранения паспортных данных
+ * <p>Класс для хранения паспортных данных</p>
  */
 public class PassportInfo {
 
@@ -47,7 +47,7 @@ public class PassportInfo {
     private String issuedBy = null;
 
     /**
-     * Возвращает код подразделения
+     * <p>Возвращает код подразделения.</p>
      * @return код подразделения
      */
     public String getCode() {
@@ -55,7 +55,7 @@ public class PassportInfo {
     }
 
     /**
-     * Устанавливает код подразделения
+     * <p>Устанавливает код подразделения.</p>
      * @param code код подразделения
      */
     public void setCode(String code) {
@@ -63,7 +63,7 @@ public class PassportInfo {
     }
 
     /**
-     * Возвращает серию паспорта
+     * <p>Возвращает серию паспорта.</p>
      * @return серии паспорта
      */
     public String getSeriesNumber() {
@@ -71,7 +71,7 @@ public class PassportInfo {
     }
 
     /**
-     * Устанавливает серию паспорта
+     * <p>Устанавливает серию паспорта.</p>
      * @param seriesNumber серия паспорта
      */
     public void setSeriesNumber(String seriesNumber) {
@@ -79,7 +79,7 @@ public class PassportInfo {
     }
 
     /**
-     * Возвращает дату выдачи
+     * <p>Возвращает дату выдачи.</p>
      * @return дата выдачи
      */
     public Date getIssuedDate() {
@@ -87,7 +87,7 @@ public class PassportInfo {
     }
 
     /**
-     * Устанвливает дату выдачи
+     * <p>Устанвливает дату выдачи.</p>
      * @param issuedDate дата выдачи
      */
     public void setIssuedDate(Date issuedDate) {
@@ -95,7 +95,7 @@ public class PassportInfo {
     }
 
     /**
-     * Возвращает имя учереждения, выдавщего паспорт
+     * <p>Возвращает имя учереждения, выдавщего паспорт.</p>
      * @return имя учереждения, выдавщего паспорт
      */
     public String getIssuedBy() {
@@ -103,7 +103,7 @@ public class PassportInfo {
     }
 
     /**
-     * Устанавливает имя учереждения, выдавщего паспорт
+     * <p>Устанавливает имя учереждения, выдавщего паспорт.</p>
      * @param issuedBy имя учереждения, выдавщего паспорт
      */
     public void setIssuedBy(String issuedBy) {

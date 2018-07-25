@@ -32,16 +32,20 @@ import java.io.IOException;
 
 /**
  * @author alexs
- *
+ * <p>
  * Класс предназначен для отправки информации об отправителе и подотчетной организации
  * при создании декларации. Класс инкопсулирует в себе следующие структуры:
- * <p>
- *     {@link SignerTypeEnum} тип подписанта, возможные значения:
+ * </p>
+ * <ul>
+ *   <li>{@link SignerTypeEnum} тип подписанта, возможные значения:
+ *   <ul>
  *     <li>UNKNOWN - должность подписанта неизвестен;</li>
  *     <li>CHIEF - руководитель;</li>
  *     <li>REPRESENTATIVE - представитель</li>
- * </p>
- * <p>{@link Taxpayer} - подотчетная организация</p>
+ *   </ul>
+ *   </li>
+ *   <li>{@link Taxpayer} подотчетная организация</li>
+ * </ul>
  */
 public class AdditionalClientInfo {
 

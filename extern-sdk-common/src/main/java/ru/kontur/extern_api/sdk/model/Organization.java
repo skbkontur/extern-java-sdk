@@ -28,6 +28,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author AlexS
+ * <p>
+ *     Класс содержит информацию об организации
+ * </p>
  */
 public class Organization {
 
@@ -40,18 +43,34 @@ public class Organization {
         this.organization = new OrganizationInfo(kpp);
     }
 
+    /**
+     * <p>Возвращает ИНН.</p>
+     * @return ИНН
+     */
     public String getInn() {
         return inn;
     }
 
+    /**
+     * <p>Устанавливает ИНН.</p>
+     * @param inn ИНН
+     */
     public void setInn(String inn) {
         this.inn = inn;
     }
 
+    /**
+     * <p>Возвращает КПП.</p>
+     * @return КПП
+     */
     public String getKpp() {
         return organization.getKpp();
     }
 
+    /**
+     * <p>Устанавливает КПП.</p>
+     * @param kpp КПП
+     */
     public void setKpp(String kpp) {
         this.organization.setKpp(kpp);
     }
