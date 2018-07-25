@@ -24,8 +24,11 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import ru.kontur.extern_api.sdk.model.CheckError;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
 
 
 /**
@@ -33,46 +36,76 @@ import java.util.stream.Collectors;
  */
 public class CheckResultDataDto {
 
-    public ru.kontur.extern_api.sdk.model.CheckResultData fromDto(ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData dto) {
+    public CheckResultData fromDto(
+            ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData dto) {
 
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
 
-        ru.kontur.extern_api.sdk.model.CheckResultData checkResultData
-                = new ru.kontur.extern_api.sdk.model.CheckResultData();
-
+        CheckResultData checkResultData = new CheckResultData();
         CheckErrorDto checkErrorDto = new CheckErrorDto();
 
         if (dto.getCommonErrors() != null) {
-            checkResultData.setCommonErrors(dto.getCommonErrors().stream().map(checkErrorDto::fromDto).collect(Collectors.toList()));
+            checkResultData.setCommonErrors(
+                    dto.getCommonErrors().stream().map(checkErrorDto::fromDto)
+                            .collect(Collectors.toList()));
         }
 
         if (dto.getDocumentsErrors() != null) {
             checkResultData.setDocumentsErrors(
                     dto.getDocumentsErrors().entrySet().stream().collect(
-                            Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(checkErrorDto::fromDto).collect(Collectors.toList()))
+                            Collectors.toMap(Map.Entry::getKey,
+                                    l -> l.getValue().stream().map(checkErrorDto::fromDto)
+                                            .collect(Collectors.toList()))
                     )
             );
         }
         return checkResultData;
     }
 
-    public ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData toDto(ru.kontur.extern_api.sdk.model.CheckResultData checkResultData) {
+    public CheckResultData fromDto(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
 
-        if (checkResultData == null) return null;
+        CheckResultData checkResultData = new CheckResultData();
+        Map<String, Object> data = (Map<String, Object>) map.get("data");
+        if (data != null) {
+            // collect documents-errors
+            checkResultData.setDocumentsErrors(
+                    (Map<String, List<CheckError>>) data.get("documents-errors"));
+            // collect common-errors
+            checkResultData.setCommonErrors(
+                    (List<CheckError>) data.get("common-errors"));
+        }
+        System.out.println(checkResultData);
+        return checkResultData;
+    }
 
-        ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData dto
-                = new ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData();
+    public ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData toDto(
+            CheckResultData checkResultData) {
+
+        if (checkResultData == null) {
+            return null;
+        }
+
+        ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData dto = new ru.kontur.extern_api.sdk.service.transport.swagger.model.CheckResultData();
 
         CheckErrorDto checkErrorDto = new CheckErrorDto();
 
         if (checkResultData.getCommonErrors() != null) {
-            dto.setCommonErrors(checkResultData.getCommonErrors().stream().map(checkErrorDto::toDto).collect(Collectors.toList()));
+            dto.setCommonErrors(
+                    checkResultData.getCommonErrors().stream().map(checkErrorDto::toDto)
+                            .collect(Collectors.toList()));
         }
 
         if (checkResultData.getDocumentsErrors() != null) {
             dto.setDocumentsErrors(
                     checkResultData.getDocumentsErrors().entrySet().stream().collect(
-                            Collectors.toMap(Map.Entry::getKey, l -> l.getValue().stream().map(checkErrorDto::toDto).collect(Collectors.toList()))
+                            Collectors.toMap(Map.Entry::getKey,
+                                    l -> l.getValue().stream().map(checkErrorDto::toDto)
+                                            .collect(Collectors.toList()))
                     )
             );
         }
