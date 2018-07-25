@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# Pre-commit hooks
+
+branch=`git rev-parse --abbrev-ref HEAD`
+
+# Check branch name
+LENGTH=`echo ${branch} | grep -E '^master$' | wc -c`
+if [ ${LENGTH} -gt 0 ]; then 
+    exit 0
+fi
+
+# Check branch name
+LENGTH=`echo ${branch} | grep -E '^develop$' | wc -c`
+if [ ${LENGTH} -gt 0 ]; then 
+    exit 0
+fi
+
+# ka-####
+LENGTH=`echo ${branch} | grep -E '^ka-([0-9]+)$' | wc -c`
+if [ ${LENGTH} -gt 0 ]; then 
+    exit 0
+fi
+
+# Check branch name
+# ka-####-comment
+LENGTH=`echo ${branch} | grep -E '^ka-([0-9]+)-(.*?)$' | wc -c`
+if [ ${LENGTH} -gt 0 ]; then
+    exit 0
+fi
+
+# Invalid branch name
+echo ""
+echo -e "\033[0;31m- Invalid branch name -"
+echo ""
+echo -e "\033[0mTry to use one of this patterns:"
+echo "ka-####"
+echo "ka-####-any-text"
+exit 1
