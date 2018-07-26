@@ -47,8 +47,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
- *
  * Группа методов предоставляет доступ к операциям для работы с черновиками:
  *<p>- создание черновика {@link DraftService#createAsync} | {@link DraftService#createAsync};</p>
  *<p>- поиск черновика по идентификатору {@link DraftService#lookupAsync} | {@link DraftService#lookup};</p>
@@ -72,6 +70,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignInitAsync} | {@link DraftService#cloudSignInit };</p>
  *<p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync} | {@link DraftService#cloudSignConfirm};</p>
  *<p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}.</p>
+ * @author Aleksey Sukhorukov
  */
 public interface DraftService extends Providers {
 

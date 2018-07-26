@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class Messages {
 

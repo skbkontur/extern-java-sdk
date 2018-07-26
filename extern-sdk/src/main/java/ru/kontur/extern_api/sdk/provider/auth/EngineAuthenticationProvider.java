@@ -33,7 +33,7 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SE
 
 /**
  *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class EngineAuthenticationProvider implements AuthenticationProvider {
 

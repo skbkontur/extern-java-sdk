@@ -29,9 +29,8 @@ import java.util.Date;
 
 
 /**
- * @author alexs
- *
  * <p>Класс для хранения паспортных данных</p>
+ * @author Aleksey Sukhorukov
  */
 public class PassportInfo {
 

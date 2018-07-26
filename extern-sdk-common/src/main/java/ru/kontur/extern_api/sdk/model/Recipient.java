@@ -25,8 +25,8 @@
 package ru.kontur.extern_api.sdk.model;
 
 /**
- * @author AlexS
  * <p>Маркерный интерфейс для получателей. От данного интерфейса должны наследоваться все получатели (КО: ФНС (FnsRecipient), ПФР ...)</p>
+ * @author Aleksey Sukhorukov
  */
 public interface Recipient {
 

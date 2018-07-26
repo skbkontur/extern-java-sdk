@@ -31,7 +31,6 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- * @author alexs
  * <p>
  * Класс предназначен для отправки информации об отправителе и подотчетной организации
  * при создании декларации. Класс инкопсулирует в себе следующие структуры:
@@ -46,6 +45,7 @@ import java.io.IOException;
  *   </li>
  *   <li>{@link Taxpayer} подотчетная организация</li>
  * </ul>
+ * @author Aleksey Sukhorukov
  */
 public class AdditionalClientInfo {
 

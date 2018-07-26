@@ -30,11 +30,10 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
- *
  * <p>
  * Класс содержит информацию документа документооборота
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Document {
 

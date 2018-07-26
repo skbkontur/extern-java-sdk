@@ -28,10 +28,10 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит информацию о черновике
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DraftMeta {
 

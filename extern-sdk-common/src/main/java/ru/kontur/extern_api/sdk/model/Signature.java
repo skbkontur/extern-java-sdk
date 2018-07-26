@@ -31,8 +31,8 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
  * <p>Класс содержит информацию о подписи документа</p>
+ * @author Aleksey Sukhorukov
  */
 public class Signature {
 

@@ -25,12 +25,12 @@
 package ru.kontur.extern_api.sdk.model;
 
 /**
- * @author AlexS
  * <p>
  * Класс предназначен для отправки данных, предоставляющие информацию о личности.
  * Как правило, это личный номер тедефона, так-же может быть СНИЛС и т.д.
  * Используется для доверительной аутентификации, см. {@code TrustedAuthentication}
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Credential {
 

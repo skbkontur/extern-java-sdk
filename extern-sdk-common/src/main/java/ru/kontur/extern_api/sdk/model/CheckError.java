@@ -25,10 +25,10 @@
 package ru.kontur.extern_api.sdk.model;
 
 /**
- * @author AlexS
  * <p>
  * Класс содержит описание проблемы, который может вернуть метод {@code DraftService.check}
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CheckError {
 

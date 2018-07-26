@@ -31,13 +31,12 @@ import java.util.Map;
 
 
 /**
- * @author AlexS
- *
  * <p>
  * Класс предназначен для получения информации о результатах проверки черновика перед отправкой.
  * Используется в методах: {@code DraftService.check} и {@code DraftService.prepare}
  * </p>
  * @see CheckError
+ * @author Aleksey Sukhorukov
  */
 public class CheckResultData {
 

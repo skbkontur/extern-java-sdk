@@ -31,11 +31,11 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
  * <p>
  * Класс предоставляет информацию о документообороте (ДО).
  * Используется в сервисах: {@code DraftService} и {@code DocflowService}.
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Docflow {
 

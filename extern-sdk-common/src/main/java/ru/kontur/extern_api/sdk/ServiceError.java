@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public interface ServiceError {
 

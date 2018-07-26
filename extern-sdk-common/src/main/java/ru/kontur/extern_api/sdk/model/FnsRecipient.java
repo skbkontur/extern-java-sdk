@@ -27,10 +27,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит информацию о налоговой инспекции, в которую необходимо отправить документ
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class FnsRecipient implements Recipient {
 

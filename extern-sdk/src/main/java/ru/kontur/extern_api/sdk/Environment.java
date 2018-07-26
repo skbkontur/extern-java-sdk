@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk;
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class Environment {
 

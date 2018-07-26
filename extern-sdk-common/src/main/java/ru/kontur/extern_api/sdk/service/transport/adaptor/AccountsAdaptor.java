@@ -29,8 +29,7 @@ import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.Link;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface AccountsAdaptor {
 

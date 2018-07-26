@@ -27,10 +27,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит информацию об организации
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Organization {
 

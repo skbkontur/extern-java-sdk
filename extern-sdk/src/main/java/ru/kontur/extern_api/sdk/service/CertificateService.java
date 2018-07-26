@@ -32,11 +32,10 @@ import ru.kontur.extern_api.sdk.provider.Providers;
 
 
 /**
- * @author alexs
- *
  * Предназначен для получения списка сертификатов
  *
  * @see QueryContext
+ * @author Aleksey Sukhorukov
  */
 public interface CertificateService extends Providers {
 

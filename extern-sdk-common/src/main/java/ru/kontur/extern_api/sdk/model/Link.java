@@ -28,10 +28,10 @@ import java.util.Objects;
 
 
 /**
- * @author AlexS
  * <p>
  *     Класс описывает ссылку на ресурс
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Link {
 

@@ -48,7 +48,7 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CO
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class CryptoProviderMSCapi implements CryptoProvider {
 

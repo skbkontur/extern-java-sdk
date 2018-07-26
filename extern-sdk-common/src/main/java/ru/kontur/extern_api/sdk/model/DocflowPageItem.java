@@ -32,11 +32,10 @@ import java.util.UUID;
 
 
 /**
- * @author alexs
- *
  * <p>
  * Класс является элементом списка {@link DocflowPage} и представляет документооборот (ДО)
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocflowPageItem {
 

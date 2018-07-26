@@ -57,8 +57,7 @@ import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class ExternEngine implements AuthenticationListener {
 

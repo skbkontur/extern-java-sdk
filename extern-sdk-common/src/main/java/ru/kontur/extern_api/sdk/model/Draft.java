@@ -33,10 +33,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит описания черновика.
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Draft {
 

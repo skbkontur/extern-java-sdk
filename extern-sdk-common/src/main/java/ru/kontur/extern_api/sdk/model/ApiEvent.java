@@ -30,10 +30,10 @@ import java.util.Objects;
 
 
 /**
- * @author AlexS
  * <p>
  * Класс предназначен для хронения информации ленты событий документооборотов см. класс EventService
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class ApiEvent {
 

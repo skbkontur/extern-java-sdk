@@ -27,9 +27,8 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
- *
  * <p>Класс содержит информацию о налогоплательщике</p>
+ * @author Aleksey Sukhorukov
  */
 public class Taxpayer {
 

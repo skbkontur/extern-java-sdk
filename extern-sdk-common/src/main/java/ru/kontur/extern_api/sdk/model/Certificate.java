@@ -27,10 +27,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
  * <p>
  * Класс предназначен для хронения информации сертификата см. класс {@code CertifcateService}
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Certificate {
 

@@ -31,11 +31,10 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
- *
  * <p>
  *     Класс содержит данные, необходимые для отправки документа
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocumentToSend {
 

@@ -77,6 +77,7 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
  * @param <R> тип возвращаемого результата операции
  *
  * @since 1.2
+ * @author Aleksey Sukhorukov
  */
 public class QueryContext<R> implements Serializable {
 

@@ -30,8 +30,8 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
  * <p>Класс, содержащий информацию для отправки контента подписи</p>
+ * @author Aleksey Sukhorukov
  */
 public class SignatureToSend {
 

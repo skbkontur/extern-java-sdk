@@ -41,7 +41,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class BusinessDriver {
 

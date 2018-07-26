@@ -26,8 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor;
 import java.util.function.Supplier;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface Adaptor {
     HttpClient getHttpClient();

@@ -35,8 +35,7 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface Providers {
 	void serviceBaseUriProvider(UriProvider serviceBaseUriProvider);

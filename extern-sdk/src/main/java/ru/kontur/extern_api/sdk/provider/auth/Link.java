@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class Link {
 

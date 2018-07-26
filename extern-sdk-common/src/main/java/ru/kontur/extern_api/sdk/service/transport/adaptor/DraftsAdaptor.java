@@ -32,8 +32,7 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface DraftsAdaptor {
     

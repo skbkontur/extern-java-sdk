@@ -28,11 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Aleksey Sukhorukov
- *
  * <p>
  * Класс содержит список компаний, возвращаемый сервисом {@code OrganizationService.search}
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CompanyBatch {
     @SerializedName("organizations")

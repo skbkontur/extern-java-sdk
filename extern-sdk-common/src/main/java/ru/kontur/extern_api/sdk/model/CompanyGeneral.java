@@ -26,10 +26,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Aleksey Sukhorukov
  * <p>
  * Класс содержит данные организации. Используется для создании новой организации или получения информации о новой в {@code OrganizationService}
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CompanyGeneral {
     @SerializedName("inn")

@@ -24,9 +24,8 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Mikhail Pavlenko
- *
  * <p>Класс контент печатной формы документа в PDF формате в кодировке BASE64</p>
+ * @author Mikhail Pavlenko
  */
 
 public class PrintDocumentData {

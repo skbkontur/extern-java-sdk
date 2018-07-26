@@ -27,10 +27,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит описание документа черновика
  * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DraftDocument {
 

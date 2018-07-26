@@ -29,11 +29,10 @@ import java.util.List;
 
 
 /**
- * @author AlexS
- *
  * <p>Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к отправке (шифрования, упаковки, проверка подписи и др.)</p>
  *
  * <p>см. метод DraftService.prepare</p>
+ * @author Aleksey Sukhorukov
  */
 public class PrepareResult {
 

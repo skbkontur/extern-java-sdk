@@ -24,10 +24,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Mikhail Pavlenko
  * <p>
  *     Класс содержит сертификат подписанта в кодировке BASE64
  * </p>
+ * @author Mikhail Pavlenko
  */
 
 public class GenerateReplyDocumentRequestData {

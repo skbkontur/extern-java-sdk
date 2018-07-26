@@ -31,11 +31,11 @@ import java.util.Objects;
 
 
 /**
- * @author AlexS
  * <p>
  *     Класс содержит список событий документооборотов
  * </p>
  * @see ApiEvent
+ * @author Aleksey Sukhorukov
  */
 public class EventsPage {
 

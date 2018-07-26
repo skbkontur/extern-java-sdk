@@ -39,8 +39,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
- *
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО):
  *<p>- поиск ДО по идентификатору {@link DocflowService#lookupDocflowAsync} | {@link DocflowService#lookupDocflow};</p>
  *<p>- получение списка документов {@link DocflowService#lookupDocflowAsync} | {@link DocflowService#lookupDocflow};</p>
@@ -58,6 +56,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *<p>- получение печатной формы {@link DocflowService#printAsync} | {@link DocflowService#print};</p>
  *
  * @see QueryContext
+ * @author Aleksey Sukhorukov
  */
 public interface DocflowService extends Providers {
 
