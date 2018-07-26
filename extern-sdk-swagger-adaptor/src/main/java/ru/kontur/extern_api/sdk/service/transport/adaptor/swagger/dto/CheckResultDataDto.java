@@ -64,6 +64,7 @@ public class CheckResultDataDto {
         return checkResultData;
     }
 
+    @SuppressWarnings("unchecked")
     public CheckResultData fromDto(Map<String, Object> map) {
         if (map == null) {
             return null;
