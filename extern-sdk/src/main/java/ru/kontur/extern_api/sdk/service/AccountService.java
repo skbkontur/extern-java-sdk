@@ -61,6 +61,7 @@ public interface AccountService extends Providers {
      * <p>GET /</p>
      * Синхронный метод возвращает список ссылок на доступные ресурсы.
      * Для выполнения аутентификация не требуется.
+     * @param cxt контекст
      * @return список ссылок
      * @see Link
      */
@@ -77,6 +78,7 @@ public interface AccountService extends Providers {
     /**
      * <p>GET /v1</p>
      * Синхронный метод возвращает список учетных записей с разбивкой по страницам
+     * @param cxt контекст
      * @return список учетных записей
      * @see AccountList
      */
