@@ -28,7 +28,7 @@ import ru.kontur.extern_api.sdk.model.Credential;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface CredentialProvider {
 

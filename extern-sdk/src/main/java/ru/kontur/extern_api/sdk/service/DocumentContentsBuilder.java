@@ -30,7 +30,7 @@ import ru.kontur.extern_api.sdk.model.DocumentDescription;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 class DocumentContentsBuilder {
 

@@ -32,11 +32,10 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
- *
  * Группа методов предоставляет доступ к операциям для работы с событиями,
  * связанными с докуметооборотами (ДО):
  * <p>- получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};</p>
+ * @author Aleksey Sukhorukov
  */
 public interface EventService extends Providers {
 

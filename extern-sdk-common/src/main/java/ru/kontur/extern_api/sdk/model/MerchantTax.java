@@ -27,45 +27,88 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
+ * <p>
+ * Класс предназначен для формирования разделов УСН декларации
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class MerchantTax {
 
     private String dohod = null;
     private String ischisl = null;
-		@SerializedName("torg-sbor-fact")
+    @SerializedName("torg-sbor-fact")
     private String torgSborFact = null;
-		@SerializedName("torg-sbor-umen")
+    @SerializedName("torg-sbor-umen")
     private String torgSborUmen = null;
 
+    /**
+     * <p>Возвращает значение поля "Доход".</p>
+     *
+     * @return значение поля "Доход"
+     */
     public String getDohod() {
         return dohod;
     }
 
+    /**
+     * <p>Устанавливает значение поля "Доход".</p>
+     *
+     * @param dohod значение поля "Доход"
+     */
     public void setDohod(String dohod) {
         this.dohod = dohod;
     }
 
+    /**
+     * <p>Возвращает значение поля "Исчисл".</p>
+     *
+     * @return значение поля "Исчисл"
+     */
     public String getIschisl() {
         return ischisl;
     }
 
+    /**
+     * <p>Возвращает значение поля "Исчисл".</p>
+     *
+     * @param ischisl значение поля "Исчисл"
+     */
     public void setIschisl(String ischisl) {
         this.ischisl = ischisl;
     }
 
+    /**
+     * <p>Возвращает значение поля "ТоргСборФакт".</p>
+     *
+     * @return значение поля "ТоргСборФакт"
+     */
     public String getTorgSborFact() {
         return torgSborFact;
     }
 
+    /**
+     * <p>Устанавливает значение поля "ТоргСборФакт".</p>
+     *
+     * @param torgSborFact значение поля "ТоргСборФакт"
+     */
     public void setTorgSborFact(String torgSborFact) {
         this.torgSborFact = torgSborFact;
     }
 
+    /**
+     * <p>Возвращает значение поля "ТоргСборУмен".</p>
+     *
+     * @return значение поля "ТоргСборУмен"
+     */
     public String getTorgSborUmen() {
         return torgSborUmen;
     }
 
+    /**
+     * <p>Устанавливает значение поля "ТоргСборУмен".</p>
+     *
+     * @param torgSborUmen значение поля "ТоргСборУмен"
+     */
     public void setTorgSborUmen(String torgSborUmen) {
         this.torgSborUmen = torgSborUmen;
     }

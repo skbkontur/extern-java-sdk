@@ -30,7 +30,7 @@ import java.util.List;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class RequestResponse {
 

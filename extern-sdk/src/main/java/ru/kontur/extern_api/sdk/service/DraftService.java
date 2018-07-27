@@ -33,7 +33,7 @@ import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.ISmsCodeProvider;
+import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -47,16 +47,14 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
- *
  * Группа методов предоставляет доступ к операциям для работы с черновиками:
  *<p>- создание черновика {@link DraftService#createAsync} | {@link DraftService#createAsync};</p>
- *<p>- поиск черновика по идентификатору {@link DraftService#lookupAsync | {@link DraftService#lookup};</p>
+ *<p>- поиск черновика по идентификатору {@link DraftService#lookupAsync} | {@link DraftService#lookup};</p>
  *<p>- удаление черновика {@link DraftService#deleteAsync} | {@link DraftService#delete};</p>
- *<p>- поиск мета-данных черновика {@link DraftService#lookupDraftMetaAsync | {@link DraftService#lookupDraftMeta};</p>
- *<p>- обновление мета-данных черновика {@link DraftService#updateDraftMetaAsync | {@link DraftService#updateDraftMeta};</p>
+ *<p>- поиск мета-данных черновика {@link DraftService#lookupDraftMetaAsync} | {@link DraftService#lookupDraftMeta};</p>
+ *<p>- обновление мета-данных черновика {@link DraftService#updateDraftMetaAsync} | {@link DraftService#updateDraftMeta};</p>
  *<p>- проверка черновика {@link DraftService#checkAsync} | {@link DraftService#check};</p>
- *<p>- подготовка черновика к отправке {@link DraftService#prepareAsync | {@link DraftService##prepare};</p>
+ *<p>- подготовка черновика к отправке {@link DraftService#prepareAsync} | {@link DraftService#prepare};</p>
  *<p>- отправка черновика в контролирующий орган {@link DraftService#sendAsync} | {@link DraftService#send};</p>
  *<p>- удаление документа из черновика {@link DraftService#deleteDocumentAsync} | {@link DraftService#deleteDocument};</p>
  *<p>- поиска документа в черновике по идентификатору {@link DraftService#lookupDocumentAsync} | {@link DraftService#lookupDocument};</p>
@@ -69,9 +67,10 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *<p>- метод обновления контента подписи {@link DraftService#updateSignatureAsync} | {@link DraftService#updateSignature};</p>
  *<p>- метод создания УСН декларации по JSON описанию {@link DraftService#createUSN1Async} | {@link DraftService#createUSN1};</p>
  *<p>- метод создания УСН декларации с помощью объектной модели {@link DraftService#createUSN2Async} | {@link DraftService#createUSN2};</p>
- *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignInitAsync } | {@link DraftService#cloudSignInit };</p>
+ *<p>- метод для создания запроса на облачную подпись {@link DraftService#cloudSignInitAsync} | {@link DraftService#cloudSignInit };</p>
  *<p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync} | {@link DraftService#cloudSignConfirm};</p>
- *<p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}};</p>
+ *<p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}.</p>
+ * @author Aleksey Sukhorukov
  */
 public interface DraftService extends Providers {
 
@@ -90,11 +89,11 @@ public interface DraftService extends Providers {
      * Синхронный метод создает черновик
      * @param cxt контекст. Должен содержать следующие данные:
      *<p>- объект мета-данные черновика, полученный с помощью конструктора {@link DraftMeta#DraftMeta(Sender, Recipient, Organization)}, где:</p>
-     * <div>
+     * <ul>
      *  <li>sender отправитель декларации {@link Sender};</li>
      *  <li>recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient};</li>
      *  <li>organization организация, на которую создана декларация {@link Organization}.</li>
-     *</div>
+     *</ul>
      *<p>Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.</p>
      *
      * @return идентификатор черновика

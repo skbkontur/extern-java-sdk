@@ -58,7 +58,7 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CO
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class CryptoProviderRSA implements CryptoProvider {
 

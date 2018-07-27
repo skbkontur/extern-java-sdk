@@ -32,7 +32,7 @@
     </parent>
 
     <artifactId>extern-api-java-sdk-examples</artifactId>
-    <name>Extern Api SDK for Java Examples</name>
+    <name>Extern Api SDK for Java - Examples</name>
 
     <packaging>jar</packaging>
 

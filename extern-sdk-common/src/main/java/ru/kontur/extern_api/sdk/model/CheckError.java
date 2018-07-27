@@ -25,9 +25,10 @@
 package ru.kontur.extern_api.sdk.model;
 
 /**
- * @author AlexS
- *
+ * <p>
  * Класс содержит описание проблемы, который может вернуть метод {@code DraftService.check}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CheckError {
 
@@ -92,10 +93,11 @@ public class CheckError {
 
     /**
      * Устанавливает уровень серьезности проблемы
-     * @param level <p>уровень серьезности проблемы
-     * <li>error - ошибка</li>
-     * <li>warning - предупреждение</li>
-     * </p>
+     * @param level уровень серьезности проблемы:
+     * <ul>
+     *   <li>error - ошибка</li>
+     *   <li>warning - предупреждение</li>
+     * </ul>
      * @return {@link CheckError}
      */
     public CheckError level(String level) {
@@ -105,10 +107,11 @@ public class CheckError {
 
     /**
      * Возвращает уровень серьезности проблемы
-     * @return level <p>уровень серьезности проблемы
-     * <li>error - ошибка</li>
-     * <li>warning - предупреждение</li>
-     * </p>
+     * @return level уровень серьезности проблемы:
+     * <ul>
+     *   <li>error - ошибка</li>
+     *   <li>warning - предупреждение</li>
+     * </ul>
      */
     public String getLevel() {
         return level;
@@ -116,10 +119,11 @@ public class CheckError {
 
     /**
      * Устанавливает уровень серьезности проблемы
-     * @param level <p>уровень серьезности проблемы
-     * <li>error - ошибка</li>
-     * <li>warning - предупреждение</li>
-     * </p>
+     * @param level уровень серьезности проблемы:
+     * <ul>
+     *   <li>error - ошибка</li>
+     *   <li>warning - предупреждение</li>
+     * </ul>
      */
     public void setLevel(String level) {
         this.level = level;
@@ -172,7 +176,6 @@ public class CheckError {
     /**
      * Устанавливает метки для проблемы
      * @param tags метки для проблемы
-     * @param tags
      */
     public void setTags(String tags) {
         this.tags = tags;

@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk.event;
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface AuthenticationListener {
 

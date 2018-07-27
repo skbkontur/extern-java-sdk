@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class File {
 

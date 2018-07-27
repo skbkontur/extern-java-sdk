@@ -29,7 +29,7 @@ import java.util.Map;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class ApiResponse<T> {
 

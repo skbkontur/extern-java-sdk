@@ -31,7 +31,10 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
+ * <p>
+ *     Класс содержит данные, необходимые для отправки документа
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocumentToSend {
 
@@ -50,78 +53,109 @@ public class DocumentToSend {
 
 
     /**
-     * Get id
-     *
-     * @return id
+     * Возврашает идентификатор документа
+     * @return id идентификатор документа
      */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор документа
+     * @param id String идентификатор документа
+     */
     public void setId(String id) {
         this.id = UUID.fromString(id);
     }
 
+    /**
+     * Устанавливает идентификатор документа
+     * @param id {@link UUID} идентификатор документа
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
     /**
-     * Get content
-     *
-     * @return content
+     * Возвращает содержимое документа
+     * @return content byte array содержимое документа
      */
     public byte[] getContent() {
         return content;
     }
 
+    /**
+     * Устанавливает содержимое документа
+     * @param content byte array содержимое документа
+     */
     public void setContent(byte[] content) {
         this.content = content;
     }
 
     /**
-     * Get filename
-     *
-     * @return filename
+     * Возвращает имя файла документа
+     * @return filename имя файла документа
      */
     public String getFilename() {
         return filename;
     }
 
+    /**
+     * Устанавливает имя файла документа
+     * @param filename имя файла документа
+     */
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
     /**
-     * Get signature
-     *
-     * @return signature
+     * Возвращает структуру данных с подписью
+     * @return signature структура данных с подписью
+     * @see SignatureToSend
      */
     public SignatureToSend getSignature() {
         return signature;
     }
 
+    /**
+     * Устанавливает структуру данных с подписью
+     * @param signature структуру данных с подписью
+     * @see SignatureToSend
+     */
     public void setSignature(SignatureToSend signature) {
         this.signature = signature;
     }
 
     /**
-     * Get senderIp
-     *
-     * @return senderIp
+     * Возвращает IP - адрес отправителя
+     * @return senderIp IP - адрес отправителя
      */
     public String getSenderIp() {
         return senderIp;
     }
 
+    /**
+     * Устанавливает IP - адрес отправителя
+     * @param senderIp IP - адрес отправителя
+     */
     public void setSenderIp(String senderIp) {
         this.senderIp = senderIp;
     }
 
+    /**
+     * Возвращает список ссылок
+     * @return список ссылок
+     * @see Link
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * Устанавливает список ссылок
+     * @param links список ссылок
+     * @see Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }

@@ -28,7 +28,10 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * @author AlexS
+ * <p>
+ *     Класс содержит информацию о черновике
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DraftMeta {
 
@@ -48,26 +51,56 @@ public class DraftMeta {
         this.payer = payer;
     }
 
+    /**
+     * Возвращает объект {@link Sender}, описывающий отправителя документа
+     * @return объект, описывающий отправителя документа
+     * @see Sender
+     */
     public Sender getSender() {
         return sender;
     }
 
+    /**
+     * Устанавливает объект {@link Sender}, описывающий отправителя документа
+     * @param sender объект, описывающий отправителя документа
+     * @see Sender
+     */
     public void setSender(Sender sender) {
         this.sender = sender;
     }
 
+    /**
+     * Возвращает объект {@link FnsRecipient}, описывающий получателя документа
+     * @return объект {@link FnsRecipient}, описывающий получателя документа
+     * @see FnsRecipient
+     */
     public Recipient getRecipient() {
         return recipient;
     }
 
+    /**
+     * Устанавливает объект {@link FnsRecipient}, описывающий получателя документа
+     * @param recipient объект {@link FnsRecipient}, описывающий получателя документа
+     * @see FnsRecipient
+     */
     public void setRecipient(Recipient recipient) {
         this.recipient = recipient;
     }
 
+    /**
+     * Возвращает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * @return объект, описывающий организацию, за которую производится сдача документа
+     * @see Organization
+     */
     public Organization getPayer() {
         return payer;
     }
 
+    /**
+     * Устанавливает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * @param payer объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * @see Organization
+     */
     public void setPayer(Organization payer) {
         this.payer = payer;
     }

@@ -29,9 +29,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author AlexS
+ * <p>
  * Класс содержит информацию об учетной записи организации.
  * Используется методами сервиса {@code AccountService}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Account {
 

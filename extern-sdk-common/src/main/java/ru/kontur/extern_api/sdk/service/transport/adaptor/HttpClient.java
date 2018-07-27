@@ -29,8 +29,7 @@ import java.util.Map;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface HttpClient {
     HttpClient setServiceBaseUri(String uri);

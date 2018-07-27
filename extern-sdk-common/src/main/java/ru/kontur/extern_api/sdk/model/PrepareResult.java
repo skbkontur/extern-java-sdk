@@ -29,11 +29,10 @@ import java.util.List;
 
 
 /**
- * @author AlexS
+ * <p>Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к отправке (шифрования, упаковки, проверка подписи и др.)</p>
  *
- * Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к отправке (шифрования, упаковки, проверка подписи и др.)
- *
- * см. метод DraftService.prepare
+ * <p>см. метод DraftService.prepare</p>
+ * @author Aleksey Sukhorukov
  */
 public class PrepareResult {
 
@@ -78,8 +77,14 @@ public class PrepareResult {
     }
 
     /**
-     *
-     * @return
+     * <p>Возвращает результат проверки:</p>
+     * <ul>
+     *     <li>checkProtocolHasErrors - результат проверки содержит ошибки</li>
+     *     <li>checkProtocolHasOnlyWarnings - результат проверки содержит предупреждения</li>
+     *     <li>encryptionFailed - результат проверки содержит ошибки криптографии</li>
+     *     <li>OK - результат проверки не содержит ошибок</li>
+     * </ul>
+     * @return результат проверки
      */
     public Status getStatus() {
         return status;
