@@ -620,7 +620,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=1
      * <p>
      * Create an USN declaration, version 1
      *
@@ -650,7 +650,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=2
      * <p>
      * Create an USN declaration, version 2
      *
@@ -680,7 +680,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=type&amp;version=version
      * <p>
      *
      * @param cxt a context
