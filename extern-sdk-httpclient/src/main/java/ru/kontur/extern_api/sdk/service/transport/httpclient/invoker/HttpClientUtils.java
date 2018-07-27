@@ -32,8 +32,9 @@ import java.util.Date;
  * @author alexs
  */
 public class HttpClientUtils {
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-    
+//    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+
     /**
      * Format the given Date object into string (Datetime format).
      *
