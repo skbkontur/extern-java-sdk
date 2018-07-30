@@ -28,9 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Aleksey Sukhorukov
- *
+ * <p>
  * Класс содержит список компаний, возвращаемый сервисом {@code OrganizationService.search}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CompanyBatch {
     @SerializedName("organizations")
@@ -72,7 +73,7 @@ public class CompanyBatch {
 
     /**
      * Устанавливает общее количество организаций удовлетворяющих критерию поиска
-     * @param totalCount
+     * @param totalCount общее количество организаций удовлетворяющих критерию поиска
      */
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;

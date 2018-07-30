@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class AuthenticationProviderByPass extends AuthenticationProviderAbstract {
 

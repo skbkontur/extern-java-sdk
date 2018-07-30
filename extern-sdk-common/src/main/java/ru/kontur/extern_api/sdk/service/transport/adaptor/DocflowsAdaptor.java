@@ -32,8 +32,7 @@ import ru.kontur.extern_api.sdk.model.DocumentToSend;
 import ru.kontur.extern_api.sdk.model.Signature;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface DocflowsAdaptor {
     

@@ -32,9 +32,10 @@ import java.util.UUID;
 
 
 /**
- * @author alexs
- *
+ * <p>
  * Класс является элементом списка {@link DocflowPage} и представляет документооборот (ДО)
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocflowPageItem {
 
@@ -65,7 +66,9 @@ public class DocflowPageItem {
 
     /**
      * Возвращает тип ДО:
-     * <li>urn:docflow:fns534-report</li>
+     * <ul>
+     *   <li>urn:docflow:fns534-report</li>
+     * </ul>
      * @return тип ДО
      */
     public String getType() {
@@ -74,8 +77,10 @@ public class DocflowPageItem {
 
     /**
      * Устанавливает тип ДО
-     * <li>urn:docflow:fns534-report</li>
-     * @param type тип ДО
+     * @param type тип ДО:
+     * <ul>
+     *   <li>urn:docflow:fns534-report</li>
+     * </ul>
      */
     public void setType(String type) {
         this.type = type;
@@ -83,14 +88,16 @@ public class DocflowPageItem {
 
     /**
      * Возвращает состояние ДО
-     *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
-     *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
-     *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
-     *  <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
-     *  <li>urn:urn:docflow-common-status:received - документ получен КО</li>
-     *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
-     *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
-     *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * <ul>
+     *   <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
+     *   <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
+     *   <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
+     *   <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
+     *   <li>urn:urn:docflow-common-status:received - документ получен КО</li>
+     *   <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
+     *   <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
+     *   <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * </ul>
      * @return состояние ДО
      */
     public String getStatus() {
@@ -99,15 +106,17 @@ public class DocflowPageItem {
 
     /**
      * Устанавливает состояние ДО
-     *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
-     *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
-     *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
-     *  <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
-     *  <li>urn:urn:docflow-common-status:received - документ получен КО</li>
-     *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
-     *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
-     *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
-     * @param status состояние ДО
+     * @param status состояние ДО:
+     * <ul>
+     *   <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
+     *   <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
+     *   <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
+     *   <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
+     *   <li>urn:urn:docflow-common-status:received - документ получен КО</li>
+     *   <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
+     *   <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
+     *   <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * </ul>
      */
     public void setStatus(String status) {
         this.status = status;
@@ -125,7 +134,7 @@ public class DocflowPageItem {
     /**
      * Устанавливает список ссылок на документообороты
      * @param links список ссылок на документообороты
-     * @Link
+     * @see  Link
      */
     public void setLinks(List<Link> links) {
         this.links = links;

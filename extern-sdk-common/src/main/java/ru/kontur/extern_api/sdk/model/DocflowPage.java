@@ -30,9 +30,11 @@ import java.util.List;
 
 
 /**
- * @author alexs
+ * <p>
  * Класс предназначен для постраничного получение списка документооборотов {@link DocflowPageItem}
  * Используетс в {@code DocflowService}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocflowPage {
 

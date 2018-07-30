@@ -32,7 +32,7 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class ContentRequest {
 

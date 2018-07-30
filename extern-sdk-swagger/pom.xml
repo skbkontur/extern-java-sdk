@@ -27,11 +27,11 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.4-SNAPSHOT</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-generated-client</artifactId>
-    <name>Extern Api Generated REST Swagger Client for Java SDK</name>
+    <name>Extern Api SDK for Java - Generated Swagger Client</name>
 
     <packaging>jar</packaging>
 

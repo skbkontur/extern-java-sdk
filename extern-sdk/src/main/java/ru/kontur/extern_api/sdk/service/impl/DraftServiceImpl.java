@@ -33,7 +33,7 @@ import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.ISmsCodeProvider;
+import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -396,7 +396,7 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignQueryAsync(String draftId) {
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignInitAsync(String draftId) {
         QueryContext<SignInitiation> cxt = createQueryContext("");
         return cxt
             .setDraftId(draftId)
@@ -405,14 +405,16 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<?> parent) {
+    public QueryContext<SignInitiation> cloudSignInit(QueryContext<?> parent) {
         QueryContext<SignInitiation> queryContext = createQueryContext(parent, "");
         return queryContext.apply(draftsAdaptor::cloudSignQuery);
     }
 
     @Override
     public CompletableFuture<QueryContext<SignedDraft>> cloudSignConfirmAsync(
-        String draftId, String requestId, String code) {
+            String draftId,
+            String requestId,
+            String code) {
 
         QueryContext<SignedDraft> cxt = createQueryContext("");
 
@@ -430,9 +432,11 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignedDraft>> cloudSignAsync(String draftId,
-        ISmsCodeProvider codeProvider) {
-        return cloudSignQueryAsync(draftId)
+    public CompletableFuture<QueryContext<SignedDraft>> cloudSignAsync(
+            String draftId,
+            ISmsCodeProvider codeProvider) {
+
+        return cloudSignInitAsync(draftId)
             .thenApplyAsync(cxt -> cxt.setSmsCode(codeProvider.getCode(cxt)))
             .thenApplyAsync(this::cloudSignConfirm);
 

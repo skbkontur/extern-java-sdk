@@ -30,7 +30,8 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
+ * <p>Класс, содержащий информацию для отправки контента подписи</p>
+ * @author Aleksey Sukhorukov
  */
 public class SignatureToSend {
 
@@ -40,31 +41,41 @@ public class SignatureToSend {
     private byte[] contentData = null;
 
     /**
-     * Get id
-     *
-     * @return id
+     * <p>Возвращает идентификатор подписи. Инициализуруется сервером.</p>
+     * @return id идентификатор подписи
      */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * <p>Устанавливает идентификатор подписи. Инициализуруется сервером.</p>
+     * @param id String идентификатор подписи
+     */
     public void setId(String id) {
         this.id = UUID.fromString(id);
     }
 
+    /**
+     * <p>Устанавливает идентификатор подписи. Инициализуруется сервером.</p>
+     * @param id UUID идентификатор подписи
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
     /**
-     * Get contentData
-     *
-     * @return contentData
+     * Возвращает массив байт подписи в формате PKCS#7
+     * @return contentData массив байт подписи в формате PKCS#7
      */
     public byte[] getContentData() {
         return contentData;
     }
 
+    /**
+     * Устанавливает массив байт подписи в формате PKCS#7
+     * @param contentData массив байт подписи в формате PKCS#7
+     */
     public void setContentData(byte[] contentData) {
         this.contentData = contentData;
     }

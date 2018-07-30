@@ -26,7 +26,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
+ * <p>
+ * Класс предназначен для формирования разделов УСН декларации
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class UsnServiceContractInfo {
 
@@ -35,28 +38,55 @@ public class UsnServiceContractInfo {
     private AdditionalClientInfo additionalOrgInfo = null;
     private Object data = null;
 
+    /**
+     * <p>Возвращает информацию об отчетном периоде</p>
+     * @return информация об отчетном периоде
+     * @see UsnFormatPeriod
+     */
     public UsnFormatPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * <p>Устанавливает информацию об отчетном периоде</p>
+     * @param period информация об отчетном периоде
+     * @see UsnFormatPeriod
+     */
     public void setPeriod(UsnFormatPeriod period) {
         this.period = period;
     }
 
+    /**
+     * <p>Возвращает информацию об организации</p>
+     * @return информация об организации
+     * @see AdditionalClientInfo
+     */
     public AdditionalClientInfo getAdditionalOrgInfo() {
         return additionalOrgInfo;
     }
 
+    /**
+     * <p>Устанавливает информацию об организации</p>
+     * @param additionalOrgInfo информация об организации
+     * @see AdditionalClientInfo
+     */
     public void setAdditionalOrgInfo(AdditionalClientInfo additionalOrgInfo) {
         this.additionalOrgInfo = additionalOrgInfo;
     }
 
+    /**
+     * Возвращает JSON документ с информацией об УСН декларации
+     * @return JSON документ с информацией об УСН декларации
+     */
     public Object getData() {
         return data;
     }
 
+    /**
+     * Устанавливает JSON документ с информацией об УСН декларации
+     * @param data JSON документ с информацией об УСН декларации
+     */
     public void setData(Object data) {
         this.data = data;
     }
-
 }

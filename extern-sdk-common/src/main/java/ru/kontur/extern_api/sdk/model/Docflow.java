@@ -31,9 +31,11 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
+ * <p>
  * Класс предоставляет информацию о документообороте (ДО).
  * Используется в сервисах: {@code DraftService} и {@code DocflowService}.
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class Docflow {
 
@@ -66,7 +68,9 @@ public class Docflow {
 
     /**
      * Возвращает тип ДО:
-     * <li>urn:docflow:fns534-report</li>
+     * <ul>
+     *   <li>urn:docflow:fns534-report</li>
+     * </ul>
      * @return type тип ДО
      */
     public String getType() {
@@ -74,9 +78,11 @@ public class Docflow {
     }
 
     /**
-     * Устанавливает тип ДО:
+     * Устанавливает тип ДО
+     * @param type тип ДО:
+     * <ul>
      * <li>urn:docflow-type:ke-fns-report</li>
-     * @param type
+     * </ul>
      */
     public void setType(String type) {
         this.type = type;
@@ -84,14 +90,16 @@ public class Docflow {
 
     /**
      * Возвращает состояние документооборота:
-     *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
-     *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
-     *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
-     *  <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
-     *  <li>urn:docflow-common-status:received - документ получен КО</li>
-     *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
-     *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
-     *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * <ul>
+     *   <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
+     *   <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
+     *   <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
+     *   <li>urn:docflow-common-status:response-processed - пришли результаты обработки отправленного документа</li>
+     *   <li>urn:docflow-common-status:received - документ получен КО</li>
+     *   <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
+     *   <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
+     *   <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
+     * </ul>
      * @return состояние документооборота
      */
     public String getStatus() {
@@ -100,6 +108,8 @@ public class Docflow {
 
     /**
      * Устанавливает состояние документооборота
+     * @param status состояние документооборота:
+     * <ul>
      *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
      *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
      *  <li>urn:docflow-common-status:response-arrived - пришли результаты проверки отправленного документа</li>
@@ -108,7 +118,7 @@ public class Docflow {
      *  <li>urn:docflow-common-status:arrived - документ получен налогоплательщиком</li>
      *  <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
      *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
-     * @param status состояние документооборота
+     * </ul>
      */
     public void setStatus(String status) {
         this.status = status;
@@ -153,8 +163,10 @@ public class Docflow {
     /**
      * Возвращает список ссылок {@link Link}.
      * Список может содержать ссылки на:
-     * <li>ДО с типом self</li>
-     * <li>документы с типом reply, которые необходимо получить и подписать</li>
+     * <ul>
+     *   <li>ДО с типом self</li>
+     *   <li>документы с типом reply, которые необходимо получить и подписать</li>
+     * </ul>
      * @return links
      */
     public List<Link> getLinks() {
@@ -163,10 +175,11 @@ public class Docflow {
 
     /**
      * Устанавливает список ссылок {@link Link}.
-     * Список может содержать ссылки на:
-     * <li>ДО с типом self</li>
-     * <li>документы с типом reply, которые необходимо получить и подписать</li>
-     * @param links список ссылок
+     * @param links список ссылок:
+     * <ul>
+     *   <li>ДО с типом self</li>
+     *   <li>документы с типом reply, которые необходимо получить и подписать</li>
+     * </ul>
      */
     public void setLinks(List<Link> links) {
         this.links = links;
@@ -198,7 +211,7 @@ public class Docflow {
 
     /**
      * Устанавливает дату последнего обновления ДО
-     * @param lastChangeDate
+     * @param lastChangeDate дата последнего обновления ДО
      */
     public void setLastChangeDate(Date lastChangeDate) {
         this.lastChangeDate = lastChangeDate;

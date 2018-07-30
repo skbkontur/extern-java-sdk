@@ -25,8 +25,8 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 /**
- * @author AlexS
  * @param <R> a result type
+ * @author Aleksey Sukhorukov
  */
 @FunctionalInterface
 public interface Query<R> {

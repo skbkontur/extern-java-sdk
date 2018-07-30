@@ -29,7 +29,7 @@ import java.util.Map;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class ApiException extends Exception {
 

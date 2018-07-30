@@ -252,17 +252,19 @@ public class HttpClientImpl {
             String prefix = path.contains("?") ? "&" : "?";
             for (Map.Entry<String, Object> param : queryParams.entrySet()) {
                 if (param.getValue() != null) {
-                    if (prefix != null) {
-                        request.append(prefix);
-                        prefix = null;
-                    }
-                    else {
-                        request.append("&");
-                    }
 
                     String value = parameterToString(param.getValue());
 
-                    request.append(escapeString(param.getKey())).append("=").append(escapeString(value));
+                    if (value != null && !value.isEmpty()) {
+                        if (prefix != null) {
+                            request.append(prefix);
+                            prefix = null;
+                        } else {
+                            request.append("&");
+                        }
+
+                        request.append(escapeString(param.getKey())).append("=").append(escapeString(value));
+                    }
                 }
             }
         }

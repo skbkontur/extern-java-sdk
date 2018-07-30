@@ -29,7 +29,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class AuthenticationEvent extends EventObject {
 

@@ -28,10 +28,11 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.4-SNAPSHOT</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
+    <name>Extern Api SDK for Java - Swagger Client Adaptor</name>
 
     <packaging>jar</packaging>
 

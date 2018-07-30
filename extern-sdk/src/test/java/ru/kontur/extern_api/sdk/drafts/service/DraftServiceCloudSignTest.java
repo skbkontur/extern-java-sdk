@@ -37,13 +37,9 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class DraftServiceCloudSignTest {
@@ -63,32 +59,10 @@ public class DraftServiceCloudSignTest {
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
-            new AuthenticationProvider() {
+            new AuthenticationProviderAdaptor() {
                 @Override
                 public QueryContext<String> sessionId() {
                     return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
-
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
-
-                @Override
-                public AuthenticationProvider httpClient(HttpClient httpClient) {
-                    return this;
-                }
-
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
-
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
-
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
                 }
             });
         draftService = engine.getDraftService();
@@ -114,7 +88,7 @@ public class DraftServiceCloudSignTest {
                 .setDraftId(UUID.randomUUID());
 
         QueryContext<SignInitiation> queryContext = draftService
-                .cloudSignQuery(context)
+                .cloudSignInit(context)
                 .ensureSuccess();
 
         SignInitiation signInitiation = queryContext.get();
@@ -156,7 +130,7 @@ public class DraftServiceCloudSignTest {
         String draftId = UUID.randomUUID().toString();
 
         serverPlease()
-                .when(request().withPath(".*/cloudSign$"), exactly(1))
+                .when(request().withPath(".*/cloud-sign$"), exactly(1))
                 .respond(response().withBody("{ "
                         + "'links': [] , "
                         + "'documents-to-sign': [], "
@@ -166,7 +140,7 @@ public class DraftServiceCloudSignTest {
         serverPlease()
                 .when(
                         request()
-                                .withPath(".*/confirm$")
+                                .withPath(".*/cloud-sign-confirm$")
                                 .withQueryStringParameter("code", "1234"),
                         exactly(1))
                 .respond(response().withBody("{ 'signed-documents': [] }"));

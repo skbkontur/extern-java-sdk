@@ -106,7 +106,7 @@ public class DocflowListExample {
                 System.out.println(
                     "Start sending DocumentToSend: id = " + docToSend.getId().toString()
                         + ", filename = " + docToSend.getFilename());
-                QueryContext sendDocflowCtx = new QueryContext();
+                QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
                 SignatureToSend signature = new SignatureToSend();
                 signature.setContentData("signature" .getBytes());

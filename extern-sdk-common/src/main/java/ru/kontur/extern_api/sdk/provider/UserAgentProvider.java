@@ -24,8 +24,7 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface UserAgentProvider {
     String getVersion();

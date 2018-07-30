@@ -32,8 +32,7 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface ServicesFactory {
     UserAgentProvider getUserAgentProvider();

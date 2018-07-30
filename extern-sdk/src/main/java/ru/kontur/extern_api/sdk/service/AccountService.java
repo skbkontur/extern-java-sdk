@@ -37,14 +37,13 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
- * @author AlexS
- *
- * Группа методов предоставляет доступ к операциям для работы с учетными записями:
+ * <p>Группа методов предоставляет доступ к операциям для работы с учетными записями:</p>
  *<p>- получение списка учетных записей;</p>
  *<p>- создать учетную записьж</p>
  *<p>- получить учетную запись по идентификатору.</p>
  *
  * @see QueryContext
+ * @author Aleksey Sukhorukov
  */
 public interface AccountService extends Providers {
 
@@ -61,6 +60,7 @@ public interface AccountService extends Providers {
      * <p>GET /</p>
      * Синхронный метод возвращает список ссылок на доступные ресурсы.
      * Для выполнения аутентификация не требуется.
+     * @param cxt контекст
      * @return список ссылок
      * @see Link
      */
@@ -77,6 +77,7 @@ public interface AccountService extends Providers {
     /**
      * <p>GET /v1</p>
      * Синхронный метод возвращает список учетных записей с разбивкой по страницам
+     * @param cxt контекст
      * @return список учетных записей
      * @see AccountList
      */

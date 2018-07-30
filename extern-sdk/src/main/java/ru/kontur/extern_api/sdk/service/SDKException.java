@@ -28,7 +28,7 @@ import java.text.MessageFormat;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class SDKException extends RuntimeException {
 

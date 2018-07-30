@@ -27,9 +27,8 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
- *
- * Класс содержит информацию для представителя организации
+ * <p>Класс содержит информацию для представителя организации</p>
+ * @author Aleksey Sukhorukov
  */
 public class Representative {
 
@@ -39,7 +38,7 @@ public class Representative {
     private PassportInfo passport = null;
 
     /**
-     * Возвращает наименования документа представителя
+     * <p>Возвращает наименования документа представителя</p>
      * @return наименования документа представителя
      */
     public String getRepresentativeDocument() {
@@ -47,15 +46,15 @@ public class Representative {
     }
 
     /**
-     * Устанавливает наименования документа представителя
-     * @param representativeDocument
+     * <p>Устанавливает наименования документа представителя</p>
+     * @param representativeDocument наименования документа представителя
      */
     public void setRepresentativeDocument(String representativeDocument) {
         this.representativeDocument = representativeDocument;
     }
 
     /**
-     * Возвращает паспортные данные представителя
+     * <p>Возвращает паспортные данные представителя</p>
      * @return паспортные данные представителя
      * @see PassportInfo
      */
@@ -64,7 +63,7 @@ public class Representative {
     }
 
     /**
-     * Устанавливат паспортные данные представителя
+     * <p>Устанавливат паспортные данные представителя</p>
      * @param passport паспортные данные представителя
      * @see PassportInfo
      */
