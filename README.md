@@ -6,16 +6,8 @@
 Предназначен для легкой интеграции внешних систем с [API Контур.Экстерна](https://github.com/skbkontur/extern-api-docs), разработанных для платформы **JVM**. Для этого библиотека предоставляет класс *ExternEngine*, с помощью которого производится передача данных на внешние сервисы СКБ Контур.
 
 ## 2. Подключение SDK к проекту
-Для того чтобы воспользоваться SDK нужно выполнить следующие шаги:
-- склонировать командой git репозиторий SDK:
 
-`git clone git@github.com:skbkontur/extern-java-sdk.git`
-
-- cобрать с помощью maven SDK проект:
-
-`mvn clean install`
-
-- добавить в maven-проект (pom.xml) артефакт extern-api-java-sdk:
+### Указать библиотеку как зависимость из [maven.central](https://mvnrepository.com/artifact/ru.kontur.extern-api/extern-api-java-sdk):
 ```xml
 <dependency>
     <groupId>ru.kontur.extern-api</groupId>
@@ -23,6 +15,27 @@
     <version>${extern-api-java-sdk.version}</version>
 </dependency>
 ```
+
+### Компиляция из исходного кода:
+
+1. Склонировать репозиторий SDK:
+    ```cmd
+    git clone git@github.com:skbkontur/extern-java-sdk.git
+    ```
+    
+1. Собрать и установить проект в локальный maven репозиторий:
+    ```cmd
+    mvn clean install
+    ```
+    
+1. Добавить в `pom.xml` проекта артефакт `extern-api-java-sdk`:
+    ```xml
+    <dependency>
+        <groupId>ru.kontur.extern-api</groupId>
+        <artifactId>extern-api-java-sdk</artifactId>
+        <version>${extern-api-java-sdk.version}</version>
+    </dependency>
+    ```
 
 ## 3. Конфигурирование
 Для того чтобы начать работу с **SDK**, необходимо создать и сконфигурировать объект *ExternEngine*. Для конфигурации необходимо создать и передать с помощью соответствующего сеттера следующие провайдеры:

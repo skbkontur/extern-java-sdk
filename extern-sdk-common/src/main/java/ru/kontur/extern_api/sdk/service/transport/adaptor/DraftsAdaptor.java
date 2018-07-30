@@ -181,7 +181,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> updateSignature(QueryContext<Void> cxt);
 
     /**
-     * {@code POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1}
+     * {@code POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=1}
      * <p>Create an USN declaration, version 1</p>
      * @param cxt a context (required: draftId,documentId)
      * @return QueryContext&lt;Void&gt;
@@ -189,7 +189,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> createUSN1(QueryContext<Void> cxt);
 
     /**
-     * {@code POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2}
+     * {@code POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=2}
      * <p>Create an USN declaration, version 2</p>
      * @param cxt a context (required: draftId,documentId)
      * @return QueryContext&lt;Void&gt;
@@ -197,7 +197,7 @@ public interface DraftsAdaptor {
     QueryContext<Void> createUSN2(QueryContext<Void> cxt);
 
     /**
-     * {@code POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version}
+     * {@code POST /v1/{accountId}/drafts/{draftId}/build-document?format=type&amp;version=version}
      * <p>Creates a Declaration with a selected type</p>
      * @param cxt a context
      * @return QueryContext&lt;Void&gt;

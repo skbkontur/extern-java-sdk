@@ -4,13 +4,13 @@
 
 branch=`git rev-parse --abbrev-ref HEAD`
 
-# Check branch name
+# Check master
 LENGTH=`echo ${branch} | grep -E '^master$' | wc -c`
 if [ ${LENGTH} -gt 0 ]; then 
     exit 0
 fi
 
-# Check branch name
+# Check develop
 LENGTH=`echo ${branch} | grep -E '^develop$' | wc -c`
 if [ ${LENGTH} -gt 0 ]; then 
     exit 0
@@ -22,9 +22,14 @@ if [ ${LENGTH} -gt 0 ]; then
     exit 0
 fi
 
-# Check branch name
 # ka-####-comment
 LENGTH=`echo ${branch} | grep -E '^ka-([0-9]+)-(.*?)$' | wc -c`
+if [ ${LENGTH} -gt 0 ]; then
+    exit 0
+fi
+
+# release-x[.x]+
+LENGTH=`echo ${branch} | grep -E '^release-([0-9]+)([.][0-9]+)$' | wc -c`
 if [ ${LENGTH} -gt 0 ]; then
     exit 0
 fi
