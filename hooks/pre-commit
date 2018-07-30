@@ -28,8 +28,8 @@ if [ ${LENGTH} -gt 0 ]; then
     exit 0
 fi
 
-# ka-####-comment
-LENGTH=`echo ${branch} | grep -E '^release-\d+(\.\d+)+$' | wc -c`
+# release-x[.x]+
+LENGTH=`echo ${branch} | grep -E '^release-([0-9]+)([.][0-9]+)$' | wc -c`
 if [ ${LENGTH} -gt 0 ]; then
     exit 0
 fi
