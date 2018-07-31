@@ -400,8 +400,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                     .generateDocumentTypeReply(
                         cxt.getAccountProvider().accountId().toString(),
                         cxt.getDocflowId().toString(),
-                        cxt.getDocumentType().toLowerCase(),
                         cxt.getDocumentId().toString(),
+                        cxt.getDocumentType().toLowerCase(),
                         new GenerateReplyDocumentRequestData()
                             .certificateBase64(cxt.getContentString()))
                     .getData(),
