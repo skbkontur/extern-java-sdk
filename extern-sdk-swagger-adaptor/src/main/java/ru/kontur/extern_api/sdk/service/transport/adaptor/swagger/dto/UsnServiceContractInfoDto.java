@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 
+import com.google.gson.Gson;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 
 
@@ -31,37 +32,7 @@ import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
  * @author alexs
  */
 public class UsnServiceContractInfoDto {
-
-    public UsnServiceContractInfo fromDto(ru.kontur.extern_api.sdk.service.transport.swagger.model.UsnServiceContractInfoObject dto) {
-
-        if (dto == null) return null;
-
-        UsnServiceContractInfo info = new UsnServiceContractInfo();
-
-        AdditionalClientInfoDto additionalOrgInfoDto = new AdditionalClientInfoDto();
-        UsnFormatPeriodDto usnFormatPeriodDto = new UsnFormatPeriodDto();
-
-        info.setAdditionalOrgInfo(additionalOrgInfoDto.fromDto(dto.getAdditionalOrgInfo()));
-        info.setData(dto.getData());
-        info.setPeriod(usnFormatPeriodDto.fromDto(dto.getPeriod()));
-
-        return info;
-    }
-
-    public ru.kontur.extern_api.sdk.service.transport.swagger.model.UsnServiceContractInfoObject toDto(UsnServiceContractInfo info) {
-
-        if (info == null) return null;
-
-        ru.kontur.extern_api.sdk.service.transport.swagger.model.UsnServiceContractInfoObject dto
-                = new ru.kontur.extern_api.sdk.service.transport.swagger.model.UsnServiceContractInfoObject();
-
-        AdditionalClientInfoDto additionalOrgInfoDto = new AdditionalClientInfoDto();
-        UsnFormatPeriodDto usnFormatPeriodDto = new UsnFormatPeriodDto();
-
-        dto.setAdditionalOrgInfo(additionalOrgInfoDto.toDto(info.getAdditionalOrgInfo()));
-        dto.setData(info.getData());
-        dto.setPeriod(usnFormatPeriodDto.toDto(info.getPeriod()));
-
-        return dto;
+    public String toDto(UsnServiceContractInfo info) {
+        return info == null ? null : new Gson().toJson(info);
     }
 }

@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
@@ -217,37 +218,25 @@ public interface DraftsAdaptor {
      */
     QueryContext<Void> updateSignature(QueryContext<Void> cxt);
 
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1
-     * <p>
-     * Create an USN declaration, version 1
-     *
-     * @param cxt a context (required: draftId,documentId)
-     * @return QueryContext&lt;Void&gt;
-     */
-    QueryContext<Void> createUSN1(QueryContext<Void> cxt);
-
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2
-     * <p>
-     * Create an USN declaration, version 2
-     *
-     * @param cxt a context (required: draftId,documentId)
-     * @return QueryContext&lt;Void&gt;
-     */
-    QueryContext<Void> createUSN2(QueryContext<Void> cxt);
-
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version
-     * <p>
-     *
-     * @param cxt a context
-     * @return QueryContext&lt;Void&gt;
-     */
-    QueryContext<Void> createDeclOfType(QueryContext<Void> cxt);
-
     QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt);
 
     QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build</p>
+     *
+     * @param cxt a context (required: draftId,documentId, version, content)
+     * @return QueryContext&lt;Void&gt;
+     */
+    @NotNull QueryContext<Void> buildDeclaration(@NotNull QueryContext<Void> cxt);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
+     *
+     * @param cxt a context (required: draftId, version, content)
+     * @return QueryContext&lt;DraftDocument&gt;
+     */
+
+    @NotNull QueryContext<DraftDocument> createAndBuildDeclaration(@NotNull QueryContext<DraftDocument> cxt);
 
 }

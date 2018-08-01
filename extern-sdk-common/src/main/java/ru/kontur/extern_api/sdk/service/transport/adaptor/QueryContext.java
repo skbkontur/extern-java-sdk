@@ -33,6 +33,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.HttpsURLConnection;
 import org.jetbrains.annotations.NotNull;
+import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
@@ -44,38 +47,33 @@ import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocumentToSend;
+import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.ServiceException;
-import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
- * {@code QueryContext} класс предоставляет контекст функционального интерфейса
- * Предназначен для:
- *<p>- установки входных параметров для операций;</p>
- *<p>- установки результата операции;</p>
- *<p>- установки ошибки;</p>
- *<p>- передачи параметров операции от от одного контекста другому;</p>
- *<p>- установки правайдеров: аутентификации, адреса сервиса и апи-кей;</p>
- *<p>- выполнения операций в синхронном и асинхронном режиме. Для этого опреация должна удовлетворять функциональному интерфейсу {@code Query<R>}</p>
+ * {@code QueryContext} класс предоставляет контекст функционального интерфейса Предназначен для:
+ * <p>- установки входных параметров для операций;</p>
+ * <p>- установки результата операции;</p>
+ * <p>- установки ошибки;</p>
+ * <p>- передачи параметров операции от от одного контекста другому;</p>
+ * <p>- установки правайдеров: аутентификации, адреса сервиса и апи-кей;</p>
+ * <p>- выполнения операций в синхронном и асинхронном режиме. Для этого опреация должна
+ * удовлетворять функциональному интерфейсу {@code Query<R>}</p>
  *
- * Перечисленные свойства контекста позволяют строить цепочку выполнения операций с использованием парадигмы FORK & JOIN.
- *
- * @author Сухоруков А., St.Petersburg 25/04/2018
+ * Перечисленные свойства контекста позволяют строить цепочку выполнения операций с использованием
+ * парадигмы FORK & JOIN.
  *
  * @param <R> тип возвращаемого результата операции
- *
+ * @author Сухоруков А., St.Petersburg 25/04/2018
  * @since 1.2
  */
 public class QueryContext<R> implements Serializable {
@@ -84,150 +82,276 @@ public class QueryContext<R> implements Serializable {
 
     private static final long serialVersionUID = -2919303896965835578L;
 
-    /** Токен аутентификации */
+    /**
+     * Токен аутентификации
+     */
     public static final String SESSION_ID = "sessionId";
-    /** Префикс токена аутентификации */
+    /**
+     * Префикс токена аутентификации
+     */
     public static final String AUTH_PREFIX = "authPrefix";
-    /** Наименование сущности. Может быть использовано для логичесокой связи между параметрами.
-     * Например, ENTITY_NAME может указывать на сущность, для которой контекст значение идентификатора ENTITY_ID.
+    /**
+     * Наименование сущности. Может быть использовано для логичесокой связи между параметрами.
+     * Например, ENTITY_NAME может указывать на сущность, для которой контекст значение
+     * идентификатора ENTITY_ID.
      */
     public static final String ENTITY_NAME = "entityName";
-    /** Идентификатор сущности */
+    /**
+     * Идентификатор сущности
+     */
     public static final String ENTITY_ID = "entityId";
-    /** Идентификатор черновика */
+    /**
+     * Идентификатор черновика
+     */
     public static final String DRAFT_ID = "draftId";
-    /** Объект черновик {@link Draft}*/
+    /**
+     * Объект черновик {@link Draft}
+     */
     public static final String DRAFT = "draft";
-    /** Объект документ черновика {@link DraftDocument}*/
+    /**
+     * Объект документ черновика {@link DraftDocument}
+     */
     public static final String DRAFT_DOCUMENT = "draftDocument";
-    /** Идентификатор документа */
+    /**
+     * Идентификатор документа
+     */
     public static final String DOCUMENT_ID = "documentId";
-    /** Объект документ */
+    /**
+     * Объект документ
+     */
     public static final String DOCUMENT = "document";
-    /** Список документов {@code List<Document>} */
+    /**
+     * Список документов {@code List<Document>}
+     */
     public static final String DOCUMENTS = "documents";
-    /** Идентификатор документооборота (ДО) */
+    /**
+     * Идентификатор документооборота (ДО)
+     */
     public static final String DOCFLOW_ID = "docflowId";
-    /** Объект {@link Docflow} */
+    /**
+     * Объект {@link Docflow}
+     */
     public static final String DOCFLOW = "docflow";
-    /** Список документооборотов {@code List<Docflow>} */
+    /**
+     * Список документооборотов {@code List<Docflow>}
+     */
     public static final String DOCFLOWS = "docflows";
-    /** Тип документа */
+    /**
+     * Тип документа
+     */
     public static final String DOCUMENT_TYPE = "documentType";
-    /** Идентификатор ответа */
+    /**
+     * Идентификатор ответа
+     */
     public static final String REPLY_ID = "replyId";
-    /** Объект для отправки документа @see DocumentToSend */
+    /**
+     * Объект для отправки документа @see DocumentToSend
+     */
     public static final String DOCUMENT_TO_SEND = "documentToSend";
-    /** Список объектов для отправки документов ({@code List<DocumentToSend>}) */
+    /**
+     * Список объектов для отправки документов ({@code List<DocumentToSend>})
+     */
     public static final String DOCUMENT_TO_SENDS = "documentToSends";
-    /** Объект "Описание черновика" {@link DraftMeta} */
+    /**
+     * Объект "Описание черновика" {@link DraftMeta}
+     */
     public static final String DRAFT_META = "draftMeta";
-    /** Режим задержки (отсрочки) */
+    /**
+     * Режим задержки (отсрочки)
+     */
     public static final String DEFFERED = "deffered";
-    /** ускоренный режим */
+    /**
+     * ускоренный режим
+     */
     public static final String FORCE = "force";
     // public static final String CONTENT_BYTES = "contentBytes";
-    /** Произвольная строка */
+    /**
+     * Произвольная строка
+     */
     public static final String CONTENT_STRING = "contentString";
-    /** Имя файла */
+    /**
+     * Имя файла
+     */
     public static final String FILE_NAME = "fileName";
-    /** Объект "Содержимое документа" {@link DocumentContents}*/
+    /**
+     * Объект "Содержимое документа" {@link DocumentContents}
+     */
     public static final String DOCUMENT_CONTENTS = "documentContents";
-    /** Массив байт */
+    /**
+     * Массив байт
+     */
     public static final String CONTENT = "content";
-    /** Коллекция типа Map {@link Map} */
+    /**
+     * Коллекция типа Map {@link Map}
+     */
     public static final String MAP = "map";
-    /** Объект {@link ru.kontur.extern_api.sdk.model.PrepareResult} */
+    /**
+     * Объект {@link ru.kontur.extern_api.sdk.model.PrepareResult}
+     */
     public static final String PREPARE_RESULT = "prepareResult";
-    /** Объект {@link ru.kontur.extern_api.sdk.model.CheckResultData} */
+    /**
+     * Объект {@link ru.kontur.extern_api.sdk.model.CheckResultData}
+     */
     public static final String CHECK_RESULT_DATA = "checkResultData";
-    /** Объект "Дескриптор документа" {@link DocumentDescription} */
+    /**
+     * Объект "Дескриптор документа" {@link DocumentDescription}
+     */
     public static final String DOCUMENT_DESCRIPTION = "documentDescription";
-    /** Идентификатор подписи */
+    /**
+     * Идентификатор подписи
+     */
     public static final String SIGNATURE_ID = "signatureId";
-    /** Объект "Подпис" {@link Signature}*/
+    /**
+     * Объект "Подпис" {@link Signature}
+     */
     public static final String SIGNATURE = "signature";
-    /** Список подписией ({@code List<Signature>}) */
+    /**
+     * Список подписией ({@code List<Signature>})
+     */
     public static final String SIGNATURES = "signatures";
-    /** Отпечаток сертификата - хеш SHA-1*/
+    /**
+     * Отпечаток сертификата - хеш SHA-1
+     */
     public static final String THUMBPRINT = "thumbprint";
-    /** Список ссылок ({@code List<Link>}) {@link Link} */
+    /**
+     * Список ссылок ({@code List<Link>}) {@link Link}
+     */
     public static final String LINKS = "links";
-    /** Идентификатор учетной записи */
+    /**
+     * Идентификатор учетной записи
+     */
     public static final String ACCOUNT_ID = "accountId";
-    /** Объект "Учетная запись" {@link Account} */
+    /**
+     * Объект "Учетная запись" {@link Account}
+     */
     public static final String ACCOUNT = "account";
-    /** Список учетных записей ({@code List<Account>})*/
+    /**
+     * Список учетных записей ({@code List<Account>})
+     */
     public static final String ACCOUNT_LIST = "accountList";
-    /** Объект для постраничного извлечения списка документооборотов {@link ru.kontur.extern_api.sdk.model.DocflowPage} */
+    /**
+     * Объект для постраничного извлечения списка документооборотов {@link
+     * ru.kontur.extern_api.sdk.model.DocflowPage}
+     */
     public static final String DOCFLOW_PAGE = "docflowPage";
-    /** Объект для создания учетной записи для организации {@link CreateAccountRequest} */
+    /**
+     * Объект для создания учетной записи для организации {@link CreateAccountRequest}
+     */
     public static final String CREATE_ACCOUNT_REQUEST = "createAccountRequest";
-    /** Признак завершенности документооборота */
+    /**
+     * Признак завершенности документооборота
+     */
     public static final String FINISHED = "finished";
-    /** Признак документооборотов инициализируемые контролирующими органами */
+    /**
+     * Признак документооборотов инициализируемые контролирующими органами
+     */
     public static final String INCOMING = "incoming";
-    /** Смещение от начала списка для постраничного чтения*/
+    /**
+     * Смещение от начала списка для постраничного чтения
+     */
     public static final String SKIP = "skip";
-    /** Максимальное количество считываемых записей для постраничного чтения */
+    /**
+     * Максимальное количество считываемых записей для постраничного чтения
+     */
     public static final String TAKE = "take";
-    /** ИНН+КПП */
+    /**
+     * ИНН+КПП
+     */
     public static final String INN_KPP = "innKpp";
-    /** ИНН */
+    /**
+     * ИНН
+     */
     public static final String INN = "inn";
-    /** КПП */
+    /**
+     * КПП
+     */
     public static final String KPP = "kpp";
-    /** Дата начала периода для обновления документооборотов */
+    /**
+     * Дата начала периода для обновления документооборотов
+     */
     public static final String UPDATED_FROM = "updatedFrom";
-    /** Дата окончания периода для обновления документооборотов */
+    /**
+     * Дата окончания периода для обновления документооборотов
+     */
     public static final String UPDATED_TO = "updatedTo";
-    /** Дата начала периода создания документооборотов */
+    /**
+     * Дата начала периода создания документооборотов
+     */
     public static final String CREATED_FROM = "createdFrom";
-    /** Дата окончания периода создания документооборотов */
+    /**
+     * Дата окончания периода создания документооборотов
+     */
     public static final String CREATED_TO = "createdTo";
-    /** Тип */
+    /**
+     * Тип
+     */
     public static final String TYPE = "type";
-    /** Объект сертификат {@link ru.kontur.extern_api.sdk.model.Certificate} */
+    /**
+     * Объект сертификат {@link ru.kontur.extern_api.sdk.model.Certificate}
+     */
     public static final String CERTIFICATE = "certificate";
-    /** Объект список сертификатов {@link CertificateList} для постраничного извлечения сертификтов */
+    /**
+     * Объект список сертификатов {@link CertificateList} для постраничного извлечения сертификтов
+     */
     public static final String CERTIFICATE_LIST = "certificateList";
     /**
-     * Объект содержащий информацию для создания УСН декларации на сервисе.
-     * Объект включает в себя JSON с данными декларации.
-     * {@link UsnServiceContractInfo}
+     * Объект содержащий информацию для создания УСН декларации на сервисе. Объект включает в себя
+     * JSON с данными декларации. {@link UsnServiceContractInfo}
      */
     public static final String USN_SERVICE_CONTRACT_INFO = "usnServiceContractInfo";
     /**
-     * Объект содержащий информацию для создания УСН декларации на сервисе.
-     * Объект включает в себя объектную модель с данными декларации.
-     * {@link UsnServiceContractInfoV2}
+     * Идентификатор первой учетной записи, с которой необходимо произвести загрузку списока
      */
-    public static final String USN_SERVICE_CONTRACT_INFO_V2 = "usnServiceContractInfoV2";
-    /** Идентификатор первой учетной записи, с которой необходимо произвести загрузку списока */
     public static final String FROM_ID = "fromId";
-    /** Содержит размер списка объектов*/
+    /**
+     * Содержит размер списка объектов
+     */
     public static final String SIZE = "size";
-    /** Объект "Страница событий" {@link EventsPage} */
+    /**
+     * Объект "Страница событий" {@link EventsPage}
+     */
     public static final String EVENTS_PAGE = "eventsPage";
-    /** Признак отсутствия выходных данных для операции {@link Void} */
+    /**
+     * Признак отсутствия выходных данных для операции {@link Void}
+     */
     public static final String NOTHING = "nothing";
-    /** Объект "Простой объект" {@link Object} */
+    /**
+     * Объект "Простой объект" {@link Object}
+     */
     public static final String OBJECT = "object";
-    /** Версия */
+    /**
+     * Версия
+     */
     public static final String VERSION = "version";
-    /** Идетификатор организации */
+    /**
+     * Идетификатор организации
+     */
     public static final String COMPANY_ID = "companyId";
-    /** Объект "Организация". Возвращается сервисом и содержит идентификатор организации. {@link Company} */
+    /**
+     * Объект "Организация". Возвращается сервисом и содержит идентификатор организации. {@link
+     * Company}
+     */
     public static final String COMPANY = "company";
-    /** Объект "Организация". Передается сервису для создания новой организации. Не содержит идентификатор. {@link CompanyGeneral} */
+    /**
+     * Объект "Организация". Передается сервису для создания новой организации. Не содержит
+     * идентификатор. {@link CompanyGeneral}
+     */
     public static final String COMPANY_GENERAL = "companyGeneral";
-    /** Имя */
+    /**
+     * Имя
+     */
     public static final String NAME = "name";
-    /** Объект "Страница списка организации". {@link ru.kontur.extern_api.sdk.model.CompanyBatch} */
+    /**
+     * Объект "Страница списка организации". {@link ru.kontur.extern_api.sdk.model.CompanyBatch}
+     */
     public static final String COMPANY_BATCH = "companyBatch";
-    /** Идентификатор запроса на облачную подпись */
+    /**
+     * Идентификатор запроса на облачную подпись
+     */
     public static final String REQUEST_ID = "requestId";
-    /** SMS-код подтврждения */
+    /**
+     * SMS-код подтврждения
+     */
     public static final String SMS_CODE = "code";
 
 
@@ -256,6 +380,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Конструктор для создания контекста
+     *
      * @param entityName наименования сущности, для которой создается контекст
      */
     public QueryContext(String entityName) {
@@ -265,6 +390,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Конструктор для создания контекста
+     *
      * @param parent контекст, из которого копируются параметры для создаваемого контекста
      * @param entityName наименования сущности, для которой создается контекст
      */
@@ -277,7 +403,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает результат операции, который можно получить с помощью метода {@link QueryContext#get()}
+     * Метод устанавливает результат операции, который можно получить с помощью метода {@link
+     * QueryContext#get()}
+     *
      * @param result результат операции
      * @param key наименование параметра
      * @return контекст
@@ -289,9 +417,10 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает ошибку операции.
-     * Если метод вернул значение не null, то метод {@link QueryContext#isFail()} вернет true,
-     * иначе метод {@link QueryContext#isSuccess()} ()} вернет true.
+     * Метод возвращает ошибку операции. Если метод вернул значение не null, то метод {@link
+     * QueryContext#isFail()} вернет true, иначе метод {@link QueryContext#isSuccess()} ()} вернет
+     * true.
+     *
      * @return объект {@link ServiceError}
      */
     public ServiceError getServiceError() {
@@ -299,8 +428,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает сообщение об ошибке. Метод {@link QueryContext#getServiceError()}
-     * вернет ошибку со значением кода {@link ErrorCode#business}
+     * Метод устанавливает сообщение об ошибке. Метод {@link QueryContext#getServiceError()} вернет
+     * ошибку со значением кода {@link ErrorCode#business}
+     *
      * @param message сообщение об ошибке
      * @return контекст
      */
@@ -309,8 +439,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает значение ошибки из переданного контекста.
-     * Если контекст содержит ошибку авторизации (401), то значение токена авторизации (SID) будет удалено из контекста.
+     * Метод устанавливает значение ошибки из переданного контекста. Если контекст содержит ошибку
+     * авторизации (401), то значение токена авторизации (SID) будет удалено из контекста.
+     *
      * @param queryContext контекст, ошибка которого будет сохранена
      * @return контекст
      */
@@ -325,6 +456,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает ошибку {@link ServiceError} в контекст.
+     *
      * @param serviceError ошибка
      * @return контекст
      */
@@ -339,6 +471,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает ошибку и дефолтное сообщение по переданному коду ошибки
+     *
      * @param errorCode код ошибки {@link ErrorCode}
      * @return контекст
      */
@@ -347,17 +480,20 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает значение ошибки, которое вернул сервис,
-     * при этом ErrorCode примет значение ErrorCode.server
+     * Метод устанавливает значение ошибки, которое вернул сервис, при этом ErrorCode примет
+     * значение ErrorCode.server
+     *
      * @param x ошибка сервера (4XX, 5XX)
      * @return контекст
      */
     public QueryContext<R> setServiceError(ApiException x) {
-        return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(), x.getResponseHeaders(), x.getResponseBody(), x.getCause());
+        return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(),
+                x.getResponseHeaders(), x.getResponseBody(), x.getCause());
     }
 
     /**
      * Метод устанавливает значение ошибки
+     *
      * @param errorCode код ошибки {@link ErrorCode}
      * @param message сообщение об ошибки
      * @param code HTTP код ошибки
@@ -366,49 +502,52 @@ public class QueryContext<R> implements Serializable {
      * @param thrown эксепшин, приведший к ошибке
      * @return контекст
      */
-    public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message, int code, Map<String, List<String>> responseHeaders, String responseBody, Throwable thrown) {
+    public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message,
+            int code, Map<String, List<String>> responseHeaders, String responseBody,
+            Throwable thrown) {
         return setServiceError(
-            new ServiceError() {
-            @Override
-            public ErrorCode getErrorCode() {
-                return errorCode;
-            }
+                new ServiceError() {
+                    @Override
+                    public ErrorCode getErrorCode() {
+                        return errorCode;
+                    }
 
-            @Override
-            public int getResponseCode() {
-                return code;
-            }
+                    @Override
+                    public int getResponseCode() {
+                        return code;
+                    }
 
-            @Override
-            public String getMessage() {
-                return message;
-            }
+                    @Override
+                    public String getMessage() {
+                        return message;
+                    }
 
-            @Override
-            public Map<String, List<String>> getResponseHeaders() {
-                return responseHeaders;
-            }
+                    @Override
+                    public Map<String, List<String>> getResponseHeaders() {
+                        return responseHeaders;
+                    }
 
-            @Override
-            public String getResponseBody() {
-                return responseBody;
-            }
+                    @Override
+                    public String getResponseBody() {
+                        return responseBody;
+                    }
 
-            @Override
-            public Throwable getCause() {
-                return thrown;
-            }
+                    @Override
+                    public Throwable getCause() {
+                        return thrown;
+                    }
 
-            @Override
-            public String toString() {
-                return prettyErrorPrint(this);
-            }
-        }
+                    @Override
+                    public String toString() {
+                        return prettyErrorPrint(this);
+                    }
+                }
         );
     }
 
     /**
      * Метод устанавливает значение ошибки. При этом ErrorCode примет значение ErrorCode.business
+     *
      * @param message сообщение с ошибкой
      * @param x эксепшин, приведший к ошибке
      * @return контекст
@@ -419,6 +558,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает результат операции
+     *
      * @return результат операции
      */
     public R get() {
@@ -430,6 +570,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает true, если ошибка в контекст не была установлена, иначе - false
+     *
      * @return true, если ошибка в контекст не была установлена, иначе - false
      */
     public boolean isSuccess() {
@@ -438,6 +579,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает true, если ошибка в контекст была установлена, иначе - false
+     *
      * @return true, если ошибка в контекст была установлена, иначе - false
      */
     public boolean isFail() {
@@ -446,8 +588,10 @@ public class QueryContext<R> implements Serializable {
 
 
     /**
-     * Возвращает функцию типа {@link UriProvider}. Данная функция возвращает адрес сервиса в Интернет.
-     * Если значение не было установлено, то метод вернет функцию, которая вернет пустую строку.
+     * Возвращает функцию типа {@link UriProvider}. Данная функция возвращает адрес сервиса в
+     * Интернет. Если значение не было установлено, то метод вернет функцию, которая вернет пустую
+     * строку.
+     *
      * @return функция, возвращающая адрес сервиса
      */
     public UriProvider getServiceBaseUriProvider() {
@@ -456,6 +600,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает функцию типа {@link UriProvider}, возвращающую адрес сервиса
+     *
      * @param serviceBaseUriProvider функция, возвращающая адрес сервиса
      * @return контекст
      */
@@ -466,6 +611,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает провайдер для аутентификации {@link AuthenticationProvider}
+     *
      * @return провайдер для аутентификации {@link AuthenticationProvider}
      */
     public AuthenticationProvider getAuthenticationProvider() {
@@ -474,20 +620,21 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает провайдер аутентификации {@link AuthenticationProvider} в контекст.
-     * Существует несколько типов аутентификации:
-     * - аутентификация по логину и паролю;
-     * - аутентификация по сертификату;
-     * - доверитеоьная аутентификация.
+     * Существует несколько типов аутентификации: - аутентификация по логину и паролю; -
+     * аутентификация по сертификату; - доверитеоьная аутентификация.
+     *
      * @param authenticationProvider провайдер аутентификации
      * @return контекст
      */
-    public QueryContext<R> setAuthenticationProvider(@NotNull AuthenticationProvider authenticationProvider) {
+    public QueryContext<R> setAuthenticationProvider(
+            @NotNull AuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
         return this;
     }
 
     /**
      * Метод возвращает провайдер идентификатора учетной записи {@link AccountProvider}
+     *
      * @return провайдер идентификатора учетной записи
      */
     public AccountProvider getAccountProvider() {
@@ -496,6 +643,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает провайдер идентификатора учетной записи
+     *
      * @param accountProvider провайдер идентификатора учетной записи
      * @return контекст
      */
@@ -506,6 +654,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает провайдер идентификатора внешнего сервиса {@link ApiKeyProvider}
+     *
      * @return провайдер идентификатора внешнего сервиса
      */
     public ApiKeyProvider getApiKeyProvider() {
@@ -513,7 +662,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает правайдер идентификатора внешнего сервиса {@link ApiKeyProvider} в контекст
+     * Метод устанавливает правайдер идентификатора внешнего сервиса {@link ApiKeyProvider} в
+     * контекст
+     *
      * @param apiKeyProvider правайдер идентификатора внешнего сервиса
      * @return контекст
      */
@@ -524,6 +675,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор сессии (SID)
+     *
      * @return идентификатор сессии (SID)
      */
     public String getSessionId() {
@@ -532,6 +684,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор сессии (SID)
+     *
      * @param sessionId идентификатор сессии
      * @return контекст
      */
@@ -541,6 +694,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор сессии (SID), установленный в переданный контекст
+     *
      * @param queryContext контекст, с установленным идентификатором сессии
      * @return контекст
      */
@@ -550,6 +704,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает префикс идентификатора сессии (SID)
+     *
      * @return префикс идентификатора сессии
      */
     public String getAuthPrefix() {
@@ -558,6 +713,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает префикс идентификатора сессии (SID)
+     *
      * @param authPrefix префикс идентификатора сессии
      * @return контекст
      */
@@ -567,6 +723,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает имя сущности
+     *
      * @return имя сущности
      */
     public String getEntityName() {
@@ -575,6 +732,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает имя сущности
+     *
      * @param entityName имя сущности
      * @return контекст
      */
@@ -584,6 +742,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор черновика
+     *
      * @return идентификатор черновика
      */
     public UUID getDraftId() {
@@ -592,6 +751,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор черновика
+     *
      * @param draftId идентификатор черновика
      * @return контекст
      */
@@ -601,6 +761,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор черновика
+     *
      * @param draftId идентификатор черновика
      * @return контекст
      */
@@ -610,6 +771,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект черновик {@link Draft}
+     *
      * @return объект черновик
      */
     public Draft getDraft() {
@@ -618,6 +780,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект черновик {@link Draft}
+     *
      * @param draft объект черновик
      * @return контекст
      */
@@ -627,6 +790,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект документооборот {@link Docflow}
+     *
      * @return объект документооборот
      */
     public Docflow getDocflow() {
@@ -635,6 +799,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект документооборот {@link Docflow}
+     *
      * @param docflow объект документооборот
      * @return контекст
      */
@@ -644,6 +809,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список документооборотов {@link Docflow}
+     *
      * @param docflows {@code List<Docflow>} список документооборотов
      * @return контекст
      */
@@ -653,6 +819,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список документооборотов {@link Docflow}
+     *
      * @return {@code List<Docflow>} список документооборот
      */
     @SuppressWarnings("unchecked")
@@ -662,6 +829,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор документооборота
+     *
      * @return идентификатор документооборота
      */
     public UUID getDocflowId() {
@@ -677,6 +845,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор документооборота
+     *
      * @param docflowId идентификатор документооборота
      * @return контекст
      */
@@ -686,6 +855,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор документооборота
+     *
      * @param docflowId идентификатор документооборота
      * @return контекст
      */
@@ -695,6 +865,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор документооборота
+     *
      * @return идентификатор документооборота
      */
     public UUID getDocumentId() {
@@ -703,6 +874,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор документа
+     *
      * @param documentId идентификатор документа
      * @return контекст
      */
@@ -712,6 +884,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор документа
+     *
      * @param documentId идентификатор документа
      * @return контекст
      */
@@ -721,6 +894,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект документ {@link Document}
+     *
      * @return идентификатор документооборота
      */
     public Document getDocument() {
@@ -729,6 +903,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список документов {@link Document}
+     *
      * @param documents список документов
      * @return контекст
      */
@@ -738,6 +913,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект документ {@link Document}
+     *
      * @param document объект документов
      * @return контекст
      */
@@ -747,6 +923,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список документов {@link Document}
+     *
      * @return список документов
      */
     @SuppressWarnings("unchecked")
@@ -756,6 +933,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Иетод возвращает дескриптор документа {@link DocumentDescription}
+     *
      * @return дескриптор документа
      */
     public DocumentDescription getDocumentDescription() {
@@ -764,6 +942,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает дескриптор документа {@link DocumentDescription}
+     *
      * @param documentDescription дескриптор документа
      * @return контекст
      */
@@ -773,6 +952,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает тип документа
+     *
      * @return тип документа
      */
     public String getDocumentType() {
@@ -781,6 +961,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает тип документа
+     *
      * @param documentType тип документа
      * @return контекст
      */
@@ -790,6 +971,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор ответа
+     *
      * @return идентификатор ответа
      */
     public UUID getReplyId() {
@@ -798,6 +980,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор ответа
+     *
      * @param replyId идентификатор ответа
      * @return контекст
      */
@@ -807,6 +990,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект документ для отправки {@link DocumentToSend}
+     *
      * @return объект документ для отправки
      */
     public DocumentToSend getDocumentToSend() {
@@ -815,6 +999,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает документ для отправки {@link DocumentToSend}
+     *
      * @param documentToSend документ для отправки
      * @return контекст
      */
@@ -824,6 +1009,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект метаданные черновика {@link DraftMeta}
+     *
      * @return метаданные черновика
      */
     public DraftMeta getDraftMeta() {
@@ -832,6 +1018,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект метаданные черновика {@link DraftMeta}
+     *
      * @param draftMeta объект метаданные черновика
      * @return контекст
      */
@@ -841,6 +1028,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает режим задержки (отсрочки)
+     *
      * @return режим задержки (отсрочки)
      */
     public boolean getDeffered() {
@@ -850,6 +1038,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает режим задержки (отсрочки)
+     *
      * @param deffered режим задержки (отсрочки)
      * @return контекст
      */
@@ -859,6 +1048,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает признак ускоренного режима
+     *
      * @return признак ускоренного режима
      */
     public boolean getForce() {
@@ -868,6 +1058,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает признак ускоренного режима
+     *
      * @param force признак ускоренного режима
      * @return контекст
      */
@@ -886,6 +1077,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает значение - строку
+     *
      * @return значение - строку
      */
     public String getContentString() {
@@ -894,6 +1086,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает значение - строку
+     *
      * @param contentString значение - строка
      * @return контекст
      */
@@ -903,6 +1096,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает имя файла
+     *
      * @return имя файла
      */
     public String getFileName() {
@@ -911,6 +1105,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает имя файла
+     *
      * @param fileName имя файла
      * @return контекст
      */
@@ -920,6 +1115,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект Контекст документа {@link DocumentContents}
+     *
      * @return возвращает объект Контекст документа
      */
     public DocumentContents getDocumentContents() {
@@ -928,6 +1124,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метол устанавливает объект Контекст документа
+     *
      * @param documentContents объект Контекст документа
      * @return контекст
      */
@@ -937,6 +1134,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает массив байт
+     *
      * @return массив байт
      */
     public byte[] getContent() {
@@ -945,6 +1143,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает массив байт
+     *
      * @param content массив байт
      * @return контекст
      */
@@ -954,6 +1153,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект DraftDocument {@link DraftDocument}
+     *
      * @return возвращает объект DraftDocument
      */
     public DraftDocument getDraftDocument() {
@@ -962,6 +1162,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор подписи
+     *
      * @return идентификатор подписи
      */
     public UUID getSignatureId() {
@@ -970,6 +1171,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор подписи
+     *
      * @param signatureId идентификатор подписи
      * @return контекст
      */
@@ -979,6 +1181,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор подписи
+     *
      * @param signatureId идентификатор подписи
      * @return контекст
      */
@@ -988,6 +1191,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод Возвращает отпечаток сертификата
+     *
      * @return отпечаток сертификата
      */
     public String getThumbprint() {
@@ -996,6 +1200,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает отпечаток сертификата
+     *
      * @param thumbprint отпечаток сертификата
      * @return контекст
      */
@@ -1005,6 +1210,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список ссылок {@link Link}
+     *
      * @return список ссылок
      */
     @SuppressWarnings("unchecked")
@@ -1014,6 +1220,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список ссылок {@link Link}
+     *
      * @param links список ссылок
      * @return контекст
      */
@@ -1023,6 +1230,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор учетной записи
+     *
      * @return идентификатор учетной записи
      */
     public UUID getAccountId() {
@@ -1031,6 +1239,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор учетной записи
+     *
      * @param accountId идентификатор учетной записи
      * @return контекст
      */
@@ -1040,6 +1249,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор учетной записи
+     *
      * @param accountId идентификатор учетной записи
      * @return контекст
      */
@@ -1049,6 +1259,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект "Учетная запись" {@link Account}
+     *
      * @return объект "Учетная запись"
      */
     public Account getAccount() {
@@ -1057,6 +1268,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект "Учетная запись" {@link Account}
+     *
      * @param account объект "Учетная запись"
      * @return контекст
      */
@@ -1065,8 +1277,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Список учетных записей" {@link AccountList}.
-     * Включает в себя свойства для постраничной загрузки.
+     * Метод возвращает объект "Список учетных записей" {@link AccountList}. Включает в себя
+     * свойства для постраничной загрузки.
+     *
      * @return объект "Список учетных записей"
      */
     public AccountList getAccountList() {
@@ -1075,6 +1288,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект "Список учетных записей" {@link AccountList}
+     *
      * @param accountList объект "Список учетных записей"
      * @return контекст
      */
@@ -1083,8 +1297,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Данные новой учетной записи" {@link CreateAccountRequest}.
-     * Служит для передачи запросу данных о новой учетной записи
+     * Метод возвращает объект "Данные новой учетной записи" {@link CreateAccountRequest}. Служит
+     * для передачи запросу данных о новой учетной записи
+     *
      * @return объект "Данные новой учетной записи"
      */
     public CreateAccountRequest getCreateAccountRequest() {
@@ -1092,8 +1307,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект "Данные новой учетной записи" {@link CreateAccountRequest}.
-     * Служит для передачи запросу данных о новой учетной записи
+     * Метод устанавливает объект "Данные новой учетной записи" {@link CreateAccountRequest}. Служит
+     * для передачи запросу данных о новой учетной записи
+     *
      * @param createAccountRequest объект "Данные новой учетной записи"
      * @return контекст
      */
@@ -1103,6 +1319,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект "Подпись" {@link Signature}
+     *
      * @return объект "Подпись"
      */
     public Signature getSignature() {
@@ -1111,6 +1328,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект "Подпись" {@link Signature}
+     *
      * @param signature объект "Подпись"
      * @return контекст
      */
@@ -1120,6 +1338,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список подписей {@link Signature}
+     *
      * @return список подписей
      */
     @SuppressWarnings("unchecked")
@@ -1129,6 +1348,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список подписей {@link Signature}
+     *
      * @param signatures список подписей
      * @return контекст
      */
@@ -1138,6 +1358,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список документов подготовленных к отправке {@link DocumentToSend}
+     *
      * @return список документов подготовленных к отправке
      */
     @SuppressWarnings("unchecked")
@@ -1147,6 +1368,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список документов подготовленных к отправке {@link DocumentToSend}
+     *
      * @param replies список документов подготовленных к отправке
      * @return контекст
      */
@@ -1155,8 +1377,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает признак завершенности документооборота (ДО). True - ДО завершен, false - не завершен
-     * Используется в запросе для извлечения списка документооборотов.
+     * Метод возвращает признак завершенности документооборота (ДО). True - ДО завершен, false - не
+     * завершен Используется в запросе для извлечения списка документооборотов.
+     *
      * @return признак завершенности документооборота
      */
     public boolean getFinished() {
@@ -1164,8 +1387,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает признак завершенности документооборота (ДО). True - ДО завершен, false - не завершен
-     * Используется в запросе для извлечения списка документооборотов.
+     * Метод возвращает признак завершенности документооборота (ДО). True - ДО завершен, false - не
+     * завершен Используется в запросе для извлечения списка документооборотов.
+     *
      * @param finished признак завершенности документооборота
      * @return контекст
      */
@@ -1174,17 +1398,21 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает признак документооборотов (ДО), инициализированные контролирующими органами. True - требуются входящие ДО , false - требуются исходящие ДО
-     * Используется в запросе для извлечения списка документооборотов.
-     * @return  признак документооборотов (ДО), инициализированные контролирующими органами
+     * Метод возвращает признак документооборотов (ДО), инициализированные контролирующими органами.
+     * True - требуются входящие ДО , false - требуются исходящие ДО Используется в запросе для
+     * извлечения списка документооборотов.
+     *
+     * @return признак документооборотов (ДО), инициализированные контролирующими органами
      */
     public boolean getIncoming() {
         return (boolean) params.get(INCOMING);
     }
 
     /**
-     * Метод устанавливает признак документооборотов (ДО), инициализированные контролирующими органами. True - требуются входящие ДО , false - требуются исходящие ДО
-     * Используется в запросе для извлечения списка документооборотов.
+     * Метод устанавливает признак документооборотов (ДО), инициализированные контролирующими
+     * органами. True - требуются входящие ДО , false - требуются исходящие ДО Используется в
+     * запросе для извлечения списка документооборотов.
+     *
      * @param incoming признак наличия входящих документов документооборота
      * @return контекст
      */
@@ -1193,8 +1421,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в возвращаемой колекции.
-     * Необходим для организации постраничной загрузки.
+     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в
+     * возвращаемой колекции. Необходим для организации постраничной загрузки.
+     *
      * @return порядковый номер первой записи от начала списка в возвращаемой колекции
      */
     public Long getSkip() {
@@ -1202,8 +1431,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в возвращаемой колекции.
-     * Необходим для организации постраничной загрузки.
+     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в
+     * возвращаемой колекции. Необходим для организации постраничной загрузки.
+     *
      * @param skip порядковый номер первой записи от начала списка в возвращаемой колекции
      * @return контекст
      */
@@ -1212,8 +1442,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает максимальное количество записей в возвращаемой коллекции.
-     * Необходим для организации постраничной загрузки.
+     * Метод возвращает максимальное количество записей в возвращаемой коллекции. Необходим для
+     * организации постраничной загрузки.
+     *
      * @return максимальное количество записей в возвращаемой коллекции
      */
     public Integer getTake() {
@@ -1221,8 +1452,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает максимальное количество записей в возвращаемой коллекции.
-     * Необходим для организации постраничной загрузки.
+     * Метод устанавливает максимальное количество записей в возвращаемой коллекции. Необходим для
+     * организации постраничной загрузки.
+     *
      * @param take максимальное количество записей в возвращаемой коллекции
      * @return контекст
      */
@@ -1232,6 +1464,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает ИНН
+     *
      * @return ИНН
      */
     public String getInn() {
@@ -1240,6 +1473,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает ИНН
+     *
      * @param inn ИНН
      * @return контекст
      */
@@ -1249,6 +1483,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает КПП
+     *
      * @return КПП
      */
     public String getKpp() {
@@ -1257,6 +1492,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает КПП
+     *
      * @param kpp КПП
      * @return контекст
      */
@@ -1266,6 +1502,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает ИНН+КПП
+     *
      * @return ИНН+КПП
      */
     public String getInnKpp() {
@@ -1274,6 +1511,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает ИНН+КПП
+     *
      * @param innKpp ИНН+КПП
      * @return контекст
      */
@@ -1282,8 +1520,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает дату начала периода для дат обновления документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод возвращает дату начала периода для дат обновления документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @return дату начала периода для дат обновления документооборотов.
      */
     public Date getUpdatedFrom() {
@@ -1291,8 +1530,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает дату начала периода для дат обновления документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод устанавливает дату начала периода для дат обновления документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @param updatedFrom дата начала периода для дат обновления документооборотов.
      * @return контекст
      */
@@ -1301,8 +1541,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает дату конца периода для дат обновления документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод возвращает дату конца периода для дат обновления документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @return дату конца периода для дат обновления документооборотов.
      */
     public Date getUpdatedTo() {
@@ -1310,8 +1551,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает дату конца периода для дат обновления документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод устанавливает дату конца периода для дат обновления документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @param updatedTo дата начала периода для дат обновления документооборотов.
      * @return контекст
      */
@@ -1320,8 +1562,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает дату начала периода для дат создания документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод возвращает дату начала периода для дат создания документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @return дату начала периода для дат создания документооборотов.
      */
     public Date getCreatedFrom() {
@@ -1329,8 +1572,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает дату начала периода для дат создания документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод устанавливает дату начала периода для дат создания документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @param createdFrom дата начала периода для дат создания документооборотов.
      * @return контекст
      */
@@ -1339,8 +1583,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает дату конца периода для дат создания документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод возвращает дату конца периода для дат создания документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @return дату конца периода для дат создания документооборотов.
      */
     public Date getCreatedTo() {
@@ -1348,8 +1593,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает дату конца периода для дат создания документооборотов.
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод устанавливает дату конца периода для дат создания документооборотов. Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @param createdTo дата начала периода для дат создания документооборотов.
      * @return контекст
      */
@@ -1358,8 +1604,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает тип (или типы, разделенные знаком запятая) документооборотов
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод возвращает тип (или типы, разделенные знаком запятая) документооборотов Данный критерий
+     * используется для формирования списка документооборотов
+     *
      * @return тип (или типы, разделенные знаком запятая) документооборотов
      */
     public String getType() {
@@ -1367,8 +1614,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает тип (или типы, разделенные знаком запятая) документооборотов
-     * Данный критерий используется для формирования списка документооборотов
+     * Метод устанавливает тип (или типы, разделенные знаком запятая) документооборотов Данный
+     * критерий используется для формирования списка документооборотов
+     *
      * @param type тип (или типы, разделенные знаком запятая) документооборотов
      * @return контекст
      */
@@ -1378,6 +1626,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает сертификат в кодировке BASE64 без тегов
+     *
      * @return сертификат в кодировке BASE64 без тегов
      */
     public String getCertificate() {
@@ -1386,6 +1635,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает сертификат в кодировке BASE64 без тегов
+     *
      * @param certificate сертификат в кодировке BASE64 без тегов
      * @return контекст
      */
@@ -1394,16 +1644,22 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект {@link CertificateList}, предназначенный для постраничнего извлечения сертификатов.
-     * @return объект {@link CertificateList}, предназначенный для постраничнего извлечения сертификатов
+     * Метод возвращает объект {@link CertificateList}, предназначенный для постраничнего извлечения
+     * сертификатов.
+     *
+     * @return объект {@link CertificateList}, предназначенный для постраничнего извлечения
+     * сертификатов
      */
     public CertificateList getCertificateList() {
         return (CertificateList) params.get(CERTIFICATE_LIST);
     }
 
     /**
-     * Метод устанавливает объект {@link CertificateList}, предназначенный для постраничнего извлечения сертификатов.
-     * @param certificateList объект {@link CertificateList}, предназначенный для постраничнего извлечения сертификатов
+     * Метод устанавливает объект {@link CertificateList}, предназначенный для постраничнего
+     * извлечения сертификатов.
+     *
+     * @param certificateList объект {@link CertificateList}, предназначенный для постраничнего
+     * извлечения сертификатов
      * @return контекст
      */
     public QueryContext<R> setCertificateList(CertificateList certificateList) {
@@ -1411,9 +1667,10 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект {@link UsnServiceContractInfo}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации
-     * Объект включает в себя JSON с данными УСН декларации.
+     * Метод возвращает объект {@link UsnServiceContractInfo}, содержащий информацию о УСН
+     * декларации Предназначен для передачи данных на сервер, для создания УСН декларации Объект
+     * включает в себя JSON с данными УСН декларации.
+     *
      * @return объект {@link UsnServiceContractInfo}
      */
     public UsnServiceContractInfo getUsnServiceContractInfo() {
@@ -1421,38 +1678,22 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект {@link UsnServiceContractInfo}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации.
-     * Объект включает в себя JSON с данными УСН декларации.
+     * Метод устанавливает объект {@link UsnServiceContractInfo}, содержащий информацию о УСН
+     * декларации Предназначен для передачи данных на сервер, для создания УСН декларации. Объект
+     * включает в себя JSON с данными УСН декларации.
+     *
      * @param usnServiceContractInfo объект, содержащий информацию о УСН декларации
      * @return контекст
      */
-    public QueryContext<R> setUsnServiceContractInfo(UsnServiceContractInfo usnServiceContractInfo) {
+    public QueryContext<R> setUsnServiceContractInfo(
+            UsnServiceContractInfo usnServiceContractInfo) {
         return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
-    }
-
-    /**
-     * Метод возвращает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации
-     * @return объект {@link UsnServiceContractInfo}
-     */
-    public UsnServiceContractInfoV2 getUsnServiceContractInfoV2() {
-        return (UsnServiceContractInfoV2) params.get(USN_SERVICE_CONTRACT_INFO_V2);
-    }
-
-    /**
-     * Метод устанавливает объект {@link UsnServiceContractInfoV2}, содержащий информацию о УСН декларации
-     * Предназначен для передачи данных на сервер, для создания УСН декларации.
-     * @param usnServiceContractInfoV2 объект, содержащий информацию о УСН декларации
-     * @return контекст
-     */
-    public QueryContext<R> setUsnServiceContractInfoV2(UsnServiceContractInfoV2 usnServiceContractInfoV2) {
-        return set(USN_SERVICE_CONTRACT_INFO_V2, usnServiceContractInfoV2);
     }
 
     /**
      * Метод возвращает идентификатор записи, после которой необходимо произвести загрузку страницы.
      * Для считывания первой страницы должно быть установлено значение "0".
+     *
      * @return идентификатор записи
      */
     public String getFromId() {
@@ -1460,8 +1701,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает идентификатор записи, после которой необходимо произвести загрузку страницы.
-     * Для считывания первой страницы должно быть установлено значение "0".
+     * Метод устанавливает идентификатор записи, после которой необходимо произвести загрузку
+     * страницы. Для считывания первой страницы должно быть установлено значение "0".
+     *
      * @param fromId идентификатор записи
      * @return контекст
      */
@@ -1470,8 +1712,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает идентификатор организации.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод возвращает идентификатор организации. Используется в группе запросов для работы с
+     * организациями {@code OrganizationService}
+     *
      * @return идентификатор организации
      */
     public UUID getCompanyId() {
@@ -1479,8 +1722,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает идентификатор организации.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод устанавливает идентификатор организации. Используется в группе запросов для работы с
+     * организациями {@code OrganizationService}
+     *
      * @param companyId идентификатор организации
      * @return контекст
      */
@@ -1489,8 +1733,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает идентификатор организации.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод устанавливает идентификатор организации. Используется в группе запросов для работы с
+     * организациями {@code OrganizationService}
+     *
      * @param companyId идентификатор организации
      * @return контекст
      */
@@ -1499,8 +1744,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Организация" {@link Company}
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод возвращает объект "Организация" {@link Company} Используется в группе запросов для
+     * работы с организациями {@code OrganizationService}
+     *
      * @return объект "Организация"
      */
     public Company getCompany() {
@@ -1508,8 +1754,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект "Организация" {@link Company}
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод устанавливает объект "Организация" {@link Company} Используется в группе запросов для
+     * работы с организациями {@code OrganizationService}
+     *
      * @param company объект "Организация"
      * @return контекст
      */
@@ -1518,9 +1765,11 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Новая организация" {@link CompanyGeneral}.
-     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод возвращает объект "Новая организация" {@link CompanyGeneral}. Объект предназначен для
+     * создания новой организации. В отличии от класса {@link Company}, в нем отсутствует
+     * идентификатор организации Используется в группе запросов для работы с организациями {@code
+     * OrganizationService}
+     *
      * @return объект "Новая организация"
      */
     public CompanyGeneral getCompanyGeneral() {
@@ -1528,9 +1777,11 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает объект "Новая организация" {@link CompanyGeneral}.
-     * Объект предназначен для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует идентификатор организации
-     * Используется в группе запросов для работы с организациями {@code OrganizationService}
+     * Метод устанавливает объект "Новая организация" {@link CompanyGeneral}. Объект предназначен
+     * для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует
+     * идентификатор организации Используется в группе запросов для работы с организациями {@code
+     * OrganizationService}
+     *
      * @param companyGeneral объект "Новая организация"
      * @return контекст
      */
@@ -1539,8 +1790,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает имя.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService} при изменении имени организации.
+     * Метод возвращает имя. Используется в группе запросов для работы с организациями {@code
+     * OrganizationService} при изменении имени организации.
+     *
      * @return имя
      */
     public String getName() {
@@ -1548,8 +1800,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает имя.
-     * Используется в группе запросов для работы с организациями {@code OrganizationService} при изменении имени организации.
+     * Метод устанавливает имя. Используется в группе запросов для работы с организациями {@code
+     * OrganizationService} при изменении имени организации.
+     *
      * @param name имя
      * @return контекст
      */
@@ -1558,8 +1811,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает размер.
-     * Используется для определения максимального размера страницы при извлечения списка объектов.
+     * Метод возвращает размер. Используется для определения максимального размера страницы при
+     * извлечения списка объектов.
+     *
      * @return размер
      */
     public int getSize() {
@@ -1567,8 +1821,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает размер.
-     * Используется для определения максимального размера страницы при извлечения списка объектов.
+     * Метод устанавливает размер. Используется для определения максимального размера страницы при
+     * извлечения списка объектов.
+     *
      * @param size размер
      * @return контекст
      */
@@ -1577,8 +1832,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект "Страница событий" {@link EventsPage}.
-     * Используется для постраничного извлечения списка событий в группе запросов {@code EventService}.
+     * Метод возвращает объект "Страница событий" {@link EventsPage}. Используется для постраничного
+     * извлечения списка событий в группе запросов {@code EventService}.
+     *
      * @return "Страница событий"
      */
     public EventsPage getEventsPage() {
@@ -1586,8 +1842,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливаето объект "Страница событий" {@link EventsPage}.
-     * Используется для постраничного извлечения списка событий в группе запросов {@code EventService}.
+     * Метод устанавливаето объект "Страница событий" {@link EventsPage}. Используется для
+     * постраничного извлечения списка событий в группе запросов {@code EventService}.
+     *
      * @param eventsPage "Страница событий"
      * @return контекст
      */
@@ -1596,8 +1853,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает номер версии.
-     * Используется для указания версии при создании декларации в группе запросов {@code DraftService}.
+     * Метод возвращает номер версии. Используется для указания версии при создании декларации в
+     * группе запросов {@code DraftService}.
+     *
      * @return номер версии
      */
     public int getVersion() {
@@ -1605,8 +1863,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает номер версии.
-     * Используется для указания версии при создании декларации в группе запросов {@code DraftService}.
+     * Метод устанавливает номер версии. Используется для указания версии при создании декларации в
+     * группе запросов {@code DraftService}.
+     *
      * @param version номер версии
      * @return контекст
      */
@@ -1631,7 +1890,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод устанавливает значение для параметра. Если переданное значение null, то параметр удаляется.
+     * Метод устанавливает значение для параметра. Если переданное значение null, то параметр
+     * удаляется.
+     *
      * @param name имя параметра
      * @param val значение параметра
      * @return контекст
@@ -1639,8 +1900,7 @@ public class QueryContext<R> implements Serializable {
     public QueryContext<R> set(String name, Object val) {
         if (val != null) {
             params.put(name, val);
-        }
-        else {
+        } else {
             params.remove(name);
         }
 
@@ -1649,9 +1909,9 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает параметр с именем "name", приводя его к типу переменной
+     *
      * @param name имя параметра
      * @param <T> задекларированный тип переменной
-     * @return
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String name) {
@@ -1659,8 +1919,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query<R>} в отдельном потоке.
-     * Операция принимает в качестве параметра данный контекст
+     * Метод выполняет операцию типа {@link Query<R>} в отдельном потоке. Операция принимает в
+     * качестве параметра данный контекст
+     *
      * @param query операция
      * @return квитанция на результат операции
      */
@@ -1673,8 +1934,9 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query<R>} в текущем потоке.
-     * Операция принимает в качестве параметра данный контекст
+     * Метод выполняет операцию типа {@link Query<R>} в текущем потоке. Операция принимает в
+     * качестве параметра данный контекст
+     *
      * @param query операция
      * @return контекст с результатом операции
      */
@@ -1684,7 +1946,8 @@ public class QueryContext<R> implements Serializable {
         }
 
         QueryContext<R> r = query.apply(this);
-        if (r.isFail() && r.getServiceError().getErrorCode() == ErrorCode.server && r.getServiceError().getResponseCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+        if (r.isFail() && r.getServiceError().getErrorCode() == ErrorCode.server
+                && r.getServiceError().getResponseCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
             if (authenticationProvider != null) {
                 authenticationProvider.raiseUnauthenticated(r.getServiceError());
             }
@@ -1697,13 +1960,14 @@ public class QueryContext<R> implements Serializable {
      */
     public void failure() {
         ServiceError e = getServiceError();
-        if (e != null)
+        if (e != null) {
             throw new ServiceException(e);
+        }
     }
 
     /**
-     * Метод в случае наличия ошибки кидает исключение.
-     * Предназначен для тестов.
+     * Метод в случае наличия ошибки кидает исключение. Предназначен для тестов.
+     *
      * @return контекст
      */
     public QueryContext<R> ensureSuccess() {
@@ -1720,7 +1984,8 @@ public class QueryContext<R> implements Serializable {
         Map<String, List<String>> responseHeaders = se.getResponseHeaders();
         String responseBody = se.getResponseBody();
 
-        StringBuilder errorMsg = new StringBuilder("Message error: ").append(message == null ? errorCode.message() : message).append(EOL);
+        StringBuilder errorMsg = new StringBuilder("Message error: ")
+                .append(message == null ? errorCode.message() : message).append(EOL);
         if (responseCode != 0) {
             errorMsg.append("  Response code: ").append(responseCode).append(EOL);
             if (responseHeaders != null) {
