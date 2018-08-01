@@ -16,7 +16,7 @@ extern-sdk-test
 /extern-sdk-examples/tests
 /extern-sdk-examples/nbactions.xml
 /extern-sdk-examples/nbactions-release-profile.xml
-/nb-configuration.xml
+nb-configuration.xml
 /extern-sdk/nbactions.xml
 /extern-sdk-swagger-adaptor/nb-configuration.xml
 /extern-sdk-common/nb-configuration.xml

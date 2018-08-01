@@ -37,7 +37,7 @@
     </description>
     <url>https://github.com/skbkontur/extern-java-sdk</url>
 
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
 
     <packaging>pom</packaging>
 
@@ -90,7 +90,7 @@
 
         <swagger-core-version>1.5.15</swagger-core-version>
         <okhttp-version>2.7.5</okhttp-version>
-        <gson-version>2.8.1</gson-version>
+        <gson.version>2.8.1</gson.version>
         <jodatime-version>2.9.9</jodatime-version>
         <junit.version>4.12</junit.version>
         <cryptoservice.version>5.0.19</cryptoservice.version>
@@ -108,6 +108,10 @@
         <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
+        <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
+        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
 
         <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
         <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
@@ -116,10 +120,8 @@
         <servlet-api.version>2.5</servlet-api.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <mockserver-netty.version>5.3.0</mockserver-netty.version>
-        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
-        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-        <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <log4j.version>2.11.0</log4j.version>
     </properties>
 
     <modules>
@@ -136,6 +138,27 @@
 
         <pluginManagement>
             <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven-enforcer-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>[3.0,)</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -287,20 +310,10 @@
                     <configuration>
                         <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
                     </configuration>
                 </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.4.2</version>
-                    <configuration>
-                        <tagNameFormat>v@{project.version}</tagNameFormat>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <releaseProfiles>release</releaseProfiles>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -308,6 +321,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
             </plugin>
 
             <plugin>
@@ -329,30 +347,25 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
 
     </build>
 
     <profiles>
-        <profile>
-            <id>snapshot</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>release</id>
             <build>
@@ -360,14 +373,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -382,6 +387,56 @@
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
                 <version>${jb-annotations.version}</version>
+            </dependency>
+
+            <!-- logging -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
+            <!-- SDK dependencies -->
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-httpclient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-generated-client</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- test dependencies -->
@@ -421,13 +476,6 @@
                 <version>${mockserver-netty.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>ru.kontur.extern-api</groupId>
-                <artifactId>extern-api-java-sdk-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
         </dependencies>
     </dependencyManagement>
 

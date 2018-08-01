@@ -28,7 +28,7 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.5-SNAPSHOT</version>
+        <version>1.5</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
@@ -41,12 +41,12 @@
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-generated-client</artifactId>
-            <version>${project.version}</version>
-            <type>jar</type>
         </dependency>
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>${gson-version}</version>
+            <version>${gson.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
