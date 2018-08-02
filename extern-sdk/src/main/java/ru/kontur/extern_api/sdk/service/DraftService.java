@@ -94,7 +94,7 @@ public interface DraftService extends Providers {
      * Асинхронный метод создает черновик
      *
      * @param sender отправитель декларации {@link Sender}
-     * @param recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient}
+     * @param recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient} | {@link ru.kontur.extern_api.sdk.model.TogsRecipient}
      * @param organization организация, на которую создана декларация {@link Organization}
      * @return идентификатор черновика
      */
@@ -109,11 +109,12 @@ public interface DraftService extends Providers {
      * <p>- объект мета-данные черновика, полученный с помощью конструктора {@link
      * DraftMeta#DraftMeta(Sender, Recipient, Organization)}, где:</p>
      * <ul>
-     * <li>sender отправитель декларации {@link Sender};</li>
-     * <li>recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient};</li>
-     * <li>organization организация, на которую создана декларация {@link Organization}.</li>
-     * </ul>
-     * <p>Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.</p>
+     *  <li>sender отправитель декларации {@link Sender};</li>
+     *  <li>recipient получатель декларации {@link ru.kontur.extern_api.sdk.model.FnsRecipient}  | {@link ru.kontur.extern_api.sdk.model.TogsRecipient};</li>
+     *  <li>organization организация, на которую создана декларация {@link Organization}.</li>
+     *</ul>
+     *<p>Для установки необходимо использовать метод {@link QueryContext#setDraftMeta}.</p>
+     *
      * @return идентификатор черновика
      */
     QueryContext<UUID> create(QueryContext<?> cxt);
