@@ -98,7 +98,7 @@ public class DocumentDescription {
     public void setFilename(String filename) {
         this.filename = filename;
         // пытаемся угадать тип
-        this.type = Type.guessType(filename).value;
+        // this.type = Type.guessType(filename).value;
     }
 
     /**
