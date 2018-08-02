@@ -116,7 +116,7 @@ public final class MediaType {
     /**
      * Returns the charset of this media type, or {@code defaultValue} if this media type doesn't specify a charset.
      * @param defaultValue Charset a default charset of the media data
-     * @return 
+     * @return the charset of this media type, or {@code defaultValue} if this media type doesn't specify a charset.
      */
     public Charset charset(Charset defaultValue) {
         return charset != null ? Charset.forName(charset) : defaultValue;
