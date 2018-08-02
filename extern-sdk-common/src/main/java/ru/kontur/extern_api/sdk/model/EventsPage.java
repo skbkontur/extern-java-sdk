@@ -31,7 +31,11 @@ import java.util.Objects;
 
 
 /**
- * @author AlexS
+ * <p>
+ *     Класс содержит список событий документооборотов
+ * </p>
+ * @see ApiEvent
+ * @author Aleksey Sukhorukov
  */
 public class EventsPage {
 
@@ -46,46 +50,93 @@ public class EventsPage {
     @SerializedName("api-events")
     private List<ApiEvent> apiEvents = new ArrayList<>();
 
+    /**
+     * <p>Возвращает идентификатор первого события в списке.</p>
+     * @return идентификатор первого события в списке.
+     */
     public String getFirstEventId() {
         return firstEventId;
     }
 
+    /**
+     * <p>Устанавливает идентификатор первого события в списке.</p>
+     * @param firstEventId идентификатор первого события в списке
+     */
     public void setFirstEventId(String firstEventId) {
         this.firstEventId = firstEventId;
     }
 
+    /**
+     * <p>Возвращает идентификатор последнего события в списке.</p>
+     * @return идентификатор последнего события в списке
+     */
     public String getLastEventId() {
         return lastEventId;
     }
 
+    /**
+     * <p>Устанавливает идентификатор последнего события в списке.</p>
+     * @param lastEventId идентификатор последнего события в списке
+     */
     public void setLastEventId(String lastEventId) {
         this.lastEventId = lastEventId;
     }
 
+    /**
+     * <p>Возвращает запрошенное количество событий в запросе</p>
+     * @return запрошенное количество событий в запросе
+     */
     public Integer getRequestedCount() {
         return requestedCount;
     }
 
+    /**
+     * <p>Устанавливает максимаоьное количество событий, которое должен вернуть запрос.</p>
+     * @param requestedCount максимаоьное количество событий, которое должен вернуть запрос
+     */
     public void setRequestedCount(Integer requestedCount) {
         this.requestedCount = requestedCount;
     }
 
+    /**
+     * <p>Возвращает количество событий, которое вернул запрос.</p>
+     * @return количество событий, которое вернул запрос
+     */
     public Integer getReturnedCount() {
         return returnedCount;
     }
 
+    /**
+     * <p>Устанавливает количество событий, которое вернул запрос.</p>
+     * @param returnedCount количество событий, которое вернул запрос
+     */
     public void setReturnedCount(Integer returnedCount) {
         this.returnedCount = returnedCount;
     }
 
+    /**
+     * <p>Возвращает список событий</p>
+     * @return список событий
+     * @see ApiEvent
+     */
     public List<ApiEvent> getApiEvents() {
         return apiEvents;
     }
 
+    /**
+     * <p>Устанавливает список событий</p>
+     * @param apiEvents список событий
+     * @see ApiEvent
+     */
     public void setApiEvents(List<ApiEvent> apiEvents) {
         this.apiEvents = apiEvents;
     }
 
+    /**
+     * <p>Добавляет событие {@link ApiEvent} в список</p>
+     * @param apiEventsItem событие
+     * @return страница событий
+     */
     public EventsPage addApiEventsItem(ApiEvent apiEventsItem) {
         if (this.apiEvents == null) {
             this.apiEvents = new ArrayList<>();

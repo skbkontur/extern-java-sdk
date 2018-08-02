@@ -603,6 +603,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=1
      * POST /v1/{accountId}/drafts/{draftId}/cloudSign
      * <p>
      * Initiates the process of cloud signing of the draft
@@ -632,7 +633,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/cloudSign/confirm
+     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&amp;version=2
      * <p>
      * Initiates the process of cloud signing of the draft
      *
@@ -661,7 +662,8 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/buildDeclaration</p>
+     * POST /v1/{accountId}/drafts/{draftId}/build-document?format=type&amp;version=version
+     * <p>
      *
      * @param cxt a context (required: draftId,documentId, version, content)
      * @return QueryContext&lt;Void&gt;

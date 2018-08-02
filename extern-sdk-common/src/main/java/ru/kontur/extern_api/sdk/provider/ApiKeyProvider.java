@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public interface ApiKeyProvider {
 

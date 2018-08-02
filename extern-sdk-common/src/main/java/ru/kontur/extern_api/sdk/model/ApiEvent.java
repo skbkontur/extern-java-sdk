@@ -30,9 +30,10 @@ import java.util.Objects;
 
 
 /**
- * @author AlexS
- *
+ * <p>
  * Класс предназначен для хронения информации ленты событий документооборотов см. класс EventService
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class ApiEvent {
 
@@ -82,7 +83,9 @@ public class ApiEvent {
 
     /**
      * Возвращает тип документооборота
-     * <li>urn:docflow-type:ke-fns-report</li>
+     * <ul>
+     *   <li>urn:docflow-type:ke-fns-report</li>
+     * </ul>
      * @return тип документооборота
      */
     public String getDocflowType() {
@@ -91,7 +94,10 @@ public class ApiEvent {
 
     /**
      * Устанавливает тип документооборота
-     * @param docflowType
+     * @param docflowType тип документооборота:
+     * <ul>
+     *   <li>urn:docflow-type:ke-fns-report</li>
+     * </ul>
      */
     public void setDocflowType(String docflowType) {
         this.docflowType = docflowType;
@@ -115,9 +121,11 @@ public class ApiEvent {
 
     /**
      * Возвращает состояние документооборота:
-     *  <li>urn:transaction:report</li>
-     *  <li>urn:transaction:acceptance-result-positive</li>
-     *  <li>urn:transaction:processing-result-ok</li>
+     * <ul>
+     *   <li>urn:transaction:report</li>
+     *   <li>urn:transaction:acceptance-result-positive</li>
+     *   <li>urn:transaction:processing-result-ok</li>
+     * </ul>
      * @return состояние документооборота
      */
     public String getNewState() {
@@ -125,10 +133,12 @@ public class ApiEvent {
     }
 
     /**
-     * Устанавливает состояние документооборота
-     *  <li>urn:transaction:report</li>
-     *  <li>urn:transaction:acceptance-result-positive</li>
-     *  <li>urn:transaction:processing-result-ok</li>
+     * Устанавливает состояние документооборота:
+     * <ul>
+     *   <li>urn:transaction:report</li>
+     *   <li>urn:transaction:acceptance-result-positive</li>
+     *   <li>urn:transaction:processing-result-ok</li>
+     * </ul>
      * @param newState состояние документооборота
      */
     public void setNewState(String newState) {

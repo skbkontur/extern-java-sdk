@@ -28,7 +28,7 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class DefaultUserAgentProvider implements UserAgentProvider {
     private static final String DEFAULT_VERSION = "unknown";

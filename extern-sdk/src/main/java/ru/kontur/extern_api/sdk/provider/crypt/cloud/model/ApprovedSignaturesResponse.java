@@ -30,7 +30,7 @@ import java.util.List;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public class ApprovedSignaturesResponse {
 

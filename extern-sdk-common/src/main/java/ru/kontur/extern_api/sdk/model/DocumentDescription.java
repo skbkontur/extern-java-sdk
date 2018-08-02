@@ -27,10 +27,11 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author AlexS
- *
+ * <p>
  * Класс содержит данные, описывающие документ, для отправки.
  * Используется в сервисе {@code DraftService}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DocumentDescription {
 
@@ -46,9 +47,11 @@ public class DocumentDescription {
 
     /**
      * Возвращает тип документа. Могут быть следующие типы документов для отправки:
-     * <li>urn:document:fns534-report - декларация для ФНС</li>
-     * <li>urn:document:fns534-report-warrant - доверенность</li>
-     * <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
+     * <ul>
+     *   <li>urn:document:fns534-report - декларация для ФНС</li>
+     *   <li>urn:document:fns534-report-warrant - доверенность</li>
+     *   <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
+     * </ul>
      * @return type
      */
     public String getType() {
@@ -57,10 +60,12 @@ public class DocumentDescription {
 
     /**
      * Устанавливает тип документа. Могут быть следующие типы документов для отправки:
-     * <li>urn:document:fns534-report - декларация для ФНС</li>
-     * <li>urn:document:fns534-report-warrant - доверенность</li>
-     * <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
      * @param type тип документа
+     * <ul>
+     *   <li>urn:document:fns534-report - декларация для ФНС</li>
+     *   <li>urn:document:fns534-report-warrant - доверенность</li>
+     *   <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
+     * </ul>
      */
     public void setType(String type) {
         this.type = type;

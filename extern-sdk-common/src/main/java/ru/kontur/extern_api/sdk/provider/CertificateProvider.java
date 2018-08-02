@@ -26,8 +26,7 @@ package ru.kontur.extern_api.sdk.provider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 @FunctionalInterface
 public interface CertificateProvider {

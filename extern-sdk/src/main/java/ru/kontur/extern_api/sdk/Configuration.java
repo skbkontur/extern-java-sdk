@@ -41,7 +41,7 @@ import ru.kontur.extern_api.sdk.model.Credential;
 
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class Configuration implements Serializable, AccountProvider, ApiKeyProvider, LoginAndPasswordProvider {
 

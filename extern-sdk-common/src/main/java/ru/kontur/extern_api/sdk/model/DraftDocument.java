@@ -27,7 +27,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 
 /**
- * @author AlexS
+ * <p>
+ *     Класс содержит описание документа черновика
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class DraftDocument {
 
@@ -42,61 +45,90 @@ public class DraftDocument {
     private DocumentDescription description = null;
 
     /**
-     * Get id
-     *
-     * @return id
+     * Возвращает идентификатор документа
+     * @return id идентификатор документа
      */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор документа
+     * @param id UUID идентификатор документа
+     * @see UUID
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
     /**
-     * Get decryptedContentLink
-     *
-     * @return decryptedContentLink
+     * Возвращает ссылку на расшифрованный контент документа
+     * @return ссылка на расшифрованный контент документа
+     * @see Link
      */
     public Link getDecryptedContentLink() {
         return decryptedContentLink;
     }
 
+    /**
+     * Устанавливает ссылку на расшифрованный контент документа
+     * @param decryptedContentLink ссылка на расшифрованный контент документа
+     * @see Link
+     */
     public void setDecryptedContentLink(Link decryptedContentLink) {
         this.decryptedContentLink = decryptedContentLink;
     }
 
     /**
-     * Get encryptedContentLink
-     *
-     * @return encryptedContentLink
+     * Возвращает ссылку на зашифрованный контент документа
+     * @return ссылка на зашифрованный контент документа
+     * @see Link
      */
     public Link getEncryptedContentLink() {
         return encryptedContentLink;
     }
 
+    /**
+     * Устанавливает ссылку на зашифрованный контент документа
+     * @param encryptedContentLink ссылка на зашифрованный контент документа
+     * @see Link
+     */
     public void setEncryptedContentLink(Link encryptedContentLink) {
         this.encryptedContentLink = encryptedContentLink;
     }
 
     /**
-     * Get signatureContentLink
-     *
-     * @return signatureContentLink
+     * Возвращает ссылку на подпись документа
+     * @return signatureContentLink ссылка на подпись документа
+     * @see Link
      */
     public Link getSignatureContentLink() {
         return signatureContentLink;
     }
 
+    /**
+     * Устанавливает ссылку на подпись документа
+     * @param signatureContentLink ссылка на подпись документа
+     * @see Link
+     */
     public void setSignatureContentLink(Link signatureContentLink) {
         this.signatureContentLink = signatureContentLink;
     }
 
+    /**
+     * Возвращает дескриптор документа
+     * @return дескриптор документа
+     * @see DocumentDescription
+     */
     public DocumentDescription getDescription() {
         return description;
     }
 
+    /**
+     * Устанавливает дескриптор документа
+     * @param description дескриптор документа
+     * @see DocumentDescription
+     */
     public void setDescription(DocumentDescription description) {
         this.description = description;
     }

@@ -49,7 +49,7 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NO
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
 
 /**
- * @author AlexS
+ * @author Aleksey Sukhorukov
  */
 public class TrustedAuthentication extends AuthenticationProviderAbstract {
 

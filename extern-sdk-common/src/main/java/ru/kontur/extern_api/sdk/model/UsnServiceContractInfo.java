@@ -25,39 +25,68 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * <p>
+ * Класс предназначен для формирования разделов УСН декларации
+ * </p>
  * @author Mikhail Pavlenko
  */
-
 public class UsnServiceContractInfo<T> {
 
     public UsnFormatPeriod period = null;
     @SerializedName("additional-org-info")
-    public AdditionalClientInfo additionalOrgInfo = null;
+    private AdditionalClientInfo additionalOrgInfo = null;
+    private Object data = null;
 
-    private T data = null;
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
+    /**
+     * <p>Возвращает информацию об отчетном периоде</p>
+     * @return информация об отчетном периоде
+     * @see UsnFormatPeriod
+     */
     public UsnFormatPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * <p>Устанавливает информацию об отчетном периоде</p>
+     * @param period информация об отчетном периоде
+     * @see UsnFormatPeriod
+     */
     public void setPeriod(UsnFormatPeriod period) {
         this.period = period;
     }
 
+    /**
+     * <p>Возвращает информацию об организации</p>
+     * @return информация об организации
+     * @see AdditionalClientInfo
+     */
     public AdditionalClientInfo getAdditionalOrgInfo() {
         return additionalOrgInfo;
     }
 
+    /**
+     * <p>Устанавливает информацию об организации</p>
+     * @param additionalOrgInfo информация об организации
+     * @see AdditionalClientInfo
+     */
     public void setAdditionalOrgInfo(AdditionalClientInfo additionalOrgInfo) {
         this.additionalOrgInfo = additionalOrgInfo;
+    }
+
+    /**
+     * Возвращает JSON документ с информацией об УСН декларации
+     * @return JSON документ с информацией об УСН декларации
+     */
+    public Object getData() {
+        return data;
+    }
+
+    /**
+     * Устанавливает JSON документ с информацией об УСН декларации
+     * @param data JSON документ с информацией об УСН декларации
+     */
+    public void setData(Object data) {
+        this.data = data;
     }
 
     public String toJson() {

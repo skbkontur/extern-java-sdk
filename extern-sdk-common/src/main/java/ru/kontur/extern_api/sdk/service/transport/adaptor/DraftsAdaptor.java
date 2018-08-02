@@ -33,186 +33,149 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface DraftsAdaptor {
     
     /**
-     * Create new a draft
-     * <p>
-     * POST /v1/{billingAccountId}/drafts
-     *
-     * @param cxt a context
-     * @return QueryContext &lt;UUID&gt;
+     * {@code POST /v1/{accountId}/drafts}
+     * <p>Create new a draft</p>
+     * @param cxt a context(required: draftMeta)
+     * @return {@code QueryContext<UUID>}
      */
     QueryContext<UUID> createDraft(QueryContext<UUID> cxt);
     
     /**
-     * lookup a draft by an identifier
-     * <p>
-     * GET /v1/{accountId}/drafts/{draftId}
-     *
-     * @param cxt a context
-     * @return Draft
+     * {@code GET /v1/{accountId}/drafts/{draftId}}
+     * <p>lookup a draft by an identifier</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with a {@link ru.kontur.extern_api.sdk.model.Draft}
      */
     QueryContext<ru.kontur.extern_api.sdk.model.Draft> lookup(QueryContext<ru.kontur.extern_api.sdk.model.Draft> cxt);
 
     /**
-     * Delete a draft
-     * <p>
-     * DELETE /v1/{accountId}/drafts/{draftId}
-     *
-     * @param cxt a context
-     * @return QueryContext&lt;Void&gt;
+     * {@code DELETE /v1/{accountId}/drafts/{draftId}}
+     * <p>Delete a draft</p>
+     * @param cxt a context(required: draftId)
+     * @return {@code QueryContext<Void>}
      */
     QueryContext<Void> delete(QueryContext<Void> cxt);
 
     /**
-     * lookup a draft meta by an identifier
-     * <p>
-     * GET /v1/{accountId}/drafts/{draftId}/meta
-     *
-     * @param cxt a context
-     * @return DraftMeta
+     * {@code GET /v1/{accountId}/drafts/{draftId}/meta}
+     * <p>lookup a draft meta by an identifier</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with a {@link ru.kontur.extern_api.sdk.model.DraftMeta}
      */
     QueryContext<ru.kontur.extern_api.sdk.model.DraftMeta> lookupDraftMeta(QueryContext<ru.kontur.extern_api.sdk.model.DraftMeta> cxt);
 
     /**
-     * update a draft meta
-     * <p>
-     * PUT /v1/{accountId}/drafts/{draftId}/meta
-     *
-     * @param cxt a context
-     * @return DraftMeta
+     * {@code PUT /v1/{accountId}/drafts/{draftId}/meta}
+     * <p>update a draft meta</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with a {@link ru.kontur.extern_api.sdk.model.DraftMeta}
      */
     QueryContext<ru.kontur.extern_api.sdk.model.DraftMeta> updateDraftMeta(QueryContext<ru.kontur.extern_api.sdk.model.DraftMeta> cxt);
 
     /**
-     * Operate CHECK
-     * <p>
-     * POST /v1/{accountId}/drafts/{draftId}/check
-     *
-     * @param cxt a context
-     * @return Map&lt;String,Object&gt;
+     * {@code POST /v1/{accountId}/drafts/{draftId}/check}
+     * <p>Operate CHECK</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with a {@link ru.kontur.extern_api.sdk.model.CheckResultData}
      */
     QueryContext<CheckResultData> check(QueryContext<CheckResultData> cxt);
 
     /**
-     * Operate PREPARE
-     * <p>
-     * POST /v1/{accountId}/drafts/{draftId}/prepare
-     *
-     * @param cxt a context
-     * @return PrepareResult;
+     * {@code POST /v1/{accountId}/drafts/{draftId}/prepare}
+     * <p>Operate PREPARE</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with a {@link ru.kontur.extern_api.sdk.model.PrepareResult}
      */
     QueryContext<ru.kontur.extern_api.sdk.model.PrepareResult> prepare(QueryContext<ru.kontur.extern_api.sdk.model.PrepareResult> cxt);
 
     /**
-     * Send the draft
-     * <p>
-     * POST /v1/{accountId}/drafts/drafts/{draftId}/send
-     *
-     * @param cxt a context
-     * @return List&lt;Docflow&gt;
+     * {@code POST /v1/{accountId}/drafts/drafts/{draftId}/send}
+     * <p>Send the draft</p>
+     * @param cxt a context(required: draftId)
+     * @return a context with {@code List<Docflow>}
      */
     QueryContext<List<Docflow>> send(QueryContext<List<Docflow>> cxt);
 
     /**
-     * DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}
-     * <p>
-     * Delete a document from the draft
-     *
-     * @param cxt a context (draftId, documentId)
-     * @return QueryContext&lt;Void&gt;
+     * {@code DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}}
+     * <p>Delete a document from the draft</p>
+     * @param cxt a context (required: draftId, documentId)
+     * @return {@code QueryContext<Void>}
      */
     QueryContext<Void> deleteDocument(QueryContext<Void> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}
-     * <p>
-     * lookup a document from the draft
-     *
-     * @param cxt a context (draftId,documentId)
-     * @return DraftDocument
+     * {@code GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}}
+     * <p>lookup a document from the draft</p>
+     * @param cxt a context (required: draftId,documentId)
+     * @return a context with a {@link DraftDocument}
      */
     QueryContext<DraftDocument> lookupDocument(QueryContext<DraftDocument> cxt);
 
     /**
-     * PUT /v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}
-     * <p>
-     * Update a draft document Update the document
-     *
+     * {@code PUT /v1/{billingAccountId}/drafts/{draftId}/documents/{documentId}}
+     * <p>Update a draft document Update the document</p>
      * @param cxt a context (required: draftId,documentId,DocumentContents)
-     * @return DraftDocument
+     * @return a context with a {@link DraftDocument}
      */
     QueryContext<DraftDocument> updateDocument(QueryContext<DraftDocument> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print
-     * <p>
-     * print a document from the draft
-     *
-     * @param cxt a context (draftId,documentId)
-     * @return DraftDocument
+     * {@code GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print}
+     * <p>print a document from the draft</p>
+     * @param cxt a context (required: draftId,documentId)
+     * @return a context with print form as PDF of a base64 code
      */
     QueryContext<String> printDocument(QueryContext<String> cxt);
 
     /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents
-     * <p>
-     * Add a new document to the draft
-     *
-     * @param cxt a context (draftId,documentContent,fileName)
-     * @return DraftDocument
+     * {@code POST /v1/{accountId}/drafts/{draftId}/documents}
+     * <p>Add a new document to the draft</p>
+     * @param cxt a context (required: draftId,documentContent,fileName)
+     * @return a context with a {@link DraftDocument}
      */
     QueryContext<DraftDocument> addDecryptedDocument(QueryContext<DraftDocument> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
-     * <p>
-     * Get a decrypted document content
-     *
+     * {@code GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted}
+     * <p>Get a decrypted document content</p>
      * @param cxt a context (required: draftId,documentId)
-     * @return String
+     * @return a context with a decrypted PKCS#7 context of a base64 code
      */
     QueryContext<String> getDecryptedDocumentContent(QueryContext<String> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
-     * <p>
-     * Get a decrypted document content
-     *
+     * {@code PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted}
+     * <p>Get a decrypted document content</p>
      * @param cxt a context (required: draftId,documentId)
      * @return QueryContext&lt;Void&gt;
      */
     QueryContext<Void> updateDecryptedDocumentContent(QueryContext<Void> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
-     * <p>
-     * Get a ecrypted document content
-     *
+     * {@code GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted}
+     * <p>Get a ecrypted document content</p>
      * @param cxt a context (required: draftId,documentId)
-     * @return String
+     * @return a context with a encrypted PKCS#7 context of a base64 code
      */
     QueryContext<String> getEncryptedDocumentContent(QueryContext<String> cxt);
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
-     * <p>
-     * Get a document signature
-     *
+     * {@code GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature}
+     * <p>Get a document signature</p>
      * @param cxt a context (required: draftId,documentId)
-     * @return String
+     * @return a context with a PKCS#7 signature of a base64 code
      */
     QueryContext<String> getSignatureContent(QueryContext<String> cxt);
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
-     * <p>
-     * Update a document signature
-     *
+     * {@code PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature}
+     * <p>Update a document signature</p>
      * @param cxt a context (required: draftId,documentId)
      * @return QueryContext&lt;Void&gt;
      */

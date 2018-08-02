@@ -26,9 +26,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Aleksey Sukhorukov
- *
+ * <p>
  * Класс содержит данные организации. Используется для создании новой организации или получения информации о новой в {@code OrganizationService}
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class CompanyGeneral {
     @SerializedName("inn")
@@ -66,7 +67,7 @@ public class CompanyGeneral {
 
     /**
      * Устанавливает КПП
-     * @param kpp
+     * @param kpp КПП
      */
     public void setKpp(String kpp) {
         this.kpp = kpp;
@@ -74,7 +75,7 @@ public class CompanyGeneral {
 
     /**
      * Возвращает имя организации
-     * @return
+     * @return имя организации
      */
     public String getName() {
         return name;
@@ -82,7 +83,7 @@ public class CompanyGeneral {
 
     /**
      * Устанавливает имя организации
-     * @param name
+     * @param name имя организации
      */
     public void setName(String name) {
         this.name = name;

@@ -35,7 +35,7 @@ import ru.kontur.extern_api.sdk.ServiceError;
 
 
 /**
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 abstract class AuthenticationProviderAbstract implements AuthenticationProvider {
 

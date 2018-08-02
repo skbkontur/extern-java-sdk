@@ -26,8 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 /**
- *
- * @author alexs
+ * @author Aleksey Sukhorukov
  */
 public interface EventsAdaptor {
     

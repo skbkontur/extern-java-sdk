@@ -27,9 +27,8 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author alexs
- *
- * Класс содержит информацию о налогоплательщике
+ * <p>Класс содержит информацию о налогоплательщике</p>
+ * @author Aleksey Sukhorukov
  */
 public class Taxpayer {
 
@@ -48,7 +47,7 @@ public class Taxpayer {
     private String taxpayerFullName = null;
 
     /**
-     * Возвращает ФИО руководителя
+     * <p>Возвращает ФИО руководителя</p>
      * @return ФИО руководителя
      */
     public String getTaxpayerChiefFio() {
@@ -56,15 +55,15 @@ public class Taxpayer {
     }
 
     /**
-     * Устанавливает ФИО руководителя
-     * @param taxpayerChiefFio
+     * <p>Устанавливает ФИО руководителя</p>
+     * @param taxpayerChiefFio ФИО руководителя
      */
     public void setTaxpayerChiefFio(String taxpayerChiefFio) {
         this.taxpayerChiefFio = taxpayerChiefFio;
     }
 
     /**
-     * Возвращает представителя организации. Если отсутствует, то возвращает null
+     * <p>Возвращает представителя организации. Если отсутствует, то возвращает null</p>
      * @return представитель организации
      * @see Representative
      */
@@ -73,7 +72,7 @@ public class Taxpayer {
     }
 
     /**
-     * Устанавливает представителя организации.
+     * <p>Устанавливает представителя организации.</p>
      * @param representative представитель организации
      * @see Representative
      */
@@ -82,7 +81,7 @@ public class Taxpayer {
     }
 
     /**
-     * Возвращает телефон организации
+     * <p>Возвращает телефон организации</p>
      * @return телефон организации
      */
     public String getTaxpayerPhone() {
@@ -90,7 +89,7 @@ public class Taxpayer {
     }
 
     /**
-     * Устанавливает телефон организации
+     * <p>Устанавливает телефон организации</p>
      * @param taxpayerPhone телефон организации
      */
     public void setTaxpayerPhone(String taxpayerPhone) {
@@ -98,7 +97,7 @@ public class Taxpayer {
     }
 
     /**
-     * Возвращает ОКВЭД организации
+     * <p>Возвращает ОКВЭД организации</p>
      * @return ОКВЭД организации
      */
     public String getTaxpayerOkved() {
@@ -106,7 +105,7 @@ public class Taxpayer {
     }
 
     /**
-     * Устанавливает ОКВЕД организации
+     * <p>Устанавливает ОКВЕД организации</p>
      * @param taxpayerOkved ОКВЭД организации
      */
     public void setTaxpayerOkved(String taxpayerOkved) {
@@ -114,7 +113,7 @@ public class Taxpayer {
     }
 
     /**
-     * Возвращает полное имя организации
+     * <p>Возвращает полное имя организации</p>
      * @return полное имя организации
      */
     public String getTaxpayerFullName() {
@@ -122,7 +121,7 @@ public class Taxpayer {
     }
 
     /**
-     * Устанавливает полное имя организации
+     * <p>Устанавливает полное имя организации</p>
      * @param taxpayerFullName полное имя организации
      */
     public void setTaxpayerFullName(String taxpayerFullName) {

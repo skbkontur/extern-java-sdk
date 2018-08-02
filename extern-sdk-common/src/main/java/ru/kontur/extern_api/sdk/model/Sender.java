@@ -26,7 +26,8 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author AlexS
+ * <p>Класс содержит информацию об отправителе черновика</p>
+ * @author Aleksey Sukhorukov
  */
 public class Sender {
 
@@ -51,42 +52,82 @@ public class Sender {
 		this.ipaddress = ipaddress;
 	}
 
+	/**
+	 * Возвращает ИНН
+	 * @return ИНН
+	 */
 	public String getInn() {
 		return inn;
 	}
 
+	/**
+	 * Устанавливает ИНН
+	 * @param inn ИНН
+	 */
 	public void setInn(String inn) {
 		this.inn = inn;
 	}
 
+	/**
+	 * Возвращает КПП
+	 * @return КПП
+	 */
 	public String getKpp() {
 		return kpp;
 	}
 
+	/**
+	 * Устанавливает КПП
+	 * @param kpp КПП
+	 */
 	public void setKpp(String kpp) {
 		this.kpp = kpp;
 	}
 
+	/**
+	 * Возвращает сертификат в кодировке BASE64
+	 * @return сертификат в кодировке BASE64
+	 */
 	public String getCertificate() {
 		return certificate.content;
 	}
 
+	/**
+	 * Устанавливает сертификат в кодировке BASE64
+	 * @param certificate сертификат в кодировке BASE64
+	 */
 	public void setCertificate(String certificate) {
 		this.certificate = new Certificate(certificate);
 	}
 
+	/**
+	 * Возвращает IP адрес отправителя
+	 * @return IP адрес отправителя
+	 */
 	public String getIpaddress() {
 		return ipaddress;
 	}
 
+	/**
+	 * Устанавливает IP адрес отправителя
+	 * @param ipaddress IP адрес отправителя
+	 */
 	public void setIpaddress(String ipaddress) {
 		this.ipaddress = ipaddress;
 	}
 
+	/**
+	 * Возвращает отпечаток сертификата отправителя
+	 * @return отпечаток сертификата отправителя
+	 */
 	public String getThumbprint() {
 		return thumbprint;
 	}
 
+	/**
+	 * Устанавливает отпечаток сертификата отправителя
+	 * @param thumbprint отпечаток сертификата отправителя
+	 */
 	public void setThumbprint(String thumbprint) {
 		this.thumbprint = thumbprint;
 	}

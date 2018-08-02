@@ -27,7 +27,10 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author AlexS
+ * <p>
+ *     Класс содержит информацию о налоговой инспекции, в которую необходимо отправить документ
+ * </p>
+ * @author Aleksey Sukhorukov
  */
 public class FnsRecipient implements Recipient {
 
@@ -41,12 +44,19 @@ public class FnsRecipient implements Recipient {
         this.ifnsCode = ifnsCode;
     }
 
+    /**
+     * <p>Возвращает код налоговой инспекции.</p>
+     * @return код налоговой инспекции
+     */
     public String getIfnsCode() {
         return ifnsCode;
     }
 
+    /**
+     * <p>Устанавливает код налоговой инспекции.</p>
+     * @param ifnsCode код налоговой инспекции
+     */
     public void setIfnsCode(String ifnsCode) {
         this.ifnsCode = ifnsCode;
     }
-
 }

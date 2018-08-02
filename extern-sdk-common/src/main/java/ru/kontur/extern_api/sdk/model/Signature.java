@@ -31,7 +31,8 @@ import java.util.UUID;
 
 
 /**
- * @author AlexS
+ * <p>Класс содержит информацию о подписи документа</p>
+ * @author Aleksey Sukhorukov
  */
 public class Signature {
 
@@ -46,50 +47,71 @@ public class Signature {
     }
 
     /**
-     * Get id
-     *
-     * @return id
+     * <p>Возвращает идентификатор подписи</p>
+     * @return id идентификатор подписи
      */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * <p>Устанавливает идентификатор подписи</p>
+     * @param id идентификатор подписи
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * <p>Устанавливает ссылку на подпись</p>
+     * @param contentLink ссылка {@link Link} на подпись
+     * @return подпись
+     */
     public Signature contentLink(Link contentLink) {
         this.contentLink = contentLink;
         return this;
     }
 
     /**
-     * Get contentLink
-     *
-     * @return contentLink
+     * <p>Возвращает ссылку на контент подписи</p>
+     * @return contentLink ссылка {@link Link} на подпись
      */
     public Link getContentLink() {
         return contentLink;
     }
 
+    /**
+     * <p>Устанавливает ссылку на контент подписи</p>
+     * @param contentLink ссылка {@link Link} на подпись
+     */
     public void setContentLink(Link contentLink) {
         this.contentLink = contentLink;
     }
 
+    /**
+     * <p>Устанавливает ссылки на ресурсы</p>
+     * @param links ссылки на ресурсы
+     * @return подпись
+     */
     public Signature links(List<Link> links) {
         this.links = links;
         return this;
     }
 
     /**
-     * Get links
-     *
+     * <p>Возвращает ссылки на сущности документооборота</p>
      * @return links
+     * @see Link
      */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * <p>Устанавливает ссылки на сущности документооборота</p>
+     * @param links ссылки на сущности документооборота
+     * @see Link
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }
