@@ -42,8 +42,6 @@ import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfoV2;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 
@@ -65,7 +63,7 @@ public class DraftsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Draft> createDraft(@PathParam("accountId") String accountId,
-        DraftMeta clientInfo) throws ApiException {
+            DraftMeta clientInfo) throws ApiException {
         return invoke("createDraft", clientInfo, new TypeToken<Draft>() {
         }.getType(), accountId);
     }
@@ -83,7 +81,7 @@ public class DraftsApi extends RestApi {
     @Path("/v1/{accountId}/drafts/{draftId}")
     @DELETE
     public ApiResponse<Void> delete(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId) throws ApiException {
+            @PathParam("draftId") String draftId) throws ApiException {
         return invoke("delete", null, new TypeToken<Void>() {
         }.getType(), accountId, draftId);
     }
@@ -101,7 +99,7 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Draft> lookup(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId) throws ApiException {
+            @PathParam("draftId") String draftId) throws ApiException {
         return invoke("lookup", null, new TypeToken<Draft>() {
         }.getType(), accountId, draftId);
     }
@@ -119,7 +117,7 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DraftMeta> lookupDraftMeta(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId) throws ApiException {
+            @PathParam("draftId") String draftId) throws ApiException {
         return invoke("lookupDraftMeta", null, new TypeToken<DraftMeta>() {
         }.getType(), accountId, draftId);
     }
@@ -138,7 +136,7 @@ public class DraftsApi extends RestApi {
     @PUT
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DraftMeta> updateDraftMeta(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, DraftMeta clientInfo) throws ApiException {
+            @PathParam("draftId") String draftId, DraftMeta clientInfo) throws ApiException {
         return invoke("updateDraftMeta", clientInfo, new TypeToken<DraftMeta>() {
         }.getType(), accountId, draftId);
     }
@@ -156,7 +154,7 @@ public class DraftsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<CheckResultData> check(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId) throws ApiException {
+            @PathParam("draftId") String draftId) throws ApiException {
         return invoke("check", null, new TypeToken<CheckResultData>() {
         }.getType(), accountId, draftId);
     }
@@ -174,7 +172,7 @@ public class DraftsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<PrepareResult> prepare(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId) throws ApiException {
+            @PathParam("draftId") String draftId) throws ApiException {
         return invoke("prepare", null, new TypeToken<PrepareResult>() {
         }.getType(), accountId, draftId);
     }
@@ -194,8 +192,8 @@ public class DraftsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<List<Docflow>> send(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred,
-        @QueryParam("force") boolean force) throws ApiException {
+            @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred,
+            @QueryParam("force") boolean force) throws ApiException {
         return invoke("send", null, new TypeToken<List<Docflow>>() {
         }.getType(), accountId, draftId, deferred, force);
     }
@@ -214,8 +212,8 @@ public class DraftsApi extends RestApi {
     @DELETE
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> deleteDocument(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("deleteDocument", null, new TypeToken<List<Docflow>>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -234,8 +232,8 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DraftDocument> lookupDocument(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("lookupDocument", null, new TypeToken<DraftDocument>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -255,8 +253,8 @@ public class DraftsApi extends RestApi {
     @PUT
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DraftDocument> updateDocument(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
-        DocumentContents documentContents) throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+            DocumentContents documentContents) throws ApiException {
         return invoke("updateDocument", documentContents, new TypeToken<DraftDocument>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -275,8 +273,8 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> printDocument(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("printDocument", null, new TypeToken<String>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -295,8 +293,8 @@ public class DraftsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DraftDocument> addDecryptedDocument(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, DocumentContents documentContents)
-        throws ApiException {
+            @PathParam("draftId") String draftId, DocumentContents documentContents)
+            throws ApiException {
         return invoke("addDecryptedDocument", documentContents, new TypeToken<DraftDocument>() {
         }.getType(), accountId, draftId);
     }
@@ -315,8 +313,8 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> getDecryptedDocumentContent(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("getDecryptedDocumentContent", null, new TypeToken<String>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -336,8 +334,8 @@ public class DraftsApi extends RestApi {
     @PUT
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> updateDecryptedDocumentContent(
-        @PathParam("accountId") String accountId, @PathParam("draftId") String draftId,
-        @PathParam("documentId") String documentId, byte[] content) throws ApiException {
+            @PathParam("accountId") String accountId, @PathParam("draftId") String draftId,
+            @PathParam("documentId") String documentId, byte[] content) throws ApiException {
         return invoke("updateDecryptedDocumentContent", content, new TypeToken<Void>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -356,8 +354,8 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> getEncryptedDocumentContent(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("getEncryptedDocumentContent", null, new TypeToken<String>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -376,8 +374,8 @@ public class DraftsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> getSignatureContent(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("getSignatureContent", null, new TypeToken<String>() {
         }.getType(), accountId, draftId, documentId);
     }
@@ -397,85 +395,21 @@ public class DraftsApi extends RestApi {
     @PUT
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> updateSignature(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
-        byte[] content) throws ApiException {
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+            byte[] content) throws ApiException {
         return invoke("updateSignature", content, new TypeToken<Void>() {
         }.getType(), accountId, draftId, documentId);
     }
 
     /**
-     * Create an USN declaration, version 1
-     * <p>
-     *
-     * @param accountId String private account identifier
-     * @param draftId String draft identifier
-     * @param documentId String document identifier
-     * @param usn UsnServiceContractInfo meta data of an USN document
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=1")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> createUSN1(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
-        UsnServiceContractInfo usn) throws ApiException {
-        return invoke("createUSN1", usn, new TypeToken<Void>() {
-        }.getType(), accountId, draftId, documentId);
-    }
-
-    /**
-     * Create an USN declaration, version 2
-     * <p>
-     *
-     * @param accountId String private account identifier
-     * @param draftId String draft identifier
-     * @param documentId String document identifier
-     * @param usn UsnServiceContractInfo meta data of an USN document
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build?format=USN&version=2")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> createUSN2(@PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
-        UsnServiceContractInfoV2 usn) throws ApiException {
-        return invoke("createUSN2", usn, new TypeToken<Void>() {
-        }.getType(), accountId, draftId, documentId);
-    }
-
-    /**
-     * @param accountId (required)
-     * @param draftId (required)
-     * @param type (required)
-     * @param version (required)
-     * @param content (required)
-     * @return ApiResponse&lt;Void&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/drafts/{draftId}/build-document?format=&type=&version=version")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Void> createDeclOfType(
-        @PathParam("accountId") String accountId,
-        @PathParam("draftId") String draftId,
-        @PathParam("type") String type,
-        @PathParam("version") Integer version,
-        String content) throws ApiException {
-        return invoke("createDeclOfType", content, new TypeToken<Void>() {
-        }.getType(), accountId, draftId, type, version);
-    }
-
-    /**
-     *  Initiates the process of cloud signing of the draft
+     * Initiates the process of cloud signing of the draft
      *
      * @param accountId String private account identifier
      * @param draftId String draft identifier
      * @return ApiResponse&lt;SignInitiation&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/cloud-sign")
+    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<SignInitiation> cloudSignDraft(
@@ -500,7 +434,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;SignedDraft&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/cloud-sign-confirm")
+    @Path("/v1/{accountId}/drafts/{draftId}/cloudSign/confirm")
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<SignedDraft> confirmCloudSigning(
@@ -517,5 +451,53 @@ public class DraftsApi extends RestApi {
                 requestId,
                 code
         );
+    }
+
+    /**
+     * Create an USN declaration and replace context in document
+     * <p>
+     *
+     * @param accountId String private account identifier
+     * @param draftId String draft identifier
+     * @param documentId String document identifier
+     * @param type Document type
+     * @param version Declaration version
+     * @param data metadata of an USN document
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<Void> buildDeclaration(@PathParam("accountId") String accountId,
+            @PathParam("draftId") String draftId, @PathParam("documentId") String documentId,
+            @QueryParam("type") String type, @QueryParam("version") int version, String data)
+            throws ApiException {
+        return invoke("buildDeclaration", data, new TypeToken<Void>() {
+        }.getType(), accountId, draftId, documentId, type, version);
+    }
+
+    /**
+     * Create an USN declaration and replace context in document
+     * <p>
+     *
+     * @param accountId String private account identifier
+     * @param draftId String draft identifier
+     * @param type Document type
+     * @param version Declaration version
+     * @param data UsnServiceContractInfo meta data of an USN document
+     * @return ApiResponse&lt;Void&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/drafts/{draftId}/build-document")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<DraftDocument> createAndBuildDeclaration(
+            @PathParam("accountId") String accountId,
+            @PathParam("draftId") String draftId, @QueryParam("type") String type,
+            @QueryParam("version") int version,
+            String data) throws ApiException {
+        return invoke("createAndBuildDeclaration", data, new TypeToken<DraftDocument>() {
+        }.getType(), accountId, draftId, type, version);
     }
 }
