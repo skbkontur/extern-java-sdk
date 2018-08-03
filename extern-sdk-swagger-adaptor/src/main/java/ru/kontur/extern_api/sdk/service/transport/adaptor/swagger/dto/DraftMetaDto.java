@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.model.TogsRecipient;
 
 
 /**
@@ -101,6 +102,11 @@ public class DraftMetaDto {
             recipientInfo.setIfnsCode(fnsCode);
             return recipientInfo;
         }
+        else if (recipient instanceof TogsRecipient) {
+            String togsCode = TogsRecipient.class.cast(recipient).getTogsCode();
+            recipientInfo.setTogsCode(togsCode);
+            return recipientInfo;
+        }
         return null;
     }
 
@@ -108,6 +114,9 @@ public class DraftMetaDto {
         ru.kontur.extern_api.sdk.model.Recipient recipient = null;
         if (recipientDto.getIfnsCode() != null && !recipientDto.getIfnsCode().isEmpty()) {
             recipient = new ru.kontur.extern_api.sdk.model.FnsRecipient(recipientDto.getIfnsCode());
+        }
+        else if (recipientDto.getTogsCode() != null && !recipientDto.getTogsCode().isEmpty()) {
+            recipient = new ru.kontur.extern_api.sdk.model.TogsRecipient(recipientDto.getTogsCode());
         }
         return recipient;
     }

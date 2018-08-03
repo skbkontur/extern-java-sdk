@@ -59,12 +59,12 @@ public class DraftServiceCloudSignTest {
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
         engine.setAuthenticationProvider(
-            new AuthenticationProviderAdaptor() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
-            });
+                new AuthenticationProviderAdaptor() {
+                    @Override
+                    public QueryContext<String> sessionId() {
+                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+                    }
+                });
         draftService = engine.getDraftService();
     }
 
@@ -124,7 +124,7 @@ public class DraftServiceCloudSignTest {
         Assert.assertTrue(signedDraft.getSignedDocuments().isEmpty());
     }
 
-    @Test
+    //    @Test
     public void cloudSignMethodWithSupplierShouldSignDraft() throws Exception {
 
         String draftId = UUID.randomUUID().toString();

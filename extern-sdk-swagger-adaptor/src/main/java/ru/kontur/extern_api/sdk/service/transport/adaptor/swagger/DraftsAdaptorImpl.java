@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Draft;
@@ -37,8 +38,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DraftMetaD
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.PrepareResultDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.SignConfirmDto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.SignInitResultDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.UsnServiceContractInfoDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.UsnServiceContractInfoV2Dto;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.ApiClient;
 import ru.kontur.extern_api.sdk.service.transport.swagger.api.DraftsApi;
 import ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiException;
@@ -596,94 +595,6 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
         }
     }
 
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/1
-     * <p>
-     * Create an USN declaration, version 1
-     *
-     * @param cxt a context (required: draftId,documentId)
-     * @return QueryContext&lt;Void&gt;
-     */
-    @Override
-    public QueryContext<Void> createUSN1(QueryContext<Void> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return cxt;
-            }
-
-            transport(cxt)
-                    .draftDocumentsBuildContentFromFormatWithHttpInfo(
-                            cxt.getAccountProvider().accountId(),
-                            cxt.getDraftId(),
-                            cxt.getDocumentId(),
-                            new UsnServiceContractInfoDto().toDto(cxt.getUsnServiceContractInfo())
-                    );
-
-            return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-        }
-    }
-
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/format/USN/2
-     * <p>
-     * Create an USN declaration, version 2
-     *
-     * @param cxt a context (required: draftId,documentId)
-     * @return QueryContext&lt;Void&gt;
-     */
-    @Override
-    public QueryContext<Void> createUSN2(QueryContext<Void> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return cxt;
-            }
-
-            transport(cxt)
-                    .draftDocumentsBuildContentFromFormat_0WithHttpInfo(
-                            cxt.getAccountProvider().accountId(),
-                            cxt.getDraftId(),
-                            cxt.getDocumentId(),
-                            new UsnServiceContractInfoV2Dto()
-                                    .toDto(cxt.getUsnServiceContractInfoV2())
-                    );
-
-            return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-        }
-    }
-
-    /**
-     * POST /v1/{accountId}/drafts/{draftId}/documents/content/format/{type}/{version}
-     * <p>
-     *
-     * @param cxt a context
-     * @return QueryContext&lt;Void&gt;
-     */
-    @Override
-    public QueryContext<Void> createDeclOfType(QueryContext<Void> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return cxt;
-            }
-
-            transport(cxt)
-                    .draftDocumentsCreateDocumentWithBuildContentFromFormatWithHttpInfo(
-                            cxt.getAccountProvider().accountId(),
-                            cxt.getDraftId(),
-                            cxt.getType(),
-                            cxt.getVersion(),
-                            cxt.getContentString()
-                    );
-
-            return cxt.setResult(null, NOTHING);
-        } catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-        }
-    }
-
     @Override
     public QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt) {
         try {
@@ -721,6 +632,69 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
         } catch (ApiException x) {
             return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
         }
+    }
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/buildDeclaration</p>
+     *
+     * @param cxt a context (required: draftId,documentId, version, content)
+     * @return QueryContext&lt;Void&gt;
+     */
+    @Override
+    @NotNull
+    public QueryContext<Void> buildDeclaration(@NotNull QueryContext<Void> cxt) {
+        // todo uncomment after fix swagger
+//        try {
+//            if (cxt.isFail()) {
+//                return cxt;
+//            }
+//
+//            transport(cxt).draftDocumentBuildBuildContentFromFormatWithHttpInfo(
+//                    cxt.getAccountProvider().accountId(),
+//                    cxt.getDraftId(),
+//                    cxt.getDocumentId(),
+//                    cxt.getType(),
+//                    cxt.getVersion(),
+//                    new UsnServiceContractInfoDto().toDto(cxt.getUsnServiceContractInfo())
+//            );
+//            return cxt.setResult(null, QueryContext.NOTHING);
+//        } catch (ApiException x) {
+//            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+//        }
+        return null;
+    }
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
+     *
+     * @param cxt a context (required: draftId, version, content)
+     * @return QueryContext&lt;DraftDocument&gt;
+     */
+    @Override
+    @NotNull
+    public QueryContext<DraftDocument> createAndBuildDeclaration(
+            @NotNull QueryContext<DraftDocument> cxt) {
+        // todo uncomment after fix swagger
+//        try {
+//            if (cxt.isFail()) {
+//                return cxt;
+//            }
+//
+//            return cxt.setResult(new DraftDocumentDto().fromDto(
+//                    (ru.kontur.extern_api.sdk.service.transport.swagger.model.DraftDocument)
+//                            transport(cxt)
+//                                    .draftDocumentBuildCreateDocumentWithBuildContentFromFormat(
+//                                            cxt.getAccountProvider().accountId(),
+//                                            cxt.getDraftId(),
+//                                            cxt.getType(),
+//                                            cxt.getVersion(),
+//                                            new UsnServiceContractInfoDto()
+//                                                    .toDto(cxt.getUsnServiceContractInfo())
+//                                    )), QueryContext.DRAFT_DOCUMENT);
+//        } catch (ApiException x) {
+//            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+//        }
+        return null;
     }
 
     private DraftsApi transport(QueryContext<?> cxt) {
