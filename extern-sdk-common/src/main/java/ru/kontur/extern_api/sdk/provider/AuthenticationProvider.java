@@ -46,4 +46,6 @@ public interface AuthenticationProvider {
     void removeAuthenticationListener(AuthenticationListener authListener);
 
     void raiseUnauthenticated(ServiceError x);
+
+    String userIP();
 }

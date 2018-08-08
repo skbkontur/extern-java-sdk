@@ -49,6 +49,7 @@ import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
+import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Signature;
@@ -90,35 +91,7 @@ public class DocflowServiceGetSignatureTest {
         engine.setServiceBaseUriProvider(() -> "http://localhost:8080/docflows");
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(
-            new AuthenticationProvider() {
-                @Override
-                public QueryContext<String> sessionId() {
-                    return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                }
-
-                @Override
-                public String authPrefix() {
-                    return "auth.sid ";
-                }
-
-                @Override
-                public AuthenticationProvider httpClient(HttpClient httpClient) {
-                    return this;
-                }
-                
-                @Override
-                public void addAuthenticationListener(AuthenticationListener authListener) {
-                }
-
-                @Override
-                public void removeAuthenticationListener(AuthenticationListener authListener) {
-                }
-
-                @Override
-                public void raiseUnauthenticated(ServiceError x) {
-                }
-            });
+        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
     }
 
     @Test

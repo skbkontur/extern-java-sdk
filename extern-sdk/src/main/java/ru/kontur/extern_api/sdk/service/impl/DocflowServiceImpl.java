@@ -26,12 +26,8 @@ package ru.kontur.extern_api.sdk.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Signature;
+
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -50,7 +46,7 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     DocflowServiceImpl(DocflowsAdaptor docflowsAdaptor) {
         this.docflowsAdaptor = docflowsAdaptor;
     }
-    
+
     /**
      * Allow API user to get Docflow object
      * <p>
@@ -63,8 +59,8 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     public CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
         return cxt
-            .setDocflowId(docflowId)
-            .applyAsync(docflowsAdaptor::lookupDocflow);
+                .setDocflowId(docflowId)
+                .applyAsync(docflowsAdaptor::lookupDocflow);
     }
 
     @Override
@@ -77,8 +73,8 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId) {
         QueryContext<List<Document>> cxt = createQueryContext(EN_DFW);
         return cxt
-            .setDocflowId(docflowId)
-            .applyAsync(docflowsAdaptor::getDocuments);
+                .setDocflowId(docflowId)
+                .applyAsync(docflowsAdaptor::getDocuments);
     }
 
     @Override
@@ -89,12 +85,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId,
-        String documentId) {
+                                                                         String documentId) {
         QueryContext<Document> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .applyAsync(docflowsAdaptor::lookupDocument);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .applyAsync(docflowsAdaptor::lookupDocument);
     }
 
     @Override
@@ -105,12 +101,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(
-        String docflowId, String documentId) {
+            String docflowId, String documentId) {
         QueryContext<DocumentDescription> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .applyAsync(docflowsAdaptor::lookupDescription);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .applyAsync(docflowsAdaptor::lookupDescription);
     }
 
     @Override
@@ -121,12 +117,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId,
-        String documentId) {
+                                                                            String documentId) {
         QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .applyAsync(docflowsAdaptor::getEncryptedContent);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .applyAsync(docflowsAdaptor::getEncryptedContent);
     }
 
     @Override
@@ -137,12 +133,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId,
-        String documentId) {
+                                                                            String documentId) {
         QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .applyAsync(docflowsAdaptor::getDecryptedContent);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .applyAsync(docflowsAdaptor::getDecryptedContent);
     }
 
     @Override
@@ -153,12 +149,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId,
-        String documentId) {
+                                                                               String documentId) {
         QueryContext<List<Signature>> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .applyAsync(docflowsAdaptor::getSignatures);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .applyAsync(docflowsAdaptor::getSignatures);
     }
 
     @Override
@@ -171,10 +167,10 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId, String documentId, String signatureId) {
         QueryContext<Signature> cxt = createQueryContext(EN_SGN);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .setSignatureId(signatureId)
-            .applyAsync(docflowsAdaptor::getSignature);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setSignatureId(signatureId)
+                .applyAsync(docflowsAdaptor::getSignature);
     }
 
     @Override
@@ -187,10 +183,10 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId, String documentId, String signatureId) {
         QueryContext<byte[]> cxt = createQueryContext(EN_SGN);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .setSignatureId(signatureId)
-            .applyAsync(docflowsAdaptor::getSignatureContent);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setSignatureId(signatureId)
+                .applyAsync(docflowsAdaptor::getSignatureContent);
     }
 
     @Override
@@ -201,14 +197,14 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(
-        String docflowId, String documentType, String documentId, String x509Base64) {
+            String docflowId, String documentType, String documentId, String x509Base64) {
         QueryContext<DocumentToSend> cxt = createQueryContext(EN_SGN);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentType(documentType)
-            .setDocumentId(documentId)
-            .setContentString(x509Base64)
-            .applyAsync(docflowsAdaptor::generateDocumentTypeReply);
+                .setDocflowId(docflowId)
+                .setDocumentType(documentType)
+                .setDocumentId(documentId)
+                .setContentString(x509Base64)
+                .applyAsync(docflowsAdaptor::generateDocumentTypeReply);
     }
 
     @Override
@@ -219,14 +215,14 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<Docflow>> sendDocumentTypeReplyAsync(String docflowId,
-        String documentType, String documentId, DocumentToSend documentToSend) {
+                                                                               String documentType, String documentId, DocumentToSend documentToSend) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DOC);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentType(documentType)
-            .setDocumentId(documentId)
-            .setDocumentToSend(documentToSend)
-            .applyAsync(docflowsAdaptor::sendDocumentTypeReply);
+                .setDocflowId(docflowId)
+                .setDocumentType(documentType)
+                .setDocumentId(documentId)
+                .setDocumentToSend(documentToSend)
+                .applyAsync(docflowsAdaptor::sendDocumentTypeReply);
     }
 
     @Override
@@ -237,12 +233,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow,
-        String signerX509Base64) {
+                                                                                      String signerX509Base64) {
         QueryContext<List<DocumentToSend>> cxt = createQueryContext(EN_DFW);
         return cxt
-            .setDocflow(docflow)
-            .setCertificate(signerX509Base64)
-            .applyAsync(docflowsAdaptor::generateReplies);
+                .setDocflow(docflow)
+                .setCertificate(signerX509Base64)
+                .applyAsync(docflowsAdaptor::generateReplies);
     }
 
     @Override
@@ -254,43 +250,70 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     @Override
     public CompletableFuture<QueryContext<Docflow>> sendRepliesAsync(DocumentToSend documentToSend) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
+        QueryContext<String> userIPCxt = this.userIPProvider.userIP();
+        if (userIPCxt.isFail()) {
+            return CompletableFuture.completedFuture(cxt.setServiceError(userIPCxt));
+        }
         return cxt
-            .setDocumentToSend(documentToSend)
-            .applyAsync(docflowsAdaptor::sendReplies);
+                .setDocumentToSend(documentToSend)
+                .setUserIP(userIPCxt.get())
+                .applyAsync(docflowsAdaptor::sendReplies);
     }
 
     @Override
     public QueryContext<Docflow> sendReplies(QueryContext<?> parent) {
         QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::sendReplies);
+        QueryContext<String> userIPCxt = this.userIPProvider.userIP();
+        if (userIPCxt.isFail()) {
+            return cxt.setServiceError(userIPCxt);
+        }
+        return cxt
+                .setUserIP(userIPCxt.get())
+                .apply(docflowsAdaptor::sendReplies);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(String docflowId, String documentId, String replyId)  {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .applyAsync(docflowsAdaptor::getReplyDocument);
+    }
+
+    @Override
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_DFW);
+        return cxt.apply(docflowsAdaptor::getReplyDocument);
     }
 
     @Override
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
-        boolean finished,
-        boolean incoming,
-        long skip,
-        int take,
-        String innKpp,
-        Date updatedFrom,
-        Date updatedTo,
-        Date createdFrom,
-        Date createdTo,
-        String type
+            boolean finished,
+            boolean incoming,
+            long skip,
+            int take,
+            String innKpp,
+            Date updatedFrom,
+            Date updatedTo,
+            Date createdFrom,
+            Date createdTo,
+            String type
     ) {
         QueryContext<DocflowPage> cxt = createQueryContext(EN_DFW);
         return cxt
-            .setFinished(finished)
-            .setIncoming(incoming)
-            .setSkip(skip)
-            .setTake(take)
-            .setInnKpp(innKpp)
-            .setUpdatedFrom(updatedFrom)
-            .setUpdatedTo(updatedTo)
-            .setCreatedFrom(createdFrom)
-            .setCreatedTo(createdTo)
-            .setType(type)
-            .applyAsync(docflowsAdaptor::getDocflows);
+                .setFinished(finished)
+                .setIncoming(incoming)
+                .setSkip(skip)
+                .setTake(take)
+                .setInnKpp(innKpp)
+                .setUpdatedFrom(updatedFrom)
+                .setUpdatedTo(updatedTo)
+                .setCreatedFrom(createdFrom)
+                .setCreatedTo(createdTo)
+                .setType(type)
+                .applyAsync(docflowsAdaptor::getDocflows);
     }
 
     @Override
@@ -301,13 +324,13 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
-        String documentContentBase64) {
+                                                              String documentContentBase64) {
         QueryContext<String> cxt = createQueryContext(EN_DFW);
         return cxt
-            .setDocflowId(docflowId)
-            .setDocumentId(documentId)
-            .setContentString(documentContentBase64)
-            .applyAsync(docflowsAdaptor::print);
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setContentString(documentContentBase64)
+                .applyAsync(docflowsAdaptor::print);
     }
 
     @Override

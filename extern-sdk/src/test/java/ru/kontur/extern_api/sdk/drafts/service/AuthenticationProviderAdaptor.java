@@ -27,8 +27,14 @@ import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
-public abstract class AuthenticationProviderAdaptor implements AuthenticationProvider {
+public class AuthenticationProviderAdaptor implements AuthenticationProvider {
+
+    @Override
+    public QueryContext<String> sessionId() {
+        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+    }
 
     @Override
     public String authPrefix() {
@@ -50,5 +56,10 @@ public abstract class AuthenticationProviderAdaptor implements AuthenticationPro
 
     @Override
     public void raiseUnauthenticated(ServiceError x) {
+    }
+
+    @Override
+    public String userIP() {
+        return "0.0.0.0";
     }
 }

@@ -32,28 +32,12 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.HttpsURLConnection;
+
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.ServiceException;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
-import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.EventsPage;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -149,6 +133,10 @@ public class QueryContext<R> implements Serializable {
      * Объект для отправки документа @see DocumentToSend
      */
     public static final String DOCUMENT_TO_SEND = "documentToSend";
+    /**
+     * Объект, содержащий IP адрес отправителя
+     */
+    public static final String SENDER_IP = "senderIP";
     /**
      * Список объектов для отправки документов ({@code List<DocumentToSend>})
      */
@@ -359,7 +347,14 @@ public class QueryContext<R> implements Serializable {
      * SMS-код подтврждения
      */
     public static final String SMS_CODE = "code";
-
+    /**
+     * IP адрес отправителя. Требуется для ФНС.
+     */
+    public static final String USER_IP = "userIP";
+    /**
+     * Объект, содержащий информацию об ответном документе
+     */
+    public static final String REPLY_DOCUMENT = "replyDocument";
 
     private final Map<String, Object> params;
 
@@ -397,7 +392,7 @@ public class QueryContext<R> implements Serializable {
     /**
      * Конструктор для создания контекста
      *
-     * @param parent контекст, из которого копируются параметры для создаваемого контекста
+     * @param parent     контекст, из которого копируются параметры для создаваемого контекста
      * @param entityName наименования сущности, для которой создается контекст
      */
     public QueryContext(QueryContext<?> parent, String entityName) {
@@ -413,7 +408,7 @@ public class QueryContext<R> implements Serializable {
      * QueryContext#get()}
      *
      * @param result результат операции
-     * @param key наименование параметра
+     * @param key    наименование параметра
      * @return контекст
      */
     public QueryContext<R> setResult(R result, String key) {
@@ -500,17 +495,17 @@ public class QueryContext<R> implements Serializable {
     /**
      * Метод устанавливает значение ошибки
      *
-     * @param errorCode код ошибки {@link ErrorCode}
-     * @param message сообщение об ошибки
-     * @param code HTTP код ошибки
+     * @param errorCode       код ошибки {@link ErrorCode}
+     * @param message         сообщение об ошибки
+     * @param code            HTTP код ошибки
      * @param responseHeaders коллекция HTTP заголовков (ключ, значения)
-     * @param responseBody ответ сервера
-     * @param thrown эксепшин, приведший к ошибке
+     * @param responseBody    ответ сервера
+     * @param thrown          эксепшин, приведший к ошибке
      * @return контекст
      */
     public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message,
-            int code, Map<String, List<String>> responseHeaders, String responseBody,
-            Throwable thrown) {
+                                           int code, Map<String, List<String>> responseHeaders, String responseBody,
+                                           Throwable thrown) {
         return setServiceError(
                 new ServiceError() {
                     @Override
@@ -555,7 +550,7 @@ public class QueryContext<R> implements Serializable {
      * Метод устанавливает значение ошибки. При этом ErrorCode примет значение ErrorCode.business
      *
      * @param message сообщение с ошибкой
-     * @param x эксепшин, приведший к ошибке
+     * @param x       эксепшин, приведший к ошибке
      * @return контекст
      */
     public QueryContext<R> setServiceError(String message, Throwable x) {
@@ -1011,6 +1006,23 @@ public class QueryContext<R> implements Serializable {
      */
     public QueryContext<R> setDocumentToSend(DocumentToSend documentToSend) {
         return set(DOCUMENT_TO_SEND, documentToSend);
+    }
+
+    /**
+     * Метод возвращает объект, содержащий IP адрес отправителя {@link SenderIP}
+     * @return IP адрес отправителя
+     */
+    public SenderIP getSenderIP() {
+        return (SenderIP)params.get(SENDER_IP);
+    }
+
+    /**
+     * Метод устанавливает объект, содержащий IP адрес отправителя {@link SenderIP}
+     * @param senderIP объект, содержащий IP адрес отправителя
+     * @return контекст
+     */
+    public QueryContext<R> setSenderIP(SenderIP senderIP) {
+        return set(SENDER_IP, senderIP);
     }
 
     /**
@@ -1665,7 +1677,7 @@ public class QueryContext<R> implements Serializable {
      * извлечения сертификатов.
      *
      * @param certificateList объект {@link CertificateList}, предназначенный для постраничнего
-     * извлечения сертификатов
+     *                        извлечения сертификатов
      * @return контекст
      */
     public QueryContext<R> setCertificateList(CertificateList certificateList) {
@@ -1879,10 +1891,19 @@ public class QueryContext<R> implements Serializable {
         return set(VERSION, version);
     }
 
+    /**
+     * Метод возвращает идентификатор запроса
+     * @return идентификатор запроса
+     */
     public String getRequestId() {
         return (String) params.get(REQUEST_ID);
     }
 
+    /**
+     * Метод устанавливает идентификатор запроса
+     * @param requestId идентификатор запроса
+     * @return контекст
+     */
     public QueryContext<R> setRequestId(String requestId) {
         return set(REQUEST_ID, requestId);
     }
@@ -1896,11 +1917,45 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
+     * Метод возвращает IP адрес отправителя
+     * @return IP адрес отправителя
+     */
+    public String getUserIP() {
+        return (String) params.get(USER_IP);
+    }
+
+    /**
+     * Метод устанавливает IP адрес отправителя
+     * @param userIP IP адрес отправителя
+     * @return контекст
+     */
+    public QueryContext<R> setUserIP(String userIP) {
+        return set(USER_IP, userIP);
+    }
+
+    /**
+     * Метод возвращает объект, содержащий информацию об ответном документе
+     * @return объект, содержащий информацию об ответном документе
+     */
+    public ReplyDocument getReplyDocument() {
+        return (ReplyDocument) params.get(REPLY_DOCUMENT);
+    }
+
+    /**
+     * Метод устанавливает объект, содержащий информацию об ответном документе
+     * @param replyDocument объект, содержащий информацию об ответном документе
+     * @return контекст
+     */
+    public QueryContext<R> setReplyDocument(ReplyDocument replyDocument) {
+        return set(REPLY_DOCUMENT, replyDocument);
+    }
+
+    /**
      * Метод устанавливает значение для параметра. Если переданное значение null, то параметр
      * удаляется.
      *
      * @param name имя параметра
-     * @param val значение параметра
+     * @param val  значение параметра
      * @return контекст
      */
     public QueryContext<R> set(String name, Object val) {
@@ -1917,7 +1972,7 @@ public class QueryContext<R> implements Serializable {
      * Метод возвращает параметр с именем "name", приводя его к типу переменной.
      *
      * @param name имя параметра
-     * @param <T> задекларированный тип переменной
+     * @param <T>  задекларированный тип переменной
      * @return возвращает параметр с именем "name", приводя его к типу переменной
      */
     @SuppressWarnings("unchecked")

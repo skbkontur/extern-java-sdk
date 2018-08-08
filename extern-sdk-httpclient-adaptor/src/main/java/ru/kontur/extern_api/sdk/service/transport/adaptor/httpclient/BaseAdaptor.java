@@ -23,7 +23,10 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
+import java.util.Collection;
 import java.util.function.Supplier;
+
+import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.Adaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;

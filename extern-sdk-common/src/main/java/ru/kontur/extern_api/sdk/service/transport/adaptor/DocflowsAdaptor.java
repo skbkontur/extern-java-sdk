@@ -24,12 +24,8 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Signature;
+
+import ru.kontur.extern_api.sdk.model.*;
 
 /**
  * @author Aleksey Sukhorukov
@@ -159,6 +155,8 @@ public interface DocflowsAdaptor {
     public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt);
 
     public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt);
+
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<ReplyDocument> cxt);
 
     public QueryContext<String> print(QueryContext<String> cxt);
 }
