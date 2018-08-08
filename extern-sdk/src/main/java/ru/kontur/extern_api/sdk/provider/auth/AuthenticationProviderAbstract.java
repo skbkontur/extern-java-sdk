@@ -82,4 +82,17 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
             clonedAuthListeners.forEach(l -> l.authenticate(new AuthenticationEvent(AuthenticationProviderAbstract.this, authCxt)));
         }
     }
+
+    /**
+     * Возвращает дефолтный IP адрес
+     * @return IP адрес компьютера
+     */
+    public String userIP() {
+        try {
+            return java.net.InetAddress.getLocalHost().getHostAddress();
+        }
+        catch (Exception x) {
+            return "0.0.0.0";
+        }
+    }
 }

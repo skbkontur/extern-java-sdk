@@ -54,13 +54,13 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
     }
     
     @Override
-    public QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt) {
+    public QueryContext<EventsPage> getEvents(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<EventsPage>(cxt, cxt.getEntityName()).setResult(
                 transport(cxt)
                     .getEvents(
                         cxt.getFromId(),
@@ -69,7 +69,7 @@ public class EventsAdaptorImpl extends BaseAdaptor implements EventsAdaptor {
                 EVENTS_PAGE
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<EventsPage>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 

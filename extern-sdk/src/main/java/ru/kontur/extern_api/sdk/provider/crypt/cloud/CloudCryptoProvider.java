@@ -163,7 +163,7 @@ public class CloudCryptoProvider implements CryptoProvider {
             return cxt.setServiceError(signatureReqRespCxt);
         }
         // ответ сервиса содержит идентификатор запроса
-        RequestResponse signatureReqResp = (RequestResponse) signatureReqRespCxt.get(REQUEST_RESPONSE);
+        RequestResponse signatureReqResp = signatureReqRespCxt.get(REQUEST_RESPONSE);
         // запросить код подтверждения у владельца облачного сертификата
         String approveCode = approveCodeProvider.apply(signatureReqResp.getResultId());
         // устанавливаем в контекст код подтверждения
@@ -242,7 +242,7 @@ public class CloudCryptoProvider implements CryptoProvider {
             return cxt.setServiceError(decryptReqRespCxt);
         }
         // ответ сервиса содержит идентификатор запроса
-        RequestResponse decryptReqResp = (RequestResponse) decryptReqRespCxt.get(REQUEST_RESPONSE);
+        RequestResponse decryptReqResp = decryptReqRespCxt.get(REQUEST_RESPONSE);
         // запросить код подтверждения у владельца облачного сертификата
         String approveCode = approveCodeProvider.apply(decryptReqResp.getResultId());
         // устанавливаем в контекст код подтверждения
@@ -341,13 +341,13 @@ public class CloudCryptoProvider implements CryptoProvider {
         }
 
         @Override
-        public QueryContext<RequestResponse> apply(QueryContext<RequestResponse> context) {
+        public QueryContext<RequestResponse> apply(QueryContext<?> cxt) {
             try {
-                if (context.isFail()) {
-                    return context;
+                if (cxt.isFail()) {
+                    return new QueryContext<>(cxt, cxt.getEntityName());
                 }
 
-                Map<String, String> headerParams = acceptAccessToken(context, new HashMap<>());
+                Map<String, String> headerParams = acceptAccessToken(cxt, new HashMap<>());
 
                 httpClient.setServiceBaseUri(cloudCryptoBaseUri);
 
@@ -361,10 +361,10 @@ public class CloudCryptoProvider implements CryptoProvider {
                     RequestResponse.class
                 );
 
-                return context.setResult(resp.getData(), REQUEST_RESPONSE);
+                return new QueryContext<RequestResponse>(cxt, cxt.getEntityName()).setResult(resp.getData(), REQUEST_RESPONSE);
             }
             catch (ApiException x) {
-                return context.setServiceError(x);
+                return new QueryContext<RequestResponse>(cxt, cxt.getEntityName()).setServiceError(x);
             }
         }
 
@@ -387,10 +387,10 @@ public class CloudCryptoProvider implements CryptoProvider {
         }
 
         @Override
-        public QueryContext<T> apply(QueryContext<T> context) {
+        public QueryContext<T> apply(QueryContext<?> cxt) {
             
-            if (context.isFail()) {
-                return context;
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
             
             // запрос на отправку кода подтверждения
@@ -404,7 +404,7 @@ public class CloudCryptoProvider implements CryptoProvider {
                 }
             };
 
-            acceptAccessToken(context, headers);
+            acceptAccessToken(cxt, headers);
             
             try {
 
@@ -418,10 +418,10 @@ public class CloudCryptoProvider implements CryptoProvider {
                     clazz
                 );
                 
-                return context.setResult(resp.getData(), entityName);
+                return new QueryContext<T>(cxt, cxt.getEntityName()).setResult(resp.getData(), entityName);
             }
             catch (ApiException x) {
-                return context.setServiceError(x);
+                return new QueryContext<T>(cxt, cxt.getEntityName()).setServiceError(x);
             }
         }
     }

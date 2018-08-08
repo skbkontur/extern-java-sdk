@@ -21,6 +21,14 @@
 
 package ru.kontur.extern_api.sdk.examples;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.service.DocflowService;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,14 +39,6 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.SignatureToSend;
-import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -95,29 +95,23 @@ public class DocflowExample {
             QueryContext<Docflow> docflowCtx = new QueryContext<>();
             docflowCtx.setDocflowId(UUID.fromString(docflowId));
             // получаем документооборот
-            Docflow docflow = docflowService.lookupDocflow(docflowCtx).get();
+            Docflow docflow = docflowService.lookupDocflow(docflowCtx).ensureSuccess().get();
             System.out.println("Start working with docflow " + docflowId);
             // получам спосок документов для отправки
-            QueryContext<List<DocumentToSend>> listDocToSendCtx = new QueryContext<>();
-            listDocToSendCtx.setDocflow(docflow);
-            listDocToSendCtx.setCertificate(configuratorService.getSender().getCertificate());
-            List<DocumentToSend> listDocToSend = docflowService.generateReplies(listDocToSendCtx)
-                    .get();
+            QueryContext<List<ReplyDocument>> replyDocumentCxt = new QueryContext<>();
+            replyDocumentCxt.setDocflow(docflow);
+            replyDocumentCxt.setCertificate(configuratorService.getSender().getCertificate());
+            replyDocumentCxt = docflowService.generateReplies(replyDocumentCxt).ensureSuccess();
             System.out.println("List of DocumentToSend received");
-            for (DocumentToSend docToSend : listDocToSend) {
-                System.out.println(
-                        "Start sending DocumentToSend: id = " + docToSend.getId().toString()
-                                + ", filename = " + docToSend.getFilename());
+            for (ReplyDocument replyDocument : replyDocumentCxt.get()) {
+                System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                SignatureToSend signature = new SignatureToSend();
-                signature.setContentData("signature".getBytes());
-                // signature.setContentData(docToSend.getContent());
-                docToSend.setSignature(signature);
-                sendDocflowCtx.setDocumentToSend(docToSend);
+                replyDocument.setSignature("signature".getBytes());
+                sendDocflowCtx.setReplyDocument(replyDocument);
                 // и отправляем его
-                docflowService.sendReplies(sendDocflowCtx);
-                System.out.println("DocumentToSend sent");
+                docflowService.sendReply(sendDocflowCtx).ensureSuccess();
+                System.out.println("ReplyDocument sent");
             }
             System.out.println("All documents sent");
 

@@ -23,11 +23,23 @@
  */
 package ru.kontur.extern_api.sdk.examples;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.Messages;
+import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.model.Credential;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
+import ru.kontur.extern_api.sdk.provider.crypt.cloud.CloudCryptoProvider;
+import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+
+import javax.swing.*;
+import java.io.*;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.text.MessageFormat;
@@ -36,26 +48,9 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.function.Function;
-import javax.swing.JOptionPane;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.Messages;
+
 import static ru.kontur.extern_api.sdk.Messages.C_RESOURCE_NOT_FOUND;
 import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
-
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.ServiceException;
-import ru.kontur.extern_api.sdk.model.Credential;
-import ru.kontur.extern_api.sdk.provider.CertificateProvider;
-import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
-import ru.kontur.extern_api.sdk.provider.crypt.cloud.CloudCryptoProvider;
-import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  *
@@ -311,7 +306,7 @@ public class ProxyExample {
 
             QueryContext<String> approvedCxt
                 = cxt.apply(
-                    (QueryContext<String> c) -> {
+                    (QueryContext<?> c) -> {
                         try {
                             ApiResponse<String> resp
                             = httpClient
@@ -328,17 +323,17 @@ public class ProxyExample {
                                     String.class
                                 );
 
-                            return c.setResult(resp.getData(), APPROVE_CODE);
+                            return new QueryContext<String>(c, c.getEntityName()).setResult(resp.getData(), APPROVE_CODE);
                         }
                         catch (ApiException x) {
-                            return c.setServiceError(x);
+                            return new QueryContext<String>(c, c.getEntityName()).setServiceError(x);
                         }
                     }
                 );
 
             if (approvedCxt.isFail()) {
                 ServiceError e = approvedCxt.getServiceError();
-                System.out.println(MessageFormat.format("Method: {0}" + EOL + "Details:" + EOL + "{1}" + EOL, new Object[]{"ApproveCodeProviderImpl", e.toString()}));
+                System.out.println(MessageFormat.format("Method: {0}" + EOL + "Details:" + EOL + "{1}" + EOL, "ApproveCodeProviderImpl", e.toString()));
                 return "";
             }
             else {

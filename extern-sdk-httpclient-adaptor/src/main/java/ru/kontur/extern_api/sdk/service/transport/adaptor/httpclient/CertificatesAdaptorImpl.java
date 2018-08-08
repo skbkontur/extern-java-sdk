@@ -54,16 +54,16 @@ public class CertificatesAdaptorImpl extends BaseAdaptor implements Certificates
     }
     
     @Override
-    public QueryContext<CertificateList> getCertificates(QueryContext<CertificateList> cxt) {
+    public QueryContext<CertificateList> getCertificates(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(transport(cxt).getCertificates(cxt.getAccountProvider().accountId().toString()).getData(), QueryContext.CERTIFICATE_LIST);
+            return new QueryContext<CertificateList>(cxt, cxt.getEntityName()).setResult(transport(cxt).getCertificates(cxt.getAccountProvider().accountId().toString()).getData(), QueryContext.CERTIFICATE_LIST);
         }
         catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<CertificateList>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 

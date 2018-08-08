@@ -126,8 +126,8 @@ public class USNExample {
         return properties;
     }
 
-    private static UsnServiceContractInfo<String> createUsnServiceContractInfo_v1() {
-        UsnServiceContractInfo<String> usn = new UsnServiceContractInfo<>();
+    private static UsnServiceContractInfo createUsnServiceContractInfo_v1() {
+        UsnServiceContractInfo usn = new UsnServiceContractInfo();
         // 1. period
         UsnFormatPeriod period = new UsnFormatPeriod();
         period.setPeriodModifiers(UsnFormatPeriod.PeriodModifiersEnum.LASTPERIODFORTAXREGIME);
@@ -143,8 +143,8 @@ public class USNExample {
         return usn;
     }
 
-    private static UsnServiceContractInfo<Object> createUsnServiceContractInfo_v2() {
-        UsnServiceContractInfo<Object> usn = new UsnServiceContractInfo<>();
+    private static UsnServiceContractInfo createUsnServiceContractInfo_v2() {
+        UsnServiceContractInfo usn = new UsnServiceContractInfo();
         // 1. period
         UsnFormatPeriod period = new UsnFormatPeriod();
         period.setPeriodModifiers(UsnFormatPeriod.PeriodModifiersEnum.LASTPERIODFORTAXREGIME);

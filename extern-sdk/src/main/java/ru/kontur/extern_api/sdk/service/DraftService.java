@@ -619,6 +619,7 @@ public interface DraftService extends Providers {
      * @param documentId идентификатор документа
      * @param version версия декларации
      * @param usn описание УСН декрации
+     * @return {@code CompletableFuture<QueryContext<Void>>}
      */
     @NotNull
     CompletableFuture<QueryContext<Void>> buildDeclarationAsync(@NotNull String draftId,
@@ -652,6 +653,8 @@ public interface DraftService extends Providers {
      * @param draftId идентификатор черновика
      * @param version версия декларации
      * @param usn описание УСН декрации
+     * @return {@code CompletableFuture<QueryContext<DraftDocument>>}
+     * @see DraftDocument
      */
     @NotNull
     CompletableFuture<QueryContext<DraftDocument>> createAndBuildDeclarationAsync(
