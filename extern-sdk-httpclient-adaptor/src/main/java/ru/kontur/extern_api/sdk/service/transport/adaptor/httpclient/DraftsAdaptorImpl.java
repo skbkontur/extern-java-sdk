@@ -36,6 +36,7 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.PR
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
+
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -82,10 +83,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext &lt;UUID&gt;
      */
     @Override
-    public QueryContext<UUID> createDraft(QueryContext<UUID> cxt) {
+    public QueryContext<UUID> createDraft(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             Draft draft
@@ -96,9 +97,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     )
                     .getData();
 
-            return cxt.setDraft(draft).setResult(draft.getId(), DRAFT_ID);
+            return new QueryContext<UUID>(cxt, cxt.getEntityName()).setDraft(draft).setResult(draft.getId(), DRAFT_ID);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<UUID>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -111,13 +112,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return Draft
      */
     @Override
-    public QueryContext<Draft> lookup(QueryContext<Draft> cxt) {
+    public QueryContext<Draft> lookup(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<Draft>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .lookup(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -127,7 +128,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     DRAFT
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Draft>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -140,18 +141,17 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> delete(QueryContext<Void> cxt) {
+    public QueryContext<Void> delete(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            transport(cxt).delete(cxt.getAccountProvider().accountId().toString(),
-                    cxt.getDraftId().toString());
+            transport(cxt).delete(cxt.getAccountProvider().accountId().toString(), cxt.getDraftId().toString());
 
-            return cxt.setResult(null, NOTHING);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -164,13 +164,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftMeta
      */
     @Override
-    public QueryContext<DraftMeta> lookupDraftMeta(QueryContext<DraftMeta> cxt) {
+    public QueryContext<DraftMeta> lookupDraftMeta(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt
+            return new QueryContext<DraftMeta>(cxt, cxt.getEntityName())
                     .setResult(
                             transport(cxt)
                                     .lookupDraftMeta(
@@ -181,7 +181,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             DRAFT_META
                     );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftMeta>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -194,13 +194,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftMeta
      */
     @Override
-    public QueryContext<DraftMeta> updateDraftMeta(QueryContext<DraftMeta> cxt) {
+    public QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<DraftMeta>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .updateDraftMeta(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -211,7 +211,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     DRAFT_META
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftMeta>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -225,13 +225,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public QueryContext<CheckResultData> check(QueryContext<CheckResultData> cxt) {
+    public QueryContext<CheckResultData> check(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<CheckResultData>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .check(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -241,7 +241,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     CHECK_RESULT_DATA
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<CheckResultData>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -254,13 +254,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return PrepareResult;
      */
     @Override
-    public QueryContext<PrepareResult> prepare(QueryContext<PrepareResult> cxt) {
+    public QueryContext<PrepareResult> prepare(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<PrepareResult>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .prepare(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -271,7 +271,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
             );
 
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<PrepareResult>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -284,13 +284,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return List&lt;Docflow&gt;
      */
     @Override
-    public QueryContext<List<Docflow>> send(QueryContext<List<Docflow>> cxt) {
+    public QueryContext<List<Docflow>> send(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .send(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -302,7 +302,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     DOCFLOWS
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -315,10 +315,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> deleteDocument(QueryContext<Void> cxt) {
+    public QueryContext<Void> deleteDocument(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             transport(cxt).deleteDocument(
@@ -327,9 +327,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     cxt.getDocumentId().toString()
             );
 
-            return cxt.setResult(null, NOTHING);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -342,13 +342,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftDocument
      */
     @Override
-    public QueryContext<DraftDocument> lookupDocument(QueryContext<DraftDocument> cxt) {
+    public QueryContext<DraftDocument> lookupDocument(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            QueryContext<DraftDocument> resultCxt = new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .lookupDocument(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -357,9 +357,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             )
                             .getData(),
                     DRAFT_DOCUMENT
-            ).setDocumentId(cxt.getDraftDocument().getId());
+            );
+            return resultCxt.setDocumentId(resultCxt.getDraftDocument().getId());
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -372,13 +373,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftDocument
      */
     @Override
-    public QueryContext<DraftDocument> updateDocument(QueryContext<DraftDocument> cxt) {
+    public QueryContext<DraftDocument> updateDocument(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            QueryContext<DraftDocument> resultCxt = new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .updateDocument(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -388,9 +389,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             )
                             .getData(),
                     DRAFT_DOCUMENT
-            ).setDocumentId(cxt.getDraftDocument().getId());
+            );
+            return resultCxt.setDocumentId(resultCxt.getDraftDocument().getId());
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -403,13 +405,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftDocument
      */
     @Override
-    public QueryContext<String> printDocument(QueryContext<String> cxt) {
+    public QueryContext<String> printDocument(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .printDocument(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -420,7 +422,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     CONTENT_STRING
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -433,13 +435,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return DraftDocument
      */
     @Override
-    public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<DraftDocument> cxt) {
+    public QueryContext<DraftDocument> addDecryptedDocument(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            QueryContext<DraftDocument> resultCxt =  new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .addDecryptedDocument(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -448,9 +450,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             )
                             .getData(),
                     DRAFT_DOCUMENT
-            ).setDocumentId(cxt.getDraftDocument().getId());
+            );
+            return resultCxt.setDocumentId(resultCxt.getDraftDocument().getId());
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -463,13 +466,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return String
      */
     @Override
-    public QueryContext<String> getDecryptedDocumentContent(QueryContext<String> cxt) {
+    public QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .getDecryptedDocumentContent(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -480,7 +483,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     CONTENT_STRING
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -493,10 +496,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<Void> cxt) {
+    public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             transport(cxt)
@@ -507,9 +510,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getContent()
                     );
 
-            return cxt.setResult(null, NOTHING);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -522,13 +525,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return String
      */
     @Override
-    public QueryContext<String> getEncryptedDocumentContent(QueryContext<String> cxt) {
+    public QueryContext<String> getEncryptedDocumentContent(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .getEncryptedDocumentContent(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -539,7 +542,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     CONTENT_STRING
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -552,13 +555,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return String
      */
     @Override
-    public QueryContext<String> getSignatureContent(QueryContext<String> cxt) {
+    public QueryContext<String> getSignatureContent(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .getSignatureContent(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -569,7 +572,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     CONTENT_STRING
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -582,10 +585,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<Void> updateSignature(QueryContext<Void> cxt) {
+    public QueryContext<Void> updateSignature(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             transport(cxt)
@@ -596,9 +599,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getContent()
                     );
 
-            return cxt.setResult(null, NOTHING);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -612,10 +615,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<SignInitiation> cxt) {
+    public QueryContext<SignInitiation> cloudSignQuery(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             ApiResponse<SignInitiation> response = transport(cxt)
@@ -624,11 +627,11 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getDraftId().toString()
                     );
 
-            return cxt
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName())
                     .setRequestId(response.getData().getRequestId())
                     .setResult(response.getData(), "sign request data");
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -641,10 +644,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return QueryContext&lt;Void&gt;
      */
     @Override
-    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<SignedDraft> cxt) {
+    public QueryContext<SignedDraft> cloudSignConfirm(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             ApiResponse<SignedDraft> response = transport(cxt)
@@ -655,9 +658,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getSmsCode()
                     );
 
-            return cxt.setResult(response.getData(), "signed documents");
+            return new QueryContext<SignedDraft>(cxt, cxt.getEntityName()).setResult(response.getData(), "signed documents");
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<SignedDraft>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -670,10 +673,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      */
     @Override
     @NotNull
-    public QueryContext<Void> buildDeclaration(@NotNull QueryContext<Void> cxt) {
+    public QueryContext<Void> buildDeclaration(@NotNull QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             transport(cxt)
@@ -686,9 +689,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getUsnServiceContractInfo().toJson()
                     );
 
-            return cxt.setResult(null, NOTHING);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
 
     }
@@ -701,11 +704,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      */
     @Override
     @NotNull
-    public QueryContext<DraftDocument> createAndBuildDeclaration(
-            @NotNull QueryContext<DraftDocument> cxt) {
+    public QueryContext<DraftDocument> createAndBuildDeclaration(@NotNull QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             ApiResponse<DraftDocument> createAndBuildDeclaration = transport(cxt)
@@ -717,9 +719,9 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getUsnServiceContractInfo().toJson()
                     );
 
-            return cxt.setResult(createAndBuildDeclaration.getData(), DRAFT_DOCUMENT);
+            return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(createAndBuildDeclaration.getData(), DRAFT_DOCUMENT);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 

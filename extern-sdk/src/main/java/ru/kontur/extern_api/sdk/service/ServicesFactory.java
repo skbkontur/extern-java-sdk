@@ -23,12 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service;
 
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
+import ru.kontur.extern_api.sdk.provider.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
@@ -131,4 +126,17 @@ public interface ServicesFactory {
      * @see ru.kontur.extern_api.sdk.provider.CryptoProvider
      */
     void setCryptoProvider(CryptoProvider cryptoProvider);
+
+    /**
+     * Возвращает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
+     * @return {@code UserIPProvider} предназначен для получения IP адреса отправителя
+     * @see UserIPProvider
+     */
+    UserIPProvider getUserIPProvider();
+
+    /**
+     * Устанавливает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
+     * @param userIPProvider {@code UserIPProvider} интерфейс предназначен для получения IP адреса отправителя
+     */
+    void setUserIPProvider(UserIPProvider userIPProvider);
 }

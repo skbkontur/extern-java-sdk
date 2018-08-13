@@ -34,13 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.Providers;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
+import ru.kontur.extern_api.sdk.provider.*;
 import ru.kontur.extern_api.sdk.provider.userAgent.DefaultUserAgentProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -100,6 +94,8 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     private CryptoProvider cryptoProvider;
 
+    private UserIPProvider userIPProvider;
+
     private AccountService accountService;
 
     private CertificateService certificateService;
@@ -116,13 +112,14 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     private UserAgentProvider userAgentProvider;
 
-    public DefaultServicesFactory(@NotNull String adaptorContextPath, @NotNull UserAgentProvider userAgentProvider) {
+    public DefaultServicesFactory(@NotNull String adaptorContextPath, @NotNull UserAgentProvider userAgentProvider, @NotNull UserIPProvider userIPProvider) {
         load(adaptorContextPath);
         this.userAgentProvider = userAgentProvider;
+        this.userIPProvider = userIPProvider;
     }
 
     public DefaultServicesFactory() {
-        this(ADAPTOR_CONTEXT, new DefaultUserAgentProvider());
+        this(ADAPTOR_CONTEXT, new DefaultUserAgentProvider(), new DefaultUserIPProvider());
     }
 
     @Override
@@ -178,6 +175,16 @@ public class DefaultServicesFactory implements ServicesFactory {
     @Override
     public UserAgentProvider getUserAgentProvider() {
         return userAgentProvider;
+    }
+
+    @Override
+    public UserIPProvider getUserIPProvider() {
+        return userIPProvider;
+    }
+
+    @Override
+    public void setUserIPProvider(UserIPProvider userIPProvider) {
+        this.userIPProvider = userIPProvider;
     }
 
     @Override
@@ -294,6 +301,7 @@ public class DefaultServicesFactory implements ServicesFactory {
         providers.authenticationProvider(authenticationProvider);
         providers.cryptoProvider(cryptoProvider);
         providers.serviceBaseUriProvider(serviceBaseUriProvider);
+        providers.userIPProvider(userIPProvider);
     }
 
     private class AdaptorMeta {

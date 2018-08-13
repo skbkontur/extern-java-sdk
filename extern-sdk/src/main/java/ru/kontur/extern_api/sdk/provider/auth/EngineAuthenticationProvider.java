@@ -83,5 +83,10 @@ public class EngineAuthenticationProvider implements AuthenticationProvider {
     public void raiseUnauthenticated(ServiceError x) {
         authenticationProvider.raiseUnauthenticated(x);
     }
+
+    @Override
+    public String userIP() {
+        return authenticationProvider.userIP();
+    }
 }
  

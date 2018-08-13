@@ -35,13 +35,7 @@ import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDE
 import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
+import ru.kontur.extern_api.sdk.provider.*;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.auth.EngineAuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
@@ -347,6 +341,19 @@ public class ExternEngine implements AuthenticationListener {
 
     public UserAgentProvider getUserAgentProvider() {
         return servicesFactory.getUserAgentProvider();
+    }
+
+    /**
+     * Возвращает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
+     * @return UserIPProvider предназначен для получения IP адреса отправителя
+     * @see UserIPProvider
+     */
+    public UserIPProvider getUserIPProvider() {
+        return servicesFactory.getUserIPProvider();
+    }
+
+    public void setUserIPProvider(UserIPProvider userIPProvider) {
+        this.servicesFactory.setUserIPProvider(userIPProvider);
     }
 
     /**

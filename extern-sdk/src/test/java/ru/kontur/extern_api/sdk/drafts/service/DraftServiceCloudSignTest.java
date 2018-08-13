@@ -58,13 +58,7 @@ public class DraftServiceCloudSignTest {
         engine.setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT);
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(
-                new AuthenticationProviderAdaptor() {
-                    @Override
-                    public QueryContext<String> sessionId() {
-                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                    }
-                });
+        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
         draftService = engine.getDraftService();
     }
 
@@ -161,12 +155,7 @@ public class DraftServiceCloudSignTest {
                 .setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT)
                 .setAccountProvider(UUID::randomUUID)
                 .setApiKeyProvider(() -> UUID.randomUUID().toString())
-                .setAuthenticationProvider(new AuthenticationProviderAdaptor() {
-                    @Override
-                    public QueryContext<String> sessionId() {
-                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                    }
-                });
+                .setAuthenticationProvider(new AuthenticationProviderAdaptor());
     }
 
     private static int getFreePort() {

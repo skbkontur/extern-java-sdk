@@ -60,27 +60,27 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
     }
     
 	@Override
-	public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
+	public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(transport(cxt).acquireBaseUri().getData(), LINKS);
+            return new QueryContext<List<Link>>(cxt, cxt.getEntityName()).setResult(transport(cxt).acquireBaseUri().getData(), LINKS);
         }
         catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<List<Link>>(cxt, cxt.getEntityName()).setServiceError(x);
         }
 	}
 
 	@Override
-	public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt) {
+	public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt
+            return new QueryContext<AccountList>(cxt, cxt.getEntityName())
                 .setResult(
                     transport(cxt)
                         .acquireAccounts()
@@ -89,35 +89,35 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
                 );
         }
         catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<AccountList>(cxt, cxt.getEntityName()).setServiceError(x);
         }
 	}
 
 	@Override
-	public QueryContext<Account> createAccount(QueryContext<Account> cxt) {
+	public QueryContext<Account> createAccount(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(transport(cxt).createAccount(cxt.getCreateAccountRequest()).getData(), ACCOUNT);
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setResult(transport(cxt).createAccount(cxt.getCreateAccountRequest()).getData(), ACCOUNT);
         }
         catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setServiceError(x);
         }
 	}
 
 	@Override
-	public QueryContext<Account> getAccount(QueryContext<Account> cxt) {
+	public QueryContext<Account> getAccount(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(transport(cxt).accountsGet(cxt.getAccountProvider().accountId().toString()).getData(), ACCOUNT);
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setResult(transport(cxt).accountsGet(cxt.getAccountProvider().accountId().toString()).getData(), ACCOUNT);
         }
         catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setServiceError(x);
         }
 	}
     
