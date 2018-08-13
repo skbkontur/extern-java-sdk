@@ -38,7 +38,7 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
-    QueryContext<Company> lookup(QueryContext<Company> cxt);
+    QueryContext<Company> lookup(QueryContext<?> cxt);
 
     /**
      * Creates an organization
@@ -47,7 +47,7 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
-    QueryContext<Company> create(QueryContext<Company> cxt);
+    QueryContext<Company> create(QueryContext<?> cxt);
 
     /**
      * Updates a name of an organization
@@ -56,7 +56,7 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;Company&gt; a context of query with an organization object
      */
-    QueryContext<Company> update(QueryContext<Company> cxt);
+    QueryContext<Company> update(QueryContext<?> cxt);
 
     /**
      * Deletes an organization by an identifier
@@ -65,7 +65,7 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;Void&gt; a context of query. Needs check isFail result.
      */
-    QueryContext<Void> delete(QueryContext<Void> cxt);
+    QueryContext<Void> delete(QueryContext<?> cxt);
 
     /**
      * Searches organizations by critaries: inn, kpp
@@ -74,5 +74,5 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;CompanyBatch&gt; a context with a result
      */
-    QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt);
+    QueryContext<CompanyBatch> search(QueryContext<?> cxt);
 }

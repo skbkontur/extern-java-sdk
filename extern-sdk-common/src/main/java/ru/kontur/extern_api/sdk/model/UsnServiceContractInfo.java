@@ -30,9 +30,9 @@ import com.google.gson.annotations.SerializedName;
  * </p>
  * @author Mikhail Pavlenko
  */
-public class UsnServiceContractInfo<T> {
+public class UsnServiceContractInfo {
 
-    public UsnFormatPeriod period = null;
+    private UsnFormatPeriod period = null;
     @SerializedName("additional-org-info")
     private AdditionalClientInfo additionalOrgInfo = null;
     private Object data = null;

@@ -26,11 +26,7 @@ package ru.kontur.extern_api.sdk.service.impl;
 import ru.kontur.extern_api.sdk.Messages;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
+import ru.kontur.extern_api.sdk.provider.*;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -44,6 +40,7 @@ public class AbstractService {
     protected AccountProvider accountProvider;
     protected ApiKeyProvider apiKeyProvider;
     protected CryptoProvider cryptoProvider;
+    protected UserIPProvider userIPProvider;
 
     public CryptoProvider getCryptoProvider() throws SDKException {
         if (cryptoProvider == null) {
@@ -132,5 +129,9 @@ public class AbstractService {
 
     public void cryptoProvider(CryptoProvider cryptoProvider) {
         this.cryptoProvider = cryptoProvider;
+    }
+
+    public void userIPProvider(UserIPProvider userIPProvider) {
+        this.userIPProvider = userIPProvider;
     }
 }

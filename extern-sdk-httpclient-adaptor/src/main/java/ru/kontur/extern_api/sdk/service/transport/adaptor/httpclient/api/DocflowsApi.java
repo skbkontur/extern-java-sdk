@@ -22,23 +22,13 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
+
 import java.util.Date;
 import java.util.List;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+
 import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
-import ru.kontur.extern_api.sdk.model.PrintDocumentData;
-import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -52,17 +42,17 @@ public class DocflowsApi extends RestApi {
     /**
      * Get docflow page
      *
-     * @param accountId String private account identifier
-     * @param finished Get finished docflows (optional)
-     * @param incoming Get incoming docflows (optional)
-     * @param skip Get docflows with skip elements (optional)
-     * @param take Get take docflows (optional)
-     * @param innKpp Get docflows with specified inn-kpp (optional)
+     * @param accountId   String private account identifier
+     * @param finished    Get finished docflows (optional)
+     * @param incoming    Get incoming docflows (optional)
+     * @param skip        Get docflows with skip elements (optional)
+     * @param take        Get take docflows (optional)
+     * @param innKpp      Get docflows with specified inn-kpp (optional)
      * @param updatedFrom Get docflows with updated from specified date (optional)
-     * @param updatedTo Get docflows with updated to specified date (optional)
+     * @param updatedTo   Get docflows with updated to specified date (optional)
      * @param createdFrom Get docflows with created from specified date (optional)
-     * @param createdTo Get docflows with created to specified date (optional)
-     * @param type Get docflows with specified type (optional)
+     * @param createdTo   Get docflows with created to specified date (optional)
+     * @param type        Get docflows with specified type (optional)
      * @return ApiResponse&lt;DocflowPage&gt;
      * @throws ApiException transport exception
      */
@@ -70,21 +60,21 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DocflowPage> getDocflows(
-        @PathParam("accountId") final String accountId,
-        @QueryParam("finished") final Boolean finished, 
-        @QueryParam("incoming") final Boolean incoming, 
-        @QueryParam("skip") final Long skip, 
-        @QueryParam("take") final Integer take, 
-        @QueryParam("innKpp") final String innKpp,
-        @QueryParam("updatedFrom") final Date updatedFrom, 
-        @QueryParam("updatedTo") final Date updatedTo, 
-        @QueryParam("createdFrom") final Date createdFrom, 
-        @QueryParam("createdTo") final Date createdTo,
-        @QueryParam("type") String type
+            @PathParam("accountId") final String accountId,
+            @QueryParam("finished") final Boolean finished,
+            @QueryParam("incoming") final Boolean incoming,
+            @QueryParam("skip") final Long skip,
+            @QueryParam("take") final Integer take,
+            @QueryParam("innKpp") final String innKpp,
+            @QueryParam("updatedFrom") final Date updatedFrom,
+            @QueryParam("updatedTo") final Date updatedTo,
+            @QueryParam("createdFrom") final Date createdFrom,
+            @QueryParam("createdTo") final Date createdTo,
+            @QueryParam("type") String type
     ) throws ApiException {
         return invoke("getDocflows", null, new TypeToken<DocflowPage>() {
-            }.getType(), accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo,
-            createdFrom, createdTo, type);
+                }.getType(), accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo,
+                createdFrom, createdTo, type);
     }
 
     /**
@@ -99,8 +89,8 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Docflow> lookupDocflow(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId) throws ApiException {
         return invoke("lookupDocflow", null, new TypeToken<Docflow>() {
         }.getType(), accountId, docflowId);
     }
@@ -117,8 +107,8 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<List<Document>> getDocuments(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId) throws ApiException {
         return invoke("getDocuments", null, new TypeToken<List<Document>>() {
         }.getType(), accountId, docflowId);
     }
@@ -126,8 +116,8 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete document from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @return ApiResponse&lt;Document&gt;
      * @throws ApiException transport exception
@@ -136,9 +126,9 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Document> lookupDocument(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId) throws ApiException {
         return invoke("lookupDocument", null, new TypeToken<Document>() {
         }.getType(), accountId, docflowId, documentId);
     }
@@ -146,8 +136,8 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete document description from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @return ApiResponse&lt;DocumentDescription&gt;
      * @throws ApiException transport exception
@@ -156,10 +146,10 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DocumentDescription> lookupDescription(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId)
-        throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId)
+            throws ApiException {
         return invoke("lookupDescription", null, new TypeToken<DocumentDescription>() {
         }.getType(), accountId, docflowId, documentId);
     }
@@ -167,8 +157,8 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete encrypted document content from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @return ApiResponse&lt;byte[]&gt;
      * @throws ApiException transport exception
@@ -177,9 +167,9 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<byte[]> getEncryptedContent(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId) throws ApiException {
         return invoke("getEncryptedContent", null, new TypeToken<byte[]>() {
         }.getType(), accountId, docflowId, documentId);
     }
@@ -187,8 +177,8 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete decrypted document content from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @return ApiResponse&lt;byte[]&gt;
      * @throws ApiException transport exception
@@ -197,9 +187,9 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<byte[]> getDecryptedContent(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId) throws ApiException {
         return invoke("getDecryptedContent", null, new TypeToken<byte[]>() {
         }.getType(), accountId, docflowId, documentId);
     }
@@ -207,8 +197,8 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete document signatures from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @return ApiResponse&lt;List&lt;Signature&gt;&gt;
      * @throws ApiException transport exception
@@ -217,9 +207,9 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<List<Signature>> getSignatures(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId) throws ApiException {
         return invoke("getSignatures", null, new TypeToken<List<Signature>>() {
         }.getType(), accountId, docflowId, documentId);
     }
@@ -227,9 +217,9 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete document single signature from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
-     * @param documentId Document identifier (required)
+     * @param accountId   Account identifier (required)
+     * @param docflowId   Docflow object identifier (required)
+     * @param documentId  Document identifier (required)
      * @param signatureId Signature identifier (required)
      * @return ApiResponse&lt;Signature&gt;
      * @throws ApiException transport exception
@@ -238,10 +228,10 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Signature> getSignature(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId,
-        @PathParam("signatureId") String signatureId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("signatureId") String signatureId) throws ApiException {
         return invoke("getSignature", null, new TypeToken<Signature>() {
         }.getType(), accountId, docflowId, documentId, signatureId);
     }
@@ -249,9 +239,9 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get discrete document signature single content from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
-     * @param documentId Document identifier (required)
+     * @param accountId   Account identifier (required)
+     * @param docflowId   Docflow object identifier (required)
+     * @param documentId  Document identifier (required)
      * @param signatureId Signature identifier (required)
      * @return ApiResponse&lt;byte[]&gt;
      * @throws ApiException transport exception
@@ -260,10 +250,10 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<byte[]> getSignatureContent(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId,
-        @PathParam("signatureId") String signatureId) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("signatureId") String signatureId) throws ApiException {
         return invoke("getSignatureContent", null, new TypeToken<byte[]>() {
         }.getType(), accountId, docflowId, documentId, signatureId);
     }
@@ -271,11 +261,11 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to create Reply document for specified workflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
-     * @param documentId Document identifier (required)
+     * @param accountId    Account identifier (required)
+     * @param docflowId    Docflow object identifier (required)
+     * @param documentId   Document identifier (required)
      * @param documentType Document type (required)
-     * @param request (required)
+     * @param request      (required)
      * @return ApiResponse&lt;DocumentToSend&gt;
      * @throws ApiException transport exception
      */
@@ -283,11 +273,11 @@ public class DocflowsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DocumentToSend> generateDocumentTypeReply(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId,
-        @PathParam("documentType") String documentType,
-        GenerateReplyDocumentRequestData request) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("documentType") String documentType,
+            GenerateReplyDocumentRequestData request) throws ApiException {
         return invoke("generateDocumentTypeReply", request, new TypeToken<DocumentToSend>() {
         }.getType(), accountId, docflowId, documentId, documentType);
     }
@@ -295,11 +285,11 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to send Reply document for specified workflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
-     * @param documentId Document identifier (required)
+     * @param accountId    Account identifier (required)
+     * @param docflowId    Docflow object identifier (required)
+     * @param documentId   Document identifier (required)
      * @param documentType Document type (required)
-     * @param document Reply document to be sent (required)
+     * @param document     Reply document to be sent (required)
      * @return ApiResponse&lt;Docflow&gt;
      * @throws ApiException transport exception
      */
@@ -307,11 +297,11 @@ public class DocflowsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Docflow> sendReplyDocument(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId,
-        @PathParam("documentType") String documentType,
-        DocumentToSend document) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("documentType") String documentType,
+            DocumentToSend document) throws ApiException {
         return invoke("addDocumentTypeReply", document, new TypeToken<Docflow>() {
         }.getType(), accountId, docflowId, documentId, documentType);
     }
@@ -320,10 +310,10 @@ public class DocflowsApi extends RestApi {
     /**
      * Allow API user to get document print from docflow
      *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
+     * @param accountId  Account identifier (required)
+     * @param docflowId  Docflow object identifier (required)
      * @param documentId Document identifier (required)
-     * @param request (required)
+     * @param request    (required)
      * @return ApiResponse&lt;String&gt;
      * @throws ApiException transport exception response body
      */
@@ -331,14 +321,38 @@ public class DocflowsApi extends RestApi {
     @POST
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> print(
-        @PathParam("accountId") String accountId,
-        @PathParam("docflowId") String docflowId,
-        @PathParam("documentId") String documentId,
-        PrintDocumentData request) throws ApiException {
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            PrintDocumentData request) throws ApiException {
         return invoke("print", request, new TypeToken<String>() {
         }.getType(), accountId, docflowId, documentId);
     }
 
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
+    @GET
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<ReplyDocument> getReplyDocument(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId
+    ) throws ApiException {
+        return invoke("getReplyDocument", null, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
+    }
+
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
+    @PUT
+    @Consumes("application/octet-stream")
+    public ApiResponse<ReplyDocument> updateReplyDocumentContent(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId,
+            byte[] content
+    ) throws ApiException {
+        return invoke("getReplyDocument", content, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
+    }
 
     @NotNull
     @Override

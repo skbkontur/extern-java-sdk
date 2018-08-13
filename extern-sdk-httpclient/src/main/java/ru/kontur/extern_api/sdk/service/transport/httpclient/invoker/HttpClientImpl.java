@@ -58,12 +58,12 @@ public class HttpClientImpl {
     private static final String USER_AGENT = "User-Agent";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
+    private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
-    private final Map<String, String> defaultParams = new ConcurrentHashMap<>();
-    private final Supplier<Map<String, String>> DEFAULT_HEADER_PARAMS = () -> defaultParams;
+    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
-    private static Supplier<String> SERVICE_BASE_URI = () -> "";
+    private static final ThreadLocal<Supplier<String>>  SERVICE_BASE_URI = new ThreadLocal<>();
 
     private String userAgent;
     private int connectTimeout;
@@ -72,11 +72,6 @@ public class HttpClientImpl {
     private boolean keepAlive;
 
     public HttpClientImpl() {
-        this("");
-    }
-
-    public HttpClientImpl(String serviceBaseUri) {
-        SERVICE_BASE_URI = () -> serviceBaseUri;
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
         this.json = new Gson();
@@ -93,17 +88,28 @@ public class HttpClientImpl {
     }
     
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
-        SERVICE_BASE_URI = () -> serviceBaseUri;
+        SERVICE_BASE_URI.set(() -> serviceBaseUri);
         return this;
     }
 
+    private Map<String,String> getDefaultHeaderParams() {
+        Map<String,String> defaultHeaderParams = DEFAULT_HEADER_PARAMS.get();
+        if (defaultHeaderParams == null) {
+            defaultHeaderParams = new ConcurrentHashMap<>();
+            DEFAULT_HEADER_PARAMS.set(defaultHeaderParams);
+        }
+        return defaultHeaderParams;
+    }
+
     public HttpClientImpl acceptAccessToken(String sessionId) {
-        DEFAULT_HEADER_PARAMS.get().put(AUTHORIZATION, AUTH_PREFIX + sessionId);
+        Map<String,String> defaultHeaderParams = getDefaultHeaderParams();
+        defaultHeaderParams.put(AUTHORIZATION, AUTH_PREFIX + sessionId);
         return this;
     }
 
     public HttpClientImpl acceptApiKey(String apiKey) {
-        DEFAULT_HEADER_PARAMS.get().put(APIKEY, apiKey);
+        Map<String,String> defaultHeaderParams = getDefaultHeaderParams();
+        defaultHeaderParams.put(APIKEY, apiKey);
         return this;
     }
 
@@ -136,9 +142,9 @@ public class HttpClientImpl {
             
 
             // setup default headers
-            DEFAULT_HEADER_PARAMS.get().forEach(connect::setRequestProperty);
+            getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
-            headerParams.putIfAbsent(CONTENT_TYPE, DEFAULT_CONTENT_TYPE);
+            headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
             headerParams.putIfAbsent(USER_AGENT, userAgent);
 
             headerParams.forEach(connect::setRequestProperty);
@@ -245,7 +251,7 @@ public class HttpClientImpl {
     private URL buildUrl(String path, Map<String, Object> queryParams) throws MalformedURLException {
         final StringBuilder request = new StringBuilder();
 
-        request.append(SERVICE_BASE_URI.get()).append(path);
+        request.append(SERVICE_BASE_URI.get().get()).append(path);
 
         if (queryParams != null && !queryParams.isEmpty()) {
             // support (constant) query string in `path`, e.g. "/posts?draft=1"
@@ -500,6 +506,13 @@ public class HttpClientImpl {
                 throw (e);
             }
         }
+    }
+
+    private String guessContentType(Object body) {
+        if (body instanceof byte[]) {
+            return OCTET_STREAM_CONTENT_TYPE;
+        }
+        return DEFAULT_CONTENT_TYPE;
     }
 
     private static class Response {

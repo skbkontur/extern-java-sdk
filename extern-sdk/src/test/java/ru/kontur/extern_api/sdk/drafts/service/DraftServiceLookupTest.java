@@ -87,35 +87,7 @@ public class DraftServiceLookupTest {
         engine.setServiceBaseUriProvider(() -> "http://localhost:8080/drafts");
         engine.setAccountProvider(UUID::randomUUID);
         engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(
-                new AuthenticationProvider() {
-                    @Override
-                    public QueryContext<String> sessionId() {
-                        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-                    }
-
-                    @Override
-                    public String authPrefix() {
-                        return "auth.sid ";
-                    }
-
-                    @Override
-                    public AuthenticationProvider httpClient(HttpClient httpClient) {
-                        return this;
-                    }
-
-                    @Override
-                    public void addAuthenticationListener(AuthenticationListener authListener) {
-                    }
-
-                    @Override
-                    public void removeAuthenticationListener(AuthenticationListener authListener) {
-                    }
-
-                    @Override
-                    public void raiseUnauthenticated(ServiceError x) {
-                    }
-                });
+        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
     }
 
     @Test

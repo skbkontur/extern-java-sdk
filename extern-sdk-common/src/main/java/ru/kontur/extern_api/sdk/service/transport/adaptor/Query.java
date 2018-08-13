@@ -31,5 +31,5 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor;
 @FunctionalInterface
 public interface Query<R> {
 
-    QueryContext<R> apply(QueryContext<R> context);
+    QueryContext<R> apply(QueryContext<?> context);
 }

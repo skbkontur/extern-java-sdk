@@ -33,11 +33,11 @@ import ru.kontur.extern_api.sdk.model.Link;
  */
 public interface AccountsAdaptor {
 
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt);
+    public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt);
 
-    public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt);
+    public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
 
-    public QueryContext<Account> createAccount(QueryContext<Account> cxt);
+    public QueryContext<Account> createAccount(QueryContext<?> cxt);
 
-    public QueryContext<Account> getAccount(QueryContext<Account> cxt);
+    public QueryContext<Account> getAccount(QueryContext<?> cxt);
 }

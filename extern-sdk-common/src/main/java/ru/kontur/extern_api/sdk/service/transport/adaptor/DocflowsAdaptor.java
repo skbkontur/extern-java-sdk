@@ -24,12 +24,8 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Signature;
+
+import ru.kontur.extern_api.sdk.model.*;
 
 /**
  * @author Aleksey Sukhorukov
@@ -44,7 +40,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;Docflow&gt;
      * @return QueryContext&lt;Docflow&gt;
      */
-    public QueryContext<DocflowPage> getDocflows(QueryContext<DocflowPage> cxt);
+    public QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt);
 
     /**
      * Allow API user to get Docflow object
@@ -54,7 +50,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;Docflow&gt;
      * @return QueryContext&lt;Docflow&gt;
      */
-    public QueryContext<Docflow> lookupDocflow(QueryContext<Docflow> cxt);
+    public QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt);
 
     /**
      * Allow API user to get all document from docflow
@@ -64,7 +60,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
      * @return QueryContext&lt;List&lt;Document&gt;&gt; context
      */
-    public QueryContext<List<Document>> getDocuments(QueryContext<List<Document>> cxt);
+    public QueryContext<List<Document>> getDocuments(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete document from docflow
@@ -74,7 +70,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
      * @return QueryContext&lt;List&lt;Document&gt;&gt; context
      */
-    public QueryContext<Document> lookupDocument(QueryContext<Document> cxt);
+    public QueryContext<Document> lookupDocument(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete document description from docflow
@@ -84,7 +80,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;DocumentDescription&gt; context
      * @return QueryContext&lt;DocumentDescription&gt; context
      */
-    public QueryContext<DocumentDescription> lookupDescription(QueryContext<DocumentDescription> cxt);
+    public QueryContext<DocumentDescription> lookupDescription(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete encrypted document content from docflow
@@ -94,7 +90,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;byte[]&gt; context
      * @return QueryContext&lt;byte[]&gt; context
      */
-    public QueryContext<byte[]> getEncryptedContent(QueryContext<byte[]> cxt);
+    public QueryContext<byte[]> getEncryptedContent(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete decrypted document content from docflow
@@ -104,7 +100,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;byte[]&gt; context
      * @return QueryContext&lt;byte[]&gt; context
      */
-    public QueryContext<byte[]> getDecryptedContent(QueryContext<byte[]> cxt);
+    public QueryContext<byte[]> getDecryptedContent(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete document signatures from docflow
@@ -114,7 +110,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;List&lt;Signature&gt;&gt; context
      * @return QueryContext&lt;List&lt;Signature&gt;&gt; context
      */
-    public QueryContext<List<Signature>> getSignatures(QueryContext<List<Signature>> cxt);
+    public QueryContext<List<Signature>> getSignatures(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete document single signature from docflow
@@ -124,7 +120,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;Signature&gt; context
      * @return QueryContext&lt;Signature&gt; context
      */
-    public QueryContext<Signature> getSignature(QueryContext<Signature> cxt);
+    public QueryContext<Signature> getSignature(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete document signature single content from docflow
@@ -134,7 +130,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;byte[]gt; context
      * @return QueryContext&lt;byte[]&gt; context
      */
-    public QueryContext<byte[]> getSignatureContent(QueryContext<byte[]> cxt);
+    public QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
     /**
      * Allow API user to create Reply document for specified workflow
@@ -144,7 +140,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;DocumentToSend&gt; context
      * @return QueryContext&lt;DocumentToSend&gt; context
      */
-    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<DocumentToSend> cxt);
+    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> cxt);
 
     /**
      * Allow API user to send Reply document for specified workflow
@@ -154,11 +150,17 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;Signature&gt; context
      * @return QueryContext&lt;Signature&gt; context
      */
-    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<Docflow> cxt);
+    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> cxt);
 
-    public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt);
+    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt);
 
-    public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt);
+    public QueryContext<Docflow> sendReply(QueryContext<?> cxt);
 
-    public QueryContext<String> print(QueryContext<String> cxt);
+    public QueryContext<List<Docflow>> sendReplies(QueryContext<?> cxt);
+
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
+
+    public QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt);
+
+    public QueryContext<String> print(QueryContext<?> cxt);
 }
