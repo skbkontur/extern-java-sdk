@@ -16,6 +16,27 @@
 </dependency>
 ```
 
+#### [Иcпользовать SNAPSHOT версии sdk](https://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
+
+Для использования SNAPSHOT версий sdk нужно разрешить использование **sonatype snapshot repository**.
+Для этого добавьте в ` ~/.m2/settings.xml`
+```xml
+<profiles>
+  <profile>
+     <id>allow-snapshots</id>
+        <activation><activeByDefault>true</activeByDefault></activation>
+     <repositories>
+       <repository>
+         <id>snapshots-repo</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+       </repository>
+     </repositories>
+   </profile>
+</profiles>
+```
+
 ### Компиляция из исходного кода:
 
 1. Склонировать репозиторий SDK:
