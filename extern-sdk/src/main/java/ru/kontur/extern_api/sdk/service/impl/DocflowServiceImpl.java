@@ -330,8 +330,8 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
-            boolean finished,
-            boolean incoming,
+            Boolean finished,
+            Boolean incoming,
             long skip,
             int take,
             String innKpp,

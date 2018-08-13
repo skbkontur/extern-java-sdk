@@ -1409,8 +1409,8 @@ public class QueryContext<R> implements Serializable {
      *
      * @return признак завершенности документооборота
      */
-    public boolean getFinished() {
-        return (boolean) params.get(FINISHED);
+    public Boolean getFinished() {
+        return (Boolean) params.get(FINISHED);
     }
 
     /**
@@ -1420,7 +1420,7 @@ public class QueryContext<R> implements Serializable {
      * @param finished признак завершенности документооборота
      * @return контекст
      */
-    public QueryContext<R> setFinished(boolean finished) {
+    public QueryContext<R> setFinished(Boolean finished) {
         return set(FINISHED, finished);
     }
 
@@ -1431,8 +1431,8 @@ public class QueryContext<R> implements Serializable {
      *
      * @return признак документооборотов (ДО), инициализированные контролирующими органами
      */
-    public boolean getIncoming() {
-        return (boolean) params.get(INCOMING);
+    public Boolean getIncoming() {
+        return (Boolean) params.get(INCOMING);
     }
 
     /**
@@ -1443,7 +1443,7 @@ public class QueryContext<R> implements Serializable {
      * @param incoming признак наличия входящих документов документооборота
      * @return контекст
      */
-    public QueryContext<R> setIncoming(boolean incoming) {
+    public QueryContext<R> setIncoming(Boolean incoming) {
         return set(INCOMING, incoming);
     }
 

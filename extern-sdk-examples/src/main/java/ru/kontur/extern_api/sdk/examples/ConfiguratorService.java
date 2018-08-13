@@ -32,6 +32,7 @@ import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -87,6 +88,8 @@ class ConfiguratorService {
         // если используется свой криптопровайдер
         engine.setCryptoProvider(new CryptoProviderMSCapi());
 
+        // устанавливает провайдер для IP адреса
+        engine.setUserIPProvider(() -> new QueryContext<String>().setResult(parameters.getProperty("sender.ip"),QueryContext.USER_IP));
         return engine;
     }
 
