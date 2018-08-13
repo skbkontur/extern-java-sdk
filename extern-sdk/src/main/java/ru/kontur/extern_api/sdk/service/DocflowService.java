@@ -438,11 +438,11 @@ public interface DocflowService extends Providers {
      * <p>GET /v1/{accountId}/docflows</p>
      * Асинхронный метод постранично возвращает список ДО.
      *
-     * @param finished    признак завершенности ДО
-     * @param incoming    признак входящего ДО, true - входящие ДО, иначе - исходящие
+     * @param finished    признак завершенности ДО. Если присвоить значение null, то в выборку попадут как завершенные, так и не завершенные ДО
+     * @param incoming    признак входящего ДО, true - входящие ДО, иначе - исходящие. Если присвоить значение null, то в выборку попадут, как входящие, так и исходящие ДО
      * @param skip        порядковый номер первого ДО в выходном списке
      * @param take        максимальное количество ДО в выходном списке
-     * @param innKpp      ИНН+КПП подотчетной организации
+     * @param innKpp      ИНН+КПП подотчетной организации. Можно передать пустую строку или значение null, тогда параметр не буде участвовать при формировании выборки ДО
      * @param updatedFrom дата обновления ДО, с которой производится поиск. Если передано значение null, то критерий не учитывается
      * @param updatedTo   дата обновления ДО, до которой производится поиск. Если передано значение null, то критерий не учитывается
      * @param createdFrom дата создания ДО, с которой производится поиск. Если передано значение null, то критерий не учитывается
@@ -451,7 +451,7 @@ public interface DocflowService extends Providers {
      * @return список ДО
      * @see DocflowPage
      */
-    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(boolean finished, boolean incoming, long skip, int take, String innKpp, Date updatedFrom, Date updatedTo, Date createdFrom, Date createdTo, String type);
+    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(Boolean finished, Boolean incoming, long skip, int take, String innKpp, Date updatedFrom, Date updatedTo, Date createdFrom, Date createdTo, String type);
 
     /**
      * <p>GET /v1/{accountId}/docflows</p>

@@ -68,7 +68,7 @@ public class DocflowExample {
                         configuratorService.getSender(),
                         configuratorService.getRecipient(),
                         configuratorService.getOrganization());
-        System.out.println("Draft sent");
+       System.out.println("Draft sent");
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
             System.out.println("Error sending document: " + sendCxt.getServiceError().toString());
@@ -107,7 +107,8 @@ public class DocflowExample {
                 System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                replyDocument.setSignature("signature".getBytes());
+                byte[] signature = sign(externEngine, replyDocument.getContent(), configuratorService.getSender().getThumbprint());
+                replyDocument.setSignature(signature);
                 sendDocflowCtx.setReplyDocument(replyDocument);
                 // и отправляем его
                 docflowService.sendReply(sendDocflowCtx).ensureSuccess();
@@ -158,5 +159,21 @@ public class DocflowExample {
                 return;
             }
         }
+    }
+
+    private static byte[] sign(ExternEngine engine, byte[] content, String thumbprint) {
+        if (engine != null && content != null && thumbprint != null) {
+            QueryContext<byte[]> signCxt
+                    = engine
+                    .getCryptoProvider()
+                    .sign(
+                            new QueryContext<byte[]>()
+                                    .setThumbprint(thumbprint)
+                                    .setContent(content)
+                    );
+            signCxt.ensureSuccess();
+            return signCxt.getContent();
+        }
+        return null;
     }
 }
