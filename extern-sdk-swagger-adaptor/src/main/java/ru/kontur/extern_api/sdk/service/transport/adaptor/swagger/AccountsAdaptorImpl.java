@@ -40,15 +40,15 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
     }
 
     @Override
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<List<Link>> cxt) {
+    public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             LinkDto linkDto = new LinkDto();
 
-            return cxt.setResult(
+            return new QueryContext<List<Link>>(cxt, cxt.getEntityName()).setResult(
                 transport(cxt)
                     .rootIndex()
                     .stream()
@@ -58,20 +58,20 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             );
         }
         catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+            return new QueryContext<List<Link>>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }
 
     @Override
-    public QueryContext<AccountList> acquireAccounts(QueryContext<AccountList> cxt) {
+    public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             AccountListDto accountListDto = new AccountListDto();
 
-            return cxt.setResult(
+            return new QueryContext<AccountList>(cxt, cxt.getEntityName()).setResult(
                 accountListDto
                     .fromDto(
                         transport(cxt)
@@ -81,21 +81,21 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             );
         }
         catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+            return new QueryContext<AccountList>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public QueryContext<Account> createAccount(QueryContext<Account> cxt) {
+    public QueryContext<Account> createAccount(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             CreateAccountRequestDto createAccountRequestDto = new CreateAccountRequestDto();
 
-            return cxt.setResult(
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setResult(
                 new AccountDto().fromDto(
                     (Map<String,Object>)transport(cxt).accountsCreate(
                         createAccountRequestDto
@@ -106,20 +106,20 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             );
         }
         catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }
 
     @Override
-    public QueryContext<Account> getAccount(QueryContext<Account> cxt) {
+    public QueryContext<Account> getAccount(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             AccountDto accountDto = new AccountDto();
 
-            return cxt.setResult(
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setResult(
                 accountDto
                     .fromDto(
                         transport(cxt).accountsGet(cxt.getAccountProvider().accountId())
@@ -128,7 +128,7 @@ public class AccountsAdaptorImpl extends BaseAdaptor implements AccountsAdaptor 
             );
         }
         catch (ApiException x) {
-            return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
+            return new QueryContext<Account>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
         }
     }
 

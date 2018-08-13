@@ -5,585 +5,560 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.adaptor.swagger;
 
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_PAGE;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENTS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_DESCRIPTION;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SEND;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_TO_SENDS;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
-
 import com.google.gson.reflect.TypeToken;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.joda.time.DateTime;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.ApiExceptionDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocflowPageDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocumentDescriptionDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocumentDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.DocumentToSendDto;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.SignatureDto;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.dto.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.swagger.invoker.ApiClient;
 import ru.kontur.extern_api.sdk.service.transport.swagger.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.service.transport.swagger.invoker.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.swagger.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.service.transport.swagger.model.PrintDocumentData;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.*;
 
 /**
- *
  * @author alexs
  */
 public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor {
 
-	private final DocflowsApi api;
+    private final DocflowsApi api;
 
-	public DocflowsAdaptorImpl() {
-		this.api = new DocflowsApi();
-	}
+    public DocflowsAdaptorImpl() {
+        this.api = new DocflowsApi();
+    }
 
-	/**
-	 * Get docflow page
-	 * <p>
-	 * GET /v1/{accountId}/docflows
-	 *
-	 * @param cxt QueryContext&lt;Docflow&gt;
-	 * @return QueryContext&lt;Docflow&gt;
-	 */
-	@Override
-	public QueryContext<DocflowPage> getDocflows(QueryContext<DocflowPage> cxt) {
-		if (cxt.isFail()) {
-			return cxt;
-		}
+    /**
+     * Get docflow page
+     * <p>
+     * GET /v1/{accountId}/docflows
+     *
+     * @param cxt QueryContext&lt;Docflow&gt;
+     * @return QueryContext&lt;Docflow&gt;
+     */
+    @Override
+    public QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt) {
+        if (cxt.isFail()) {
+            return new QueryContext<>(cxt, cxt.getEntityName());
+        }
 
-		try {
-			return cxt.setResult(
-				new DocflowPageDto().fromDto(
-					transport(cxt)
-						.docflowsGetDocflowsAsync(
-							cxt.getAccountProvider().accountId(),
-							cxt.getFinished(),
-							cxt.getIncoming(),
-							cxt.getSkip(),
-							cxt.getTake(),
-							cxt.getInnKpp(),
-                            cxt.getUpdatedFrom()==null ? null : new DateTime(cxt.getUpdatedFrom().getTime()),
-                            cxt.getUpdatedTo()==null ? null : new DateTime(cxt.getUpdatedTo().getTime()),
-                            cxt.getCreatedFrom()==null ? null : new DateTime(cxt.getCreatedFrom().getTime()),
-                            cxt.getCreatedTo()==null ? null : new DateTime(cxt.getCreatedTo().getTime()),
-							cxt.getType())
-				),
-				DOCFLOW_PAGE
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+        try {
+            return new QueryContext<DocflowPage>(cxt, cxt.getEntityName()).setResult(
+                    new DocflowPageDto().fromDto(
+                            transport(cxt)
+                                    .docflowsGetDocflowsAsync(
+                                            cxt.getAccountProvider().accountId(),
+                                            cxt.getFinished(),
+                                            cxt.getIncoming(),
+                                            cxt.getSkip(),
+                                            cxt.getTake(),
+                                            cxt.getInnKpp(),
+                                            cxt.getUpdatedFrom() == null ? null : new DateTime(cxt.getUpdatedFrom().getTime()),
+                                            cxt.getUpdatedTo() == null ? null : new DateTime(cxt.getUpdatedTo().getTime()),
+                                            cxt.getCreatedFrom() == null ? null : new DateTime(cxt.getCreatedFrom().getTime()),
+                                            cxt.getCreatedTo() == null ? null : new DateTime(cxt.getCreatedTo().getTime()),
+                                            cxt.getType())
+                    ),
+                    DOCFLOW_PAGE
+            );
+        } catch (ApiException x) {
+            return new QueryContext<DocflowPage>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get Docflow object
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}
-	 *
-	 * @param cxt QueryContext&lt;Docflow&gt;
-	 * @return QueryContext&lt;Docflow&gt;
-	 */
-	@Override
-	public QueryContext<Docflow> lookupDocflow(QueryContext<Docflow> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get Docflow object
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}
+     *
+     * @param cxt QueryContext&lt;Docflow&gt;
+     * @return QueryContext&lt;Docflow&gt;
+     */
+    @Override
+    public QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new DocflowDto().fromDto(
-					transport(cxt)
-						.docflowsGetDocflowAsync(
-							cxt.getAccountProvider().accountId(),
-							cxt.getDocflowId()
-						)
-				),
-				DOCFLOW
-			).setDocflowId(cxt.getDocflow().getId());
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            QueryContext<Docflow> resultCxt = new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
+                    new DocflowDto().fromDto(
+                            transport(cxt)
+                                    .docflowsGetDocflowAsync(
+                                            cxt.getAccountProvider().accountId(),
+                                            cxt.getDocflowId()
+                                    )
+                    ),
+                    DOCFLOW
+            );
+            return resultCxt.setDocflowId(cxt.getDocflow().getId());
+        } catch (ApiException x) {
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get all document from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents
-	 *
-	 * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
-	 * @return QueryContext&lt;List&lt;Document&gt;&gt; context
-	 */
-	@Override
-	public QueryContext<List<Document>> getDocuments(QueryContext<List<Document>> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get all document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents
+     *
+     * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
+     * @return QueryContext&lt;List&lt;Document&gt;&gt; context
+     */
+    @Override
+    public QueryContext<List<Document>> getDocuments(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			DocumentDto documentDto = new DocumentDto();
+            DocumentDto documentDto = new DocumentDto();
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetDocumentsAsync(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId()
-					)
-					.stream()
-					.map(documentDto::fromDto)
-					.collect(Collectors.toList()),
-				DOCUMENTS
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<List<Document>>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetDocumentsAsync(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId()
+                            )
+                            .stream()
+                            .map(documentDto::fromDto)
+                            .collect(Collectors.toList()),
+                    DOCUMENTS
+            );
+        } catch (ApiException x) {
+            return new QueryContext<List<Document>>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete document from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}
-	 *
-	 * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
-	 * @return QueryContext&lt;List&lt;Document&gt;&gt; context
-	 */
-	@Override
-	public QueryContext<Document> lookupDocument(QueryContext<Document> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}
+     *
+     * @param cxt QueryContext&lt;List&lt;Document&gt;&gt; context
+     * @return QueryContext&lt;List&lt;Document&gt;&gt; context
+     */
+    @Override
+    public QueryContext<Document> lookupDocument(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new DocumentDto().fromDto(
-					transport(cxt)
-						.docflowsGetDocumentAsync(
-							cxt.getAccountProvider().accountId(),
-							cxt.getDocflowId(),
-							cxt.getDocumentId()
-						)
-				),
-				DOCUMENT
-			)
-				.setDocumentId(cxt.getDocument().getId());
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            QueryContext<Document> resultCxt = new QueryContext<Document>(cxt, cxt.getEntityName()).setResult(
+                    new DocumentDto().fromDto(
+                            transport(cxt)
+                                    .docflowsGetDocumentAsync(
+                                            cxt.getAccountProvider().accountId(),
+                                            cxt.getDocflowId(),
+                                            cxt.getDocumentId()
+                                    )
+                    ),
+                    DOCUMENT
+            );
+            return resultCxt.setDocumentId(cxt.getDocument().getId());
+        } catch (ApiException x) {
+            return new QueryContext<Document>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete document description from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description
-	 *
-	 * @param cxt QueryContext&lt;DocumentDescription&gt; context
-	 * @return QueryContext&lt;DocumentDescription&gt; context
-	 */
-	@Override
-	public QueryContext<DocumentDescription> lookupDescription(QueryContext<DocumentDescription> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete document description from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description
+     *
+     * @param cxt QueryContext&lt;DocumentDescription&gt; context
+     * @return QueryContext&lt;DocumentDescription&gt; context
+     */
+    @Override
+    public QueryContext<DocumentDescription> lookupDescription(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new DocumentDescriptionDto().fromDto(
-					transport(cxt)
-						.docflowsGetDocumentDescriptionAsync(
-							cxt.getAccountProvider().accountId(),
-							cxt.getDocflowId(),
-							cxt.getDocumentId()
-						)
-				),
-				DOCUMENT_DESCRIPTION
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName()).setResult(
+                    new DocumentDescriptionDto().fromDto(
+                            transport(cxt)
+                                    .docflowsGetDocumentDescriptionAsync(
+                                            cxt.getAccountProvider().accountId(),
+                                            cxt.getDocflowId(),
+                                            cxt.getDocumentId()
+                                    )
+                    ),
+                    DOCUMENT_DESCRIPTION
+            );
+        } catch (ApiException x) {
+            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete encrypted document content from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted
-	 *
-	 * @param cxt QueryContext&lt;byte[]&gt; context
-	 * @return QueryContext&lt;byte[]&gt; context
-	 */
-	@Override
-	public QueryContext<byte[]> getEncryptedContent(QueryContext<byte[]> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete encrypted document content from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted
+     *
+     * @param cxt QueryContext&lt;byte[]&gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<byte[]> getEncryptedContent(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetEncryptedDocumentContentAsync(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId(),
-						cxt.getDocumentId()
-					),
-				CONTENT
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetEncryptedDocumentContentAsync(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId(),
+                                    cxt.getDocumentId()
+                            ),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete decrypted document content from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted
-	 *
-	 * @param cxt QueryContext&lt;byte[]&gt; context
-	 * @return QueryContext&lt;byte[]&gt; context
-	 */
-	@Override
-	public QueryContext<byte[]> getDecryptedContent(QueryContext<byte[]> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete decrypted document content from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted
+     *
+     * @param cxt QueryContext&lt;byte[]&gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<byte[]> getDecryptedContent(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetDecryptedDocumentContentAsync(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId(),
-						cxt.getDocumentId()
-					),
-				CONTENT
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetDecryptedDocumentContentAsync(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId(),
+                                    cxt.getDocumentId()
+                            ),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete document signatures from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures
-	 *
-	 * @param cxt QueryContext&lt;List&lt;Signature&gt;&gt; context
-	 * @return QueryContext&lt;List&lt;Signature&gt;&gt; context
-	 */
-	@Override
-	public QueryContext<List<Signature>> getSignatures(QueryContext<List<Signature>> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete document signatures from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures
+     *
+     * @param cxt QueryContext&lt;List&lt;Signature&gt;&gt; context
+     * @return QueryContext&lt;List&lt;Signature&gt;&gt; context
+     */
+    @Override
+    public QueryContext<List<Signature>> getSignatures(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			SignatureDto signatureDto = new SignatureDto();
+            SignatureDto signatureDto = new SignatureDto();
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetDocumentSignaturesAsync(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId(),
-						cxt.getDocumentId()
-					)
-					.stream()
-					.map(signatureDto::fromDto)
-					.collect(Collectors.toList()),
-				SIGNATURES
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<List<Signature>>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetDocumentSignaturesAsync(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId(),
+                                    cxt.getDocumentId()
+                            )
+                            .stream()
+                            .map(signatureDto::fromDto)
+                            .collect(Collectors.toList()),
+                    SIGNATURES
+            );
+        } catch (ApiException x) {
+            return new QueryContext<List<Signature>>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete document single signature from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}
-	 *
-	 * @param cxt QueryContext&lt;Signature&gt; context
-	 * @return QueryContext&lt;Signature&gt; context
-	 */
-	@Override
-	public QueryContext<Signature> getSignature(QueryContext<Signature> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete document single signature from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}
+     *
+     * @param cxt QueryContext&lt;Signature&gt; context
+     * @return QueryContext&lt;Signature&gt; context
+     */
+    @Override
+    public QueryContext<Signature> getSignature(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new SignatureDto()
-					.fromDto(
-						transport(cxt)
-							.docflowsGetDocumentSignatureAsync(
-								cxt.getAccountProvider().accountId(),
-								cxt.getDocflowId(),
-								cxt.getDocumentId(),
-								cxt.getSignatureId()
-							)
-					),
-				SIGNATURE
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<Signature>(cxt, cxt.getEntityName()).setResult(
+                    new SignatureDto()
+                            .fromDto(
+                                    transport(cxt)
+                                            .docflowsGetDocumentSignatureAsync(
+                                                    cxt.getAccountProvider().accountId(),
+                                                    cxt.getDocflowId(),
+                                                    cxt.getDocumentId(),
+                                                    cxt.getSignatureId()
+                                            )
+                            ),
+                    SIGNATURE
+            );
+        } catch (ApiException x) {
+            return new QueryContext<Signature>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to get discrete document signature single content from docflow
-	 * <p>
-	 * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content
-	 *
-	 * @param cxt QueryContext&lt;byte[]gt; context
-	 * @return QueryContext&lt;byte[]&gt; context
-	 */
-	@Override
-	public QueryContext<byte[]> getSignatureContent(QueryContext<byte[]> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to get discrete document signature single content from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetDocumentSignatureContentAsync(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId(),
-						cxt.getDocumentId(),
-						cxt.getSignatureId()
-					),
-				CONTENT
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetDocumentSignatureContentAsync(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId(),
+                                    cxt.getDocumentId(),
+                                    cxt.getSignatureId()
+                            ),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<byte[]>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to create Reply document for specified workflow
-	 * <p>
-	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
-	 *
-	 * @param cxt QueryContext&lt;DocumentToSend&gt; context
-	 * @return QueryContext&lt;DocumentToSend&gt; context
-	 */
-	@Override
-	public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<DocumentToSend> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to create Reply document for specified workflow
+     * <p>
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
+     *
+     * @param cxt QueryContext&lt;DocumentToSend&gt; context
+     * @return QueryContext&lt;DocumentToSend&gt; context
+     */
+    @Override
+    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new DocumentToSendDto()
-					.fromDto(
-						transport(cxt)
-							.docflowsGenerateReplyDocumentAsync(
-								cxt.getAccountProvider().accountId(),
-								cxt.getDocflowId(),
-								cxt.getDocumentType(),
-								cxt.getDocumentId(),
-								new GenerateReplyDocumentRequestData().certificateBase64(cxt.getContentString())
-							)
-					),
-				DOCUMENT_TO_SEND
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<DocumentToSend>(cxt, cxt.getEntityName()).setResult(
+                    new DocumentToSendDto()
+                            .fromDto(
+                                    transport(cxt)
+                                            .docflowsGenerateReplyDocumentAsync(
+                                                    cxt.getAccountProvider().accountId(),
+                                                    cxt.getDocflowId(),
+                                                    cxt.getDocumentType(),
+                                                    cxt.getDocumentId(),
+                                                    new GenerateReplyDocumentRequestData().certificateBase64(cxt.getContentString())
+                                            )
+                            ),
+                    DOCUMENT_TO_SEND
+            );
+        } catch (ApiException x) {
+            return new QueryContext<DocumentToSend>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-	/**
-	 * Allow API user to send Reply document for specified workflow
-	 * <p>
-	 * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send
-	 *
-	 * @param cxt QueryContext&lt;Signature&gt; context
-	 * @return QueryContext&lt;Signature&gt; context
-	 */
-	@Override
-	public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<Docflow> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    /**
+     * Allow API user to send Reply document for specified workflow
+     * <p>
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send
+     *
+     * @param cxt QueryContext&lt;Signature&gt; context
+     * @return QueryContext&lt;Signature&gt; context
+     */
+    @Override
+    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			return cxt.setResult(
-				new DocflowDto()
-					.fromDto(
-						transport(cxt)
-							.docflowsSendReplyDocumentAsync(
-								cxt.getAccountProvider().accountId(),
-								cxt.getDocflowId(),
-								cxt.getDocumentType(),
-								cxt.getDocumentId(),
-								new DocumentToSendDto().toDto(cxt.getDocumentToSend())
-							)
-					),
-				DOCFLOW
-			).setDocflowId(cxt.getDocflow().getId());
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            QueryContext<Docflow> resultCxt = new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
+                    new DocflowDto()
+                            .fromDto(
+                                    transport(cxt)
+                                            .docflowsSendReplyDocumentAsync(
+                                                    cxt.getAccountProvider().accountId(),
+                                                    cxt.getDocflowId(),
+                                                    cxt.getDocumentType(),
+                                                    cxt.getDocumentId(),
+                                                    new DocumentToSendDto().toDto(cxt.getDocumentToSend())
+                                            )
+                            ),
+                    DOCFLOW
+            );
+            return resultCxt.setDocflowId(resultCxt.getDocflow().getId());
+        } catch (ApiException x) {
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
 
-		@SuppressWarnings("unchecked")
-	@Override
-	public QueryContext<List<DocumentToSend>> generateReplies(QueryContext<List<DocumentToSend>> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+    @SuppressWarnings("unchecked")
+    @Override
+    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			Docflow docflow = cxt.getDocflow();
-			if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
-				String x509Base64 = cxt.getCertificate();
-				if (x509Base64 == null) {
-					return cxt.setServiceError("A signer certificate is absent in the context.");
-				}
-				HttpClient httpClient = prepareTransport(cxt);
-				List<DocumentToSend> replies = new ArrayList<>();
-				for (Link l : docflow.getLinks()) {
-					if (l.getRel().equals("reply")) {
-						
-							ApiResponse<Map<String, Object>> response
-									= httpClient
-										.setServiceBaseUri("")
-										.submitHttpRequest(
-											l.getHref(),
-											"POST",
-											new HashMap<>(),
-											new GenerateReplyDocumentRequestData().certificateBase64(x509Base64),
-											new HashMap<>(),
-											new HashMap<>(),
-											new TypeToken<Map<String, Object>>() {
-											}.getType()
-										);
-						
-						DocumentToSend documentToSend	= new DocumentToSendDto().fromDto(response.getData());
-						
-						replies.add(documentToSend);
-					}
-				}
+            Docflow docflow = cxt.getDocflow();
+            if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
+                String x509Base64 = cxt.getCertificate();
+                if (x509Base64 == null) {
+                    return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName()).setServiceError("A signer certificate is absent in the context.");
+                }
+                HttpClient httpClient = prepareTransport(cxt);
+                List<ReplyDocument> replies = new ArrayList<>();
+                for (Link l : docflow.getLinks()) {
+                    if (l.getRel().equals("reply")) {
 
-				return cxt.setResult(replies, DOCUMENT_TO_SENDS);
-			}
-			else {
-				return cxt.setResult(Collections.emptyList(), DOCUMENT_TO_SENDS);
-			}
-		}
-		catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
-			return cxt.setServiceError(x);
-		}
-	}
+                        ApiResponse<ReplyDocument> response
+                                = httpClient
+                                .setServiceBaseUri("")
+                                .submitHttpRequest(
+                                        l.getHref(),
+                                        "POST",
+                                        new HashMap<>(),
+                                        new GenerateReplyDocumentRequestData().certificateBase64(x509Base64),
+                                        new HashMap<>(),
+                                        new HashMap<>(),
+                                        new TypeToken<ReplyDocument>() {
+                                        }.getType()
+                                );
 
-	@Override
-	public QueryContext<Docflow> sendReplies(QueryContext<Docflow> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+                        replies.add(response.getData());
+                    }
+                }
 
-			DocumentToSend documentToSend = cxt.getDocumentToSend();
-			if (documentToSend == null) {
-				return cxt.setServiceError("Reply is absent in the context.");
-			}
+                return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName()).setResult(replies, REPLY_DOCUMENTS);
+            } else {
+                return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName()).setResult(Collections.emptyList(), REPLY_DOCUMENTS);
+            }
+        } catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
+            return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
 
-			Link self = documentToSend.getLinks().stream().filter(l -> l.getRel().equals("self")).findAny().orElse(null);
-			if (self == null) {
-				return cxt.setServiceError("The reply does not contain a self reference.");
-			}
+    @Override
+    public QueryContext<Docflow> sendReply(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
 
-			HttpClient httpClient = prepareTransport(cxt);
+            DocumentToSend documentToSend = cxt.getDocumentToSend();
+            if (documentToSend == null) {
+                return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError("Reply is absent in the context.");
+            }
 
-			DocumentToSendDto documentToSendDto = new DocumentToSendDto();
-			DocflowDto docflowDto = new DocflowDto();
+            Link self = documentToSend.getLinks().stream().filter(l -> l.getRel().equals("self")).findAny().orElse(null);
+            if (self == null) {
+                return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError("The reply does not contain a self reference.");
+            }
 
-			String httpRequest = self.getHref().toLowerCase().replaceAll("/generate", "/send");
+            HttpClient httpClient = prepareTransport(cxt);
 
-			ApiResponse<ru.kontur.extern_api.sdk.service.transport.swagger.model.Docflow> response
-				= httpClient
-					.setServiceBaseUri("")
-					.submitHttpRequest(
-						httpRequest,
-						"POST",
-						new HashMap<>(),
-						documentToSendDto.toDto(documentToSend),
-						new HashMap<>(),
-						new HashMap<>(),
-						new TypeToken<ru.kontur.extern_api.sdk.service.transport.swagger.model.Docflow>() {
-						}.getType()
-					);
+            DocumentToSendDto documentToSendDto = new DocumentToSendDto();
+            DocflowDto docflowDto = new DocflowDto();
 
-			Docflow docflow	= docflowDto.fromDto(response.getData());
+            String httpRequest = self.getHref().toLowerCase().replaceAll("/generate", "/send");
 
-			return cxt.setResult(docflow, DOCFLOW);
-		}
-		catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
-			return cxt.setServiceError(x);
-		}
-	}
+            ApiResponse<ru.kontur.extern_api.sdk.service.transport.swagger.model.Docflow> response
+                    = httpClient
+                    .setServiceBaseUri("")
+                    .submitHttpRequest(
+                            httpRequest,
+                            "POST",
+                            new HashMap<>(),
+                            documentToSendDto.toDto(documentToSend),
+                            new HashMap<>(),
+                            new HashMap<>(),
+                            new TypeToken<ru.kontur.extern_api.sdk.service.transport.swagger.model.Docflow>() {
+                            }.getType()
+                    );
 
-	@Override
-	public QueryContext<String> print(QueryContext<String> cxt) {
-		try {
-			if (cxt.isFail()) {
-				return cxt;
-			}
+            Docflow docflow = docflowDto.fromDto(response.getData());
 
-			return cxt.setResult(
-				transport(cxt)
-					.docflowsGetDocumentPrintAsyncWithHttpInfo(
-						cxt.getAccountProvider().accountId(),
-						cxt.getDocflowId(),
-						cxt.getDocumentId(),
-						new PrintDocumentData().content(cxt.getContentString())
-					).getData(),
-				CONTENT_STRING
-			);
-		}
-		catch (ApiException x) {
-			return cxt.setServiceError(new ApiExceptionDto().fromDto(x));
-		}
-	}
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(docflow, DOCFLOW);
+        } catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
 
+    @Override
+    public QueryContext<List<Docflow>> sendReplies(QueryContext<?> cxt) {
+        throw new NotImplementedException();
+    }
 
+    @Override
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt) {
+        throw new NotImplementedException();
+    }
 
-	private DocflowsApi transport(QueryContext<?> cxt) {
-		api.setApiClient((ApiClient)prepareTransport(cxt));
-		return api;
-	}
+    @Override
+    public QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public QueryContext<String> print(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .docflowsGetDocumentPrintAsyncWithHttpInfo(
+                                    cxt.getAccountProvider().accountId(),
+                                    cxt.getDocflowId(),
+                                    cxt.getDocumentId(),
+                                    new PrintDocumentData().content(cxt.getContentString())
+                            ).getData(),
+                    CONTENT_STRING
+            );
+        } catch (ApiException x) {
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(new ApiExceptionDto().fromDto(x));
+        }
+    }
+
+    private DocflowsApi transport(QueryContext<?> cxt) {
+        api.setApiClient((ApiClient) prepareTransport(cxt));
+        return api;
+    }
 }

@@ -47,4 +47,6 @@ public interface Providers {
 	void apiKeyProvider(ApiKeyProvider apiKeyProvider);
     
 	void cryptoProvider(CryptoProvider cryptoProvider);
+
+	void userIPProvider(UserIPProvider userIPProvider);
 }

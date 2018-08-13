@@ -33,10 +33,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.SignatureToSend;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -99,22 +96,19 @@ public class DocflowListExample {
             QueryContext<List<DocumentToSend>> listDocToSendCtx = new QueryContext<>();
             listDocToSendCtx.setDocflow(docflow);
             listDocToSendCtx.setCertificate(configuratorService.getSender().getCertificate());
-            List<DocumentToSend> listDocToSend = docflowService.generateReplies(listDocToSendCtx)
-                .get();
+            List<ReplyDocument> replyDocuments = docflowService.generateReplies(listDocToSendCtx).get();
             System.out.println("List of DocumentToSend received");
-            for (DocumentToSend docToSend : listDocToSend) {
+            for (ReplyDocument replyDocument: replyDocuments) {
                 System.out.println(
-                    "Start sending DocumentToSend: id = " + docToSend.getId().toString()
-                        + ", filename = " + docToSend.getFilename());
+                    "Start sending DocumentToSend: id = " + replyDocument.getId()
+                        + ", filename = " + replyDocument.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                SignatureToSend signature = new SignatureToSend();
-                signature.setContentData("signature" .getBytes());
-                docToSend.setSignature(signature);
-                sendDocflowCtx.setDocumentToSend(docToSend);
+                replyDocument.setSignature("signature" .getBytes());
+                sendDocflowCtx.setReplyDocument(replyDocument);
                 // и отправляем его
-                docflowService.sendReplies(sendDocflowCtx);
-                System.out.println("DocumentToSend sent");
+                docflowService.sendReply(sendDocflowCtx);
+                System.out.println("ReplyDocument sent");
             }
             System.out.println("All documents sent");
 

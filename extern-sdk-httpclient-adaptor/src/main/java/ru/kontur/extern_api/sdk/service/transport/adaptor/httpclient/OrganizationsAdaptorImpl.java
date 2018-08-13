@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.COMPANY_BATCH;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NOTHING;
 
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
@@ -45,13 +46,13 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
     }
 
     @Override
-    public QueryContext<Company> lookup(QueryContext<Company> cxt) {
+    public QueryContext<Company> lookup(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            QueryContext<Company> resultCxt = new QueryContext<Company>(cxt, cxt.getEntityName()).setResult(
                 transport(cxt)
                     .lookup(
                         cxt.getAccountProvider().accountId().toString(),
@@ -59,19 +60,20 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                     ).getData(),
                 COMPANY
             );
+            return resultCxt.setCompanyId(resultCxt.getCompany().getId());
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
     @Override
-    public QueryContext<Company> create(QueryContext<Company> cxt) {
+    public QueryContext<Company> create(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt
+            QueryContext<Company> resultCxt = new QueryContext<Company>(cxt, cxt.getEntityName())
                 .setResult(
                     transport(cxt)
                         .create(
@@ -79,20 +81,21 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                             cxt.getCompanyGeneral()
                         ).getData(),
                     COMPANY
-                ).setCompanyId(cxt.getCompany().getId());
+                );
+            return resultCxt.setCompanyId(resultCxt.getCompany().getId());
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
     @Override
-    public QueryContext<Company> update(QueryContext<Company> cxt) {
+    public QueryContext<Company> update(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return cxt.setResult(
+            return new QueryContext<Company>(cxt, cxt.getEntityName()).setResult(
                 transport(cxt)
                     .update(
                         cxt.getAccountProvider().accountId().toString(),
@@ -102,15 +105,15 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                 COMPANY
             );
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
     @Override
-    public QueryContext<Void> delete(QueryContext<Void> cxt) {
+    public QueryContext<Void> delete(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             transport(cxt)
@@ -119,20 +122,20 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                     cxt.getCompanyId().toString()
                 );
 
-            return cxt;
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<Void>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
     @Override
-    public QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt) {
+    public QueryContext<CompanyBatch> search(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
-                return cxt;
+                return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            cxt.setResult(
+            return new QueryContext<CompanyBatch>(cxt, cxt.getEntityName()).setResult(
                 transport(cxt)
                     .search(
                         cxt.getAccountProvider().accountId().toString(),
@@ -143,10 +146,8 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                     ).getData()
                 , COMPANY_BATCH
             );
-
-            return cxt;
         } catch (ApiException x) {
-            return cxt.setServiceError(x);
+            return new QueryContext<CompanyBatch>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 

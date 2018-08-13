@@ -34,27 +34,27 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 public class OrganizationsAdaptorImpl extends BaseAdaptor implements OrganizationsAdaptor {
 
     @Override
-    public QueryContext<Company> lookup(QueryContext<Company> cxt) {
+    public QueryContext<Company> lookup(QueryContext<?> cxt) {
         return null;
     }
 
     @Override
-    public QueryContext<Company> create(QueryContext<Company> cxt) {
+    public QueryContext<Company> create(QueryContext<?> cxt) {
         return null;
     }
 
     @Override
-    public QueryContext<Company> update(QueryContext<Company> cxt) {
+    public QueryContext<Company> update(QueryContext<?> cxt) {
         return null;
     }
 
     @Override
-    public QueryContext<Void> delete(QueryContext<Void> cxt) {
+    public QueryContext<Void> delete(QueryContext<?> cxt) {
         return null;
     }
 
     @Override
-    public QueryContext<CompanyBatch> search(QueryContext<CompanyBatch> cxt) {
+    public QueryContext<CompanyBatch> search(QueryContext<?> cxt) {
         return null;
     }
 }

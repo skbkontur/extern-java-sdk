@@ -30,5 +30,5 @@ import ru.kontur.extern_api.sdk.model.EventsPage;
  */
 public interface EventsAdaptor {
     
-    QueryContext<EventsPage> getEvents(QueryContext<EventsPage> cxt);
+    QueryContext<EventsPage> getEvents(QueryContext<?> cxt);
 }

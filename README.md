@@ -55,7 +55,9 @@
 - **AuthenticationProvider** — предоставляет аутентификатор. Каждый запрос, отправляемый к сервисам СКБ Контур, должен сопровождаться идентификатором аутентификационной сессии. Аутентифицироваться можно:
    * по логину и паролю, для этого в SDK есть класс AuthenticationProviderByPass, реализующий интерфейс *AuthenticationProvider*;
    * с помощью механизмов доверительной аутентификации, для этого в SDK реализован класс *TrustedAuthentication*, так-же реализующий интерфейс *AuthenticationProvider*;
-   * с помощью сертификата личного ключа, для этого в SDK предназначен класс *CertificateAuthenticationProvider*, реализующий интерфейс *AuthenticationProvider*.
+   * с помощью сертификата личного ключа, для этого в SDK предназначен класс *CertificateAuthenticationProvider*, реализующий интерфейс *AuthenticationProvider*.  
+
+- **UserIPProvider** - предоставляет IPV4 адрес компьютера отправителя. По умолчанию в *ExternEngine* будет установлен провайдер, который возвращает IP адрес локального компьютера. Для замены провайдера необходимо воспользоваться методом **`ExternEngine.setUserIPProvider`**. При отправки черновка Контур Экстерн производит валидацию значения IP адреса. IP адрес не должен быть локальным, см. [RFC 5735](https://tools.ietf.org/html/rfc5735#page-6). 
 
 ### 3.1. <a name="cryptoProvider">Конфигурирование криптопровайдеров</a>
 
@@ -708,28 +710,40 @@
 
 #### 4.5.11. Методы для создания ответных документов
 
-- `CompletableFuture<QueryContext<List<DocumentToSend>>> generateRepliesAsync(Docflow docflow, String signerX509Base64)`
+- `CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(Docflow docflow, String signerX509Base64)`
 Параметры:
   - docflow - объект **Docflow** существующего ДО;
   - signerX509Base64 - сертификат подписи в кодировке BASE64.
-- `QueryContext<List<DocumentToSend>> generateReplies(QueryContext<?> parent)`  
+- `QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent)`  
 Должен принимать параметр **QueryContext**, содержащий следующие данные:  
-  - объект **Docflow** существующего ДО. Для установки необходимо использовать метод **setDocflow**.  
+  - объект **Docflow** существующего ДО. Для установки необходимо использовать метод **setDocflow**;
+  - сертификат отправителя. Для установки в контекст необходимо использовать метод **setCertificate**.
 
-Методы возвращает список структуру данных DocumentToSend.
+Методы возвращает список объектов ReplyDocument.
 
 #### 4.5.12. Методы для отправки ответного документа
 
-После создания ответных документов, перед отправкой, необходимо подписать документ и установить подпись в объект **DocumentToSend** с помощью метода **setSignature**. Метод **setSignature** на вход получает объект SignatureToSend, в который, в свою очередь, должна быть установлена подпись в формате PKCS#7 в DER-кодировке, с помощью метода **setContentData**.    
+После создания ответных документов, перед отправкой, необходимо подписать контент документа, содержащийся в поле **content**, и установить подпись в объект **ReplyDocument** с помощью метода **setSignature**. Метод **setSignature** на вход получает массив байт подписи в формате PKCS#7 в DER-кодировке.    
 
-- `CompletableFuture<QueryContext<Docflow>> sendReplyAsync(DocumentToSend documentToSend)`
+- `CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument)`
 Параметры:
-  - documentToSend - объект **DocumentToSend**, возвращаемый методом "создание ответных документов".
+  - replyDocument - объект **DocumentToSend**, возвращаемый методом "создание ответных документов".
 - `QueryContext<Docflow> sendReply(QueryContext<?> parent)`  
 Должен принимать параметр **QueryContext**, содержащий следующие данные:  
-  - объект **DocumentToSend**. Для установки необходимо использовать метод **setDocumentToSend**.  
+  - объект **ReplyDocument**. Для установки необходимо использовать метод **setReplyDocument**.  
 
 Методы возвращает структуру данных Docflow.
+
+#### 4.5.13. Методы для отправки ответных документов
+
+После создания ответных документов, перед отправкой, необходимо подписать контент документа, содержащийся в поле **content**, и установить подпись в объект **ReplyDocument** с помощью метода **setSignature**. Метод **setSignature** на вход получает массив байт подписи в формате PKCS#7 в DER-кодировке.    
+
+- `CompletableFuture<QueryContext<Docflow>> sendRepliesAsync(List<ReplyDocument> replyDocuments)`
+Параметры:
+  - replyDocuments - список **ReplyDocument**, возвращаемый методом "создание ответных документов".
+- `QueryContext<Docflow> sendReplies(QueryContext<?> parent)`  
+Должен принимать параметр **QueryContext**, содержащий следующие данные:  
+  - объект **List<ReplyDocument>**. Для установки необходимо использовать метод **setReplyDocuments**.  
 
 ### 4.5. Сервис для работы с лентой событий
 
