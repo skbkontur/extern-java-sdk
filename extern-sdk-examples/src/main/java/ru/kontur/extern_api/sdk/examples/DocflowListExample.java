@@ -61,7 +61,7 @@ public class DocflowListExample {
         // 1. Получаем список первых 10 (или меньше) незавершенных документооборотов
         // и запоминаем для дальнейшей обработки
         DocflowPage docflowPage = docflowService
-            .getDocflowsAsync(null, true, 0, 10, "", null, null, null, null, "fns534-report")
+            .getDocflowsAsync(false, false, 0, 10, "", null, null, null, null, "fns534-report")
             .get().get();
         System.out.println("DocflowPage received");
 
