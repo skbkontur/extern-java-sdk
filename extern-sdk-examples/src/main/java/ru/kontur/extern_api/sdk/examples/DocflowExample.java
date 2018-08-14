@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -107,7 +108,7 @@ public class DocflowExample {
                 System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                byte[] signature = sign(externEngine, replyDocument.getContent(), configuratorService.getSender().getThumbprint());
+                byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(), configuratorService.getSender().getThumbprint());
                 replyDocument.setSignature(signature);
                 sendDocflowCtx.setReplyDocument(replyDocument);
                 // и отправляем его
@@ -161,19 +162,13 @@ public class DocflowExample {
         }
     }
 
-    private static byte[] sign(ExternEngine engine, byte[] content, String thumbprint) {
-        if (engine != null && content != null && thumbprint != null) {
-            QueryContext<byte[]> signCxt
-                    = engine
-                    .getCryptoProvider()
-                    .sign(
-                            new QueryContext<byte[]>()
-                                    .setThumbprint(thumbprint)
-                                    .setContent(content)
-                    );
-            signCxt.ensureSuccess();
-            return signCxt.getContent();
-        }
-        return null;
+    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content, @NotNull String thumbprint) {
+        QueryContext<byte[]> signCxt
+                = cryptoProvider.sign(
+                        new QueryContext<byte[]>()
+                                .setThumbprint(thumbprint)
+                                .setContent(content)
+        ).ensureSuccess();
+        return signCxt.getContent();
     }
 }
