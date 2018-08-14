@@ -341,7 +341,7 @@ public class DocflowsApi extends RestApi {
         return invoke("getReplyDocument", null, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
     }
 
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
     @PUT
     @Consumes("application/octet-stream")
     public ApiResponse<ReplyDocument> updateReplyDocumentContent(
@@ -351,7 +351,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("replyId") String replyId,
             byte[] content
     ) throws ApiException {
-        return invoke("getReplyDocument", content, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
+        return invoke("updateReplyDocumentContent", content, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
     }
 
     @NotNull
