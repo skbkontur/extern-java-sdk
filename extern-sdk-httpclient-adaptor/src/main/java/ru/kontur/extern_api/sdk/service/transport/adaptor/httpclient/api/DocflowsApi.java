@@ -232,8 +232,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             @PathParam("signatureId") String signatureId) throws ApiException {
-        return invoke("getSignature", null, new TypeToken<Signature>() {
-        }.getType(), accountId, docflowId, documentId, signatureId);
+        return invoke("getSignature", null, Signature.class, accountId, docflowId, documentId, signatureId);
     }
 
     /**
@@ -254,8 +253,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             @PathParam("signatureId") String signatureId) throws ApiException {
-        return invoke("getSignatureContent", null, new TypeToken<byte[]>() {
-        }.getType(), accountId, docflowId, documentId, signatureId);
+        return invoke("getSignatureContent", null, byte[].class, accountId, docflowId, documentId, signatureId);
     }
 
     /**
@@ -278,8 +276,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("documentId") String documentId,
             @PathParam("documentType") String documentType,
             GenerateReplyDocumentRequestData request) throws ApiException {
-        return invoke("generateDocumentTypeReply", request, new TypeToken<DocumentToSend>() {
-        }.getType(), accountId, docflowId, documentId, documentType);
+        return invoke("generateDocumentTypeReply", request, DocumentToSend.class, accountId, docflowId, documentId, documentType);
     }
 
     /**
@@ -302,8 +299,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("documentId") String documentId,
             @PathParam("documentType") String documentType,
             DocumentToSend document) throws ApiException {
-        return invoke("addDocumentTypeReply", document, new TypeToken<Docflow>() {
-        }.getType(), accountId, docflowId, documentId, documentType);
+        return invoke("addDocumentTypeReply", document, Docflow.class, accountId, docflowId, documentId, documentType);
     }
 
 
@@ -325,8 +321,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             PrintDocumentData request) throws ApiException {
-        return invoke("print", request, new TypeToken<String>() {
-        }.getType(), accountId, docflowId, documentId);
+        return invoke("print", request, String.class, accountId, docflowId, documentId);
     }
 
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
@@ -338,7 +333,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("documentId") String documentId,
             @PathParam("replyId") String replyId
     ) throws ApiException {
-        return invoke("getReplyDocument", null, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
+        return invoke("getReplyDocument", null, ReplyDocument.class, accountId, docflowId, documentId, replyId);
     }
 
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
@@ -351,7 +346,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("replyId") String replyId,
             byte[] content
     ) throws ApiException {
-        return invoke("getReplyDocument", content, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
+        return invoke("updateReplyDocumentContent", content, ReplyDocument.class, accountId, docflowId, documentId, replyId, content);
     }
 
     @NotNull
