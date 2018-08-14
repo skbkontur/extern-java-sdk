@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -68,7 +69,7 @@ public class DocflowExample {
                         configuratorService.getSender(),
                         configuratorService.getRecipient(),
                         configuratorService.getOrganization());
-        System.out.println("Draft sent");
+       System.out.println("Draft sent");
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
             System.out.println("Error sending document: " + sendCxt.getServiceError().toString());
@@ -107,7 +108,8 @@ public class DocflowExample {
                 System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                replyDocument.setSignature("signature".getBytes());
+                byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(), configuratorService.getSender().getThumbprint());
+                replyDocument.setSignature(signature);
                 sendDocflowCtx.setReplyDocument(replyDocument);
                 // и отправляем его
                 docflowService.sendReply(sendDocflowCtx).ensureSuccess();
@@ -158,5 +160,15 @@ public class DocflowExample {
                 return;
             }
         }
+    }
+
+    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content, @NotNull String thumbprint) {
+        QueryContext<byte[]> signCxt
+                = cryptoProvider.sign(
+                        new QueryContext<byte[]>()
+                                .setThumbprint(thumbprint)
+                                .setContent(content)
+        ).ensureSuccess();
+        return signCxt.getContent();
     }
 }

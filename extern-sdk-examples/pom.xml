@@ -42,6 +42,16 @@
             <artifactId>extern-api-java-sdk</artifactId>
         </dependency>
         <dependency>
+            <groupId>ru.kontur.extern-api</groupId>
+            <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.kontur.extern-api</groupId>
+            <artifactId>extern-api-java-sdk-httpclient</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
         </dependency>

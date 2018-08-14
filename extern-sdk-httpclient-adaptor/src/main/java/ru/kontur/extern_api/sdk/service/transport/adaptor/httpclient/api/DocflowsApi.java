@@ -73,7 +73,7 @@ public class DocflowsApi extends RestApi {
             @QueryParam("type") String type
     ) throws ApiException {
         return invoke("getDocflows", null, new TypeToken<DocflowPage>() {
-                }.getType(), accountId, finished, incoming, skip, take, innKpp, updatedFrom, updatedTo,
+                }.getType(), accountId, finished, incoming, skip, take, (innKpp==null || innKpp.isEmpty() ? null: innKpp), updatedFrom, updatedTo,
                 createdFrom, createdTo, type);
     }
 
