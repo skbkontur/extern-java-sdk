@@ -341,7 +341,7 @@ public class DocflowsApi extends RestApi {
         return invoke("getReplyDocument", null, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
     }
 
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
     @PUT
     @Consumes("application/octet-stream")
     public ApiResponse<ReplyDocument> updateReplyDocumentContent(
