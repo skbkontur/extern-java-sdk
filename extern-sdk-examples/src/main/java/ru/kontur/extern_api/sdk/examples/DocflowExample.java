@@ -110,8 +110,7 @@ public class DocflowExample {
                                 + ", filename = " + docToSend.getFilename());
                 QueryContext<?> sendDocflowCtx = new QueryContext<>();
                 // подписываем каждый документ
-                SignatureToSend signature = new SignatureToSend();
-                signature.setContentData("signature".getBytes());
+                byte[] signature = "signature".getBytes();
                 // signature.setContentData(docToSend.getContent());
                 docToSend.setSignature(signature);
                 sendDocflowCtx.setDocumentToSend(docToSend);
