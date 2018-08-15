@@ -346,7 +346,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("replyId") String replyId,
             byte[] content
     ) throws ApiException {
-        return invoke("updateReplyDocumentContent", content, ReplyDocument.class, accountId, docflowId, documentId, replyId, content);
+        return invoke("updateReplyDocumentContent", content, new TypeToken<ReplyDocument>() {}.getType(), accountId, docflowId, documentId, replyId);
     }
 
     @NotNull
