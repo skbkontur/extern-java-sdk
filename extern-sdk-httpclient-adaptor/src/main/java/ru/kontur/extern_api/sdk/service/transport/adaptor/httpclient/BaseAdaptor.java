@@ -30,6 +30,7 @@ import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.Adaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.GsonProvider;
 
 /**
  *
@@ -42,8 +43,10 @@ class BaseAdaptor implements Adaptor {
         HttpClient httpClient = httpClientSupplier.get();
         httpClient
             .setServiceBaseUri(cxt.getServiceBaseUriProvider().getUri())
-            .acceptAccessToken(cxt.getAuthPrefix(),cxt.getSessionId()) // устанавливаем access tocken
-            .acceptApiKey(cxt.getApiKeyProvider().getApiKey()); // устанавливаем api-key
+            .acceptAccessToken(cxt.getAuthPrefix(),cxt.getSessionId())
+            .acceptApiKey(cxt.getApiKeyProvider().getApiKey())
+            .setGson(GsonProvider.getGson());
+
         return httpClient;
     }
 

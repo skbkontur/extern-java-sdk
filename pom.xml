@@ -169,7 +169,7 @@
                         <archive>
                             <manifestEntries>
                                 <Implementation-Version>${project.version}</Implementation-Version>
-                                <Implementation-Title>${project.artifactId}</Implementation-Title>
+                                <Implementation-Title>extern-api-java-sdk</Implementation-Title>
                             </manifestEntries>
                         </archive>
                     </configuration>

@@ -37,13 +37,13 @@ public class DefaultUserAgentProvider implements UserAgentProvider {
     
     @Override
     public String getVersion() {
-        Package p = ExternEngine.class.getPackage();
-        if (p != null) {
-            String artifactId = p.getName();
+        Package aPackage = ExternEngine.class.getPackage();
+        if (aPackage != null) {
+            String artifactId = aPackage.getImplementationTitle();
             if (artifactId == null) {
                 artifactId = DEFAULT_ARTIFACTID;
             }
-            String version = p.getImplementationVersion();
+            String version = aPackage.getImplementationVersion();
             if (version == null) {
                 version = DEFAULT_VERSION;
             }
