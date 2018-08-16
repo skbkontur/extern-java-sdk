@@ -76,7 +76,6 @@ public class HttpClientImpl {
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
-        this.json = new Gson();
         this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive", "true"));
     }
 
@@ -222,8 +221,9 @@ public class HttpClientImpl {
 
 
             if (responseCode >= 200 && responseCode < 300) {
+                T deserialize = deserialize(response, type);
                 return new ApiResponse<>(responseCode, responseMessage, responseHeaders,
-                        deserialize(response, type));
+                        deserialize);
             } else if (responseCode >= 300 && responseCode < 400) {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");

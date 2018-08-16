@@ -55,8 +55,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
  */
 public class ExternEngine implements AuthenticationListener {
 
-    private static final Gson GSON = new Gson();
-
     private Environment env;
 
     private BusinessDriver businessDriver;
@@ -142,7 +140,8 @@ public class ExternEngine implements AuthenticationListener {
                 throw new SDKException(Messages.get(C_CONFIG_NOT_FOUND));
             }
 
-            return GSON.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+            return new Gson()
+                    .fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
         }
         catch (IOException x) {
             throw new SDKException(Messages.get(C_CONFIG_LOAD), x);
