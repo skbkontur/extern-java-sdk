@@ -1179,6 +1179,27 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
+     * Метод возвращает ссылку
+     *
+     * @return массив байт
+     */
+    public String getContentUrl() {
+        return (String) params.get(CONTENT);
+    }
+
+    /**
+     * Метод устанавливает ссылку
+     *
+     * @param content ссылка
+     * @return контекст
+     */
+    public QueryContext<R> setContentUrl(String content) {
+        return set(CONTENT, content);
+    }
+
+
+
+    /**
      * Метод возвращает объект DraftDocument {@link DraftDocument}
      *
      * @return возвращает объект DraftDocument

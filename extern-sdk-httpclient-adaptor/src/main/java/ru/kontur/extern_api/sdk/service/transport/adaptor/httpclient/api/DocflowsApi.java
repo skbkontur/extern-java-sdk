@@ -257,53 +257,6 @@ public class DocflowsApi extends RestApi {
     }
 
     /**
-     * Allow API user to create Reply document for specified workflow
-     *
-     * @param accountId    Account identifier (required)
-     * @param docflowId    Docflow object identifier (required)
-     * @param documentId   Document identifier (required)
-     * @param documentType Document type (required)
-     * @param request      (required)
-     * @return ApiResponse&lt;DocumentToSend&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DocumentToSend> generateDocumentTypeReply(
-            @PathParam("accountId") String accountId,
-            @PathParam("docflowId") String docflowId,
-            @PathParam("documentId") String documentId,
-            @PathParam("documentType") String documentType,
-            GenerateReplyDocumentRequestData request) throws ApiException {
-        return invoke("generateDocumentTypeReply", request, DocumentToSend.class, accountId, docflowId, documentId, documentType);
-    }
-
-    /**
-     * Allow API user to send Reply document for specified workflow
-     *
-     * @param accountId    Account identifier (required)
-     * @param docflowId    Docflow object identifier (required)
-     * @param documentId   Document identifier (required)
-     * @param documentType Document type (required)
-     * @param document     Reply document to be sent (required)
-     * @return ApiResponse&lt;Docflow&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<Docflow> sendReplyDocument(
-            @PathParam("accountId") String accountId,
-            @PathParam("docflowId") String docflowId,
-            @PathParam("documentId") String documentId,
-            @PathParam("documentType") String documentType,
-            DocumentToSend document) throws ApiException {
-        return invoke("addDocumentTypeReply", document, Docflow.class, accountId, docflowId, documentId, documentType);
-    }
-
-
-    /**
      * Allow API user to get document print from docflow
      *
      * @param accountId  Account identifier (required)
@@ -324,6 +277,41 @@ public class DocflowsApi extends RestApi {
         return invoke("print", request, String.class, accountId, docflowId, documentId);
     }
 
+    /* region Replies */
+
+    /**
+     * Allow API user to create Reply document for specified workflow
+     *
+     * @param accountId    Account identifier (required)
+     * @param docflowId    Docflow object identifier (required)
+     * @param documentId   Document identifier (required)
+     * @param documentType Document type (required)
+     * @param request      (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<ReplyDocument> generateDocumentTypeReply(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @QueryParam("documentType") String documentType,
+            GenerateReplyDocumentRequestData request) throws ApiException {
+        return invoke("generateDocumentTypeReply", request, ReplyDocument.class, accountId, docflowId, documentId, documentType);
+    }
+
+    /**
+     * Allow API user to get Reply document from specified workflow
+     *
+     * @param accountId    Account identifier (required)
+     * @param docflowId    Docflow object identifier (required)
+     * @param documentId   Document identifier (required)
+     * @param replyId      Reply document identifier (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
     @GET
     @Consumes("application/json; charset=utf-8")
@@ -336,6 +324,17 @@ public class DocflowsApi extends RestApi {
         return invoke("getReplyDocument", null, ReplyDocument.class, accountId, docflowId, documentId, replyId);
     }
 
+    /**
+     * Allow API user to put content to Reply document from specified workflow
+     *
+     * @param accountId    Account identifier (required)
+     * @param docflowId    Docflow object identifier (required)
+     * @param documentId   Document identifier (required)
+     * @param replyId      Reply document identifier (required)
+     * @param content      (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
     @PUT
     @Consumes("application/octet-stream")

@@ -132,27 +132,7 @@ public interface DocflowsAdaptor {
      */
     public QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
-    /**
-     * Allow API user to create Reply document for specified workflow
-     * <p>
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
-     *
-     * @param cxt QueryContext&lt;DocumentToSend&gt; context
-     * @return QueryContext&lt;DocumentToSend&gt; context
-     */
-    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> cxt);
-
-    /**
-     * Allow API user to send Reply document for specified workflow
-     * <p>
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/send
-     *
-     * @param cxt QueryContext&lt;Signature&gt; context
-     * @return QueryContext&lt;Signature&gt; context
-     */
-    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> cxt);
-
-    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt);
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
 
     public QueryContext<Docflow> sendReply(QueryContext<?> cxt);
 

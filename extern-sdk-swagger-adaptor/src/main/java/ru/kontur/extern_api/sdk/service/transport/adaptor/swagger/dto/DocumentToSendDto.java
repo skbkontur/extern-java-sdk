@@ -47,7 +47,6 @@ public class DocumentToSendDto {
         documentToSend.setContent(dto.getContent());
         documentToSend.setFilename(dto.getFilename());
         documentToSend.setId(dto.getId());
-        documentToSend.setSenderIp(dto.getSenderIp());
         documentToSend.setSignature(new SignatureToSendDto().fromDto(dto.getSignature()));
         if (dto.getLinks() != null) {
             LinkDto linkDto = new LinkDto();
@@ -78,7 +77,6 @@ public class DocumentToSendDto {
         documentToSend.setContent(content);
         documentToSend.setFilename((String) dto.get("filename"));
         documentToSend.setId((String) dto.get("id"));
-        documentToSend.setSenderIp(null);
         documentToSend.setSignature(new SignatureToSendDto().fromDto((Map<String, Object>) dto.get("signature")));
         if (dto.get("links") != null) {
             LinkDto linkDto = new LinkDto();
@@ -100,7 +98,6 @@ public class DocumentToSendDto {
         dto.setContent(documentToSend.getContent());
         dto.setFilename(documentToSend.getFilename());
         dto.setId(documentToSend.getId());
-        dto.setSenderIp(documentToSend.getSenderIp());
         dto.setSignature(new SignatureToSendDto().toDto(documentToSend.getSignature()));
         if (documentToSend.getLinks() != null) {
             LinkDto linkDto = new LinkDto();

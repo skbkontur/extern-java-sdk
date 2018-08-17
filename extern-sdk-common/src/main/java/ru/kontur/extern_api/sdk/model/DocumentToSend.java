@@ -46,8 +46,6 @@ public class DocumentToSend {
     private String filename = null;
     @SerializedName("signature")
     private SignatureToSend signature = null;
-    @SerializedName("sender-ip")
-    private String senderIp = null;
     @SerializedName("links")
     private List<Link> links = null;
 
@@ -124,22 +122,6 @@ public class DocumentToSend {
      */
     public void setSignature(SignatureToSend signature) {
         this.signature = signature;
-    }
-
-    /**
-     * Возвращает IP - адрес отправителя
-     * @return senderIp IP - адрес отправителя
-     */
-    public String getSenderIp() {
-        return senderIp;
-    }
-
-    /**
-     * Устанавливает IP - адрес отправителя
-     * @param senderIp IP - адрес отправителя
-     */
-    public void setSenderIp(String senderIp) {
-        this.senderIp = senderIp;
     }
 
     /**
