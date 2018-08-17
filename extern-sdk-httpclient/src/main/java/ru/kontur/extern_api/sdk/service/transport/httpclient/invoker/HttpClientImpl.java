@@ -43,11 +43,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 /**
- *
  * @author alexs
  */
 public class HttpClientImpl {
@@ -61,9 +62,10 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
+
     private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
-    private static final ThreadLocal<Supplier<String>>  SERVICE_BASE_URI = new ThreadLocal<>();
+    private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
     private String userAgent;
     private int connectTimeout;
@@ -74,26 +76,25 @@ public class HttpClientImpl {
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
-        this.json = new Gson();
-        this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive","true"));
+        this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive", "true"));
     }
 
     public HttpClientImpl setKeepAlive(boolean keepAlive) {
         this.keepAlive = keepAlive;
         return this;
     }
-    
+
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
-    
+
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
         SERVICE_BASE_URI.set(() -> serviceBaseUri);
         return this;
     }
 
-    private Map<String,String> getDefaultHeaderParams() {
-        Map<String,String> defaultHeaderParams = DEFAULT_HEADER_PARAMS.get();
+    private Map<String, String> getDefaultHeaderParams() {
+        Map<String, String> defaultHeaderParams = DEFAULT_HEADER_PARAMS.get();
         if (defaultHeaderParams == null) {
             defaultHeaderParams = new ConcurrentHashMap<>();
             DEFAULT_HEADER_PARAMS.set(defaultHeaderParams);
@@ -102,13 +103,13 @@ public class HttpClientImpl {
     }
 
     public HttpClientImpl acceptAccessToken(String sessionId) {
-        Map<String,String> defaultHeaderParams = getDefaultHeaderParams();
+        Map<String, String> defaultHeaderParams = getDefaultHeaderParams();
         defaultHeaderParams.put(AUTHORIZATION, AUTH_PREFIX + sessionId);
         return this;
     }
 
     public HttpClientImpl acceptApiKey(String apiKey) {
-        Map<String,String> defaultHeaderParams = getDefaultHeaderParams();
+        Map<String, String> defaultHeaderParams = getDefaultHeaderParams();
         defaultHeaderParams.put(APIKEY, apiKey);
         return this;
     }
@@ -134,12 +135,13 @@ public class HttpClientImpl {
         return this;
     }
 
-    public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Type type) throws HttpClientException {
+    public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod,
+            Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
+            Type type) throws HttpClientException {
         try {
             URL url = buildUrl(path, queryParams);
 
             HttpURLConnection connect = (HttpURLConnection) url.openConnection();
-            
 
             // setup default headers
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
@@ -157,6 +159,8 @@ public class HttpClientImpl {
             connect.setUseCaches(false);
             connect.setDefaultUseCaches(false);
 
+            Map<String, List<String>> requestProperties = connect.getRequestProperties();
+
             if (httpMethod.equalsIgnoreCase("POST") || httpMethod.equalsIgnoreCase("PUT")) {
                 connect.setDoOutput(true);
                 byte[] preparedBody = acquireBodyAsByteArray(body, headerParams.get(CONTENT_TYPE));
@@ -167,47 +171,102 @@ public class HttpClientImpl {
                     writeData(preparedBody, outputStream);
                 }
             }
+
+            Logger log = Logger.getLogger("HttpClient");
+
+            if (System.getProperty("httpclient.debug") != null)
+                log.info(() -> {
+                    String requestProps = headersToString(requestProperties);
+                    String request = String.format("%s %s %s\n%s",
+                            httpMethod,
+                            url.toString(),
+                            "HTTP/1.1",
+                            requestProps);
+                    String bodyStr = Optional.ofNullable(body).map(o -> {
+                        if (o instanceof String) {
+                            return "\n\n" + o;
+                        } else if (o instanceof byte[]) {
+                            return "\n\n" + new String((byte[]) o);
+                        }
+                        return "\n\n" + json.toJson(o);
+                    }).orElse("");
+                    return "========== request ===========\n" +
+                            request + bodyStr +
+                            "\n========= request end =========";
+                });
+
             // read server answer
             int responseCode = connect.getResponseCode();
             String responseMessage = connect.getResponseMessage();
             Map<String, List<String>> responseHeaders = connect.getHeaderFields();
             byte[] responseData = readResponse(connect);
             MediaType mediaType = getContentType(responseHeaders);
-            Response response = new Response(responseCode, responseMessage, responseHeaders, mediaType, responseData);
+            Response response = new Response(responseCode, responseMessage, responseHeaders,
+                    mediaType, responseData);
             connect.disconnect();
-            
+
+            if (System.getProperty("httpclient.debug") != null)
+                log.info(() -> {
+                    String respProps = headersToString(responseHeaders);
+                    String status = responseHeaders.get(null).stream()
+                            .reduce((s1, s2) -> s1 + "; " + s2).orElse("");
+                    String responce = String.format("%s\n%s", status, respProps);
+                    String respObjStr = Optional
+                            .ofNullable(responseData)
+                            .map(bytes -> "\n\n" + new String(bytes)).orElse("");
+                    return "========== responce ===========\n" +
+                            responce + respObjStr +
+                            "\n========= responce end =========";
+                });
+
+
             if (responseCode >= 200 && responseCode < 300) {
-                return new ApiResponse<>(responseCode, responseMessage, responseHeaders, deserialize(response, type));
-            }
-            else if (responseCode >= 300 && responseCode < 400) {
+                T deserialize = deserialize(response, type);
+                return new ApiResponse<>(responseCode, responseMessage, responseHeaders,
+                        deserialize);
+            } else if (responseCode >= 300 && responseCode < 400) {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");
                 if (redirectToUrl == null || redirectToUrl.isEmpty()) {
-                    throw new HttpClientException("Redirect address is empty", responseCode, responseHeaders, response.bodyToString());
+                    throw new HttpClientException("Redirect address is empty", responseCode,
+                            responseHeaders, response.bodyToString());
                 }
-                return sendHttpRequest(redirectToUrl, httpMethod, queryParams, body, headerParams, type);
-            }
-            else {
+                return sendHttpRequest(redirectToUrl, httpMethod, queryParams, body, headerParams,
+                        type);
+            } else {
                 // error 400 - 500
-                throw new HttpClientException(responseMessage, null, responseCode, responseHeaders, response.bodyToString());
+                throw new HttpClientException(responseMessage, null, responseCode, responseHeaders,
+                        response.bodyToString());
             }
-        }
-        catch (HttpRetryException e) {
+        } catch (HttpRetryException e) {
             throw new HttpClientException(e.responseCode(), e.getLocation());
-        }
-        catch (IOException x) {
+        } catch (IOException x) {
             throw new HttpClientException(x);
         }
     }
 
+    private String headersToString(Map<String, List<String>> headers) {
+        return headers.entrySet().stream()
+                .filter(e -> e.getKey() != null)
+                .map(e -> String.format(
+                        "%s: %s",
+                        e.getKey(),
+                        e.getValue().stream().reduce((s1, s2) -> s1 + "; " + s2).orElse("")))
+                .reduce((s, s2) -> s + "\n" + s2)
+                .orElse("");
+
+    }
+
     /**
-     * Deserialize response body to Java object, according to the return type and the Content-Type response header.
+     * Deserialize response body to Java object, according to the return type and the Content-Type
+     * response header.
      *
      * @param <T> Type
      * @param response server response
      * @param returnType The type of the Java object
      * @return The deserialized Java object
-     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read response body or the Content-Type of the response is not supported.
+     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read response
+     * body or the Content-Type of the response is not supported.
      */
     @SuppressWarnings("unchecked")
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {
@@ -220,23 +279,25 @@ public class HttpClientImpl {
             return (T) response.getBody();
         }
 
-        MediaType contentType = response.getMediaType() == null ? MediaType.parse(DEFAULT_CONTENT_TYPE) : response.getMediaType();
+        MediaType contentType =
+                response.getMediaType() == null ? MediaType.parse(DEFAULT_CONTENT_TYPE)
+                        : response.getMediaType();
 
+        assert contentType != null;
         String respBody = new String(response.getBody(), contentType.charset(DEFAULT_CHARSET));
 
         if (isJsonMime(contentType.toString())) {
             return deserialize(respBody, returnType);
-        }
-        else if (returnType.equals(String.class)) {
+        } else if (returnType.equals(String.class)) {
             // Expecting string, return the raw response body.
             return (T) respBody;
-        }
-        else {
+        } else {
             throw new HttpClientException(
-                "Content type \"" + contentType.toString() + "\" is not supported for type: " + returnType,
-                response.getCode(),
-                response.getHeaders(),
-                respBody
+                    "Content type \"" + contentType.toString() + "\" is not supported for type: "
+                            + returnType,
+                    response.getCode(),
+                    response.getHeaders(),
+                    respBody
             );
         }
     }
@@ -248,7 +309,8 @@ public class HttpClientImpl {
      * @param queryParams The query parameters
      * @return The full URL
      */
-    private URL buildUrl(String path, Map<String, Object> queryParams) throws MalformedURLException {
+    private URL buildUrl(String path, Map<String, Object> queryParams)
+            throws MalformedURLException {
         final StringBuilder request = new StringBuilder();
 
         request.append(SERVICE_BASE_URI.get().get()).append(path);
@@ -269,7 +331,8 @@ public class HttpClientImpl {
                             request.append("&");
                         }
 
-                        request.append(escapeString(param.getKey())).append("=").append(escapeString(value));
+                        request.append(escapeString(param.getKey())).append("=")
+                                .append(escapeString(value));
                     }
                 }
             }
@@ -287,8 +350,7 @@ public class HttpClientImpl {
     private String escapeString(String str) {
         try {
             return URLEncoder.encode(str, "utf8").replaceAll("\\+", "%20");
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return str;
         }
     }
@@ -302,11 +364,9 @@ public class HttpClientImpl {
     private String parameterToString(Object param) {
         if (param == null) {
             return "";
-        }
-        else if (param instanceof Date) {
+        } else if (param instanceof Date) {
             return HttpClientUtils.formatDatetime((Date) param);
-        }
-        else if (param instanceof Collection) {
+        } else if (param instanceof Collection) {
             StringBuilder b = new StringBuilder();
             ((Collection<?>) param).forEach((o) -> {
                 if (b.length() > 0) {
@@ -315,91 +375,13 @@ public class HttpClientImpl {
                 b.append(String.valueOf(o));
             });
             return b.toString();
-        }
-        else {
+        } else {
             return String.valueOf(param);
         }
     }
 
-    /*    
-    private byte[] httpTransport(String request, String method, byte[] body, Map<String,String> headers) {
-		// HTTP connection
-		HttpURLConnection connect = null;
-		// открываем соединение
-		try {
-    		// адрес ресурса
-        	URL url = new URL(request);
-            // 
-			connect = (HttpURLConnection) url.openConnection(getProxy());
-			// дополнительные параметры
-			connect.setUseCaches(false);
-			connect.setDefaultUseCaches(false);
-			connect.setConnectTimeout(connectTimeout);
-			connect.setReadTimeout(SERVER_TIMEOUT);
-			if (session != null && useSession) {
-				// устанавливаем идентификатор сессии
-				String jsessionId = session.getJsessionId();
-				if (jsessionId != null && !jsessionId.isEmpty())
-					connect.setRequestProperty("Cookie", JSESSIONID.concat("=").concat(jsessionId));
-			}
-			// устанавливаем метод запроса
-			if (method != null)
-				connect.setRequestMethod(method);
-			// устанавливаем тип передоваемых данных
-			if (contentType != null) {
-				connect.setRequestProperty("Content-Type", contentType);
-			}
-			// отправляем данные на сервер
-			if (data != null) {
-				connect.setDoOutput(true);
-				connect.setFixedLengthStreamingMode(data.length);
-				OutputStream os = connect.getOutputStream();
-				os.write(data);
-				os.flush();
-			}
-			// получаем ответ от сервера
-			byte[] response = readResponse(connect);
-			// если сессия не была открыта
-			if (session == null && useSession) {
-				//String cookie = connect.getHeaderField("Set-Cookie");
-				// сервер не вернул идентификатор сессии
-				// if (cookie == null)
-				// throw new AConnectException("send request", DMS_CONNECT_ERROR,
-				// url.toString(), null);
-				List<HttpCookie> cookies = getCookies();
-				if (cookies != null && !cookies.isEmpty()) {
-					// сохраняем идентификатор сессии
-					session = new Session(cookies);
-				}
-			}
-			// возвращаем ответ сервера
-			return response;
-		}
-		catch (IOException x) {
-			throw new AConnectException("send request", DMS_CONNECT_ERROR, url.toString(), x);
-		}
-		finally {
-			if (connect != null) {
-				connect.disconnect();
-			}
-		}
-    }
-     */
-    private java.net.Proxy getProxy() {
-        java.net.Proxy proxy = java.net.Proxy.NO_PROXY;
-        /*        
-		if (Config.SYSTEM.equals(config.getProxyMode())) {
-			proxy = Proxy.getSystemProxy(config.getDmsAddress(),log);
-		}
-		else if (Config.CUSTOM.equals(config.getProxyMode())) {
-			proxy = Proxy.getCustomProxy(config.getProxy().address, config.getProxy().port);
-			Proxy.setProxydAuthentication(config.getProxy().login, config.getProxy().password);
-		}
-         */
-        return proxy;
-    }
-
-    private byte[] acquireBodyAsByteArray(Object body, String contentType) throws HttpClientException {
+    private byte[] acquireBodyAsByteArray(Object body, String contentType)
+            throws HttpClientException {
         if (body == null) {
             return new byte[0];
         }
@@ -408,14 +390,12 @@ public class HttpClientImpl {
 
         if (body instanceof byte[]) {
             return (byte[]) body;
-        }
-        else if (body instanceof String) {
+        } else if (body instanceof String) {
+            assert mediaType != null;
             return ((String) body).getBytes(mediaType.charset(DEFAULT_CHARSET));
-        }
-        else if ("json".equalsIgnoreCase(mediaType.subtype())) {
+        } else if ("json".equalsIgnoreCase(mediaType.subtype())) {
             return json.toJson(body).getBytes(mediaType.charset(DEFAULT_CHARSET));
-        }
-        else {
+        } else {
             throw new HttpClientException("Content type \"" + contentType + "\" is not supported");
         }
     }
@@ -423,8 +403,7 @@ public class HttpClientImpl {
     private byte[] readResponse(HttpURLConnection connect) throws IOException {
         try (InputStream is = connect.getInputStream()) {
             return readData(is);
-        }
-        catch (IOException x) {
+        } catch (IOException x) {
             try (InputStream is = connect.getErrorStream()) {
                 if (is == null) {
                     throw x;
@@ -469,14 +448,16 @@ public class HttpClientImpl {
     }
 
     /**
-     * Check if the given MIME is a JSON MIME. JSON MIME examples: application/json application/json; charset=UTF8 APPLICATION/JSON application/vnd.company+json
+     * Check if the given MIME is a JSON MIME. JSON MIME examples: application/json
+     * application/json; charset=UTF8 APPLICATION/JSON application/vnd.company+json
      *
      * @param mime MIME (Multipurpose Internet Mail Extensions)
      * @return True if the given MIME is JSON, false otherwise.
      */
     private boolean isJsonMime(String mime) {
         String jsonMime = "(?i)^(application/json|[^;/ \t]+/[^;/ \t]+[+]json)[ \t]*(;.*)?$";
-        return mime != null && (mime.matches(jsonMime) || mime.equalsIgnoreCase("application/json-patch+json"));
+        return mime != null && (mime.matches(jsonMime) || mime
+                .equalsIgnoreCase("application/json-patch+json"));
     }
 
     /**
@@ -491,18 +472,15 @@ public class HttpClientImpl {
     public <T> T deserialize(String body, Type returnType) {
         try {
             return json.fromJson(body, returnType);
-        }
-        catch (JsonParseException e) {
+        } catch (JsonParseException e) {
             // Fallback processing when failed to parse JSON form response body:
             //   return the response body string directly for the String return type;
             //   parse response body into date or datetime for the Date return type.
             if (returnType.equals(String.class)) {
                 return (T) body;
-            }
-            else if (returnType.equals(Date.class)) {
+            } else if (returnType.equals(Date.class)) {
                 return (T) HttpClientUtils.parseDateTime(body);
-            }
-            else {
+            } else {
                 throw (e);
             }
         }
@@ -523,7 +501,8 @@ public class HttpClientImpl {
         private MediaType mediaType;
         private byte[] body;
 
-        Response(int code, String message, Map<String, List<String>> headers, MediaType mediaType, byte[] body) {
+        Response(int code, String message, Map<String, List<String>> headers, MediaType mediaType,
+                byte[] body) {
             this.code = code;
             this.message = message;
             this.headers = headers;
@@ -572,9 +551,11 @@ public class HttpClientImpl {
         }
 
         public String bodyToString() {
-            if (body == null || body.length == 0)
+            if (body == null || body.length == 0) {
                 return "";
-            return mediaType == null ? new String(body) : new String(body, mediaType.charset(DEFAULT_CHARSET));
+            }
+            return mediaType == null ? new String(body)
+                    : new String(body, mediaType.charset(DEFAULT_CHARSET));
         }
     }
 }
