@@ -106,7 +106,7 @@ public class DocflowExample {
         Postman postman = new Postman(
                 new SendToDepartment(configure, engine),
                 new SendReplies(
-                        configure,
+                        configure.getSender(),
                         engine.getDocflowService(),
                         new Signer(engine.getCryptoProvider())
                 )
@@ -161,12 +161,12 @@ public class DocflowExample {
         private static final String STATUS_RESPONSE_ARRIVED = "urn:docflow-common-status:response-arrived";
         private static final String STATUS_RESPONSE_FINISHED = "urn:docflow-common-status:finished";
 
-        private Configure configure;
+        private Sender sender;
         private DocflowService docflowService;
         private Signer signer;
 
-        SendReplies(@NotNull Configure configure, @NotNull DocflowService docflowService, @NotNull Signer signer) {
-            this.configure = configure;
+        SendReplies(@NotNull Sender sender, @NotNull DocflowService docflowService, @NotNull Signer signer) {
+            this.sender = sender;
             this.docflowService = docflowService;
             this.signer = signer;
         }
@@ -187,7 +187,7 @@ public class DocflowExample {
                     QueryContext<List<ReplyDocument>> replyDocumentsCxt
                             = new QueryContext<List<ReplyDocument>>()
                             .setDocflow(d)
-                            .setCertificate(configure.getSender().getCertificate());
+                            .setCertificate(sender.getCertificate());
                     replyDocumentsCxt = docflowService.generateReplies(replyDocumentsCxt);
                     if (replyDocumentsCxt.isFail()) {
                         throw new RuntimeException("Error getting reply documents.", new ServiceException(replyDocumentsCxt.getServiceError()));
@@ -197,7 +197,7 @@ public class DocflowExample {
                         System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
                         QueryContext<?> sendReplyDocflowCtx = new QueryContext<>();
                         // подписываем документ
-                        byte[] signature = signer.sign(replyDocument.getContent(), configure.getSender().getThumbprint());
+                        byte[] signature = signer.sign(replyDocument.getContent(), sender.getThumbprint());
                         replyDocument.setSignature(signature);
                         sendReplyDocflowCtx.setReplyDocument(replyDocument);
                         // и отправляем его
