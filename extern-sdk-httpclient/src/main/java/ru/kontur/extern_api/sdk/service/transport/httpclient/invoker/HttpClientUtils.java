@@ -23,7 +23,12 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.httpclient.invoker;
 
+import static com.google.gson.internal.bind.util.ISO8601Utils.format;
+
+import com.google.gson.internal.bind.util.ISO8601Utils;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,8 +37,13 @@ import java.util.Date;
  * @author alexs
  */
 public class HttpClientUtils {
-//    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+
+    private static final DateFormat[] supportedFormates = new DateFormat[] {
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+    };
+
+    private static final DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /**
      * Format the given Date object into string (Datetime format).
@@ -42,16 +52,25 @@ public class HttpClientUtils {
      * @return Formatted datetime in string representation
      */
     public static String formatDatetime(Date date) {
-        return new SimpleDateFormat(DATE_FORMAT).format(date);
+        return outputFormat.format(date);
     }
 
     public static Date parseDateTime(String date) {
         try {
-            return new SimpleDateFormat(DATE_FORMAT).parse(date);
+            return ISO8601Utils.parse(date, new ParsePosition(0));
+        } catch (ParseException ignored) {
+            // Ok, try to use other date formatters
         }
-        catch (ParseException x) {
-            return null;
+
+        for (DateFormat supportedFormate : supportedFormates) {
+            try {
+                return supportedFormate.parse(date);
+            } catch (ParseException ignored) {
+                // maybe later?
+            }
         }
+
+        throw new RuntimeException(new ParseException(date, 0));
     }
 
 }

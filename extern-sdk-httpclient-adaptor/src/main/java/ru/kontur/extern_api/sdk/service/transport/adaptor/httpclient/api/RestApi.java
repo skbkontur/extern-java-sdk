@@ -214,15 +214,6 @@ public class RestApi {
     }
 
     private static Gson configuredGson() {
-        return new GsonBuilder()
-            .disableHtmlEscaping()
-            .registerTypeAdapter(Date.class, new GsonDateAdaptor())
-            .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
-            .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
-            .create();
+        return GsonProvider.getGson();
     }
-    /*
-    private HttpClient configuredHttpClient() {
-        return httpClient.setGson(JSON);
-    }*/
 }
