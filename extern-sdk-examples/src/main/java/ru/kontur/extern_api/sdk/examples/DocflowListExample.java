@@ -47,7 +47,7 @@ public class DocflowListExample {
     private static final String STATUS_RESPONSE_FINISHED = "urn:docflow-common-status:finished";
 
     public static void main(String[] args)
-        throws IOException, InterruptedException, ExecutionException {
+            throws IOException, InterruptedException, ExecutionException {
         // first argument is a path to property file
         if (args.length == 0) {
             System.out.println("There is no path to the property file in the command line.");
@@ -62,11 +62,11 @@ public class DocflowListExample {
         // и запоминаем для дальнейшей обработки
         DocflowPage docflowPage = docflowService.getDocflows(
                 new QueryContext<>()
-                .setFinished(false)
-                .setIncoming(false)
-                .setSkip(0L)
-                .setTake(10)
-                .setType("fns534-report")
+                        .setFinished(false)
+                        .setIncoming(false)
+                        .setSkip(0L)
+                        .setTake(10)
+                        .setType("fns534-report")
         ).get();
         System.out.println("DocflowPage received");
 
@@ -77,7 +77,7 @@ public class DocflowListExample {
         // сохраняем в список
         System.out.println("Id collected:");
         List<String> docflowIds = docflowPage.getDocflowsPageItem().stream()
-            .map(d -> d.getId().toString()).collect(Collectors.toList());
+                .map(d -> d.getId().toString()).collect(Collectors.toList());
         docflowIds.forEach(System.out::println);
 
         // 2. проверяем, что все документообороты имеют статус "Ответ обработан", если нет,
@@ -101,20 +101,18 @@ public class DocflowListExample {
             QueryContext<List<DocumentToSend>> listDocToSendCtx = new QueryContext<>();
             listDocToSendCtx.setDocflow(docflow);
             listDocToSendCtx.setCertificate(configuratorService.getSender().getCertificate());
-            List<ReplyDocument> replyDocuments = docflowService.generateReplies(listDocToSendCtx).get();
+            ReplyDocument replyDocument = docflowService.generateReply(listDocToSendCtx).get();
             System.out.println("List of DocumentToSend received");
-            for (ReplyDocument replyDocument: replyDocuments) {
-                System.out.println(
+            System.out.println(
                     "Start sending DocumentToSend: id = " + replyDocument.getId()
-                        + ", filename = " + replyDocument.getFilename());
-                QueryContext<?> sendDocflowCtx = new QueryContext<>();
-                // подписываем каждый документ
-                replyDocument.setSignature("signature" .getBytes());
-                sendDocflowCtx.setReplyDocument(replyDocument);
-                // и отправляем его
-                docflowService.sendReply(sendDocflowCtx);
-                System.out.println("ReplyDocument sent");
-            }
+                            + ", filename = " + replyDocument.getFilename());
+            QueryContext<?> sendDocflowCtx = new QueryContext<>();
+            // подписываем каждый документ
+            replyDocument.setSignature("signature".getBytes());
+            sendDocflowCtx.setReplyDocument(replyDocument);
+            // и отправляем его
+            docflowService.sendReply(sendDocflowCtx);
+            System.out.println("ReplyDocument sent");
             System.out.println("All documents sent");
 
             // после отправки последнего извещения документооборот считается завершенным.
@@ -145,8 +143,8 @@ public class DocflowListExample {
 
     // ждем пока документооборот не изменит статус на указанный
     private static void waitStatus(@NotNull String docflowId, @NotNull String status,
-        @NotNull DocflowService docflowService)
-        throws InterruptedException {
+            @NotNull DocflowService docflowService)
+            throws InterruptedException {
         System.out.println("Start waiting: docflow = " + docflowId + ", status = " + status);
         while (true) {
             QueryContext<Docflow> docflowCtx = new QueryContext<>();

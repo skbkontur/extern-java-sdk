@@ -47,7 +47,7 @@ public class DocumentToSendDto {
         documentToSend.setContent(dto.getContent());
         documentToSend.setFilename(dto.getFilename());
         documentToSend.setId(dto.getId());
-        documentToSend.setSignature(new SignatureToSendDto().fromDto(dto.getSignature()));
+        documentToSend.setSignature(dto.getSignature().getContentData());
         if (dto.getLinks() != null) {
             LinkDto linkDto = new LinkDto();
             documentToSend.setLinks(dto.getLinks().stream().map(linkDto::fromDto).collect(Collectors.toList()));
@@ -77,7 +77,7 @@ public class DocumentToSendDto {
         documentToSend.setContent(content);
         documentToSend.setFilename((String) dto.get("filename"));
         documentToSend.setId((String) dto.get("id"));
-        documentToSend.setSignature(new SignatureToSendDto().fromDto((Map<String, Object>) dto.get("signature")));
+        documentToSend.setSignature((byte[]) dto.get("signature"));
         if (dto.get("links") != null) {
             LinkDto linkDto = new LinkDto();
             List<Map<String, Object>> links = (List<Map<String, Object>>) dto.get("links");

@@ -45,7 +45,7 @@ public class DocumentToSend {
     @SerializedName("filename")
     private String filename = null;
     @SerializedName("signature")
-    private SignatureToSend signature = null;
+    private byte[] signature = null;
     @SerializedName("links")
     private List<Link> links = null;
 
@@ -111,7 +111,7 @@ public class DocumentToSend {
      * @return signature структура данных с подписью
      * @see SignatureToSend
      */
-    public SignatureToSend getSignature() {
+    public byte[] getSignature() {
         return signature;
     }
 
@@ -120,7 +120,7 @@ public class DocumentToSend {
      * @param signature структуру данных с подписью
      * @see SignatureToSend
      */
-    public void setSignature(SignatureToSend signature) {
+    public void setSignature(byte[] signature) {
         this.signature = signature;
     }
 

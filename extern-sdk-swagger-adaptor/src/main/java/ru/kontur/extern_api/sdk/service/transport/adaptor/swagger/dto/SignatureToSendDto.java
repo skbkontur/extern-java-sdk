@@ -59,15 +59,17 @@ class SignatureToSendDto {
         return signatureToSend;
     }
 
-    public ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend toDto(ru.kontur.extern_api.sdk.model.SignatureToSend signatureToSend) {
+    public ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend toDto(byte[] signatureToSend) {
 
-        if (signatureToSend == null) return null;
-
-        ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend dto = new ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend();
-
-        dto.setContentData(signatureToSend.getContentData());
-        dto.setId(signatureToSend.getId());
-
-        return dto;
+        throw new UnsupportedOperationException();
+//        if (signatureToSend == null) return null;
+//
+//        ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend dto = new ru.kontur.extern_api.sdk.service.transport.swagger.model.SignatureToSend();
+//
+//        dto.setContentData(signatureToSend
+//        );
+//        dto.setId(signatureToSend.getId());
+//
+//        return dto;
     }
 }
