@@ -79,7 +79,7 @@ public class DocflowsValidator {
         boolean withDocuments, boolean withLinks) {
         assertNotNull("Docflow must not be null!", docflow);
         validateId(docflow.getId());
-        assertEquals("Type is wrong!", "urn:nss:nid", docflow.getType());
+        assertEquals("Type is wrong!", "urn:nss:docflow-description", docflow.getType());
         assertEquals("Status is wrong!", "urn:nss:nid", docflow.getStatus());
         assertEquals("SendDate is wrong!", StandardValues.standardDate(),
             docflow.getSendDate());

@@ -52,10 +52,16 @@ public class HttpClientUtils {
      * @return Formatted datetime in string representation
      */
     public static String formatDatetime(Date date) {
+        if (date == null)
+            return null;
         return outputFormat.format(date);
     }
 
     public static Date parseDateTime(String date) {
+
+        if (date == null || date.trim().isEmpty())
+            return null;
+
         try {
             return ISO8601Utils.parse(date, new ParsePosition(0));
         } catch (ParseException ignored) {
