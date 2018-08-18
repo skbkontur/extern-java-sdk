@@ -23,27 +23,31 @@
  */
 package ru.kontur.extern_api.sdk.service.transport.httpclient.invoker;
 
-import static com.google.gson.internal.bind.util.ISO8601Utils.format;
-
 import com.google.gson.internal.bind.util.ISO8601Utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
-/**
- *
- * @author alexs
- */
+
 public class HttpClientUtils {
 
-    private static final DateFormat[] supportedFormates = new DateFormat[] {
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+    private static final List<ThreadLocal<DateFormat>> supportedFormates
+            = new ArrayList<ThreadLocal<DateFormat>>() {
+        {
+            add(ThreadLocal.withInitial(() ->
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")));
+            add(ThreadLocal.withInitial(() ->
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")));
+        }
     };
 
     private static final DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static Logger logger = Logger.getLogger(HttpClientUtils.class.getName());
 
     /**
      * Format the given Date object into string (Datetime format).
@@ -52,15 +56,17 @@ public class HttpClientUtils {
      * @return Formatted datetime in string representation
      */
     public static String formatDatetime(Date date) {
-        if (date == null)
+        if (date == null) {
             return null;
+        }
         return outputFormat.format(date);
     }
 
     public static Date parseDateTime(String date) {
 
-        if (date == null || date.trim().isEmpty())
+        if (date == null || date.trim().isEmpty()) {
             return null;
+        }
 
         try {
             return ISO8601Utils.parse(date, new ParsePosition(0));
@@ -68,15 +74,16 @@ public class HttpClientUtils {
             // Ok, try to use other date formatters
         }
 
-        for (DateFormat supportedFormate : supportedFormates) {
+        for (ThreadLocal<DateFormat> supportedFormate : supportedFormates) {
             try {
-                return supportedFormate.parse(date);
+                return supportedFormate.get().parse(date);
             } catch (ParseException ignored) {
                 // maybe later?
             }
         }
 
-        throw new RuntimeException(new ParseException(date, 0));
+        logger.warning("Cannot parse date: " + date);
+        return null;
     }
 
 }
