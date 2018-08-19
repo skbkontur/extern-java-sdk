@@ -274,11 +274,6 @@ public class HttpClientImpl {
             return null;
         }
 
-        if ("byte[]".equals(returnType.toString())) {
-            // Handle binary response (byte array).
-            return (T) response.getBody();
-        }
-
         MediaType contentType =
                 response.getMediaType() == null ? MediaType.parse(DEFAULT_CONTENT_TYPE)
                         : response.getMediaType();

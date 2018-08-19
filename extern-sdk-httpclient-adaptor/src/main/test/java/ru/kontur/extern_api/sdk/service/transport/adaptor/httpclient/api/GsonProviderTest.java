@@ -3,14 +3,14 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Letter;
 
-class GsonProviderTest {
+public class GsonProviderTest {
 
     @Test
-    void gsonShouldParseDocflowDescription() {
+    public void gsonShouldParseDocflowDescription() {
         Gson gson = GsonProvider.getPreConfiguredGsonBuilder().setPrettyPrinting().create();
 
         String docflow = "{\n"
