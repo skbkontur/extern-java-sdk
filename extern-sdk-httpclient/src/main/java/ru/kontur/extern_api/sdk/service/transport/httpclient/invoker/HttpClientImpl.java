@@ -63,7 +63,7 @@ public class HttpClientImpl {
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
 
-    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
+    private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
     private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 

@@ -80,9 +80,9 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     private static final String ADAPTOR_CONTEXT = "/AdaptorContext.xml";
 
-    private static final Map<String, AdaptorMeta> ADAPTOR_META = new ConcurrentHashMap<>();
+    private final Map<String, AdaptorMeta> ADAPTOR_META = new ConcurrentHashMap<>();
 
-    private static final Map<String, Object> ADAPTORS = new ConcurrentHashMap<>();
+    private final Map<String, Object> ADAPTORS = new ConcurrentHashMap<>();
 
     private UriProvider serviceBaseUriProvider;
 

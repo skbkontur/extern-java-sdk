@@ -1,8 +1,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.google.gson.Gson;
+import org.junit.Assert;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Letter;
@@ -27,8 +26,8 @@ public class GsonProviderTest {
 
         Docflow df = gson.fromJson(docflow, Docflow.class);
 
-        assertEquals(Fns534Letter.class, df.getDescription().getClass());
-        assertEquals("0087", ((Fns534Letter) df.getDescription()).getCu());
+        Assert.assertEquals(Fns534Letter.class, df.getDescription().getClass());
+        Assert.assertEquals("0087", ((Fns534Letter) df.getDescription()).getCu());
 
         System.out.println(gson.toJson(df));
     }
