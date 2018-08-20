@@ -64,7 +64,7 @@ public class DocflowServiceLookupDocflowTest {
     private static Server server;
 
     private final static String DOCFLOW = "\"id\": \"" + StandardValues.ID + "\","
-        + "\"type\": \"urn:nss:nid\","
+        + "\"type\": \"urn:nss:docflow-description\","
         + "\"status\": \"urn:nss:nid\","
         + "\"send-date\": \"" + StandardValues.DATE + "\","
         + "\"last-change-date\": \"" + StandardValues.DATE + "\"";

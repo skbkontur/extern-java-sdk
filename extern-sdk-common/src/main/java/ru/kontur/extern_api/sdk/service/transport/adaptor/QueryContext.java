@@ -401,7 +401,7 @@ public class QueryContext<R> implements Serializable {
      * @param entityName наименования сущности, для которой создается контекст
      */
     public QueryContext(QueryContext<?> parent, String entityName) {
-        this.params = new ConcurrentHashMap<>();
+        this();
         this.params.putAll(parent.params);
         this.serviceError = parent.getServiceError();
         this.result = null;

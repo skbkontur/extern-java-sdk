@@ -318,7 +318,6 @@ public class DocflowsApi extends RestApi {
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
     @GET
     @Consumes("application/json; charset=utf-8")
-//<<<<<<< HEAD
     public ApiResponse<ReplyDocument> getReplyDocument(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
@@ -327,20 +326,6 @@ public class DocflowsApi extends RestApi {
     ) throws ApiException {
         return invoke("getReplyDocument", null, ReplyDocument.class, accountId, docflowId,
                 documentId, replyId);
-//=======
-//    public ApiResponse<String> print(
-//        @PathParam("accountId") String accountId,
-//        @PathParam("docflowId") String docflowId,
-//        @PathParam("documentId") String documentId,
-//        PrintDocumentData request) throws ApiException {
-//        return invoke(
-//                "print",
-//                request,
-//                new TypeToken<String>() {}.getType(),
-//                accountId,
-//                docflowId,
-//                documentId);
-//>>>>>>> 93cda0f75463d6e683419c08257f82a2771b1c7c
     }
 
     /**
