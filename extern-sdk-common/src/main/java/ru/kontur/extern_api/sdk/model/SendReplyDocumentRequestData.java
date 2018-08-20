@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class SendReplyDocumentRequestData {
 
-    @SerializedName("senderIp")
     private String senderIp = null;
 
     public SendReplyDocumentRequestData senderIp(String senderIp) {
