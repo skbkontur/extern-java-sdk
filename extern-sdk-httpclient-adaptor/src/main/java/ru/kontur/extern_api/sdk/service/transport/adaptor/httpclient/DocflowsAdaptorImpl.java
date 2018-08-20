@@ -361,38 +361,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     /**
-     //     * Allow API user to create Reply document for specified workflow
-     //     * <p>
-     //     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
-     //     *
-     //     * @param cxt QueryContext&lt;DocumentToSend&gt; context
-     //     * @return QueryContext&lt;DocumentToSend&gt; context
-     //     */
-//    @Override
-//    public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
-//        try {
-//            if (cxt.isFail()) {
-//                return new QueryContext<>(cxt, cxt.getEntityName());
-//            }
-//
-//            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setResult(
-//                    transport(cxt)
-//                            .generateDocumentTypeReply(
-//                                    cxt.getAccountProvider().accountId().toString(),
-//                                    cxt.getDocflowId().toString(),
-//                                    cxt.getDocumentId().toString(),
-//                                    cxt.getDocumentType().toLowerCase(),
-//                                    new GenerateReplyDocumentRequestData()
-//                                            .certificateBase64(cxt.getContentString()))
-//                            .getData(),
-//                    DOCUMENT_TO_SEND
-//            );
-//        } catch (ApiException x) {
-//            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setServiceError(x);
-//        }
-//    }
-
-    /**
      * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply С
      *
      * @param cxt контекс для генерации ответных документов
