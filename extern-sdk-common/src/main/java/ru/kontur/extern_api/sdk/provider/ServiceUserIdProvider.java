@@ -25,9 +25,14 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
+ * Интерфейс предоставляет идентификатор пользователя во внешней (по отношению к СКБ Контур) системе
  * @author Aleksey Sukhorukov
  */
 public interface ServiceUserIdProvider {
 
+    /**
+     * Возвращает идентификатор пользователя во внешней системе
+     * @return идентификатор пользователя во внешней системе
+     */
     String getServiceUserIdProvider();
 }

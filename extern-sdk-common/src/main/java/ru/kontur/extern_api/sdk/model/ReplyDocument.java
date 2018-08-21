@@ -102,7 +102,7 @@ public class ReplyDocument implements LinksHolder {
 
     /**
      * Возвращает идентификатор документооборота
-     * @return
+     * @return идентификатор документооборота
      */
     public String getDocflowId() {
         return docflowId;

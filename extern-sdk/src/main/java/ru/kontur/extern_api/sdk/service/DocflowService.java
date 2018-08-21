@@ -45,12 +45,16 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * <p>- получение подписи документа по идентификатору {@link DocflowService#getSignatureAsync} | {@link DocflowService#getSignature};</p>
  * <p>- создание регламентного документа с указанным типом (УОП, ИОП) {@link DocflowService#generateReplyAsync} | {@link DocflowService#generateReply};</p>
  * <p>- создание всех регламентных документов для ДО {@link DocflowService#generateReplyAsync} | {@link DocflowService#generateReply};</p>
- * <p>- отправка регламентных документов {@link DocflowService#sendReplyAsync} | {@link DocflowService#sendReply};</p>
+ * <p>- отправка регламентного документа {@link DocflowService#sendReplyAsync} | {@link DocflowService#sendReply};</p>
+ * <p>- отправка регламентных документов {@link #sendRepliesAsync} | {@link #sendReplies}</p>
+ * <p>- получение регламентного документ по идентификатору {@link #getReplyDocumentAsync} | {@link #getReplyDocument}</p>
+ * <p>- обновление контента  служебного документа {@link #updateReplyDocumentContentAsync} | {@link #updateReplyDocumentContent}</p>
  * <p>- получение списка ДО {@link DocflowService#getDocflowsAsync} | {@link DocflowService#getDocflows};</p>
  * <p>- получение печатной формы {@link DocflowService#printAsync} | {@link DocflowService#print};</p>
  *
- * @author Aleksey Sukhorukov
  * @see QueryContext
+ *
+ * @author Aleksey Sukhorukov
  */
 public interface DocflowService extends Providers {
 
@@ -258,6 +262,7 @@ public interface DocflowService extends Providers {
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
      * Асинхронный метод создает служебный документ для документа ДО с заданным типом
      *
+     * @param docflow документооборот
      * @param signerX509Base64   сертификат ключа подписи в кодировке BASE64 без тегов
      * @return структура данных для отправки
      * @see DocumentToSend

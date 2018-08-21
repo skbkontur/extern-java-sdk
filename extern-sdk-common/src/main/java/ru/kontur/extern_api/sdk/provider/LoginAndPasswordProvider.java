@@ -25,11 +25,20 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
+ * Интерфейс предоставляет логин и пароль пользователя
  * @author Aleksey Sukhorukov
  */
 public interface LoginAndPasswordProvider {
 
+    /**
+     * Возвращает логин пользователя
+     * @return логин пользователя
+     */
     String getLogin();
 
+    /**
+     * Возвращает пароль пользователя
+     * @return пароль пользователя
+     */
     String getPass();
 }

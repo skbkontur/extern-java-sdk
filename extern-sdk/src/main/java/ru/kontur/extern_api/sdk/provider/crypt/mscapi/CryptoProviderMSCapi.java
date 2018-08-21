@@ -48,6 +48,9 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CO
 
 
 /**
+ * <p>
+ *  Предназначен для выполнения криптографических операций на компьютере клиента с помощью сертифицированного криптопровайдера с использованием <b>ГОСТ</b>-алгоритмов, например <b>КриптоПро</b>. Для расшифрования и вычисления электронной подписи требуется доступный ключевой носитель, содержащий сертификат открытого ключа.
+ * </p>
  * @author Aleksey Sukhorukov
  */
 public class CryptoProviderMSCapi implements CryptoProvider {

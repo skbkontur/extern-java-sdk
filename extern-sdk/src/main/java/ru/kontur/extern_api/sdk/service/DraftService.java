@@ -84,6 +84,10 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * <p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync}
  * | {@link DraftService#cloudSignConfirm};</p>
  * <p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}.</p>
+ * <p>- метод для создания декларации. Контент документа будет заменен на переданный {@link #buildDeclarationAsync}
+ * | {@link #buildDeclaration};</p>
+ * <p>- метод для создания декларации. В результате будет создан документ с переданным контентом
+ * {@link #createAndBuildDeclarationAsync} | {@link #createAndBuildDeclaration}</p>
  *
  * @author Aleksey Sukhorukov
  */

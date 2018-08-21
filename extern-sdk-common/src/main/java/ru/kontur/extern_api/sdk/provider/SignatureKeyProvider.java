@@ -25,9 +25,14 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
+ * Интерфейс возвращает отпечаток сертификата пользователя
  * @author Aleksey Sukhorukov
  */
 public interface SignatureKeyProvider {
 
+    /**
+     * Возвращает отпечаток сертификата пользователя
+     * @return отпечаток сертификата пользователя
+     */
     String getThumbprint();
 }

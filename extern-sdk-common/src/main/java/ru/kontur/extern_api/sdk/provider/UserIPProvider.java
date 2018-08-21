@@ -25,6 +25,11 @@ package ru.kontur.extern_api.sdk.provider;
 
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
+/**
+ * Интерфейс предоставляет IPV4 адрес компьютера отправителя. По умолчанию в <b>ExternEngine</b> будет установлен провайдер,
+ * который возвращает IP адрес локального компьютера. Для замены провайдера необходимо воспользоваться методом {@code ExternEngine.setUserIPProvider}. При отправке черновка Контур Экстерн производит валидацию значения IP адреса. IP адрес не должен быть локальным, см. <a href="https://tools.ietf.org/html/rfc5735#page-6">RFC 5735</a>.
+ * @author Aleksey Sukhorukov
+ */
 public interface UserIPProvider {
     QueryContext<String> userIP();
 }
