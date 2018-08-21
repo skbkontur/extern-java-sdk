@@ -15,7 +15,7 @@ import ru.kontur.extern_api.sdk.model.descriptions.Fns534Letter;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Report;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Submission;
 import ru.kontur.extern_api.sdk.model.descriptions.StatReport;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.extras.DocflowDescriptionTypeAdapter;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.DocflowDeserializer;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonByteArrayAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonDateAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonRecipientAdaptor;
@@ -27,7 +27,7 @@ public class GsonProvider {
     }
 
     public static GsonBuilder getPreConfiguredGsonBuilder() {
-        DocflowDescriptionTypeAdapter typeAdapter = new DocflowDescriptionTypeAdapter()
+        DocflowDeserializer typeAdapter = new DocflowDeserializer()
                 .registerDescription(DocflowDescription.class)
                 .registerDescription(Fns534Letter.class)
                 .registerDescription(Fns534Application.class)

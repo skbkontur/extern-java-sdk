@@ -3,13 +3,15 @@ package ru.kontur.extern_api.sdk.model.descriptions;
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
-public class Fns534Letter extends DocflowDescription {
+public class StatLetter extends DocflowDescription {
 
     private String cu;
 
-    private String recepient;
+    private String recipient;
 
     private String subject;
+
+    private String okpo;
 
     private UUID originDocflowId;
 
@@ -21,12 +23,12 @@ public class Fns534Letter extends DocflowDescription {
         this.cu = cu;
     }
 
-    public String getRecepient() {
-        return recepient;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     public String getSubject() {
@@ -35,6 +37,14 @@ public class Fns534Letter extends DocflowDescription {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getOkpo() {
+        return okpo;
+    }
+
+    public void setOkpo(String okpo) {
+        this.okpo = okpo;
     }
 
     public UUID getOriginDocflowId() {
