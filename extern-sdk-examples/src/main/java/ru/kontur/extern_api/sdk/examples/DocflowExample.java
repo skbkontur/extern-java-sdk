@@ -69,7 +69,7 @@ public class DocflowExample {
                         configuratorService.getSender(),
                         configuratorService.getRecipient(),
                         configuratorService.getOrganization());
-       System.out.println("Draft sent");
+        System.out.println("Draft sent");
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
             System.out.println("Error sending document: " + sendCxt.getServiceError().toString());
@@ -99,22 +99,26 @@ public class DocflowExample {
             Docflow docflow = docflowService.lookupDocflow(docflowCtx).ensureSuccess().get();
             System.out.println("Start working with docflow " + docflowId);
             // получам спосок документов для отправки
-            QueryContext<List<ReplyDocument>> replyDocumentCxt = new QueryContext<>();
+            QueryContext<ReplyDocument> replyDocumentCxt = new QueryContext<>();
             replyDocumentCxt.setDocflow(docflow);
             replyDocumentCxt.setCertificate(configuratorService.getSender().getCertificate());
-            replyDocumentCxt = docflowService.generateReplies(replyDocumentCxt).ensureSuccess();
+            replyDocumentCxt = docflowService.generateReply(replyDocumentCxt).ensureSuccess();
             System.out.println("List of DocumentToSend received");
-            for (ReplyDocument replyDocument : replyDocumentCxt.get()) {
-                System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
-                QueryContext<?> sendDocflowCtx = new QueryContext<>();
-                // подписываем каждый документ
-                byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(), configuratorService.getSender().getThumbprint());
-                replyDocument.setSignature(signature);
-                sendDocflowCtx.setReplyDocument(replyDocument);
-                // и отправляем его
-                docflowService.sendReply(sendDocflowCtx).ensureSuccess();
-                System.out.println("ReplyDocument sent");
-            }
+
+            ReplyDocument replyDocument = replyDocumentCxt.get();
+            System.out.println(
+                    "Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = "
+                            + replyDocument.getFilename());
+            QueryContext<?> sendDocflowCtx = new QueryContext<>();
+            // подписываем документ
+            byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(),
+                    configuratorService.getSender().getThumbprint());
+            replyDocument.setSignature(signature);
+            sendDocflowCtx.setReplyDocument(replyDocument);
+            // и отправляем его
+            docflowService.sendReply(sendDocflowCtx).ensureSuccess();
+            System.out.println("ReplyDocument sent");
+//            }
             System.out.println("All documents sent");
 
             // после отправки последнего извещения документооборот считается завершенным.
@@ -162,12 +166,13 @@ public class DocflowExample {
         }
     }
 
-    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content, @NotNull String thumbprint) {
+    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content,
+            @NotNull String thumbprint) {
         QueryContext<byte[]> signCxt
                 = cryptoProvider.sign(
-                        new QueryContext<byte[]>()
-                                .setThumbprint(thumbprint)
-                                .setContent(content)
+                new QueryContext<byte[]>()
+                        .setThumbprint(thumbprint)
+                        .setContent(content)
         ).ensureSuccess();
         return signCxt.getContent();
     }

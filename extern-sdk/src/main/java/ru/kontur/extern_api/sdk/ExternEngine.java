@@ -100,11 +100,11 @@ public class ExternEngine implements AuthenticationListener {
                         return configuration.getPass();
                     }
                 },
-                    () -> configuration.getApiKey()
+                        configuration
                 )
             );
         }
-        setServiceBaseUriProvider(() -> configuration.getServiceBaseUri());
+        setServiceBaseUriProvider(configuration::getServiceBaseUri);
         this.businessDriver = new BusinessDriver(this);
     }
 
