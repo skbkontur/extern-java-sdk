@@ -28,6 +28,8 @@ import ru.kontur.extern_api.sdk.model.Credential;
 
 
 /**
+ * Интерфейс предназначен для получения структуры с идентификационными данными
+ * @see Credential
  * @author Aleksey Sukhorukov
  */
 public interface CredentialProvider {

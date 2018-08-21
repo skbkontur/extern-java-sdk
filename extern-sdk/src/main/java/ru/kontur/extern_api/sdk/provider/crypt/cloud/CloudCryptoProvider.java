@@ -51,6 +51,21 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
 
 /**
+ * <p>
+ * Предназначен для выполнения криптографических операций на сервере с использованием <b>ГОСТ</b>-алгоритмов. Клиент делегирует выполнение криптографических операций к специализированному сервису.
+ * </p>
+ * <p>Криптографические операции: вычисление подписи и расшифрование выполняются в два этапа:</p>
+ * <ul>
+ *     <li>запрос на выполнение операции;</li>
+ *     <li>подтверждение операции СМС–кодом.</li>
+ * </ul>
+ * <p>Для работы с облачной криптографией необходимо создать объект <b>CloudCryptoProvider</b> с помощью конструктора, передав в него, адрес облачного сервиса. Для полученного объекта необходимо установить:</p>
+ * <ul>
+ *     <li><b>AuthenticationProvider</b> – провайдер для получения токена аутентификации, см. {@link AuthenticationProvider}. Метод для установки: {@link #setAuthenticationProvider(AuthenticationProvider)};</li>
+ *     <li><b>ApiKeyProvider</b> – провайдер для получения идентификатора сервиса, см. {@link ApiKeyProvider};</li>
+ *     <li><b>CertificateProvider</b> – провайдер предназначен для получения сертификата отправителя в DER-кодировке по его отпечатку из внутреннего хранилища внешней системы. Данный провайдер должен имплементировать интерфейс типа: <b>CertificateProvider</b>, реализующий метод {@code QueryContext<byte[]> getCertificate(String thumbprint)}, где <b>thumbprint</b> - отпечаток сертификата. Метод возвращает контекст типа: {@code QueryContext<byte[]>}. Контекст должен содержащий сертификат или ошибку, в зависимости от возвращаемого результата метода {@link QueryContext#isFail}. Если метод {@link QueryContext#isFail} возвращает значение <b>false</b>, то метод {@link QueryContext#get} вернет массив байт сертификата, иначе метод {@link QueryContext#getServiceError} вернет ошибку. Метод для установки: {@link #setCertificateProvider};</li>
+ *     <li><b>ApproveCodeProvider</b> – провайдер предназначен для получения СМС-кода, который отправляется облачным сервисом на зарегистрированный номер телефона отправителя. Данный провайдер должен имплементировать интерфейс типа: {@code Function<String, String>}, где параметром является идентификатор запроса, а возвращаемым значением – СМС-код. Метод для установки: {@link #setApproveCodeProvider}.</li>
+ * </ul>
  * @author Aleksey Sukhorukov
  */
 public class CloudCryptoProvider implements CryptoProvider {

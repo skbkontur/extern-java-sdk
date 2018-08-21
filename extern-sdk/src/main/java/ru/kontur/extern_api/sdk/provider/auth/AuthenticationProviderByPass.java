@@ -37,6 +37,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
 
 /**
+ * Класс реализует аутентификацию по логину и паролю.
  * @author Aleksey Sukhorukov
  */
 public class AuthenticationProviderByPass extends AuthenticationProviderAbstract {
@@ -48,6 +49,13 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
     private HttpClient httpClient;
 
+    /**
+     * Конструктор объекта для аутентификации по логину и паролю
+     * @param authBaseUriProvider объект, реализующий {@link UriProvider} интерфейс, возвращающий адрес сервиса аутентификации. В простейшем случае можно использовать лямбда-выражение: {@code ()->"https://...”}`
+     * @param loginAndPasswordProvider объект, реализующий {@link LoginAndPasswordProvider} интерфейс, возвращающий логин и пароль пользователя из внешней системы
+     * @param apiKeyProvider объект, реализующий {@link ApiKeyProvider} интерфейс, возвращающий идентификатор сервиса, от которого выполняются запросы к внешнему АПИ СКБ Контур. В простейшем случае можно передать лямбда-выражение: {@code ()->"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}
+     * @param authPrefix префикс для запроса аутентификации. Является необязательным параметром. По умолчанию будет использоваться pзначение: auth.sid
+     */
     public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
         this.authBaseUriProvider = authBaseUriProvider;
         this.loginAndPasswordProvider = loginAndPasswordProvider;
@@ -55,6 +63,12 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
     }
 
+    /**
+     * Конструктор объекта для аутентификации по логину и паролю
+     * @param authBaseUriProvider объект, реализующий {@link UriProvider} интерфейс, возвращающий адрес сервиса аутентификации. В простейшем случае можно использовать лямбда-выражение: {@code ()->"https://...”}`
+     * @param loginAndPasswordProvider объект, реализующий {@link LoginAndPasswordProvider} интерфейс, возвращающий логин и пароль пользователя из внешней системы
+     * @param apiKeyProvider объект, реализующий {@link ApiKeyProvider} интерфейс, возвращающий идентификатор сервиса, от которого выполняются запросы к внешнему АПИ СКБ Контур. В простейшем случае можно передать лямбда-выражение: {@code ()->"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}
+     */
     public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {
         this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
     }

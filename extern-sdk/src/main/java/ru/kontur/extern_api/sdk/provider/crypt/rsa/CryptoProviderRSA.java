@@ -58,6 +58,8 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CO
 
 
 /**
+ * <p>Предназначен для вычисления электронной подписи с использованием <b>RSA</b>-алгоритмов. Данный криптопровайдер может быть использован для доверительной аутентификации.</p>
+ * <p>Для работы с <b>RSA</b> подписью необходимо создать объект типа <b>CryptoProviderRSA</b> с помощью конструктора. Конструктор принимает на вход пароль для ключевого хранилища <b>JAVA</b> (<b>JKS</b>) и пароль для секретного ключа. Если в качестве паролей передать значение <b>null</b>, то это будет означать его отсутствие.  Для полученного объекта можно установить провайдер <b>KeyStoreProvider</b> типа {@code Supplier<String>}, который возвращает путь к <b>JKS</b>. По умолчанию криптопровайдер использует <b>java runtime JKS</b>: {@code System.getProperty("java.home")+File.separator+"lib"+File.separator+"security"+File.separator+"cacerts"}.</p>
  * @author Aleksey Sukhorukov
  */
 public class CryptoProviderRSA implements CryptoProvider {

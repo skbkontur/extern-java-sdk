@@ -25,9 +25,14 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
+ * Интерфейс возвращает адрес в сети Интернет
  * @author Aleksey Sukhorukov
  */
 public interface UriProvider {
 
+    /**
+     * Возвращает адрес в сети Интернет
+     * @return адрес в сети Интернет
+     */
     String getUri();
 }

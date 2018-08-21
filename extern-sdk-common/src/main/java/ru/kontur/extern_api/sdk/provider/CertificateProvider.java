@@ -26,9 +26,17 @@ package ru.kontur.extern_api.sdk.provider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
+ * <p>Интерфейс предназначен для получения сертификата отправителя в DER-кодировке по его отпечатку из внутреннего хранилища внешней системы.
+ * </p>
  * @author Aleksey Sukhorukov
  */
 @FunctionalInterface
 public interface CertificateProvider {
+    /**
+     * Возвращет контекст, содержащий массив байт сертификата в формате X.509, если метод {@link QueryContext#isFail()} возвращает значение false.
+     * Если метод {@link QueryContext#isFail()} возвратил true, то метод {@link QueryContext#getServiceError()} должен вернуть ошибку.
+     * @param thumbprint отпечаток сертификата
+     * @return контекст
+     */
     QueryContext<byte[]> getCertificate(String thumbprint);
 }

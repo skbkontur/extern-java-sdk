@@ -49,6 +49,24 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NO
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
 
 /**
+ * <p>Класс, реализующий доверительную аутентификацию - аутентификация сервиса за пользователя.</p>
+ * <p>Для создания объекта необходимо воспользоваться конструктором. Для полученного объекта с помощью соответствующих сеттеров необходимо установить следующие провайдеры:</p>
+ * <ul>
+ *     <li><b>ApiKeyProvider</b> – провайдер для получения идентификатора сервиса, см. {@link ApiKeyProvider}. Метод для установки: {@link #setApiKeyProvider(ApiKeyProvider)};</li>
+ *     <li><b>UriProvider</b> - <b>URI</b> провайдер возвращает адрес сервиса аутентификации. В простейшем случае можно использовать лямбда-выражение: {@code ()->"https://...”}. Метод для установки: {@link #setAuthBaseUriProvider(UriProvider)};</li>
+ *     <li><b>CryptoProvider</b> - предоставляет криптографический провайдер. Можно установить либо {@link ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi} провайдер, либо {@link ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA} криптопровайдер. Для того чтобы можно доверительно аутентифицироваться, необходимо зарегистрировать сертификат в сервисе доверительной аутентификации. Для этого необходимо обратиться в СКБ Контур. Метод для установки: {@link #setCryptoProvider(CryptoProvider)};</li>
+ *     <li><b>SignatureKeyProvider</b> – предоставляет отпечаток сертификата ключа, с помощью которого будут подписываться идентификационные данные конечного пользователя (отправителя). В простейшем случае можно использовать лямбда-выражение: {@code ()->”XXXXXXXXXXXXXXXXXXXX”}. Метод для установки: {@link #setSignatureKeyProvider(SignatureKeyProvider)};</li>
+ *     <li><b>ServiceUserIdProvider</b> - предоставляет идентификатор конечного пользователя во внешней системе. В простейшем случае можно использовать лямбда-выражение: {@code ()->”XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX”}. Метод для установки: {@link #setServiceUserIdProvider(ServiceUserIdProvider)};</li>
+ *     <li><b>CredentialProvider</b> - предоставляет структуру данных содержащий наименования идентификатора, идентифицирующий пользователя, и его значение. В простейшем случае можно использовать лямбда-выражение: {@code ()->new Credential(”phone”,”03”)}. В качестве идентификатора пользователя можно использовать:</li>
+ *     <ul>
+ *         <li>номер телефона (phone);</li>
+ *         <li>СНИЛС (snils);</li>
+ *         <li>идентификатор пользователя (serviceUserId):</li>
+ *         <li>отпечаток сертификата пользователя (thumbprint);</li>
+ *         <li>логин пользователя (login).</li>
+ *     </ul>
+ *     Метод для установки: {@link #setCredentialProvider(CredentialProvider)}.</li>
+ * </ul>
  * @author Aleksey Sukhorukov
  */
 public class TrustedAuthentication extends AuthenticationProviderAbstract {

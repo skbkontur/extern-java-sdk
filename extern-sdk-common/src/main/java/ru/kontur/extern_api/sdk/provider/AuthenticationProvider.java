@@ -31,6 +31,15 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
+ * <p>
+ * Интерфейс предоставляет аутентификатор. Каждый запрос, отправляемый к сервисам СКБ Контур,
+ * должен сопровождаться идентификатором аутентификационной сессии. Аутентифицироваться можно:
+ * <ul>
+ *     <li>по логину и паролю, для этого в SDK есть класс AuthenticationProviderByPass;</li>
+ *     <li>с помощью механизмов доверительной аутентификации, для этого в SDK реализован класс TrustedAuthentication;</li>
+ *     <li>с помощью сертификата личного ключа, для этого в SDK предназначен класс CertificateAuthenticationProvider.</li>
+ * </ul>
+ * </p>
  * @author Aleksey Sukhorukov
  */
 public interface AuthenticationProvider {

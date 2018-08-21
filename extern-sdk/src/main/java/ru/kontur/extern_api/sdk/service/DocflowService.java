@@ -46,12 +46,16 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * <p>- создание регламентного документа с указанным типом (УОП, ИОП) {@link DocflowService#generateDocumentTypeReplyAsync} | {@link DocflowService#generateDocumentTypeReply};</p>
  * <p>- отправка регламентного документа {@link DocflowService#sendDocumentTypeReplyAsync} | {@link DocflowService#sendDocumentTypeReply};</p>
  * <p>- создание всех регламентных документов для ДО {@link DocflowService#generateRepliesAsync} | {@link DocflowService#generateReplies};</p>
- * <p>- отправка регламентных документов {@link DocflowService#sendReplyAsync} | {@link DocflowService#sendReply};</p>
+ * <p>- отправка регламентного документа {@link DocflowService#sendReplyAsync} | {@link DocflowService#sendReply};</p>
+ * <p>- отправка регламентных документов {@link #sendRepliesAsync} | {@link #sendReplies}</p>
+ * <p>- получение регламентного документ по идентификатору {@link #getReplyDocumentAsync} | {@link #getReplyDocument}</p>
+ * <p>- обновление контента  служебного документа {@link #updateReplyDocumentContentAsync} | {@link #updateReplyDocumentContent}</p>
  * <p>- получение списка ДО {@link DocflowService#getDocflowsAsync} | {@link DocflowService#getDocflows};</p>
  * <p>- получение печатной формы {@link DocflowService#printAsync} | {@link DocflowService#print};</p>
  *
- * @author Aleksey Sukhorukov
  * @see QueryContext
+ *
+ * @author Aleksey Sukhorukov
  */
 public interface DocflowService extends Providers {
 

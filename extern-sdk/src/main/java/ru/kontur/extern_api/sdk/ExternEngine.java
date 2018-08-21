@@ -51,6 +51,43 @@ import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
+ * <p>Предназначен для легкой интеграции внешних систем с <a href="https://github.com/skbkontur/extern-api-docs">API Контур.Экстерна</a>,
+ * С помощью сервисов, инкапсулированных в класс <b>ExternEngine</b>, производится передача данных на внешние сервисы СКБ Контур.</p>
+ * <p>Для того чтобы начать работу с <b>SDK</b>, необходимо создать и сконфигурировать объект <b>ExternEngine</b>. Для этого требуется установить следующие провайдеры:</p>
+ * <ul>
+ *     <li>{@link UriProvider} - предоставляет адрес сервиса в Интернет. В качестве провайдера можно передать лямбда-выражение типа: {@code ()->”https://...”}. Метод для установки: {@link #setServiceBaseUriProvider};</li>
+ *     <li>{@link AccountProvider} - предоставляет идентификатор аккаунта, который передается при отправки данных на сервис. Данный идентификатор связан с лицевым счетом в системе СКБ Контур. В качестве провайдера можно передать лямбда-выражение типа: {@code ()->UUID.fromString("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX")}. Метод для установки: {@link #setAccountProvider};</li>
+ *     <li>{@link ApiKeyProvider} – предоставляет идентификатор, который выдается сервису, от которого отправляются запросы к API СКБ Контура. В качестве провайдера можно передать лямбда-выражение типа: {@code ()->"XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}. Метод для установки: {@link #setApiKeyProvider};</li>
+ *     <li>{@link CryptoProvider} - предоставляет криптографический провайдер. В SDK есть три реализации:
+ *          <ul>
+ *              <li>для работы с <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380256.aspx">MSCapi</a> - класс {@link ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi};</li>
+ *              <li>для работы с облачными сертификатами Удостоверяющего Центра СКБ Контур - класс {@link ru.kontur.extern_api.sdk.provider.crypt.cloud.CloudCryptoProvider};</li>
+ *              <li>для RSA-криптографии {@link ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA}.</li>
+ *          </ul>
+ *          Для делегирования криптографических операций удаленной машине необходимо реализовать интерфейс {@link CryptoProvider}.
+ *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setCryptoProvider}.
+ *     <li>{@link AuthenticationProvider} - предоставляет аутентификатор. Каждый запрос, отправляемый к сервисам СКБ Контур, должен сопровождаться идентификатором аутентификационной сессии. Аутентифицироваться можно:</li>
+ *          <ul>
+ *              <li>по логину и паролю, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass};</li>
+ *              <li>с помощью доверительной аутентификации, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication};</li>
+ *              <li>с помощью сертификата личного ключа, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider}.</li>
+ *          </ul>
+ *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setAuthenticationProvider} .
+ *     <li><{@link UserIPProvider} - предоставляет <b>IPV4</b> адрес компьютера отправителя. По умолчанию в <b>ExternEngine</b> будет установлен провайдер, который возвращает <b>IP</b> адрес локального компьютера. Для замены провайдера необходимо воспользоваться методом <b>ExternEngine.setUserIPProvider</b>. При отправке черновка Контур Экстерн производит валидацию значения <b>IP</b> адреса. <b>IP</b> адрес не должен быть локальным, см. <a href="(https://tools.ietf.org/html/rfc5735#page-6">RFC 5735</a>.
+ *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setUserIPProvider}.</li>
+ * </ul>
+ *
+ * <p>Для работы с внешним АПИ СКБ Контур класс содержит следующие сервисы:
+ * <ul>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.AccountService} - сервис для работы с учетными записями конечных пользователей. Для доступа к сервису предназначен метод {@link #getAccountService()};</li>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.CertificateService} - сервис для получения информации о сертификатах конечных пользователей. Для доступа к сервису предназначен метод {@link #getCertificateService()};</li>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.OrganizationService} - сервис для работы со списком организаций. Для доступа к сервису предназначен метод {@link #getOrganizationService()};</li>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.DraftService} - сервис для работы с черновиками. Для доступа к сервису предназначен метод {@link #getDraftService()};</li>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.DocflowService} - сервис для работы с документооборотами. Для доступа к сервису предназначен метод {@link #getDocflowService()};</li>
+ *     <li>{@link ru.kontur.extern_api.sdk.service.EventService} - сервис для работы с лентой событий. Для доступа к сервису предназначен метод {@link #getEventService()}.</li>
+ * </ul>
+ * </p>
+ *
  * @author Aleksey Sukhorukov
  */
 public class ExternEngine implements AuthenticationListener {
@@ -344,13 +381,17 @@ public class ExternEngine implements AuthenticationListener {
 
     /**
      * Возвращает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
-     * @return UserIPProvider предназначен для получения IP адреса отправителя
+     * @return UserIPProvider - провайдер, предназначенный для получения IP адреса отправителя
      * @see UserIPProvider
      */
     public UserIPProvider getUserIPProvider() {
         return servicesFactory.getUserIPProvider();
     }
 
+    /**
+     * Устанавливает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
+     * @param userIPProvider провайдер, предназначеный для получения IP адреса отправителя
+     */
     public void setUserIPProvider(UserIPProvider userIPProvider) {
         this.servicesFactory.setUserIPProvider(userIPProvider);
     }
@@ -377,6 +418,10 @@ public class ExternEngine implements AuthenticationListener {
         return businessDriver;
     }
 
+    /**
+     * Предоставляет HTTP клиент для отправки произвольных запросов
+     * @return HTTP клиент для отправки произвольных запросов
+     */
     public HttpClient getHttpClient() {
         return servicesFactory.getHttpClient();
     }

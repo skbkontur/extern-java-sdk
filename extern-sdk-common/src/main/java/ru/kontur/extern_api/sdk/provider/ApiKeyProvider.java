@@ -25,6 +25,9 @@
 package ru.kontur.extern_api.sdk.provider;
 
 /**
+ * <p>
+ *     Интерфейс предоставляет идентификатор сервиса, от которого отправляются запросы к API СКБ Контура.
+ * </p>
  * @author Aleksey Sukhorukov
  */
 public interface ApiKeyProvider {
