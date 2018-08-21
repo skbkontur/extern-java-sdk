@@ -188,7 +188,8 @@ public class DocflowExample {
                             = new QueryContext<List<ReplyDocument>>()
                             .setDocflow(d)
                             .setCertificate(sender.getCertificate());
-                    replyDocumentsCxt = docflowService.generateReplies(replyDocumentsCxt);
+                    // метод был несогласованно удален. необходимо выяснить причину
+                    // replyDocumentsCxt = docflowService.generateReplies(replyDocumentsCxt);
                     if (replyDocumentsCxt.isFail()) {
                         throw new RuntimeException("Error getting reply documents.", new ServiceException(replyDocumentsCxt.getServiceError()));
                     }

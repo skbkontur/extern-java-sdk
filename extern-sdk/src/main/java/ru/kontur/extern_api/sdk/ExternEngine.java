@@ -66,18 +66,19 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
  *          </ul>
  *          Для делегирования криптографических операций удаленной машине необходимо реализовать интерфейс {@link CryptoProvider}.
  *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setCryptoProvider}.
- *     <li>{@link AuthenticationProvider} - предоставляет аутентификатор. Каждый запрос, отправляемый к сервисам СКБ Контур, должен сопровождаться идентификатором аутентификационной сессии. Аутентифицироваться можно:</li>
+ *     <li>{@link AuthenticationProvider} - предоставляет аутентификатор. Каждый запрос, отправляемый к сервисам СКБ Контур, должен сопровождаться идентификатором аутентификационной сессии. Аутентифицироваться можно:
  *          <ul>
  *              <li>по логину и паролю, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass};</li>
  *              <li>с помощью доверительной аутентификации, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication};</li>
  *              <li>с помощью сертификата личного ключа, см. класс {@link ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider}.</li>
  *          </ul>
  *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setAuthenticationProvider} .
- *     <li><{@link UserIPProvider} - предоставляет <b>IPV4</b> адрес компьютера отправителя. По умолчанию в <b>ExternEngine</b> будет установлен провайдер, который возвращает <b>IP</b> адрес локального компьютера. Для замены провайдера необходимо воспользоваться методом <b>ExternEngine.setUserIPProvider</b>. При отправке черновка Контур Экстерн производит валидацию значения <b>IP</b> адреса. <b>IP</b> адрес не должен быть локальным, см. <a href="(https://tools.ietf.org/html/rfc5735#page-6">RFC 5735</a>.
+ *      </li>
+ *     <li>{@link UserIPProvider} - предоставляет <b>IPV4</b> адрес компьютера отправителя. По умолчанию в <b>ExternEngine</b> будет установлен провайдер, который возвращает <b>IP</b> адрес локального компьютера. Для замены провайдера необходимо воспользоваться методом <b>ExternEngine.setUserIPProvider</b>. При отправке черновка Контур Экстерн производит валидацию значения <b>IP</b> адреса. <b>IP</b> адрес не должен быть локальным, см. <a href=https://tools.ietf.org/html/rfc5735#page-6>RFC 5735</a>.
  *          Для установки экземпляра криптопровайдера в объект ExternEngine предназначен метод: {@link #setUserIPProvider}.</li>
  * </ul>
  *
- * <p>Для работы с внешним АПИ СКБ Контур класс содержит следующие сервисы:
+ * <p>Для работы с внешним АПИ СКБ Контур класс содержит следующие сервисы:</p>
  * <ul>
  *     <li>{@link ru.kontur.extern_api.sdk.service.AccountService} - сервис для работы с учетными записями конечных пользователей. Для доступа к сервису предназначен метод {@link #getAccountService()};</li>
  *     <li>{@link ru.kontur.extern_api.sdk.service.CertificateService} - сервис для получения информации о сертификатах конечных пользователей. Для доступа к сервису предназначен метод {@link #getCertificateService()};</li>
@@ -86,7 +87,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
  *     <li>{@link ru.kontur.extern_api.sdk.service.DocflowService} - сервис для работы с документооборотами. Для доступа к сервису предназначен метод {@link #getDocflowService()};</li>
  *     <li>{@link ru.kontur.extern_api.sdk.service.EventService} - сервис для работы с лентой событий. Для доступа к сервису предназначен метод {@link #getEventService()}.</li>
  * </ul>
- * </p>
  *
  * @author Aleksey Sukhorukov
  */
@@ -137,11 +137,11 @@ public class ExternEngine implements AuthenticationListener {
                         return configuration.getPass();
                     }
                 },
-                    () -> configuration.getApiKey()
+                        configuration
                 )
             );
         }
-        setServiceBaseUriProvider(() -> configuration.getServiceBaseUri());
+        setServiceBaseUriProvider(configuration::getServiceBaseUri);
         this.businessDriver = new BusinessDriver(this);
     }
 

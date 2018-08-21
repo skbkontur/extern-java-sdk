@@ -103,7 +103,6 @@ public class DocflowListExample {
         }
     };
 
-
     private Properties engineProperties;
 
     private DocflowListExample(Properties props) {
@@ -304,7 +303,8 @@ public class DocflowListExample {
             // получам спосок документов для отправки
             QueryContext<List<ReplyDocument>> replyDocumentsCxt = new QueryContext<>(docflowCxt, "");
             replyDocumentsCxt.setCertificate(getSender(engine.getCryptoProvider()).getCertificate());
-            replyDocumentsCxt = docflowService.generateReplies(replyDocumentsCxt);
+            // метод был несогласованно удален. необходимо выяснить причину
+            // replyDocumentsCxt = docflowService.generateReplies(replyDocumentsCxt);
             if (replyDocumentsCxt.isFail()) {
                 System.out.println("Error getting reply documents of the docflow with id: " + item.getId());
                 System.out.println("Details: \n" + replyDocumentsCxt.getServiceError());

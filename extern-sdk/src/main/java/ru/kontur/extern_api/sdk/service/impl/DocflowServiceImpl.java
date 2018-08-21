@@ -196,54 +196,18 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<DocumentToSend>> generateDocumentTypeReplyAsync(
-            String docflowId, String documentType, String documentId, String x509Base64) {
-        QueryContext<DocumentToSend> cxt = createQueryContext(EN_SGN);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentType(documentType)
-                .setDocumentId(documentId)
-                .setContentString(x509Base64)
-                .applyAsync(docflowsAdaptor::generateDocumentTypeReply);
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
+        return cxt.apply(docflowsAdaptor::generateReply);
     }
 
     @Override
-    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> parent) {
-        QueryContext<DocumentToSend> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::generateDocumentTypeReply);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Docflow>> sendDocumentTypeReplyAsync(String docflowId,
-                                                                               String documentType, String documentId, DocumentToSend documentToSend) {
-        QueryContext<Docflow> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentType(documentType)
-                .setDocumentId(documentId)
-                .setDocumentToSend(documentToSend)
-                .applyAsync(docflowsAdaptor::sendDocumentTypeReply);
-    }
-
-    @Override
-    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> parent) {
-        QueryContext<Docflow> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::sendDocumentTypeReply);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(Docflow docflow, String signerX509Base64) {
-        QueryContext<List<ReplyDocument>> cxt = createQueryContext(EN_DFW);
+    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(Docflow docflow, String signerX509Base64) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
         return cxt
                 .setDocflow(docflow)
                 .setCertificate(signerX509Base64)
-                .applyAsync(docflowsAdaptor::generateReplies);
-    }
-
-    @Override
-    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent) {
-        QueryContext<List<ReplyDocument>> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::generateReplies);
+                .applyAsync(docflowsAdaptor::generateReply);
     }
 
     @Override

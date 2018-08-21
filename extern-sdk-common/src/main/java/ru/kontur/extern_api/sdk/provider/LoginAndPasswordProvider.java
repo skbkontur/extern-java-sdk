@@ -32,13 +32,13 @@ public interface LoginAndPasswordProvider {
 
     /**
      * Возвращает логин пользователя
-     * @return
+     * @return логин пользователя
      */
     String getLogin();
 
     /**
      * Возвращает пароль пользователя
-     * @return
+     * @return пароль пользователя
      */
     String getPass();
 }
