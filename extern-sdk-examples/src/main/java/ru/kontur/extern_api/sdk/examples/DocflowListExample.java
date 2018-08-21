@@ -103,7 +103,6 @@ public class DocflowListExample {
         }
     };
 
-
     private Properties engineProperties;
 
     private DocflowListExample(Properties props) {
