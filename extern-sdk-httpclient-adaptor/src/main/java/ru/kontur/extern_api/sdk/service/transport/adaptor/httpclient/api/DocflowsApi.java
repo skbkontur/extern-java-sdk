@@ -353,6 +353,28 @@ public class DocflowsApi extends RestApi {
         }.getType(), accountId, docflowId, documentId, replyId);
     }
 
+    /**
+     * Allow API user to cloud sign Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<SignInitiation> initCloudSignReplyDocument(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId
+    ) throws ApiException {
+        return invoke("cloudSignReplyDocument", null, ReplyDocument.class, accountId, docflowId, documentId, replyId);
+    }
+
     @NotNull
     @Override
     public HttpClient getHttpClient() {
