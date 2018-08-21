@@ -470,6 +470,53 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         ).apply(cxt);
     }
 
+
+    /**
+     * Allow API user to init cloud sign for reply document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/cloud-sign
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .initCloudSignReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getSignatureId().toString())
+                            .getData(),
+                    cxt.getEntityName()
+            );
+        } catch (ApiException x) {
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * Allow API user to confirm cloud sign for reply document from docflow POST
+     * /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm
+     *
+     * @param cxt контекст
+     * @return контекст со списоком документов, подлежащих отправки
+     */
+    @Override
+    public QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt) {
+        return
+                new NoFail<>(
+                        new ParamExists<>(cxt.getEntityName(), new SignConfirmReply())
+                ).apply(cxt);
+    }
+
+
     /**
      * Allow API user to get document print from docflow
      *
@@ -522,8 +569,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 cxt.getReplyDocument().getSignature(),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<ReplyDocument>() {
-                                }.getType()
+                                ReplyDocument.class
                         );
                 return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
                         .setResult(signResponse.getData(), REPLY_DOCUMENT);
@@ -552,8 +598,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 new SenderIP(cxt.getUserIP()),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<Docflow>() {
-                                }.getType()
+                                Docflow.class
                         );
                 return new QueryContext<Docflow>(cxt, DOCFLOW)
                         .setResult(sendResponse.getData(), DOCFLOW);
@@ -647,6 +692,35 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
             } catch (ApiException x) {
                 return new QueryContext<ReplyDocument>(cxt, "reply-document")
                         .setServiceError(x);
+            }
+        }
+    }
+
+    private class SignConfirmReply implements Query<SignConfirmResultData> {
+
+        @Override
+        public QueryContext<SignConfirmResultData> apply(QueryContext<?> cxt) {
+            try {
+                Link sendLink = Link.class.cast(cxt.get("sign-confirm"));
+                HttpClient httpClient = api.getHttpClient();
+                httpClient.setServiceBaseUri("");
+                ApiResponse<SignConfirmResultData> sendResponse
+                        = transport(cxt)
+                        .getHttpClient()
+                        .setServiceBaseUri("")
+                        .submitHttpRequest(
+                                sendLink.getHref(),
+                                "POST",
+                                new HashMap<>(),
+                                cxt.getSmsCode(),
+                                new HashMap<>(),
+                                new HashMap<>(),
+                                SignConfirmResultData.class
+                        );
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setResult(sendResponse.getData(), cxt.getEntityName());
+            } catch (ApiException x) {
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName()).setServiceError(x);
             }
         }
     }
