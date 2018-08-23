@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
+import java.util.List;
+
 /**
  * @param <R> a result type
  * @author Aleksey Sukhorukov
@@ -32,4 +34,5 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor;
 public interface Query<R> {
 
     QueryContext<R> apply(QueryContext<?> context);
+
 }

@@ -97,18 +97,15 @@ public class DocflowExample {
             docflowCtx.setDocflowId(UUID.fromString(docflowId));
             // получаем документооборот
             Docflow docflow = docflowService.lookupDocflow(docflowCtx).ensureSuccess().get();
-            System.out.println("Start working with docflow " + docflowId);
+
             // получам спосок документов для отправки
             QueryContext<ReplyDocument> replyDocumentCxt = new QueryContext<>();
             replyDocumentCxt.setDocflow(docflow);
             replyDocumentCxt.setCertificate(configuratorService.getSender().getCertificate());
             replyDocumentCxt = docflowService.generateReply(replyDocumentCxt).ensureSuccess();
-            System.out.println("List of DocumentToSend received");
 
             ReplyDocument replyDocument = replyDocumentCxt.get();
-            System.out.println(
-                    "Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = "
-                            + replyDocument.getFilename());
+
             QueryContext<?> sendDocflowCtx = new QueryContext<>();
             // подписываем документ
             byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(),
@@ -117,9 +114,6 @@ public class DocflowExample {
             sendDocflowCtx.setReplyDocument(replyDocument);
             // и отправляем его
             docflowService.sendReply(sendDocflowCtx).ensureSuccess();
-            System.out.println("ReplyDocument sent");
-//            }
-            System.out.println("All documents sent");
 
             // после отправки последнего извещения документооборот считается завершенным.
             waitStatus(docflowId, STATUS_RESPONSE_FINISHED, docflowService);

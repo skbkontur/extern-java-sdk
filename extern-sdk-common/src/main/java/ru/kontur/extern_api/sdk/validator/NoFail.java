@@ -23,11 +23,18 @@
 
 package ru.kontur.extern_api.sdk.validator;
 
+import java.util.List;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryForComplex;
 
 public class NoFail<R> implements Query<R> {
     private Query<R> query;
+    private QueryForComplex<R> queryForAll;
+
+    public NoFail(QueryForComplex<R> query) {
+        this.queryForAll = query;
+    }
 
     public NoFail(Query<R> query) {
         this.query = query;
@@ -39,5 +46,12 @@ public class NoFail<R> implements Query<R> {
             return new QueryContext<>(cxt,cxt.getEntityName());
         }
         return query.apply(cxt);
+    }
+
+    public QueryContext<List<R>> applyAtAll(QueryContext<?> cxt) {
+        if (cxt.isFail()) {
+            return new QueryContext<>(cxt,cxt.getEntityName());
+        }
+        return queryForAll.applyAtAll(cxt);
     }
 }

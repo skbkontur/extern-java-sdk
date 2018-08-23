@@ -298,9 +298,10 @@ public interface DocflowService extends Providers {
      *
      * @param signerX509Base64 сертификат ключа подписи в кодировке BASE64 без тегов
      * @return структура данных для отправки
-     * @see DocumentToSend
+     * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(Docflow docflow,
+    CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            Document document,
             String signerX509Base64);
 
     /**
@@ -320,6 +321,37 @@ public interface DocflowService extends Providers {
      * @see DocumentToSend
      */
     QueryContext<ReplyDocument> generateReply(QueryContext<?> parent);
+
+
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
+     * Асинхронный метод создает служебные документы для всех документов в докуметообороте
+     *
+     * @param signerX509Base64 сертификат ключа подписи в кодировке BASE64 без тегов
+     * @return структура данных для отправки
+     * @see DocumentToSend
+     */
+    CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(
+            Docflow docflow,
+            String signerX509Base64);
+
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
+     * Cинхронный метод создает служебные документы для всех документов в докуметообороте
+     *
+     * @param parent контекст. Должен содержать следующие параметры:
+     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     * QueryContext#setDocflowId};</p>
+     * <p>- тип создаваемого документа. Для установки необходимо использовать метод {@link
+     * QueryContext#setDocumentType};</p>
+     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     * QueryContext#setDocumentId};</p>
+     * <p>- сертификат ключа подписи в кодировке BASE64 без тегов. Для установки необходимо
+     * использовать метод {@link QueryContext#setCertificate}.</p>
+     * @return структура данных для отправки
+     * @see DocumentToSend
+     */
+    QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent);
 
 
     /**
