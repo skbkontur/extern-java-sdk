@@ -8,29 +8,17 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDescription;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DocflowType;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.Link;
 
 
-public class DocflowDeserializer implements JsonDeserializer<Docflow> {
-
-    private final Map<String, Class<? extends DocflowDescription>> docflowDescriptionTypes
-            = new HashMap<>();
-
-    public DocflowDeserializer registerDescription(
-            Class<? extends DocflowDescription> description) {
-        String classname = description.getSimpleName().toLowerCase();
-        docflowDescriptionTypes.put(classname, description);
-        return this;
-    }
+public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
 
     private TypeToken<List<Document>> listDocToken = new TypeToken<List<Document>>() {
 
@@ -48,8 +36,9 @@ public class DocflowDeserializer implements JsonDeserializer<Docflow> {
 
         Docflow df = new Docflow();
         df.setType(deserialize(obj, "type", DocflowType.class, context));
-        if (df.getType() != null)
-            df.setDescription(deserialize(obj, "description", df.getType().getType(), context));
+        Optional.ofNullable(df.getType())
+                .map(type -> deserialize(obj, "description", type.getType(), context))
+                .ifPresent(df::setDescription);
         df.setId(deserialize(obj, "id", UUID.class, context));
         df.setStatus(deserialize(obj, "status", DocflowStatus.class, context));
         df.setLastChangeDate(deserialize(obj, "last-change-date", Date.class, context));
@@ -58,6 +47,14 @@ public class DocflowDeserializer implements JsonDeserializer<Docflow> {
         df.setLinks(deserialize(obj, "links", listLinkToken.getType(), context));
 
         return df;
+    }
+
+    private static <T> T deserialize(
+            JsonObject obj,
+            String fieldName,
+            Class<T> type,
+            JsonDeserializationContext cxt) {
+        return deserialize(obj, fieldName, (Type) type, cxt);
     }
 
     private static <T> T deserialize(
