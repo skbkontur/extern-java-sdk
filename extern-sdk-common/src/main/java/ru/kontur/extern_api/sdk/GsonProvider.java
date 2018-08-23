@@ -1,4 +1,4 @@
-package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
+package ru.kontur.extern_api.sdk;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -6,10 +6,10 @@ import com.google.gson.GsonBuilder;
 import java.util.Date;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonByteArrayAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonDateAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonDocflowDeserializer;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors.GsonRecipientAdaptor;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonByteArrayAdaptor;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDeserializer;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonRecipientAdaptor;
 
 public class GsonProvider {
 

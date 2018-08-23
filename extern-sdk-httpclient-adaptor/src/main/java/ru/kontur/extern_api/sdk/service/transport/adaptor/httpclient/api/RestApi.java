@@ -24,13 +24,11 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;

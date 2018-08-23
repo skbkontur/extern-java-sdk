@@ -49,4 +49,5 @@ public interface HttpClient {
             throws ApiException;
 
     HttpClient setGson(Gson gson);
+    Gson getGson();
 }

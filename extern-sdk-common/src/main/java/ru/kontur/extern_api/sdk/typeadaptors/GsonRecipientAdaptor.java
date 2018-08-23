@@ -21,43 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors;
+package ru.kontur.extern_api.sdk.typeadaptors;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.util.Date;
-import ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientUtils;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.model.TogsRecipient;
 
 /**
  *
  * @author alexs
  */
-public class GsonDateAdaptor implements JsonSerializer<Date>, JsonDeserializer<Date> {
+public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDeserializer<Recipient> {
 
     @Override
-    public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Recipient src, Type typeOfSrc, JsonSerializationContext context) {
         if (src == null) {
             return JsonNull.INSTANCE;
         }
-
-        return new JsonPrimitive(HttpClientUtils.formatDatetime(src));
+        else {
+            if (src instanceof FnsRecipient) {
+                return context.serialize(src, FnsRecipient.class);
+            }
+            else if (src instanceof TogsRecipient) {
+                return context.serialize(src, TogsRecipient.class);
+            }
+            else {
+                return JsonNull.INSTANCE;
+            }
+        }
     }
 
     @Override
-    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        String str = json.getAsJsonPrimitive().getAsString();
+    public Recipient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        String str = json.toString();
         try {
-            return HttpClientUtils.parseDateTime(str);
+            if (str.matches(".*ifns-code.*")) {
+                return context.deserialize(json, FnsRecipient.class);
+            }
+            else if (str.matches(".*togs-code.*")) {
+                return context.deserialize(json, TogsRecipient.class);
+            }
+            else {
+                return null;
+            }
         }
         catch (RuntimeException e) {
             throw new JsonParseException(e);
         }
     }
+    
 }

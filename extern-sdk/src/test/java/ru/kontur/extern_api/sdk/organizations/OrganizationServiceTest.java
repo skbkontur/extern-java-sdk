@@ -44,16 +44,13 @@ import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.GsonProvider;
 
 /**
  * @author Aleksey Sukhorukov
@@ -64,7 +61,7 @@ public class OrganizationServiceTest {
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
     private static final String PATH = "/organizations";
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = GsonProvider.getGson();
 
     private static ClientAndServer mockServer;
     private OrganizationService organizationService;

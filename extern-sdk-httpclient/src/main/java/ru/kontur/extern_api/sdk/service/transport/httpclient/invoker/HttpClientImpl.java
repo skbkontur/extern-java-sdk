@@ -47,6 +47,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import ru.kontur.extern_api.sdk.PublicDateFormat;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
  * @author alexs
@@ -64,7 +66,7 @@ public class HttpClientImpl {
 
     private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
-    private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
+    private final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
     private String userAgent;
     private int connectTimeout;
@@ -132,6 +134,10 @@ public class HttpClientImpl {
     public HttpClientImpl setJson(Gson json) {
         this.json = json;
         return this;
+    }
+
+    public Gson getJson() {
+        return json;
     }
 
     public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod,
@@ -358,7 +364,7 @@ public class HttpClientImpl {
         if (param == null) {
             return "";
         } else if (param instanceof Date) {
-            return HttpClientUtils.formatDatetime((Date) param);
+            return PublicDateFormat.formatDatetime((Date) param);
         } else if (param instanceof Collection) {
             StringBuilder b = new StringBuilder();
             ((Collection<?>) param).forEach((o) -> {
@@ -472,7 +478,7 @@ public class HttpClientImpl {
             if (returnType.equals(String.class)) {
                 return (T) body;
             } else if (returnType.equals(Date.class)) {
-                return (T) HttpClientUtils.parseDateTime(body);
+                return (T) PublicDateFormat.parseDateTime(body);
             } else {
                 throw (e);
             }
