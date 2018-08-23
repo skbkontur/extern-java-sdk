@@ -1,12 +1,9 @@
 package ru.kontur.extern_api.sdk.model.descriptions;
 
 import java.util.Date;
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
 public class Fns534Report extends DocflowDescription {
-
-    private String knd;
 
     private Date periodBegin;
 
@@ -18,25 +15,11 @@ public class Fns534Report extends DocflowDescription {
 
     private String finalRecepient;
 
-    private String version;
-
     private int correctionNumber;
-
-    private String formFullname;
-
-    private String formShortname;
 
     private String payerInn;
 
-    private UUID portalUserId;
-
-    public String getKnd() {
-        return knd;
-    }
-
-    public void setKnd(String knd) {
-        this.knd = knd;
-    }
+    private FormVersion formVersion;
 
     public Date getPeriodBegin() {
         return periodBegin;
@@ -78,36 +61,12 @@ public class Fns534Report extends DocflowDescription {
         this.finalRecepient = finalRecepient;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
     public int getCorrectionNumber() {
         return correctionNumber;
     }
 
     public void setCorrectionNumber(int correctionNumber) {
         this.correctionNumber = correctionNumber;
-    }
-
-    public String getFormFullname() {
-        return formFullname;
-    }
-
-    public void setFormFullname(String formFullname) {
-        this.formFullname = formFullname;
-    }
-
-    public String getFormShortname() {
-        return formShortname;
-    }
-
-    public void setFormShortname(String formShortname) {
-        this.formShortname = formShortname;
     }
 
     public String getPayerInn() {
@@ -118,11 +77,11 @@ public class Fns534Report extends DocflowDescription {
         this.payerInn = payerInn;
     }
 
-    public UUID getPortalUserId() {
-        return portalUserId;
+    public FormVersion getFormVersion() {
+        return formVersion;
     }
 
-    public void setPortalUserId(UUID portalUserId) {
-        this.portalUserId = portalUserId;
+    public void setFormVersion(FormVersion formVersion) {
+        this.formVersion = formVersion;
     }
 }

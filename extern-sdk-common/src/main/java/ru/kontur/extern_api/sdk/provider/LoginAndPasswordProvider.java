@@ -32,4 +32,18 @@ public interface LoginAndPasswordProvider {
     String getLogin();
 
     String getPass();
+
+    static LoginAndPasswordProvider form(String login, String pass) {
+        return new LoginAndPasswordProvider() {
+            @Override
+            public String getLogin() {
+                return login;
+            }
+
+            @Override
+            public String getPass() {
+                return pass;
+            }
+        };
+    }
 }

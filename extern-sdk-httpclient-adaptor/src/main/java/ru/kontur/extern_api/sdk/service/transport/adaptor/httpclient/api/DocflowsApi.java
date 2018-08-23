@@ -165,7 +165,7 @@ public class DocflowsApi extends RestApi {
      */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted")
     @GET
-    @Consumes("application/json; charset=utf-8")
+    @Consumes("application/json")
     public ApiResponse<byte[]> getEncryptedContent(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,

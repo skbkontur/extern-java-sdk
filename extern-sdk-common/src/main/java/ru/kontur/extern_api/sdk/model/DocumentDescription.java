@@ -37,7 +37,6 @@ public class DocumentDescription {
 
     private String type = null;
     private String filename = null;
-    @SerializedName("content-type")
     private String contentType = null;
 
     public DocumentDescription type(String type) {

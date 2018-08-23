@@ -1,6 +1,6 @@
 package ru.kontur.extern_api.sdk.model.descriptions;
 
-import java.util.UUID;
+import java.util.List;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
 public class Fns534Demand extends DocflowDescription {
@@ -9,7 +9,9 @@ public class Fns534Demand extends DocflowDescription {
 
     private String transitCu;
 
-    private UUID portalUserId;
+    private int attachmentsCount;
+
+    private List<FormVersion> formVersions;
 
     public String getCu() {
         return cu;
@@ -27,11 +29,20 @@ public class Fns534Demand extends DocflowDescription {
         this.transitCu = transitCu;
     }
 
-    public UUID getPortalUserId() {
-        return portalUserId;
+    public int getAttachmentsCount() {
+        return attachmentsCount;
     }
 
-    public void setPortalUserId(UUID portalUserId) {
-        this.portalUserId = portalUserId;
+    public void setAttachmentsCount(int attachmentsCount) {
+        this.attachmentsCount = attachmentsCount;
+    }
+
+    public List<FormVersion> getFormVersions() {
+        return formVersions;
+    }
+
+    public void setFormVersions(
+            List<FormVersion> formVersions) {
+        this.formVersions = formVersions;
     }
 }

@@ -1,7 +1,5 @@
 # SDK для работы с API Контур.Экстерна для платформы JVM
 
-[TOC]
-
 ## 1. Назначение
 Предназначен для легкой интеграции внешних систем с [API Контур.Экстерна](https://github.com/skbkontur/extern-api-docs), разработанных для платформы **JVM**. Для этого библиотека предоставляет класс *ExternEngine*, с помощью которого производится передача данных на внешние сервисы СКБ Контур.
 
@@ -15,6 +13,37 @@
     <version>${extern-api-java-sdk.version}</version>
 </dependency>
 ```
+
+#### [Иcпользовать SNAPSHOT версии sdk](https://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
+
+Для использования SNAPSHOT версий sdk нужно разрешить использование **sonatype snapshot repository**.
+Для этого добавьте в ` ~/.m2/settings.xml`
+```xml
+<profiles>
+  <profile>
+     <id>allow-snapshots</id>
+        <activation><activeByDefault>true</activeByDefault></activation>
+     <repositories>
+       <repository>
+         <id>snapshots-repo</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+       </repository>
+     </repositories>
+   </profile>
+</profiles>
+```
+
+Snapshot версии полезно использовать для активной разработки, оперативного исправления багов
+и получения самых свежих обновлений. 
+
+### Версионирование
+
+Информацию самых новых версиях sdk можно найти [здесь](https://github.com/skbkontur/extern-java-sdk/releases) 
+
+Название тега соответствует существующей версии sdk в maven.central или версии snapshot'а в o
+репозитории oss.sonatype
 
 ### Компиляция из исходного кода:
 

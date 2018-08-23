@@ -51,25 +51,21 @@
             <artifactId>asn1</artifactId>
             <version>${cryptoservice.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>pkcs</artifactId>
             <version>${cryptoservice.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs</artifactId>
             <version>${cryptoservice.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs-mscapi</artifactId>
             <version>${cryptoservice.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs-util</artifactId>
@@ -137,35 +133,11 @@
                 <dependency>
                     <groupId>ru.kontur.extern-api</groupId>
                     <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
 
                 <dependency>
                     <groupId>ru.kontur.extern-api</groupId>
                     <artifactId>extern-api-java-sdk-httpclient</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>swagger</id>
-            <activation>
-                <property>
-                    <name>build.client</name>
-                    <value>swagger</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-generated-client</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

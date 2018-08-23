@@ -1,4 +1,4 @@
-package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors;
+package ru.kontur.extern_api.sdk.typeadaptors;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

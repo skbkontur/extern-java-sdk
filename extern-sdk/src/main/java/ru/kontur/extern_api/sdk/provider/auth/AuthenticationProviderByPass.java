@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
+import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
@@ -79,6 +80,8 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
     @Override
     public QueryContext<String> sessionId() {
+        Logger.getLogger(LoginAndPasswordProvider.class.getName())
+                .info("Login attempt: " + loginAndPasswordProvider.getLogin());
         QueryContext<String> cxt = createQueryContext();
 
         try {

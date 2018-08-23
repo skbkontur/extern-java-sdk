@@ -47,6 +47,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import ru.kontur.extern_api.sdk.PublicDateFormat;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 
 /**
  * @author alexs
@@ -62,10 +64,9 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
+    private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
-    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
-
-    private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
+    private final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
     private String userAgent;
     private int connectTimeout;
@@ -133,6 +134,10 @@ public class HttpClientImpl {
     public HttpClientImpl setJson(Gson json) {
         this.json = json;
         return this;
+    }
+
+    public Gson getJson() {
+        return json;
     }
 
     public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod,
@@ -221,9 +226,8 @@ public class HttpClientImpl {
 
 
             if (responseCode >= 200 && responseCode < 300) {
-                T deserialize = deserialize(response, type);
                 return new ApiResponse<>(responseCode, responseMessage, responseHeaders,
-                        deserialize);
+                        deserialize(response, type));
             } else if (responseCode >= 300 && responseCode < 400) {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");
@@ -272,11 +276,6 @@ public class HttpClientImpl {
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {
         if (response.getBody() == null || returnType == null) {
             return null;
-        }
-
-        if ("byte[]".equals(returnType.toString())) {
-            // Handle binary response (byte array).
-            return (T) response.getBody();
         }
 
         MediaType contentType =
@@ -365,7 +364,7 @@ public class HttpClientImpl {
         if (param == null) {
             return "";
         } else if (param instanceof Date) {
-            return HttpClientUtils.formatDatetime((Date) param);
+            return PublicDateFormat.formatDatetime((Date) param);
         } else if (param instanceof Collection) {
             StringBuilder b = new StringBuilder();
             ((Collection<?>) param).forEach((o) -> {
@@ -479,7 +478,7 @@ public class HttpClientImpl {
             if (returnType.equals(String.class)) {
                 return (T) body;
             } else if (returnType.equals(Date.class)) {
-                return (T) HttpClientUtils.parseDateTime(body);
+                return (T) PublicDateFormat.parseDateTime(body);
             } else {
                 throw (e);
             }

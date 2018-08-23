@@ -88,8 +88,4 @@ public class UsnServiceContractInfo {
     public void setData(Object data) {
         this.data = data;
     }
-
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
 }
