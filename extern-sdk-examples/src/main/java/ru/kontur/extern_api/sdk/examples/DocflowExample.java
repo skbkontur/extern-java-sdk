@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
@@ -47,9 +48,6 @@ import java.util.stream.Collectors;
 
 public class DocflowExample {
 
-    private static final String STATUS_RESPONSE_ARRIVED = "urn:docflow-common-status:response-arrived";
-    private static final String STATUS_RESPONSE_FINISHED = "urn:docflow-common-status:finished";
-
     public static void main(String[] args)
             throws IOException, InterruptedException, ExecutionException {
         // first argument is a path to property file
@@ -69,7 +67,7 @@ public class DocflowExample {
                         configuratorService.getSender(),
                         configuratorService.getRecipient(),
                         configuratorService.getOrganization());
-       System.out.println("Draft sent");
+        System.out.println("Draft sent");
         List<String> docflowIds = new ArrayList<>();
         if (sendCxt.isFail()) {
             System.out.println("Error sending document: " + sendCxt.getServiceError().toString());
@@ -86,7 +84,7 @@ public class DocflowExample {
         // статус "Ответ обработан" (response-arrived) означает, что пришли результаты проверки
         // отправленного документа и можно продолжать работать с данным документооборотом
         for (String docflowId : docflowIds) {
-            waitStatus(docflowId, STATUS_RESPONSE_ARRIVED, docflowService);
+            waitStatus(docflowId, DocflowStatus.ARRIVED, docflowService);
         }
 
         //3. необходимо отправить в налоговую извещения о получении
@@ -99,26 +97,30 @@ public class DocflowExample {
             Docflow docflow = docflowService.lookupDocflow(docflowCtx).ensureSuccess().get();
             System.out.println("Start working with docflow " + docflowId);
             // получам спосок документов для отправки
-            QueryContext<List<ReplyDocument>> replyDocumentCxt = new QueryContext<>();
+            QueryContext<ReplyDocument> replyDocumentCxt = new QueryContext<>();
             replyDocumentCxt.setDocflow(docflow);
             replyDocumentCxt.setCertificate(configuratorService.getSender().getCertificate());
-            replyDocumentCxt = docflowService.generateReplies(replyDocumentCxt).ensureSuccess();
+            replyDocumentCxt = docflowService.generateReply(replyDocumentCxt).ensureSuccess();
             System.out.println("List of DocumentToSend received");
-            for (ReplyDocument replyDocument : replyDocumentCxt.get()) {
-                System.out.println("Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = " + replyDocument.getFilename());
-                QueryContext<?> sendDocflowCtx = new QueryContext<>();
-                // подписываем каждый документ
-                byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(), configuratorService.getSender().getThumbprint());
-                replyDocument.setSignature(signature);
-                sendDocflowCtx.setReplyDocument(replyDocument);
-                // и отправляем его
-                docflowService.sendReply(sendDocflowCtx).ensureSuccess();
-                System.out.println("ReplyDocument sent");
-            }
+
+            ReplyDocument replyDocument = replyDocumentCxt.get();
+            System.out.println(
+                    "Start sending DocumentToSend: id = " + replyDocument.getId() + ", filename = "
+                            + replyDocument.getFilename());
+            QueryContext<?> sendDocflowCtx = new QueryContext<>();
+            // подписываем документ
+            byte[] signature = sign(externEngine.getCryptoProvider(), replyDocument.getContent(),
+                    configuratorService.getSender().getThumbprint());
+            replyDocument.setSignature(signature);
+            sendDocflowCtx.setReplyDocument(replyDocument);
+            // и отправляем его
+            docflowService.sendReply(sendDocflowCtx).ensureSuccess();
+            System.out.println("ReplyDocument sent");
+//            }
             System.out.println("All documents sent");
 
             // после отправки последнего извещения документооборот считается завершенным.
-            waitStatus(docflowId, STATUS_RESPONSE_FINISHED, docflowService);
+            waitStatus(docflowId, DocflowStatus.FINISHED, docflowService);
         }
 
     }
@@ -144,14 +146,13 @@ public class DocflowExample {
     }
 
     // ждем пока документооборот не изменит статус на указанный
-    private static void waitStatus(@NotNull String docflowId, @NotNull String status,
-            @NotNull DocflowService docflowService)
+    private static void waitStatus(String docflowId, DocflowStatus status, DocflowService service)
             throws InterruptedException {
         System.out.println("Start waiting: docflow = " + docflowId + ", status = " + status);
         while (true) {
             QueryContext<Docflow> docflowCtx = new QueryContext<>();
             docflowCtx.setDocflowId(UUID.fromString(docflowId));
-            String currentStatus = docflowService.lookupDocflow(docflowCtx).get().getStatus();
+            DocflowStatus currentStatus = service.lookupDocflow(docflowCtx).get().getStatus();
             if (!currentStatus.equals(status)) {
                 System.out.println("\tStill waiting: current status = " + currentStatus);
                 Thread.sleep(1000);
@@ -162,12 +163,13 @@ public class DocflowExample {
         }
     }
 
-    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content, @NotNull String thumbprint) {
+    private static byte[] sign(@NotNull CryptoProvider cryptoProvider, byte[] content,
+            @NotNull String thumbprint) {
         QueryContext<byte[]> signCxt
                 = cryptoProvider.sign(
-                        new QueryContext<byte[]>()
-                                .setThumbprint(thumbprint)
-                                .setContent(content)
+                new QueryContext<byte[]>()
+                        .setThumbprint(thumbprint)
+                        .setContent(content)
         ).ensureSuccess();
         return signCxt.getContent();
     }

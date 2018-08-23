@@ -167,15 +167,16 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            QueryContext<Document> resultCxt = new QueryContext<Document>(cxt, cxt.getEntityName()).setResult(
-                    transport(cxt)
-                            .lookupDocument(
-                                    cxt.getAccountProvider().accountId().toString(),
-                                    cxt.getDocflowId().toString(),
-                                    cxt.getDocumentId().toString())
-                            .getData(),
-                    DOCUMENT
-            );
+            QueryContext<Document> resultCxt = new QueryContext<Document>(cxt, cxt.getEntityName())
+                    .setResult(
+                            transport(cxt)
+                                    .lookupDocument(
+                                            cxt.getAccountProvider().accountId().toString(),
+                                            cxt.getDocflowId().toString(),
+                                            cxt.getDocumentId().toString())
+                                    .getData(),
+                            DOCUMENT
+                    );
             return resultCxt.setDocumentId(resultCxt.getDocument().getId());
         } catch (ApiException x) {
             return new QueryContext<Document>(cxt, cxt.getEntityName()).setServiceError(x);
@@ -207,7 +208,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                     DOCUMENT_DESCRIPTION
             );
         } catch (ApiException x) {
-            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName()).setServiceError(x);
+            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName())
+                    .setServiceError(x);
         }
     }
 
@@ -359,81 +361,16 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     /**
-     * Allow API user to create Reply document for specified workflow
-     * <p>
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate
-     *
-     * @param cxt QueryContext&lt;DocumentToSend&gt; context
-     * @return QueryContext&lt;DocumentToSend&gt; context
-     */
-    @Override
-    public QueryContext<DocumentToSend> generateDocumentTypeReply(QueryContext<?> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return new QueryContext<>(cxt, cxt.getEntityName());
-            }
-
-            return new QueryContext<DocumentToSend>(cxt, cxt.getEntityName()).setResult(
-                    transport(cxt)
-                            .generateDocumentTypeReply(
-                                    cxt.getAccountProvider().accountId().toString(),
-                                    cxt.getDocflowId().toString(),
-                                    cxt.getDocumentId().toString(),
-                                    cxt.getDocumentType().toLowerCase(),
-                                    new GenerateReplyDocumentRequestData()
-                                            .certificateBase64(cxt.getContentString()))
-                            .getData(),
-                    DOCUMENT_TO_SEND
-            );
-        } catch (ApiException x) {
-            return new QueryContext<DocumentToSend>(cxt, cxt.getEntityName()).setServiceError(x);
-        }
-    }
-
-    /**
-     * Allow API user to send Reply document for specified workflow
-     * <p>
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}
-     *
-     * @param cxt QueryContext&lt;Signature&gt; context
-     * @return QueryContext&lt;Signature&gt; context
-     */
-    @Override
-    public QueryContext<Docflow> sendDocumentTypeReply(QueryContext<?> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return new QueryContext<>(cxt, cxt.getEntityName());
-            }
-
-            QueryContext<Docflow> resultCxt = new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
-                    transport(cxt)
-                            .sendReplyDocument(
-                                    cxt.getAccountProvider().accountId().toString(),
-                                    cxt.getDocflowId().toString(),
-                                    cxt.getDocumentType(),
-                                    cxt.getDocumentId().toString(),
-                                    cxt.getDocumentToSend())
-                            .getData(),
-                    DOCFLOW
-            );
-            return resultCxt.setDocflowId(resultCxt.getDocflow().getId());
-        } catch (ApiException x) {
-            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
-        }
-    }
-
-    /**
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
-     * С
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply С
      *
      * @param cxt контекс для генерации ответных документов
      * @return контекст со списоком документов, подлежащих отправки
      */
     @Override
-    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt) {
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
         return
                 new NoFail<>(
-                        new ParamExists<>(CERTIFICATE, new GenerateReplies())
+                        new ParamExists<>(CERTIFICATE, new GenerateReply())
                 ).apply(cxt);
     }
 
@@ -448,12 +385,15 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     public QueryContext<Docflow> sendReply(QueryContext<?> cxt) {
         QueryContext<ReplyDocument> saveSignatureCxt =
                 new NoFail<>(
-                        new ParamExists<>(REPLY_DOCUMENT, new LinkExists<>("save-signature", cxt.getReplyDocument(), new SaveSignature()))
+                        new ParamExists<>(REPLY_DOCUMENT,
+                                new LinkExists<>("save-signature", cxt.getReplyDocument(),
+                                        new SaveSignature()))
                 ).apply(cxt);
 
         return
                 new NoFail<>(
-                        new ParamExists<>(USER_IP, new LinkExists<>("send", cxt.getReplyDocument(), new SendReply()))
+                        new ParamExists<>(USER_IP,
+                                new LinkExists<>("send", cxt.getReplyDocument(), new SendReply()))
                 ).apply(saveSignatureCxt);
     }
 
@@ -473,7 +413,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 ).apply(cxt);
 
         if (replyDocumentsCxt.isFail()) {
-            return new QueryContext<List<Docflow>>(replyDocumentsCxt, replyDocumentsCxt.getEntityName()).setServiceError(replyDocumentsCxt);
+            return new QueryContext<List<Docflow>>(replyDocumentsCxt,
+                    replyDocumentsCxt.getEntityName()).setServiceError(replyDocumentsCxt);
         }
 
         List<Docflow> docflows = new ArrayList<>();
@@ -486,19 +427,20 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                     replyDocumentsCxt.getEntityName()
                             ).setReplyDocument(replyDocument)
                     );
-            if (docflowCxt.isFail())  {
+            if (docflowCxt.isFail()) {
                 return new QueryContext<>(docflowCxt, docflowCxt.getEntityName());
             }
 
             docflows.add(docflowCxt.get());
         }
 
-        return new QueryContext<List<Docflow>>(replyDocumentsCxt, replyDocumentsCxt.getEntityName()).setResult(docflows, DOCFLOWS);
+        return new QueryContext<List<Docflow>>(replyDocumentsCxt, replyDocumentsCxt.getEntityName())
+                .setResult(docflows, DOCFLOWS);
     }
 
     /**
-     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}
-     * Получение ответного документа
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId} Получение
+     * ответного документа
      *
      * @param cxt контекст для получения ответного документа
      * @return контекст с данными ответного документа
@@ -527,6 +469,53 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 )
         ).apply(cxt);
     }
+
+
+    /**
+     * Allow API user to init cloud sign for reply document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/cloud-sign
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .initCloudSignReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getSignatureId().toString())
+                            .getData(),
+                    cxt.getEntityName()
+            );
+        } catch (ApiException x) {
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * Allow API user to confirm cloud sign for reply document from docflow POST
+     * /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm
+     *
+     * @param cxt контекст
+     * @return контекст со списоком документов, подлежащих отправки
+     */
+    @Override
+    public QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt) {
+        return
+                new NoFail<>(
+                        new ParamExists<>(cxt.getEntityName(), new SignConfirmReply())
+                ).apply(cxt);
+    }
+
 
     /**
      * Allow API user to get document print from docflow
@@ -562,6 +551,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     private class SaveSignature implements Query<ReplyDocument> {
+
         @Override
         public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
             try {
@@ -579,10 +569,10 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 cxt.getReplyDocument().getSignature(),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<ReplyDocument>() {
-                                }.getType()
+                                ReplyDocument.class
                         );
-                return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT).setResult(signResponse.getData(), REPLY_DOCUMENT);
+                return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+                        .setResult(signResponse.getData(), REPLY_DOCUMENT);
             } catch (ApiException x) {
                 return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT).setServiceError(x);
             }
@@ -590,6 +580,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     private class SendReply implements Query<Docflow> {
+
         @Override
         public QueryContext<Docflow> apply(QueryContext<?> cxt) {
             try {
@@ -607,23 +598,25 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 new SenderIP(cxt.getUserIP()),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<Docflow>() {
-                                }.getType()
+                                Docflow.class
                         );
-                return new QueryContext<Docflow>(cxt, DOCFLOW).setResult(sendResponse.getData(), DOCFLOW);
+                return new QueryContext<Docflow>(cxt, DOCFLOW)
+                        .setResult(sendResponse.getData(), DOCFLOW);
             } catch (ApiException x) {
                 return new QueryContext<Docflow>(cxt, DOCFLOW).setServiceError(x);
             }
         }
     }
 
-    private class GenerateReplies implements Query<List<ReplyDocument>> {
-        public QueryContext<List<ReplyDocument>> apply(QueryContext<?> cxt) {
+
+    private class GenerateReply implements Query<ReplyDocument> {
+
+        public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
             try {
                 Docflow docflow = cxt.getDocflow();
                 String x509Base64 = cxt.getCertificate();
                 if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
-                    List<ReplyDocument> replies = new ArrayList<>();
+                    ReplyDocument reply = null;
                     for (Link l : docflow.getLinks()) {
                         if (l.getRel().equals("reply")) {
                             ApiResponse<Map<String, Object>> response
@@ -634,21 +627,26 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                             l.getHref(),
                                             "POST",
                                             new HashMap<>(),
-                                            new GenerateReplyDocumentRequestData().certificateBase64(x509Base64),
+                                            new GenerateReplyDocumentRequestData()
+                                                    .certificateBase64(x509Base64),
                                             new HashMap<>(),
                                             new HashMap<>(),
-                                            new TypeToken<ReplyDocument>() {
-                                            }.getType()
+                                            ReplyDocument.class
                                     );
-                            replies.add((ReplyDocument) response.getData());
+
+                            reply = (ReplyDocument) response.getData();
                         }
                     }
-                    return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS).setResult(replies, REPLY_DOCUMENTS);
+
+                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENTS)
+                            .setResult((ReplyDocument) reply, REPLY_DOCUMENTS);
                 } else {
-                    return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS).setResult(Collections.emptyList(), REPLY_DOCUMENTS);
+                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+                            .setResult(null, REPLY_DOCUMENT);
                 }
             } catch (ApiException x) {
-                return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS).setServiceError(x);
+                return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+                        .setServiceError(x);
             }
         }
     }
@@ -669,7 +667,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                         REPLY_DOCUMENT
                 );
             } catch (ApiException x) {
-                return new QueryContext<ReplyDocument>(cxt, "reply-document").setServiceError(x);
+                return new QueryContext<ReplyDocument>(cxt, "reply-document")
+                        .setServiceError(x);
             }
         }
     }
@@ -691,7 +690,37 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                         REPLY_DOCUMENT
                 );
             } catch (ApiException x) {
-                return new QueryContext<ReplyDocument>(cxt, "reply-document").setServiceError(x);
+                return new QueryContext<ReplyDocument>(cxt, "reply-document")
+                        .setServiceError(x);
+            }
+        }
+    }
+
+    private class SignConfirmReply implements Query<SignConfirmResultData> {
+
+        @Override
+        public QueryContext<SignConfirmResultData> apply(QueryContext<?> cxt) {
+            try {
+                Link sendLink = Link.class.cast(cxt.get("sign-confirm"));
+                HttpClient httpClient = api.getHttpClient();
+                httpClient.setServiceBaseUri("");
+                ApiResponse<SignConfirmResultData> sendResponse
+                        = transport(cxt)
+                        .getHttpClient()
+                        .setServiceBaseUri("")
+                        .submitHttpRequest(
+                                sendLink.getHref(),
+                                "POST",
+                                new HashMap<>(),
+                                cxt.getSmsCode(),
+                                new HashMap<>(),
+                                new HashMap<>(),
+                                SignConfirmResultData.class
+                        );
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setResult(sendResponse.getData(), cxt.getEntityName());
+            } catch (ApiException x) {
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName()).setServiceError(x);
             }
         }
     }

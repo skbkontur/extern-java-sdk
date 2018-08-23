@@ -10,15 +10,12 @@ extern-sdk/src/test/resources/extern-sdk-config.json
 extern-sdk-test
 **/*.iml
 .idea
-/extern-sdk/nb-configuration.xml
-/extern-sdk-examples/nb-configuration.xml
+nb-configuration.xml
 /extern-sdk-examples/lib
 /extern-sdk-examples/tests
 /extern-sdk-examples/nbactions.xml
-/extern-sdk-examples/nbactions-release-profile.xml
-nb-configuration.xml
+nbactions-release-profile.xml
 /extern-sdk/nbactions.xml
-/extern-sdk-swagger-adaptor/nb-configuration.xml
 /extern-sdk-common/nb-configuration.xml
 extern-java-sdk-test-runner
 /extern-sdk-examples/nbactions-Proxy.example.xml
@@ -27,3 +24,4 @@ extern-java-sdk-test-runner
 /extern-sdk/nbactions-swagger.xml
 *.*Backup
 release.properties
+logs

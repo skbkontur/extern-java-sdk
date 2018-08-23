@@ -33,6 +33,8 @@ import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_LOAD;
 import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_NOT_FOUND;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
+import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
+
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.*;
@@ -49,13 +51,12 @@ import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 /**
  * @author Aleksey Sukhorukov
  */
 public class ExternEngine implements AuthenticationListener {
-
-    private static final Gson GSON = new Gson();
 
     private Environment env;
 
@@ -77,36 +78,26 @@ public class ExternEngine implements AuthenticationListener {
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
      *
-     * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
+     * @param config содержит конфигурационные параметры для инициализации нового ExternEngine объекта
      * @param servicesFactory ServicesFactory предоставляет проинициализированные сервисы, предоставляющие высокоуровневый доступ к Extern API
      * @see ru.kontur.extern_api.sdk.Configuration
      */
-    public ExternEngine(@NotNull Configuration configuration, @NotNull ServicesFactory servicesFactory) {
+    public ExternEngine(@NotNull Configuration config, @NotNull ServicesFactory servicesFactory) {
         this.servicesFactory = servicesFactory;
         this.env = new Environment();
-        this.env.configuration = configuration;
-        setAccountProvider(configuration);
-        setApiKeyProvider(configuration);
-        if (configuration.getLogin() != null && !configuration.getLogin().isEmpty() && configuration.getPass() != null && !configuration.getPass().isEmpty()) {
+        this.env.configuration = config;
+        setAccountProvider(config);
+        setApiKeyProvider(config);
+        if (!isNullOrEmpty(config.getLogin()) && !isNullOrEmpty(config.getPass())) {
             setAuthenticationProvider(
                 new AuthenticationProviderByPass(
                     () -> ExternEngine.this.env.configuration.getAuthBaseUri(),
-                    new LoginAndPasswordProvider() {
-                    @Override
-                    public String getLogin() {
-                        return configuration.getLogin();
-                    }
-
-                    @Override
-                    public String getPass() {
-                        return configuration.getPass();
-                    }
-                },
-                    () -> configuration.getApiKey()
+                    LoginAndPasswordProvider.form(config.getLogin(), config.getPass()),
+                    config
                 )
             );
         }
-        setServiceBaseUriProvider(() -> configuration.getServiceBaseUri());
+        setServiceBaseUriProvider(config::getServiceBaseUri);
         this.businessDriver = new BusinessDriver(this);
     }
 
@@ -142,7 +133,8 @@ public class ExternEngine implements AuthenticationListener {
                 throw new SDKException(Messages.get(C_CONFIG_NOT_FOUND));
             }
 
-            return GSON.fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
+            return new Gson()
+                    .fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
         }
         catch (IOException x) {
             throw new SDKException(Messages.get(C_CONFIG_LOAD), x);

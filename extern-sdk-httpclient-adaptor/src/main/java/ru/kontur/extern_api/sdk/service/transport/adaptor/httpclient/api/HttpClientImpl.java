@@ -42,6 +42,7 @@ public class HttpClientImpl implements HttpClient {
 
     public HttpClientImpl() {
         this.httpClient = new ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.HttpClientImpl();
+        this.httpClient.setJson(GsonProvider.getGson());
     }
 
     @Override

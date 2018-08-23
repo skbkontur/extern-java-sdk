@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.docflows;
 
-import java.util.Date;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
@@ -40,6 +39,8 @@ import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
+import ru.kontur.extern_api.sdk.model.DocflowType;
 
 /**
  * @author Mikhail Pavlenko
@@ -79,8 +80,8 @@ public class DocflowsValidator {
         boolean withDocuments, boolean withLinks) {
         assertNotNull("Docflow must not be null!", docflow);
         validateId(docflow.getId());
-        assertEquals("Type is wrong!", "urn:nss:nid", docflow.getType());
-        assertEquals("Status is wrong!", "urn:nss:nid", docflow.getStatus());
+        assertEquals("Type is wrong!", DocflowType.STAT_LETTER, docflow.getType());
+        assertEquals("Status is wrong!", DocflowStatus.ARRIVED, docflow.getStatus());
         assertEquals("SendDate is wrong!", StandardValues.standardDate(),
             docflow.getSendDate());
         assertEquals("LastChangeDate is wrong!", StandardValues.standardDate(),

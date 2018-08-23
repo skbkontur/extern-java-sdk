@@ -62,8 +62,7 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
-
-    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
+    private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
     private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
@@ -76,7 +75,6 @@ public class HttpClientImpl {
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
-        this.json = new Gson();
         this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive", "true"));
     }
 
@@ -272,11 +270,6 @@ public class HttpClientImpl {
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {
         if (response.getBody() == null || returnType == null) {
             return null;
-        }
-
-        if ("byte[]".equals(returnType.toString())) {
-            // Handle binary response (byte array).
-            return (T) response.getBody();
         }
 
         MediaType contentType =

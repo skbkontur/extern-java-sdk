@@ -401,7 +401,7 @@ public class QueryContext<R> implements Serializable {
      * @param entityName наименования сущности, для которой создается контекст
      */
     public QueryContext(QueryContext<?> parent, String entityName) {
-        this.params = new ConcurrentHashMap<>();
+        this();
         this.params.putAll(parent.params);
         this.serviceError = parent.getServiceError();
         this.result = null;
@@ -1177,6 +1177,27 @@ public class QueryContext<R> implements Serializable {
     public QueryContext<R> setContent(byte[] content) {
         return set(CONTENT, content);
     }
+
+    /**
+     * Метод возвращает ссылку
+     *
+     * @return массив байт
+     */
+    public String getContentUrl() {
+        return (String) params.get(CONTENT);
+    }
+
+    /**
+     * Метод устанавливает ссылку
+     *
+     * @param content ссылка
+     * @return контекст
+     */
+    public QueryContext<R> setContentUrl(String content) {
+        return set(CONTENT, content);
+    }
+
+
 
     /**
      * Метод возвращает объект DraftDocument {@link DraftDocument}

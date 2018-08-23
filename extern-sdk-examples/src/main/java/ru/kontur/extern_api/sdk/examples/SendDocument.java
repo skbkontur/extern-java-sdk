@@ -50,7 +50,8 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 /**
  * @author Sukhorukov A.D.
  *
- * Отправка документа, при этом отправитель и организация, за которую производится отправка документа, является одной и той-же организацией
+ * Отправка документа, при этом отправитель и организация, за которую производится отправка
+ * документа, является одной и той-же организацией
  *
  * <pre>
  * {@code
@@ -90,11 +91,11 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * document.path = X:\\path documents\\NO_SRCHIS_0087_0087_XXXXXXXXXXXXXXXXXXX_20180126_XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.xml;
  * }
  * </pre>
- *
  */
 public class SendDocument {
 
-    public static void main(String[] args) throws IOException, CryptoException, InterruptedException, ExecutionException {
+    public static void main(String[] args)
+            throws IOException, CryptoException, InterruptedException, ExecutionException {
         // необходимо передать путь
         if (args.length == 0) {
             System.out.println("There is no path to the properter file in the command line.");
@@ -136,11 +137,11 @@ public class SendDocument {
         };
         // устанавливаем провайдер для аутентификации по логину и паролю/*
         engine.setAuthenticationProvider(
-            new AuthenticationProviderByPass(
-                () -> parameters.getProperty("auth.base.uri"),
-                loginAndPasswordProvider,
-                engine.getApiKeyProvider()
-            )
+                new AuthenticationProviderByPass(
+                        () -> parameters.getProperty("auth.base.uri"),
+                        loginAndPasswordProvider,
+                        engine.getApiKeyProvider()
+                )
         );
         // данную инициализацию делать необязательно,
         // если используется свой криптопровайдер
@@ -160,27 +161,31 @@ public class SendDocument {
         // Код ФНС
         recipient.setIfnsCode(parameters.getProperty("ifns.code"));
         // подотчетная организация
-        Organization organization = new Organization(parameters.getProperty("company.inn"), parameters.getProperty("company.kpp"));
+        Organization organization = new Organization(parameters.getProperty("company.inn"),
+                parameters.getProperty("company.kpp"));
 
         // путь к документу, который будем отправлять
         String docPath = parameters.getProperty("document.path");
         String[] docPaths = docPath == null ? null : docPath.split(";");
         if (docPaths != null) {
             ru.kontur.extern_api.sdk.service.File[] files
-                = Stream
+                    = Stream
                     .of(docPaths)
                     .map(File::new)
-                    .map(f -> new ru.kontur.extern_api.sdk.service.File(f.getName(), readFileContent(f))) //
+                    .map(f -> new ru.kontur.extern_api.sdk.service.File(f.getName(),
+                            readFileContent(f))) //
                     .collect(Collectors.toList())
                     .toArray(new ru.kontur.extern_api.sdk.service.File[docPaths.length]);
 
             // отправляем документы
-            QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver().sendDocument(files, sender, recipient, organization);
+            QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver()
+                    .sendDocument(files, sender, recipient, organization);
             // проверяем результат отправки
             if (sendCxt.isFail()) {
                 // ошибка отправки документа
                 // регистрируем ошибку в лог файл
-                System.out.println("Error sending document.\r\n" + sendCxt.getServiceError().toString());
+                System.out.println(
+                        "Error sending document.\r\n" + sendCxt.getServiceError().toString());
 
                 return;
             }
@@ -188,15 +193,17 @@ public class SendDocument {
             // документ был отправлен
             // в результате получаем список документооборотов (ДО)
             // иногда один документ может вызвать несколько ДО
-            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.", Stream.of(files).map(ru.kontur.extern_api.sdk.service.File::getFileName).reduce("",(x, y) -> x + "\r\n" + y)));
+            System.out.println(MessageFormat.format("The documents: \r\n{0}\r\nwas sent.",
+                    Stream.of(files)
+                            .map(ru.kontur.extern_api.sdk.service.File::getFileName)
+                            .reduce("", (x, y) -> x + "\r\n" + y)));
         }
     }
 
     private static byte[] readFileContent(File file) throws RuntimeException {
         try {
             return IOUtil.readFileContent(file);
-        }
-        catch (IOException x) {
+        } catch (IOException x) {
             throw new RuntimeException(x);
         }
     }

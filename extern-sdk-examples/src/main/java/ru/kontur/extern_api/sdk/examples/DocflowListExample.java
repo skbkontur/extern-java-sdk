@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -43,11 +44,8 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class DocflowListExample {
 
-    private static final String STATUS_RESPONSE_ARRIVED = "urn:docflow-common-status:response-arrived";
-    private static final String STATUS_RESPONSE_FINISHED = "urn:docflow-common-status:finished";
-
     public static void main(String[] args)
-        throws IOException, InterruptedException, ExecutionException {
+            throws IOException, InterruptedException, ExecutionException {
         // first argument is a path to property file
         if (args.length == 0) {
             System.out.println("There is no path to the property file in the command line.");
@@ -62,11 +60,11 @@ public class DocflowListExample {
         // и запоминаем для дальнейшей обработки
         DocflowPage docflowPage = docflowService.getDocflows(
                 new QueryContext<>()
-                .setFinished(false)
-                .setIncoming(false)
-                .setSkip(0L)
-                .setTake(10)
-                .setType("fns534-report")
+                        .setFinished(false)
+                        .setIncoming(false)
+                        .setSkip(0L)
+                        .setTake(10)
+                        .setType("fns534-report")
         ).get();
         System.out.println("DocflowPage received");
 
@@ -77,7 +75,7 @@ public class DocflowListExample {
         // сохраняем в список
         System.out.println("Id collected:");
         List<String> docflowIds = docflowPage.getDocflowsPageItem().stream()
-            .map(d -> d.getId().toString()).collect(Collectors.toList());
+                .map(d -> d.getId().toString()).collect(Collectors.toList());
         docflowIds.forEach(System.out::println);
 
         // 2. проверяем, что все документообороты имеют статус "Ответ обработан", если нет,
@@ -85,7 +83,7 @@ public class DocflowListExample {
         // статус "Ответ обработан" (response-arrived) означает, что пришли результаты проверки
         // отправленного документа и можно продолжать работать с данным документооборотом
         for (String docflowId : docflowIds) {
-            waitStatus(docflowId, STATUS_RESPONSE_ARRIVED, docflowService);
+            waitStatus(docflowId, DocflowStatus.ARRIVED, docflowService);
         }
 
         //3. необходимо отправить в налоговую извещения о получении
@@ -101,24 +99,22 @@ public class DocflowListExample {
             QueryContext<List<DocumentToSend>> listDocToSendCtx = new QueryContext<>();
             listDocToSendCtx.setDocflow(docflow);
             listDocToSendCtx.setCertificate(configuratorService.getSender().getCertificate());
-            List<ReplyDocument> replyDocuments = docflowService.generateReplies(listDocToSendCtx).get();
+            ReplyDocument replyDocument = docflowService.generateReply(listDocToSendCtx).get();
             System.out.println("List of DocumentToSend received");
-            for (ReplyDocument replyDocument: replyDocuments) {
-                System.out.println(
+            System.out.println(
                     "Start sending DocumentToSend: id = " + replyDocument.getId()
-                        + ", filename = " + replyDocument.getFilename());
-                QueryContext<?> sendDocflowCtx = new QueryContext<>();
-                // подписываем каждый документ
-                replyDocument.setSignature("signature" .getBytes());
-                sendDocflowCtx.setReplyDocument(replyDocument);
-                // и отправляем его
-                docflowService.sendReply(sendDocflowCtx);
-                System.out.println("ReplyDocument sent");
-            }
+                            + ", filename = " + replyDocument.getFilename());
+            QueryContext<?> sendDocflowCtx = new QueryContext<>();
+            // подписываем каждый документ
+            replyDocument.setSignature("signature".getBytes());
+            sendDocflowCtx.setReplyDocument(replyDocument);
+            // и отправляем его
+            docflowService.sendReply(sendDocflowCtx);
+            System.out.println("ReplyDocument sent");
             System.out.println("All documents sent");
 
             // после отправки последнего извещения документооборот считается завершенным.
-            waitStatus(docflowId, STATUS_RESPONSE_FINISHED, docflowService);
+            waitStatus(docflowId, DocflowStatus.FINISHED, docflowService);
         }
 
     }
@@ -144,14 +140,14 @@ public class DocflowListExample {
     }
 
     // ждем пока документооборот не изменит статус на указанный
-    private static void waitStatus(@NotNull String docflowId, @NotNull String status,
-        @NotNull DocflowService docflowService)
-        throws InterruptedException {
+    private static void waitStatus(String docflowId, DocflowStatus status, DocflowService docflowService)
+            throws InterruptedException {
+
         System.out.println("Start waiting: docflow = " + docflowId + ", status = " + status);
         while (true) {
             QueryContext<Docflow> docflowCtx = new QueryContext<>();
             docflowCtx.setDocflowId(UUID.fromString(docflowId));
-            String currentStatus = docflowService.lookupDocflow(docflowCtx).get().getStatus();
+            DocflowStatus currentStatus = docflowService.lookupDocflow(docflowCtx).get().getStatus();
             if (!currentStatus.equals(status)) {
                 System.out.println("\tStill waiting: current status = " + currentStatus);
                 Thread.sleep(1000);

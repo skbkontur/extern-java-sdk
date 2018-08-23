@@ -24,12 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-/**
- * <p>
- * Класс зарезервирован для будущего использования
- * </p>
- * @author Aleksey Sukhorukov
- */
-public class DocflowDescription {
+public class DocflowDescription implements IDocflowDescription {
+
 
 }

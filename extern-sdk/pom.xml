@@ -103,8 +103,8 @@
         </dependency>
         
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
         </dependency>
         
         <dependency>
@@ -138,26 +138,6 @@
                 <dependency>
                     <groupId>ru.kontur.extern-api</groupId>
                     <artifactId>extern-api-java-sdk-httpclient</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>swagger</id>
-            <activation>
-                <property>
-                    <name>build.client</name>
-                    <value>swagger</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-generated-client</artifactId>
                 </dependency>
             </dependencies>
         </profile>
