@@ -281,29 +281,29 @@ public class DocflowsApi extends RestApi {
 
     /* region Replies */
 
-    /**
-     * Allow API user to create Reply document for specified workflow
-     *
-     * @param accountId Account identifier (required)
-     * @param docflowId Docflow object identifier (required)
-     * @param documentId Document identifier (required)
-     * @param documentType Document type (required)
-     * @param request (required)
-     * @return ApiResponse&lt;DocumentToSend&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
-    @POST
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<ReplyDocument> generateDocumentTypeReply(
-            @PathParam("accountId") String accountId,
-            @PathParam("docflowId") String docflowId,
-            @PathParam("documentId") String documentId,
-            @QueryParam("documentType") String documentType,
-            GenerateReplyDocumentRequestData request) throws ApiException {
-        return invoke("generateDocumentTypeReply", request, ReplyDocument.class, accountId,
-                docflowId, documentId, documentType);
-    }
+//    /**
+//     * Allow API user to create Reply document for specified workflow
+//     *
+//     * @param accountId Account identifier (required)
+//     * @param docflowId Docflow object identifier (required)
+//     * @param documentId Document identifier (required)
+//     * @param documentType Document type (required)
+//     * @param request (required)
+//     * @return ApiResponse&lt;DocumentToSend&gt;
+//     * @throws ApiException transport exception
+//     */
+//    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
+//    @POST
+//    @Consumes("application/json; charset=utf-8")
+//    public ApiResponse<ReplyDocument> generateDocumentTypeReply(
+//            @PathParam("accountId") String accountId,
+//            @PathParam("docflowId") String docflowId,
+//            @PathParam("documentId") String documentId,
+//            @QueryParam("documentType") String documentType,
+//            GenerateReplyDocumentRequestData request) throws ApiException {
+//        return invoke("generateDocumentTypeReply", request, ReplyDocument.class, accountId,
+//                docflowId, documentId, documentType);
+//    }
 
     /**
      * Allow API user to get Reply document from specified workflow

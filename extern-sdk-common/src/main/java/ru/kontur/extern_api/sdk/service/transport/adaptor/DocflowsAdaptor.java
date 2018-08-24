@@ -132,7 +132,9 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
-    QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
+    QueryContext generateReply(QueryContext<?> cxt);
+
+    QueryContext generateReplies(QueryContext<?> cxt);
 
     QueryContext<Docflow> sendReply(QueryContext<?> cxt);
 

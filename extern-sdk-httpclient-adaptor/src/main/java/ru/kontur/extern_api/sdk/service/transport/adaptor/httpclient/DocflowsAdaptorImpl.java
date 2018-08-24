@@ -21,13 +21,13 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
-import com.google.gson.reflect.TypeToken;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.validator.LinkExists;
 import ru.kontur.extern_api.sdk.validator.NoFail;
 import ru.kontur.extern_api.sdk.validator.ParamExists;
+import ru.kontur.extern_api.sdk.validator.ParamExistsForAll;
 import ru.kontur.extern_api.sdk.validator.Stub;
 
 import java.util.*;
@@ -361,17 +361,31 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     /**
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply С
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
      *
-     * @param cxt контекс для генерации ответных документов
-     * @return контекст со списоком документов, подлежащих отправки
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст с документом, подлежащим отправке
      */
     @Override
     public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
         return
-                new NoFail<>(
-                        new ParamExists<>(CERTIFICATE, new GenerateReply())
+                new NoFail(
+                        new ParamExistsForAll(CERTIFICATE, new GenerateReply())
                 ).apply(cxt);
+    }
+
+    /**
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
+     *
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст со списоком документов, подлежащим отправке
+     */
+    @Override
+    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt) {
+        return
+                new NoFail(
+                        new ParamExistsForAll(CERTIFICATE, new GenerateReply())
+                ).applyAtAll(cxt);
     }
 
     /**
@@ -608,46 +622,96 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
+    private class GenerateReply implements QueryForComplex<ReplyDocument> {
 
-    private class GenerateReply implements Query<ReplyDocument> {
-
+        @Override
         public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
+            try {
+                Document document = cxt.getDocument();
+                String x509Base64 = cxt.getCertificate();
+
+                if (document.getLinks() == null || document.getLinks().isEmpty()) {
+                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                            .setResult(null, REPLY_DOCUMENT);
+                }
+
+                if (x509Base64 == null) {
+                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                            .setServiceError("A signer certificate is absent in the context.");
+                }
+
+                ReplyDocument reply = generateReply(document, x509Base64, cxt);
+
+                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                        .setResult(reply, REPLY_DOCUMENT);
+
+            } catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
+                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                        .setServiceError(x);
+            }
+        }
+
+        @Override
+        public QueryContext<List<ReplyDocument>> applyAtAll(QueryContext<?> cxt) {
             try {
                 Docflow docflow = cxt.getDocflow();
                 String x509Base64 = cxt.getCertificate();
-                if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
-                    ReplyDocument reply = null;
-                    for (Link l : docflow.getLinks()) {
-                        if (l.getRel().equals("reply")) {
-                            ApiResponse<Map<String, Object>> response
-                                    = transport(cxt)
-                                    .getHttpClient()
-                                    .setServiceBaseUri("")
-                                    .submitHttpRequest(
-                                            l.getHref(),
-                                            "POST",
-                                            new HashMap<>(),
-                                            new GenerateReplyDocumentRequestData()
-                                                    .certificateBase64(x509Base64),
-                                            new HashMap<>(),
-                                            new HashMap<>(),
-                                            ReplyDocument.class
-                                    );
 
-                            reply = (ReplyDocument) response.getData();
-                        }
-                    }
-
-                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENTS)
-                            .setResult((ReplyDocument) reply, REPLY_DOCUMENTS);
-                } else {
-                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
-                            .setResult(null, REPLY_DOCUMENT);
+                if (docflow.getLinks() == null || docflow.getLinks().isEmpty()) {
+                    return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
+                            .setResult(Collections.emptyList(), REPLY_DOCUMENTS);
                 }
+
+                if (x509Base64 == null) {
+                    return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName())
+                            .setServiceError("A signer certificate is absent in the context.");
+                }
+
+                List<ReplyDocument> replies = new ArrayList<>();
+                for (Document document : docflow.getDocuments()) {
+                    ReplyDocument reply = generateReply(document, x509Base64, cxt);
+                    if (reply != null) {
+                        replies.add(generateReply(document, x509Base64, cxt));
+                    }
+                }
+                return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
+                        .setResult(replies, REPLY_DOCUMENTS);
+
             } catch (ApiException x) {
-                return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+                return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
                         .setServiceError(x);
             }
+        }
+
+        private ReplyDocument generateReply(
+                Document document,
+                String certificate,
+                QueryContext<?> cxt
+        ) throws ApiException {
+
+            for (Link l : document.getLinks()) {
+                if (!l.getRel().equals("reply")) {
+                    continue;
+                }
+
+                ApiResponse<ReplyDocument> response
+                        = transport(cxt)
+                        .getHttpClient()
+                        .setServiceBaseUri("")
+                        .submitHttpRequest(
+                                l.getHref(),
+                                "POST",
+                                new HashMap<>(),
+                                new GenerateReplyDocumentRequestData()
+                                        .certificateBase64(certificate),
+                                new HashMap<>(),
+                                new HashMap<>(),
+                                ReplyDocument.class
+                        );
+
+                return response.getData();
+            }
+            return null;
         }
     }
 
@@ -720,7 +784,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
                         .setResult(sendResponse.getData(), cxt.getEntityName());
             } catch (ApiException x) {
-                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName()).setServiceError(x);
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setServiceError(x);
             }
         }
     }
