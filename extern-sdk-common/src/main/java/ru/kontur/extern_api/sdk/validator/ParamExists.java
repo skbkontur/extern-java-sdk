@@ -23,12 +23,10 @@
 
 package ru.kontur.extern_api.sdk.validator;
 
-import java.util.List;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.text.MessageFormat;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryForComplex;
 
 public class ParamExists<R> implements Query<R> {
     private Query<R> query;

@@ -27,6 +27,4 @@ public class GsonProvider {
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
                 .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer());
     }
-
-
 }
