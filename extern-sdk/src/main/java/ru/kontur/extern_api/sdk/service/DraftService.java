@@ -413,7 +413,6 @@ public interface DraftService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод получения расшифрованного контента документа
      *
      * @param cxt контекст. Должен содержать следующие данные:
@@ -426,7 +425,6 @@ public interface DraftService extends Providers {
     QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * <p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Асинхронный метод обновления незашифрованного контента документа
      *
      * @param draftId идентификатор черновика
@@ -438,7 +436,6 @@ public interface DraftService extends Providers {
             String documentId, byte[] content);
 
     /**
-     * <p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод обновления незашифрованного контента документа
      *
      * @param cxt контекст. Должен содержать следующие данные:
@@ -453,7 +450,6 @@ public interface DraftService extends Providers {
     QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Асинхронный метод получения зашифрованного контента
      *
      * @param draftId идентификатор черновика
@@ -464,7 +460,6 @@ public interface DraftService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Синхронный метод получения зашифрованного контента
      *
      * @param cxt контекст. Должен содержать следующие данные:

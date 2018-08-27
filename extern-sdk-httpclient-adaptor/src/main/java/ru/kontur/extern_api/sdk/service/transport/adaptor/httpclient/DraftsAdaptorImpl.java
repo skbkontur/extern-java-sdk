@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CHECK_RESULT_DATA;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOWS;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_DOCUMENT;
@@ -299,7 +300,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                                     cxt.getForce()
                             )
                             .getData(),
-                    DOCFLOWS
+                    DOCFLOW
             );
         } catch (ApiException x) {
             return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
