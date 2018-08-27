@@ -49,6 +49,7 @@ class CertificatesValidator {
         assertEquals("Fio is wrong! ", "string", certificate.getFio());
         assertEquals("Inn is wrong! ", "string", certificate.getInn());
         assertEquals("Kpp is wrong! ", "string", certificate.getKpp());
+        assertNotNull("ExpiredAt must not be null!", certificate.getExpiredAt());
         assertTrue("IsValid is wrong! ", certificate.getIsValid());
         assertTrue("IsCloud is wrong! ", certificate.getIsCloud());
         assertTrue("IsQualified is wrong! ", certificate.getIsQualified());

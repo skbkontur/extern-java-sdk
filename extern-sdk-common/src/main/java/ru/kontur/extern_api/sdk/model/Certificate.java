@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 /**
@@ -42,22 +41,22 @@ public class Certificate {
     private Boolean isCloud = null;
     private Boolean isQualified = null;
     private String content = null;
-    private Date expireAt = null;
+    private Date expiredAt = null;
 
     /**
      * Возвращает дату истечения сертификата
      * @return Дата истечения сертификата
      */
-    public Date getExpireAt() {
-        return expireAt;
+    public Date getExpiredAt() {
+        return expiredAt;
     }
 
     /**
      * Устанавливает дату истечения сертификата
      * @param expireAt дата истечения сертификата
      */
-    public Date setExpireAt(Date expireAt) {
-        this.expireAt = expireAt;
+    public void setExpiredAt(Date expireAt) {
+        this.expiredAt = expireAt;
     }
 
     /**
