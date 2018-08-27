@@ -422,8 +422,10 @@ public interface DocflowService extends Providers {
      * @return объект с данными ответного документа
      * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(String docflowId,
-            String documentId, String replyId);
+    CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId);
 
     /**
      * Синхронный метод получения ответного документа по идентификатору
