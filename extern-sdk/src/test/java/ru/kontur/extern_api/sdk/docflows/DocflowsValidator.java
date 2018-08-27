@@ -33,6 +33,7 @@ import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.model.Content;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.DocflowPageItem;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -139,11 +140,12 @@ public class DocflowsValidator {
         }
     }
 
-    public static void validateDocumentDescription(DocumentDescription documentDescription) {
-        assertNotNull("DocumentDescription must not be null!", documentDescription);
+    public static void validateDocumentDescription(DocflowDocumentDescription documentDescription) {
+        assertNotNull("DocflowDocumentDescription must not be null!", documentDescription);
         assertEquals("Type is wrong!", "urn:nss:nid", documentDescription.getType());
         assertEquals("Filename is wrong!", "string", documentDescription.getFilename());
         assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
+        assertEquals("Compressed is wrong!", "bool", documentDescription.getCompressed());
     }
 
     private static void validateContent(Content content) {

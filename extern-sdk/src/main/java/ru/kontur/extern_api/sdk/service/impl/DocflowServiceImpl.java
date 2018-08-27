@@ -100,9 +100,9 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(
+    public CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
             String docflowId, String documentId) {
-        QueryContext<DocumentDescription> cxt = createQueryContext(EN_DOC);
+        QueryContext<DocflowDocumentDescription> cxt = createQueryContext(EN_DOC);
         return cxt
                 .setDocflowId(docflowId)
                 .setDocumentId(documentId)
@@ -110,8 +110,8 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public QueryContext<DocumentDescription> lookupDescription(QueryContext<?> parent) {
-        QueryContext<DocumentDescription> cxt = createQueryContext(parent, EN_DOC);
+    public QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent) {
+        QueryContext<DocflowDocumentDescription> cxt = createQueryContext(parent, EN_DOC);
         return cxt.apply(docflowsAdaptor::lookupDescription);
     }
 

@@ -145,7 +145,7 @@ public class DocflowsApi extends RestApi {
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description")
     @GET
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<DocumentDescription> lookupDescription(
+    public ApiResponse<DocflowDocumentDescription> lookupDescription(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId)

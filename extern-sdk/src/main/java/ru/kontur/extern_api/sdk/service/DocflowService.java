@@ -146,7 +146,7 @@ public interface DocflowService extends Providers {
      * @return мета-данные
      * @see DocumentDescription
      */
-    CompletableFuture<QueryContext<DocumentDescription>> lookupDescriptionAsync(String docflowId,
+    CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(String docflowId,
             String documentId);
 
     /**
@@ -161,7 +161,7 @@ public interface DocflowService extends Providers {
      * @return мета-данные
      * @see DocumentDescription
      */
-    QueryContext<DocumentDescription> lookupDescription(QueryContext<?> parent);
+    QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent);
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted</p>

@@ -80,7 +80,7 @@ public interface DocflowsAdaptor {
      * @param cxt QueryContext&lt;DocumentDescription&gt; context
      * @return QueryContext&lt;DocumentDescription&gt; context
      */
-    QueryContext<DocumentDescription> lookupDescription(QueryContext<?> cxt);
+    QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> cxt);
 
     /**
      * Allow API user to get discrete encrypted document content from docflow

@@ -192,13 +192,13 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
      * @return QueryContext&lt;DocumentDescription&gt; context
      */
     @Override
-    public QueryContext<DocumentDescription> lookupDescription(QueryContext<?> cxt) {
+    public QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName()).setResult(
+            return new QueryContext<DocflowDocumentDescription>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .lookupDescription(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -208,7 +208,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                     DOCUMENT_DESCRIPTION
             );
         } catch (ApiException x) {
-            return new QueryContext<DocumentDescription>(cxt, cxt.getEntityName())
+            return new QueryContext<DocflowDocumentDescription>(cxt, cxt.getEntityName())
                     .setServiceError(x);
         }
     }

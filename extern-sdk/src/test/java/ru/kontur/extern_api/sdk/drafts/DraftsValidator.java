@@ -29,6 +29,8 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
@@ -100,5 +102,12 @@ public class DraftsValidator {
             assertNull("SignatureContentLink must be null!",
                 draftDocument.getSignatureContentLink());
         }
+    }
+    public static void validateDocumentDescription(
+            DocumentDescription documentDescription) {
+        assertNotNull("DocflowDocumentDescription must not be null!", documentDescription);
+        assertEquals("Type is wrong!", "urn:nss:nid", documentDescription.getType());
+        assertEquals("Filename is wrong!", "string", documentDescription.getFilename());
+        assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
     }
 }

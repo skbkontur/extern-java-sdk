@@ -24,9 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 /**
  * <p>
  * Класс содержит данные, описывающие документ, для отправки.
