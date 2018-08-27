@@ -8,7 +8,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryForComplex;
 public class ParamExistsForAll<R> implements QueryForComplex<R> {
 
     private QueryForComplex<R> queryForAll;
-    String paramName;
+    private String paramName;
 
     public ParamExistsForAll(String paramName, QueryForComplex<R> query) {
         this.queryForAll = query;
@@ -23,7 +23,9 @@ public class ParamExistsForAll<R> implements QueryForComplex<R> {
 
         Object paramObject = cxt.get(paramName);
         if (paramObject == null) {
-            return new QueryContext<R>(cxt, cxt.getEntityName()).setServiceError(MessageFormat.format("There is no parameter {0} in the context.", paramName));
+            String format = MessageFormat
+                    .format("There is no parameter {0} in the context.", paramName);
+            return new QueryContext<R>(cxt, cxt.getEntityName()).setServiceError(format);
         }
         return queryForAll.apply(cxt);
     }
@@ -36,8 +38,10 @@ public class ParamExistsForAll<R> implements QueryForComplex<R> {
 
         Object paramObject = cxt.get(paramName);
         if (paramObject == null) {
-            return new QueryContext<List<R>>(cxt, cxt.getEntityName()).setServiceError(MessageFormat
-                    .format("There is no parameter {0} in the context.", paramName));
+            String format = MessageFormat
+                    .format("There is no parameter {0} in the context.", paramName);
+
+            return new QueryContext<List<R>>(cxt, cxt.getEntityName()).setServiceError(format);
         }
         return queryForAll.applyAtAll(cxt);
     }

@@ -23,6 +23,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.*;
@@ -279,31 +280,36 @@ public class DocflowsApi extends RestApi {
         return invoke("print", request, String.class, accountId, docflowId, documentId);
     }
 
-    /* region Replies */
-
-//    /**
-//     * Allow API user to create Reply document for specified workflow
-//     *
-//     * @param accountId Account identifier (required)
-//     * @param docflowId Docflow object identifier (required)
-//     * @param documentId Document identifier (required)
-//     * @param documentType Document type (required)
-//     * @param request (required)
-//     * @return ApiResponse&lt;DocumentToSend&gt;
-//     * @throws ApiException transport exception
-//     */
-//    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
-//    @POST
-//    @Consumes("application/json; charset=utf-8")
-//    public ApiResponse<ReplyDocument> generateDocumentTypeReply(
-//            @PathParam("accountId") String accountId,
-//            @PathParam("docflowId") String docflowId,
-//            @PathParam("documentId") String documentId,
-//            @QueryParam("documentType") String documentType,
-//            GenerateReplyDocumentRequestData request) throws ApiException {
-//        return invoke("generateDocumentTypeReply", request, ReplyDocument.class, accountId,
-//                docflowId, documentId, documentType);
-//    }
+    /**
+     * Allow API user to get Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param documentType Reply document identifier (required)
+     * @param generateData Certificate content
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<ReplyDocument> generateReplyDocument(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @QueryParam("documentType") String documentType,
+            String certificateBase64
+    ) throws ApiException {
+        return invoke(
+                "generateReplyDocument",
+                Collections.singletonMap("certificate-base64", certificateBase64),
+                ReplyDocument.class,
+                accountId,
+                docflowId,
+                documentId,
+                documentType);
+    }
 
     /**
      * Allow API user to get Reply document from specified workflow
