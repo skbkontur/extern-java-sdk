@@ -191,10 +191,10 @@ public class DraftsApi extends RestApi {
     @Path("/v1/{accountId}/drafts/{draftId}/send")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<List<Docflow>> send(@PathParam("accountId") String accountId,
+    public ApiResponse<Docflow> send(@PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred,
             @QueryParam("force") boolean force) throws ApiException {
-        return invoke("send", null, new TypeToken<List<Docflow>>() {
+        return invoke("send", null, new TypeToken<Docflow>() {
         }.getType(), accountId, draftId, deferred, force);
     }
 

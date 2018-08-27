@@ -62,7 +62,7 @@ public class DocflowExample {
 
         // 1. После отправки черновика мы получаем идентификатор документооборота
         // (в некоторых случаях их может быть несколько)
-        QueryContext<List<Docflow>> sendCxt = externEngine.getBusinessDriver()
+        QueryContext<Docflow> sendCxt = externEngine.getBusinessDriver()
                 .sendDocument(configuratorService.getFile(),
                         configuratorService.getSender(),
                         configuratorService.getRecipient(),

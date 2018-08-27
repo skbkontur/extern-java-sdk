@@ -178,7 +178,7 @@ public class SendDocument {
                     .toArray(new ru.kontur.extern_api.sdk.service.File[docPaths.length]);
 
             // отправляем документы
-            QueryContext<List<Docflow>> sendCxt = engine.getBusinessDriver()
+            QueryContext<Docflow> sendCxt = engine.getBusinessDriver()
                     .sendDocument(files, sender, recipient, organization);
             // проверяем результат отправки
             if (sendCxt.isFail()) {

@@ -258,7 +258,7 @@ public interface DraftService extends Providers {
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
+    CompletableFuture<QueryContext<Docflow>> sendAsync(String draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/send</p>
@@ -270,7 +270,7 @@ public interface DraftService extends Providers {
      * @return список документооборотов
      * @see Docflow
      */
-    QueryContext<List<Docflow>> send(QueryContext<?> cxt);
+    QueryContext<Docflow> send(QueryContext<?> cxt);
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>

@@ -164,8 +164,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId) {
-        QueryContext<List<Docflow>> cxt = createQueryContext(EN_DFT);
+    public CompletableFuture<QueryContext<Docflow>> sendAsync(String draftId) {
+        QueryContext<Docflow> cxt = createQueryContext(EN_DFT);
         return cxt
                 .setDraftId(draftId)
                 .setDeffered(true)
@@ -174,8 +174,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
     }
 
     @Override
-    public QueryContext<List<Docflow>> send(QueryContext<?> parent) {
-        QueryContext<List<Docflow>> cxt = createQueryContext(parent, EN_DFT);
+    public QueryContext<Docflow> send(QueryContext<?> parent) {
+        QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFT);
         return cxt.apply(draftsAdaptor::send);
     }
 

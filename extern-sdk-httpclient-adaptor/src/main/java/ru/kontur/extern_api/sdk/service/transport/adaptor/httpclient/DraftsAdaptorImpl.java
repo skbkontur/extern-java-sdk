@@ -284,13 +284,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return List&lt;Docflow&gt;
      */
     @Override
-    public QueryContext<List<Docflow>> send(QueryContext<?> cxt) {
+    public QueryContext<Docflow> send(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setResult(
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .send(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -302,7 +302,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                     DOCFLOWS
             );
         } catch (ApiException x) {
-            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setServiceError(x);
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
