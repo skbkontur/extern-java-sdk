@@ -1,9 +1,8 @@
-package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
+package ru.kontur.extern_api.sdk;
 
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DocflowType;
