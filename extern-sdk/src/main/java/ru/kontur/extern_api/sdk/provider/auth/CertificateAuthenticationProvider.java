@@ -154,7 +154,6 @@ public final class CertificateAuthenticationProvider extends AuthenticationProvi
         String skipCertValidation) throws ApiException {
 
         Map<String, Object> queryParams = new HashMap<>(2);
-        queryParams.put(APIKEY_QUERY_PARAM, apiKey);
         queryParams.put(SKIP_VALIDATION_QUERY_PARAM, skipCertValidation);
 
         return post(AUTH_BY_CERT_PATH, queryParams, certBytes, AuthInitResponse.class);

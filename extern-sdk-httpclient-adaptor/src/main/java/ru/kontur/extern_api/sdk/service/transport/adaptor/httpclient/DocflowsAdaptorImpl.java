@@ -21,7 +21,6 @@
 
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
-import com.google.gson.reflect.TypeToken;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.*;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DocflowsApi;
@@ -361,17 +360,61 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
     /**
-     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply С
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
      *
-     * @param cxt контекс для генерации ответных документов
-     * @return контекст со списоком документов, подлежащих отправки
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст с документом, подлежащим отправке
      */
     @Override
     public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
         return
                 new NoFail<>(
-                        new ParamExists<>(CERTIFICATE, new GenerateReply())
+                        new ParamExists<>(DOCUMENT, new GenerateReply())
                 ).apply(cxt);
+    }
+
+    /**
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
+     *
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст со списоком документов, подлежащим отправке
+     */
+    @Override
+    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt) {
+
+        QueryContext<List<Document>> replyDocumentsCxt =
+                new NoFail<>(
+                        new ParamExists<>(DOCFLOW, new Stub<List<Document>>())
+                ).apply(cxt);
+
+        if (replyDocumentsCxt.isFail()) {
+            return new QueryContext<List<ReplyDocument>>(replyDocumentsCxt,
+                    replyDocumentsCxt.getEntityName()).setServiceError(replyDocumentsCxt);
+        }
+
+        List<ReplyDocument> replies = new ArrayList<>();
+
+        for (Document document : cxt.getDocflow().getDocuments()) {
+            QueryContext<ReplyDocument> replyCxt =
+                    generateReply(
+                            new QueryContext<ReplyDocument>(
+                                    replyDocumentsCxt,
+                                    replyDocumentsCxt.getEntityName()
+                            ).setDocument(document)
+                    );
+            if (replyCxt.isFail()) {
+                return new QueryContext<>(replyCxt, replyCxt.getEntityName());
+            }
+
+            if (replyCxt.get() != null)
+                replies.add(replyCxt.get());
+        }
+
+        return new QueryContext<List<ReplyDocument>>(replyDocumentsCxt,
+                replyDocumentsCxt.getEntityName())
+                .setResult(replies, REPLY_DOCUMENTS);
+
+
     }
 
     /**
@@ -385,7 +428,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     public QueryContext<Docflow> sendReply(QueryContext<?> cxt) {
         QueryContext<ReplyDocument> saveSignatureCxt =
                 new NoFail<>(
-                        new ParamExists<>(REPLY_DOCUMENT,
+                        new ParamExists<>(DOCUMENT,
                                 new LinkExists<>("save-signature", cxt.getReplyDocument(),
                                         new SaveSignature()))
                 ).apply(cxt);
@@ -470,6 +513,53 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         ).apply(cxt);
     }
 
+
+    /**
+     * Allow API user to init cloud sign for reply document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/cloud-sign
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .initCloudSignReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getSignatureId().toString())
+                            .getData(),
+                    cxt.getEntityName()
+            );
+        } catch (ApiException x) {
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * Allow API user to confirm cloud sign for reply document from docflow POST
+     * /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm
+     *
+     * @param cxt контекст
+     * @return контекст со списоком документов, подлежащих отправки
+     */
+    @Override
+    public QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt) {
+        return
+                new NoFail<>(
+                        new ParamExists<>(cxt.getEntityName(), new SignConfirmReply())
+                ).apply(cxt);
+    }
+
+
     /**
      * Allow API user to get document print from docflow
      *
@@ -522,8 +612,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 cxt.getReplyDocument().getSignature(),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<ReplyDocument>() {
-                                }.getType()
+                                ReplyDocument.class
                         );
                 return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
                         .setResult(signResponse.getData(), REPLY_DOCUMENT);
@@ -552,8 +641,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                                 new SenderIP(cxt.getUserIP()),
                                 new HashMap<>(),
                                 new HashMap<>(),
-                                new TypeToken<Docflow>() {
-                                }.getType()
+                                Docflow.class
                         );
                 return new QueryContext<Docflow>(cxt, DOCFLOW)
                         .setResult(sendResponse.getData(), DOCFLOW);
@@ -563,46 +651,64 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
-
     private class GenerateReply implements Query<ReplyDocument> {
 
+        @Override
         public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
             try {
-                Docflow docflow = cxt.getDocflow();
+                Document document = cxt.getDocument();
                 String x509Base64 = cxt.getCertificate();
-                if (docflow.getLinks() != null && !docflow.getLinks().isEmpty()) {
-                    ReplyDocument reply = null;
-                    for (Link l : docflow.getLinks()) {
-                        if (l.getRel().equals("reply")) {
-                            ApiResponse<Map<String, Object>> response
-                                    = transport(cxt)
-                                    .getHttpClient()
-                                    .setServiceBaseUri("")
-                                    .submitHttpRequest(
-                                            l.getHref(),
-                                            "POST",
-                                            new HashMap<>(),
-                                            new GenerateReplyDocumentRequestData()
-                                                    .certificateBase64(x509Base64),
-                                            new HashMap<>(),
-                                            new HashMap<>(),
-                                            ReplyDocument.class
-                                    );
 
-                            reply = (ReplyDocument) response.getData();
-                        }
-                    }
-
-                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENTS)
-                            .setResult((ReplyDocument) reply, REPLY_DOCUMENTS);
-                } else {
-                    return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+                if (document.getLinks() == null || document.getLinks().isEmpty()) {
+                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
                             .setResult(null, REPLY_DOCUMENT);
                 }
-            } catch (ApiException x) {
-                return new QueryContext<ReplyDocument>(cxt, REPLY_DOCUMENT)
+
+                if (x509Base64 == null) {
+                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                            .setServiceError("A signer certificate is absent in the context.");
+                }
+
+                ReplyDocument reply = generateReply(document, x509Base64, cxt);
+
+                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
+                        .setResult(reply, REPLY_DOCUMENT);
+
+            } catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
+                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
                         .setServiceError(x);
             }
+        }
+
+        private ReplyDocument generateReply(
+                Document document,
+                String certificate,
+                QueryContext<?> cxt
+        ) throws ApiException {
+
+            for (Link l : document.getLinks()) {
+                if (!l.getRel().equals("reply")) {
+                    continue;
+                }
+
+                ApiResponse<ReplyDocument> response
+                        = transport(cxt)
+                        .getHttpClient()
+                        .setServiceBaseUri("")
+                        .submitHttpRequest(
+                                l.getHref(),
+                                "POST",
+                                new HashMap<>(),
+                                new GenerateReplyDocumentRequestData()
+                                        .certificateBase64(certificate),
+                                new HashMap<>(),
+                                new HashMap<>(),
+                                ReplyDocument.class
+                        );
+
+                return response.getData();
+            }
+            return null;
         }
     }
 
@@ -646,6 +752,36 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 );
             } catch (ApiException x) {
                 return new QueryContext<ReplyDocument>(cxt, "reply-document")
+                        .setServiceError(x);
+            }
+        }
+    }
+
+    private class SignConfirmReply implements Query<SignConfirmResultData> {
+
+        @Override
+        public QueryContext<SignConfirmResultData> apply(QueryContext<?> cxt) {
+            try {
+                Link sendLink = Link.class.cast(cxt.get("sign-confirm"));
+                HttpClient httpClient = api.getHttpClient();
+                httpClient.setServiceBaseUri("");
+                ApiResponse<SignConfirmResultData> sendResponse
+                        = transport(cxt)
+                        .getHttpClient()
+                        .setServiceBaseUri("")
+                        .submitHttpRequest(
+                                sendLink.getHref(),
+                                "POST",
+                                new HashMap<>(),
+                                cxt.getSmsCode(),
+                                new HashMap<>(),
+                                new HashMap<>(),
+                                SignConfirmResultData.class
+                        );
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setResult(sendResponse.getData(), cxt.getEntityName());
+            } catch (ApiException x) {
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
                         .setServiceError(x);
             }
         }

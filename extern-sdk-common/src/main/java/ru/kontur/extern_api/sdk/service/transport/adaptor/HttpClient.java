@@ -38,6 +38,16 @@ public interface HttpClient {
     void setConnectWaiting(int millisocond);
     void setReadTimeout(int millisocond);
     HttpClient userAgentProvider(UserAgentProvider userAgentProvider);
-    <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException;
+    <T> ApiResponse<T> submitHttpRequest(
+            String httpRequestUri,
+            String httpMetod,
+            Map<String, Object> queryParams,
+            Object body,
+            Map<String, String> headerParams,
+            Map<String, Object> formParams,
+            Type type)
+            throws ApiException;
+
     HttpClient setGson(Gson gson);
+    Gson getGson();
 }

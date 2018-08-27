@@ -34,10 +34,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class DocumentContents {
 
-    @SerializedName("base64-content")
     private String base64Content = null;
     private String signature = null;
-    @SerializedName("document-description")
     private DocumentDescription documentDescription = null;
 
     /**

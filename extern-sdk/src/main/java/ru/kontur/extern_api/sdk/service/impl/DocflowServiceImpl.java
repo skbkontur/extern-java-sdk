@@ -202,12 +202,30 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(Docflow docflow, String signerX509Base64) {
+    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            Document document,
+            String signerX509Base64) {
         QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocument(document)
+                .setCertificate(signerX509Base64)
+                .applyAsync(docflowsAdaptor::generateReply);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(
+            Docflow docflow, String signerX509Base64) {
+        QueryContext<List<ReplyDocument>> cxt = createQueryContext(EN_DFW);
         return cxt
                 .setDocflow(docflow)
                 .setCertificate(signerX509Base64)
-                .applyAsync(docflowsAdaptor::generateReply);
+                .applyAsync(docflowsAdaptor::generateReplies);
+    }
+
+    @Override
+    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent) {
+        QueryContext<List<ReplyDocument>> cxt = createQueryContext(parent, EN_SGN);
+        return cxt.apply(docflowsAdaptor::generateReplies);
     }
 
     @Override
@@ -335,6 +353,46 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
                 .setDocumentId(documentId)
                 .setContentString(documentContentBase64)
                 .applyAsync(docflowsAdaptor::print);
+    }
+
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent) {
+        QueryContext<SignInitiation> cxt = createQueryContext(parent, EN_DFW);
+        return cxt.apply(docflowsAdaptor::cloudSignReplyDocument);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            String smsCode) {
+        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .setSmsCode(smsCode)
+                .applyAsync(docflowsAdaptor::confirmSignReplyDocument);
+    }
+
+    @Override
+    public QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent) {
+        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
+        return cxt.apply(docflowsAdaptor::confirmSignReplyDocument);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId)  {
+        QueryContext<SignInitiation> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .applyAsync(docflowsAdaptor::cloudSignReplyDocument);
     }
 
     @Override

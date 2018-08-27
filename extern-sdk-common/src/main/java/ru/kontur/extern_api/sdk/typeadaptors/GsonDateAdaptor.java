@@ -21,31 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.typeadaptors;
+package ru.kontur.extern_api.sdk.typeadaptors;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.util.Base64;
+import java.util.Date;
+import ru.kontur.extern_api.sdk.PublicDateFormat;
 
 /**
  *
  * @author alexs
  */
-public class GsonByteArrayAdaptor implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
+public class GsonDateAdaptor implements JsonSerializer<Date>, JsonDeserializer<Date> {
 
     @Override
-    public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(Base64.getEncoder().encodeToString(src));
+    public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+        if (src == null) {
+            return JsonNull.INSTANCE;
+        }
+
+        return new JsonPrimitive(PublicDateFormat.formatDatetime(src));
     }
 
     @Override
-    public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return Base64.getDecoder().decode(json.getAsString());
+    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        String str = json.getAsJsonPrimitive().getAsString();
+        try {
+            return PublicDateFormat.parseDateTime(str);
+        }
+        catch (RuntimeException e) {
+            throw new JsonParseException(e);
+        }
     }
 }

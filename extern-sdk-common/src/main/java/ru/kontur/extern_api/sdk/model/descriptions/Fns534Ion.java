@@ -1,30 +1,23 @@
 package ru.kontur.extern_api.sdk.model.descriptions;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
 public class Fns534Ion extends DocflowDescription {
 
-    private String knd;
+    private FormVersion formVersion;
 
     private String recepient;
 
-    private String serviceCode;
-
     private String finalRecepient;
 
-    private String formFullname;
+    private String serviceCode;
 
-    private String formShortname;
-
-    private UUID portalUserId;
-
-    public String getKnd() {
-        return knd;
+    public FormVersion getFormVersion() {
+        return formVersion;
     }
 
-    public void setKnd(String knd) {
-        this.knd = knd;
+    public void setFormVersion(FormVersion formVersion) {
+        this.formVersion = formVersion;
     }
 
     public String getRecepient() {
@@ -35,14 +28,6 @@ public class Fns534Ion extends DocflowDescription {
         this.recepient = recepient;
     }
 
-    public String getServiceCode() {
-        return serviceCode;
-    }
-
-    public void setServiceCode(String serviceCode) {
-        this.serviceCode = serviceCode;
-    }
-
     public String getFinalRecepient() {
         return finalRecepient;
     }
@@ -51,27 +36,11 @@ public class Fns534Ion extends DocflowDescription {
         this.finalRecepient = finalRecepient;
     }
 
-    public String getFormFullname() {
-        return formFullname;
+    public String getServiceCode() {
+        return serviceCode;
     }
 
-    public void setFormFullname(String formFullname) {
-        this.formFullname = formFullname;
-    }
-
-    public String getFormShortname() {
-        return formShortname;
-    }
-
-    public void setFormShortname(String formShortname) {
-        this.formShortname = formShortname;
-    }
-
-    public UUID getPortalUserId() {
-        return portalUserId;
-    }
-
-    public void setPortalUserId(UUID portalUserId) {
-        this.portalUserId = portalUserId;
+    public void setServiceCode(String serviceCode) {
+        this.serviceCode = serviceCode;
     }
 }

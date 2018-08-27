@@ -1,49 +1,16 @@
 package ru.kontur.extern_api.sdk.model.descriptions;
 
-import java.util.Date;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
 public class Fns534Application extends DocflowDescription {
 
-    private Date periodBegin;
-
-    private Date periodEnd;
-
-    private int periodCode;
-
     private String recepient;
 
-    private int correctionNumber;
+    private String finalRecepient;
 
-    private String payerInn;
+    private String documentNumber;
 
-    private String okud;
-
-    private String okpo;
-
-    public Date getPeriodBegin() {
-        return periodBegin;
-    }
-
-    public void setPeriodBegin(Date periodBegin) {
-        this.periodBegin = periodBegin;
-    }
-
-    public Date getPeriodEnd() {
-        return periodEnd;
-    }
-
-    public void setPeriodEnd(Date periodEnd) {
-        this.periodEnd = periodEnd;
-    }
-
-    public int getPeriodCode() {
-        return periodCode;
-    }
-
-    public void setPeriodCode(int periodCode) {
-        this.periodCode = periodCode;
-    }
+    private FormVersion formVersion;
 
     public String getRecepient() {
         return recepient;
@@ -53,35 +20,27 @@ public class Fns534Application extends DocflowDescription {
         this.recepient = recepient;
     }
 
-    public int getCorrectionNumber() {
-        return correctionNumber;
+    public String getFinalRecepient() {
+        return finalRecepient;
     }
 
-    public void setCorrectionNumber(int correctionNumber) {
-        this.correctionNumber = correctionNumber;
+    public void setFinalRecepient(String finalRecepient) {
+        this.finalRecepient = finalRecepient;
     }
 
-    public String getPayerInn() {
-        return payerInn;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 
-    public void setPayerInn(String payerInn) {
-        this.payerInn = payerInn;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
-    public String getOkud() {
-        return okud;
+    public FormVersion getFormVersion() {
+        return formVersion;
     }
 
-    public void setOkud(String okud) {
-        this.okud = okud;
-    }
-
-    public String getOkpo() {
-        return okpo;
-    }
-
-    public void setOkpo(String okpo) {
-        this.okpo = okpo;
+    public void setFormVersion(FormVersion formVersion) {
+        this.formVersion = formVersion;
     }
 }

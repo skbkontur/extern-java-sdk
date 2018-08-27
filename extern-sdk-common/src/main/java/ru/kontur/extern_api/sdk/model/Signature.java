@@ -37,9 +37,9 @@ import java.util.UUID;
 public class Signature {
 
     private UUID id = null;
-    @SerializedName("content-link")
     private Link contentLink = null;
     private List<Link> links = new ArrayList<>();
+    private String title = null;
 
     public Signature id(UUID id) {
         this.id = id;
@@ -114,5 +114,16 @@ public class Signature {
      */
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+
+    /**
+     * @return Title подписанта
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

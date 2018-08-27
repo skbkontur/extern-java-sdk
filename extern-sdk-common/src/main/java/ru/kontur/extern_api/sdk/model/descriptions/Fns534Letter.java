@@ -9,17 +9,9 @@ public class Fns534Letter extends DocflowDescription {
 
     private String recepient;
 
-    private String finalRecepient;
-
     private String subject;
 
     private UUID originDocflowId;
-
-    private UUID originDocumentId;
-
-    private UUID orgid;
-
-    private UUID portalUserId;
 
     public String getCu() {
         return cu;
@@ -37,14 +29,6 @@ public class Fns534Letter extends DocflowDescription {
         this.recepient = recepient;
     }
 
-    public String getFinalRecepient() {
-        return finalRecepient;
-    }
-
-    public void setFinalRecepient(String finalRecepient) {
-        this.finalRecepient = finalRecepient;
-    }
-
     public String getSubject() {
         return subject;
     }
@@ -59,29 +43,5 @@ public class Fns534Letter extends DocflowDescription {
 
     public void setOriginDocflowId(UUID originDocflowId) {
         this.originDocflowId = originDocflowId;
-    }
-
-    public UUID getOriginDocumentId() {
-        return originDocumentId;
-    }
-
-    public void setOriginDocumentId(UUID originDocumentId) {
-        this.originDocumentId = originDocumentId;
-    }
-
-    public UUID getOrgid() {
-        return orgid;
-    }
-
-    public void setOrgid(UUID orgid) {
-        this.orgid = orgid;
-    }
-
-    public UUID getPortalUserId() {
-        return portalUserId;
-    }
-
-    public void setPortalUserId(UUID portalUserId) {
-        this.portalUserId = portalUserId;
     }
 }

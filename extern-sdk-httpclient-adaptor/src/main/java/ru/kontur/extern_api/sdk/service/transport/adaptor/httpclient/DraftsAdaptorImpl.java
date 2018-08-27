@@ -686,7 +686,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getDocumentId().toString(),
                             cxt.getType(),
                             cxt.getVersion(),
-                            cxt.getUsnServiceContractInfo().toJson()
+                            getHttpClient().getGson().toJson(cxt.getUsnServiceContractInfo())
                     );
 
             return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
@@ -716,7 +716,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getDraftId().toString(),
                             cxt.getType(),
                             cxt.getVersion(),
-                            cxt.getUsnServiceContractInfo().toJson()
+                            getHttpClient().getGson().toJson(cxt.getUsnServiceContractInfo())
                     );
 
             return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(createAndBuildDeclaration.getData(), DRAFT_DOCUMENT);

@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -40,14 +39,12 @@ import java.util.UUID;
 public class Docflow {
 
     private UUID id = null;
-    private String type = null;
-    private String status = null;
-    private DocflowDescription description = null;
+    private DocflowType type = null;
+    private DocflowStatus status = null;
+    private IDocflowDescription description = null;
     private List<Document> documents = null;
     private List<Link> links = null;
-    @SerializedName("send-date")
     private Date sendDate = null;
-    @SerializedName("last-change-date")
     private Date lastChangeDate = null;
 
     /**
@@ -73,7 +70,7 @@ public class Docflow {
      * </ul>
      * @return type тип ДО
      */
-    public String getType() {
+    public DocflowType getType() {
         return type;
     }
 
@@ -84,7 +81,7 @@ public class Docflow {
      * <li>urn:docflow-type:ke-fns-report</li>
      * </ul>
      */
-    public void setType(String type) {
+    public void setType(DocflowType type) {
         this.type = type;
     }
 
@@ -102,7 +99,7 @@ public class Docflow {
      * </ul>
      * @return состояние документооборота
      */
-    public String getStatus() {
+    public DocflowStatus getStatus() {
         return status;
     }
 
@@ -120,25 +117,25 @@ public class Docflow {
      *  <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
      * </ul>
      */
-    public void setStatus(String status) {
+    public void setStatus(DocflowStatus status) {
         this.status = status;
     }
 
     /**
-     * Возвращает дескриптор ДО {@link DocflowDescription}
+     * Возвращает дескриптор ДО {@link IDocflowDescription}
      * @return description дескриптор ДО
-     * @see DocflowDescription
+     * @see DocflowStatus
      */
-    public DocflowDescription getDescription() {
+    public IDocflowDescription getDescription() {
         return description;
     }
 
     /**
-     * Устанавливает дескриптор ДО {@link DocflowDescription}
+     * Устанавливает дескриптор ДО {@link IDocflowDescription}
      * @param description дескриптор ДО
-     * @see DocflowDescription
+     * @see IDocflowDescription
      */
-    public void setDescription(DocflowDescription description) {
+    public void setDescription(IDocflowDescription description) {
         this.description = description;
     }
 

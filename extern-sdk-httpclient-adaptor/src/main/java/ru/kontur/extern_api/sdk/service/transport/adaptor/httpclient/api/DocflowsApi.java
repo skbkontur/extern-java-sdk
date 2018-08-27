@@ -23,6 +23,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.*;
@@ -165,7 +166,7 @@ public class DocflowsApi extends RestApi {
      */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted")
     @GET
-    @Consumes("application/json; charset=utf-8")
+    @Consumes("application/json")
     public ApiResponse<byte[]> getEncryptedContent(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
@@ -279,30 +280,35 @@ public class DocflowsApi extends RestApi {
         return invoke("print", request, String.class, accountId, docflowId, documentId);
     }
 
-    /* region Replies */
-
     /**
-     * Allow API user to create Reply document for specified workflow
+     * Allow API user to get Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
-     * @param documentType Document type (required)
-     * @param request (required)
+     * @param documentType Reply document identifier (required)
+     * @param generateData Certificate content
      * @return ApiResponse&lt;DocumentToSend&gt;
      * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<ReplyDocument> generateDocumentTypeReply(
+    public ApiResponse<ReplyDocument> generateReplyDocument(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             @QueryParam("documentType") String documentType,
-            GenerateReplyDocumentRequestData request) throws ApiException {
-        return invoke("generateDocumentTypeReply", request, ReplyDocument.class, accountId,
-                docflowId, documentId, documentType);
+            String certificateBase64
+    ) throws ApiException {
+        return invoke(
+                "generateReplyDocument",
+                Collections.singletonMap("certificate-base64", certificateBase64),
+                ReplyDocument.class,
+                accountId,
+                docflowId,
+                documentId,
+                documentType);
     }
 
     /**
@@ -351,6 +357,28 @@ public class DocflowsApi extends RestApi {
     ) throws ApiException {
         return invoke("updateReplyDocumentContent", content, new TypeToken<ReplyDocument>() {
         }.getType(), accountId, docflowId, documentId, replyId);
+    }
+
+    /**
+     * Allow API user to cloud sign Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<SignInitiation> initCloudSignReplyDocument(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId
+    ) throws ApiException {
+        return invoke("cloudSignReplyDocument", null, ReplyDocument.class, accountId, docflowId, documentId, replyId);
     }
 
     @NotNull

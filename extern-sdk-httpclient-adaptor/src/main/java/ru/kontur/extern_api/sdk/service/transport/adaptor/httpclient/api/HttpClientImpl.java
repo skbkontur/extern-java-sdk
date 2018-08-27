@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.ServiceLogger;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
@@ -49,6 +50,11 @@ public class HttpClientImpl implements HttpClient {
     public HttpClientImpl setGson(Gson json) {
         httpClient.setJson(json);
         return this;
+    }
+
+    @Override
+    public Gson getGson() {
+        return httpClient.getJson();
     }
 
     @Override
