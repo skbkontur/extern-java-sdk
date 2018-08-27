@@ -38,7 +38,7 @@ import java.util.UUID;
 public class Document {
 
     private UUID id = null;
-    private DocumentDescription description = null;
+    private DocflowDocumentDescription description = null;
     private Content content = null;
     private List<Signature> signatures = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
@@ -69,7 +69,7 @@ public class Document {
      * @param description дескриптор документа
      * @return {@link Document}
      */
-    public Document description(DocumentDescription description) {
+    public Document description(DocflowDocumentDescription description) {
         this.description = description;
         return this;
     }
@@ -78,7 +78,7 @@ public class Document {
      * Возвращает дескриптор документа {@link DocumentDescription}
      * @return description дескриптор документа
      */
-    public DocumentDescription getDescription() {
+    public DocflowDocumentDescription getDescription() {
         return description;
     }
 
@@ -86,7 +86,7 @@ public class Document {
      * Устанавливает дескриптор документа {@link DocumentDescription}
      * @param description дескриптор документа
      */
-    public void setDescription(DocumentDescription description) {
+    public void setDescription(DocflowDocumentDescription description) {
         this.description = description;
     }
 
