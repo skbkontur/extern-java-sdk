@@ -156,7 +156,9 @@ public class CertificateServiceGetCertificateListTest {
             "\"is-valid\": true," +
             "\"is-cloud\": true," +
             "\"is-qualified\": true," +
-            "\"content\": \"string\"}]" +
+            "\"content\": \"string\","  +
+            "\"expired-at\":\"2005-08-09T18:31:42\"}"
+                + "]" +
             "}");
         //
         CertificateList certificateList = engine.getCertificateService()
@@ -179,7 +181,8 @@ public class CertificateServiceGetCertificateListTest {
             "\"is-valid\": true," +
             "\"is-cloud\": true," +
             "\"is-qualified\": true," +
-            "\"content\": \"string\"}]" +
+            "\"content\": \"string\"," +
+            "\"expired-at\":\"2005-08-09T18:31:42\"}]" +
             "}");
         try {
             CertificateList certificateList = engine.getCertificateService()

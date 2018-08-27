@@ -150,7 +150,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId)
             throws ApiException {
-        return invoke("lookupDescription", null, new TypeToken<DocumentDescription>() {
+        return invoke("lookupDescription", null, new TypeToken<DocflowDocumentDescription>() {
         }.getType(), accountId, docflowId, documentId);
     }
 

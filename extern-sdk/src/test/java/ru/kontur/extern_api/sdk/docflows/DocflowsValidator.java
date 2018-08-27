@@ -145,7 +145,7 @@ public class DocflowsValidator {
         assertEquals("Type is wrong!", "urn:nss:nid", documentDescription.getType());
         assertEquals("Filename is wrong!", "string", documentDescription.getFilename());
         assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
-        assertEquals("Compressed is wrong!", "bool", documentDescription.getCompressed());
+        assertEquals("Compressed is wrong!", (Object) true, documentDescription.getCompressed());
     }
 
     private static void validateContent(Content content) {

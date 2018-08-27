@@ -164,7 +164,7 @@ public interface DocflowService extends Providers {
     QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent);
 
     /**
-     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted</p>
+     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content/</p>
      * Асинхронный метод возвращает зашифрованный контент документа
      *
      * @param docflowId идентификатор ДО
@@ -175,7 +175,7 @@ public interface DocflowService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted</p>
+     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content</p>
      * Синхронный метод возвращает зашифрованный контент документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
@@ -188,7 +188,7 @@ public interface DocflowService extends Providers {
     QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent);
 
     /**
-     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted</p>
+     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content</p>
      * Асинхронный метод возвращает расшифрованный контент документа
      *
      * @param docflowId идентификатор ДО
@@ -199,7 +199,7 @@ public interface DocflowService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted</p>
+     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content</p>
      * Синхронный метод возвращает расшифрованный контент документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
