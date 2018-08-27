@@ -49,14 +49,22 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
     private HttpClient httpClient;
 
-    public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider, String authPrefix) {
+    public AuthenticationProviderByPass(
+            UriProvider authBaseUriProvider,
+            LoginAndPasswordProvider loginAndPasswordProvider,
+            ApiKeyProvider apiKeyProvider,
+            String authPrefix) {
+
         this.authBaseUriProvider = authBaseUriProvider;
         this.loginAndPasswordProvider = loginAndPasswordProvider;
         this.apiKeyProvider = apiKeyProvider;
         this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
     }
 
-    public AuthenticationProviderByPass(UriProvider authBaseUriProvider, LoginAndPasswordProvider loginAndPasswordProvider, ApiKeyProvider apiKeyProvider) {
+    public AuthenticationProviderByPass(
+            UriProvider authBaseUriProvider,
+            LoginAndPasswordProvider loginAndPasswordProvider,
+            ApiKeyProvider apiKeyProvider) {
         this(authBaseUriProvider, loginAndPasswordProvider, apiKeyProvider, DEFAULT_AUTH_PREFIX);
     }
 
@@ -82,7 +90,8 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
     public QueryContext<String> sessionId() {
         Logger.getLogger(LoginAndPasswordProvider.class.getName())
                 .info("Login attempt: " + loginAndPasswordProvider.getLogin());
-        QueryContext<String> cxt = createQueryContext();
+        QueryContext<String> cxt = new QueryContext<String>("")
+                .setApiKeyProvider(apiKeyProvider);
 
         try {
 
@@ -149,9 +158,4 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         return authPrefix;
     }
 
-    private <T> QueryContext<T> createQueryContext() {
-        return 
-            new QueryContext<T>("loginAndPasswordAuthenticationProvider")
-                .setApiKeyProvider(apiKeyProvider);
-    }
 }

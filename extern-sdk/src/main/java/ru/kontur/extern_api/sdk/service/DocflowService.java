@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -65,7 +65,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Aleksey Sukhorukov
  * @see QueryContext
  */
-public interface DocflowService extends Providers {
+public interface DocflowService extends ProviderHolder {
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}</p>

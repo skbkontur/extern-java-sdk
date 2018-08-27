@@ -23,115 +23,56 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import ru.kontur.extern_api.sdk.Messages;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.provider.*;
-import ru.kontur.extern_api.sdk.service.SDKException;
+import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
-/**
- * @author alexs
- */
-public class AbstractService {
+public class AbstractService implements ProviderHolderParent<ServicesFactory> {
 
-    protected UriProvider serviceBaseUriProvider;
-    protected AuthenticationProvider authenticationProvider;
-    protected AccountProvider accountProvider;
-    protected ApiKeyProvider apiKeyProvider;
-    protected CryptoProvider cryptoProvider;
-    protected UserIPProvider userIPProvider;
+    private final ServicesFactory servicesFactory;
 
-    public CryptoProvider getCryptoProvider() throws SDKException {
-        if (cryptoProvider == null) {
-            throw new SDKException(Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER));
-        }
-        return cryptoProvider;
+    public AbstractService(ServicesFactory servicesFactory) {
+        this.servicesFactory = servicesFactory;
     }
 
     protected <T> QueryContext<T> createQueryContext(String entityName) {
-        QueryContext<T> cxt = new QueryContext<>(entityName);
-        if (validity(cxt).isFail()) {
-            return cxt;
-        }
-        cxt.setServiceBaseUriProvider(serviceBaseUriProvider);
-        cxt.setAccountProvider(accountProvider);
-        cxt.setAuthenticationProvider(authenticationProvider);
-        cxt.setApiKeyProvider(apiKeyProvider);
-        
-        return acquireSessionId(cxt);
+        return createQueryContext(new QueryContext<>(), entityName);
     }
 
     protected <T> QueryContext<T> createQueryContext(QueryContext<?> parent, String entityName) {
-        QueryContext<T> cxt = new QueryContext<>(parent, entityName);
-        if (validity(cxt).isFail()) {
-            return cxt;
-        }
-        cxt.setServiceBaseUriProvider(serviceBaseUriProvider);
-        cxt.setAccountProvider(accountProvider);
-        cxt.setAuthenticationProvider(authenticationProvider);
-        cxt.setApiKeyProvider(apiKeyProvider);
-        
-        return acquireSessionId(cxt);
-    }
+        QueryContext<T> cxt = new QueryContext<T>(parent, entityName)
+                .setServiceBaseUriProvider(getServiceBaseUriProvider())
+                .setAccountProvider(getAccountProvider())
+                .setAuthenticationProvider(getAuthenticationProvider())
+                .setApiKeyProvider(getApiKeyProvider());
 
-    private <T> QueryContext<T> validity(QueryContext<T> cxt) {
-        if (serviceBaseUriProvider == null) {
-            return cxt.setServiceError("Undefined Base URI Provider.");
-        }
-        if (authenticationProvider == null) {
-            return cxt.setServiceError("Undefined Authentication Provider.");
-        }
-        if (accountProvider == null) {
-            return cxt.setServiceError("Undefined Account Provider.");
-        }
-        if (apiKeyProvider == null) {
-            return cxt.setServiceError("Undefined Api Key Provider.");
-        }
-        return cxt;
+        return acquireSessionId(cxt);
     }
 
     private <T> QueryContext<T> acquireSessionId(QueryContext<T> cxt) {
         String sessionId = cxt.getSessionId();
-        if (sessionId == null || sessionId.isEmpty()) {
-            if (authenticationProvider != null) {
-                QueryContext<String> authQuery = authenticationProvider.sessionId();
-                if (authQuery.isFail()) {
-                    cxt.setServiceError(authQuery);
-                }
-                else {
-                    cxt.setSessionId(authQuery.get()).getSessionId();
-                    cxt.setAuthPrefix(authenticationProvider.authPrefix());
-                }
-            }
-            else {
-                cxt.setServiceError(ServiceError.ErrorCode.unknownAuth);
-            }
+        if (!YAStringUtils.isNullOrEmpty(sessionId)) {
+            return cxt;
         }
-        return cxt;
+
+        if (getAuthenticationProvider() == null) {
+            return cxt.setServiceError(ServiceError.ErrorCode.unknownAuth);
+        }
+
+        QueryContext<String> authQuery = getAuthenticationProvider().sessionId();
+        if (authQuery.isFail()) {
+            return cxt.setServiceError(authQuery);
+        }
+
+        return cxt
+                .setSessionId(authQuery.get())
+                .setAuthPrefix(getAuthenticationProvider().authPrefix());
     }
 
-    public void serviceBaseUriProvider(UriProvider serviceBaseUriProvider) {
-        this.serviceBaseUriProvider = serviceBaseUriProvider;
-    }
-
-    public void authenticationProvider(AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
-    }
-
-    public void accountProvider(AccountProvider accountProvider) {
-        this.accountProvider = accountProvider;
-    }
-
-    public void apiKeyProvider(ApiKeyProvider apiKeyProvider) {
-        this.apiKeyProvider = apiKeyProvider;
-    }
-
-    public void cryptoProvider(CryptoProvider cryptoProvider) {
-        this.cryptoProvider = cryptoProvider;
-    }
-
-    public void userIPProvider(UserIPProvider userIPProvider) {
-        this.userIPProvider = userIPProvider;
+    @Override
+    public ServicesFactory getChildProviderHolder() {
+        return servicesFactory;
     }
 }
