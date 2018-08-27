@@ -458,7 +458,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content
      * <p>
      * Get a decrypted document content
      *
@@ -488,7 +488,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content
      * <p>
      * Get a decrypted document content
      *
@@ -517,7 +517,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
+     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content
      * <p>
      * Get a encrypted document content
      *

@@ -163,7 +163,7 @@ public class DocflowsApi extends RestApi {
      * @return ApiResponse&lt;byte[]&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/encrypted")
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content")
     @GET
     @Consumes("application/json")
     public ApiResponse<byte[]> getEncryptedContent(
@@ -183,7 +183,7 @@ public class DocflowsApi extends RestApi {
      * @return ApiResponse&lt;byte[]&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/content/decrypted")
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content")
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<byte[]> getDecryptedContent(
