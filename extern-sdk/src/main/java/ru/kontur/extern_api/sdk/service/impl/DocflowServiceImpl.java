@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
