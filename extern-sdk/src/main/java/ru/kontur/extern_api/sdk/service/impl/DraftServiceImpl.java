@@ -43,6 +43,7 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -54,11 +55,11 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
 
     private static final String EN_DFT = "Черновик";
     private static final String EN_DOC = "Документ";
-    private static final String EN_SIGN = "Подпись";
 
     private final DraftsAdaptor draftsAdaptor;
 
-    DraftServiceImpl(DraftsAdaptor draftsAdaptor) {
+    DraftServiceImpl(ServicesFactory servicesFactory, DraftsAdaptor draftsAdaptor) {
+        super(servicesFactory);
         this.draftsAdaptor = draftsAdaptor;
     }
 

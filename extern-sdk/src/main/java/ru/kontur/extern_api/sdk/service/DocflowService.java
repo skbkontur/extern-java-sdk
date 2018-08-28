@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -65,7 +65,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @author Aleksey Sukhorukov
  * @see QueryContext
  */
-public interface DocflowService extends Providers {
+public interface DocflowService extends ProviderHolder {
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}</p>
@@ -422,8 +422,10 @@ public interface DocflowService extends Providers {
      * @return объект с данными ответного документа
      * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(String docflowId,
-            String documentId, String replyId);
+    CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId);
 
     /**
      * Синхронный метод получения ответного документа по идентификатору

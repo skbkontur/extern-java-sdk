@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service.impl;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.CertificatesAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -38,10 +39,13 @@ public class CertificateServiceImpl extends AbstractService implements Certifica
 
     private final CertificatesAdaptor certificatesAdaptor;
 
-    public CertificateServiceImpl(CertificatesAdaptor certificatesAdaptor) {
+    public CertificateServiceImpl(
+            ServicesFactory servicesFactory,
+            CertificatesAdaptor certificatesAdaptor) {
+        super(servicesFactory);
         this.certificatesAdaptor = certificatesAdaptor;
     }
-    
+
     @Override
     public CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync() {
         QueryContext<CertificateList> cxt = createQueryContext(EN_CER);

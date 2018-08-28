@@ -28,7 +28,7 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 
 /**
@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.provider.Providers;
  * @see QueryContext
  * @author Aleksey Sukhorukov
  */
-public interface CertificateService extends Providers {
+public interface CertificateService extends ProviderHolder {
 
     /**
      * <p>GET /v1/{accountId}/certificates</p>

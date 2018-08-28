@@ -62,9 +62,9 @@ abstract class AuthenticationProviderAbstract implements AuthenticationProvider 
     }
 
     private List<AuthenticationListener> getAuthenticationListener() {
-        List<AuthenticationListener> cloned = new ArrayList<>();
+        List<AuthenticationListener> cloned;
         synchronized (authListeners) {
-            cloned.addAll(authListeners);
+            cloned = new ArrayList<>(authListeners);
         }
         return cloned;
     }

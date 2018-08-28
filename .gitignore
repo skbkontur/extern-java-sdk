@@ -25,3 +25,4 @@ extern-java-sdk-test-runner
 *.*Backup
 release.properties
 logs
+*.stackdump

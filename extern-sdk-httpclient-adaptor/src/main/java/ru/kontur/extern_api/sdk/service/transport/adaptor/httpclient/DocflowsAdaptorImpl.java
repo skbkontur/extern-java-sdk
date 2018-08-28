@@ -27,7 +27,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.Docflow
 import ru.kontur.extern_api.sdk.validator.LinkExists;
 import ru.kontur.extern_api.sdk.validator.NoFail;
 import ru.kontur.extern_api.sdk.validator.ParamExists;
-import ru.kontur.extern_api.sdk.validator.ParamExistsForAll;
 import ru.kontur.extern_api.sdk.validator.Stub;
 
 import java.util.*;
@@ -369,8 +368,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     @Override
     public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
         return
-                new NoFail(
-                        new ParamExistsForAll(CERTIFICATE, new GenerateReply())
+                new NoFail<>(
+                        new ParamExists<>(DOCUMENT, new GenerateReply())
                 ).apply(cxt);
     }
 
@@ -382,10 +381,40 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
      */
     @Override
     public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> cxt) {
-        return
-                new NoFail(
-                        new ParamExistsForAll(CERTIFICATE, new GenerateReply())
-                ).applyAtAll(cxt);
+
+        QueryContext<List<Document>> replyDocumentsCxt =
+                new NoFail<>(
+                        new ParamExists<>(DOCFLOW, new Stub<List<Document>>())
+                ).apply(cxt);
+
+        if (replyDocumentsCxt.isFail()) {
+            return new QueryContext<List<ReplyDocument>>(replyDocumentsCxt,
+                    replyDocumentsCxt.getEntityName()).setServiceError(replyDocumentsCxt);
+        }
+
+        List<ReplyDocument> replies = new ArrayList<>();
+
+        for (Document document : cxt.getDocflow().getDocuments()) {
+            QueryContext<ReplyDocument> replyCxt =
+                    generateReply(
+                            new QueryContext<ReplyDocument>(
+                                    replyDocumentsCxt,
+                                    replyDocumentsCxt.getEntityName()
+                            ).setDocument(document)
+                    );
+            if (replyCxt.isFail()) {
+                return new QueryContext<>(replyCxt, replyCxt.getEntityName());
+            }
+
+            if (replyCxt.get() != null)
+                replies.add(replyCxt.get());
+        }
+
+        return new QueryContext<List<ReplyDocument>>(replyDocumentsCxt,
+                replyDocumentsCxt.getEntityName())
+                .setResult(replies, REPLY_DOCUMENTS);
+
+
     }
 
     /**
@@ -399,7 +428,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     public QueryContext<Docflow> sendReply(QueryContext<?> cxt) {
         QueryContext<ReplyDocument> saveSignatureCxt =
                 new NoFail<>(
-                        new ParamExists<>(REPLY_DOCUMENT,
+                        new ParamExists<>(DOCUMENT,
                                 new LinkExists<>("save-signature", cxt.getReplyDocument(),
                                         new SaveSignature()))
                 ).apply(cxt);
@@ -622,7 +651,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
-    private class GenerateReply implements QueryForComplex<ReplyDocument> {
+    private class GenerateReply implements Query<ReplyDocument> {
 
         @Override
         public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
@@ -647,38 +676,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
 
             } catch (ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException x) {
                 return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
-                        .setServiceError(x);
-            }
-        }
-
-        @Override
-        public QueryContext<List<ReplyDocument>> applyAtAll(QueryContext<?> cxt) {
-            try {
-                Docflow docflow = cxt.getDocflow();
-                String x509Base64 = cxt.getCertificate();
-
-                if (docflow.getLinks() == null || docflow.getLinks().isEmpty()) {
-                    return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
-                            .setResult(Collections.emptyList(), REPLY_DOCUMENTS);
-                }
-
-                if (x509Base64 == null) {
-                    return new QueryContext<List<ReplyDocument>>(cxt, cxt.getEntityName())
-                            .setServiceError("A signer certificate is absent in the context.");
-                }
-
-                List<ReplyDocument> replies = new ArrayList<>();
-                for (Document document : docflow.getDocuments()) {
-                    ReplyDocument reply = generateReply(document, x509Base64, cxt);
-                    if (reply != null) {
-                        replies.add(generateReply(document, x509Base64, cxt));
-                    }
-                }
-                return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
-                        .setResult(replies, REPLY_DOCUMENTS);
-
-            } catch (ApiException x) {
-                return new QueryContext<List<ReplyDocument>>(cxt, REPLY_DOCUMENTS)
                         .setServiceError(x);
             }
         }

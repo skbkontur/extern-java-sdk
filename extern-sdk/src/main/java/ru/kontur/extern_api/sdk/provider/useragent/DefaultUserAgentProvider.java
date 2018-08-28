@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ru.kontur.extern_api.sdk.provider.userAgent;
+package ru.kontur.extern_api.sdk.provider.useragent;
 
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
@@ -31,10 +31,10 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
  * @author Aleksey Sukhorukov
  */
 public class DefaultUserAgentProvider implements UserAgentProvider {
+
     private static final String DEFAULT_VERSION = "unknown";
     private static final String DEFAULT_ARTIFACTID = "unknown";
-    
-    
+
     @Override
     public String getVersion() {
         Package aPackage = ExternEngine.class.getPackage();

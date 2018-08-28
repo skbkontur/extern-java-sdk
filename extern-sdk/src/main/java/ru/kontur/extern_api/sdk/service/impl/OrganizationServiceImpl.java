@@ -28,6 +28,7 @@ import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -40,7 +41,10 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
 
     private final OrganizationsAdaptor organizationsAdaptor;
 
-    public OrganizationServiceImpl(OrganizationsAdaptor organizationsAdaptor) {
+    public OrganizationServiceImpl(
+            ServicesFactory servicesFactory,
+            OrganizationsAdaptor organizationsAdaptor) {
+        super(servicesFactory);
         this.organizationsAdaptor = organizationsAdaptor;
     }
 
