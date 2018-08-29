@@ -24,15 +24,11 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import java.text.MessageFormat;
-
 
 /**
  * @author Aleksey Sukhorukov
  */
 public class SDKException extends RuntimeException {
-
-    private static final long serialVersionUID = 1813799131945186727L;
 
     public SDKException(String message, Throwable x) {
         super(message, x);
@@ -42,11 +38,4 @@ public class SDKException extends RuntimeException {
         super(message);
     }
 
-    public SDKException(String template, Object... params) {
-        super(MessageFormat.format(template, params));
-    }
-
-    public SDKException(String template, Throwable x, Object... params) {
-        super(MessageFormat.format(template, params), x);
-    }
 }

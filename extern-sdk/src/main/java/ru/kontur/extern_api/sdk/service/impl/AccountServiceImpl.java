@@ -31,6 +31,7 @@ import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.AccountService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -44,7 +45,10 @@ public class AccountServiceImpl extends AbstractService implements AccountServic
 
     private final AccountsAdaptor accountsAdaptor;
 
-    public AccountServiceImpl(AccountsAdaptor accountsAdaptor) {
+    public AccountServiceImpl(
+            ServicesFactory servicesFactory,
+            AccountsAdaptor accountsAdaptor) {
+        super(servicesFactory);
         this.accountsAdaptor = accountsAdaptor;
     }
     

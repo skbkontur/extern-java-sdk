@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -87,7 +87,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *
  * @author Aleksey Sukhorukov
  */
-public interface DraftService extends Providers {
+public interface DraftService extends ProviderHolder {
 
     /**
      * <p>POST /v1/{accountId}/drafts</p>

@@ -287,7 +287,7 @@ public class DocflowsApi extends RestApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      * @param documentType Reply document identifier (required)
-     * @param generateData Certificate content
+     * @param certificateBase64 Certificate content
      * @return ApiResponse&lt;DocumentToSend&gt;
      * @throws ApiException transport exception
      */

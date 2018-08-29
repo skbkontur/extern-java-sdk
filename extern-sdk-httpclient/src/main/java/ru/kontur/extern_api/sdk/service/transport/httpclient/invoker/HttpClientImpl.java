@@ -40,6 +40,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  * @author alexs
@@ -68,11 +69,11 @@ public class HttpClientImpl {
 
     private final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
-    private String userAgent;
     private int connectTimeout;
     private int readTimeout;
     private Gson json;
     private boolean keepAlive;
+    private UserAgentProvider userAgentProvider;
 
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
@@ -85,8 +86,12 @@ public class HttpClientImpl {
         return this;
     }
 
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+    public void setUserAgentProvider(UserAgentProvider userAgentProvider) {
+        this.userAgentProvider = userAgentProvider;
+    }
+
+    public UserAgentProvider getUserAgentProvider() {
+        return userAgentProvider;
     }
 
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
@@ -152,7 +157,7 @@ public class HttpClientImpl {
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
             headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
-            headerParams.putIfAbsent(USER_AGENT, userAgent);
+            headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
 
             headerParams.forEach(connect::setRequestProperty);
 
@@ -252,10 +257,15 @@ public class HttpClientImpl {
     private String headersToString(Map<String, List<String>> headers) {
         return headers.entrySet().stream()
                 .filter(e -> e.getKey() != null)
-                .map(e -> String.format(
-                        "%s: %s",
-                        e.getKey(),
-                        e.getValue().stream().reduce((s1, s2) -> s1 + "; " + s2).orElse("")))
+                .map(e -> {
+                    List<String> value = Optional.ofNullable(e.getValue())
+                            .orElse(Collections.emptyList());
+
+                    return String.format(
+                            "%s: %s",
+                            e.getKey(),
+                            value.stream().reduce((s1, s2) -> s1 + "; " + s2).orElse(""));
+                })
                 .reduce((s, s2) -> s + "\n" + s2)
                 .orElse("");
 

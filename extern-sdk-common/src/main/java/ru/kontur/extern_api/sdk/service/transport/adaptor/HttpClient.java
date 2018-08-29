@@ -32,12 +32,21 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
  * @author Aleksey Sukhorukov
  */
 public interface HttpClient {
+
     HttpClient setServiceBaseUri(String uri);
+
     HttpClient acceptAccessToken(String authPrefix, String sessionId);
+
     HttpClient acceptApiKey(String apiKey);
+
     void setConnectWaiting(int millisocond);
+
     void setReadTimeout(int millisocond);
-    HttpClient userAgentProvider(UserAgentProvider userAgentProvider);
+
+    HttpClient setUserAgentProvider(UserAgentProvider userAgentProvider);
+
+    UserAgentProvider getUserAgentProvider();
+
     <T> ApiResponse<T> submitHttpRequest(
             String httpRequestUri,
             String httpMetod,
@@ -49,5 +58,6 @@ public interface HttpClient {
             throws ApiException;
 
     HttpClient setGson(Gson gson);
+
     Gson getGson();
 }
