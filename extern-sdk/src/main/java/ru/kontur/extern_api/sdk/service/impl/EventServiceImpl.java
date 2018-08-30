@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk.service.impl;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.EventService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
@@ -39,11 +40,14 @@ public class EventServiceImpl extends AbstractService implements EventService {
     private static final String EN_EVENT = "event";
 
     private final EventsAdaptor eventsAdaptor;
-    
-    public EventServiceImpl(EventsAdaptor eventsAdaptor) {
+
+    public EventServiceImpl(
+            ServicesFactory servicesFactory,
+            EventsAdaptor eventsAdaptor) {
+        super(servicesFactory);
         this.eventsAdaptor = eventsAdaptor;
     }
-    
+
     @Override
     public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size) {
         QueryContext<EventsPage> cxt = createQueryContext(EN_EVENT);

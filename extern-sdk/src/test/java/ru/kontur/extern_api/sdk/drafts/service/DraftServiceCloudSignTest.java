@@ -118,7 +118,7 @@ public class DraftServiceCloudSignTest {
         Assert.assertTrue(signedDraft.getSignedDocuments().isEmpty());
     }
 
-    //    @Test
+    @Test
     public void cloudSignMethodWithSupplierShouldSignDraft() throws Exception {
 
         String draftId = UUID.randomUUID().toString();

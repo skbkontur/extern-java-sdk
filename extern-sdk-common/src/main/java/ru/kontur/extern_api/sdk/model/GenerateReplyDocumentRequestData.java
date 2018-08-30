@@ -32,7 +32,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class GenerateReplyDocumentRequestData {
 
-    @SerializedName("certificate-base64")
     private String certificateBase64 = null;
 
     public GenerateReplyDocumentRequestData certificateBase64(String certificateBase64) {

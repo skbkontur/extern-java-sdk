@@ -28,7 +28,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 public class NoFail<R> implements Query<R> {
     private Query<R> query;
-
     public NoFail(Query<R> query) {
         this.query = query;
     }

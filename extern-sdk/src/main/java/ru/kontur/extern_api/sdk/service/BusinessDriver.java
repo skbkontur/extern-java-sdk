@@ -51,17 +51,17 @@ public class BusinessDriver {
         this.engine = engine;
     }
 
-    public QueryContext<List<Docflow>> sendDocument(File file, Sender sender, Recipient recipient,
+    public QueryContext<Docflow> sendDocument(File file, Sender sender, Recipient recipient,
         Organization organization) throws InterruptedException, ExecutionException {
         return sendDocument(new File[]{file}, sender, recipient, organization);
     }
 
-    public QueryContext<List<Docflow>> sendDocument(File[] files, Sender sender, Recipient recipient, Organization organization) throws InterruptedException, ExecutionException {
+    public QueryContext<Docflow> sendDocument(File[] files, Sender sender, Recipient recipient, Organization organization) throws InterruptedException, ExecutionException {
         DraftService draft = engine.getDraftService();
         // получаем сертификат подписанта
         QueryContext<byte[]> x509DerCxt = engine.getCryptoProvider().getSignerCertificate(new QueryContext<byte[]>().setThumbprint(sender.getThumbprint()));
         if (x509DerCxt.isFail()) {
-            return new QueryContext<List<Docflow>>().setServiceError(x509DerCxt);
+            return new QueryContext<Docflow>().setServiceError(x509DerCxt);
         }
         sender.setCertificate(IOUtil.encodeBase64(x509DerCxt.get()));
         // запрос на создание черновика

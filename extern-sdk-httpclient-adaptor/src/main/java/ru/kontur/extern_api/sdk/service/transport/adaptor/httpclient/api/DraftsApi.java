@@ -191,10 +191,10 @@ public class DraftsApi extends RestApi {
     @Path("/v1/{accountId}/drafts/{draftId}/send")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<List<Docflow>> send(@PathParam("accountId") String accountId,
+    public ApiResponse<Docflow> send(@PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId, @QueryParam("deferred") boolean deferred,
             @QueryParam("force") boolean force) throws ApiException {
-        return invoke("send", null, new TypeToken<List<Docflow>>() {
+        return invoke("send", null, new TypeToken<Docflow>() {
         }.getType(), accountId, draftId, deferred, force);
     }
 
@@ -309,7 +309,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;String&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> getDecryptedDocumentContent(@PathParam("accountId") String accountId,
@@ -330,7 +330,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
     @PUT
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Void> updateDecryptedDocumentContent(
@@ -350,7 +350,7 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;String&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content")
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> getEncryptedDocumentContent(@PathParam("accountId") String accountId,

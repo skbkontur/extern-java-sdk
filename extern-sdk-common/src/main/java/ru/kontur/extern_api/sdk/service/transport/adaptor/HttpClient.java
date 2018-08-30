@@ -32,12 +32,32 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
  * @author Aleksey Sukhorukov
  */
 public interface HttpClient {
+
     HttpClient setServiceBaseUri(String uri);
+
     HttpClient acceptAccessToken(String authPrefix, String sessionId);
+
     HttpClient acceptApiKey(String apiKey);
+
     void setConnectWaiting(int millisocond);
+
     void setReadTimeout(int millisocond);
-    HttpClient userAgentProvider(UserAgentProvider userAgentProvider);
-    <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMetod, Map<String, Object> queryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, Type type) throws ApiException;
+
+    HttpClient setUserAgentProvider(UserAgentProvider userAgentProvider);
+
+    UserAgentProvider getUserAgentProvider();
+
+    <T> ApiResponse<T> submitHttpRequest(
+            String httpRequestUri,
+            String httpMetod,
+            Map<String, Object> queryParams,
+            Object body,
+            Map<String, String> headerParams,
+            Map<String, Object> formParams,
+            Type type)
+            throws ApiException;
+
     HttpClient setGson(Gson gson);
+
+    Gson getGson();
 }

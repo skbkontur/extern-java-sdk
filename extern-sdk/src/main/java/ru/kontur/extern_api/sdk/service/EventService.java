@@ -27,7 +27,7 @@ package ru.kontur.extern_api.sdk.service;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * <p>- получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};</p>
  * @author Aleksey Sukhorukov
  */
-public interface EventService extends Providers {
+public interface EventService extends ProviderHolder {
 
     /**
      * <p>GET /v1/events</p>

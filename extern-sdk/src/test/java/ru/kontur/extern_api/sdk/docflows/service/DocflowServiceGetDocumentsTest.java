@@ -71,7 +71,8 @@ public class DocflowServiceGetDocumentsTest {
 
     private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
         "\"filename\": \"string\"," +
-        "\"content-type\": \"string\"}";
+        "\"content-type\": \"string\","
+        +"\"compressed\": true}";
 
     @BeforeClass
     public static void startJetty() throws Exception {

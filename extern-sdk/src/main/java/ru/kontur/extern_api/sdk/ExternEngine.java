@@ -23,21 +23,13 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import org.jetbrains.annotations.NotNull;
-import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_LOAD;
-import static ru.kontur.extern_api.sdk.Messages.C_CONFIG_NOT_FOUND;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
-import static ru.kontur.extern_api.sdk.Messages.UNKNOWN;
+import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
+
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.*;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
-import ru.kontur.extern_api.sdk.provider.auth.EngineAuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.BusinessDriver;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -49,11 +41,12 @@ import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 /**
  * @author Aleksey Sukhorukov
  */
-public class ExternEngine implements AuthenticationListener {
+public class ExternEngine implements AuthenticationListener, ProviderHolderParent<ServicesFactory> {
 
     private Environment env;
 
@@ -75,36 +68,26 @@ public class ExternEngine implements AuthenticationListener {
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
      *
-     * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
+     * @param config содержит конфигурационные параметры для инициализации нового ExternEngine объекта
      * @param servicesFactory ServicesFactory предоставляет проинициализированные сервисы, предоставляющие высокоуровневый доступ к Extern API
      * @see ru.kontur.extern_api.sdk.Configuration
      */
-    public ExternEngine(@NotNull Configuration configuration, @NotNull ServicesFactory servicesFactory) {
+    public ExternEngine(@NotNull Configuration config, @NotNull ServicesFactory servicesFactory) {
         this.servicesFactory = servicesFactory;
         this.env = new Environment();
-        this.env.configuration = configuration;
-        setAccountProvider(configuration);
-        setApiKeyProvider(configuration);
-        if (configuration.getLogin() != null && !configuration.getLogin().isEmpty() && configuration.getPass() != null && !configuration.getPass().isEmpty()) {
+        this.env.configuration = config;
+        setAccountProvider(config);
+        setApiKeyProvider(config);
+        if (!isNullOrEmpty(config.getLogin()) && !isNullOrEmpty(config.getPass())) {
             setAuthenticationProvider(
                 new AuthenticationProviderByPass(
-                    () -> ExternEngine.this.env.configuration.getAuthBaseUri(),
-                    new LoginAndPasswordProvider() {
-                    @Override
-                    public String getLogin() {
-                        return configuration.getLogin();
-                    }
-
-                    @Override
-                    public String getPass() {
-                        return configuration.getPass();
-                    }
-                },
-                        configuration
-                )
+                        config::getAuthBaseUri,
+                        LoginAndPasswordProvider.form(config.getLogin(), config.getPass()),
+                        config
+                ).httpClient(getHttpClient())
             );
         }
-        setServiceBaseUriProvider(configuration::getServiceBaseUri);
+        setServiceBaseUriProvider(config::getServiceBaseUri);
         this.businessDriver = new BusinessDriver(this);
     }
 
@@ -134,24 +117,9 @@ public class ExternEngine implements AuthenticationListener {
         this(configuration, new DefaultServicesFactory());
     }
 
-    private static Configuration loadConfiguration(String path) throws SDKException {
-        try (InputStream is = ExternEngine.class.getResourceAsStream(path)) {
-            if (is == null) {
-                throw new SDKException(Messages.get(C_CONFIG_NOT_FOUND));
-            }
-
-            return new Gson()
-                    .fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
-        }
-        catch (IOException x) {
-            throw new SDKException(Messages.get(C_CONFIG_LOAD), x);
-        }
-        catch (SDKException x) {
-            throw x;
-        }
-        catch (Throwable x) {
-            throw new SDKException(Messages.get(UNKNOWN), x);
-        }
+    private static Configuration loadConfiguration(String path) {
+        return UncheckedSupplier
+                .get(() -> Configuration.load(ExternEngine.class.getResource(path)));
     }
 
     /**
@@ -234,132 +202,9 @@ public class ExternEngine implements AuthenticationListener {
         return servicesFactory.getOrganizationService();
     }
 
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
-     *
-     * @return serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     */
-    public UriProvider getServiceBaseUriProvider() {
-        return servicesFactory.getServiceBaseUriProvider();
-    }
-
-    /**
-     * Устанавливает экземпляр класса, реализующий интерфейс ServiceBaseUriProvider
-     *
-     * @param serviceBaseUriProvider предназначен получения адреса сетевого сервиса Контур Экстерн
-     */
-    public final void setServiceBaseUriProvider(UriProvider serviceBaseUriProvider) {
-        this.servicesFactory.setServiceBaseUriProvider(serviceBaseUriProvider);
-    }
-
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс AuthenticationProvider
-     *
-     * @return AuthenticationProvider предназначен для получения токена аутентификации
-     * @see ru.kontur.extern_api.sdk.provider.AuthenticationProvider
-     */
-    public AuthenticationProvider getAuthenticationProvider() {
-        return this.servicesFactory.getAuthenticationProvider();
-    }
-
-    /**
-     * Устанавливает экземпляр класса, реализующий интерфейс AuthenticationProvider
-     *
-     * @param authenticationProvider предназначен для получения токена аутентификации
-     * @see ru.kontur.extern_api.sdk.provider.AuthenticationProvider
-     */
-    public final void setAuthenticationProvider(@NotNull AuthenticationProvider authenticationProvider) {
-        authenticationProvider.addAuthenticationListener(this);
-        this.servicesFactory.setAuthenticationProvider(new EngineAuthenticationProvider(authenticationProvider, env));
-        authenticationProvider.httpClient(this.getHttpClient());
-    }
-
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс AccountProvider
-     *
-     * @return AccountProvider предназначен для получения учетной записи пользователя
-     * @see ru.kontur.extern_api.sdk.provider.AuthenticationProvider
-     */
-    public AccountProvider getAccountProvider() {
-        return this.servicesFactory.getAccountProvider();
-    }
-
-    /**
-     * Устанавливает экземпляр класса, реализующий интерфейс AccountProvider
-     *
-     * @param accountProvider AccountProvider предназначен для получения учетной записи пользователя
-     * @see ru.kontur.extern_api.sdk.provider.AuthenticationProvider
-     */
-    public final void setAccountProvider(AccountProvider accountProvider) {
-        this.servicesFactory.setAccountProvider(accountProvider);
-    }
-
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс ApiKeyProvider
-     *
-     * @return ApiKeyProvider предназначен для получения идентификатора внешнего сервиса
-     * @see ru.kontur.extern_api.sdk.provider.ApiKeyProvider
-     */
-    public ApiKeyProvider getApiKeyProvider() {
-        return this.servicesFactory.getApiKeyProvider();
-    }
-
-    /**
-     * Устанавливает экземпляр класса, реализующий интерфейс ApiKeyProvider
-     *
-     * @param apiKeyProvider ApiKeyProvider предназначен для получения идентификатора внешнего сервиса
-     * @see ru.kontur.extern_api.sdk.provider.ApiKeyProvider
-     */
-    public final void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
-        this.servicesFactory.setApiKeyProvider(apiKeyProvider);
-    }
-
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс CryptoProvider
-     *
-     * @return CryptoProvider предназначен выполнения криптографических операций
-     * @throws SDKException необрабатываемое исключение генерится в том случае, если криптопровайдер отсутствует
-     * @see ru.kontur.extern_api.sdk.provider.CryptoProvider
-     */
-    public CryptoProvider getCryptoProvider() throws SDKException {
-        if (this.servicesFactory.getCryptoProvider() == null) {
-            throw new SDKException(Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER));
-        }
-        return this.servicesFactory.getCryptoProvider();
-    }
-
-    /**
-     * Устанавливает экземпляр класса, реализующий интерфейс CryptoProvider
-     *
-     * @param cryptoProvider CryptoProvider предназначен выполнения криптографических операций
-     * @see ru.kontur.extern_api.sdk.provider.CryptoProvider
-     */
-    public void setCryptoProvider(CryptoProvider cryptoProvider) {
-        this.servicesFactory.setCryptoProvider(cryptoProvider);
-    }
-
-    public UserAgentProvider getUserAgentProvider() {
-        return servicesFactory.getUserAgentProvider();
-    }
-
-    /**
-     * Возвращает экземпляр класса, реализующий интерфейс {@code UserIPProvider}
-     * @return UserIPProvider предназначен для получения IP адреса отправителя
-     * @see UserIPProvider
-     */
-    public UserIPProvider getUserIPProvider() {
-        return servicesFactory.getUserIPProvider();
-    }
-
-    public void setUserIPProvider(UserIPProvider userIPProvider) {
-        this.servicesFactory.setUserIPProvider(userIPProvider);
-    }
-
-    /**
-     * Больше не используется
-     */
-    @Deprecated
-    public void configureServices() {
+    @Override
+    public ServicesFactory getChildProviderHolder() {
+        return servicesFactory;
     }
 
     @Override

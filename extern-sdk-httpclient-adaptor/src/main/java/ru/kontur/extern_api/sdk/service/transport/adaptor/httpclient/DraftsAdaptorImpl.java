@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CHECK_RESULT_DATA;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOWS;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DRAFT_DOCUMENT;
@@ -284,13 +285,13 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
      * @return List&lt;Docflow&gt;
      */
     @Override
-    public QueryContext<List<Docflow>> send(QueryContext<?> cxt) {
+    public QueryContext<Docflow> send(QueryContext<?> cxt) {
         try {
             if (cxt.isFail()) {
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setResult(
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
                     transport(cxt)
                             .send(
                                     cxt.getAccountProvider().accountId().toString(),
@@ -299,10 +300,10 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                                     cxt.getForce()
                             )
                             .getData(),
-                    DOCFLOWS
+                    DOCFLOW
             );
         } catch (ApiException x) {
-            return new QueryContext<List<Docflow>>(cxt, cxt.getEntityName()).setServiceError(x);
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
         }
     }
 
@@ -458,7 +459,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content
      * <p>
      * Get a decrypted document content
      *
@@ -488,7 +489,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
+     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content
      * <p>
      * Get a decrypted document content
      *
@@ -517,7 +518,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
     }
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
+     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content
      * <p>
      * Get a encrypted document content
      *
@@ -686,7 +687,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getDocumentId().toString(),
                             cxt.getType(),
                             cxt.getVersion(),
-                            cxt.getUsnServiceContractInfo().toJson()
+                            getHttpClient().getGson().toJson(cxt.getUsnServiceContractInfo())
                     );
 
             return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
@@ -716,7 +717,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                             cxt.getDraftId().toString(),
                             cxt.getType(),
                             cxt.getVersion(),
-                            cxt.getUsnServiceContractInfo().toJson()
+                            getHttpClient().getGson().toJson(cxt.getUsnServiceContractInfo())
                     );
 
             return new QueryContext<DraftDocument>(cxt, cxt.getEntityName()).setResult(createAndBuildDeclaration.getData(), DRAFT_DOCUMENT);

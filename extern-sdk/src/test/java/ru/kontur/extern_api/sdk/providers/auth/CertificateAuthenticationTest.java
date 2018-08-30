@@ -52,13 +52,14 @@ import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.Link;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.GsonProvider;
 
 public class CertificateAuthenticationTest {
 
     private static final Header JSON_CONTENT_TYPE = new Header("Content-Type", "application/json");
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = GsonProvider.getGson();
 
     private static ClientAndServer mockServer;
     private AuthenticationProvider auth;
@@ -90,7 +91,7 @@ public class CertificateAuthenticationTest {
     private void createAnswerForInitiation(int code, String body) {
         new MockServerClient(HOST, PORT)
             .when(
-                request().withMethod("POST").withPath("/v5.9/authenticate-by-cert"),
+                request().withMethod("POST").withPath("**/authenticate-by-cert"),
                 exactly(1))
             .respond(response()
                 .withStatusCode(code)
@@ -101,7 +102,7 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForApprove(int code, String body) {
         new MockServerClient(HOST, PORT)
-            .when(request().withMethod("POST").withPath("/v5.9/approve-cert"), exactly(1))
+            .when(request().withMethod("POST").withPath("**/approve-cert"), exactly(1))
             .respond(
                 response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
             );

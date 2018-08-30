@@ -24,8 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>
  * Класс содержит данные, описывающие документ, для отправки.
@@ -37,7 +35,6 @@ public class DocumentDescription {
 
     private String type = null;
     private String filename = null;
-    @SerializedName("content-type")
     private String contentType = null;
 
     public DocumentDescription type(String type) {
@@ -163,3 +160,4 @@ public class DocumentDescription {
         }
     }
 }
+

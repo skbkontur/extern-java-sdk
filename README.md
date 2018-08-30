@@ -1,7 +1,5 @@
 # SDK для работы с API Контур.Экстерна для платформы JVM
 
-[TOC]
-
 ## 1. Назначение
 Предназначен для легкой интеграции внешних систем с [API Контур.Экстерна](https://github.com/skbkontur/extern-api-docs), разработанных для платформы **JVM**. Для этого библиотека предоставляет класс *ExternEngine*, с помощью которого производится передача данных на внешние сервисы СКБ Контур.
 
@@ -15,6 +13,37 @@
     <version>${extern-api-java-sdk.version}</version>
 </dependency>
 ```
+
+#### [Иcпользовать SNAPSHOT версии sdk](https://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
+
+Для использования SNAPSHOT версий sdk нужно разрешить использование **sonatype snapshot repository**.
+Для этого добавьте в ` ~/.m2/settings.xml`
+```xml
+<profiles>
+  <profile>
+     <id>allow-snapshots</id>
+        <activation><activeByDefault>true</activeByDefault></activation>
+     <repositories>
+       <repository>
+         <id>snapshots-repo</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+       </repository>
+     </repositories>
+   </profile>
+</profiles>
+```
+
+Snapshot версии полезно использовать для активной разработки, оперативного исправления багов
+и получения самых свежих обновлений. 
+
+### Версионирование
+
+Информацию самых новых версиях sdk можно найти [здесь](https://github.com/skbkontur/extern-java-sdk/releases) 
+
+Название тега соответствует существующей версии sdk в maven.central или версии snapshot'а в o
+репозитории oss.sonatype
 
 ### Компиляция из исходного кода:
 
@@ -708,7 +737,20 @@
 
 Методы возвращает массив байт подписи для документа.
 
-#### 4.5.11. Методы для создания ответных документов
+#### 4.5.11. Методы для создания ответного документа
+
+- `CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(Document document, String signerX509Base64)`
+Параметры:
+  - document - объект **Document** существующего ДО;
+  - signerX509Base64 - сертификат подписи в кодировке BASE64.
+- `QueryContext<ReplyDocument> generateReply(QueryContext<?> parent)`  
+Должен принимать параметр **QueryContext**, содержащий следующие данные:  
+  - объект **Document** существующего ДО. Для установки необходимо использовать метод **setDocument**;
+  - сертификат отправителя. Для установки в контекст необходимо использовать метод **setCertificate**.
+
+Методы возвращает объект ReplyDocument.
+
+#### 4.5.12. Методы для создания ответных документов
 
 - `CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(Docflow docflow, String signerX509Base64)`
 Параметры:
@@ -721,7 +763,7 @@
 
 Методы возвращает список объектов ReplyDocument.
 
-#### 4.5.12. Методы для отправки ответного документа
+#### 4.5.13. Методы для отправки ответного документа
 
 После создания ответных документов, перед отправкой, необходимо подписать контент документа, содержащийся в поле **content**, и установить подпись в объект **ReplyDocument** с помощью метода **setSignature**. Метод **setSignature** на вход получает массив байт подписи в формате PKCS#7 в DER-кодировке.    
 
@@ -734,7 +776,7 @@
 
 Методы возвращает структуру данных Docflow.
 
-#### 4.5.13. Методы для отправки ответных документов
+#### 4.5.14. Методы для отправки ответных документов
 
 После создания ответных документов, перед отправкой, необходимо подписать контент документа, содержащийся в поле **content**, и установить подпись в объект **ReplyDocument** с помощью метода **setSignature**. Метод **setSignature** на вход получает массив байт подписи в формате PKCS#7 в DER-кодировке.    
 
@@ -745,9 +787,9 @@
 Должен принимать параметр **QueryContext**, содержащий следующие данные:  
   - объект **List<ReplyDocument>**. Для установки необходимо использовать метод **setReplyDocuments**.  
 
-### 4.5. Сервис для работы с лентой событий
+### 4.6. Сервис для работы с лентой событий
 
-#### 4.5.1. Методы для постраничного получения списка событий
+#### 4.6.1. Методы для постраничного получения списка событий
 
 Все события упорядочены по возрастанию идентификатора события, который представляет из себя монотонно возрастающую функцию по времени наступления события.
 

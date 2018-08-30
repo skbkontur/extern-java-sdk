@@ -50,11 +50,8 @@ import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -159,7 +156,9 @@ public class CertificateServiceGetCertificateListTest {
             "\"is-valid\": true," +
             "\"is-cloud\": true," +
             "\"is-qualified\": true," +
-            "\"content\": \"string\"}]" +
+            "\"content\": \"string\","  +
+            "\"expired-at\":\"2005-08-09T18:31:42\"}"
+                + "]" +
             "}");
         //
         CertificateList certificateList = engine.getCertificateService()
@@ -182,7 +181,8 @@ public class CertificateServiceGetCertificateListTest {
             "\"is-valid\": true," +
             "\"is-cloud\": true," +
             "\"is-qualified\": true," +
-            "\"content\": \"string\"}]" +
+            "\"content\": \"string\"," +
+            "\"expired-at\":\"2005-08-09T18:31:42\"}]" +
             "}");
         try {
             CertificateList certificateList = engine.getCertificateService()

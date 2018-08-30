@@ -50,6 +50,7 @@ import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
@@ -65,7 +66,7 @@ public class DocflowServiceLookupDescriptionTest {
 
     private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\","
         + "\"filename\": \"string\","
-        + "\"content-type\": \"string\"}";
+        + "\"content-type\": \"string\", \"compressed\": true}";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -146,7 +147,7 @@ public class DocflowServiceLookupDescriptionTest {
         QueryContext<Docflow> queryContext = new QueryContext<>();
         queryContext.setDocflowId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
-        QueryContext<DocumentDescription> documentDescriptionQueryContext = engine
+        QueryContext<DocflowDocumentDescription> documentDescriptionQueryContext = engine
             .getDocflowService()
             .lookupDescription(queryContext);
         assertNull("documentDescription must be null!", documentDescriptionQueryContext.get());
@@ -155,14 +156,14 @@ public class DocflowServiceLookupDescriptionTest {
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
 
-    private DocumentDescription getDocumentDescription() {
+    private DocflowDocumentDescription getDocumentDescription() {
         QueryContext<Docflow> queryContext = new QueryContext<>();
         queryContext.setDocflowId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         return engine.getDocflowService().lookupDescription(queryContext).get();
     }
 
-    private DocumentDescription getDocumentDescriptionAsync() {
+    private DocflowDocumentDescription getDocumentDescriptionAsync() {
         try {
             return engine.getDocflowService()
                 .lookupDescriptionAsync(StandardValues.ID, StandardValues.ID)

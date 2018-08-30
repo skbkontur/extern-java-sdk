@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
@@ -32,7 +31,7 @@ import ru.kontur.extern_api.sdk.model.Link;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -45,7 +44,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * @see QueryContext
  * @author Aleksey Sukhorukov
  */
-public interface AccountService extends Providers {
+public interface AccountService extends ProviderHolder {
 
     /**
      * <p>GET /</p>

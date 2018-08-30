@@ -40,6 +40,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import ru.kontur.extern_api.sdk.PublicDateFormat;
+import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  * @author alexs
@@ -62,16 +65,15 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
+    private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
 
-    private static final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
+    private final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
 
-    private static final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
-
-    private String userAgent;
     private int connectTimeout;
     private int readTimeout;
     private Gson json;
     private boolean keepAlive;
+    private UserAgentProvider userAgentProvider;
 
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
@@ -84,8 +86,12 @@ public class HttpClientImpl {
         return this;
     }
 
-    public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+    public void setUserAgentProvider(UserAgentProvider userAgentProvider) {
+        this.userAgentProvider = userAgentProvider;
+    }
+
+    public UserAgentProvider getUserAgentProvider() {
+        return userAgentProvider;
     }
 
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
@@ -135,6 +141,10 @@ public class HttpClientImpl {
         return this;
     }
 
+    public Gson getJson() {
+        return json;
+    }
+
     public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod,
             Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
             Type type) throws HttpClientException {
@@ -147,7 +157,7 @@ public class HttpClientImpl {
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
             headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
-            headerParams.putIfAbsent(USER_AGENT, userAgent);
+            headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
 
             headerParams.forEach(connect::setRequestProperty);
 
@@ -221,9 +231,8 @@ public class HttpClientImpl {
 
 
             if (responseCode >= 200 && responseCode < 300) {
-                T deserialize = deserialize(response, type);
                 return new ApiResponse<>(responseCode, responseMessage, responseHeaders,
-                        deserialize);
+                        deserialize(response, type));
             } else if (responseCode >= 300 && responseCode < 400) {
                 // process redirect
                 String redirectToUrl = connect.getHeaderField("Location");
@@ -248,10 +257,15 @@ public class HttpClientImpl {
     private String headersToString(Map<String, List<String>> headers) {
         return headers.entrySet().stream()
                 .filter(e -> e.getKey() != null)
-                .map(e -> String.format(
-                        "%s: %s",
-                        e.getKey(),
-                        e.getValue().stream().reduce((s1, s2) -> s1 + "; " + s2).orElse("")))
+                .map(e -> {
+                    List<String> value = Optional.ofNullable(e.getValue())
+                            .orElse(Collections.emptyList());
+
+                    return String.format(
+                            "%s: %s",
+                            e.getKey(),
+                            value.stream().reduce((s1, s2) -> s1 + "; " + s2).orElse(""));
+                })
                 .reduce((s, s2) -> s + "\n" + s2)
                 .orElse("");
 
@@ -272,11 +286,6 @@ public class HttpClientImpl {
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {
         if (response.getBody() == null || returnType == null) {
             return null;
-        }
-
-        if ("byte[]".equals(returnType.toString())) {
-            // Handle binary response (byte array).
-            return (T) response.getBody();
         }
 
         MediaType contentType =
@@ -365,7 +374,7 @@ public class HttpClientImpl {
         if (param == null) {
             return "";
         } else if (param instanceof Date) {
-            return HttpClientUtils.formatDatetime((Date) param);
+            return PublicDateFormat.formatDatetime((Date) param);
         } else if (param instanceof Collection) {
             StringBuilder b = new StringBuilder();
             ((Collection<?>) param).forEach((o) -> {
@@ -479,7 +488,7 @@ public class HttpClientImpl {
             if (returnType.equals(String.class)) {
                 return (T) body;
             } else if (returnType.equals(Date.class)) {
-                return (T) HttpClientUtils.parseDateTime(body);
+                return (T) PublicDateFormat.parseDateTime(body);
             } else {
                 throw (e);
             }

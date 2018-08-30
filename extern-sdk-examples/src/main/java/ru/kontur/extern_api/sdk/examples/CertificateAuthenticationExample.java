@@ -107,6 +107,8 @@ public class CertificateAuthenticationExample {
 
         // теперь можно использовать engine для дальнейшей работы
         QueryContext<AccountList> cxt = new QueryContext<>();
+
+
         cxt.setAccountId(UUID.fromString(properties.getProperty("account.id")));
         QueryContext<AccountList> queryContext = engine.getAccountService()
                 .acquireAccounts(cxt);

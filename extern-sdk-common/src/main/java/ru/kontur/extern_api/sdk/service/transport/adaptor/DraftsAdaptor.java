@@ -99,7 +99,7 @@ public interface DraftsAdaptor {
      * @param cxt a context(required: draftId)
      * @return a context with {@code List<Docflow>}
      */
-    QueryContext<List<Docflow>> send(QueryContext<?> cxt);
+    QueryContext<Docflow> send(QueryContext<?> cxt);
 
     /**
      * {@code DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}}

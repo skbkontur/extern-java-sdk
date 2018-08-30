@@ -5,19 +5,53 @@ import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
 public class StatReport extends DocflowDescription {
 
+    private FormVersion formVersion;
+
+    private String recipient;
+
+    private String okpo;
+
+    private String okud;
+
     private Date periodBegin;
 
     private Date periodEnd;
 
     private int periodCode;
 
-    private String recepient;
-
-    private String okpo;
-
-    private String okud;
-
     private int correctionNumber;
+
+    public FormVersion getFormVersion() {
+        return formVersion;
+    }
+
+    public void setFormVersion(FormVersion formVersion) {
+        this.formVersion = formVersion;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getOkpo() {
+        return okpo;
+    }
+
+    public void setOkpo(String okpo) {
+        this.okpo = okpo;
+    }
+
+    public String getOkud() {
+        return okud;
+    }
+
+    public void setOkud(String okud) {
+        this.okud = okud;
+    }
 
     public Date getPeriodBegin() {
         return periodBegin;
@@ -41,30 +75,6 @@ public class StatReport extends DocflowDescription {
 
     public void setPeriodCode(int periodCode) {
         this.periodCode = periodCode;
-    }
-
-    public String getRecepient() {
-        return recepient;
-    }
-
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
-    }
-
-    public String getOkpo() {
-        return okpo;
-    }
-
-    public void setOkpo(String okpo) {
-        this.okpo = okpo;
-    }
-
-    public String getOkud() {
-        return okud;
-    }
-
-    public void setOkud(String okud) {
-        this.okud = okud;
     }
 
     public int getCorrectionNumber() {

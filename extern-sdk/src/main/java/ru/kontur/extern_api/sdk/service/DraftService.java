@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.Providers;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
@@ -87,7 +87,7 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  *
  * @author Aleksey Sukhorukov
  */
-public interface DraftService extends Providers {
+public interface DraftService extends ProviderHolder {
 
     /**
      * <p>POST /v1/{accountId}/drafts</p>
@@ -258,7 +258,7 @@ public interface DraftService extends Providers {
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<QueryContext<List<Docflow>>> sendAsync(String draftId);
+    CompletableFuture<QueryContext<Docflow>> sendAsync(String draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/send</p>
@@ -270,7 +270,7 @@ public interface DraftService extends Providers {
      * @return список документооборотов
      * @see Docflow
      */
-    QueryContext<List<Docflow>> send(QueryContext<?> cxt);
+    QueryContext<Docflow> send(QueryContext<?> cxt);
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/{draftId}/documents/{documentId}</p>
@@ -413,7 +413,6 @@ public interface DraftService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод получения расшифрованного контента документа
      *
      * @param cxt контекст. Должен содержать следующие данные:
@@ -426,7 +425,6 @@ public interface DraftService extends Providers {
     QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * <p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Асинхронный метод обновления незашифрованного контента документа
      *
      * @param draftId идентификатор черновика
@@ -438,7 +436,6 @@ public interface DraftService extends Providers {
             String documentId, byte[] content);
 
     /**
-     * <p>PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted</p>
      * Синхронный метод обновления незашифрованного контента документа
      *
      * @param cxt контекст. Должен содержать следующие данные:
@@ -453,7 +450,6 @@ public interface DraftService extends Providers {
     QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Асинхронный метод получения зашифрованного контента
      *
      * @param draftId идентификатор черновика
@@ -464,7 +460,6 @@ public interface DraftService extends Providers {
             String documentId);
 
     /**
-     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted</p>
      * Синхронный метод получения зашифрованного контента
      *
      * @param cxt контекст. Должен содержать следующие данные:
