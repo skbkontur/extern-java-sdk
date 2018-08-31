@@ -64,8 +64,7 @@ public class DraftsApi extends RestApi {
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Draft> createDraft(@PathParam("accountId") String accountId,
             DraftMeta clientInfo) throws ApiException {
-        return invoke("createDraft", clientInfo, new TypeToken<Draft>() {
-        }.getType(), accountId);
+        return invoke("createDraft", clientInfo, Draft.class, accountId);
     }
 
     /**

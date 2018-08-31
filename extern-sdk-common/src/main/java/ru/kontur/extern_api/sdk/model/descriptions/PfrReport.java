@@ -25,15 +25,29 @@ package ru.kontur.extern_api.sdk.model.descriptions;
 
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
-public class Fns534Ion extends DocflowDescription {
+public class PfrReport extends DocflowDescription {
+
+    private String registrationNumber;
+
+    private String cu;
 
     private FormVersion formVersion;
 
-    private String recepient;
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
 
-    private String finalRecepient;
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
 
-    private String serviceCode;
+    public String getCu() {
+        return cu;
+    }
+
+    public void setCu(String cu) {
+        this.cu = cu;
+    }
 
     public FormVersion getFormVersion() {
         return formVersion;
@@ -41,29 +55,5 @@ public class Fns534Ion extends DocflowDescription {
 
     public void setFormVersion(FormVersion formVersion) {
         this.formVersion = formVersion;
-    }
-
-    public String getRecepient() {
-        return recepient;
-    }
-
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
-    }
-
-    public String getFinalRecepient() {
-        return finalRecepient;
-    }
-
-    public void setFinalRecepient(String finalRecepient) {
-        this.finalRecepient = finalRecepient;
-    }
-
-    public String getServiceCode() {
-        return serviceCode;
-    }
-
-    public void setServiceCode(String serviceCode) {
-        this.serviceCode = serviceCode;
     }
 }

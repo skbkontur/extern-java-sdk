@@ -23,47 +23,58 @@
 
 package ru.kontur.extern_api.sdk.model.descriptions;
 
+import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.DocflowDescription;
 
-public class Fns534Ion extends DocflowDescription {
+public class PfrLetter extends DocflowDescription {
 
-    private FormVersion formVersion;
+    private String registrationNumber;
 
-    private String recepient;
+    private String cu;
 
-    private String finalRecepient;
+    private String subject;
 
-    private String serviceCode;
+    private String formType;
 
-    public FormVersion getFormVersion() {
-        return formVersion;
+    private UUID originDocflowId;
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public void setFormVersion(FormVersion formVersion) {
-        this.formVersion = formVersion;
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
     }
 
-    public String getRecepient() {
-        return recepient;
+    public String getCu() {
+        return cu;
     }
 
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
+    public void setCu(String cu) {
+        this.cu = cu;
     }
 
-    public String getFinalRecepient() {
-        return finalRecepient;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setFinalRecepient(String finalRecepient) {
-        this.finalRecepient = finalRecepient;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public String getServiceCode() {
-        return serviceCode;
+    public String getFormType() {
+        return formType;
     }
 
-    public void setServiceCode(String serviceCode) {
-        this.serviceCode = serviceCode;
+    public void setFormType(String formType) {
+        this.formType = formType;
+    }
+
+    public UUID getOriginDocflowId() {
+        return originDocflowId;
+    }
+
+    public void setOriginDocflowId(UUID originDocflowId) {
+        this.originDocflowId = originDocflowId;
     }
 }

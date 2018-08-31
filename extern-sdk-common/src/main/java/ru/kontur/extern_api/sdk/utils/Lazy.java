@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Threadsafe lazy initializer
+ * Thread safe lazy initializer.
  * @param <T>
  */
 public class Lazy<T> implements Supplier<T> {
@@ -40,6 +40,7 @@ public class Lazy<T> implements Supplier<T> {
     private final Supplier<T> supplier;
 
     private T instance;
+    private RuntimeException error;
 
     private Lazy(Supplier<T> supplier) {
         this.lock = new Object();
@@ -48,10 +49,19 @@ public class Lazy<T> implements Supplier<T> {
 
     @Override
     public T get() {
+
+        if (error != null)
+            throw new PreviouslyCaughtError(error);
+
         if (instance == null) {
             synchronized (lock) {
                 if (instance == null) {
-                    instance = supplier.get();
+                    try {
+                        instance = supplier.get();
+                    } catch (RuntimeException e) {
+                        error = e;
+                        throw e;
+                    }
                 }
             }
         }

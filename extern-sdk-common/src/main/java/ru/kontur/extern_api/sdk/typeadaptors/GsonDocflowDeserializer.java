@@ -37,7 +37,7 @@ public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
         Docflow df = new Docflow();
         df.setType(deserialize(obj, "type", DocflowType.class, context));
         Optional.ofNullable(df.getType())
-                .map(type -> deserialize(obj, "description", type.getType(), context))
+                .map(type -> deserialize(obj, "description", type.getDescriptionType(), context))
                 .ifPresent(df::setDescription);
         df.setId(deserialize(obj, "id", UUID.class, context));
         df.setStatus(deserialize(obj, "status", DocflowStatus.class, context));
