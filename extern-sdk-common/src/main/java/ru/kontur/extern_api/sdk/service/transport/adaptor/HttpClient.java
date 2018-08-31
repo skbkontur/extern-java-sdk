@@ -39,9 +39,9 @@ public interface HttpClient {
 
     HttpClient acceptApiKey(String apiKey);
 
-    void setConnectWaiting(int millisocond);
+    void setConnectWaiting(int millisecond);
 
-    void setReadTimeout(int millisocond);
+    void setReadTimeout(int millisecond);
 
     HttpClient setUserAgentProvider(UserAgentProvider userAgentProvider);
 
@@ -49,7 +49,7 @@ public interface HttpClient {
 
     <T> ApiResponse<T> submitHttpRequest(
             String httpRequestUri,
-            String httpMetod,
+            String httpMethod,
             Map<String, Object> queryParams,
             Object body,
             Map<String, String> headerParams,

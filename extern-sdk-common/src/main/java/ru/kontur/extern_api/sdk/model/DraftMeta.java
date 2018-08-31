@@ -35,11 +35,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class DraftMeta {
 
-    @SerializedName("sender")
     private Sender sender;
-    @SerializedName("recipient")
     private Recipient recipient;
-    @SerializedName("payer")
     private Organization payer;
 
     public DraftMeta() {

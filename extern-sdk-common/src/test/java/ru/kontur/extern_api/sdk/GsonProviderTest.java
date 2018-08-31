@@ -35,7 +35,7 @@ public class GsonProviderTest {
         System.out.println(gson.toJson(df));
 
         Assert.assertEquals(DocflowStatus.DELIVERED, df.getStatus());
-        Assert.assertEquals(DocflowType.FNS_534_DEMAND, df.getType());
+        Assert.assertEquals(DocflowType.FNS534_DEMAND, df.getType());
         Assert.assertEquals(Fns534Demand.class, df.getDescription().getClass());
 
         Fns534Demand description = (Fns534Demand) df.getDescription();

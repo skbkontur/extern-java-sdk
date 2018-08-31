@@ -28,7 +28,6 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.Map;
 import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.ServiceLogger;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
@@ -77,24 +76,26 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @Override
-    public <T> ApiResponse<T> submitHttpRequest(String path, String httpMetod,
-        Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
-        Map<String, Object> formParams, Type type) throws ApiException {
+    public <T> ApiResponse<T> submitHttpRequest(
+            String path, String httpMethod,
+            Map<String, Object> queryParams,
+            Object body,
+            Map<String, String> headerParams,
+            Map<String, Object> formParams,
+            Type type) throws ApiException {
         try {
             ru.kontur.extern_api.sdk.service.transport.httpclient.invoker.ApiResponse<T> resp
-                = httpClient
-                .sendHttpRequest(path, httpMetod, queryParams, body, headerParams, type);
-            Object logHttpRequest = System.getProperties().get("ru.extern_api.logHttpRequest");
-            if (logHttpRequest != null && logHttpRequest.equals("true")) {
-                ServiceLogger.getInstance()
-                    .logHttpRequest(path, httpMetod, queryParams, body, headerParams, formParams,
-                        type,
-                        resp.getStatusCode(), resp.getHeaders(), resp.getData());
-            }
+                    = httpClient
+                    .sendHttpRequest(path, httpMethod, queryParams, body, headerParams, type);
+
             return new ApiResponse<>(resp.getStatusCode(), resp.getHeaders(), resp.getData());
         } catch (HttpClientException x) {
-            throw new ApiException(x.getMessage(), x, x.getCode(), x.getResponseHeaders(),
-                x.getResponseBody());
+            throw new ApiException(
+                    x.getMessage(),
+                    x,
+                    x.getCode(),
+                    x.getResponseHeaders(),
+                    x.getResponseBody());
         }
     }
 
@@ -110,12 +111,12 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @Override
-    public void setConnectWaiting(int millisocond) {
-        httpClient.setConnectTimeout(millisocond);
+    public void setConnectWaiting(int millisecond) {
+        httpClient.setConnectTimeout(millisecond);
     }
 
     @Override
-    public void setReadTimeout(int millisocond) {
-        httpClient.setReadTimeout(millisocond);
+    public void setReadTimeout(int millisecond) {
+        httpClient.setReadTimeout(millisecond);
     }
 }

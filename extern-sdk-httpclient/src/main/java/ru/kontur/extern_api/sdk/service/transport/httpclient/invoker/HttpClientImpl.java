@@ -65,9 +65,9 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
-    private final ThreadLocal<Map<String, String>> DEFAULT_HEADER_PARAMS = new ThreadLocal<>();
+    private final Map<String, String> defaultHeaderParams = new ConcurrentHashMap<>();
 
-    private final ThreadLocal<Supplier<String>> SERVICE_BASE_URI = new ThreadLocal<>();
+    private String serviceBaseUri;
 
     private int connectTimeout;
     private int readTimeout;
@@ -95,17 +95,12 @@ public class HttpClientImpl {
     }
 
     public HttpClientImpl setServiceBaseUri(String serviceBaseUri) {
-        SERVICE_BASE_URI.set(() -> serviceBaseUri);
+        this.serviceBaseUri = serviceBaseUri;
         return this;
     }
 
     private Map<String, String> getDefaultHeaderParams() {
-        Map<String, String> defaultHeaderParams = DEFAULT_HEADER_PARAMS.get();
-        if (defaultHeaderParams == null) {
-            defaultHeaderParams = new ConcurrentHashMap<>();
-            DEFAULT_HEADER_PARAMS.set(defaultHeaderParams);
-        }
-        return defaultHeaderParams;
+        return this.defaultHeaderParams;
     }
 
     public HttpClientImpl acceptAccessToken(String sessionId) {
@@ -322,7 +317,7 @@ public class HttpClientImpl {
             throws MalformedURLException {
         final StringBuilder request = new StringBuilder();
 
-        request.append(SERVICE_BASE_URI.get().get()).append(path);
+        request.append(serviceBaseUri).append(path);
 
         if (queryParams != null && !queryParams.isEmpty()) {
             // support (constant) query string in `path`, e.g. "/posts?draft=1"
