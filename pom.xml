@@ -210,7 +210,6 @@
                                 <artifactSet>
                                     <includes>
                                         <include>ru.argosgrp.*</include>
-                                        <include>ru.kontur.*</include>
                                     </includes>
                                 </artifactSet>
                             </configuration>
