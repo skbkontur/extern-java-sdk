@@ -267,14 +267,13 @@ public class DraftsApi extends RestApi {
      * @return ApiResponse&lt;String&gt;
      * @throws ApiException transport exception
      */
-    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
+    @Path("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/print")
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<String> printDocument(@PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
             throws ApiException {
-        return invoke("printDocument", null, new TypeToken<String>() {
-        }.getType(), accountId, draftId, documentId);
+        return invoke("printDocument", null, String.class, accountId, draftId, documentId);
     }
 
     /**
