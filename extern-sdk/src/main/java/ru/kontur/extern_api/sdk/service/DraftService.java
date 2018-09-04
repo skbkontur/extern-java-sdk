@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**
@@ -84,8 +83,6 @@ import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
  * <p>- метод для подтверждения запроса на облачную подпись {@link DraftService#cloudSignConfirmAsync}
  * | {@link DraftService#cloudSignConfirm};</p>
  * <p>- метод для облачного подписания документов черновика {@link DraftService#cloudSignAsync}.</p>
- *
- * @author Aleksey Sukhorukov
  */
 public interface DraftService extends ProviderHolder {
 

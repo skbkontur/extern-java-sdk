@@ -24,28 +24,17 @@
 
 package ru.kontur.extern_api.sdk.provider;
 
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
-/**
- * @author Aleksey Sukhorukov
- */
 public interface AuthenticationProvider {
+
+    String DEFAULT_AUTH_PREFIX = "auth.sid ";
 
     QueryContext<String> sessionId();
 
     String authPrefix();
 
     AuthenticationProvider httpClient(HttpClient httpClient);
-    
-    void addAuthenticationListener(AuthenticationListener authListener);
-
-    void removeAuthenticationListener(AuthenticationListener authListener);
-
-    void raiseUnauthenticated(ServiceError x);
-
-    String userIP();
 }

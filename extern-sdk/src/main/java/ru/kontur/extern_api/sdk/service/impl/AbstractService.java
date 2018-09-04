@@ -24,17 +24,17 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
-public class AbstractService implements ProviderHolderParent<ServicesFactory> {
+public class AbstractService implements ProviderHolderParent<ProviderHolder> {
 
-    private final ServicesFactory servicesFactory;
+    private final ProviderHolder providerHolder;
 
-    public AbstractService(ServicesFactory servicesFactory) {
-        this.servicesFactory = servicesFactory;
+    public AbstractService(ProviderHolder providerHolder) {
+        this.providerHolder = providerHolder;
     }
 
     protected <T> QueryContext<T> createQueryContext(String entityName) {
@@ -72,7 +72,7 @@ public class AbstractService implements ProviderHolderParent<ServicesFactory> {
     }
 
     @Override
-    public ServicesFactory getChildProviderHolder() {
-        return servicesFactory;
+    public ProviderHolder getChildProviderHolder() {
+        return providerHolder;
     }
 }

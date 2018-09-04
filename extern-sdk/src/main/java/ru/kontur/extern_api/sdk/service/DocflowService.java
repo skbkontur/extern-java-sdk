@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**

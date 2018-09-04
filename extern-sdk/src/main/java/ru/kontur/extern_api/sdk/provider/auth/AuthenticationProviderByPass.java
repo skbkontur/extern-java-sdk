@@ -23,24 +23,25 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import java.util.logging.Logger;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.SESSION_ID;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
+import java.util.logging.Logger;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
  * @author Aleksey Sukhorukov
  */
-public class AuthenticationProviderByPass extends AuthenticationProviderAbstract {
+public class AuthenticationProviderByPass implements AuthenticationProvider {
 
     private final String authPrefix;
     private ApiKeyProvider apiKeyProvider;
@@ -73,7 +74,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
         this.httpClient = httpClient;
         return this;
     }
-    
+
     public void setApiKeyProvider(ApiKeyProvider apiKeyProvider) {
         this.apiKeyProvider = apiKeyProvider;
     }
@@ -140,15 +141,14 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
                 }
             };
 
-            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
+            ApiResponse<ResponseSid> resp = httpClient
+                    .submitHttpRequest("/authenticate-by-pass", "POST", queryParams, pass,
+                            headerParams, Collections.emptyMap(), ResponseSid.class);
 
             cxt.setResult(resp.getData().getSid(), SESSION_ID);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             cxt.setServiceError(x);
         }
-
-        fireAuthenticationEvent(cxt);
 
         return cxt;
     }

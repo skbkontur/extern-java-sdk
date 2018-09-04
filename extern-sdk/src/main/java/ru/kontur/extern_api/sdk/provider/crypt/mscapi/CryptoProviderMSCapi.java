@@ -33,7 +33,7 @@ import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 
 /**

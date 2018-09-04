@@ -25,7 +25,7 @@ package ru.kontur.extern_api.sdk.providers.auth;
 
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 public class MockCryptoProvider implements CryptoProvider {
 

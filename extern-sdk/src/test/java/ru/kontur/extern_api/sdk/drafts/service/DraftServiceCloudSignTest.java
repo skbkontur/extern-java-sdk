@@ -37,10 +37,11 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 public class DraftServiceCloudSignTest {
 
@@ -54,12 +55,18 @@ public class DraftServiceCloudSignTest {
     public static void startMock() {
         mockServer = ClientAndServer.startClientAndServer(PORT);
 
-        ExternEngine engine = new ExternEngine();
-        engine.setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT);
-        engine.setAccountProvider(UUID::randomUUID);
-        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
+        ExternEngine engine = ExternEngineBuilder
+                .createExternEngine()
+                .authProvider(new AuthenticationProviderAdaptor())
+                .apiKey(UUID.randomUUID().toString())
+                .doNotUseCryptoProvider()
+                .accountId(UUID.randomUUID().toString())
+                .serviceBaseUrl("http://" + HOST + ":" + PORT)
+                .build();
+
         draftService = engine.getDraftService();
+
+
     }
 
     @AfterClass

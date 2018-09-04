@@ -33,10 +33,10 @@ import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
 import ru.kontur.extern_api.sdk.provider.crypt.cloud.CloudCryptoProvider;
 import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 import javax.swing.*;
 import java.io.*;

@@ -23,203 +23,90 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import org.jetbrains.annotations.NotNull;
-import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
-
-import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.provider.*;
-import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
+import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.service.AccountService;
-import ru.kontur.extern_api.sdk.service.BusinessDriver;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
-/**
- * @author Aleksey Sukhorukov
- */
-public class ExternEngine implements AuthenticationListener, ProviderHolderParent<ServicesFactory> {
 
-    private Environment env;
+public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
 
-    private BusinessDriver businessDriver;
+    private final ServicesFactory servicesFactory;
+    private final ProviderHolder providerHolder;
+    private final Configuration configuration;
 
-    private ServicesFactory servicesFactory;
-
-    /**
-     * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
-     */
-    public ExternEngine() {
-        this(new Configuration(), new DefaultServicesFactory());
-    }
-
-    public ExternEngine(@NotNull ServicesFactory servicesFactory) {
-        this(new Configuration(), servicesFactory);
-    }
-
-    /**
-     * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
-     *
-     * @param config содержит конфигурационные параметры для инициализации нового ExternEngine объекта
-     * @param servicesFactory ServicesFactory предоставляет проинициализированные сервисы, предоставляющие высокоуровневый доступ к Extern API
-     * @see ru.kontur.extern_api.sdk.Configuration
-     */
-    public ExternEngine(@NotNull Configuration config, @NotNull ServicesFactory servicesFactory) {
+    public ExternEngine(
+            Configuration configuration,
+            ProviderHolder providerHolder,
+            ServicesFactory servicesFactory) {
         this.servicesFactory = servicesFactory;
-        this.env = new Environment();
-        this.env.configuration = config;
-        setAccountProvider(config);
-        setApiKeyProvider(config);
-        if (!isNullOrEmpty(config.getLogin()) && !isNullOrEmpty(config.getPass())) {
-            setAuthenticationProvider(
-                new AuthenticationProviderByPass(
-                        config::getAuthBaseUri,
-                        LoginAndPasswordProvider.form(config.getLogin(), config.getPass()),
-                        config
-                ).httpClient(getHttpClient())
-            );
-        }
-        setServiceBaseUriProvider(config::getServiceBaseUri);
-        this.businessDriver = new BusinessDriver(this);
+        this.providerHolder = providerHolder;
+        this.configuration = configuration;
     }
 
     /**
-     * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
-     *
-     * @param configPath содержит путь к файлу, содержащий конфигурационные параметры
-     * @throws SDKException непроверяемое исключение может возникнуть при загрузки данных из файла
-     * @see ru.kontur.extern_api.sdk.Configuration
-     * @see ru.kontur.extern_api.sdk.service.SDKException
-     */
-    public ExternEngine(@NotNull String configPath) throws SDKException {
-        // loads config data from the resourse file: extern-sdk-config.json
-        this(loadConfiguration(configPath), new DefaultServicesFactory());
-    }
-
-    /**
-     * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
-     *
-     * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
-     * @throws SDKException непроверяемое исключение может возникнуть при загрузки данных из файла
-     * @see ru.kontur.extern_api.sdk.Configuration
-     * @see ru.kontur.extern_api.sdk.service.SDKException
-     */
-    public ExternEngine(@NotNull Configuration configuration) throws SDKException {
-        // loads config data from the resourse file: extern-sdk-config.json
-        this(configuration, new DefaultServicesFactory());
-    }
-
-    private static Configuration loadConfiguration(String path) {
-        return UncheckedSupplier
-                .get(() -> Configuration.load(ExternEngine.class.getResource(path)));
-    }
-
-    /**
-     * Возвращает окружение среды выполненения
-     *
-     * @return параметры среды выполнения
-     * @see Environment
-     */
-    public Environment getEnvironment() {
-        return env;
-    }
-
-    /**
-     * Возвращает параметры, использующиеся для конфигурации среды выполнения
-     *
      * @return Configuration параметры среды выполненя
-     * @see Configuration
      */
     public Configuration getConfiguration() {
-        return env.configuration;
+        return configuration;
     }
 
     /**
-     * Возвращает экземпляр класса AccountService
-     *
      * @return AccountService сервис предназначен для работы с учетными записями
-     * @see ru.kontur.extern_api.sdk.service.AccountService
      */
     public AccountService getAccountService() {
         return servicesFactory.getAccountService();
     }
 
     /**
-     * Возвращает экземпляр класса AccountService
-     *
      * @return CertificateService сервис предназначен для работы с сертификатами пользователей
-     * @see ru.kontur.extern_api.sdk.service.CertificateService
+     * @see CertificateService
      */
     public CertificateService getCertificateService() {
         return servicesFactory.getCertificateService();
     }
 
     /**
-     * Возвращает экземпляр класса DocflowService
-     *
      * @return DocflowService сервис предназначен для работы с документоборотами
-     * @see ru.kontur.extern_api.sdk.service.DocflowService
+     * @see DocflowService
      */
     public DocflowService getDocflowService() {
         return servicesFactory.getDocflowService();
     }
 
     /**
-     * Возвращает экземпляр класса DraftService
-     *
      * @return DraftService сервис предназначен для работы с черновиками
-     * @see ru.kontur.extern_api.sdk.service.DraftService
+     * @see DraftService
      */
     public DraftService getDraftService() {
         return servicesFactory.getDraftService();
     }
 
     /**
-     * Возвращает экземпляр класса EventService
-     *
-     * @return EventService сервис предназначен для получения ленты соббытий документооборота
-     * @see ru.kontur.extern_api.sdk.service.EventService
+     * @return EventService сервис предназначен для получения ленты событий документооборота
+     * @see EventService
      */
     public EventService getEventService() {
         return servicesFactory.getEventService();
     }
 
     /**
-     * Возвращает экземпляр класса OrganizationService
-     *
      * @return OrganizationService сервис предназначен для управления организациями (CRUD)
-     * @see ru.kontur.extern_api.sdk.service.OrganizationService
+     * @see OrganizationService
      */
     public OrganizationService getOrganizationService() {
         return servicesFactory.getOrganizationService();
     }
 
     @Override
-    public ServicesFactory getChildProviderHolder() {
-        return servicesFactory;
-    }
-
-    @Override
-    public void authenticate(AuthenticationEvent authEvent) {
-        env.accessToken = authEvent.getAuthCxt().isSuccess() ? authEvent.getAuthCxt().get() : null;
-    }
-
-    /**
-     * Возвращает экземпляр класса BusinessDriver.
-     *
-     * @return BusinessDriver класс, предназначенный для выполненения крупных операций. Например отправка документа выполняется с помощью следующих операций: 1)
-     * создание черновика; 2) подпись документа; 3) отправка контента на сервер; 4) проверка; 5) запуск документооборота.
-     */
-    public BusinessDriver getBusinessDriver() {
-        return businessDriver;
+    public ProviderHolder getChildProviderHolder() {
+        return providerHolder;
     }
 
     public HttpClient getHttpClient() {

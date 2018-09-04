@@ -23,35 +23,34 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import ru.argosgrp.cryptoservice.utils.IOUtil;
-import ru.kontur.extern_api.sdk.Messages;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.CredentialProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.ServiceUserIdProvider;
-import ru.kontur.extern_api.sdk.provider.SignatureKeyProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.NOTHING;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.SESSION_ID;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.NOTHING;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SESSION_ID;
+import ru.kontur.extern_api.sdk.provider.CredentialProvider;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.provider.ServiceUserIdProvider;
+import ru.kontur.extern_api.sdk.provider.SignatureKeyProvider;
+import ru.kontur.extern_api.sdk.provider.UriProvider;
 
 /**
  * @author Aleksey Sukhorukov
  */
-public class TrustedAuthentication extends AuthenticationProviderAbstract {
+public class TrustedAuthentication implements AuthenticationProvider {
 
     private static final String EOL = System.getProperty("line.separator", "\r\n");
     private static final String APIKEY = "apikey";
@@ -99,7 +98,8 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
         this.serviceUserIdProvider = serviceUserIdProvider;
     }
 
-    public TrustedAuthentication serviceUserIdProvider(ServiceUserIdProvider serviceUserIdProvider) {
+    public TrustedAuthentication serviceUserIdProvider(
+            ServiceUserIdProvider serviceUserIdProvider) {
         this.serviceUserIdProvider = serviceUserIdProvider;
         return this;
     }
@@ -167,7 +167,8 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
     @Override
     public QueryContext<String> sessionId() {
         if (cryptoProvider == null) {
-            return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth, Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null, null);
+            return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth,
+                    Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null, null);
         }
 
         httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
@@ -187,7 +188,7 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
         this.httpClient = httpClient;
         return this;
     }
-    
+
     public QueryContext<Void> registerExternalServiceId(String serviceUserId, String phone) {
         QueryContext<Void> registerCxt;
 
@@ -206,14 +207,14 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
             Map<String, Object> localVarFormParams = new HashMap<>();
 
-            httpClient.submitHttpRequest("/register-external-service-id", "PUT", queryParams, null, localHeaderParams, localVarFormParams, Object.class);
+            httpClient.submitHttpRequest("/register-external-service-id", "PUT", queryParams, null,
+                    localHeaderParams, localVarFormParams, Object.class);
 
             registerCxt = new QueryContext<Void>().setResult(null, NOTHING);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             registerCxt = new QueryContext<Void>().setServiceError(x);
         }
-        
+
         return registerCxt;
     }
 
@@ -231,8 +232,10 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
             identityData.append(APIKEY).append("=").append(apiKey).append(EOL);
 
             if (credentialProvider != null) {
-                queryParams.put(credentialProvider.getCredential().getName(), credentialProvider.getCredential().getValue());
-                identityData.append(ID).append("=").append(credentialProvider.getCredential().getValue()).append(EOL);
+                queryParams.put(credentialProvider.getCredential().getName(),
+                        credentialProvider.getCredential().getValue());
+                identityData.append(ID).append("=")
+                        .append(credentialProvider.getCredential().getValue()).append(EOL);
             }
 
             queryParams.put(TIMESTAMP, timestamp);
@@ -245,16 +248,19 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
             Map<String, Object> localVarFormParams = new HashMap<>();
 
             QueryContext<byte[]> signature = cryptoProvider.sign(
-                new QueryContext<byte[]>()
-                    .setThumbprint(signatureKeyProvider.getThumbprint())
-                    .setContent(identityData.toString().getBytes())
+                    new QueryContext<byte[]>()
+                            .setThumbprint(signatureKeyProvider.getThumbprint())
+                            .setContent(identityData.toString().getBytes())
             );
 
             if (signature.isFail()) {
                 return new QueryContext<String>().setServiceError(signature);
             }
 
-            ApiResponse<ResponseLink> responseLink = httpClient.submitHttpRequest("/authenticate-by-truster", "POST", queryParams, signature.get(), localHeaderParams, localVarFormParams, ResponseLink.class);
+            ApiResponse<ResponseLink> responseLink = httpClient
+                    .submitHttpRequest("/authenticate-by-truster", "POST", queryParams,
+                            signature.get(), localHeaderParams, localVarFormParams,
+                            ResponseLink.class);
 
             httpClient.setServiceBaseUri("");
 
@@ -264,15 +270,14 @@ public class TrustedAuthentication extends AuthenticationProviderAbstract {
 
             String approveRequest = link.getLink().getHref(); // + "&" + APIKEY + "=" + apiKey;
 
-            ApiResponse<ResponseSid> sid = httpClient.submitHttpRequest(approveRequest, "POST", Collections.emptyMap(), key, localHeaderParams, localVarFormParams, ResponseSid.class);
+            ApiResponse<ResponseSid> sid = httpClient
+                    .submitHttpRequest(approveRequest, "POST", Collections.emptyMap(), key,
+                            localHeaderParams, localVarFormParams, ResponseSid.class);
 
             authCxt = new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
-        }
-        catch (ApiException x) {
+        } catch (ApiException x) {
             authCxt = new QueryContext<String>().setServiceError(x);
         }
-
-        fireAuthenticationEvent(authCxt);
 
         return authCxt;
     }

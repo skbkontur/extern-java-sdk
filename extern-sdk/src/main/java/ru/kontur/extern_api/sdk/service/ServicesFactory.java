@@ -24,20 +24,20 @@
 package ru.kontur.extern_api.sdk.service;
 
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 
-public interface ServicesFactory extends ProviderHolder {
+public interface ServicesFactory {
 
-	AccountService getAccountService();
-    
-	CertificateService getCertificateService();
-    
-	DocflowService getDocflowService();
-    
-	DraftService getDraftService();
-    
-	EventService getEventService();
+    AccountService getAccountService();
+
+    CertificateService getCertificateService();
+
+    DocflowService getDocflowService();
+
+    DraftService getDraftService();
+
+    EventService getEventService();
 
     OrganizationService getOrganizationService();
 

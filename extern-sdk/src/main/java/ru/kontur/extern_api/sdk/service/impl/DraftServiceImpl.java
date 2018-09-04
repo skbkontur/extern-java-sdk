@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
@@ -42,10 +41,10 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**
@@ -58,8 +57,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
 
     private final DraftsAdaptor draftsAdaptor;
 
-    DraftServiceImpl(ServicesFactory servicesFactory, DraftsAdaptor draftsAdaptor) {
-        super(servicesFactory);
+    DraftServiceImpl(ProviderHolder providerHolder, DraftsAdaptor draftsAdaptor) {
+        super(providerHolder);
         this.draftsAdaptor = draftsAdaptor;
     }
 
