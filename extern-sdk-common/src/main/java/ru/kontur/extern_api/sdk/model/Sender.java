@@ -31,13 +31,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Sender {
 
-	@SerializedName("inn")
 	private String inn;
-	@SerializedName("kpp")
 	private String kpp;
-	@SerializedName("certificate")
 	private Certificate certificate;
-	@SerializedName("ipaddress")
 	private String ipaddress;
 
 	private String thumbprint;

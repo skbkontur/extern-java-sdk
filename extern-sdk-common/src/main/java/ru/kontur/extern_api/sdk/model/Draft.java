@@ -40,19 +40,14 @@ import java.util.UUID;
  */
 public class Draft {
 
-    @SerializedName("id")
     private UUID id;
 
-    @SerializedName("docflows")
     private List<Link> docflows = null;
 
-    @SerializedName("documents")
     private List<Link> documents = null;
 
-    @SerializedName("meta")
     private DraftMeta meta = null;
 
-    @SerializedName("status")
     private StatusEnum status = null;
 
     public Draft() {
@@ -181,5 +176,13 @@ public class Draft {
                 return StatusEnum.fromValue(String.valueOf(value));
             }
         }
+    }
+
+    public List<Link> getDocflows() {
+        return docflows;
+    }
+
+    public List<Link> getDocuments() {
+        return documents;
     }
 }

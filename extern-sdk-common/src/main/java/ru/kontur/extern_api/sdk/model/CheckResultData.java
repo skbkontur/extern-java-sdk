@@ -40,9 +40,7 @@ import java.util.Map;
  */
 public class CheckResultData {
 
-    @SerializedName("documents-errors")
     private Map<String, List<CheckError>> documentsErrors = null;
-    @SerializedName("common-errors")
     private List<CheckError> commonErrors = null;
 
     public CheckResultData documentsErrors(Map<String, List<CheckError>> documentsErrors) {
