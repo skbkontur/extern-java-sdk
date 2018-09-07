@@ -80,8 +80,7 @@ public class DraftServiceGetEncryptedDocumentContentTest {
     @BeforeClass
     public static void setUpClass() {
         engine = ExternEngineBuilder.createExternEngine()
-                .authProvider(new AuthenticationProviderAdaptor())
-                .apiKey(UUID.randomUUID().toString())
+                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
                 .doNotUseCryptoProvider()
                 .accountId(UUID.randomUUID().toString())
                 .serviceBaseUrl("http://localhost:8080/drafts")

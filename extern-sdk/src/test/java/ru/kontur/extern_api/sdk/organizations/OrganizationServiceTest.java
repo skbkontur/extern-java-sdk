@@ -96,8 +96,7 @@ public class OrganizationServiceTest {
         accountId = UUID.randomUUID();
 
         ExternEngine engine = ExternEngineBuilder.createExternEngine()
-                .authProvider(new AuthenticationProviderAdaptor())
-                .apiKey(UUID.randomUUID().toString())
+                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
                 .doNotUseCryptoProvider()
                 .accountId(accountId.toString())
                 .serviceBaseUrl("http://" + HOST + ":" + PORT + PATH)

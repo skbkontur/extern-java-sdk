@@ -29,11 +29,16 @@ import static ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider.form;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.CertificateProvider;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
 import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
+import ru.kontur.extern_api.sdk.utils.Certificates;
 
 public final class ConfigurationUtils {
 
@@ -53,7 +58,6 @@ public final class ConfigurationUtils {
     }
 
     public static TrustedAuthentication createTrustedAuth(Configuration configuration) {
-
         String authType = "trusted";
 
         requireParam(configuration::getAuthBaseUri, "auth base uri", authType);
@@ -87,22 +91,38 @@ public final class ConfigurationUtils {
                 .isPresent();
     }
 
-    public static AuthenticationProvider createPasswordAuthProvider(
-            Configuration configuration) {
-
-
+    public static AuthenticationProviderByPass createPasswordAuthProvider(Configuration config) {
         String authType = "password";
 
-        requireParam(configuration::getLogin, "login", authType);
-        requireParam(configuration::getPass, "password", authType);
-        requireParam(configuration::getAuthBaseUri, "auth base uri", authType);
-        requireParam(configuration::getApiKey, "api key", authType);
+        requireParam(config::getLogin, "login", authType);
+        requireParam(config::getPass, "password", authType);
+        requireParam(config::getAuthBaseUri, "auth base uri", authType);
+        requireParam(config::getApiKey, "api key", authType);
 
-        LoginAndPasswordProvider form = form(configuration.getLogin(), configuration.getPass());
+        LoginAndPasswordProvider form = form(config.getLogin(), config.getPass());
 
         return new AuthenticationProviderByPass(
-                configuration::getAuthBaseUri, form, configuration::getApiKey
+                config::getAuthBaseUri, form, config::getApiKey
         );
+    }
+
+    public static CertificateAuthenticationProvider createCertificateAuthProvider(
+            Configuration configuration,
+            CryptoProvider cryptoProvider,
+            byte[] certificate
+    ) {
+        String thumbprint = Certificates.getThumbprint(certificate);
+
+        CertificateProvider certificateProvider = t -> new QueryContext<byte[]>()
+                .setResult(certificate, QueryContext.CONTENT);
+
+        return CertificateAuthenticationProvider
+                .usingCertificate(certificateProvider)
+                .setCryptoProvider(cryptoProvider)
+                .setApiKeyProvider(configuration::getApiKey)
+                .setServiceBaseUriProvider(configuration::getAuthBaseUri)
+                .setSignatureKeyProvider(() -> thumbprint)
+                .buildAuthenticationProvider();
     }
 
     private static void requireParam(Supplier<?> s, String paramName, String authType) {

@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk;
 
 import org.jetbrains.annotations.NotNull;
-
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
@@ -57,13 +56,17 @@ public interface EngineBuilder {
     interface AuthProviderSyntax {
 
         @NotNull
-        ApiKeySyntax authProvider(@NotNull AuthenticationProvider authenticationProvider);
+        MaybeCryptoProviderSyntax authProvider(
+                @NotNull AuthenticationProvider authenticationProvider);
 
         @NotNull
-        ApiKeySyntax passwordAuth(@NotNull String login, @NotNull String password);
+        MaybeCryptoProviderSyntax passwordAuth(@NotNull String login, @NotNull String password);
 
         @NotNull
-        ApiKeySyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials);
+        MaybeCryptoProviderSyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials);
+
+        @NotNull
+        CryptoProviderSyntax certificateAuth(@NotNull byte[] certificatePublicKey);
 
     }
 
@@ -72,6 +75,10 @@ public interface EngineBuilder {
         @NotNull
         AccountSyntax cryptoProvider(@NotNull CryptoProvider cryptoProvider);
 
+    }
+
+    interface MaybeCryptoProviderSyntax extends CryptoProviderSyntax {
+
         @NotNull
         AccountSyntax doNotUseCryptoProvider();
     }
@@ -79,7 +86,7 @@ public interface EngineBuilder {
     interface ApiKeySyntax {
 
         @NotNull
-        CryptoProviderSyntax apiKey(@NotNull String apiKey);
+        AuthProviderSyntax apiKey(@NotNull String apiKey);
     }
 
     interface AccountSyntax {
@@ -89,15 +96,21 @@ public interface EngineBuilder {
 
         @NotNull
         OverrideDefaultsSyntax doNotSetupAccount();
+
+    }
+
+    interface ApiKeyOrAuth extends ApiKeySyntax, AuthProviderSyntax {
+
     }
 
     interface Syntax extends
             OverrideDefaultsSyntax,
             AuthProviderSyntax,
-            CryptoProviderSyntax,
+            MaybeCryptoProviderSyntax,
             ApiKeySyntax,
-            AccountSyntax {
+            AccountSyntax,
+            ApiKeyOrAuth {
+
 
     }
-
 }
