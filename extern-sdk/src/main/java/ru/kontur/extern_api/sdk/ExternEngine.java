@@ -23,12 +23,14 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import org.jetbrains.annotations.NotNull;
 import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
 
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.provider.*;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.BusinessDriver;
@@ -68,8 +70,10 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
      *
-     * @param config содержит конфигурационные параметры для инициализации нового ExternEngine объекта
-     * @param servicesFactory ServicesFactory предоставляет проинициализированные сервисы, предоставляющие высокоуровневый доступ к Extern API
+     * @param config содержит конфигурационные параметры для инициализации нового ExternEngine
+     * объекта
+     * @param servicesFactory ServicesFactory предоставляет проинициализированные сервисы,
+     * предоставляющие высокоуровневый доступ к Extern API
      * @see ru.kontur.extern_api.sdk.Configuration
      */
     public ExternEngine(@NotNull Configuration config, @NotNull ServicesFactory servicesFactory) {
@@ -80,11 +84,11 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
         setApiKeyProvider(config);
         if (!isNullOrEmpty(config.getLogin()) && !isNullOrEmpty(config.getPass())) {
             setAuthenticationProvider(
-                new AuthenticationProviderByPass(
-                        config::getAuthBaseUri,
-                        LoginAndPasswordProvider.form(config.getLogin(), config.getPass()),
-                        config
-                ).httpClient(getHttpClient())
+                    new AuthenticationProviderByPass(
+                            config::getAuthBaseUri,
+                            LoginAndPasswordProvider.form(config.getLogin(), config.getPass()),
+                            config
+                    ).httpClient(getHttpClient())
             );
         }
         setServiceBaseUriProvider(config::getServiceBaseUri);
@@ -100,20 +104,21 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
      * @see ru.kontur.extern_api.sdk.service.SDKException
      */
     public ExternEngine(@NotNull String configPath) throws SDKException {
-        // loads config data from the resourse file: extern-sdk-config.json
+        // loads config data from the resource file: extern-sdk-config.json
         this(loadConfiguration(configPath), new DefaultServicesFactory());
     }
 
     /**
      * Инициализирует новый объект, представляющий сервисы для работы с API Контур Экстерн
      *
-     * @param configuration содержит конфигурационные параметры для инициализации нового ExternEngine объекта
+     * @param configuration содержит конфигурационные параметры для инициализации нового
+     * ExternEngine объекта
      * @throws SDKException непроверяемое исключение может возникнуть при загрузки данных из файла
      * @see ru.kontur.extern_api.sdk.Configuration
      * @see ru.kontur.extern_api.sdk.service.SDKException
      */
     public ExternEngine(@NotNull Configuration configuration) throws SDKException {
-        // loads config data from the resourse file: extern-sdk-config.json
+        // loads config data from the resource file: extern-sdk-config.json
         this(configuration, new DefaultServicesFactory());
     }
 
@@ -215,14 +220,20 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
     /**
      * Возвращает экземпляр класса BusinessDriver.
      *
-     * @return BusinessDriver класс, предназначенный для выполненения крупных операций. Например отправка документа выполняется с помощью следующих операций: 1)
-     * создание черновика; 2) подпись документа; 3) отправка контента на сервер; 4) проверка; 5) запуск документооборота.
+     * @return BusinessDriver класс, предназначенный для выполненения крупных операций. Например
+     * отправка документа выполняется с помощью следующих операций: 1) создание черновика; 2)
+     * подпись документа; 3) отправка контента на сервер; 4) проверка; 5) запуск документооборота.
      */
     public BusinessDriver getBusinessDriver() {
         return businessDriver;
     }
 
     public HttpClient getHttpClient() {
-        return servicesFactory.getHttpClient();
+        AuthenticationProvider auth = getAuthenticationProvider();
+        String sessionId = auth.sessionId().ensureSuccess().getSessionId();
+        return servicesFactory
+                .getHttpClient()
+                .acceptAccessToken(auth.authPrefix(), sessionId)
+                .acceptApiKey(getApiKeyProvider().getApiKey());
     }
 }

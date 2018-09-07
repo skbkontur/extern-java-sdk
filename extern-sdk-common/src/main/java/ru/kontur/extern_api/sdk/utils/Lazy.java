@@ -51,7 +51,7 @@ public class Lazy<T> implements Supplier<T> {
     public T get() {
 
         if (error != null)
-            throw new PreviouslyCaughtError(error);
+            throw error;
 
         if (instance == null) {
             synchronized (lock) {
@@ -59,8 +59,8 @@ public class Lazy<T> implements Supplier<T> {
                     try {
                         instance = supplier.get();
                     } catch (RuntimeException e) {
-                        error = e;
-                        throw e;
+                        error = new PreviouslyCaughtError(e);
+                        throw new RuntimeException(e);
                     }
                 }
             }

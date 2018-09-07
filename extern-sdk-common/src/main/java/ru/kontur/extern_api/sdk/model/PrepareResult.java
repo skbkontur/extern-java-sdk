@@ -29,20 +29,20 @@ import java.util.List;
 
 
 /**
- * <p>Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к отправке (шифрования, упаковки, проверка подписи и др.)</p>
+ * <p>Класс предназначен для сохранения результа проверки перед выполнением подготовки данных к
+ * отправке (шифрования, упаковки, проверка подписи и др.)</p>
  *
  * <p>см. метод DraftService.prepare</p>
- * @author Aleksey Sukhorukov
  */
 public class PrepareResult {
 
-    @SerializedName("check-result")
     private CheckResultData checkResult = null;
     private List<Link> links = null;
     private Status status = null;
 
     /**
      * Возвращает результат проверки {@link CheckResultData}
+     *
      * @return результат проверки
      * @see CheckResultData
      */
@@ -52,6 +52,7 @@ public class PrepareResult {
 
     /**
      * Устанавливает результат проверки {@link CheckResultData}
+     *
      * @param checkResult результат проверки
      */
     public void setCheckResult(CheckResultData checkResult) {
@@ -60,6 +61,7 @@ public class PrepareResult {
 
     /**
      * Возвращает список ссылок на документы
+     *
      * @return список ссылок на документы
      * @see Link
      */
@@ -69,6 +71,7 @@ public class PrepareResult {
 
     /**
      * Устанавливает список ссылок на документы
+     *
      * @param links список ссылок на документы
      * @see Link
      */
@@ -77,13 +80,6 @@ public class PrepareResult {
     }
 
     /**
-     * <p>Возвращает результат проверки:</p>
-     * <ul>
-     *     <li>checkProtocolHasErrors - результат проверки содержит ошибки</li>
-     *     <li>checkProtocolHasOnlyWarnings - результат проверки содержит предупреждения</li>
-     *     <li>encryptionFailed - результат проверки содержит ошибки криптографии</li>
-     *     <li>OK - результат проверки не содержит ошибок</li>
-     * </ul>
      * @return результат проверки
      */
     public Status getStatus() {
@@ -95,37 +91,19 @@ public class PrepareResult {
     }
 
     public enum Status {
-        CHECKPROTOCOLHASERRORS("checkProtocolHasErrors"),
 
-        CHECKPROTOCOLHASONLYWARNINGS("checkProtocolHasOnlyWarnings"),
+        @SerializedName("check-protocol-has-errors")
+        CHECK_PROTOCOL_HAS_ERRORS,
 
-        ENCRYPTIONFAILED("encryptionFailed"),
+        @SerializedName("check-protocol-has-only-warnings")
+        CHECK_PROTOCOL_HAS_ONLY_WARNINGS,
 
-        OK("ok");
+        @SerializedName("encryption-failed")
+        ENCRYPTION_FAILED,
 
-        private final String value;
+        @SerializedName("ok")
+        OK;
 
-        Status(String value) {
-            this.value = value;
-        }
-
-        public static Status fromValue(String text) {
-            for (Status b : Status.values()) {
-                if (String.valueOf(b.value).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(value);
-        }
     }
 
 }
