@@ -39,6 +39,7 @@ import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderSuite;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
 import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 
@@ -73,14 +74,12 @@ public class ExternEngineBuilder implements Syntax {
 
 
     private Configuration configuration;
-
     private AuthenticationProvider authenticationProvider;
-
     private CryptoProvider cryptoProvider;
-
     private UserAgentProvider userAgentProvider;
-
     private UserIPProvider userIPProvider;
+
+    private AuthType authType = AuthType.UNSPECIFIED;
 
     private ExternEngineBuilder() {
         configuration = new Configuration();
@@ -95,6 +94,18 @@ public class ExternEngineBuilder implements Syntax {
         return this;
     }
 
+    private AuthenticationProvider buildAuth(Configuration configuration) {
+        switch (authType) {
+            case PASSWORD:
+                return ConfigurationUtils.createPasswordAuthProvider(configuration);
+            case TRUSTED:
+                return ConfigurationUtils.createTrustedAuth(configuration);
+            case UNSPECIFIED:
+                break;
+        }
+        return authenticationProvider;
+    }
+
     @NotNull
     @Override
     public ExternEngine build() {
@@ -106,7 +117,7 @@ public class ExternEngineBuilder implements Syntax {
         providerSuite.setApiKeyProvider(configuration::getApiKey);
         providerSuite.setServiceBaseUriProvider(configuration::getServiceBaseUri);
 
-        providerSuite.setAuthenticationProvider(authenticationProvider);
+        providerSuite.setAuthenticationProvider(buildAuth(configuration));
         providerSuite.setCryptoProvider(cryptoProvider);
 
         providerSuite.setUserAgentProvider(userAgentProvider);
@@ -163,6 +174,28 @@ public class ExternEngineBuilder implements Syntax {
         return this;
     }
 
+    @Override
+    public @NotNull ApiKeySyntax passwordAuth(@NotNull String login, @NotNull String password) {
+        authType = AuthType.PASSWORD;
+        configuration.setLogin(login);
+        configuration.setPass(password);
+        return this;
+    }
+
+    @Override
+    public @NotNull ApiKeySyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials) {
+        authType = AuthType.TRUSTED;
+
+        configuration.setAuthBaseUri(authCredentials.getAuthBaseUri());
+        configuration.setApiKey(authCredentials.getApiKey());
+        configuration.setThumbprintRsa(authCredentials.getThumbprintRsa());
+        configuration.setCredential(authCredentials.getCredential());
+        configuration.setServiceUserId(authCredentials.getServiceUserId());
+        configuration.setJksPass(authCredentials.getJksPass());
+        configuration.setRsaKeyPass(authCredentials.getRsaKeyPass());
+        return this;
+    }
+
     @NotNull
     @Override
     public AccountSyntax cryptoProvider(@NotNull CryptoProvider cryptoProvider) {
@@ -193,7 +226,13 @@ public class ExternEngineBuilder implements Syntax {
 
     @NotNull
     @Override
-    public OverrideDefaultsSyntax setupAccountLater() {
+    public OverrideDefaultsSyntax doNotSetupAccount() {
         return this;
+    }
+
+    enum AuthType {
+        UNSPECIFIED,
+        PASSWORD,
+        TRUSTED
     }
 }

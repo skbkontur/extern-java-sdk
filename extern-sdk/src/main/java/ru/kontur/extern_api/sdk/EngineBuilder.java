@@ -29,6 +29,7 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
 
 public interface EngineBuilder {
 
@@ -58,6 +59,12 @@ public interface EngineBuilder {
         @NotNull
         ApiKeySyntax authProvider(@NotNull AuthenticationProvider authenticationProvider);
 
+        @NotNull
+        ApiKeySyntax passwordAuth(@NotNull String login, @NotNull String password);
+
+        @NotNull
+        ApiKeySyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials);
+
     }
 
     interface CryptoProviderSyntax {
@@ -81,7 +88,7 @@ public interface EngineBuilder {
         OverrideDefaultsSyntax accountId(@NotNull String accountId);
 
         @NotNull
-        OverrideDefaultsSyntax setupAccountLater();
+        OverrideDefaultsSyntax doNotSetupAccount();
     }
 
     interface Syntax extends

@@ -42,7 +42,7 @@ public final class ConfigurationUtils {
         LoginAndPasswordProvider form = form(configuration.getLogin(), configuration.getPass());
 
         if (nonNull(form.getLogin()) && nonNull(form.getPass())) {
-            return Optional.of(createPasswordAuthProvider(configuration, form));
+            return Optional.of(createPasswordAuthProvider(configuration));
         }
 
         if (isEnoughDataForTrustedAuth(configuration)) {
@@ -72,7 +72,7 @@ public final class ConfigurationUtils {
                 .apiKeyProvider(configuration::getApiKey)
                 .authBaseUriProvider(configuration::getAuthBaseUri)
                 .credentialProvider(configuration::getCredential)
-                .serviceUserIdProvider(configuration::getServiceBaseUri)
+                .serviceUserIdProvider(configuration::getServiceUserId)
                 .signatureKeyProvider(configuration::getThumbprintRsa)
                 .cryptoProvider(cryptoProviderRSA);
 
@@ -88,13 +88,17 @@ public final class ConfigurationUtils {
     }
 
     public static AuthenticationProvider createPasswordAuthProvider(
-            Configuration configuration,
-            LoginAndPasswordProvider form) {
+            Configuration configuration) {
+
 
         String authType = "password";
 
+        requireParam(configuration::getLogin, "login", authType);
+        requireParam(configuration::getPass, "password", authType);
         requireParam(configuration::getAuthBaseUri, "auth base uri", authType);
         requireParam(configuration::getApiKey, "api key", authType);
+
+        LoginAndPasswordProvider form = form(configuration.getLogin(), configuration.getPass());
 
         return new AuthenticationProviderByPass(
                 configuration::getAuthBaseUri, form, configuration::getApiKey
