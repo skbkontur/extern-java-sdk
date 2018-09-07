@@ -28,7 +28,6 @@ import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
@@ -229,11 +228,6 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
     }
 
     public HttpClient getHttpClient() {
-        AuthenticationProvider auth = getAuthenticationProvider();
-        String sessionId = auth.sessionId().ensureSuccess().getSessionId();
-        return servicesFactory
-                .getHttpClient()
-                .acceptAccessToken(auth.authPrefix(), sessionId)
-                .acceptApiKey(getApiKeyProvider().getApiKey());
+        return servicesFactory.getHttpClient();
     }
 }
