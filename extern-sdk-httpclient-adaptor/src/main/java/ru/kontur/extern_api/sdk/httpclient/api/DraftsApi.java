@@ -33,6 +33,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
@@ -151,9 +152,10 @@ public class DraftsApi extends RestApi {
     @Path("/v1/{accountId}/drafts/{draftId}/check")
     @POST
     @Consumes("application/json; charset=utf-8")
-    public ApiResponse<CheckResultData> check(@PathParam("accountId") String accountId,
+    public ApiResponse<DataWrapper<CheckResultData>> check(
+            @PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("check", null, new TypeToken<CheckResultData>() {
+        return invoke("check", null, new TypeToken<DataWrapper<CheckResultData>>() {
         }.getType(), accountId, draftId);
     }
 

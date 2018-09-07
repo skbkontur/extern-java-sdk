@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk;
 
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.service.AccountService;
@@ -110,6 +111,11 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     public HttpClient getHttpClient() {
-        return servicesFactory.getHttpClient();
+        AuthenticationProvider auth = getAuthenticationProvider();
+        String sessionId = auth.sessionId().ensureSuccess().getSessionId();
+        return servicesFactory
+                .getHttpClient()
+                .acceptAccessToken(auth.authPrefix(), sessionId)
+                .acceptApiKey(getApiKeyProvider().getApiKey());
     }
 }

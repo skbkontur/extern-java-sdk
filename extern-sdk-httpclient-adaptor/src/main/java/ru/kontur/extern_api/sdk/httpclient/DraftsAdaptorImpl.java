@@ -235,6 +235,7 @@ public class DraftsAdaptorImpl extends BaseAdaptor implements DraftsAdaptor {
                                     cxt.getAccountProvider().accountId().toString(),
                                     cxt.getDraftId().toString()
                             )
+                            .getData()
                             .getData(),
                     CHECK_RESULT_DATA
             );

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
+import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
 

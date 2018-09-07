@@ -2079,6 +2079,10 @@ public class QueryContext<R> implements Serializable {
         return this;
     }
 
+    public R getOrThrow() {
+        return ensureSuccess().get();
+    }
+
     private String prettyErrorPrint(ServiceError se) {
         final String EOL = "\r\n";
 

@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.adaptor;
 
 import com.google.gson.Gson;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
@@ -59,4 +60,31 @@ public interface HttpClient {
     HttpClient setGson(Gson gson);
 
     Gson getGson();
+
+
+    default <T> ApiResponse<T> submitHttpRequest(
+            String httpRequestUri,
+            String httpMethod,
+            Object body,
+            Type type) throws ApiException {
+        return submitHttpRequest(
+                httpRequestUri,
+                httpMethod,
+                new HashMap<>(),
+                body,
+                new HashMap<>(),
+                new HashMap<>(),
+                type);
+    }
+
+    default <T> ApiResponse<T> followGetLink(
+            String href,
+            Class<T> expectedType) {
+
+        try {
+            return setServiceBaseUri("").submitHttpRequest(href, "GET", null, expectedType);
+        } catch (ApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
