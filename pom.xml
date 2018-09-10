@@ -125,7 +125,6 @@
     <modules>
         <module>extern-sdk</module>
         <module>extern-sdk-common</module>
-        <module>extern-sdk-examples</module>
         <module>extern-sdk-httpclient</module>
         <module>extern-sdk-httpclient-adaptor</module>
     </modules>
