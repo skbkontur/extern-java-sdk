@@ -33,23 +33,14 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UsnDataV2 {
 
-    @SerializedName("nom-korr")
     private Integer nomKorr = null;
-    @SerializedName("po-mestu")
     private Integer poMestu = null;
-    @SerializedName("priz-np")
     private Integer prizNp = null;
-    @SerializedName("ubyt-pred")
     private String ubytPred = null;
-    @SerializedName("ischisl-min")
     private String ischislMin = null;
-    @SerializedName("za-kv")
     private PeriodIndicators zaKv = null;
-    @SerializedName("za-pg")
     private PeriodIndicators zaPg = null;
-    @SerializedName("za9m")
     private PeriodIndicators za9m = null;
-    @SerializedName("za-nal-per")
     private TaxPeriodIndicators zaNalPer = null;
 
     /**

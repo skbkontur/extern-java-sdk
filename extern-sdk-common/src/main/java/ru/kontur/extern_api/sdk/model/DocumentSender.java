@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9,8 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,39 +21,17 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.provider.auth;
+package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
+public class DocumentSender {
 
-public class AuthInitResponse {
+    private String senderFullName;
 
-    @SerializedName("Link")
-    private Link link;
-
-    @SerializedName("EncryptedKey")
-    private String encryptedKey = "";
-
-
-    public AuthInitResponse() {
+    public String getSenderFullName() {
+        return senderFullName;
     }
 
-    public Link getLink() {
-        return link;
+    public void setSenderFullName(String senderFullName) {
+        this.senderFullName = senderFullName;
     }
-
-    public void setLink(Link link) {
-        this.link = link;
-    }
-
-    /**
-     * @return base64 encoded secret
-     */
-    public String getEncryptedKey() {
-        return encryptedKey;
-    }
-
-    public void setEncryptedKey(String key) {
-        this.encryptedKey = key;
-    }
-
 }

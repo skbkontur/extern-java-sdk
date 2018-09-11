@@ -38,7 +38,6 @@ import java.io.IOException;
  */
 public class UsnFormatPeriod {
 
-    @SerializedName("period-modifiers")
     private PeriodModifiersEnum periodModifiers = null;
     private Integer year = null;
 

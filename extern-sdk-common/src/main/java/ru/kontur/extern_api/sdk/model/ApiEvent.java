@@ -24,33 +24,31 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.Objects;
 
 
 /**
  * <p>
- * Класс предназначен для хронения информации ленты событий документооборотов см. класс EventService
+ * Класс предназначен для хронения информации ленты событий документооборотов см. класс
+ * EventService
  * </p>
+ *
  * @author Aleksey Sukhorukov
  */
 public class ApiEvent {
 
     private String inn = null;
     private String kpp = null;
-    @SerializedName("docflow-type")
     private String docflowType = null;
-    @SerializedName("docflow-link")
     private Link docflowLink = null;
-    @SerializedName("new-state")
     private String newState = null;
-    @SerializedName("event-date-time")
     private Date eventDateTime = null;
     private String id = null;
 
     /**
      * Возвращает ИНН подотчетной организации
+     *
      * @return ИНН подотчетной организации
      */
     public String getInn() {
@@ -59,6 +57,7 @@ public class ApiEvent {
 
     /**
      * Устанавливает ИНН подотчетной организации
+     *
      * @param inn ИНН подотчетной организации
      */
     public void setInn(String inn) {
@@ -67,6 +66,7 @@ public class ApiEvent {
 
     /**
      * Возвращает КПП подотчетной организации
+     *
      * @return КПП подотчетной организации
      */
     public String getKpp() {
@@ -75,6 +75,7 @@ public class ApiEvent {
 
     /**
      * Устанавливает КПП подотчетной организации
+     *
      * @param kpp КПП подотчетной организации
      */
     public void setKpp(String kpp) {
@@ -84,8 +85,9 @@ public class ApiEvent {
     /**
      * Возвращает тип документооборота
      * <ul>
-     *   <li>urn:docflow-type:ke-fns-report</li>
+     * <li>urn:docflow-type:ke-fns-report</li>
      * </ul>
+     *
      * @return тип документооборота
      */
     public String getDocflowType() {
@@ -94,9 +96,10 @@ public class ApiEvent {
 
     /**
      * Устанавливает тип документооборота
+     *
      * @param docflowType тип документооборота:
      * <ul>
-     *   <li>urn:docflow-type:ke-fns-report</li>
+     * <li>urn:docflow-type:ke-fns-report</li>
      * </ul>
      */
     public void setDocflowType(String docflowType) {
@@ -105,6 +108,7 @@ public class ApiEvent {
 
     /**
      * Возвращает ссылку на документооборот
+     *
      * @return ссылка на документооборот
      */
     public Link getDocflowLink() {
@@ -113,6 +117,7 @@ public class ApiEvent {
 
     /**
      * Устанавливает ссылку на документооборот
+     *
      * @param docflowLink ссылка на документооборот
      */
     public void setDocflowLink(Link docflowLink) {
@@ -122,10 +127,11 @@ public class ApiEvent {
     /**
      * Возвращает состояние документооборота:
      * <ul>
-     *   <li>urn:transaction:report</li>
-     *   <li>urn:transaction:acceptance-result-positive</li>
-     *   <li>urn:transaction:processing-result-ok</li>
+     * <li>urn:transaction:report</li>
+     * <li>urn:transaction:acceptance-result-positive</li>
+     * <li>urn:transaction:processing-result-ok</li>
      * </ul>
+     *
      * @return состояние документооборота
      */
     public String getNewState() {
@@ -135,10 +141,11 @@ public class ApiEvent {
     /**
      * Устанавливает состояние документооборота:
      * <ul>
-     *   <li>urn:transaction:report</li>
-     *   <li>urn:transaction:acceptance-result-positive</li>
-     *   <li>urn:transaction:processing-result-ok</li>
+     * <li>urn:transaction:report</li>
+     * <li>urn:transaction:acceptance-result-positive</li>
+     * <li>urn:transaction:processing-result-ok</li>
      * </ul>
+     *
      * @param newState состояние документооборота
      */
     public void setNewState(String newState) {
@@ -147,6 +154,7 @@ public class ApiEvent {
 
     /**
      * Возвращает дату события документооборота
+     *
      * @return дата события
      */
     public Date getEventDateTime() {
@@ -155,6 +163,7 @@ public class ApiEvent {
 
     /**
      * Устанавливает дату события документооборота
+     *
      * @param eventDateTime дата события документооборота
      */
     public void setEventDateTime(Date eventDateTime) {
@@ -163,6 +172,7 @@ public class ApiEvent {
 
     /**
      * Возвращает идентификатор события
+     *
      * @return идентификатор события
      */
     public String getId() {
@@ -171,6 +181,7 @@ public class ApiEvent {
 
     /**
      * Устанавливает идентификатор события
+     *
      * @param id идентификатор события
      */
     public void setId(String id) {
@@ -187,12 +198,12 @@ public class ApiEvent {
         }
         ApiEvent apiEvent = (ApiEvent) o;
         return Objects.equals(this.inn, apiEvent.inn)
-            && Objects.equals(this.kpp, apiEvent.kpp)
-            && Objects.equals(this.docflowType, apiEvent.docflowType)
-            && Objects.equals(this.docflowLink, apiEvent.docflowLink)
-            && Objects.equals(this.newState, apiEvent.newState)
-            && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
-            && Objects.equals(this.id, apiEvent.id);
+                && Objects.equals(this.kpp, apiEvent.kpp)
+                && Objects.equals(this.docflowType, apiEvent.docflowType)
+                && Objects.equals(this.docflowLink, apiEvent.docflowLink)
+                && Objects.equals(this.newState, apiEvent.newState)
+                && Objects.equals(this.eventDateTime, apiEvent.eventDateTime)
+                && Objects.equals(this.id, apiEvent.id);
     }
 
     @Override
