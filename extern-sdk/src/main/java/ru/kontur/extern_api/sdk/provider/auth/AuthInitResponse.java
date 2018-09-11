@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk.provider.auth;
 
 import com.google.gson.annotations.SerializedName;
-import ru.kontur.extern_api.sdk.provider.auth.Link;
 
 public class AuthInitResponse {
 
