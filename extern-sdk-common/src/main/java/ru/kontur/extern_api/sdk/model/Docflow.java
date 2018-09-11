@@ -213,4 +213,9 @@ public class Docflow {
     public void setLastChangeDate(Date lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
     }
+
+    @Override
+    public String toString() {
+        return "Docflow{type=" + type + ", status=" + status + ", id=" + id + "}";
+    }
 }
