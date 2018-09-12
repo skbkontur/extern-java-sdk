@@ -61,9 +61,9 @@ public class DocflowServiceLookupDescriptionTest {
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\","
-        + "\"filename\": \"string\","
-        + "\"content-type\": \"string\", \"compressed\": true}";
+    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:document:fns534-report\","
+            + "\"filename\": \"string\","
+            + "\"content-type\": \"string\", \"compressed\": true}";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -79,8 +79,7 @@ public class DocflowServiceLookupDescriptionTest {
     public static void stopJetty() {
         try {
             server.stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -146,8 +145,8 @@ public class DocflowServiceLookupDescriptionTest {
         queryContext.setDocflowId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         QueryContext<DocflowDocumentDescription> documentDescriptionQueryContext = engine
-            .getDocflowService()
-            .lookupDescription(queryContext);
+                .getDocflowService()
+                .lookupDescription(queryContext);
         assertNull("documentDescription must be null!", documentDescriptionQueryContext.get());
         ServiceError serviceError = documentDescriptionQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
@@ -164,10 +163,9 @@ public class DocflowServiceLookupDescriptionTest {
     private DocflowDocumentDescription getDocumentDescriptionAsync() {
         try {
             return engine.getDocflowService()
-                .lookupDescriptionAsync(StandardValues.ID, StandardValues.ID)
-                .get().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+                    .lookupDescriptionAsync(StandardValues.ID, StandardValues.ID)
+                    .get().get();
+        } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

@@ -57,8 +57,7 @@ public class EventsValidator {
 
         assertEquals("Inn is wrong!", "string", apiEvent.getInn());
         assertEquals("Kpp is wrong!", "string", apiEvent.getKpp());
-        assertEquals("DocflowType is wrong!", "urn:nss:nid", apiEvent.getDocflowType());
-        assertEquals("DocflowType is wrong!", "urn:nss:nid", apiEvent.getDocflowType());
+        assertEquals("Type is wrong!", "urn:nss:nid", apiEvent.getDocflowType());
         assertEquals("NewState is wrong!", "urn:nss:nid", apiEvent.getNewState());
         assertEquals("EventDateTime is wrong!", StandardValues.standardDate(),
             apiEvent.getEventDateTime());

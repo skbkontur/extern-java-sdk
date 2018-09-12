@@ -25,14 +25,18 @@
 package ru.kontur.extern_api.sdk.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 
 /**
  * <p>
  * Класс содержит информацию документа документооборота
  * </p>
+ *
  * @author Aleksey Sukhorukov
  */
 public class Document {
@@ -50,6 +54,7 @@ public class Document {
 
     /**
      * Возвращает идентификатор документа
+     *
      * @return id идентификатор документа
      */
     public UUID getId() {
@@ -58,6 +63,7 @@ public class Document {
 
     /**
      * Устанавливает идентификатор документа
+     *
      * @param id идентификатор документа
      */
     public void setId(UUID id) {
@@ -66,6 +72,7 @@ public class Document {
 
     /**
      * Устанавливает дескриптор документа {@link DocumentDescription}
+     *
      * @param description дескриптор документа
      * @return {@link Document}
      */
@@ -76,6 +83,7 @@ public class Document {
 
     /**
      * Возвращает дескриптор документа {@link DocumentDescription}
+     *
      * @return description дескриптор документа
      */
     public DocflowDocumentDescription getDescription() {
@@ -84,6 +92,7 @@ public class Document {
 
     /**
      * Устанавливает дескриптор документа {@link DocumentDescription}
+     *
      * @param description дескриптор документа
      */
     public void setDescription(DocflowDocumentDescription description) {
@@ -92,6 +101,7 @@ public class Document {
 
     /**
      * Устанавливает контент документа {@link Content}
+     *
      * @param content контент документа
      * @return {@link Document}
      */
@@ -102,6 +112,7 @@ public class Document {
 
     /**
      * Возвращает контент документа {@link Content}
+     *
      * @return content контент документа
      * @see Content
      */
@@ -111,6 +122,7 @@ public class Document {
 
     /**
      * Устанавливает контент документа {@link Content}
+     *
      * @param content контент документа
      * @see Content
      */
@@ -120,6 +132,7 @@ public class Document {
 
     /**
      * Устанавливает список подписей документа {@link Signature}
+     *
      * @param signatures список подписей документа
      * @return {@link Document}
      */
@@ -130,6 +143,7 @@ public class Document {
 
     /**
      * Возвращает список подписей документа {@link Signature}
+     *
      * @return signatures список подписей
      * @see Signature
      */
@@ -139,6 +153,7 @@ public class Document {
 
     /**
      * Устанавливает список подписей документа {@link Signature}
+     *
      * @param signatures список подписей документа
      * @see Signature
      */
@@ -148,6 +163,7 @@ public class Document {
 
     /**
      * Устанавливает список ссылок на ресурсы документооборота {@link Link}
+     *
      * @param links список ссылок на ресурсы документооборота
      * @return {@link Document}
      */
@@ -158,6 +174,7 @@ public class Document {
 
     /**
      * Возвращает список ссылок на ресурсы документооборота {@link Link}
+     *
      * @return links список ссылок на ресурсы документооборота
      * @see Link
      */
@@ -167,10 +184,35 @@ public class Document {
 
     /**
      * Устанавливает список ссылок на ресурсы документооборота {@link Link}
+     *
      * @param links список ссылок на ресурсы документооборота
      * @see Link
      */
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+
+    public boolean isNeedToReply() {
+        return getLinks().stream().anyMatch(link -> Objects.equals(link.getRel(), "reply"));
+    }
+
+    /**
+     * @return Сылки на генерацию ответных документов к данному документу. {@link Link#getName()}
+     * содержит тип ответного документа. Для генерации ответного документа удобно использовать
+     * {@link HttpClient#followPostLink(String, Object, Class)} c аргуметами {@link Link#getHref()},
+     * {@link GenerateReplyDocumentRequestData} и {@link ReplyDocument#getClass()}
+     */
+    public Link[] getReplyLinks() {
+        return getLinks()
+                .stream()
+                .filter(link -> Objects.equals(link.getRel(), "reply"))
+                .toArray(Link[]::new);
+    }
+
+    public String[] getReplyOptions() {
+        return Arrays
+                .stream(getReplyLinks())
+                .map(Link::getName)
+                .toArray(String[]::new);
     }
 }

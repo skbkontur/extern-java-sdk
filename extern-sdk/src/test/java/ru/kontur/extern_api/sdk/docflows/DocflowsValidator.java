@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.DocflowPageItem;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentType;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
@@ -67,8 +67,8 @@ public class DocflowsValidator {
     private static void validateDocflowPageItem(DocflowPageItem docflowPageItem) {
         assertNotNull("DocflowPageItem must not be null!", docflowPageItem);
         validateId(docflowPageItem.getId());
-        assertEquals("Type is wrong!", "urn:nss:nid", docflowPageItem.getType());
-        assertEquals("Status is wrong!", "urn:nss:nid", docflowPageItem.getStatus());
+        assertEquals("Type is wrong!", DocflowType.FNS534_REPORT, docflowPageItem.getType());
+        assertEquals("Status is wrong!", DocflowStatus.SENT, docflowPageItem.getStatus());
         assertEquals("SendDate is wrong!", StandardValues.standardDate(),
             docflowPageItem.getSendDate());
         assertEquals("LastChangeDate is wrong!", StandardValues.standardDate(),
@@ -142,7 +142,7 @@ public class DocflowsValidator {
 
     public static void validateDocumentDescription(DocflowDocumentDescription documentDescription) {
         assertNotNull("DocflowDocumentDescription must not be null!", documentDescription);
-        assertEquals("Type is wrong!", "urn:nss:nid", documentDescription.getType());
+        assertEquals("Type is wrong!", DocumentType.Fns534Report, documentDescription.getType());
         assertEquals("Filename is wrong!", "string", documentDescription.getFilename());
         assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
         assertEquals("Compressed is wrong!", (Object) true, documentDescription.getCompressed());

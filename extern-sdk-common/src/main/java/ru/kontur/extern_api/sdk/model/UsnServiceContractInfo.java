@@ -21,9 +21,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>
  * Класс предназначен для формирования разделов УСН декларации
@@ -33,9 +30,9 @@ import com.google.gson.annotations.SerializedName;
 public class UsnServiceContractInfo {
 
     private UsnFormatPeriod period = null;
-    @SerializedName("additional-org-info")
     private AdditionalClientInfo additionalOrgInfo = null;
     private Object data = null;
+    private Integer version = null;
 
     /**
      * <p>Возвращает информацию об отчетном периоде</p>
@@ -87,5 +84,13 @@ public class UsnServiceContractInfo {
      */
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

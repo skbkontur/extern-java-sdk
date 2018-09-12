@@ -35,13 +35,9 @@ import java.util.UUID;
 public class DraftDocument {
 
     private UUID id = null;
-    @SerializedName("decrypted-content-link")
     private Link decryptedContentLink = null;
-    @SerializedName("encrypted-content-link")
     private Link encryptedContentLink = null;
-    @SerializedName("signature-content-link")
     private Link signatureContentLink = null;
-    @SerializedName("description")
     private DocumentDescription description = null;
 
     /**

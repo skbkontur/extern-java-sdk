@@ -357,8 +357,45 @@ public class DocflowsApi extends RestApi {
             @PathParam("replyId") String replyId,
             byte[] content
     ) throws ApiException {
-        return invoke("updateReplyDocumentContent", content, new TypeToken<ReplyDocument>() {
-        }.getType(), accountId, docflowId, documentId, replyId);
+        return invoke("updateReplyDocumentContent", content, ReplyDocument.class,
+                accountId, docflowId, documentId, replyId);
+    }
+
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
+    @PUT
+    @Consumes("application/octet-stream")
+    public ApiResponse<ReplyDocument> putReplyDocumentSignature(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId,
+            byte[] signature
+    ) throws ApiException {
+        return invoke("putReplyDocumentSignature", signature, ReplyDocument.class,
+                accountId, docflowId, documentId, replyId);
+    }
+
+    /**
+     * Allow API user to put content to Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     * @param data (required)
+     * @return ApiResponse&lt;DocumentToSend&gt;
+     * @throws ApiException transport exception
+     */
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/send")
+    @POST
+    public ApiResponse<Docflow> sendReply(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId,
+            SendReplyDocumentRequestData data
+    ) throws ApiException {
+        return invoke("sendReply", data, Docflow.class, accountId, docflowId, documentId, replyId);
     }
 
     /**

@@ -23,40 +23,33 @@
  */
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 
 /**
  * <p>
- * Класс предназначен для отправки информации об отправителе и подотчетной организации
- * при создании декларации. Класс инкопсулирует в себе следующие структуры:
+ * Класс предназначен для отправки информации об отправителе и подотчетной организации при создании
+ * декларации. Класс инкопсулирует в себе следующие структуры:
  * </p>
  * <ul>
- *   <li>{@link SignerTypeEnum} тип подписанта, возможные значения:
- *   <ul>
- *     <li>UNKNOWN - должность подписанта неизвестен;</li>
- *     <li>CHIEF - руководитель;</li>
- *     <li>REPRESENTATIVE - представитель</li>
- *   </ul>
- *   </li>
- *   <li>{@link Taxpayer} подотчетная организация</li>
+ * <li>{@link SignerTypeEnum} тип подписанта, возможные значения:
+ * <ul>
+ * <li>UNKNOWN - должность подписанта неизвестен;</li>
+ * <li>CHIEF - руководитель;</li>
+ * <li>REPRESENTATIVE - представитель</li>
  * </ul>
- * @author Aleksey Sukhorukov
+ * </li>
+ * <li>{@link Taxpayer} подотчетная организация</li>
+ * </ul>
  */
 public class AdditionalClientInfo {
 
-    @SerializedName("signer-type")
     private SignerTypeEnum signerType = null;
-    @SerializedName("sender-full-name")
-    private String senderFullName = null;
+    private DocumentSender documentSender = null;
     private Taxpayer taxpayer = null;
 
     /**
      * Возвращает тип подписанта
+     *
      * @return тип подписанта
      * @see SignerTypeEnum
      */
@@ -66,6 +59,7 @@ public class AdditionalClientInfo {
 
     /**
      * Устанавливает тип подписанта
+     *
      * @param signerType тип подписанта
      * @see SignerTypeEnum
      */
@@ -73,24 +67,17 @@ public class AdditionalClientInfo {
         this.signerType = signerType;
     }
 
-    /**
-     * Возвращает полное имя отправителя
-     * @return полное имя отправителя
-     */
-    public String getSenderFullName() {
-        return senderFullName;
+    public DocumentSender getDocumentSender() {
+        return documentSender;
     }
 
-    /**
-     * Устанавливает полное имя отправителя
-     * @param senderFullName полное имя отправителя
-     */
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public void setDocumentSender(DocumentSender documentSender) {
+        this.documentSender = documentSender;
     }
 
     /**
      * Возвращает данные подотчетной организации
+     *
      * @return данные подотчетной организации
      * @see Taxpayer
      */
@@ -100,6 +87,7 @@ public class AdditionalClientInfo {
 
     /**
      * Устанавливает данные подотчетной организации
+     *
      * @param taxpayer данные подотчетной организации
      * @see Taxpayer
      */
@@ -107,68 +95,19 @@ public class AdditionalClientInfo {
         this.taxpayer = taxpayer;
     }
 
-    @JsonAdapter(SignerTypeEnum.Adapter.class)
     /**
      * Тип подписанта
      */
     public enum SignerTypeEnum {
         /** неизвестный */
-        UNKNOWN("unknown"),
+        @SerializedName("unknown")
+        UNKNOWN,
         /** руководитель */
-        CHIEF("chief"),
+        @SerializedName("chief")
+        CHIEF,
         /** представитель */
-        REPRESENTATIVE("representative");
+        @SerializedName("representative")
+        REPRESENTATIVE
 
-        private final String value;
-
-        SignerTypeEnum(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Возвращает тип подписанта по его значению.
-         * Если значение не найдено, то тип будет null.
-         * @param text значение типа: "unknown","chief","representative"
-         * @return тип подписанта
-         */
-        public static SignerTypeEnum fromValue(String text) {
-            for (SignerTypeEnum b : SignerTypeEnum.values()) {
-                if (String.valueOf(b.value).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Возвращает значение типа
-         * @return значение типа
-         */
-        public String getValue() {
-            return value;
-        }
-
-        /**
-         * Возвращает значение типа
-         * @return значение типа
-         */
-        @Override
-        public String toString() {
-            return String.valueOf(value);
-        }
-
-        public static class Adapter extends TypeAdapter<SignerTypeEnum> {
-
-            @Override
-            public void write(final JsonWriter jsonWriter, final SignerTypeEnum enumeration) throws IOException {
-                jsonWriter.value(enumeration.getValue());
-            }
-
-            @Override
-            public SignerTypeEnum read(final JsonReader jsonReader) throws IOException {
-                String value = jsonReader.nextString();
-                return SignerTypeEnum.fromValue(String.valueOf(value));
-            }
-        }
     }
 }

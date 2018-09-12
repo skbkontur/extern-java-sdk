@@ -40,12 +40,10 @@ import java.util.UUID;
 public class DocflowPageItem {
 
     private UUID id = null;
-    private String type = null;
-    private String status = null;
+    private DocflowType type = null;
+    private DocflowStatus status = null;
     private List<Link> links = new ArrayList<>();
-    @SerializedName("send-date")
     private Date sendDate = null;
-    @SerializedName("last-change-date")
     private Date lastChangeDate = null;
 
     /**
@@ -71,7 +69,7 @@ public class DocflowPageItem {
      * </ul>
      * @return тип ДО
      */
-    public String getType() {
+    public DocflowType getType() {
         return type;
     }
 
@@ -82,7 +80,7 @@ public class DocflowPageItem {
      *   <li>urn:docflow:fns534-report</li>
      * </ul>
      */
-    public void setType(String type) {
+    public void setType(DocflowType type) {
         this.type = type;
     }
 
@@ -100,7 +98,7 @@ public class DocflowPageItem {
      * </ul>
      * @return состояние ДО
      */
-    public String getStatus() {
+    public DocflowStatus getStatus() {
         return status;
     }
 
@@ -118,7 +116,7 @@ public class DocflowPageItem {
      *   <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
      * </ul>
      */
-    public void setStatus(String status) {
+    public void setStatus(DocflowStatus status) {
         this.status = status;
     }
 

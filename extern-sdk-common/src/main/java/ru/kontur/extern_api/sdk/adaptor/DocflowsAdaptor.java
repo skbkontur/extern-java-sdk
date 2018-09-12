@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2018 SKB Kontur
+ * The MIT License
+ *
+ * Copyright 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,23 +10,28 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package ru.kontur.extern_api.sdk.adaptor;
 
 import java.util.List;
-
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.Signature;
 
 /**
  * @author Aleksey Sukhorukov
@@ -131,13 +138,22 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
-    QueryContext generateReply(QueryContext<?> cxt);
+    QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
 
-    QueryContext generateReplies(QueryContext<?> cxt);
+    /**
+     * <p>Загрузить подпись ответного документа</p>
+     * <p>cxt должен содержать:</p>
+     * <p>{@link QueryContext#getDocflowId}</p>
+     * <p>{@link QueryContext#getDocumentId}</p>
+     * <p>{@link QueryContext#getReplyId}</p>
+     * <p>{@link QueryContext#getContent} -- подпись</p>
+     *
+     * @param cxt см. выше
+     * @return Обновлённую модель ReplyDocument
+     */
+    QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
 
     QueryContext<Docflow> sendReply(QueryContext<?> cxt);
-
-    QueryContext<List<Docflow>> sendReplies(QueryContext<?> cxt);
 
     QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
 

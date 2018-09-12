@@ -2116,4 +2116,9 @@ public class QueryContext<R> implements Serializable {
         }
         return errorMsg.toString();
     }
+
+    @Override
+    public String toString() {
+        return "context{" + result + "=" + get() + " with " + params.size() + "params}";
+    }
 }

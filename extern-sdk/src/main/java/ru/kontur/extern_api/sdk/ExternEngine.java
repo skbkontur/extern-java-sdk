@@ -23,7 +23,10 @@
  */
 package ru.kontur.extern_api.sdk;
 
+import java.util.Optional;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
@@ -34,7 +37,6 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
-
 
 public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
 
@@ -117,5 +119,21 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
                 .getHttpClient()
                 .acceptAccessToken(auth.authPrefix(), sessionId)
                 .acceptApiKey(getApiKeyProvider().getApiKey());
+    }
+
+    public HttpClient getAuthorizedHttpClient() {
+        HttpClient httpClient = servicesFactory.getHttpClient();
+
+        Optional.ofNullable(getApiKeyProvider())
+                .map(ApiKeyProvider::getApiKey)
+                .ifPresent(httpClient::acceptApiKey);
+
+        Optional.ofNullable(getAuthenticationProvider())
+                .map(AuthenticationProvider::sessionId)
+                .map(QueryContext::ensureSuccess)
+                .ifPresent(cxt -> httpClient
+                        .acceptAccessToken(cxt.getAuthPrefix(), cxt.getSessionId()));
+
+        return httpClient;
     }
 }
