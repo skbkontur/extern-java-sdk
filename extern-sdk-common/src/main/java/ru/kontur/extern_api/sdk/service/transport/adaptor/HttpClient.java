@@ -65,12 +65,13 @@ public interface HttpClient {
     default <T> ApiResponse<T> submitHttpRequest(
             String httpRequestUri,
             String httpMethod,
+            Map<String, Object> queryParams,
             Object body,
             Class<T> type) throws ApiException {
         return submitHttpRequest(
                 httpRequestUri,
                 httpMethod,
-                new HashMap<>(),
+                queryParams,
                 body,
                 new HashMap<>(),
                 new HashMap<>(),
@@ -83,7 +84,7 @@ public interface HttpClient {
 
         try {
             return setServiceBaseUri("")
-                    .submitHttpRequest(href, "GET", null, expectedType)
+                    .submitHttpRequest(href, "GET", null, null, expectedType)
                     .getData();
         } catch (ApiException e) {
             throw new RuntimeException(e);
@@ -92,11 +93,41 @@ public interface HttpClient {
 
     default <T> T followPostLink(
             String href,
+            Class<T> expectedType) {
+
+        return setServiceBaseUri("")
+                .submitHttpRequest(href, "POST", null, null, expectedType)
+                .getData();
+    }
+
+    default <T> T followPostLink(
+            String href,
             Object body,
             Class<T> expectedType) {
 
-            return setServiceBaseUri("")
-                    .submitHttpRequest(href, "POST", body, expectedType)
-                    .getData();
+        return setServiceBaseUri("")
+                .submitHttpRequest(href, "POST", null, body, expectedType)
+                .getData();
+    }
+
+    default <T> T followPostLink(
+            String href,
+            Map<String, Object> queryParams,
+            Object body,
+            Class<T> expectedType) {
+
+        return setServiceBaseUri("")
+                .submitHttpRequest(href, "POST", queryParams, body, expectedType)
+                .getData();
+    }
+
+    default <T> T followPutLink(
+            String href,
+            Object body,
+            Class<T> expectedType) {
+
+        return setServiceBaseUri("")
+                .submitHttpRequest(href, "PUT", null, body, expectedType)
+                .getData();
     }
 }

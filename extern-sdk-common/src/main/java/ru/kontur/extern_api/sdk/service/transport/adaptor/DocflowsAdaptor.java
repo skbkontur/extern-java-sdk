@@ -146,15 +146,5 @@ public interface DocflowsAdaptor {
      */
     QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
 
-    QueryContext<Docflow> sendReply(QueryContext<?> cxt);
-
-    QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
-
-    QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt);
-
-    QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt);
-
-    QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt);
-
     QueryContext<String> print(QueryContext<?> cxt);
 }

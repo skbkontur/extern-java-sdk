@@ -26,7 +26,6 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-
 /**
  * <p>Объект, содержащий информацию об ответном документе</p>
  * @author Aleksey Sukhorukov
@@ -114,5 +113,29 @@ public class ReplyDocument implements LinksHolder {
      */
     public String getDocumentId() {
         return documentId;
+    }
+
+    public Link getPutSignatureLink(){
+        return getLink("save-signature");
+    }
+
+    public Link getSendLink(){
+        return getLink("send");
+    }
+
+    public Link getCloudSignLink(){
+        return getLink("sign");
+    }
+
+    public Link getCloudSignConfirmLink(){
+        return getLink("sign-confirm");
+    }
+
+    private Link getLink(String name){
+        return links
+                .stream()
+                .filter(l -> l.getRel().equals(name))
+                .findAny()
+                .orElse(null);
     }
 }
