@@ -45,7 +45,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
@@ -53,11 +52,8 @@ import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -69,10 +65,11 @@ public class DocflowServiceGetDocumentsTest {
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
-        "\"filename\": \"string\"," +
-        "\"content-type\": \"string\","
-        +"\"compressed\": true}";
+    private final static String DOCUMENT_DESCRIPTION =
+            "{\"type\": \"urn:document:fns534-report\"," +
+                    "\"filename\": \"string\"," +
+                    "\"content-type\": \"string\","
+                    + "\"compressed\": true}";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -114,7 +111,7 @@ public class DocflowServiceGetDocumentsTest {
     public void testGetDocuments_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE
-            .setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
+                .setResponseMessage(String.format("[{\"id\": \"%s\"}]", StandardValues.ID));
         List<Document> documents = getDocuments();
         StandardObjectsValidator.validateNotEmptyList(documents, "Documents");
         DocflowsValidator.validateDocument(documents.get(0), false, false, false, false);
@@ -128,9 +125,9 @@ public class DocflowServiceGetDocumentsTest {
     public void testGetDocuments_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION +
-            "}]");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION +
+                "}]");
         DocflowsValidator.validateDocument(getDocuments().get(0), true, false, false, false);
         DocflowsValidator.validateDocument(getDocumentsAsync().get(0), true, false, false, false);
     }
@@ -139,13 +136,13 @@ public class DocflowServiceGetDocumentsTest {
     public void testGetDocuments_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}" +
-            "}]");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}" +
+                "}]");
         DocflowsValidator.validateDocument(getDocuments().get(0), true, true, false, false);
         DocflowsValidator.validateDocument(getDocumentsAsync().get(0), true, true, false, false);
     }
@@ -154,14 +151,14 @@ public class DocflowServiceGetDocumentsTest {
     public void testGetDocuments_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}," +
-            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
-            "}]");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}," +
+                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
+                "}]");
         DocflowsValidator.validateDocument(getDocuments().get(0), true, true, true, false);
         DocflowsValidator.validateDocument(getDocumentsAsync().get(0), true, true, true, false);
     }
@@ -170,15 +167,15 @@ public class DocflowServiceGetDocumentsTest {
     public void testGetDocuments_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("[{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}," +
-            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
-            "\"links\": [" + StandardObjects.LINK + "]" +
-            "}]");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}," +
+                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
+                "\"links\": [" + StandardObjects.LINK + "]" +
+                "}]");
         DocflowsValidator.validateDocument(getDocuments().get(0), true, true, true, true);
         DocflowsValidator.validateDocument(getDocumentsAsync().get(0), true, true, true, true);
     }
@@ -217,16 +214,16 @@ public class DocflowServiceGetDocumentsTest {
         QueryContext<Object> queryContext = new QueryContext<>();
         queryContext.setDocflowId(StandardValues.ID);
         QueryContext<Docflow> docflowQueryContext = engine.getDocflowService()
-            .lookupDocflow(queryContext);
+                .lookupDocflow(queryContext);
         assertNull("documents must be null!", docflowQueryContext.get());
         assertNotNull("ServiceError must not be null!", docflowQueryContext.getServiceError());
         assertEquals("Response code is wrong!", code,
-            docflowQueryContext.getServiceError().getResponseCode());
+                docflowQueryContext.getServiceError().getResponseCode());
     }
 
     private List<Document> getDocuments() {
         QueryContext<Docflow> queryContext = new QueryContext<>();
-        queryContext.setAccountProvider(()->UUID.fromString(StandardValues.ID));
+        queryContext.setAccountProvider(() -> UUID.fromString(StandardValues.ID));
         queryContext.setDocflowId(StandardValues.ID);
         return engine.getDocflowService().getDocuments(queryContext).get();
     }

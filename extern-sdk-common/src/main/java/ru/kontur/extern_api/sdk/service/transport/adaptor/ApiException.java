@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * @author Aleksey Sukhorukov
  */
-public class ApiException extends Exception {
+public class ApiException extends RuntimeException {
 
     private static final long serialVersionUID = 7069199494247540112L;
 

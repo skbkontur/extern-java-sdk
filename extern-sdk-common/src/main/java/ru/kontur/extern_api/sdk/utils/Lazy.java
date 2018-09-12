@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Thread safe lazy initializer.
- * @param <T>
  */
 public class Lazy<T> implements Supplier<T> {
 

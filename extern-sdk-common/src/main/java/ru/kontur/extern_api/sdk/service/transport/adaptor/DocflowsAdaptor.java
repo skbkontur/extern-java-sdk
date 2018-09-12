@@ -24,8 +24,14 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
-
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.Signature;
 
 /**
  * @author Aleksey Sukhorukov
@@ -132,13 +138,22 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
-    QueryContext generateReply(QueryContext<?> cxt);
+    QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
 
-    QueryContext generateReplies(QueryContext<?> cxt);
+    /**
+     * <p>Загрузить подпись ответного документа</p>
+     * <p>cxt должен содержать:</p>
+     * <p>{@link QueryContext#getDocflowId}</p>
+     * <p>{@link QueryContext#getDocumentId}</p>
+     * <p>{@link QueryContext#getReplyId}</p>
+     * <p>{@link QueryContext#getContent} -- подпись</p>
+     *
+     * @param cxt см. выше
+     * @return Обновлённую модель ReplyDocument
+     */
+    QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
 
     QueryContext<Docflow> sendReply(QueryContext<?> cxt);
-
-    QueryContext<List<Docflow>> sendReplies(QueryContext<?> cxt);
 
     QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
 

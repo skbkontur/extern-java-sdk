@@ -1,5 +1,6 @@
 package ru.kontur.extern_api.sdk.model;
 
+
 /**
  * <p>
  * Класс содержит данные, описывающие документ, после отправки.
@@ -9,11 +10,11 @@ package ru.kontur.extern_api.sdk.model;
  */
 public class DocflowDocumentDescription {
 
-    private String type = null;
+    private DocumentType type = null;
     private String filename = null;
     private String contentType = null;
     private Boolean compressed = null;
-    public DocflowDocumentDescription type(String type) {
+    public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;
         return this;
     }
@@ -43,7 +44,7 @@ public class DocflowDocumentDescription {
      * </ul>
      * @return type
      */
-    public String getType() {
+    public DocumentType getType() {
         return type;
     }
 
@@ -56,7 +57,7 @@ public class DocflowDocumentDescription {
      *   <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
      * </ul>
      */
-    public void setType(String type) {
+    public void setType(DocumentType type) {
         this.type = type;
     }
 
@@ -114,41 +115,5 @@ public class DocflowDocumentDescription {
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
-    }
-
-    /**
-     * Содержит доступное перечисления типов документов
-     */
-    private enum Type {
-        /** декларация ФНС */
-        DEKL("urn:document:fns534-report", "^(?i)NO_(\\w+)_(\\d{4})_(\\d{4})_(\\d{12,19})_(\\d{8})_([\\w-]{36})\\.xml$"),
-        /** доверенность для ФНС */
-        DOV("urn:document:fns534-report-warrant", "^(?i)ON_DOV_(\\d{4})_(\\d{4})_(\\d{12,19})_(\\d{8})_([\\w-]{36})\\.xml$"),
-        /** приложение к декларации ФНС */
-        APP("urn:document:fns534-report-attachment", ""),
-        /** неизвестный тип */
-        UNKNOWN(null, "");
-
-        private final String value;
-        private final String pattern;
-
-        Type(String value, String pattern) {
-            this.value = value;
-            this.pattern = pattern;
-        }
-
-        private static Type guessType(String fileName) {
-            if (fileName == null) {
-                return UNKNOWN;
-            }
-
-            if (fileName.matches(DOV.pattern)) {
-                return DOV;
-            } else if (fileName.matches(DEKL.pattern)) {
-                return DEKL;
-            } else {
-                return APP;
-            }
-        }
     }
 }

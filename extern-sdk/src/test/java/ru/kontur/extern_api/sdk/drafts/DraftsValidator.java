@@ -106,7 +106,7 @@ public class DraftsValidator {
     public static void validateDocumentDescription(
             DocumentDescription documentDescription) {
         assertNotNull("DocflowDocumentDescription must not be null!", documentDescription);
-        assertEquals("Type is wrong!", "urn:nss:nid", documentDescription.getType());
+        assertEquals("Type is wrong!", "urn:docflow:fns534-report", documentDescription.getType());
         assertEquals("Filename is wrong!", "string", documentDescription.getFilename());
         assertEquals("ContentType is wrong!", "string", documentDescription.getContentType());
     }

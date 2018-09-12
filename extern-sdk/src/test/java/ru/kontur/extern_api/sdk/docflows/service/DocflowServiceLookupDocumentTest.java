@@ -50,11 +50,8 @@ import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -66,10 +63,11 @@ public class DocflowServiceLookupDocumentTest {
     private static ExternEngine engine;
     private static Server server;
 
-    private final static String DOCUMENT_DESCRIPTION = "{\"type\": \"urn:nss:nid\"," +
-        "\"filename\": \"string\"," +
-        "\"content-type\": \"string\"," +
-        "\"compressed\": true }";
+    private final static String DOCUMENT_DESCRIPTION = "{\"type\": " +
+            "\"urn:document:fns534-report\"," +
+            "\"filename\": \"string\"," +
+            "\"content-type\": \"string\"," +
+            "\"compressed\": true }";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -111,7 +109,7 @@ public class DocflowServiceLookupDocumentTest {
     public void testLookupDocument_Document() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE
-            .setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
+                .setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
         DocflowsValidator.validateDocument(getDocument(), false, false, false, false);
         DocflowsValidator.validateDocument(getDocumentAsync(), false, false, false, false);
     }
@@ -120,9 +118,9 @@ public class DocflowServiceLookupDocumentTest {
     public void testLookupDocument_Document_Description() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION +
-            "}");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION +
+                "}");
         DocflowsValidator.validateDocument(getDocument(), true, false, false, false);
         DocflowsValidator.validateDocument(getDocumentAsync(), true, false, false, false);
     }
@@ -131,13 +129,13 @@ public class DocflowServiceLookupDocumentTest {
     public void testLookupDocument_Document_WithContent() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}" +
-            "}");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}" +
+                "}");
         DocflowsValidator.validateDocument(getDocument(), true, true, false, false);
         DocflowsValidator.validateDocument(getDocumentAsync(), true, true, false, false);
     }
@@ -146,14 +144,14 @@ public class DocflowServiceLookupDocumentTest {
     public void testLookupDocument_Document_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}," +
-            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
-            "}");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}," +
+                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]" +
+                "}");
         DocflowsValidator.validateDocument(getDocument(), true, true, true, false);
         DocflowsValidator.validateDocument(getDocumentAsync(), true, true, true, false);
     }
@@ -162,15 +160,15 @@ public class DocflowServiceLookupDocumentTest {
     public void testLookupDocument_Document_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"description\": " + DOCUMENT_DESCRIPTION + "," +
-            "\"content\": {\n" +
-            "  \"decrypted\": " + StandardObjects.LINK + "," +
-            "  \"encrypted\": " + StandardObjects.LINK +
-            "}," +
-            "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
-            "\"links\": [" + StandardObjects.LINK + "]" +
-            "}");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"description\": " + DOCUMENT_DESCRIPTION + "," +
+                "\"content\": {\n" +
+                "  \"decrypted\": " + StandardObjects.LINK + "," +
+                "  \"encrypted\": " + StandardObjects.LINK +
+                "}," +
+                "\"signatures\": [{\"id\": \"" + StandardValues.ID + "\"}]," +
+                "\"links\": [" + StandardObjects.LINK + "]" +
+                "}");
         DocflowsValidator.validateDocument(getDocument(), true, true, true, true);
         DocflowsValidator.validateDocument(getDocumentAsync(), true, true, true, true);
     }
@@ -210,7 +208,7 @@ public class DocflowServiceLookupDocumentTest {
         queryContext.setDocflowId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         QueryContext<Document> documentQueryContext = engine.getDocflowService()
-            .lookupDocument(queryContext);
+                .lookupDocument(queryContext);
         assertNull("document must be null!", documentQueryContext.get());
         ServiceError serviceError = documentQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
@@ -227,8 +225,8 @@ public class DocflowServiceLookupDocumentTest {
     private Document getDocumentAsync() {
         try {
             return engine.getDocflowService()
-                .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
-                .get().get();
+                    .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
+                    .get().get();
         } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
