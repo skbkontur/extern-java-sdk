@@ -34,16 +34,13 @@ import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.RE
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.REPLY_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
-import static ru.kontur.extern_api.sdk.utils.UncheckedSupplier.get;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.PrintDocumentData;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
@@ -393,22 +390,28 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
      */
     @Override
     public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
-        return
-                new NoFail<>(
-                        new ParamExists<>(DOCUMENT, new GenerateReply())
-                ).apply(cxt);
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .generateReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getDocumentType(),
+                                    cxt.getCertificate()
+                            )
+                            .getData(),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
     }
 
-    /**
-     * Загрузить подпись ответного документа
-     *
-     * @param cxt должен содержать: <ul>
-     * <li>{@link QueryContext::getDocflowId}</li>
-     * <li>{@link QueryContext::getDocumentId}</li>
-     * <li>{@link QueryContext::getReplyId}</li>
-     * <li>{@link QueryContext::getContent} -- подпись</li>
-     * </ul>
-     */
     @Override
     public QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt) {
         try {
@@ -574,44 +577,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         return api;
     }
 
-    private class GenerateReply implements Query<ReplyDocument> {
-
-        @Override
-        public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
-            try {
-                Document document = cxt.getDocument();
-                String x509Base64 = cxt.getCertificate();
-
-                if (document.getLinks() == null || document.getLinks().isEmpty()) {
-                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
-                            .setResult(null, REPLY_DOCUMENT);
-                }
-
-                if (x509Base64 == null) {
-                    return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
-                            .setServiceError("A signer certificate is absent in the context.");
-                }
-
-                ReplyDocument reply = document.getLinks().stream()
-                        .filter(l -> Objects.equals(l.getRel(), "reply"))
-                        .findFirst()
-                        .map(link -> get(() -> generateReply(link, x509Base64, cxt)))
-                        .orElse(null);
-
-                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
-                        .setResult(reply, REPLY_DOCUMENT);
-
-            } catch (RuntimeException e) {
-                if (!(e.getCause() instanceof ApiException)) {
-                    throw e;
-                }
-
-                return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName())
-                        .setServiceError((ApiException) e.getCause());
-            }
-        }
-    }
-
     private class AcquireReplyDocument implements Query<ReplyDocument> {
 
         @Override
@@ -675,18 +640,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                         .setServiceError(x);
             }
         }
-    }
-
-    private ReplyDocument generateReply(
-            Link generateLink,
-            String certificate,
-            QueryContext<?> cxt
-    ) {
-        return transport(cxt).getHttpClient().followPostLink(
-                generateLink.getHref(),
-                new GenerateReplyDocumentRequestData().certificateBase64(certificate),
-                ReplyDocument.class
-        );
     }
 
 }

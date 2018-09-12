@@ -294,14 +294,19 @@ public interface DocflowService extends ProviderHolder {
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
-     * Асинхронный метод создает служебный документ для документа ДО с заданным типом
-     *
-     * @param signerX509Base64 сертификат ключа подписи в кодировке BASE64 без тегов
+     * <p>Асинхронный метод создает служебный документ для документа ДО с заданным типом.</p>
+     * <p>Возможные типы ответного документа можно найти в Document#getReplyOptions </p>
+     * @param docflowId id документооборота
+     * @param documentId id документа для которого генерируется ответный
+     * @param replyType тип ответного документа (см выше)
+     * @param signerX509Base64 сертификат подписанта
      * @return структура данных для отправки
      * @see ReplyDocument
      */
     CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
-            Document document,
+            String docflowId,
+            String documentId,
+            String replyType,
             String signerX509Base64);
 
     /**
@@ -309,12 +314,12 @@ public interface DocflowService extends ProviderHolder {
      * Асинхронный метод создает служебный документ для документа ДО с заданным типом
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     * <p>- id ДО. Для установки необходимо использовать метод {@link
      * QueryContext#setDocflowId};</p>
-     * <p>- тип создаваемого документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentType};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     * <p>- id создаваемого документа. Для установки необходимо использовать метод {@link
      * QueryContext#setDocumentId};</p>
+     * <p>- тип документа. Для установки необходимо использовать метод {@link
+     * QueryContext#setDocumentType};</p>
      * <p>- сертификат ключа подписи в кодировке BASE64 без тегов. Для установки необходимо
      * использовать метод {@link QueryContext#setCertificate}.</p>
      * @return структура данных для отправки
@@ -323,14 +328,15 @@ public interface DocflowService extends ProviderHolder {
     QueryContext<ReplyDocument> generateReply(QueryContext<?> parent);
 
     /**
-     * Загрузить подпись ответного документа
+     * <p>Загрузить подпись ответного документа</p>
+     * <p>cxt должен содержать:</p>
+     * <p>{@link QueryContext#getDocflowId}</p>
+     * <p>{@link QueryContext#getDocumentId}</p>
+     * <p>{@link QueryContext#getReplyId}</p>
+     * <p>{@link QueryContext#getContent} -- подпись</p>
      *
-     * @param parent должен содержать: <ul>
-     * <li>{@link QueryContext::getDocflowId}</li>
-     * <li>{@link QueryContext::getDocumentId}</li>
-     * <li>{@link QueryContext::getReplyId}</li>
-     * <li>{@link QueryContext::getContent} -- подпись</li>
-     * </ul>
+     * @param parent см. выше
+     * @return Обновлённую модель ReplyDocument
      */
     QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent);
 
@@ -562,6 +568,7 @@ public interface DocflowService extends ProviderHolder {
      * @param docflowId идентификатор ДО
      * @param documentId идентификатор документа
      * @param replyId идентификатор ответного документа
+     * @param smsCode смс код подтверждения подписания
      * @return объект с результатом инициации облачной паодписи
      */
     CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(

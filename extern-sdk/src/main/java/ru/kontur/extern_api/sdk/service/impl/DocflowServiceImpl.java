@@ -215,11 +215,15 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
 
     @Override
     public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
-            Document document,
+            String docflowId,
+            String documentId,
+            String replyType,
             String signerX509Base64) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
         return cxt
-                .setDocument(document)
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setDocumentType(replyType)
                 .setCertificate(signerX509Base64)
                 .applyAsync(docflowsAdaptor::generateReply);
     }
