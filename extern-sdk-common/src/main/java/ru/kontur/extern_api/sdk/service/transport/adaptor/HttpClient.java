@@ -66,7 +66,7 @@ public interface HttpClient {
             String httpRequestUri,
             String httpMethod,
             Object body,
-            Type type) throws ApiException {
+            Class<T> type) throws ApiException {
         return submitHttpRequest(
                 httpRequestUri,
                 httpMethod,
@@ -77,14 +77,26 @@ public interface HttpClient {
                 type);
     }
 
-    default <T> ApiResponse<T> followGetLink(
+    default <T> T followGetLink(
             String href,
             Class<T> expectedType) {
 
         try {
-            return setServiceBaseUri("").submitHttpRequest(href, "GET", null, expectedType);
+            return setServiceBaseUri("")
+                    .submitHttpRequest(href, "GET", null, expectedType)
+                    .getData();
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    default <T> T followPostLink(
+            String href,
+            Object body,
+            Class<T> expectedType) {
+
+            return setServiceBaseUri("")
+                    .submitHttpRequest(href, "POST", body, expectedType)
+                    .getData();
     }
 }

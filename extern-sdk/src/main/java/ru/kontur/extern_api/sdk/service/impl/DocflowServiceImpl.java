@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
@@ -224,20 +224,27 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
                 .applyAsync(docflowsAdaptor::generateReply);
     }
 
+
     @Override
-    public CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(
-            Docflow docflow, String signerX509Base64) {
-        QueryContext<List<ReplyDocument>> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflow(docflow)
-                .setCertificate(signerX509Base64)
-                .applyAsync(docflowsAdaptor::generateReplies);
+    public QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
+        return cxt.apply(docflowsAdaptor::putReplyDocumentSignature);
     }
 
     @Override
-    public QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent) {
-        QueryContext<List<ReplyDocument>> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::generateReplies);
+    public CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] signature) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
+
+        return cxt
+                .setDocumentId(documentId)
+                .setDocflowId(docflowId)
+                .setReplyId(replyId)
+                .setContent(signature)
+                .applyAsync(docflowsAdaptor::putReplyDocumentSignature);
     }
 
     @Override
@@ -263,32 +270,6 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         return cxt
                 .setUserIP(userIPCxt.get())
                 .apply(docflowsAdaptor::sendReply);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<List<Docflow>>> sendRepliesAsync(
-            List<ReplyDocument> replyDocuments) {
-        QueryContext<List<Docflow>> cxt = createQueryContext(EN_DFW);
-        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
-        if (userIPCxt.isFail()) {
-            return CompletableFuture.completedFuture(cxt.setServiceError(userIPCxt));
-        }
-        return cxt
-                .setReplyDocuments(replyDocuments)
-                .setUserIP(userIPCxt.get())
-                .applyAsync(docflowsAdaptor::sendReplies);
-    }
-
-    @Override
-    public QueryContext<List<Docflow>> sendReplies(QueryContext<?> parent) {
-        QueryContext<List<Docflow>> cxt = createQueryContext(parent, EN_DFW);
-        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
-        if (userIPCxt.isFail()) {
-            return cxt.setServiceError(userIPCxt);
-        }
-        return cxt
-                .setUserIP(userIPCxt.get())
-                .apply(docflowsAdaptor::sendReplies);
     }
 
     @Override

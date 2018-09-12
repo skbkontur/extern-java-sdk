@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.docflows.service;
 
-import java.util.Date;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
@@ -36,6 +35,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jetty.server.Server;
@@ -50,11 +50,8 @@ import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
@@ -67,15 +64,15 @@ public class DocflowServiceGetDocflowsTest {
     private static Server server;
 
     private final static String DOCFLOW_PAGE = "\"skip\": 0," +
-        "\"take\": 0," +
-        "\"total-count\": 0";
+            "\"take\": 0," +
+            "\"total-count\": 0";
 
     private final static String DOCFLOW_PAGE_ITEM =
-        "\"id\": \"00000000-0000-0000-0000-000000000000\"," +
-            "\"type\": \"urn:nss:nid\"," +
-            "\"status\": \"urn:nss:nid\"," +
-            "\"send-date\": \"" + StandardValues.DATE + "\"," +
-            "\"last-change-date\": \"" + StandardValues.DATE + "\"";
+            "\"id\": \"00000000-0000-0000-0000-000000000000\"," +
+                    "\"type\": \"urn:docflow:fns534-report\"," +
+                    "\"status\": \"urn:docflow-common-status:sent\"," +
+                    "\"send-date\": \"" + StandardValues.DATE + "\"," +
+                    "\"last-change-date\": \"" + StandardValues.DATE + "\"";
 
     @BeforeClass
     public static void startJetty() throws Exception {
@@ -125,8 +122,8 @@ public class DocflowServiceGetDocflowsTest {
     public void testGetDocflows_DocflowPageItem() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s," +
-            "  \"docflows-page-item\": [{%s}]" +
-            "}", DOCFLOW_PAGE, DOCFLOW_PAGE_ITEM));
+                "  \"docflows-page-item\": [{%s}]" +
+                "}", DOCFLOW_PAGE, DOCFLOW_PAGE_ITEM));
         DocflowsValidator.validateDocflowPage(getDocflowPage(), true);
         DocflowsValidator.validateDocflowPage(getDocflowPageAsync(), true);
     }
@@ -174,7 +171,7 @@ public class DocflowServiceGetDocflowsTest {
         queryContext.setCreatedTo(new Date());
         queryContext.setType("string");
         QueryContext<DocflowPage> docflowPageQueryContext = engine.getDocflowService()
-            .getDocflows(queryContext);
+                .getDocflows(queryContext);
         DocflowPage docflowPage = docflowPageQueryContext.get();
         assertNull("docflowPage must be null!", docflowPage);
         ServiceError serviceError = docflowPageQueryContext.getServiceError();
@@ -201,8 +198,8 @@ public class DocflowServiceGetDocflowsTest {
     private DocflowPage getDocflowPageAsync() {
         try {
             return engine.getDocflowService()
-                .getDocflowsAsync(true, true, 0, 0, "string", new Date(), new Date(),
-                    new Date(), new Date(), "string").get().get();
+                    .getDocflowsAsync(true, true, 0, 0, "string", new Date(), new Date(),
+                            new Date(), new Date(), "string").get().get();
         } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;

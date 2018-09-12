@@ -165,7 +165,7 @@ public class DraftServiceLookupDocumentTest {
         ResponseData.INSTANCE.setResponseMessage("{"
             + "\"id\": \"" + StandardValues.ID + "\","
             + "\"description\": {"
-            + "  \"type\": \"urn:nss:nid\","
+            + "  \"type\": \"urn:docflow:fns534-report\","
             + "  \"filename\": \"string\","
             + "  \"content-type\": \"string\""
             + "}}");

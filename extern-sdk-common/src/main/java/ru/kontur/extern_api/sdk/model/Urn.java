@@ -2,7 +2,7 @@ package ru.kontur.extern_api.sdk.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public interface Urn<T extends Enum> {
+public interface Urn<T extends Enum<?>> {
 
     default String getRepresentation() {
         try {

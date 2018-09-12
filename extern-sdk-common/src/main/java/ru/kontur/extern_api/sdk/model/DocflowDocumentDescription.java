@@ -1,6 +1,5 @@
 package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.model.DocumentTypes.Fns534Report;
 
 /**
  * <p>
@@ -11,11 +10,11 @@ import ru.kontur.extern_api.sdk.model.DocumentTypes.Fns534Report;
  */
 public class DocflowDocumentDescription {
 
-    private Fns534Report type = null;
+    private DocumentType type = null;
     private String filename = null;
     private String contentType = null;
     private Boolean compressed = null;
-    public DocflowDocumentDescription type(Fns534Report type) {
+    public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;
         return this;
     }
@@ -45,7 +44,7 @@ public class DocflowDocumentDescription {
      * </ul>
      * @return type
      */
-    public Fns534Report getType() {
+    public DocumentType getType() {
         return type;
     }
 
@@ -58,7 +57,7 @@ public class DocflowDocumentDescription {
      *   <li>urn:document:fns534-report-attachment - приложение к декларации для ФНС</li>
      * </ul>
      */
-    public void setType(Fns534Report type) {
+    public void setType(DocumentType type) {
         this.type = type;
     }
 

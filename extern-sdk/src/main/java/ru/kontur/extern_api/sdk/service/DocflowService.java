@@ -322,46 +322,30 @@ public interface DocflowService extends ProviderHolder {
      */
     QueryContext<ReplyDocument> generateReply(QueryContext<?> parent);
 
-
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
-     * Асинхронный метод создает служебные документы для всех документов в докуметообороте
+     * Загрузить подпись ответного документа
      *
-     * @param signerX509Base64 сертификат ключа подписи в кодировке BASE64 без тегов
-     * @return структура данных для отправки
-     * @see DocumentToSend
+     * @param parent должен содержать: <ul>
+     * <li>{@link QueryContext::getDocflowId}</li>
+     * <li>{@link QueryContext::getDocumentId}</li>
+     * <li>{@link QueryContext::getReplyId}</li>
+     * <li>{@link QueryContext::getContent} -- подпись</li>
+     * </ul>
      */
-    CompletableFuture<QueryContext<List<ReplyDocument>>> generateRepliesAsync(
-            Docflow docflow,
-            String signerX509Base64);
+    QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent);
 
-    /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
-     * Cинхронный метод создает служебные документы для всех документов в докуметообороте
-     *
-     * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- тип создаваемого документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentType};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- сертификат ключа подписи в кодировке BASE64 без тегов. Для установки необходимо
-     * использовать метод {@link QueryContext#setCertificate}.</p>
-     * @return структура данных для отправки
-     * @see DocumentToSend
-     */
-    QueryContext<List<ReplyDocument>> generateReplies(QueryContext<?> parent);
-
+    CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] signature
+    );
 
     /**
      * Асинхронный метод отправляет документ в контролирующий орган
      *
      * @param replyDocument структура данных для отправки, созданная с помощью метода {@link
-     * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply} Перед отправкой в
-     * эту структуру данных необходимо установить подпись в формате PKCS#7, вычисленную для контента
-     * документа {@link ReplyDocument#getContent()}, с помощью метода {@link
-     * ReplyDocument#setSignature}.
+     * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply}
      * @return ДО
      * @see ReplyDocument
      */
@@ -382,36 +366,6 @@ public interface DocflowService extends ProviderHolder {
      * @see ReplyDocument
      */
     QueryContext<Docflow> sendReply(QueryContext<?> parent);
-
-    /**
-     * Асинхронный метод отправляет список документов в контролирующий орган
-     *
-     * @param replyDocuments список документов {@link ReplyDocument} для отправки в контролирующие
-     * органы, созданная с помощью метода {@link DocflowService#generateReplyAsync} | {@link
-     * DocflowService#generateReply} Перед отправкой в {@link ReplyDocument} необходимо установить
-     * подпись в формате PKCS#7, вычисленную для контента документа {@link
-     * ReplyDocument#getContent()}, с помощью метода {@link ReplyDocument#setSignature}.
-     * @return список ДО
-     * @see ReplyDocument
-     */
-    CompletableFuture<QueryContext<List<Docflow>>> sendRepliesAsync(
-            List<ReplyDocument> replyDocuments);
-
-    /**
-     * Синхронный метод отправляет список документов в контролирующий орган
-     *
-     * @param parent контекст
-     * <p>Должен содержать объект {@code List<ReplyDocument>}, полученная с помощью метода {@link
-     * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply}.</p>
-     * <p>В объект {@link ReplyDocument} необходимо установить подпись в формате PKCS#7, вычесленную
-     * для массива байт {@link ReplyDocument#content}, с помощью метода {@link
-     * ReplyDocument#setSignature}.</p>
-     * <p>Для установки списка ответных документов в контекст необходимо использовать метод {@link
-     * QueryContext#setReplyDocuments}</p>
-     * @return список ДО
-     * @see ReplyDocument
-     */
-    QueryContext<List<Docflow>> sendReplies(QueryContext<?> parent);
 
     /**
      * Асинхронный метод получения ответного документа по идентификатору

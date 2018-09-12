@@ -25,9 +25,12 @@ package ru.kontur.extern_api.sdk;
 
 import static ru.kontur.extern_api.sdk.utils.YAStringUtils.isNullOrEmpty;
 
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.event.AuthenticationEvent;
 import ru.kontur.extern_api.sdk.event.AuthenticationListener;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
@@ -42,6 +45,7 @@ import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 /**
@@ -229,5 +233,21 @@ public class ExternEngine implements AuthenticationListener, ProviderHolderParen
 
     public HttpClient getHttpClient() {
         return servicesFactory.getHttpClient();
+    }
+
+    public HttpClient getAuthorizedHttpClient() {
+        HttpClient httpClient = servicesFactory.getHttpClient();
+
+        Optional.ofNullable(getApiKeyProvider())
+                .map(ApiKeyProvider::getApiKey)
+                .ifPresent(httpClient::acceptApiKey);
+
+        Optional.ofNullable(getAuthenticationProvider())
+                .map(AuthenticationProvider::sessionId)
+                .map(QueryContext::ensureSuccess)
+                .ifPresent(cxt -> httpClient
+                        .acceptAccessToken(cxt.getAuthPrefix(), cxt.getSessionId()));
+
+        return httpClient;
     }
 }
