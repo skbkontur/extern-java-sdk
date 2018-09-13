@@ -33,7 +33,7 @@ public class CompanyGeneral {
     private String inn = null;
     private String kpp = null;
     private String name = null;
-    private String isMainOrg = null;
+    private boolean isMainOrg;
 
     /**
      * Возвращает ИНН
@@ -83,11 +83,11 @@ public class CompanyGeneral {
         this.name = name;
     }
 
-    public String isMainOrg() {
+    public boolean isMainOrg() {
         return isMainOrg;
     }
 
-    public void setIsMainOrg(String isMainOrg) {
+    public void setIsMainOrg(boolean isMainOrg) {
         this.isMainOrg = isMainOrg;
     }
 }
