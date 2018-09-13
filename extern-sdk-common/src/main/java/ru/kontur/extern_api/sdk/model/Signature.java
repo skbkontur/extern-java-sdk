@@ -39,8 +39,6 @@ public class Signature {
     private Link contentLink = null;
     private List<Link> links = new ArrayList<>();
     private String title = null;
-
-    @SerializedName("singed-certificate-thumbprint")
     private String signatureCertificateThumbprint;
 
     public Signature id(UUID id) {

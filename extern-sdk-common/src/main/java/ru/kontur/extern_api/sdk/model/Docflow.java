@@ -39,6 +39,7 @@ import java.util.UUID;
 public class Docflow {
 
     private UUID id = null;
+    private UUID organizationId = null;
     private DocflowType type = null;
     private DocflowStatus status = null;
     private IDocflowDescription description = null;
@@ -212,6 +213,14 @@ public class Docflow {
      */
     public void setLastChangeDate(Date lastChangeDate) {
         this.lastChangeDate = lastChangeDate;
+    }
+
+    public UUID getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(UUID organizationId) {
+        this.organizationId = organizationId;
     }
 
     @Override

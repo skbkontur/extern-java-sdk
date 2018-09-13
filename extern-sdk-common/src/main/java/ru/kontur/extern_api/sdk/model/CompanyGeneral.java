@@ -23,23 +23,17 @@
  */
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>
  * Класс содержит данные организации. Используется для создании новой организации или получения информации о новой в {@code OrganizationService}
  * </p>
- * @author Aleksey Sukhorukov
  */
 public class CompanyGeneral {
-    @SerializedName("inn")
+
     private String inn = null;
-
-    @SerializedName("kpp")
     private String kpp = null;
-
-    @SerializedName("name")
     private String name = null;
+    private String isMainOrg = null;
 
     /**
      * Возвращает ИНН
@@ -87,5 +81,13 @@ public class CompanyGeneral {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String isMainOrg() {
+        return isMainOrg;
+    }
+
+    public void setIsMainOrg(String isMainOrg) {
+        this.isMainOrg = isMainOrg;
     }
 }
