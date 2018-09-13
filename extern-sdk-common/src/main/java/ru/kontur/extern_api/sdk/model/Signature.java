@@ -32,7 +32,6 @@ import java.util.UUID;
 
 /**
  * <p>Класс содержит информацию о подписи документа</p>
- * @author Aleksey Sukhorukov
  */
 public class Signature {
 
@@ -40,6 +39,9 @@ public class Signature {
     private Link contentLink = null;
     private List<Link> links = new ArrayList<>();
     private String title = null;
+
+    @SerializedName("singed-certificate-thumbprint")
+    private String signatureCertificateThumbprint;
 
     public Signature id(UUID id) {
         this.id = id;
@@ -125,5 +127,13 @@ public class Signature {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSignatureCertificateThumbprint() {
+        return signatureCertificateThumbprint;
+    }
+
+    public void setSignatureCertificateThumbprint(String signatureCertificateThumbprint) {
+        this.signatureCertificateThumbprint = signatureCertificateThumbprint;
     }
 }
