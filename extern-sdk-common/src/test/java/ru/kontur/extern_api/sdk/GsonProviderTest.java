@@ -18,6 +18,7 @@ public class GsonProviderTest {
 
         String docflow = "{\n"
                 + "  \"id\": \"f3201aef-dea5-43ba-8a12-d332856299c0\",\n"
+                + "  \"organization-id\": \"f3201aef-dea5-43ba-8a12-d332856299c0\",\n"
                 + "  \"type\": \"urn:docflow:fns534-demand\",\n"
                 + "  \"status\": \"urn:docflow-common-status:delivered\",\n"
                 + "  \"description\": {\n"

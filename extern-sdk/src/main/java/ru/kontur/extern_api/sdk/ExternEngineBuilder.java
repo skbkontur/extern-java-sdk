@@ -50,7 +50,7 @@ public class ExternEngineBuilder implements Syntax {
 
     @NotNull
     public static ApiKeySyntax createExternEngine() {
-        return createExternEngine(new Configuration());
+        return new ExternEngineBuilder();
     }
 
     @NotNull
