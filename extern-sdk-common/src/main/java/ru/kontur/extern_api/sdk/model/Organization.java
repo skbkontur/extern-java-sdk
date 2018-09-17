@@ -35,7 +35,6 @@ import com.google.gson.annotations.SerializedName;
 public class Organization {
 
     private String inn;
-    @SerializedName("organization")
     private final OrganizationInfo organization;
 
     public Organization(String inn, String kpp) {

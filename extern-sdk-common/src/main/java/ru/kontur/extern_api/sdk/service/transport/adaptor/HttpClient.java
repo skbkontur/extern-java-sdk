@@ -82,13 +82,9 @@ public interface HttpClient {
             String href,
             Class<T> expectedType) {
 
-        try {
-            return setServiceBaseUri("")
-                    .submitHttpRequest(href, "GET", null, null, expectedType)
-                    .getData();
-        } catch (ApiException e) {
-            throw new RuntimeException(e);
-        }
+        return setServiceBaseUri("")
+                .submitHttpRequest(href, "GET", null, null, expectedType)
+                .getData();
     }
 
     default <T> T followPostLink(

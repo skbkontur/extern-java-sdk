@@ -23,7 +23,6 @@
  */
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 
 /**
@@ -34,9 +33,7 @@ import java.util.UUID;
  * @author Aleksey Sukhorukov
  */
 public class Company {
-    @SerializedName("id")
     private UUID id;
-    @SerializedName("general")
     private CompanyGeneral general = null;
 
     /**

@@ -24,48 +24,26 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_PAGE;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENTS;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_DESCRIPTION;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_ID;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.FORCE_CONFIRMATION;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.REPLY_DOCUMENT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.REPLY_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SMS_CODE;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.USER_IP;
-import static ru.kontur.extern_api.sdk.utils.UncheckedSupplier.get;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
-import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.PrintDocumentData;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
-import ru.kontur.extern_api.sdk.model.SenderIP;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DocflowsApi;
-import ru.kontur.extern_api.sdk.validator.LinkExists;
-import ru.kontur.extern_api.sdk.validator.NoFail;
-import ru.kontur.extern_api.sdk.validator.ParamExists;
 
 /**
  * @author Mikhail Pavlenko
@@ -392,7 +370,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
-    /**
+    /*
      * Allow API user to get document print from docflow
      *
      * @param cxt QueryContext&lt;String&gt; context

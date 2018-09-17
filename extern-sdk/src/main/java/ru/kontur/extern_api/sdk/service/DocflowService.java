@@ -383,5 +383,4 @@ public interface DocflowService extends ProviderHolder {
     QueryContext<String> print(QueryContext<?> parent);
 
     QueryContext<String> getUserIp();
-
 }

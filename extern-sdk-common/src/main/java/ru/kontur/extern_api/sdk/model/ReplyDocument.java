@@ -33,14 +33,11 @@ import java.util.List;
 public class ReplyDocument implements LinksHolder {
     private String id;
     private byte[] content;
-    @SerializedName("print-content")
     private byte[] printContent;
     private String filename;
     private byte[] signature;
     private List<Link> links;
-    @SerializedName("docflow-id")
     private String docflowId;
-    @SerializedName("document-id")
     private String documentId;
 
     /**
@@ -100,8 +97,7 @@ public class ReplyDocument implements LinksHolder {
     }
 
     /**
-     * Возвращает идентификатор документооборота
-     * @return
+     * @return идентификатор документооборота
      */
     public String getDocflowId() {
         return docflowId;

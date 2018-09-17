@@ -1,21 +1,18 @@
 package ru.kontur.extern_api.sdk.typeadaptors;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DocflowType;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.Link;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 
 public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
@@ -33,18 +30,34 @@ public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
             throws JsonParseException {
 
         JsonObject obj = json.getAsJsonObject();
-
         Docflow df = new Docflow();
+
         df.setType(deserialize(obj, "type", DocflowType.class, context));
         Optional.ofNullable(df.getType())
                 .map(type -> deserialize(obj, "description", type.getDescriptionType(), context))
                 .ifPresent(df::setDescription);
-        df.setId(deserialize(obj, "id", UUID.class, context));
-        df.setStatus(deserialize(obj, "status", DocflowStatus.class, context));
-        df.setLastChangeDate(deserialize(obj, "last-change-date", Date.class, context));
-        df.setSendDate(deserialize(obj, "send-date", Date.class, context));
-        df.setDocuments(deserialize(obj, "documents", listDocToken.getType(), context));
-        df.setLinks(deserialize(obj, "links", listLinkToken.getType(), context));
+
+        FieldNamingPolicy namingPolicy = GsonProvider.getFieldNamingPolicy();
+
+        for (Field field : Docflow.class.getDeclaredFields()) {
+            String fieldName = namingPolicy.translateName(field);
+            if (Objects.equals(fieldName, "type") || Objects.equals(fieldName, "description")) {
+                continue;
+            }
+
+            field.setAccessible(true);
+            try {
+                Object deserialized = deserialize(obj, fieldName, field.getGenericType(), context);
+                field.set(df, deserialized);
+            }
+            catch (IllegalAccessException ignored) {
+                // field.setAccessible(true) should work
+            }
+            finally {
+                field.setAccessible(false);
+            }
+        }
+
 
         return df;
     }
