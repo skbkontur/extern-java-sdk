@@ -132,19 +132,19 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
-    QueryContext generateReply(QueryContext<?> cxt);
-
-    /**
-     * Загрузить подпись ответного документа
-     *
-     * @param cxt должен содержать: <ul>
-     * <li>{@link QueryContext::getDocflowId}</li>
-     * <li>{@link QueryContext::getDocumentId}</li>
-     * <li>{@link QueryContext::getReplyId}</li>
-     * <li>{@link QueryContext::getContent} -- подпись</li>
-     * </ul>
-     */
-    QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
+//    QueryContext generateReply(QueryContext<?> cxt);
+//
+//    /**
+//     * Загрузить подпись ответного документа
+//     *
+//     * @param cxt должен содержать: <ul>
+//     * <li>{@link QueryContext::getDocflowId}</li>
+//     * <li>{@link QueryContext::getDocumentId}</li>
+//     * <li>{@link QueryContext::getReplyId}</li>
+//     * <li>{@link QueryContext::getContent} -- подпись</li>
+//     * </ul>
+//     */
+//    QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
 
     QueryContext<String> print(QueryContext<?> cxt);
 }

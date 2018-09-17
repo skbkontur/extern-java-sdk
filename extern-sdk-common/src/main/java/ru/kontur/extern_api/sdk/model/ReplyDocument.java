@@ -115,6 +115,10 @@ public class ReplyDocument implements LinksHolder {
         return documentId;
     }
 
+    public Link getDocflowLink(){
+        return getLink("docflow");
+    }
+
     public Link getPutSignatureLink(){
         return getLink("save-signature");
     }
