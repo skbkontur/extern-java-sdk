@@ -14,6 +14,7 @@ public class DocflowDocumentDescription {
     private String filename = null;
     private String contentType = null;
     private Boolean compressed = null;
+
     public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;
         return this;

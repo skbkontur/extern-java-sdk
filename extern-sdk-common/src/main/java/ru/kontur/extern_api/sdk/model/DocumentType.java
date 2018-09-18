@@ -292,6 +292,196 @@ public enum DocumentType implements Urn<DocumentType> {
     @SerializedName("urn:document:fns534-application-union-check-protocol")
     Fns534ApplicationUnionCheckProtocol,
 
+
+    @SerializedName("urn:document:fns705-report")
+    Fns705Report,
+
+    @SerializedName("urn:document:fns705-report-conf")
+    Fns705ReportConf,
+
+    @SerializedName("urn:document:fns705-report-comment")
+    Fns705ReportComment,
+
+    @SerializedName("urn:document:fns705-report-protocol")
+    Fns705ReportProtocol,
+
+    @SerializedName("urn:document:fns705-report-final-insp-protocol")
+    Fns705ReportFinalInspProtocol,
+
+    /** Исходный отчет. */
+    @SerializedName("urn:document:fss-report")
+    FssReport,
+
+    /** Подтверждение СОС. */
+    @SerializedName("urn:document:fss-report-date-confirmation")
+    FssReportDateConfirmation,
+
+    /** Сообщение об ошибке. */
+    @SerializedName("urn:document:fss-report-error")
+    FssReportError,
+
+    /** Отчет об ошибке. */
+    @SerializedName("urn:document:fss-report-error-receipt")
+    FssReportErrorReceipt,
+
+    /** Квитанция. */
+    @SerializedName("urn:document:fss-report-receipt")
+    FssReportReceipt,
+
+    /** Листок нетрудоспособности с присоединённой подписью. */
+    @SerializedName("urn:document:fss-sick-report")
+    FssSickReport,
+
+    /** Подтверждение СОС. */
+    @SerializedName("urn:document:fss-sick-report-date-confirmation")
+    FssSickReportDateConfirmation,
+
+    /** Сообщение об ошибке. */
+    @SerializedName("urn:document:fss-sick-report-error")
+    FssSickReportError,
+
+    /** Отчет об ошибке. */
+    @SerializedName("urn:document:fss-sick-report-error-receipt")
+    FssSickReportErrorReceipt,
+
+    /** Квитанция. */
+    @SerializedName("urn:document:fss-sick-report-receipt")
+    FssSickReportReceipt,
+
+    /** Уведомление. */
+    @SerializedName("urn:document:fms-notification")
+    FmsNotification,
+
+    /** УведомлениеОСнятииСУчета. */
+    @SerializedName("urn:document:fms-notification-notification-unregister")
+    FmsNotificationUnregister,
+
+    /** ПриложениеУведомления. */
+    @SerializedName("urn:document:fms-notification-attachment")
+    FmsNotificationAttachment,
+
+    /** ОписаниеУведомления. */
+    @SerializedName("urn:document:fms-notification-description")
+    FmsNotificationDescription,
+
+    /** ПодтверждениеОператора. */
+    @SerializedName("urn:document:fms-notification-date-confirmation")
+    FmsNotificationDateConfirmation,
+
+    /** УведомлениеОбОтказе. */
+    @SerializedName("urn:document:fms-notification-protocol-negative")
+    FmsNotificationProtocolNegative,
+
+    /** УведомлениеОПриеме. */
+    @SerializedName("urn:document:fms-notification-protocol-positive")
+    FmsNotificationProtocolPositive,
+
+    /** ИзвещениеОПолучении. */
+    @SerializedName("urn:document:fms-notification-receipt")
+    FmsNotificationReceipt,
+
+    /** Регистрация. */
+    @SerializedName("urn:document:fms-registration")
+    FmsRegistration,
+
+    /** ОписаниеРегистрации. */
+    @SerializedName("urn:document:fms-registration-description")
+    FmsRegistrationDescription,
+
+    /** ПодтверждениеОператора. */
+    @SerializedName("urn:document:fms-registration-date-confirmation")
+    FmsRegistrationDateConfirmation,
+
+    /** УведомлениеОбОтказе. */
+    @SerializedName("urn:document:fms-registration-protocol-negative")
+    FmsRegistrationProtocolNegative,
+
+    /** УведомлениеОПриеме. */
+    @SerializedName("urn:document:fms-registration-protocol-positive")
+    FmsRegistrationProtocolPositive,
+
+    /** ИзвещениеОПолучении. */
+    @SerializedName("urn:document:fms-registration-receipt")
+    FmsRegistrationReceipt,
+
+    @SerializedName("urn:document:pfr-report")
+    PfrReport,
+
+    @SerializedName("urn:document:pfr-report-description")
+    PfrReportDescription,
+
+    @SerializedName("urn:document:pfr-report-attachment")
+    PfrReportAttachment,
+
+    @SerializedName("urn:document:pfr-report-acknowledgement")
+    PfrReportAcknowledgement,
+
+    @SerializedName("urn:document:pfr-report-protocol")
+    PfrReportProtocol,
+
+    @SerializedName("urn:document:pfr-report-protocol-appendix")
+    PfrReportProtocolAppendix,
+
+    @SerializedName("urn:document:pfr-report-error-description")
+    PfrReportErrorDescription,
+
+    @SerializedName("urn:document:pfr-letter")
+    PfrLetter,
+
+    @SerializedName("urn:document:pfr-letter-description")
+    PfrLetterDescription,
+
+    @SerializedName("urn:document:pfr-letter-attachment")
+    PfrLetterAttachment,
+
+    @SerializedName("urn:document:pfr-letter-transport-info")
+    PfrLetterTransportInfo,
+
+    @SerializedName("urn:document:pfr-letter-letter-acknowledgement")
+    PfrLetterLetterAcknowledgement,
+
+    @SerializedName("urn:document:pfr-letter-error-description")
+    PfrLetterErrorDescription,
+
+    @SerializedName("urn:document:pfr-cu-letter")
+    PfrCuLetter,
+
+    @SerializedName("urn:document:pfr-cu-letter-description")
+    PfrCuLetterDescription,
+
+    @SerializedName("urn:document:pfr-cu-letter-attachment")
+    PfrCuLetterAttachment,
+
+    @SerializedName("urn:document:pfr-cu-letter-transport-info")
+    PfrCuLetterTransportInfo,
+
+    @SerializedName("urn:document:pfr-cu-letter-letter-acknowledgement")
+    PfrCuLetterLetterAcknowledgement,
+
+    @SerializedName("urn:document:pfr-cu-letter-error-description")
+    PfrCuLetterErrorDescription,
+
+    @SerializedName("urn:document:pfr-ios-request")
+    PfrIosRequest,
+
+    @SerializedName("urn:document:pfr-ios-description")
+    PfrIosDescription,
+
+    @SerializedName("urn:document:pfr-ios-request-acknowledgement")
+    PfrIosRequestAcknowledgement,
+
+    @SerializedName("urn:document:pfr-ios-response")
+    PfrIosResponse,
+
+    @SerializedName("urn:document:pfr-ios-response-attachment")
+    PfrIosResponseAttachment,
+
+    @SerializedName("urn:document:pfr-ios-response-acknowledgement")
+    PfrIosResponseAcknowledgement,
+
+    @SerializedName("urn:document:pfr-ios-error-description")
+    PfrIosErrorDescription,
+
     /** отчет */
     @SerializedName("urn:document:stat-report")
     StatReport,
@@ -390,5 +580,6 @@ public enum DocumentType implements Urn<DocumentType> {
 
     /** ПодтверждениеОператора. */
     @SerializedName("urn:document:stat-cu-broadcast-confirmation")
-    StatCuBroadcastConfirmation,
+    StatCuBroadcastConfirmation
+
 }
