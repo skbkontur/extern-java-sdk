@@ -1,7 +1,5 @@
 /*
- * The MIT License
- *
- * Copyright 2018 alexs.
+ * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,16 +8,17 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
  */
 package ru.kontur.extern_api.sdk.service.transport.httpclient.invoker;
 
@@ -42,13 +41,15 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
+import ru.kontur.extern_api.sdk.httpclient.invoker.HttpClientLogger;
+import ru.kontur.extern_api.sdk.httpclient.invoker.HttpClientLogger.LogLevel;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
@@ -65,6 +66,8 @@ public class HttpClientImpl {
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
     private static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
+    private static final Logger log = Logger.getLogger(HttpClientImpl.class.getName());
+
     private final Map<String, String> defaultHeaderParams = new ConcurrentHashMap<>();
 
     private String serviceBaseUri;
@@ -74,11 +77,13 @@ public class HttpClientImpl {
     private Gson json;
     private boolean keepAlive;
     private UserAgentProvider userAgentProvider;
+    private HttpClientLogger clientLogger;
 
     public HttpClientImpl() {
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
         this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive", "true"));
+        this.clientLogger = new HttpClientLogger(LogLevel.BODY);
     }
 
     public HttpClientImpl setKeepAlive(boolean keepAlive) {
@@ -140,9 +145,12 @@ public class HttpClientImpl {
         return json;
     }
 
-    public <T> ApiResponse<T> sendHttpRequest(String path, String httpMethod,
+    public <T> ApiResponse<T> sendHttpRequest(String path, String method,
             Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
             Type type) throws HttpClientException {
+
+        clientLogger.setLogLevel(HttpClientLogger.logLevelFromSystemProperties());
+
         try {
             URL url = buildUrl(path, queryParams);
 
@@ -152,21 +160,24 @@ public class HttpClientImpl {
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
             headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
-            headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
+
+            if (userAgentProvider != null) {
+                headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
+            }
 
             headerParams.forEach(connect::setRequestProperty);
 
             connect.setRequestProperty("Connection", (keepAlive ? "keep-alive" : "close"));
             connect.setConnectTimeout(connectTimeout);
             connect.setReadTimeout(readTimeout);
-            connect.setRequestMethod(httpMethod);
+            connect.setRequestMethod(method);
             connect.setAllowUserInteraction(false);
             connect.setUseCaches(false);
             connect.setDefaultUseCaches(false);
 
             Map<String, List<String>> requestProperties = connect.getRequestProperties();
 
-            if (httpMethod.equalsIgnoreCase("POST") || httpMethod.equalsIgnoreCase("PUT")) {
+            if (method.equalsIgnoreCase("POST") || method.equalsIgnoreCase("PUT")) {
                 connect.setDoOutput(true);
                 byte[] preparedBody = acquireBodyAsByteArray(body, headerParams.get(CONTENT_TYPE));
                 // todo: handle auth errors when fixed streaming enabled.
@@ -177,28 +188,13 @@ public class HttpClientImpl {
                 }
             }
 
-            Logger log = Logger.getLogger("HttpClient");
-
-            if (System.getProperty("httpclient.debug") != null)
-                log.info(() -> {
-                    String requestProps = headersToString(requestProperties);
-                    String request = String.format("%s %s %s\n%s",
-                            httpMethod,
-                            url.toString(),
-                            "HTTP/1.1",
-                            requestProps);
-                    String bodyStr = Optional.ofNullable(body).map(o -> {
-                        if (o instanceof String) {
-                            return "\n\n" + o;
-                        } else if (o instanceof byte[]) {
-                            return "\n\n" + new String((byte[]) o);
-                        }
-                        return "\n\n" + json.toJson(o);
-                    }).orElse("");
-                    return "========== request ===========\n" +
-                            request + bodyStr +
-                            "\n========= request end =========";
-                });
+            HashMap<String, List<String>> headers = new HashMap<>(requestProperties);
+            for (Entry<String, String> entry : getDefaultHeaderParams().entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                headers.put(key, Collections.singletonList(value));
+            }
+            clientLogger.with(log, json).logRequest(url, method, headers, body);
 
             // read server answer
             int responseCode = connect.getResponseCode();
@@ -206,24 +202,17 @@ public class HttpClientImpl {
             Map<String, List<String>> responseHeaders = connect.getHeaderFields();
             byte[] responseData = readResponse(connect);
             MediaType mediaType = getContentType(responseHeaders);
-            Response response = new Response(responseCode, responseMessage, responseHeaders,
-                    mediaType, responseData);
+
+            Response response = new Response(
+                    responseCode,
+                    responseMessage,
+                    responseHeaders,
+                    mediaType,
+                    responseData
+            );
             connect.disconnect();
 
-            if (System.getProperty("httpclient.debug") != null)
-                log.info(() -> {
-                    String respProps = headersToString(responseHeaders);
-                    String status = responseHeaders.get(null).stream()
-                            .reduce((s1, s2) -> s1 + "; " + s2).orElse("");
-                    String responce = String.format("%s\n%s", status, respProps);
-                    String respObjStr = Optional
-                            .ofNullable(responseData)
-                            .map(bytes -> "\n\n" + new String(bytes)).orElse("");
-                    return "========== responce ===========\n" +
-                            responce + respObjStr +
-                            "\n========= responce end =========";
-                });
-
+            clientLogger.with(log, json).logResponse(url, method, responseHeaders, responseData);
 
             if (responseCode >= 200 && responseCode < 300) {
                 return new ApiResponse<>(responseCode, responseMessage, responseHeaders,
@@ -235,7 +224,7 @@ public class HttpClientImpl {
                     throw new HttpClientException("Redirect address is empty", responseCode,
                             responseHeaders, response.bodyToString());
                 }
-                return sendHttpRequest(redirectToUrl, httpMethod, queryParams, body, headerParams,
+                return sendHttpRequest(redirectToUrl, method, queryParams, body, headerParams,
                         type);
             } else {
                 // error 400 - 500
@@ -249,23 +238,6 @@ public class HttpClientImpl {
         }
     }
 
-    private String headersToString(Map<String, List<String>> headers) {
-        return headers.entrySet().stream()
-                .filter(e -> e.getKey() != null)
-                .map(e -> {
-                    List<String> value = Optional.ofNullable(e.getValue())
-                            .orElse(Collections.emptyList());
-
-                    return String.format(
-                            "%s: %s",
-                            e.getKey(),
-                            value.stream().reduce((s1, s2) -> s1 + "; " + s2).orElse(""));
-                })
-                .reduce((s, s2) -> s + "\n" + s2)
-                .orElse("");
-
-    }
-
     /**
      * Deserialize response body to Java object, according to the return type and the Content-Type
      * response header.
@@ -274,8 +246,9 @@ public class HttpClientImpl {
      * @param response server response
      * @param returnType The type of the Java object
      * @return The deserialized Java object
-     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read response
-     * body or the Content-Type of the response is not supported.
+     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read
+     *         response
+     *         body or the Content-Type of the response is not supported.
      */
     @SuppressWarnings("unchecked")
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {
@@ -392,10 +365,13 @@ public class HttpClientImpl {
 
         MediaType mediaType = MediaType.parse(contentType);
 
+        if (mediaType == null) {
+            throw new HttpClientException("Content type \"" + contentType + "\" is not supported");
+        }
+
         if (body instanceof byte[]) {
             return (byte[]) body;
         } else if (body instanceof String) {
-            assert mediaType != null;
             return ((String) body).getBytes(mediaType.charset(DEFAULT_CHARSET));
         } else if ("json".equalsIgnoreCase(mediaType.subtype())) {
             return json.toJson(body).getBytes(mediaType.charset(DEFAULT_CHARSET));
