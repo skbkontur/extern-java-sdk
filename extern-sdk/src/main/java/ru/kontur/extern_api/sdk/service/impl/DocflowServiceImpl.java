@@ -401,9 +401,4 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         QueryContext<String> cxt = createQueryContext(parent, EN_DFW);
         return cxt.apply(docflowsAdaptor::print);
     }
-
-    @Override
-    public QueryContext<String> getUserIp(){
-        return this.getUserIPProvider().userIP();
-    }
 }
