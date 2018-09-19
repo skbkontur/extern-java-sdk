@@ -208,6 +208,109 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
+        return cxt.apply(docflowsAdaptor::generateReply);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyType,
+            String signerX509Base64) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setDocumentType(replyType)
+                .setCertificate(signerX509Base64)
+                .applyAsync(docflowsAdaptor::generateReply);
+    }
+
+
+    @Override
+    public QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
+        return cxt.apply(docflowsAdaptor::putReplyDocumentSignature);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] signature) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
+
+        return cxt
+                .setDocumentId(documentId)
+                .setDocflowId(docflowId)
+                .setReplyId(replyId)
+                .setContent(signature)
+                .applyAsync(docflowsAdaptor::putReplyDocumentSignature);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument) {
+        QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
+        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
+        if (userIPCxt.isFail()) {
+            return CompletableFuture.completedFuture(cxt.setServiceError(userIPCxt));
+        }
+        return cxt
+                .setReplyDocument(replyDocument)
+                .setUserIP(userIPCxt.get())
+                .applyAsync(docflowsAdaptor::sendReply);
+    }
+
+    @Override
+    public QueryContext<Docflow> sendReply(QueryContext<?> parent) {
+        QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
+        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
+        if (userIPCxt.isFail()) {
+            return cxt.setServiceError(userIPCxt);
+        }
+        return cxt
+                .setUserIP(userIPCxt.get())
+                .apply(docflowsAdaptor::sendReply);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(String docflowId,
+            String documentId, String replyId) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .applyAsync(docflowsAdaptor::getReplyDocument);
+    }
+
+    @Override
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_DFW);
+        return cxt.apply(docflowsAdaptor::getReplyDocument);
+    }
+
+    public CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
+            String docflowId, String documentId, String replyId, byte[] content) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .setContent(content)
+                .applyAsync(docflowsAdaptor::updateReplyDocumentContent);
+    }
+
+    @Override
+    public QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> parent) {
+        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_DFW);
+        return cxt.apply(docflowsAdaptor::getReplyDocument);
+    }
+
+    @Override
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
             Boolean finished,
             Boolean incoming,
@@ -250,6 +353,47 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
                 .setDocumentId(documentId)
                 .setContentString(documentContentBase64)
                 .applyAsync(docflowsAdaptor::print);
+    }
+
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent) {
+        QueryContext<SignInitiation> cxt = createQueryContext(parent, EN_DFW);
+        return cxt.apply(docflowsAdaptor::cloudSignReplyDocument);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            String smsCode) {
+        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .setSmsCode(smsCode)
+                .applyAsync(docflowsAdaptor::confirmSignReplyDocument);
+    }
+
+    @Override
+    public QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(
+            QueryContext<?> parent) {
+        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
+        return cxt.apply(docflowsAdaptor::confirmSignReplyDocument);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId) {
+        QueryContext<SignInitiation> cxt = createQueryContext(EN_DFW);
+        return cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
+                .applyAsync(docflowsAdaptor::cloudSignReplyDocument);
     }
 
     @Override

@@ -22,10 +22,9 @@
  */
 
 package ru.kontur.extern_api.sdk.model;
-
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+import javax.annotation.Nullable;
+
 /**
  * <p>Объект, содержащий информацию об ответном документе</p>
  * @author Aleksey Sukhorukov
@@ -111,22 +110,27 @@ public class ReplyDocument implements LinksHolder {
         return documentId;
     }
 
+    @Nullable
     public Link getDocflowLink(){
         return getLink("docflow");
     }
 
+    @Nullable
     public Link getPutSignatureLink(){
         return getLink("save-signature");
     }
 
+    @Nullable
     public Link getSendLink(){
         return getLink("send");
     }
 
+    @Nullable
     public Link getCloudSignLink(){
         return getLink("sign");
     }
 
+    @Nullable
     public Link getCloudSignConfirmLink(){
         return getLink("sign-confirm");
     }

@@ -24,10 +24,14 @@ package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT_STRING;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCFLOW_PAGE;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENTS;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_DESCRIPTION;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.DOCUMENT_ID;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.REPLY_DOCUMENT;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.REPLY_ID;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURE;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.SIGNATURES;
 
@@ -37,13 +41,21 @@ import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.PrintDocumentData;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.validator.NoFail;
+import ru.kontur.extern_api.sdk.validator.ParamExists;
 
 /**
  * @author Mikhail Pavlenko
@@ -395,6 +407,233 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
             );
         } catch (ApiException x) {
             return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
+     *
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст с документом, подлежащим отправке
+     */
+    @Override
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .generateReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getDocumentType(),
+                                    cxt.getCertificate()
+                            )
+                            .getData(),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    @Override
+    public QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .putReplyDocumentSignature(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getReplyId().toString(),
+                                    cxt.getContent()
+                            )
+                            .getData(),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<ReplyDocument>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * Отправка ответного документа
+     *
+     * @param cxt контекст для отправки документов
+     * @return контекст с  документооборотом
+     */
+    @Override
+    public QueryContext<Docflow> sendReply(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .sendReply(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getReplyId().toString(),
+                                    new SendReplyDocumentRequestData()
+                                            .senderIp(cxt.getUserIP())
+                            )
+                            .getData(),
+                    CONTENT
+            );
+        } catch (ApiException x) {
+            return new QueryContext<Docflow>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId} Получение
+     * ответного документа
+     *
+     * @param cxt контекст для получения ответного документа
+     * @return контекст с данными ответного документа
+     * @see ReplyDocument
+     */
+    @Override
+    public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt) {
+        return new NoFail<>(
+                new ParamExists<>(DOCFLOW_ID,
+                        new ParamExists<>(DOCUMENT_ID,
+                                new ParamExists<>(REPLY_ID, new AcquireReplyDocument())
+                        )
+                )
+        ).apply(cxt);
+    }
+
+    @Override
+    public QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt) {
+        return new NoFail<>(
+                new ParamExists<>(DOCFLOW_ID,
+                        new ParamExists<>(DOCUMENT_ID,
+                                new ParamExists<>(REPLY_ID,
+                                        new ParamExists<>(CONTENT, new UpdateReplyDocumentContent())
+                                )
+                        )
+                )
+        ).apply(cxt);
+    }
+
+
+    /**
+     * Allow API user to init cloud sign for reply document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/cloud-sign
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
+    @Override
+    public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .initCloudSignReplyDocument(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    cxt.getSignatureId().toString())
+                            .getData(),
+                    cxt.getEntityName()
+            );
+        } catch (ApiException x) {
+            return new QueryContext<SignInitiation>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
+    /**
+     * Allow API user to confirm cloud sign for reply document from docflow POST
+     * /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm
+     *
+     * @param cxt контекст
+     * @return контекст со списоком документов, подлежащих отправки
+     */
+    @Override
+    public QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt) {
+        return new NoFail<>(new ParamExists<>(cxt.getEntityName(), new SignConfirmReply()))
+                .apply(cxt);
+    }
+
+
+    private class AcquireReplyDocument implements Query<ReplyDocument> {
+
+        @Override
+        public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
+            try {
+                return new QueryContext<ReplyDocument>(cxt, "reply-document").setResult(
+                        transport(cxt)
+                                .getReplyDocument(
+                                        cxt.getAccountProvider().accountId().toString(),
+                                        cxt.getDocflowId().toString(),
+                                        cxt.getDocumentId().toString(),
+                                        cxt.getReplyId().toString()
+                                ).getData(),
+                        REPLY_DOCUMENT
+                );
+            } catch (ApiException x) {
+                return new QueryContext<ReplyDocument>(cxt, "reply-document")
+                        .setServiceError(x);
+            }
+        }
+    }
+
+    private class UpdateReplyDocumentContent implements Query<ReplyDocument> {
+
+        @Override
+        public QueryContext<ReplyDocument> apply(QueryContext<?> cxt) {
+            try {
+                return new QueryContext<ReplyDocument>(cxt, "reply-document").setResult(
+                        transport(cxt)
+                                .updateReplyDocumentContent(
+                                        cxt.getAccountProvider().accountId().toString(),
+                                        cxt.getDocflowId().toString(),
+                                        cxt.getDocumentId().toString(),
+                                        cxt.getReplyId().toString(),
+                                        cxt.getContent()
+                                ).getData(),
+                        REPLY_DOCUMENT
+                );
+            } catch (ApiException x) {
+                return new QueryContext<ReplyDocument>(cxt, "reply-document")
+                        .setServiceError(x);
+            }
+        }
+    }
+
+    private class SignConfirmReply implements Query<SignConfirmResultData> {
+
+        @Override
+        public QueryContext<SignConfirmResultData> apply(QueryContext<?> cxt) {
+            try {
+                Link sendLink = cxt.get("sign-confirm");
+                SignConfirmResultData sendResponse = api.getHttpClient().followPostLink(
+                        sendLink.getHref(),
+                        cxt.getSmsCode(),
+                        SignConfirmResultData.class
+                );
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setResult(sendResponse, cxt.getEntityName());
+            } catch (ApiException x) {
+                return new QueryContext<SignConfirmResultData>(cxt, cxt.getEntityName())
+                        .setServiceError(x);
+            }
         }
     }
 

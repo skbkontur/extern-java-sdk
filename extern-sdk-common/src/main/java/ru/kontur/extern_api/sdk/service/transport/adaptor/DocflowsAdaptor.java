@@ -138,5 +138,30 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
+    QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
+
+    /**
+     * <p>Загрузить подпись ответного документа</p>
+     * <p>cxt должен содержать:</p>
+     * <p>{@link QueryContext#getDocflowId}</p>
+     * <p>{@link QueryContext#getDocumentId}</p>
+     * <p>{@link QueryContext#getReplyId}</p>
+     * <p>{@link QueryContext#getContent} -- подпись</p>
+     *
+     * @param cxt см. выше
+     * @return Обновлённую модель ReplyDocument
+     */
+    QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
+
+    QueryContext<Docflow> sendReply(QueryContext<?> cxt);
+
+    QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
+
+    QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt);
+
+    QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt);
+
+    QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt);
+
     QueryContext<String> print(QueryContext<?> cxt);
 }
