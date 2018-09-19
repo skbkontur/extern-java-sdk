@@ -593,4 +593,5 @@ public interface DocflowService extends ProviderHolder {
      */
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
 
+    QueryContext<String> getUserIp();
 }

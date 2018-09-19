@@ -13,7 +13,6 @@ import java.util.Optional;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowType;
-import ru.kontur.extern_api.sdk.model.descriptions.UnknownDescription;
 
 
 public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
