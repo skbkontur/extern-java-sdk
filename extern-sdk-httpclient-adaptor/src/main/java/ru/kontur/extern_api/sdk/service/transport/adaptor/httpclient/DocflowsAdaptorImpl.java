@@ -382,6 +382,34 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
+    /*
+     * Allow API user to get document print from docflow
+     *
+     * @param cxt QueryContext&lt;String&gt; context
+     * @return QueryContext&lt;String&gt; context
+     */
+    @Override
+    public QueryContext<String> print(QueryContext<?> cxt) {
+        try {
+            if (cxt.isFail()) {
+                return new QueryContext<>(cxt, cxt.getEntityName());
+            }
+
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
+                    transport(cxt)
+                            .print(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getDocflowId().toString(),
+                                    cxt.getDocumentId().toString(),
+                                    new PrintDocumentData().content(cxt.getContentString())
+                            ).getData(),
+                    CONTENT_STRING
+            );
+        } catch (ApiException x) {
+            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
+        }
+    }
+
     /**
      * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
      *
@@ -544,39 +572,6 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
     }
 
 
-    /**
-     * Allow API user to get document print from docflow
-     *
-     * @param cxt QueryContext&lt;String&gt; context
-     * @return QueryContext&lt;String&gt; context
-     */
-    @Override
-    public QueryContext<String> print(QueryContext<?> cxt) {
-        try {
-            if (cxt.isFail()) {
-                return new QueryContext<>(cxt, cxt.getEntityName());
-            }
-
-            return new QueryContext<String>(cxt, cxt.getEntityName()).setResult(
-                    transport(cxt)
-                            .print(
-                                    cxt.getAccountProvider().accountId().toString(),
-                                    cxt.getDocflowId().toString(),
-                                    cxt.getDocumentId().toString(),
-                                    new PrintDocumentData().content(cxt.getContentString())
-                            ).getData(),
-                    CONTENT_STRING
-            );
-        } catch (ApiException x) {
-            return new QueryContext<String>(cxt, cxt.getEntityName()).setServiceError(x);
-        }
-    }
-
-    private DocflowsApi transport(QueryContext<?> cxt) {
-        api.setHttpClient(configureTransport(cxt));
-        return api;
-    }
-
     private class AcquireReplyDocument implements Query<ReplyDocument> {
 
         @Override
@@ -642,4 +637,8 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
     }
 
+    private DocflowsApi transport(QueryContext<?> cxt) {
+        api.setHttpClient(configureTransport(cxt));
+        return api;
+    }
 }
