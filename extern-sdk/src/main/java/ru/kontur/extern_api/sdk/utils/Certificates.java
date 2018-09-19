@@ -24,14 +24,14 @@
 package ru.kontur.extern_api.sdk.utils;
 
 import java.security.MessageDigest;
-import javax.xml.bind.DatatypeConverter;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
 
 public class Certificates {
 
     public static String getThumbprint(byte[] cert) {
         MessageDigest md = UncheckedSupplier.get(() -> MessageDigest.getInstance("SHA-1"));
         md.update(cert);
-        return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+        return IOUtil.bytesToHex(md.digest()).toLowerCase();
     }
 
 }
