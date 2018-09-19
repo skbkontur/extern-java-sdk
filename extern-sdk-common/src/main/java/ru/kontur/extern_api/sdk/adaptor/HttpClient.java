@@ -82,8 +82,16 @@ public interface HttpClient {
             String href,
             Class<T> expectedType) {
 
+        return followGetLink(href, null, expectedType);
+    }
+
+    default <T> T followGetLink(
+            String href,
+            Map<String, Object> queryParams,
+            Class<T> expectedType) {
+
         return setServiceBaseUri("")
-                .submitHttpRequest(href, "GET", null, null, expectedType)
+                .submitHttpRequest(href, "GET", queryParams, null, expectedType)
                 .getData();
     }
 
