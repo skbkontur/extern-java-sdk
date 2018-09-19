@@ -23,15 +23,30 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import java.security.MessageDigest;
+import com.argos.asn1.Asn1Exception;
+import com.argos.cipher.asn1ext.EnvelopedData;
+import com.argos.cipher.asn1ext.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 
-public class Certificates {
+import java.security.MessageDigest;
+import java.util.stream.Stream;
+
+public class CryptoApi {
 
     public static String getThumbprint(byte[] cert) {
         MessageDigest md = UncheckedSupplier.get(() -> MessageDigest.getInstance("SHA-1"));
         md.update(cert);
         return IOUtil.bytesToHex(md.digest()).toLowerCase();
+    }
+
+    public static Stream<String> getSerialNumbers(byte[] encryptedData) throws Asn1Exception {
+        EnvelopedData envelopedData = new PKCS7(encryptedData).getEnvelopedData();
+
+        Stream.Builder<String> builder = Stream.builder();
+        for (int i = 0; i < envelopedData.sizeRecipient(); i++) {
+            builder.add(envelopedData.getRecipientInfo(i).getIssuerSerialNumber().toPrintableString());
+        }
+        return builder.build();
     }
 
 }
