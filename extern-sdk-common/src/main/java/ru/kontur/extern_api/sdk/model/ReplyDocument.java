@@ -23,7 +23,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 import java.util.List;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>Объект, содержащий информацию об ответном документе</p>
