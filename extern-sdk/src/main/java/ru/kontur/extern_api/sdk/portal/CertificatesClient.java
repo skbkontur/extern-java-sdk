@@ -1,12 +1,13 @@
 package ru.kontur.extern_api.sdk.portal;
 
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.httpclient.HttpClientBundle;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.ProviderSuite;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.HttpClientBundle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,9 @@ public class CertificatesClient {
         this.apiKeyPorvider = apiKeyPorvider;
         this.serviceBaseUrlProvider = serviceBaseUrlProvider;
 
-        this.httpClient = new HttpClientBundle(new DefaultUserAgentProvider()).getHttpClientAdaptor();
+        ProviderSuite providerHolder = new ProviderSuite();
+        providerHolder.setUserAgentProvider(new DefaultUserAgentProvider());
+        this.httpClient = new HttpClientBundle(providerHolder).getHttpClientAdaptor();
     }
 
     /**
