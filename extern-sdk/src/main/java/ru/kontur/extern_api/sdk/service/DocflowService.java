@@ -592,5 +592,4 @@ public interface DocflowService extends ProviderHolder {
      * @return объект с результатом инициации облачной паодписи
      */
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
-
 }

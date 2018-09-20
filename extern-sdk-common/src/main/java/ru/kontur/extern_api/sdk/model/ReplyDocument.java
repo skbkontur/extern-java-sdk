@@ -22,10 +22,8 @@
  */
 
 package ru.kontur.extern_api.sdk.model;
-
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>Объект, содержащий информацию об ответном документе</p>
@@ -110,5 +108,38 @@ public class ReplyDocument implements LinksHolder {
      */
     public String getDocumentId() {
         return documentId;
+    }
+
+    @Nullable
+    public Link getDocflowLink(){
+        return getLink("docflow");
+    }
+
+    @Nullable
+    public Link getPutSignatureLink(){
+        return getLink("save-signature");
+    }
+
+    @Nullable
+    public Link getSendLink(){
+        return getLink("send");
+    }
+
+    @Nullable
+    public Link getCloudSignLink(){
+        return getLink("sign");
+    }
+
+    @Nullable
+    public Link getCloudSignConfirmLink(){
+        return getLink("sign-confirm");
+    }
+
+    private Link getLink(String name){
+        return links
+                .stream()
+                .filter(l -> l.getRel().equals(name))
+                .findAny()
+                .orElse(null);
     }
 }

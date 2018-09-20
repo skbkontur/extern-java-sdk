@@ -23,12 +23,6 @@
 
 package ru.kontur.extern_api.sdk;
 
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
-import static ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider.form;
-
-import java.util.Optional;
-import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
@@ -38,7 +32,14 @@ import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
 import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-import ru.kontur.extern_api.sdk.utils.Certificates;
+import ru.kontur.extern_api.sdk.utils.CryptoApi;
+
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
+import static ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider.form;
 
 public final class ConfigurationUtils {
 
@@ -111,7 +112,7 @@ public final class ConfigurationUtils {
             CryptoProvider cryptoProvider,
             byte[] certificate
     ) {
-        String thumbprint = Certificates.getThumbprint(certificate);
+        String thumbprint = CryptoApi.getThumbprint(certificate);
 
         CertificateProvider certificateProvider = t -> new QueryContext<byte[]>()
                 .setResult(certificate, QueryContext.CONTENT);

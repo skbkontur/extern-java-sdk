@@ -190,13 +190,15 @@ public class QueryContext<R> implements Serializable {
      */
     public static final String SIGNATURE_ID = "signatureId";
     /**
-     * Объект "Подпис" {@link Signature}
+     * Объект "Подпись" {@link Signature}
      */
     public static final String SIGNATURE = "signature";
     /**
      * Список подписией ({@code List<Signature>})
      */
     public static final String SIGNATURES = "signatures";
+
+    public static final String RAW_SIGNATURE = "rawSignature";
     /**
      * Отпечаток сертификата - хеш SHA-1
      */
@@ -343,9 +345,13 @@ public class QueryContext<R> implements Serializable {
      */
     public static final String REQUEST_ID = "requestId";
     /**
-     * SMS-код подтврждения
+     * SMS-код подтверждения
      */
     public static final String SMS_CODE = "code";
+    /**
+     * Настоятельное подтверждение при генерации облачной подписи
+     */
+    public static final String FORCE_CONFIRMATION = "forceConfirmation";
     /**
      * IP адрес отправителя. Требуется для ФНС.
      */
@@ -1236,6 +1242,14 @@ public class QueryContext<R> implements Serializable {
         return set(SIGNATURE_ID, UUID.fromString(signatureId));
     }
 
+    public QueryContext<R> setRawSignature(byte[] rawSignature){
+        return set(RAW_SIGNATURE, rawSignature);
+    }
+
+    public byte[] getRawSignature() {
+        return (byte[]) params.get(RAW_SIGNATURE);
+    }
+
     /**
      * Метод Возвращает отпечаток сертификата
      *
@@ -1943,6 +1957,14 @@ public class QueryContext<R> implements Serializable {
 
     public QueryContext<R> setSmsCode(String smsCode) {
         return set(SMS_CODE, smsCode);
+    }
+
+    public boolean getForceConfirmation() {
+        return (boolean) params.get(FORCE_CONFIRMATION);
+    }
+
+    public QueryContext<R> setForceConfirmation(boolean forceConfirmation) {
+        return set(FORCE_CONFIRMATION, forceConfirmation);
     }
 
     /**

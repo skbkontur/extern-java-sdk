@@ -21,17 +21,11 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.utils;
+package ru.kontur.extern_api.sdk.model.descriptions;
 
-import java.security.MessageDigest;
-import javax.xml.bind.DatatypeConverter;
+import java.util.HashMap;
+import ru.kontur.extern_api.sdk.model.IDocflowDescription;
 
-public class Certificates {
-
-    public static String getThumbprint(byte[] cert) {
-        MessageDigest md = UncheckedSupplier.get(() -> MessageDigest.getInstance("SHA-1"));
-        md.update(cert);
-        return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
-    }
+public class UnknownDescription extends HashMap<String, String> implements IDocflowDescription {
 
 }
