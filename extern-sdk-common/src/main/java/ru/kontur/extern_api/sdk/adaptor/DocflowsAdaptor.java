@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.adaptor;
 import java.util.List;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
@@ -44,9 +45,10 @@ public interface DocflowsAdaptor {
      * GET /v1/{accountId}/docflows
      *
      * @param cxt QueryContext&lt;Docflow&gt;
+     * @param docflowFilter search filter
      * @return QueryContext&lt;Docflow&gt;
      */
-    QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt);
+    QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt, DocflowFilter docflowFilter);
 
     /**
      * Allow API user to get Docflow object

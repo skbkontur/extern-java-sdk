@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,14 +37,13 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
  * <p>
  * Класс содержит информацию документа документооборота
  * </p>
- *
- * @author Aleksey Sukhorukov
  */
 public class Document {
 
     private UUID id = null;
     private DocflowDocumentDescription description = null;
     private Content content = null;
+    private Date sendDate = null;
     private List<Signature> signatures = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
 
@@ -71,17 +71,6 @@ public class Document {
     }
 
     /**
-     * Устанавливает дескриптор документа {@link DocumentDescription}
-     *
-     * @param description дескриптор документа
-     * @return {@link Document}
-     */
-    public Document description(DocflowDocumentDescription description) {
-        this.description = description;
-        return this;
-    }
-
-    /**
      * Возвращает дескриптор документа {@link DocumentDescription}
      *
      * @return description дескриптор документа
@@ -97,17 +86,6 @@ public class Document {
      */
     public void setDescription(DocflowDocumentDescription description) {
         this.description = description;
-    }
-
-    /**
-     * Устанавливает контент документа {@link Content}
-     *
-     * @param content контент документа
-     * @return {@link Document}
-     */
-    public Document content(Content content) {
-        this.content = content;
-        return this;
     }
 
     /**
@@ -130,15 +108,12 @@ public class Document {
         this.content = content;
     }
 
-    /**
-     * Устанавливает список подписей документа {@link Signature}
-     *
-     * @param signatures список подписей документа
-     * @return {@link Document}
-     */
-    public Document signatures(List<Signature> signatures) {
-        this.signatures = signatures;
-        return this;
+    public Date getSendDate() {
+        return sendDate;
+    }
+
+    public void setSendDate(Date sendDate) {
+        this.sendDate = sendDate;
     }
 
     /**
@@ -159,17 +134,6 @@ public class Document {
      */
     public void setSignatures(List<Signature> signatures) {
         this.signatures = signatures;
-    }
-
-    /**
-     * Устанавливает список ссылок на ресурсы документооборота {@link Link}
-     *
-     * @param links список ссылок на ресурсы документооборота
-     * @return {@link Document}
-     */
-    public Document links(List<Link> links) {
-        this.links = links;
-        return this;
     }
 
     /**
@@ -198,9 +162,11 @@ public class Document {
 
     /**
      * @return Сылки на генерацию ответных документов к данному документу. {@link Link#getName()}
-     * содержит тип ответного документа. Для генерации ответного документа удобно использовать
-     * {@link HttpClient#followPostLink(String, Object, Class)} c аргуметами {@link Link#getHref()},
-     * {@link GenerateReplyDocumentRequestData} и {@link ReplyDocument#getClass()}
+     *         содержит тип ответного документа. Для генерации ответного документа удобно
+     *         использовать
+     *         {@link HttpClient#followPostLink(String, Object, Class)} c аргуметами {@link
+     *         Link#getHref()},
+     *         {@link GenerateReplyDocumentRequestData} и {@link ReplyDocument#getClass()}
      */
     public Link[] getReplyLinks() {
         return getLinks()

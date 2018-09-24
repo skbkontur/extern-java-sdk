@@ -25,11 +25,13 @@ package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
@@ -318,24 +320,44 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String type
     ) {
         QueryContext<DocflowPage> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setFinished(finished)
-                .setIncoming(incoming)
-                .setSkip(skip)
-                .setTake(take)
-                .setInnKpp(innKpp)
-                .setUpdatedFrom(updatedFrom)
-                .setUpdatedTo(updatedTo)
-                .setCreatedFrom(createdFrom)
-                .setCreatedTo(createdTo)
-                .setType(type)
-                .applyAsync(docflowsAdaptor::getDocflows);
+
+        DocflowFilter filter = DocflowFilter
+                .page(skip, take)
+                .inn(innKpp)
+                .updatedFrom(updatedFrom)
+                .updatedTo(updatedTo)
+                .createdFrom(createdFrom)
+                .createdTo(createdTo)
+                .type(type);
+
+        Optional.ofNullable(finished).ifPresent(filter::finished);
+        Optional.ofNullable(incoming).ifPresent(filter::incoming);
+
+        return CompletableFuture.supplyAsync(() -> docflowsAdaptor.getDocflows(cxt, filter));
     }
 
     @Override
     public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent) {
         QueryContext<DocflowPage> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::getDocflows);
+
+        DocflowFilter filter = DocflowFilter
+                .page(parent.getSkip(), parent.getTake())
+                .inn(parent.getInnKpp())
+                .updatedFrom(parent.getUpdatedFrom())
+                .updatedTo(parent.getUpdatedTo())
+                .createdFrom(parent.getCreatedFrom())
+                .createdTo(parent.getCreatedTo())
+                .type(parent.getType());
+
+        Optional.ofNullable(parent.getFinished()).ifPresent(filter::finished);
+        Optional.ofNullable(parent.getIncoming()).ifPresent(filter::incoming);
+
+        return docflowsAdaptor.getDocflows(cxt, filter);
+    }
+
+    @Override
+    public QueryContext<DocflowPage> searchDocflows(DocflowFilter searchFilter) {
+        return docflowsAdaptor.getDocflows(createQueryContext(EN_DFW), searchFilter);
     }
 
     @Override

@@ -45,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
@@ -238,23 +237,6 @@ public class HttpClientImpl {
         }
     }
 
-    private String headersToString(Map<String, List<String>> headers) {
-        return headers.entrySet().stream()
-                .filter(e -> e.getKey() != null)
-                .map(e -> {
-                    List<String> value = Optional.ofNullable(e.getValue())
-                            .orElse(Collections.emptyList());
-
-                    return String.format(
-                            "%s: %s",
-                            e.getKey(),
-                            value.stream().reduce((s1, s2) -> s1 + "; " + s2).orElse(""));
-                })
-                .reduce((s, s2) -> s + "\n" + s2)
-                .orElse("");
-
-    }
-
     /**
      * Deserialize response body to Java object, according to the return type and the Content-Type
      * response header.
@@ -263,8 +245,9 @@ public class HttpClientImpl {
      * @param response server response
      * @param returnType The type of the Java object
      * @return The deserialized Java object
-     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read response
-     * body or the Content-Type of the response is not supported.
+     * @throws HttpClientException If fail to deserialize response body, i.e. cannot read
+     *         response
+     *         body or the Content-Type of the response is not supported.
      */
     @SuppressWarnings("unchecked")
     private <T> T deserialize(Response response, Type returnType) throws HttpClientException {

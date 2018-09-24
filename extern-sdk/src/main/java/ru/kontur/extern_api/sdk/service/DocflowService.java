@@ -27,8 +27,17 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowFilter;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentToSend;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
@@ -460,7 +469,9 @@ public interface DocflowService extends ProviderHolder {
      * разделенных запятой
      * @return список ДО
      * @see DocflowPage
+     * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
      */
+    @Deprecated
     CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(Boolean finished,
             Boolean incoming, long skip, int take, String innKpp, Date updatedFrom, Date updatedTo,
             Date createdFrom, Date createdTo, String type);
@@ -497,8 +508,18 @@ public interface DocflowService extends ProviderHolder {
      * Для установки необходимо использовать метод {@link QueryContext#setType}</p>
      * @return список ДО
      * @see DocflowPage
+     * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
      */
+    @Deprecated
     QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
+
+    /**
+     * Возвращает документообороты удовлетворяющие поисковому фильтру
+     *
+     * @param searchFilter {@link DocflowFilter}
+     * @return список документооборотов
+     */
+    QueryContext<DocflowPage> searchDocflows(DocflowFilter searchFilter);
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
