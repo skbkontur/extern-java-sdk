@@ -1,5 +1,7 @@
 package ru.kontur.extern_api.sdk.portal;
 
+import java.util.HashMap;
+import java.util.Map;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
@@ -7,9 +9,6 @@ import ru.kontur.extern_api.sdk.provider.UriProvider;
 import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.HttpClientBundle;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -25,19 +24,38 @@ public class CertificatesClient {
         this.apiKeyPorvider = apiKeyPorvider;
         this.serviceBaseUrlProvider = serviceBaseUrlProvider;
 
-        this.httpClient = new HttpClientBundle(new DefaultUserAgentProvider()).getHttpClientAdaptor();
+        this.httpClient = new HttpClientBundle(new DefaultUserAgentProvider())
+                .getHttpClientAdaptor();
+    }
+
+    /**
+     * @deprecated typo :c.
+     *         use {@link CertificatesClient#searchCertificates(int, int, String)} instead
+     */
+    @Deprecated
+    public CertificateSearchResult searchCeritficates(int skip, int take, String query) {
+        return searchCertificates(skip, take, query);
+    }
+
+    /**
+     * @deprecated typo :c.
+     *         use {@link CertificatesClient#searchCertificates(int, int, SearchQuery)} instead
+     */
+    @Deprecated
+    public CertificateSearchResult searchCeritficates(int skip, int take, SearchQuery query) {
+        return searchCertificates(skip, take, query);
     }
 
     /**
      * Search certificates by a specified search query
      *
-     * @param skip  pagination skip
-     * @param take  pagination take
+     * @param skip pagination skip
+     * @param take pagination take
      * @param query search query. If you don't know syntax see
-     *              {@link CertificatesClient#searchCeritficates(int, int, SearchQuery)}
+     *         {@link CertificatesClient#searchCeritficates(int, int, SearchQuery)}
      * @return paginated certificate search result (thumbprints only)
      */
-    public CertificateSearchResult searchCeritficates(int skip, int take, String query) {
+    public CertificateSearchResult searchCertificates(int skip, int take, String query) {
         String url = serviceBaseUrlProvider.getUri() + "/certificates/search";
 
         take = Math.min(take, 50000);
@@ -55,13 +73,13 @@ public class CertificatesClient {
     /**
      * Search certificates  by specified search query
      *
-     * @param skip  pagination skip
-     * @param take  pagination take
+     * @param skip pagination skip
+     * @param take pagination take
      * @param query search query. See {@link SearchQuery}
      * @return paginated certificate search result (thumbprints only)
      */
-    public CertificateSearchResult searchCeritficates(int skip, int take, SearchQuery query) {
-        return searchCeritficates(skip, take, query.translate());
+    public CertificateSearchResult searchCertificates(int skip, int take, SearchQuery query) {
+        return searchCertificates(skip, take, query.translate());
     }
 
 }

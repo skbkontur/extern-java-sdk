@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.Link;
@@ -88,7 +89,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
      * @return QueryContext&lt;Docflow&gt;
      */
     @Override
-    public QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt) {
+    public QueryContext<DocflowPage> getDocflows(QueryContext<?> cxt, DocflowFilter docflowFilter) {
         if (cxt.isFail()) {
             return new QueryContext<>(cxt, cxt.getEntityName());
         }
@@ -98,16 +99,18 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                     transport(cxt)
                             .getDocflows(
                                     cxt.getAccountProvider().accountId().toString(),
-                                    cxt.getFinished(),
-                                    cxt.getIncoming(),
-                                    cxt.getSkip(),
-                                    cxt.getTake(),
-                                    cxt.getInnKpp(),
-                                    cxt.getUpdatedFrom(),
-                                    cxt.getUpdatedTo(),
-                                    cxt.getCreatedFrom(),
-                                    cxt.getCreatedTo(),
-                                    cxt.getType())
+                                    docflowFilter.getFinished(),
+                                    docflowFilter.getIncoming(),
+                                    docflowFilter.getSkip(),
+                                    docflowFilter.getTake(),
+                                    docflowFilter.getInnKpp(),
+                                    docflowFilter.getUpdatedFrom(),
+                                    docflowFilter.getUpdatedTo(),
+                                    docflowFilter.getCreatedFrom(),
+                                    docflowFilter.getCreatedTo(),
+                                    docflowFilter.getOrgId(),
+                                    docflowFilter.getTypeAsString(),
+                                    docflowFilter.getOrderBy())
                             .getData(),
                     DOCFLOW_PAGE
             );

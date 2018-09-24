@@ -22,16 +22,32 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor.httpclient.api;
 
 import com.google.gson.reflect.TypeToken;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import javax.ws.rs.*;
+import java.util.Optional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.PrintDocumentData;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.SortOrder;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 /**
  * @author Mikhail Pavlenko
@@ -60,22 +76,31 @@ public class DocflowsApi extends RestApi {
     @GET
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<DocflowPage> getDocflows(
-            @PathParam("accountId") final String accountId,
-            @QueryParam("finished") final Boolean finished,
-            @QueryParam("incoming") final Boolean incoming,
-            @QueryParam("skip") final Long skip,
-            @QueryParam("take") final Integer take,
-            @QueryParam("innKpp") final String innKpp,
-            @QueryParam("updatedFrom") final Date updatedFrom,
-            @QueryParam("updatedTo") final Date updatedTo,
-            @QueryParam("createdFrom") final Date createdFrom,
-            @QueryParam("createdTo") final Date createdTo,
-            @QueryParam("type") String type
+            @PathParam("accountId") String accountId,
+            @QueryParam("finished") Boolean finished,
+            @QueryParam("incoming") Boolean incoming,
+            @QueryParam("skip") Long skip,
+            @QueryParam("take") Integer take,
+            @QueryParam("innKpp") String innKpp,
+            @QueryParam("updatedFrom") Date updatedFrom,
+            @QueryParam("updatedTo") Date updatedTo,
+            @QueryParam("createdFrom") Date createdFrom,
+            @QueryParam("createdTo") Date createdTo,
+            @QueryParam("orgId") String organizationId,
+            @QueryParam("type") String type,
+            @QueryParam("orderBy") SortOrder order
     ) throws ApiException {
-        return invoke("getDocflows", null, new TypeToken<DocflowPage>() {
-                }.getType(), accountId, finished, incoming, skip, take,
-                (innKpp == null || innKpp.isEmpty() ? null : innKpp), updatedFrom, updatedTo,
-                createdFrom, createdTo, type);
+        return invoke("getDocflows", null, DocflowPage.class,
+                accountId,
+                finished, incoming,
+                skip, take,
+                YAStringUtils.isNullOrEmpty(innKpp) ? null : innKpp,
+                updatedFrom, updatedTo,
+                createdFrom, createdTo,
+                organizationId,
+                type,
+                Optional.ofNullable(order).map(o -> o.name().toLowerCase()).orElse(null)
+        );
     }
 
     /**
@@ -415,7 +440,8 @@ public class DocflowsApi extends RestApi {
             @PathParam("documentId") String documentId,
             @PathParam("replyId") String replyId
     ) throws ApiException {
-        return invoke("cloudSignReplyDocument", null, ReplyDocument.class, accountId, docflowId, documentId, replyId);
+        return invoke("cloudSignReplyDocument", null, ReplyDocument.class, accountId, docflowId,
+                documentId, replyId);
     }
 
     @NotNull

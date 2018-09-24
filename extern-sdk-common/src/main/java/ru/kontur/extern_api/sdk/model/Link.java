@@ -172,4 +172,9 @@ public class Link {
     public int hashCode() {
         return Objects.hash(href, rel, name, title, profile, templated);
     }
+
+    @Override
+    public String toString() {
+        return "Link{rel='" + rel + '\'' + ", name='" + name + '\'' + '}';
+    }
 }

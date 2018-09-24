@@ -17,6 +17,7 @@ import ru.kontur.extern_api.sdk.model.descriptions.PfrLetter;
 import ru.kontur.extern_api.sdk.model.descriptions.PfrReport;
 import ru.kontur.extern_api.sdk.model.descriptions.StatLetter;
 import ru.kontur.extern_api.sdk.model.descriptions.StatReport;
+import ru.kontur.extern_api.sdk.model.descriptions.UnknownDescription;
 
 public enum DocflowType implements Urn<DocflowType> {
 
@@ -162,7 +163,10 @@ public enum DocflowType implements Urn<DocflowType> {
      * Уточнение платежей в пенсионный фонд.
      */
     @SerializedName("urn:docflow:pfr-ios")
-    PFR_IOS(PfrIos.class);
+    PFR_IOS(PfrIos.class),
+
+    @SerializedName("urn:docflow:unknown")
+    UNKNOWN(UnknownDescription.class);
 
     private final Class<? extends IDocflowDescription> type;
 
@@ -176,10 +180,12 @@ public enum DocflowType implements Urn<DocflowType> {
     }
 
     public Class<? extends IDocflowDescription> getDescriptionType() {
-        return type;
+        if (this == UNKNOWN)
+            return type;
+        return hasDescriptionType() ? type : UNKNOWN.getDescriptionType();
     }
 
     public boolean hasDescriptionType() {
         return type != null;
     }
-    }
+}
