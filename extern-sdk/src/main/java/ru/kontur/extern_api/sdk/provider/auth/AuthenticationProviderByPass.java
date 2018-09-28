@@ -23,7 +23,6 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
@@ -46,6 +45,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
     private ApiKeyProvider apiKeyProvider;
     private LoginAndPasswordProvider loginAndPasswordProvider;
     private UriProvider authBaseUriProvider;
+    private String sid;
 
     private HttpClient httpClient;
 
@@ -88,10 +88,11 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
 
     @Override
     public QueryContext<String> sessionId() {
-        Logger.getLogger(LoginAndPasswordProvider.class.getName())
-                .info("Login attempt: " + loginAndPasswordProvider.getLogin());
         QueryContext<String> cxt = new QueryContext<String>("")
                 .setApiKeyProvider(apiKeyProvider);
+
+        if (sid != null)
+            return new QueryContext<String>().setResult(sid, QueryContext.SESSION_ID);
 
         try {
 
@@ -100,21 +101,7 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
             }
 
             String login = loginAndPasswordProvider.getLogin();
-
             String pass = loginAndPasswordProvider.getPass();
-
-            if (login == null) {
-                cxt.setServiceError("Missing the required parameter 'login'");
-            }
-
-            if (pass == null) {
-                cxt.setServiceError("Missing the required parameter 'pass'");
-            }
-
-            if (apiKeyProvider == null) {
-                return cxt.setServiceError("Missing the api key provider");
-            }
-
             String apiKey = apiKeyProvider.getApiKey();
 
             if (apiKey == null) {
@@ -132,15 +119,14 @@ public class AuthenticationProviderByPass extends AuthenticationProviderAbstract
                 }
             };
 
-            Map<String, String> headerParams = new HashMap<String, String>() {
-                private static final long serialVersionUID = 1L;
-
-                {
-                    put("Content-Type", "text/plain");
-                }
-            };
-
-            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST", queryParams, pass, headerParams, Collections.emptyMap(), ResponseSid.class);
+            Map<String, String> headerParams = Collections.singletonMap("Content-Type", "text/plain");
+            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST",
+                    queryParams,
+                    pass,
+                    headerParams,
+                    Collections.emptyMap(),
+                    ResponseSid.class
+            );
 
             cxt.setResult(resp.getData().getSid(), SESSION_ID);
         }

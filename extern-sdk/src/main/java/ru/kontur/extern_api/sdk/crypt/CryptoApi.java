@@ -21,22 +21,46 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.utils;
+package ru.kontur.extern_api.sdk.crypt;
+
+import static ru.kontur.extern_api.sdk.crypt.CryptoApiException.catchCryptoException;
 
 import com.argos.asn1.Asn1Exception;
 import com.argos.cipher.asn1ext.EnvelopedData;
 import com.argos.cipher.asn1ext.PKCS7;
-import ru.argosgrp.cryptoservice.utils.IOUtil;
-
-import java.security.MessageDigest;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
+import ru.argosgrp.cryptoservice.CryptoException;
+import ru.argosgrp.cryptoservice.CryptoService;
+import ru.argosgrp.cryptoservice.Key;
+import ru.argosgrp.cryptoservice.mscapi.MSCapi;
 
 public class CryptoApi {
 
-    public static String getThumbprint(byte[] cert) {
-        MessageDigest md = UncheckedSupplier.get(() -> MessageDigest.getInstance("SHA-1"));
-        md.update(cert);
-        return IOUtil.bytesToHex(md.digest()).toLowerCase();
+
+    private final CryptoService cryptoService;
+
+    private final X509CertificateFactory certificateFactory;
+
+    private List<Key> keyCache;
+
+    public CryptoApi() throws CryptoException, CertificateException {
+        cryptoService = new MSCapi();
+        keyCache = null;
+        certificateFactory = new X509CertificateFactory();
+    }
+
+    public String getThumbprint(byte[] cert) {
+        return certificateFactory.getThumbprint(cert);
+    }
+
+    public String getThumbprint(String base64) {
+        return certificateFactory.getThumbprint(Base64.getDecoder().decode(base64));
     }
 
     public static Stream<String> getSerialNumbers(byte[] encryptedData) throws Asn1Exception {
@@ -47,6 +71,24 @@ public class CryptoApi {
             builder.add(envelopedData.getRecipientInfo(i).getIssuerSerialNumber().toPrintableString());
         }
         return builder.build();
+    }
+
+    public List<CertificateWrapper> getCertificatesInstalledLocally() throws CertificateException {
+
+        ArrayList<CertificateWrapper> keys = new ArrayList<>();
+        for (Key key : getInstalledKeys(false)) {
+            keys.add(certificateFactory.create(key.getX509ctx()));
+        }
+
+        return keys;
+    }
+
+    public List<Key> getInstalledKeys(boolean refreshCache) {
+        if (keyCache == null || refreshCache) {
+            keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
+        }
+
+        return Collections.unmodifiableList(keyCache);
     }
 
 }

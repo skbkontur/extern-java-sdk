@@ -159,13 +159,15 @@ public class HttpClientImpl {
             // setup default headers
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
-            headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
+            Map<String, String> newHeaders = new HashMap<>(headerParams);
+
+            newHeaders.putIfAbsent(CONTENT_TYPE, guessContentType(body));
 
             if (userAgentProvider != null) {
-                headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
+                newHeaders.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
             }
 
-            headerParams.forEach(connect::setRequestProperty);
+            newHeaders.forEach(connect::setRequestProperty);
 
             connect.setRequestProperty("Connection", (keepAlive ? "keep-alive" : "close"));
             connect.setConnectTimeout(connectTimeout);

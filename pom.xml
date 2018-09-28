@@ -127,6 +127,7 @@
         <module>extern-sdk-common</module>
         <module>extern-sdk-httpclient</module>
         <module>extern-sdk-httpclient-adaptor</module>
+        <module>extern-java-sdk-test-runner</module>
     </modules>
 
     <build>
