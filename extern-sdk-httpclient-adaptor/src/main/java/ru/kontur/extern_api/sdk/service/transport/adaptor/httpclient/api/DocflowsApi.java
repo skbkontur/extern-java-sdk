@@ -41,6 +41,7 @@ import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.PrintDocumentData;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.SortOrder;
@@ -410,6 +411,7 @@ public class DocflowsApi extends RestApi {
      * @throws ApiException transport exception
      */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/send")
+    @Consumes("application/json; charset=utf-8")
     @POST
     public ApiResponse<Docflow> sendReply(
             @PathParam("accountId") String accountId,
@@ -433,16 +435,38 @@ public class DocflowsApi extends RestApi {
      */
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign")
     @POST
-    @Consumes("application/json; charset=utf-8")
     public ApiResponse<SignInitiation> initCloudSignReplyDocument(
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             @PathParam("replyId") String replyId
     ) throws ApiException {
-        return invoke("cloudSignReplyDocument", null, ReplyDocument.class, accountId, docflowId,
-                documentId, replyId);
+        return invoke("initCloudSignReplyDocument", null, SignInitiation.class,
+                accountId,
+                docflowId,
+                documentId,
+                replyId);
     }
+
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
+    @POST
+    public ApiResponse<SignConfirmResultData> confirmCloudSignReplyDocument(
+            @PathParam("accountId") String accountId,
+            @PathParam("docflowId") String docflowId,
+            @PathParam("documentId") String documentId,
+            @PathParam("replyId") String replyId,
+            @QueryParam("requestId") String requestId,
+            @QueryParam("code") String code
+    ) throws ApiException {
+        return invoke("confirmCloudSignReplyDocument", null, SignConfirmResultData.class,
+                accountId,
+                docflowId,
+                documentId,
+                replyId,
+                requestId,
+                code);
+    }
+
 
     @NotNull
     @Override

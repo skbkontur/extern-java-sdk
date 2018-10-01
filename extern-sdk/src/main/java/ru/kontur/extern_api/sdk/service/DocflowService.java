@@ -359,12 +359,14 @@ public interface DocflowService extends ProviderHolder {
     /**
      * Асинхронный метод отправляет документ в контролирующий орган
      *
-     * @param replyDocument структура данных для отправки, созданная с помощью метода {@link
-     * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply}
      * @return ДО
      * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument);
+    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyId
+    );
 
     /**
      * Синхронный метод отправляет документ в контролирующий орган
@@ -535,6 +537,21 @@ public interface DocflowService extends ProviderHolder {
     CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
             String documentContentBase64);
 
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
+     * Асинхронный метод возвращает печатную форму документа. Печатная форма - PDF файл.
+     *
+     * @param docflowId идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param documentContent расшифрованый формализованный документ, для которого
+     * необходимо создать печатную форму
+     * @return печатная форма
+     */
+    CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
+            String docflowId,
+            String documentId,
+            byte[] documentContent);
+
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
@@ -596,6 +613,7 @@ public interface DocflowService extends ProviderHolder {
             String docflowId,
             String documentId,
             String replyId,
+            String requestCode,
             String smsCode);
 
 

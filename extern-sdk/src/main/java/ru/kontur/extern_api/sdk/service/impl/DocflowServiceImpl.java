@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -254,14 +255,19 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument) {
+    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyId) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
         QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
         if (userIPCxt.isFail()) {
             return CompletableFuture.completedFuture(cxt.setServiceError(userIPCxt));
         }
         return cxt
-                .setReplyDocument(replyDocument)
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
                 .setUserIP(userIPCxt.get())
                 .applyAsync(docflowsAdaptor::sendReply);
     }
@@ -378,6 +384,21 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
+    public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
+            String docflowId,
+            String documentId,
+            byte[] documentContent) {
+        return printAsync(docflowId, documentId, Base64.getEncoder().encodeToString(documentContent))
+                .thenApply(cxt -> {
+                    if (cxt.isFail()) {
+                        return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
+                    }
+                    byte[] decoded = Base64.getDecoder().decode(cxt.get());
+                    return new QueryContext<byte[]>().setResult(decoded, QueryContext.CONTENT);
+                });
+    }
+
+    @Override
     public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent) {
         QueryContext<SignInitiation> cxt = createQueryContext(parent, EN_DFW);
         return cxt.apply(docflowsAdaptor::cloudSignReplyDocument);
@@ -388,12 +409,14 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String docflowId,
             String documentId,
             String replyId,
+            String requestId,
             String smsCode) {
         QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
         return cxt
                 .setDocflowId(docflowId)
                 .setDocumentId(documentId)
                 .setReplyId(replyId)
+                .setRequestId(requestId)
                 .setSmsCode(smsCode)
                 .applyAsync(docflowsAdaptor::confirmSignReplyDocument);
     }
