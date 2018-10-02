@@ -23,24 +23,9 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import java.util.function.Supplier;
-import java.util.logging.Logger;
+@FunctionalInterface
+public interface ThrowableSupplier<T, E extends Throwable> {
 
-public class Stopwatch {
-
-    private static final Logger log = Logger.getLogger(Stopwatch.class.getSimpleName());
-
-    public static <T, E extends Throwable> T timeIt(String label, ThrowableSupplier<T, E> supplier)
-            throws E {
-        log.info(">>> start watching: " + label);
-        long start = System.currentTimeMillis();
-
-        try {
-            return supplier.get();
-        } finally {
-            long time = System.currentTimeMillis() - start;
-            log.info("<<< stop watching: " + label + " [ " + time + "ms ]");
-        }
-    }
+    T get() throws E;
 
 }

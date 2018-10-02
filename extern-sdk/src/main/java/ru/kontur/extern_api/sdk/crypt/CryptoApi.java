@@ -32,7 +32,6 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -42,12 +41,14 @@ import ru.argosgrp.cryptoservice.mscapi.MSCapi;
 
 public class CryptoApi {
 
+    // Probably bad design, but significantly improves performance
+    private static List<Key> keyCache;
+    private static final Object lock = new Object();
 
     private final CryptoService cryptoService;
 
     private final X509CertificateFactory certificateFactory;
 
-    private List<Key> keyCache;
 
     public CryptoApi() throws CryptoException, CertificateException {
         cryptoService = new MSCapi();
@@ -83,12 +84,24 @@ public class CryptoApi {
         return keys;
     }
 
+    public CertificateWrapper asX509Wrapper(Key key) throws CertificateException {
+        return certificateFactory.create(key.getX509ctx());
+    }
+
+    public CryptoService getCryptoService() {
+        return cryptoService;
+    }
+
     public List<Key> getInstalledKeys(boolean refreshCache) {
         if (keyCache == null || refreshCache) {
-            keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
+            synchronized (lock) {
+                if (keyCache == null || refreshCache) {
+                    keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
+                }
+            }
         }
 
-        return Collections.unmodifiableList(keyCache);
+        return new ArrayList<>(keyCache);
     }
 
 }

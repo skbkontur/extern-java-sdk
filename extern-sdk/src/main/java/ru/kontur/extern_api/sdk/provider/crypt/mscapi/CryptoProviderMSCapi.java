@@ -24,143 +24,97 @@
 
 package ru.kontur.extern_api.sdk.provider.crypt.mscapi;
 
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
 import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.security.cert.CertificateException;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
-import ru.argosgrp.cryptoservice.mscapi.MSCapi;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
-import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.Messages;
+import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.utils.Stopwatch;
 
 
-/**
- * @author Aleksey Sukhorukov
- */
 public class CryptoProviderMSCapi implements CryptoProvider {
 
-
-
+    private final CryptoApi cryptoApi;
     private final CryptoService cryptoService;
-    private final Map<String, Key> cacheSignKey;
 
     public CryptoProviderMSCapi() throws SDKException {
         try {
-            cryptoService = new MSCapi(true);
-            cacheSignKey = new ConcurrentHashMap<>();
-        } catch (CryptoException x) {
+            cryptoApi = new CryptoApi();
+            cryptoService = cryptoApi.getCryptoService();
+
+        } catch (CryptoException | CertificateException x) {
             throw new SDKException(Messages.get(C_CRYPTO_ERROR_INIT), x);
         }
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
-        return CompletableFuture.supplyAsync(() -> sign(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
+        return CompletableFuture.supplyAsync(() -> sign(new QueryContext<byte[]>()
+                .setThumbprint(thumbprint)
+                .setContent(content)
+        ));
     }
 
     @Override
     public QueryContext<byte[]> sign(QueryContext<byte[]> cxt) {
-        try {
-            String thumbprint = cxt.getThumbprint();
-
-            Key key = getKeyByThumbprint(thumbprint);
-            if (key == null) {
-                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
-            }
-
-            PKCS7 p7p = new PKCS7(cryptoService);
-
+        return new QueryContext<byte[]>().setResultAware(CONTENT, () -> {
+            Key key = getKeyByThumbprint(cxt.getThumbprint());
             byte[] content = cxt.getContent();
 
-            return new QueryContext<byte[]>().setResult(p7p.sign(key, null, content, false), CONTENT);
-        } catch (CryptoException x) {
-            return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
-        }
+            return new PKCS7(cryptoService).sign(key, null, content, false);
+        });
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
-        return CompletableFuture.supplyAsync(() -> getSignerCertificate(new QueryContext<byte[]>().setThumbprint(thumbprint)));
+        return CompletableFuture.supplyAsync(() -> getSignerCertificate(new QueryContext<byte[]>()
+                .setThumbprint(thumbprint)));
     }
 
     @Override
     public QueryContext<byte[]> getSignerCertificate(QueryContext<byte[]> cxt) {
-        try {
-            String thumbprint = cxt.getThumbprint();
-
-            Key key = getKeyByThumbprint(thumbprint);
-            if (key == null) {
-                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
-            }
-
-            return new QueryContext<byte[]>().setResult(key.getX509ctx(), CONTENT);
-        } catch (CryptoException x) {
-            return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
-        }
+        return new QueryContext<byte[]>().setResultAware(CONTENT, () ->
+                getKeyByThumbprint(cxt.getThumbprint()).getX509ctx()
+        );
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content) {
-        return CompletableFuture.supplyAsync(() -> decrypt(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
+        return CompletableFuture.supplyAsync(() -> decrypt(new QueryContext<byte[]>()
+                .setThumbprint(thumbprint)
+                .setContent(content)
+        ));
     }
 
     @Override
     public QueryContext<byte[]> decrypt(QueryContext<byte[]> cxt) {
-        try {
-            String thumbprint = cxt.getThumbprint();
-
-            Key key = Stopwatch.timeIt("getKeyByThumbprint", () -> getKeyByThumbprint(thumbprint));
-            if (key == null) {
-                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
-            }
-
-            PKCS7 p7p = new PKCS7(cryptoService);
-
+        return new QueryContext<byte[]>().setResultAware(CONTENT, () -> {
+            Key key = getKeyByThumbprint(cxt.getThumbprint());
             byte[] content = cxt.getContent();
 
-            byte[] decrypt = Stopwatch.timeIt("decrypt", () -> p7p.decrypt(key, null, content));
-            return new QueryContext<byte[]>().setResult(decrypt, CONTENT);
-
-        } catch (RuntimeException x) {
-            if (x.getCause() instanceof CryptoException) {
-                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
-            }
-            throw x;
-        }
+            return Stopwatch.timeIt("decrypt", () -> new PKCS7(cryptoService).decrypt(key, null, content));
+        });
     }
 
-    public void removeKey(String thumbprint) {
-        cacheSignKey.remove(thumbprint);
-    }
-
-    public void removeAllKeys() {
-        cacheSignKey.clear();
-    }
-
+    @NotNull
     private Key getKeyByThumbprint(String thumbprint) throws CryptoException {
-        Key key = cacheSignKey.get(thumbprint);
-        if (key == null) {
-            Key[] keys = cryptoService.getKeys();
-            if (keys != null && keys.length > 0) {
-                byte[] t = IOUtil.hexToBytes(thumbprint);
-                key = Stream.of(keys).filter(k -> Arrays.equals(k.getThumbprint(), t)).findAny().orElse(null);
-                if (key != null)
-                    cacheSignKey.put(thumbprint, key);
-            }
-        }
-        return key;
+        return cryptoApi.getInstalledKeys(false)
+                .stream()
+                .filter(w -> Objects.equals(cryptoApi.getThumbprint(w.getX509ctx()), thumbprint))
+                .findAny()
+                .orElseThrow(() -> new CryptoException(
+                        "Cannot find locally installed certificate with thumbprint " + thumbprint
+                ));
     }
 }
