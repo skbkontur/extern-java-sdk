@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.service.transport.adaptor;
 
 import java.util.List;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -140,6 +141,12 @@ public interface DocflowsAdaptor {
      */
     QueryContext<byte[]> getSignatureContent(QueryContext<?> cxt);
 
+    /**
+     * POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/generate-reply
+     *
+     * @param cxt контекст для генерации ответных документов
+     * @return контекст с документом, подлежащим отправке
+     */
     QueryContext<ReplyDocument> generateReply(QueryContext<?> cxt);
 
     /**
@@ -155,15 +162,72 @@ public interface DocflowsAdaptor {
      */
     QueryContext<ReplyDocument> putReplyDocumentSignature(QueryContext<?> cxt);
 
+    /**
+     * Отправка ответного документа
+     *
+     * @param cxt контекст для отправки документов
+     * @return контекст с  документооборотом
+     */
     QueryContext<Docflow> sendReply(QueryContext<?> cxt);
 
+    /**
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId} Получение
+     * ответного документа
+     *
+     * @param cxt контекст для получения ответного документа
+     * @return контекст с данными ответного документа
+     * @see ReplyDocument
+     */
     QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> cxt);
 
     QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> cxt);
 
+    /**
+     * Allow API user to init cloud sign for reply document from docflow
+     * <p>
+     * GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/cloud-sign
+     *
+     * @param cxt QueryContext&lt;byte[]gt; context
+     * @return QueryContext&lt;byte[]&gt; context
+     */
     QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> cxt);
 
+    /**
+     * Allow API user to confirm cloud sign for reply document from docflow POST
+     * /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm
+     *
+     * @param cxt контекст
+     * @return контекст со списоком документов, подлежащих отправки
+     */
     QueryContext<SignConfirmResultData> confirmSignReplyDocument(QueryContext<?> cxt);
 
+    /**
+     * Allow API user to get document print from docflow
+     *
+     * @param cxt QueryContext&lt;String&gt; context
+     * @return QueryContext&lt;String&gt; context
+     */
     QueryContext<String> print(QueryContext<?> cxt);
+
+    /**
+     * Инициация облачного расшифрования документа из Docflow
+     * @param cxt <p>with params</p>
+     * <p>{@link QueryContext#getDocflowId()}</p>
+     * <p>{@link QueryContext#getDocumentId()}</p>
+     * <p>{@link QueryContext#getCertificate()}</p>
+     * @return ссылка на подтверждение расшифрования
+     */
+    QueryContext<DecryptInitiation> cloudDecryptDocumentInit(QueryContext<?> cxt);
+
+    /**
+     * Подтверждение облачного расшифрования документа из Docflow
+     * @param cxt <p>with params</p>
+     * <p>{@link QueryContext#getDocflowId()}</p>
+     * <p>{@link QueryContext#getDocumentId()}</p>
+     * <p>{@link QueryContext#getRequestId()}</p>
+     * <p>{@link QueryContext#getSmsCode()}</p>
+     * @return Расшифрованый конент документа
+     */
+    QueryContext<byte[]> cloudDecryptDocumentConfirm(QueryContext<?> cxt);
+
 }

@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -446,4 +448,57 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         QueryContext<String> cxt = createQueryContext(parent, EN_DFW);
         return cxt.apply(docflowsAdaptor::print);
     }
+
+    @Override
+    public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64) {
+        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
+        return docflowsAdaptor.cloudDecryptDocumentInit(cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setCertificate(certBase64)
+        );
+    }
+
+    @Override
+    public QueryContext<byte[]> cloudDecryptDocumentConfirm(
+            String docflowId,
+            String documentId,
+            String requestId,
+            String code) {
+        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
+        return docflowsAdaptor.cloudDecryptDocumentConfirm(cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setRequestId(requestId)
+                .setSmsCode(code)
+        );
+
+    }
+
+    @Override
+    public QueryContext<byte[]> cloudDecryptDocument(
+            String docflowId,
+            String documentId,
+            String certBase64,
+            Function<DecryptInitiation, String> smsCodeProvider) {
+
+        QueryContext<DecryptInitiation> initCxt = cloudDecryptDocumentInit(docflowId, documentId, certBase64);
+
+        if (initCxt.isFail()) {
+            return new QueryContext<byte[]>(initCxt, initCxt.getEntityName())
+                    .setServiceError(initCxt.getServiceError());
+        }
+
+        DecryptInitiation init = initCxt.get();
+        return cloudDecryptDocumentConfirm(
+                docflowId,
+                documentId,
+                init.getRequestId(),
+                smsCodeProvider.apply(init)
+        );
+    }
+
 }

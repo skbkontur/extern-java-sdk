@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,6 +35,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import org.jetbrains.annotations.NotNull;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
@@ -439,13 +441,15 @@ public class DocflowsApi extends RestApi {
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
-            @PathParam("replyId") String replyId
+            @PathParam("replyId") String replyId,
+            @QueryParam("forceConfirmation") boolean forceConfirmation
     ) throws ApiException {
         return invoke("initCloudSignReplyDocument", null, SignInitiation.class,
                 accountId,
                 docflowId,
                 documentId,
-                replyId);
+                replyId,
+                forceConfirmation);
     }
 
     @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
@@ -465,6 +469,42 @@ public class DocflowsApi extends RestApi {
                 replyId,
                 requestId,
                 code);
+    }
+
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content")
+    @POST
+    @Consumes("application/json; charset=utf-8")
+    public ApiResponse<DecryptInitiation> decryptDocumentInCloud(
+            @PathParam("accountId") UUID accountId,
+            @PathParam("docflowId") UUID docflowId,
+            @PathParam("documentId") UUID documentId,
+            String certBase64
+    ) throws ApiException {
+        return invoke("decryptDocumentInCloud",
+                Collections.singletonMap("certificate-base64", certBase64),
+                DecryptInitiation.class,
+                accountId,
+                docflowId,
+                documentId);
+    }
+
+    @Path("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content-confirm")
+    @POST
+    public ApiResponse<byte[]> decryptConfirm(
+            @PathParam("accountId") UUID accountId,
+            @PathParam("docflowId") UUID docflowId,
+            @PathParam("documentId") UUID documentId,
+            @QueryParam("requestId") String requestId,
+            @QueryParam("code") String code,
+            @QueryParam("unzip") boolean unzip
+    ) throws ApiException {
+        return invoke("decryptConfirm", null, byte[].class,
+                accountId,
+                docflowId,
+                documentId,
+                requestId,
+                code,
+                unzip);
     }
 
 

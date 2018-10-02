@@ -59,6 +59,9 @@ public final class MediaType {
      * @return MediaType this object
      */
     public static MediaType parse(String string) {
+        if (string == null) {
+            return parse("application/json");
+        }
         Matcher typeSubtype = TYPE_SUBTYPE.matcher(string);
         if (!typeSubtype.lookingAt()) {
             return null;

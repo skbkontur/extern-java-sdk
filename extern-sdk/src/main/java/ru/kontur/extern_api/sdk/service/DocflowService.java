@@ -27,6 +27,8 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -631,4 +633,34 @@ public interface DocflowService extends ProviderHolder {
      * @return объект с результатом инициации облачной паодписи
      */
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
+
+    /**
+     * Инициация процесса облачного расшифрования документа из Docflow
+     * @return ссылка на подтверждение расшифрования
+     */
+    QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64);
+
+    /**
+     * Подтверждение облачного расшифрования документа из Docflow
+     * @return Расшифрованый конент документа
+     */
+    QueryContext<byte[]> cloudDecryptDocumentConfirm(
+            String docflowId,
+            String documentId,
+            String requestId,
+            String code);
+
+    /**
+     * Инициация и подтверждение облачного расшифрования документа из Docflow
+     * @param smsCodeProvider метод получения кода подтверждения.
+     * @return Расшифрованый конент документа
+     */
+    QueryContext<byte[]> cloudDecryptDocument(
+            String docflowId,
+            String documentId,
+            String certBase64,
+            Function<DecryptInitiation, String> smsCodeProvider);
 }

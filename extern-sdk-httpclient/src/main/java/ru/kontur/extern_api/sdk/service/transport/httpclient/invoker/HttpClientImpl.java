@@ -365,6 +365,7 @@ public class HttpClientImpl {
             return new byte[0];
         }
 
+
         MediaType mediaType = MediaType.parse(contentType);
 
         if (mediaType == null) {
