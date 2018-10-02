@@ -24,6 +24,16 @@
 
 package ru.kontur.extern_api.sdk.provider.crypt.mscapi;
 
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
+import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
@@ -34,23 +44,15 @@ import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+import ru.kontur.extern_api.sdk.utils.Stopwatch;
 
 
 /**
  * @author Aleksey Sukhorukov
  */
 public class CryptoProviderMSCapi implements CryptoProvider {
+
+
 
     private final CryptoService cryptoService;
     private final Map<String, Key> cacheSignKey;
@@ -120,7 +122,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
         try {
             String thumbprint = cxt.getThumbprint();
 
-            Key key = getKeyByThumbprint(thumbprint);
+            Key key = Stopwatch.timeIt("getKeyByThumbprint", () -> getKeyByThumbprint(thumbprint));
             if (key == null) {
                 return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
             }
@@ -129,9 +131,14 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
             byte[] content = cxt.getContent();
 
-            return new QueryContext<byte[]>().setResult(p7p.decrypt(key, null, content), CONTENT);
-        } catch (CryptoException x) {
-            return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
+            byte[] decrypt = Stopwatch.timeIt("decrypt", () -> p7p.decrypt(key, null, content));
+            return new QueryContext<byte[]>().setResult(decrypt, CONTENT);
+
+        } catch (RuntimeException x) {
+            if (x.getCause() instanceof CryptoException) {
+                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR, x.getMessage()));
+            }
+            throw x;
         }
     }
 
