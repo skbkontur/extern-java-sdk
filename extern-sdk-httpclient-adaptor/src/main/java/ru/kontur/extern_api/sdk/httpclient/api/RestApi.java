@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2018 SKB Kontur
+ * The MIT License
+ *
+ * Copyright 2018 alexs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -8,17 +10,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package ru.kontur.extern_api.sdk.httpclient.api;
 
@@ -48,7 +49,6 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 /**
- *
  * @author alexs
  */
 public class RestApi {
@@ -74,37 +74,34 @@ public class RestApi {
                 Method[] methods = this.getClass().getDeclaredMethods();
                 for (Method m : methods) {
                     Path pa = m.getAnnotation(Path.class);
-                    
+
                     if (pa == null) {
                         continue;
                     }
-                    
+
                     RestQuery restQuery = new RestQuery();
                     restApi.put(m.getName(), restQuery);
-                    
+
                     restQuery.setPath(pa.value());
-                    
+
                     if (isAnnotation(m, GET.class)) {
                         restQuery.setHttpMethod("GET");
-                    }
-                    else if (isAnnotation(m, POST.class)) {
+                    } else if (isAnnotation(m, POST.class)) {
                         restQuery.setHttpMethod("POST");
-                    }
-                    else if (isAnnotation(m, PUT.class)) {
+                    } else if (isAnnotation(m, PUT.class)) {
                         restQuery.setHttpMethod("PUT");
-                    }
-                    else if (isAnnotation(m, DELETE.class)) {
+                    } else if (isAnnotation(m, DELETE.class)) {
                         restQuery.setHttpMethod("DELETE");
                     }
-                    
+
                     extractContentType(m, restQuery);
-                    
+
                     Parameter[] methodParams = m.getParameters();
-                    
+
                     List<Param> params = new ArrayList<>();
-                    
+
                     restQuery.setParams(params);
-                    
+
                     for (Parameter p : methodParams) {
                         PathParam ppa = p.getAnnotation(PathParam.class);
                         if (ppa != null) {
@@ -142,6 +139,9 @@ public class RestApi {
         Map<String, RestQuery> restApi = REST_QUERIES.get(this.getClass());
         if (restApi != null) {
             RestQuery restQuery = restApi.get(methodName);
+            if (restQuery == null) {
+                throw new ApiException("The method " + methodName + " does not exist");
+            }
 
             String path = buildRequestPath(restQuery, args);
 
@@ -154,13 +154,13 @@ public class RestApi {
             }
 
             return httpClient.submitHttpRequest(
-                path,
-                restQuery.getHttpMethod(),
-                queryParams,
-                body,
-                headerParams,
-                null,
-                type
+                    path,
+                    restQuery.getHttpMethod(),
+                    queryParams,
+                    body,
+                    headerParams,
+                    null,
+                    type
             );
         }
         throw new ApiException("The method " + methodName + " not found.");

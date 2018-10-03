@@ -52,7 +52,9 @@ import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 /**
  * @author Aleksey Sukhorukov
+ * @deprecated to be removed. Use service embedded method instead
  */
+@Deprecated
 public class CloudCryptoProvider implements CryptoProvider {
 
     private static final String SIGNATURE = "подпись";

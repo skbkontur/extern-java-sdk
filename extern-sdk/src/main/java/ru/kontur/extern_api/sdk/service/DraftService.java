@@ -360,6 +360,16 @@ public interface DraftService extends ProviderHolder {
 
     /**
      * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print</p>
+     * Асинхронный метод создания печатной формы документа.
+     *
+     * @param draftId идентификатор черновика
+     * @param documentId идентификатор документа
+     * @return byte[] pdf
+     */
+    CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(String draftId, String documentId);
+
+    /**
+     * <p>GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print</p>
      * Синхронный метод создания печатной формы документа.
      *
      * @param cxt контекст. Должен содержать следующие данные:

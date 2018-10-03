@@ -23,12 +23,15 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import java.util.function.Function;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -254,11 +257,16 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
-    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument) {
+    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyId) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
         String userIP = this.getUserIPProvider().userIP();
         return cxt
-                .setReplyDocument(replyDocument)
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setReplyId(replyId)
                 .setUserIP(userIP)
                 .applyAsync(docflowsAdaptor::sendReply);
     }
@@ -372,6 +380,21 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     }
 
     @Override
+    public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
+            String docflowId,
+            String documentId,
+            byte[] documentContent) {
+        return printAsync(docflowId, documentId, Base64.getEncoder().encodeToString(documentContent))
+                .thenApply(cxt -> {
+                    if (cxt.isFail()) {
+                        return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
+                    }
+                    byte[] decoded = Base64.getDecoder().decode(cxt.get());
+                    return new QueryContext<byte[]>().setResult(decoded, QueryContext.CONTENT);
+                });
+    }
+
+    @Override
     public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent) {
         QueryContext<SignInitiation> cxt = createQueryContext(parent, EN_DFW);
         return cxt.apply(docflowsAdaptor::cloudSignReplyDocument);
@@ -382,12 +405,14 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String docflowId,
             String documentId,
             String replyId,
+            String requestId,
             String smsCode) {
         QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
         return cxt
                 .setDocflowId(docflowId)
                 .setDocumentId(documentId)
                 .setReplyId(replyId)
+                .setRequestId(requestId)
                 .setSmsCode(smsCode)
                 .applyAsync(docflowsAdaptor::confirmSignReplyDocument);
     }
@@ -417,4 +442,57 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         QueryContext<String> cxt = createQueryContext(parent, EN_DFW);
         return cxt.apply(docflowsAdaptor::print);
     }
+
+    @Override
+    public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64) {
+        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
+        return docflowsAdaptor.cloudDecryptDocumentInit(cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setCertificate(certBase64)
+        );
+    }
+
+    @Override
+    public QueryContext<byte[]> cloudDecryptDocumentConfirm(
+            String docflowId,
+            String documentId,
+            String requestId,
+            String code) {
+        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
+        return docflowsAdaptor.cloudDecryptDocumentConfirm(cxt
+                .setDocflowId(docflowId)
+                .setDocumentId(documentId)
+                .setRequestId(requestId)
+                .setSmsCode(code)
+        );
+
+    }
+
+    @Override
+    public QueryContext<byte[]> cloudDecryptDocument(
+            String docflowId,
+            String documentId,
+            String certBase64,
+            Function<DecryptInitiation, String> smsCodeProvider) {
+
+        QueryContext<DecryptInitiation> initCxt = cloudDecryptDocumentInit(docflowId, documentId, certBase64);
+
+        if (initCxt.isFail()) {
+            return new QueryContext<byte[]>(initCxt, initCxt.getEntityName())
+                    .setServiceError(initCxt.getServiceError());
+        }
+
+        DecryptInitiation init = initCxt.get();
+        return cloudDecryptDocumentConfirm(
+                docflowId,
+                documentId,
+                init.getRequestId(),
+                smsCodeProvider.apply(init)
+        );
+    }
+
 }

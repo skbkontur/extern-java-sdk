@@ -24,10 +24,10 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -35,8 +35,9 @@ import java.util.Map;
  * Класс предназначен для получения информации о результатах проверки черновика перед отправкой.
  * Используется в методах: {@code DraftService.check} и {@code DraftService.prepare}
  * </p>
- * @see CheckError
+ *
  * @author Aleksey Sukhorukov
+ * @see CheckError
  */
 public class CheckResultData {
 
@@ -50,6 +51,7 @@ public class CheckResultData {
 
     /**
      * Возвращает карту для списков ошибок по документам (например ошибки ФЛК)
+     *
      * @return documentsErrors карта для списков ошибок
      * @see CheckError
      */
@@ -59,6 +61,7 @@ public class CheckResultData {
 
     /**
      * Устанавливает карту для списков ошибок по документам (например ошибки ФЛК)
+     *
      * @param documentsErrors карту для списков ошибок по документам
      */
     public void setDocumentsErrors(Map<String, List<CheckError>> documentsErrors) {
@@ -67,6 +70,7 @@ public class CheckResultData {
 
     /**
      * Устанавливает список ошибок по результату проверки черновика
+     *
      * @param commonErrors список ошибок по результату проверки черновика
      * @return {@link CheckResultData}
      */
@@ -77,6 +81,7 @@ public class CheckResultData {
 
     /**
      * Дщбавляет ошибку в список
+     *
      * @param commonErrorsItem ошибка {@link CheckError}
      * @return {@link CheckResultData}
      */
@@ -90,6 +95,7 @@ public class CheckResultData {
 
     /**
      * Возвращает список ошибок по результату проверки черновика
+     *
      * @return commonErrors список ошибок
      * @see CheckError
      */
@@ -99,9 +105,27 @@ public class CheckResultData {
 
     /**
      * Устанавливает список ошибок по результату проверки черновика
+     *
      * @param commonErrors список ошибок
      */
     public void setCommonErrors(List<CheckError> commonErrors) {
         this.commonErrors = commonErrors;
+    }
+
+    public boolean hasNoErrors() {
+        return !(hasCommonErrors() || hasDocumentsErrors());
+    }
+
+    private boolean hasDocumentsErrors() {
+        return getDocumentsErrors()
+                .entrySet()
+                .stream()
+                .flatMap(e -> e.getValue().stream())
+                .anyMatch(checkError -> Objects.equals("Error", checkError.getLevel()));
+    }
+
+    private boolean hasCommonErrors() {
+        return getCommonErrors().stream()
+                .anyMatch(checkError -> Objects.equals("Error", checkError.getLevel()));
     }
 }

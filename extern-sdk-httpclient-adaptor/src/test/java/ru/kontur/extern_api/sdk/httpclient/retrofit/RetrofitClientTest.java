@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.httpclient.retrofit;
 
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
+
+@Disabled("IT")
 class RetrofitClientTest {
 
     @Test
@@ -40,8 +43,8 @@ class RetrofitClientTest {
     void loggingTest() throws Exception {
 
         RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
-                .setAuthSid("9723016DF43FE64BA22A532B8EB2FD81C2CBC657E370EA499F33A9671751AC8D")
-                .setApiKey("72763D09-EC18-4CA6-A6B6-DEFEF438BBD5");
+                .setAuthSid("***")
+                .setApiKey("***");
 
         TestEventsApi service = rc.createService(TestEventsApi.class);
         Response<EventsPage> execute = service.getEvents("0_0", 1).get();
@@ -59,8 +62,8 @@ class RetrofitClientTest {
         void adaptorTestSuccess() {
 
             RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
-                    .setAuthSid("9723016DF43FE64BA22A532B8EB2FD81C2CBC657E370EA499F33A9671751AC8D")
-                    .setApiKey("72763D09-EC18-4CA6-A6B6-DEFEF438BBD5");
+                    .setAuthSid("***")
+                    .setApiKey("***");
 
             EventsAdaptorTest ea = new EventsAdaptorTest(rc.createService(TestEventsApi.class));
 
@@ -76,8 +79,8 @@ class RetrofitClientTest {
         void adaptorTestFail() {
 
             RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
-                    .setAuthSid("incorrect sid")
-                    .setApiKey("72763D09-EC18-4CA6-A6B6-DEFEF438BBD5");
+                    .setAuthSid("***")
+                    .setApiKey("***");
 
             EventsAdaptorTest ea = new EventsAdaptorTest(rc.createService(TestEventsApi.class));
 

@@ -59,6 +59,7 @@ public class HttpClientImpl {
     private static final String AUTHORIZATION = "Authorization";
     private static final String AUTH_PREFIX = "auth.sid ";
     private static final String APIKEY = "X-Kontur-Apikey";
+    private static final String TIMEOUT = "X-Kontur-Request-Timeout";
     private static final String USER_AGENT = "User-Agent";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
@@ -158,13 +159,18 @@ public class HttpClientImpl {
             // setup default headers
             getDefaultHeaderParams().forEach(connect::setRequestProperty);
 
-            headerParams.putIfAbsent(CONTENT_TYPE, guessContentType(body));
+            Map<String, String> newHeaders = new HashMap<>(headerParams);
+
+            newHeaders.putIfAbsent(CONTENT_TYPE, guessContentType(body));
 
             if (userAgentProvider != null) {
-                headerParams.putIfAbsent(USER_AGENT, userAgentProvider.getUserAgent());
+                newHeaders.putIfAbsent(USER_AGENT, userAgentProvider.getUserAgent());
+                if (readTimeout != 0) {
+                    newHeaders.putIfAbsent(TIMEOUT, Long.toString(readTimeout * 10_000L));
+                }
             }
 
-            headerParams.forEach(connect::setRequestProperty);
+            newHeaders.forEach(connect::setRequestProperty);
 
             connect.setRequestProperty("Connection", (keepAlive ? "keep-alive" : "close"));
             connect.setConnectTimeout(connectTimeout);

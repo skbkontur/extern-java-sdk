@@ -28,7 +28,6 @@ import static ru.kontur.extern_api.sdk.adaptor.QueryContext.SESSION_ID;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
@@ -47,6 +46,7 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
     private ApiKeyProvider apiKeyProvider;
     private LoginAndPasswordProvider loginAndPasswordProvider;
     private UriProvider authBaseUriProvider;
+    private String sid;
 
     private HttpClient httpClient;
 
@@ -89,10 +89,12 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
 
     @Override
     public QueryContext<String> sessionId() {
-        Logger.getLogger(LoginAndPasswordProvider.class.getName())
-                .info("Login attempt: " + loginAndPasswordProvider.getLogin());
         QueryContext<String> cxt = new QueryContext<String>("")
                 .setApiKeyProvider(apiKeyProvider);
+
+        if (sid != null) {
+            return new QueryContext<String>().setResult(sid, QueryContext.SESSION_ID);
+        }
 
         try {
 
@@ -101,21 +103,7 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
             }
 
             String login = loginAndPasswordProvider.getLogin();
-
             String pass = loginAndPasswordProvider.getPass();
-
-            if (login == null) {
-                cxt.setServiceError("Missing the required parameter 'login'");
-            }
-
-            if (pass == null) {
-                cxt.setServiceError("Missing the required parameter 'pass'");
-            }
-
-            if (apiKeyProvider == null) {
-                return cxt.setServiceError("Missing the api key provider");
-            }
-
             String apiKey = apiKeyProvider.getApiKey();
 
             if (apiKey == null) {
@@ -133,19 +121,17 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
                 }
             };
 
-            Map<String, String> headerParams = new HashMap<String, String>() {
-                private static final long serialVersionUID = 1L;
+            Map<String, String> headerParams = Collections.singletonMap("Content-Type", "text/plain");
+            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST",
+                    queryParams,
+                    pass,
+                    headerParams,
+                    Collections.emptyMap(),
+                    ResponseSid.class
+            );
 
-                {
-                    put("Content-Type", "text/plain");
-                }
-            };
-
-            ApiResponse<ResponseSid> resp = httpClient
-                    .submitHttpRequest("/authenticate-by-pass", "POST", queryParams, pass,
-                            headerParams, Collections.emptyMap(), ResponseSid.class);
-
-            cxt.setResult(resp.getData().getSid(), SESSION_ID);
+            sid = resp.getData().getSid();
+            cxt.setResult(sid, SESSION_ID);
         } catch (ApiException x) {
             cxt.setServiceError(x);
         }

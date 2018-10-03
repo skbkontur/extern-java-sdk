@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.provider.crypt.rsa;
 
 import com.argos.asn1.Asn1Exception;
 import com.argos.cipher.asn1ext.X509certificate;
+import java.nio.file.Paths;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
@@ -83,7 +84,9 @@ public class CryptoProviderRSA implements CryptoProvider {
 
     public CryptoProviderRSA(String keyStorePass, String keyPass) {
         // default key store source: the jre key store
-        keyStoreProvider = () -> System.getProperty("java.home") + File.separator + "lib" + File.separator + "security" + File.separator + "cacerts";
+        keyStoreProvider = () -> Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts")
+                .toString();
+
         // cache for keys
         this.cacheSignKey = new ConcurrentHashMap<>();
         //
