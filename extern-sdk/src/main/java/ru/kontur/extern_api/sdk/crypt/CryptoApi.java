@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
@@ -40,6 +41,8 @@ import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
 
 public class CryptoApi {
+
+    private static final Logger log = Logger.getLogger(CryptoApi.class.getSimpleName());
 
     // Probably bad design, but significantly improves performance
     private static List<Key> keyCache;
@@ -52,7 +55,6 @@ public class CryptoApi {
 
     public CryptoApi() throws CryptoException, CertificateException {
         cryptoService = new MSCapi();
-        keyCache = null;
         certificateFactory = new X509CertificateFactory();
     }
 
@@ -96,10 +98,12 @@ public class CryptoApi {
         if (keyCache == null || refreshCache) {
             synchronized (lock) {
                 if (keyCache == null || refreshCache) {
+                    log.info("Installed keys loading...");
                     keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
                 }
             }
         }
+        log.info("Found " + keyCache.size() + " installed keys");
 
         return new ArrayList<>(keyCache);
     }

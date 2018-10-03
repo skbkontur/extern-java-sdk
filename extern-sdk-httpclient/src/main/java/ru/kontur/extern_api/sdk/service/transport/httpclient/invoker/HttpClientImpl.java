@@ -60,6 +60,7 @@ public class HttpClientImpl {
     private static final String AUTHORIZATION = "Authorization";
     private static final String AUTH_PREFIX = "auth.sid ";
     private static final String APIKEY = "X-Kontur-Apikey";
+    private static final String TIMEOUT = "X-Kontur-Request-Timeout";
     private static final String USER_AGENT = "User-Agent";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
@@ -165,6 +166,9 @@ public class HttpClientImpl {
 
             if (userAgentProvider != null) {
                 newHeaders.putIfAbsent(USER_AGENT, userAgentProvider.getVersion());
+                if (readTimeout != 0) {
+                    newHeaders.putIfAbsent(TIMEOUT, Long.toString(readTimeout * 10_000L));
+                }
             }
 
             newHeaders.forEach(connect::setRequestProperty);
