@@ -136,6 +136,14 @@ public class Document {
         this.signatures = signatures;
     }
 
+    public boolean hasEncryptedContent() {
+        return content.getEncrypted() != null;
+    }
+
+    public boolean hasDecryptedContent() {
+        return content.getDecrypted() != null;
+    }
+
     /**
      * Возвращает список ссылок на ресурсы документооборота {@link Link}
      *

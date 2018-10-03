@@ -143,6 +143,9 @@ public class RestApi {
         Map<String, RestQuery> restApi = REST_QUERIES.get(this.getClass());
         if (restApi != null) {
             RestQuery restQuery = restApi.get(methodName);
+            if (restQuery == null) {
+                throw new ApiException("The method " + methodName + " does not exist");
+            }
 
             String path = buildRequestPath(restQuery, args);
 

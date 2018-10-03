@@ -42,6 +42,7 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
+import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 /**
  * {@code QueryContext} класс предоставляет контекст функционального интерфейса.
@@ -2113,6 +2114,15 @@ public class QueryContext<R> implements Serializable {
         return ensureSuccess().get();
     }
 
+    public QueryContext<R> setResultAware(String key, UncheckedSupplier<R> supplier) {
+        try {
+            this.setResult(supplier.get(), key);
+        } catch (Exception e) {
+            this.setServiceError(e.getMessage(), e);
+        }
+        return this;
+    }
+
     private String prettyErrorPrint(ServiceError se) {
         final String EOL = "\r\n";
 
@@ -2132,9 +2142,7 @@ public class QueryContext<R> implements Serializable {
                     List<String> values = responseHeaders.get(k);
                     if (values != null) {
                         StringBuilder headerLine = new StringBuilder("    ").append(k).append(": ");
-                        values.forEach((v) -> {
-                            headerLine.append(v).append("; ");
-                        });
+                        values.forEach((v) -> headerLine.append(v).append("; "));
                         errorMsg.append(headerLine).append(EOL);
                     }
                 });
@@ -2151,4 +2159,5 @@ public class QueryContext<R> implements Serializable {
     public String toString() {
         return "context{" + result + "=" + get() + " with " + params.size() + "params}";
     }
+
 }

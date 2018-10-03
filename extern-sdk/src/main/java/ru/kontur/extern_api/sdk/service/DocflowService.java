@@ -27,6 +27,8 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -359,12 +361,14 @@ public interface DocflowService extends ProviderHolder {
     /**
      * Асинхронный метод отправляет документ в контролирующий орган
      *
-     * @param replyDocument структура данных для отправки, созданная с помощью метода {@link
-     * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply}
      * @return ДО
      * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(ReplyDocument replyDocument);
+    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyId
+    );
 
     /**
      * Синхронный метод отправляет документ в контролирующий орган
@@ -535,6 +539,21 @@ public interface DocflowService extends ProviderHolder {
     CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
             String documentContentBase64);
 
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
+     * Асинхронный метод возвращает печатную форму документа. Печатная форма - PDF файл.
+     *
+     * @param docflowId идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param documentContent расшифрованый формализованный документ, для которого
+     * необходимо создать печатную форму
+     * @return печатная форма
+     */
+    CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
+            String docflowId,
+            String documentId,
+            byte[] documentContent);
+
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
@@ -596,6 +615,7 @@ public interface DocflowService extends ProviderHolder {
             String docflowId,
             String documentId,
             String replyId,
+            String requestCode,
             String smsCode);
 
 
@@ -613,4 +633,34 @@ public interface DocflowService extends ProviderHolder {
      * @return объект с результатом инициации облачной паодписи
      */
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
+
+    /**
+     * Инициация процесса облачного расшифрования документа из Docflow
+     * @return ссылка на подтверждение расшифрования
+     */
+    QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64);
+
+    /**
+     * Подтверждение облачного расшифрования документа из Docflow
+     * @return Расшифрованый конент документа
+     */
+    QueryContext<byte[]> cloudDecryptDocumentConfirm(
+            String docflowId,
+            String documentId,
+            String requestId,
+            String code);
+
+    /**
+     * Инициация и подтверждение облачного расшифрования документа из Docflow
+     * @param smsCodeProvider метод получения кода подтверждения.
+     * @return Расшифрованый конент документа
+     */
+    QueryContext<byte[]> cloudDecryptDocument(
+            String docflowId,
+            String documentId,
+            String certBase64,
+            Function<DecryptInitiation, String> smsCodeProvider);
 }

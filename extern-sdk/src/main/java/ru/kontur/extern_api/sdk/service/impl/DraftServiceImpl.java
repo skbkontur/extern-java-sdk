@@ -24,7 +24,7 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import java.util.List;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,6 @@ import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -42,6 +41,7 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
@@ -237,6 +237,18 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
                 .setDraftId(draftId)
                 .setDocumentId(documentId)
                 .applyAsync(draftsAdaptor::printDocument);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(String draftId, String documentId) {
+        return printDocumentAsync(draftId, documentId)
+                .thenApply(cxt -> {
+                    if (cxt.isFail()) {
+                        return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
+                    }
+                    return new QueryContext<byte[]>()
+                            .setResult(Base64.getDecoder().decode(cxt.get()), QueryContext.CONTENT);
+                });
     }
 
     @Override
