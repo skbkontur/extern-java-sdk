@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 public final class PublicDateFormat {
 
-    private static final List<ThreadLocal<DateFormat>> supportedFormates
+    private static final List<ThreadLocal<DateFormat>> supportedFormats
             = new ArrayList<ThreadLocal<DateFormat>>() {
         {
             add(ThreadLocal.withInitial(() ->
@@ -76,7 +76,7 @@ public final class PublicDateFormat {
             // Ok, try to use other date formatters
         }
 
-        for (ThreadLocal<DateFormat> supportedFormate : supportedFormates) {
+        for (ThreadLocal<DateFormat> supportedFormate : supportedFormats) {
             try {
                 return supportedFormate.get().parse(date);
             } catch (ParseException ignored) {

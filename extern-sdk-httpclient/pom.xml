@@ -22,13 +22,15 @@
 ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ~ SOFTWARE.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.5-SNAPSHOT</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-httpclient</artifactId>
@@ -37,29 +39,22 @@
     <packaging>jar</packaging>
 
     <dependencies>
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-common</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

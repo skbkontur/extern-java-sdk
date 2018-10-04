@@ -89,4 +89,14 @@ public interface ProviderHolderParent<TChild extends ProviderHolder> extends Pro
     default UserIPProvider getUserIPProvider() {
         return getChildProviderHolder().getUserIPProvider();
     }
+
+    @Override
+    default void setUserAgentProvider(UserAgentProvider userAgentProvider) {
+        getChildProviderHolder().setUserAgentProvider(userAgentProvider);
+    }
+
+    @Override
+    default UserAgentProvider getUserAgentProvider() {
+        return getChildProviderHolder().getUserAgentProvider();
+    }
 }

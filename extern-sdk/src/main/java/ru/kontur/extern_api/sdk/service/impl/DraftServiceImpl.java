@@ -28,6 +28,8 @@ import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
+import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -42,10 +44,8 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 
 /**
@@ -58,8 +58,8 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
 
     private final DraftsAdaptor draftsAdaptor;
 
-    DraftServiceImpl(ServicesFactory servicesFactory, DraftsAdaptor draftsAdaptor) {
-        super(servicesFactory);
+    DraftServiceImpl(ProviderHolder providerHolder, DraftsAdaptor draftsAdaptor) {
+        super(providerHolder);
         this.draftsAdaptor = draftsAdaptor;
     }
 

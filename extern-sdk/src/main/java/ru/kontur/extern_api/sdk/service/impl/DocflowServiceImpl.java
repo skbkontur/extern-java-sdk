@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -39,10 +41,8 @@ import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.DocflowsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 
 /**
  * @author AlexS
@@ -56,9 +56,9 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
     private final DocflowsAdaptor docflowsAdaptor;
 
     DocflowServiceImpl(
-            ServicesFactory servicesFactory,
+            ProviderHolder providerHolder,
             DocflowsAdaptor docflowsAdaptor) {
-        super(servicesFactory);
+        super(providerHolder);
         this.docflowsAdaptor = docflowsAdaptor;
     }
 
@@ -262,27 +262,21 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String documentId,
             String replyId) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
-        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
-        if (userIPCxt.isFail()) {
-            return CompletableFuture.completedFuture(cxt.setServiceError(userIPCxt));
-        }
+        String userIP = this.getUserIPProvider().userIP();
         return cxt
                 .setDocflowId(docflowId)
                 .setDocumentId(documentId)
                 .setReplyId(replyId)
-                .setUserIP(userIPCxt.get())
+                .setUserIP(userIP)
                 .applyAsync(docflowsAdaptor::sendReply);
     }
 
     @Override
     public QueryContext<Docflow> sendReply(QueryContext<?> parent) {
         QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-        QueryContext<String> userIPCxt = this.getUserIPProvider().userIP();
-        if (userIPCxt.isFail()) {
-            return cxt.setServiceError(userIPCxt);
-        }
+        String userIP = this.getUserIPProvider().userIP();
         return cxt
-                .setUserIP(userIPCxt.get())
+                .setUserIP(userIP)
                 .apply(docflowsAdaptor::sendReply);
     }
 

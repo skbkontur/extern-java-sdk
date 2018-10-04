@@ -27,9 +27,6 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.stream.Stream;
 
 
-/**
- * @author Aleksey Sukhorukov
- */
 public class File {
 
     private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.XML;

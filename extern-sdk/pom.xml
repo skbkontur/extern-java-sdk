@@ -28,7 +28,7 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.5-SNAPSHOT</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk</artifactId>
@@ -44,39 +44,63 @@
         </repository>
     </repositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ru.argosgrp.cryptoservice</groupId>
+                <artifactId>asn1</artifactId>
+                <version>${cryptoservice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.argosgrp.cryptoservice</groupId>
+                <artifactId>pkcs</artifactId>
+                <version>${cryptoservice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.argosgrp.cryptoservice</groupId>
+                <artifactId>cs</artifactId>
+                <version>${cryptoservice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.argosgrp.cryptoservice</groupId>
+                <artifactId>cs-mscapi</artifactId>
+                <version>${cryptoservice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.argosgrp.cryptoservice</groupId>
+                <artifactId>cs-util</artifactId>
+                <version>${cryptoservice.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- cryptoservice local dependencies -->
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>asn1</artifactId>
-            <version>${cryptoservice.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>pkcs</artifactId>
-            <version>${cryptoservice.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs</artifactId>
-            <version>${cryptoservice.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs-mscapi</artifactId>
-            <version>${cryptoservice.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.argosgrp.cryptoservice</groupId>
             <artifactId>cs-util</artifactId>
-            <version>${cryptoservice.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
         </dependency>
-
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk-common</artifactId>
@@ -91,22 +115,23 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>
-        
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
@@ -115,11 +140,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mock-server</groupId>
-            <artifactId>mockserver-netty</artifactId>
         </dependency>
 
     </dependencies>
@@ -133,23 +153,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>java</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>ru.kontur.extern-api</groupId>
-                    <artifactId>extern-api-java-sdk-httpclient</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>

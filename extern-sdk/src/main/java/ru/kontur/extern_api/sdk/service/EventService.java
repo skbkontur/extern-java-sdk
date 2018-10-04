@@ -28,14 +28,13 @@ import ru.kontur.extern_api.sdk.model.EventsPage;
 
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с событиями,
  * связанными с докуметооборотами (ДО):
  * <p>- получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};</p>
- * @author Aleksey Sukhorukov
  */
 public interface EventService extends ProviderHolder {
 

@@ -26,8 +26,6 @@ package ru.kontur.extern_api.sdk.crypt;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import ru.kontur.extern_api.sdk.utils.Lazy;
 

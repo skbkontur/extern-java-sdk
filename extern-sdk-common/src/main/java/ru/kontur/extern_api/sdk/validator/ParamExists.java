@@ -23,8 +23,8 @@
 
 package ru.kontur.extern_api.sdk.validator;
 
-import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.Query;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 import java.text.MessageFormat;
 

@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 
 /**

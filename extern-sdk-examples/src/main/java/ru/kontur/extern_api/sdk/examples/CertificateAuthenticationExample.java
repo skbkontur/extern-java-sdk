@@ -38,7 +38,7 @@ import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider.CertificateAuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -103,7 +103,7 @@ public class CertificateAuthenticationExample {
         engine.setApiKeyProvider(() -> properties.getProperty("api.key"));
         // AuthenticationProvider — предоставляет аутентификатор.
         engine.setAuthenticationProvider(certificateAuthenticationProvider
-                .httpClient(new DefaultServicesFactory().getHttpClient()));
+                .httpClient(DefaultServicesFactory.create().getHttpClient()));
 
         // теперь можно использовать engine для дальнейшей работы
         QueryContext<AccountList> cxt = new QueryContext<>();

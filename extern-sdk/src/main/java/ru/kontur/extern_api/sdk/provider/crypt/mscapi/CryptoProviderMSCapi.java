@@ -25,10 +25,9 @@
 package ru.kontur.extern_api.sdk.provider.crypt.mscapi;
 
 import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 import java.security.cert.CertificateException;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -36,12 +35,11 @@ import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.kontur.extern_api.sdk.Messages;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.utils.Stopwatch;
-
 
 public class CryptoProviderMSCapi implements CryptoProvider {
 
@@ -108,10 +106,10 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     }
 
     @NotNull
-    private Key getKeyByThumbprint(String thumbprint) throws CryptoException {
+    private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
         return cryptoApi.getInstalledKeys(false)
                 .stream()
-                .filter(w -> Objects.equals(cryptoApi.getThumbprint(w.getX509ctx()), thumbprint))
+                .filter(w -> thumbprint.compareToIgnoreCase(cryptoApi.getThumbprint(w.getX509ctx())) == 0)
                 .findAny()
                 .orElseThrow(() -> new CryptoException(
                         "Cannot find locally installed certificate with thumbprint " + thumbprint

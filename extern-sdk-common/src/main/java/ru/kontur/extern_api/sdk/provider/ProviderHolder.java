@@ -39,6 +39,8 @@ public interface ProviderHolder {
 
     void setUserIPProvider(UserIPProvider userIPProvider);
 
+    void setUserAgentProvider(UserAgentProvider userAgentProvider);
+
 
     UriProvider getServiceBaseUriProvider();
 
@@ -52,6 +54,8 @@ public interface ProviderHolder {
 
     UserIPProvider getUserIPProvider();
 
+    UserAgentProvider getUserAgentProvider();
+
     default <T extends ProviderHolder> T copyProvidersTo(T ph) {
         ph.setServiceBaseUriProvider(this.getServiceBaseUriProvider());
         ph.setAuthenticationProvider(this.getAuthenticationProvider());
@@ -59,17 +63,8 @@ public interface ProviderHolder {
         ph.setApiKeyProvider(this.getApiKeyProvider());
         ph.setCryptoProvider(this.getCryptoProvider());
         ph.setUserIPProvider(this.getUserIPProvider());
+        ph.setUserAgentProvider(this.getUserAgentProvider());
         return ph;
     }
 
-    @SuppressWarnings("unchecked")
-    default <S extends ProviderHolder, T extends ProviderHolder> S copyProvidersFrom(T ph) {
-        this.setServiceBaseUriProvider(ph.getServiceBaseUriProvider());
-        this.setAuthenticationProvider(ph.getAuthenticationProvider());
-        this.setAccountProvider(ph.getAccountProvider());
-        this.setApiKeyProvider(ph.getApiKeyProvider());
-        this.setCryptoProvider(ph.getCryptoProvider());
-        this.setUserIPProvider(ph.getUserIPProvider());
-        return (S) this;
-    }
 }

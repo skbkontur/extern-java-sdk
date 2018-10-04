@@ -44,12 +44,13 @@ import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.GsonProvider;
 
 /**
@@ -93,11 +94,13 @@ public class OrganizationServiceTest {
     @Before
     public void setupService() {
         accountId = UUID.randomUUID();
-        ExternEngine engine = new ExternEngine();
-        engine.setServiceBaseUriProvider(() -> "http://" + HOST + ":" + PORT + PATH);
-        engine.setAccountProvider(() -> accountId);
-        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
+
+        ExternEngine engine = ExternEngineBuilder.createExternEngine()
+                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
+                .doNotUseCryptoProvider()
+                .accountId(accountId.toString())
+                .serviceBaseUrl("http://" + HOST + ":" + PORT + PATH)
+                .build();
 
         organizationService = engine.getOrganizationService();
     }

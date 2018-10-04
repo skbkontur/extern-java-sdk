@@ -26,40 +26,31 @@ package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.EventsPage;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.EventService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.EventsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.EventsAdaptor;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 
-/**
- * @author AlexS
- */
 public class EventServiceImpl extends AbstractService implements EventService {
-
-    private static final String EN_EVENT = "event";
 
     private final EventsAdaptor eventsAdaptor;
 
-    public EventServiceImpl(
-            ServicesFactory servicesFactory,
+    EventServiceImpl(
+            ProviderHolder providerHolder,
             EventsAdaptor eventsAdaptor) {
-        super(servicesFactory);
+        super(providerHolder);
         this.eventsAdaptor = eventsAdaptor;
     }
 
     @Override
     public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size) {
-        QueryContext<EventsPage> cxt = createQueryContext(EN_EVENT);
-        return cxt
-                .setFromId(fromId)
-                .setSize(size)
-                .applyAsync(eventsAdaptor::getEvents);
+        return eventsAdaptor.getEvents(new QueryContext<>().setFromId(fromId).setSize(size));
     }
 
     @Override
     public QueryContext<EventsPage> getEvents(QueryContext<?> parent) {
-        QueryContext<EventsPage> cxt = createQueryContext(parent, EN_EVENT);
-        return cxt.apply(eventsAdaptor::getEvents);
+        return QueryContextUtils.join(eventsAdaptor.getEvents(parent));
     }
 }

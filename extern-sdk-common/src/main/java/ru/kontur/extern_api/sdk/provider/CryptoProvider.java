@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk.provider;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Aleksey Sukhorukov

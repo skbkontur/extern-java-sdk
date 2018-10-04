@@ -43,16 +43,16 @@ import org.junit.Test;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.HttpClientImpl;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.Link;
-import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.GsonProvider;
 
 public class CertificateAuthenticationTest {
 
@@ -90,22 +90,22 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForInitiation(int code, String body) {
         new MockServerClient(HOST, PORT)
-            .when(
-                request().withMethod("POST").withPath("**/authenticate-by-cert"),
-                exactly(1))
-            .respond(response()
-                .withStatusCode(code)
-                .withHeader(JSON_CONTENT_TYPE)
-                .withBody(body)
-            );
+                .when(
+                        request().withMethod("POST").withPath("**/authenticate-by-cert"),
+                        exactly(1))
+                .respond(response()
+                        .withStatusCode(code)
+                        .withHeader(JSON_CONTENT_TYPE)
+                        .withBody(body)
+                );
     }
 
     private void createAnswerForApprove(int code, String body) {
         new MockServerClient(HOST, PORT)
-            .when(request().withMethod("POST").withPath("**/approve-cert"), exactly(1))
-            .respond(
-                response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
-            );
+                .when(request().withMethod("POST").withPath("**/approve-cert"), exactly(1))
+                .respond(
+                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
+                );
     }
 
     private void createAnswerForValidInitiation() {
@@ -137,13 +137,16 @@ public class CertificateAuthenticationTest {
             }
         };
 
-        auth = CertificateAuthenticationProvider.usingCertificate(certificateProvider)
-            .setCryptoProvider(new MockCryptoProvider())
-            .setApiKeyProvider(() -> "apikey")
-            .setServiceBaseUriProvider(() -> String.format("http://%s:%s/", HOST, PORT))
-            .setSignatureKeyProvider(() -> "certificate")
-            .buildAuthenticationProvider()
-            .httpClient(new DefaultServicesFactory().getHttpClient());
+        String baseUri = String.format("http://%s:%s/", HOST, PORT);
+        auth = CertificateAuthenticationProvider
+                .usingCertificate(certificateProvider)
+                .setCryptoProvider(new MockCryptoProvider())
+                .setApiKeyProvider(() -> "apikey")
+                .setServiceBaseUriProvider(() -> baseUri)
+                .setSignatureKeyProvider(() -> "certificate")
+                .buildAuthenticationProvider();
+
+        auth.httpClient(new HttpClientImpl().setServiceBaseUri(baseUri));
     }
 
     @Test

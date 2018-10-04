@@ -45,6 +45,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
@@ -54,7 +55,7 @@ import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -92,11 +93,12 @@ public class DocflowServiceGetDocumentsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        engine = new ExternEngine();
-        engine.setServiceBaseUriProvider(() -> "http://localhost:8080/docflows");
-        engine.setAccountProvider(UUID::randomUUID);
-        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
+        engine = ExternEngineBuilder.createExternEngine()
+                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
+                .doNotUseCryptoProvider()
+                .accountId(UUID.randomUUID().toString())
+                .serviceBaseUrl("http://localhost:8080/docflows")
+                .build();
     }
 
     @Test

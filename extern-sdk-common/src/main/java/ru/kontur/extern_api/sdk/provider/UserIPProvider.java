@@ -23,8 +23,7 @@
 
 package ru.kontur.extern_api.sdk.provider;
 
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
-
 public interface UserIPProvider {
-    QueryContext<String> userIP();
+
+    String userIP();
 }

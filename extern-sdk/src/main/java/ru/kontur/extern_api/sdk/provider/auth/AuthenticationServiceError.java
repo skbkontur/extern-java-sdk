@@ -28,7 +28,7 @@ import com.google.gson.JsonSyntaxException;
 import java.util.List;
 import java.util.Map;
 import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 
 final public class AuthenticationServiceError implements ServiceError {
 

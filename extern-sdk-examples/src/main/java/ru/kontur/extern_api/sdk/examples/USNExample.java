@@ -46,7 +46,7 @@ import ru.kontur.extern_api.sdk.model.UsnDataV2;
 import ru.kontur.extern_api.sdk.model.UsnFormatPeriod;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko

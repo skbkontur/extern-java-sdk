@@ -36,7 +36,7 @@ public class DefaultUserAgentProvider implements UserAgentProvider {
     private static final String DEFAULT_ARTIFACTID = "unknown";
 
     @Override
-    public String getVersion() {
+    public String getUserAgent() {
         Package aPackage = ExternEngine.class.getPackage();
         if (aPackage != null) {
             String artifactId = aPackage.getImplementationTitle();

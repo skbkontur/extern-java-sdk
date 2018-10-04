@@ -29,7 +29,7 @@ import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 import java.io.File;
 import java.io.FileInputStream;

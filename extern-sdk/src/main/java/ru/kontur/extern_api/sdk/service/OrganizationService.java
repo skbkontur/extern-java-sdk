@@ -28,11 +28,9 @@ import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
- * @author Aleksey Sukhorukov
- *
  * Группа методов предоставляет доступ к операциям для работы с организациями:
  * <p>- найти организацию по ее внутреннему идентификатору {@link OrganizationService#lookupAsync} | {@link OrganizationService#lookup};</p>
  * <p>- создать организацию {@link OrganizationService#createAsync} | {@link OrganizationService#create};</p>

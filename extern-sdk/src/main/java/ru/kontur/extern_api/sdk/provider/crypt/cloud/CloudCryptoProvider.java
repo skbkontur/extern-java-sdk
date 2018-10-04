@@ -31,8 +31,8 @@ import ru.kontur.extern_api.sdk.provider.crypt.cloud.model.ApprovedDecryptRespon
 import ru.kontur.extern_api.sdk.provider.crypt.cloud.model.ApprovedSignaturesResponse;
 import ru.kontur.extern_api.sdk.provider.crypt.cloud.model.ContentRequest;
 import ru.kontur.extern_api.sdk.provider.crypt.cloud.model.RequestResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.Query;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.Query;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 import java.util.Base64;
 import java.util.Collections;
@@ -45,10 +45,10 @@ import static ru.kontur.extern_api.sdk.Messages.C_NO_DECRYPT;
 import static ru.kontur.extern_api.sdk.Messages.C_NO_SIGNATURE;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import static ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext.CONTENT;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 /**
  * @author Aleksey Sukhorukov

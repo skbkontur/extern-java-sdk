@@ -43,11 +43,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -78,11 +79,12 @@ public class DraftServiceGetEncryptedDocumentContentTest {
 
     @BeforeClass
     public static void setUpClass() {
-        engine = new ExternEngine();
-        engine.setServiceBaseUriProvider(() -> "http://localhost:8080/drafts");
-        engine.setAccountProvider(UUID::randomUUID);
-        engine.setApiKeyProvider(() -> UUID.randomUUID().toString());
-        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
+        engine = ExternEngineBuilder.createExternEngine()
+                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
+                .doNotUseCryptoProvider()
+                .accountId(UUID.randomUUID().toString())
+                .serviceBaseUrl("http://localhost:8080/drafts")
+                .build();
     }
 
     @Test

@@ -27,10 +27,10 @@ import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.OrganizationsAdaptor;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Aleksey Sukhorukov
@@ -42,9 +42,9 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
     private final OrganizationsAdaptor organizationsAdaptor;
 
     public OrganizationServiceImpl(
-            ServicesFactory servicesFactory,
+            ProviderHolder providerHolder,
             OrganizationsAdaptor organizationsAdaptor) {
-        super(servicesFactory);
+        super(providerHolder);
         this.organizationsAdaptor = organizationsAdaptor;
     }
 

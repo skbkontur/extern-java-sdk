@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk.event;
 
 import java.util.EventObject;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**

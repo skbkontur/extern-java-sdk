@@ -23,11 +23,9 @@
 
 package ru.kontur.extern_api.sdk.drafts.service;
 
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.event.AuthenticationListener;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 public class AuthenticationProviderAdaptor implements AuthenticationProvider {
 
@@ -46,20 +44,4 @@ public class AuthenticationProviderAdaptor implements AuthenticationProvider {
         return this;
     }
 
-    @Override
-    public void addAuthenticationListener(AuthenticationListener authListener) {
-    }
-
-    @Override
-    public void removeAuthenticationListener(AuthenticationListener authListener) {
-    }
-
-    @Override
-    public void raiseUnauthenticated(ServiceError x) {
-    }
-
-    @Override
-    public String userIP() {
-        return "0.0.0.0";
-    }
 }

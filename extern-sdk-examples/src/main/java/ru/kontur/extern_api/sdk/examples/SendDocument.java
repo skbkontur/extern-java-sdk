@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +44,7 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.service.transport.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Sukhorukov A.D.
