@@ -39,7 +39,7 @@ public class ApiEvent {
     private String kpp;
     private DocflowType docflowType;
     private Link docflowLink;
-    private DocflowStatus newState;
+    private String newState;
     private Date eventDateTime;
     private String id;
 
@@ -92,7 +92,7 @@ public class ApiEvent {
      *
      * @return состояние документооборота
      */
-    public DocflowStatus getNewState() {
+    public String getNewState() {
         return newState;
     }
 

@@ -25,8 +25,7 @@ package ru.kontur.extern_api.sdk.utils;
 
 class PreviouslyCaughtError extends RuntimeException {
 
-    PreviouslyCaughtError(Throwable cause) {
-        super(cause);
+    PreviouslyCaughtError(String message, Throwable cause) {
+        super(message, cause);
     }
-
 }

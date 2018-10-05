@@ -95,6 +95,8 @@ public class CryptoApi {
     }
 
     public List<Key> getInstalledKeys(boolean refreshCache) {
+        log.info("Working dir: " + System.getProperty("user.dir"));
+
         if (keyCache == null || refreshCache) {
             synchronized (lock) {
                 if (keyCache == null || refreshCache) {

@@ -78,7 +78,7 @@
                 <configuration>
                     <properties>
                         <configurationParameters>
-                            junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.enabled = false
                         </configurationParameters>
                     </properties>
                 </configuration>

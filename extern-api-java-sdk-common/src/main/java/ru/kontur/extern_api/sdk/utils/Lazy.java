@@ -40,17 +40,20 @@ public class Lazy<T> implements Supplier<T> {
 
     private T instance;
     private RuntimeException error;
+    private boolean retry;
 
-    private Lazy(Supplier<T> supplier) {
+    private Lazy(Supplier<T> supplier, boolean retry) {
         this.lock = new Object();
         this.supplier = supplier;
+        this.retry = retry;
     }
 
     @Override
     public T get() {
 
-        if (error != null)
+        if (!retry && error != null) {
             throw error;
+        }
 
         if (instance == null) {
             synchronized (lock) {
@@ -58,8 +61,8 @@ public class Lazy<T> implements Supplier<T> {
                     try {
                         instance = supplier.get();
                     } catch (RuntimeException e) {
-                        error = new PreviouslyCaughtError(e);
-                        throw new RuntimeException(e);
+                        error = new PreviouslyCaughtError(e.getMessage(), e.getCause());
+                        throw e;
                     }
                 }
             }
@@ -70,6 +73,13 @@ public class Lazy<T> implements Supplier<T> {
     @NotNull
     public static <T> Lazy<T> of(@NotNull Supplier<T> supplier) {
         Objects.requireNonNull(supplier);
-        return new Lazy<>(supplier);
+        return new Lazy<>(supplier, true);
+    }
+
+    @NotNull
+    public static <T> Lazy<T> tryOnce(@NotNull Supplier<T> supplier) {
+        Objects.requireNonNull(supplier);
+        return new Lazy<>(supplier, false);
     }
 }
+

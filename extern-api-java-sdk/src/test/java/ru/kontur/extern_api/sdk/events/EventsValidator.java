@@ -27,6 +27,7 @@ import static junit.framework.TestCase.assertNotNull;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.model.ApiEvent;
+import ru.kontur.extern_api.sdk.model.DocflowType;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 /**
@@ -57,7 +58,7 @@ public class EventsValidator {
 
         assertEquals("Inn is wrong!", "string", apiEvent.getInn());
         assertEquals("Kpp is wrong!", "string", apiEvent.getKpp());
-        assertEquals("Type is wrong!", "urn:nss:nid", apiEvent.getDocflowType());
+        assertEquals("Type is wrong!", DocflowType.FNS534_REPORT, apiEvent.getDocflowType());
         assertEquals("NewState is wrong!", "urn:nss:nid", apiEvent.getNewState());
         assertEquals("EventDateTime is wrong!", StandardValues.standardDate(),
             apiEvent.getEventDateTime());

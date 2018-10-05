@@ -34,7 +34,7 @@ public interface UncheckedSupplier<T> {
         try {
             return supplier.get();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(), e.getCause());
         }
     }
 

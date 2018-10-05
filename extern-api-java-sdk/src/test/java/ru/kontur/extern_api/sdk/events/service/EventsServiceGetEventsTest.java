@@ -116,7 +116,7 @@ public class EventsServiceGetEventsTest {
             + "\"api-events\": [{"
             + "\"inn\": \"string\","
             + "\"kpp\": \"string\","
-            + "\"docflow-type\": \"urn:nss:nid\","
+            + "\"docflow-type\": \"urn:docflow:fns534-report\","
             + "\"docflow-link\": {"
             + "\"href\": \"string\","
             + "\"rel\": \"string\","

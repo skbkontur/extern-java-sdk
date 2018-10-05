@@ -83,7 +83,7 @@ public class HttpClientImpl {
         this.connectTimeout = 60_000;
         this.readTimeout = 60_000;
         this.keepAlive = Boolean.valueOf(System.getProperty("http.keepalive", "true"));
-        this.clientLogger = new HttpClientLogger(LogLevel.BODY);
+        this.clientLogger = new HttpClientLogger(LogLevel.HEADERS);
     }
 
     public HttpClientImpl setKeepAlive(boolean keepAlive) {
