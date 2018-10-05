@@ -23,20 +23,19 @@
  */
 package ru.kontur.extern_api.sdk.it;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
 
-public class OrganizationTest extends AbstractTest {
+class OrganizationTest extends AbstractTest {
 
     private static final String INN_1 = "7810654318";
     private static final String INN_2 = "7810654325";
@@ -47,24 +46,24 @@ public class OrganizationTest extends AbstractTest {
     private static final String NAME = "ASBEST, LLC";
     private static final String NAME_NEW = "NEW ASBEST, LLC";
 
-    @BeforeClass
-    public static void setUpClass() {
+    @BeforeAll
+    static void setUpClass() {
         AbstractTest.initEngine();
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         organizationService = engine.getOrganizationService();
     }
 
     @Test
-    public void testCreate() throws Exception {
+    void testCreate() throws Exception {
         String companyId = create(INN_1);
         organizationService.deleteAsync(companyId).get().ensureSuccess();
     }
 
     @Test
-    public void testLookup() throws Exception {
+    void testLookup() throws Exception {
         String companyId = create(INN_2);
 
         QueryContext<Company> companyCxt = organizationService
@@ -77,7 +76,7 @@ public class OrganizationTest extends AbstractTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    void testUpdate() throws Exception {
         System.out.println("update an organization: PUT /v1/{accountId}/organizations/{orgId}");
 
         String companyId = create(INN_3);
@@ -97,7 +96,7 @@ public class OrganizationTest extends AbstractTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         String companyId = create(INN_4);
 
         organizationService.deleteAsync(companyId)
@@ -106,7 +105,7 @@ public class OrganizationTest extends AbstractTest {
     }
 
     @Test
-    public void testSearch() throws Exception {
+    void testSearch() throws Exception {
         String companyId = create(INN_5);
         assertNotNull(search(INN_5));
         organizationService.deleteAsync(companyId).get();
@@ -136,7 +135,7 @@ public class OrganizationTest extends AbstractTest {
             companyCxt.ensureSuccess();
             companyId = companyCxt.get().getId().toString();
         }
-        Assert.assertNotNull(companyId);
+        assertNotNull(companyId);
         return companyId;
     }
 }
