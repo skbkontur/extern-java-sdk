@@ -130,10 +130,11 @@
     </properties>
 
     <modules>
-        <module>extern-sdk</module>
-        <module>extern-sdk-common</module>
-        <module>extern-sdk-httpclient</module>
-        <module>extern-sdk-httpclient-adaptor</module>
+        <module>extern-api-java-sdk</module>
+        <module>extern-api-java-sdk-common</module>
+        <module>extern-api-java-sdk-httpclient</module>
+        <module>extern-api-java-sdk-httpclient-adaptor</module>
+        <module>extern-api-java-sdk-integrational-tests</module>
     </modules>
 
     <build>
@@ -477,6 +478,11 @@
 
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>logging-interceptor</artifactId>
                 <version>${okhttp-version}</version>
             </dependency>
@@ -521,6 +527,12 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>

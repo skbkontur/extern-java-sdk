@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<report code="6110021002001" form="2" format-version="1.3" period="11" shifr="sf" version="18-05-2015" year="2016">
+	<title>
+		<item name="ferm_vb_r" value="1234567890"/>
+		<item name="name" value="АВТОВЕБ 2.0"/>
+		<item name="leader_fio" value="ВЫБЕГАЛЛО АМВРОСИЙ АМБРУАЗОВИЧ"/>
+		<item name="responsible_post" value="ГЕНЕРАЛЬНЫЙ ДИРЕКТОР"/>
+		<item name="responsible_fio" value="НИНГЕ ДАНТЕ ОНИЕВИЧ"/>
+		<item name="phone" value="147-14-14"/>
+	</title>
+	<sections>
+		<section code="1">
+			<row code="1140">
+				<col code="4">18</col>
+				<col code="5">8</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1104">
+				<col code="4">3</col>
+				<col code="5">1</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1110">
+				<col code="4">3</col>
+				<col code="5">2</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1112">
+				<col code="4">3</col>
+				<col code="5">1</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1113">
+				<col code="4">3</col>
+				<col code="5">1</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1121">
+				<col code="4">3</col>
+				<col code="5">2</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1123">
+				<col code="4">3</col>
+				<col code="5">1</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="11" s1="1111">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1238">
+				<col code="4">0</col>
+			</row>
+			<row code="1213">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1218">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1221">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="7">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1301">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1302">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1319">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1326">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1320">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1434">
+				<col code="4">0</col>
+			</row>
+			<row code="1401">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1406">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1409">
+				<col code="4">0</col>
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1411">
+				<col code="4">0</col>
+			</row>
+			<row code="1412">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1413">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1417">
+				<col code="4">0</col>
+			</row>
+			<row code="1418">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1419">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1421">
+				<col code="4">0</col>
+			</row>
+			<row code="1422">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1423">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1440">
+				<col code="4">18</col>
+			</row>
+			<row code="1501">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1502">
+				<col code="5">0</col>
+				<col code="6">0</col>
+				<col code="8">0</col>
+			</row>
+			<row code="1614">
+				<col code="4">0</col>
+			</row>
+		</section>
+	</sections>
+</report>

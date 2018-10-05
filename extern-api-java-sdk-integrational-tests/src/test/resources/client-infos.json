@@ -1,0 +1,50 @@
+[
+    {
+        "client-info": {
+            "sender": {
+                "inn": "6653000832",
+                "kpp": "665325934",
+                "fio": {
+                    "surname": "Орлов",
+                    "name": "Сергей",
+                    "patronymic": "Юрьевич"
+                },
+                "ip-address": "80.247.184.194"
+            },
+            "recipient": {
+                "ifns-code": "0087"
+            },
+            "organization": {
+                "inn": "6653000832",
+                "kpp": "665325934"
+            }
+        },
+        "docs": [
+            "/docs/NO_SRCHIS_0087_0087_6653000832665325934_20180126_993f2341-2b37-45dc-8fd5-fca7c019d49a.xml"
+        ]
+    },
+    {
+        "client-info": {
+            "sender": {
+                "inn": "6653000832",
+                "kpp": "665325934",
+                "fio": {
+                    "surname": "Орлов",
+                    "name": "Сергей",
+                    "patronymic": "Юрьевич"
+                },
+                "ip-address": "80.247.184.194"
+            },
+            "recipient": {
+                "togs-code": "66-66"
+            },
+            "organization": {
+                "inn": "6653000832",
+                "kpp": "665325934"
+            }
+        },
+        "docs": [
+            "/docs/6110021_2_1_1176543210_11_6.xml"
+        ]
+    }
+]
