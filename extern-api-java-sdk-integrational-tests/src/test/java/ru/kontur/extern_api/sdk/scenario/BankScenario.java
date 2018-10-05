@@ -38,8 +38,8 @@ import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.test.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.test.utils.TestSuite;
+import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 
 
 @Disabled

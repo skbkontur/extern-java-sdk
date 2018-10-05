@@ -67,10 +67,10 @@ import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
 import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-import ru.kontur.extern_api.sdk.test.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.test.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.test.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.test.utils.TestSuite;
+import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.it.utils.PreparedTestData;
+import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
