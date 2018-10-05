@@ -1,0 +1,98 @@
+{
+    "additional-org-info": {
+        "document-sender": {
+            "sender-full-name": "Щекалев Анатолий Николаевич"
+        },
+        "signer-type": "representative",
+        "taxpayer": {
+            "representative": {
+                "passport": {
+                    "code": "21",
+                    "issued-by": "string",
+                    "issued-date": "2018-07-12T07:34:20Z",
+                    "series-number": "1111 441144"
+                },
+                "representative-document": "1"
+            },
+            "taxpayer-chief-fio": "Щекалев Анатолий Николаевич",
+            "taxpayer-full-name": "Щекалев Анатолий Николаевич",
+            "taxpayer-okved": "47",
+            "taxpayer-phone": "777777"
+        }
+    },
+    "data": {
+        "ischisl-min": "3681",
+        "nom-korr": 1,
+        "po-mestu": 120,
+        "ubyt-pred": "3681",
+        "za-kv": {
+            "av-pu": "560073",
+            "dohod": "560073",
+            "ischisl": "560073",
+            "nal-baza-ubyt": "560073",
+            "oktmo": "08701000",
+            "rasch-torg-sbor": {
+                "dohod": "0",
+                "ischisl": "0",
+                "torg-sbor-fact": "0",
+                "torg-sbor-umen": "0"
+            },
+            "rashod": "560073",
+            "stavka": "7.0",
+            "umen-nal": "0"
+        },
+        "za-nal-per": {
+            "av-pu": "0",
+            "dohod": "1637046",
+            "ischisl": "1637046",
+            "nal-baza-ubyt": "1637046",
+            "nal-pumin": "0",
+            "oktmo": "08701000",
+            "rasch-torg-sbor": {
+                "dohod": "0",
+                "ischisl": "0",
+                "torg-sbor-fact": "0",
+                "torg-sbor-umen": "0"
+            },
+            "rashod": "1637046",
+            "stavka": "7.0",
+            "umen-nal": "0"
+        },
+        "za-pg": {
+            "av-pu": "31931",
+            "dohod": "1092253",
+            "ischisl": "1092253",
+            "nal-baza-ubyt": "1092253",
+            "oktmo": "08701000",
+            "rasch-torg-sbor": {
+                "dohod": "0",
+                "ischisl": "0",
+                "torg-sbor-fact": "0",
+                "torg-sbor-umen": "0"
+            },
+            "rashod": "1092253",
+            "stavka": "7.0",
+            "umen-nal": "0"
+        },
+        "za9m": {
+            "av-pu": "32688",
+            "dohod": "1637046",
+            "ischisl": "1637046",
+            "nal-baza-ubyt": "1637046",
+            "oktmo": "08701000",
+            "rasch-torg-sbor": {
+                "dohod": "0",
+                "ischisl": "0",
+                "torg-sbor-fact": "0",
+                "torg-sbor-umen": "0"
+            },
+            "rashod": "1637046",
+            "stavka": "7.0",
+            "umen-nal": "0"
+        }
+    },
+    "period": {
+        "year": "2017"
+    },
+    "version": 2
+}
