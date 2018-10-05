@@ -27,12 +27,6 @@
 
     <!-- DEPRECATED -->
 
-    <parent>
-        <groupId>ru.kontur.extern-api</groupId>
-        <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.5-SNAPSHOT</version>
-    </parent>
-
     <artifactId>extern-api-java-sdk-examples</artifactId>
     <name>Extern Api SDK for Java - Examples</name>
 
@@ -42,20 +36,7 @@
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-api-java-sdk-httpclient</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
