@@ -25,117 +25,151 @@ package ru.kontur.extern_api.sdk.it;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.searchParams.OrgSearchParameters;
 
-class OrganizationTest extends AbstractTest {
+class OrganizationTest {
 
-    private static final String INN_1 = "7810654318";
-    private static final String INN_2 = "7810654325";
-    private static final String INN_3 = "7810654332";
-    private static final String INN_4 = "7810654340";
-    private static final String INN_5 = "7810654357";
+    private static final String INN = "7810654318";
     private static final String KPP = "781001001";
     private static final String NAME = "ASBEST, LLC";
     private static final String NAME_NEW = "NEW ASBEST, LLC";
 
+    private String companyId = null;
+
+    private static ExternEngine engine;
+
     @BeforeAll
     static void setUpClass() {
-        AbstractTest.initEngine();
+        engine = TestSuite.Load().engine;
     }
 
     @BeforeEach
-    void setUp() {
-        organizationService = engine.getOrganizationService();
+    void setUp() throws Exception {
+
+        this.companyId = createOrFindOrganisation();
+        assertNotNull(companyId);
     }
 
-    @Test
-    void testCreate() throws Exception {
-        String companyId = create(INN_1);
-        organizationService.deleteAsync(companyId).get().ensureSuccess();
+    @AfterEach
+    void tearDown() {
+        engine.getOrganizationService().deleteAsync(companyId);
     }
 
     @Test
     void testLookup() throws Exception {
-        String companyId = create(INN_2);
 
-        QueryContext<Company> companyCxt = organizationService
+        QueryContext<Company> companyCxt = engine.getOrganizationService()
                 .lookupAsync(companyId)
                 .get()
                 .ensureSuccess();
 
-        assertNotNull(companyCxt.getCompany());
-        organizationService.deleteAsync(companyId).get().ensureSuccess();
+        checkFields(companyCxt.get(), NAME);
     }
 
     @Test
     void testUpdate() throws Exception {
-        System.out.println("update an organization: PUT /v1/{accountId}/organizations/{orgId}");
 
-        String companyId = create(INN_3);
-
-        QueryContext<Company> updateCxt = organizationService
+        QueryContext<Company> updateCxt = engine.getOrganizationService()
                 .updateAsync(companyId, NAME_NEW)
                 .get()
                 .ensureSuccess();
 
-        Company c = updateCxt.getCompany();
-
-        assertNotNull(c);
-        assertNotNull(c.getGeneral());
-        assertEquals(NAME_NEW, c.getGeneral().getName());
-
-        organizationService.deleteAsync(companyId).get().ensureSuccess();
+        checkFields(updateCxt.getCompany(), NAME_NEW);
     }
 
     @Test
     void testDelete() throws Exception {
-        String companyId = create(INN_4);
 
-        organizationService.deleteAsync(companyId)
+        QueryContext deleteCxt = engine.getOrganizationService().deleteAsync(companyId)
+                .get();
+
+        deleteCxt.ensureSuccess();
+
+        assertTrue(engine.getOrganizationService().searchAsync(
+                new OrgSearchParameters<>(INN, KPP),
+                null,
+                null)
                 .get()
-                .ensureSuccess();
+                .ensureSuccess()
+                .get()
+                .getCompanies()
+                .isEmpty());
     }
 
     @Test
     void testSearch() throws Exception {
-        String companyId = create(INN_5);
-        assertNotNull(search(INN_5));
-        organizationService.deleteAsync(companyId).get();
+
+        Company company = searchOrganisations(true).get(0);
+        assertNotNull(company);
+        checkFields(company, NAME);
     }
 
-    private String search(String inn) throws Exception {
-        QueryContext<CompanyBatch> batchCxt = organizationService.searchAsync(inn, KPP, null, null)
+    @Test
+    void testSearchAll() throws Exception {
+
+        for (Company company : searchOrganisations(false)) {
+            assertNotNull(company.getGeneral().getName());
+        }
+    }
+
+    private List<Company> searchOrganisations(boolean withKpp) throws Exception {
+
+        QueryContext<CompanyBatch> batchCxt = engine.getOrganizationService()
+                .searchAsync(
+                        withKpp
+                                ? new OrgSearchParameters<>(INN, KPP)
+                                : new OrgSearchParameters<>(INN), null, null)
                 .get();
 
         batchCxt.ensureSuccess();
 
-        if (!batchCxt.get().getCompanies().isEmpty()) {
-            return batchCxt.get().getCompanies().get(0).getId().toString();
-        }
-
-        return null;
+        return !batchCxt.get().getCompanies().isEmpty()
+                ? batchCxt.get().getCompanies()
+                : null;
     }
 
-    private String create(String inn) throws Exception {
-        String companyId = search(inn);
-        if (companyId == null) {
-            CompanyGeneral c = new CompanyGeneral();
-            c.setInn(inn);
-            c.setKpp(KPP);
-            c.setName(NAME);
-            QueryContext<Company> companyCxt = organizationService.createAsync(c).get();
-            companyCxt.ensureSuccess();
-            companyId = companyCxt.get().getId().toString();
+
+    private String createOrFindOrganisation() throws Exception {
+
+        List<Company> companies = searchOrganisations(true);
+
+        if (companies != null) {
+            return companies.get(0).getId().toString();
         }
-        assertNotNull(companyId);
-        return companyId;
+
+        CompanyGeneral companyGeneral = new CompanyGeneral();
+        companyGeneral.setInn(INN);
+        companyGeneral.setKpp(KPP);
+        companyGeneral.setName(NAME);
+        QueryContext<Company> companyCxt = engine.getOrganizationService()
+                .createAsync(companyGeneral)
+                .get()
+                .ensureSuccess();
+
+        Company company = companyCxt.get();
+
+        assertNotNull(company);
+        return company.getId().toString();
+    }
+
+    private void checkFields(Company company, String name) {
+
+        assertEquals(company.getGeneral().getInn(), INN);
+        assertEquals(company.getGeneral().getKpp(), KPP);
+        assertEquals(company.getGeneral().getName(), name);
+        assertNotNull(company.getId());
     }
 }
