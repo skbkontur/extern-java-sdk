@@ -119,7 +119,7 @@ class BankCloudScenario {
 
     @Test
     void main() throws Exception {
-        SystemProperty.pop("httpclient.debug");
+//        SystemProperty.pop("httpclient.debug");
 
         List<Account> accounts = engine.getAccountService()
                 .acquireAccountsAsync()
