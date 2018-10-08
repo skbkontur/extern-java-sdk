@@ -40,7 +40,6 @@ import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.it.utils.TestSuite;
-import ru.kontur.extern_api.sdk.searchParams.OrgSearchParameters;
 
 
 @Disabled
@@ -97,7 +96,7 @@ class BankScenario {
         );
 
         List<Company> companies = engine.getOrganizationService()
-                .searchAsync(new OrgSearchParameters<>(null), null, null)
+                .searchAsync(null, null,  null, null)
                 .get()
                 .getOrThrow()
                 .getCompanies();

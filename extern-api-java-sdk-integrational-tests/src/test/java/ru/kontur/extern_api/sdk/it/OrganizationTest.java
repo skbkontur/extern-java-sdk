@@ -38,7 +38,6 @@ import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.searchParams.OrgSearchParameters;
 
 class OrganizationTest {
 
@@ -99,7 +98,8 @@ class OrganizationTest {
         deleteCxt.ensureSuccess();
 
         assertTrue(engine.getOrganizationService().searchAsync(
-                new OrgSearchParameters<>(INN, KPP),
+                INN,
+                null,
                 null,
                 null)
                 .get()
@@ -128,10 +128,7 @@ class OrganizationTest {
     private List<Company> searchOrganisations(boolean withKpp) throws Exception {
 
         QueryContext<CompanyBatch> batchCxt = engine.getOrganizationService()
-                .searchAsync(
-                        withKpp
-                                ? new OrgSearchParameters<>(INN, KPP)
-                                : new OrgSearchParameters<>(INN), null, null)
+                .searchAsync(INN, withKpp ? KPP : null, null, null)
                 .get();
 
         batchCxt.ensureSuccess();

@@ -71,7 +71,6 @@ import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.it.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.it.utils.TestSuite;
-import ru.kontur.extern_api.sdk.searchParams.OrgSearchParameters;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
@@ -457,7 +456,7 @@ class BankCloudScenario {
 
     private List<Company> findOrganizations() throws Exception {
         List<Company> companies = engine.getOrganizationService()
-                .searchAsync(new OrgSearchParameters<>(null), null, null)
+                .searchAsync(null , null, null, null)
                 .get()
                 .getOrThrow()
                 .getCompanies();
