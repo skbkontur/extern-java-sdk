@@ -99,7 +99,7 @@ class BankCloudScenario {
 
     @Test
     void playAroundWithDocflow() throws Exception {
-        SystemProperty.pop("httpclient.debug");
+//        SystemProperty.pop("httpclient.debug");
 
         senderCertificate = findWorkingCerts().get(0);
 
@@ -119,7 +119,7 @@ class BankCloudScenario {
 
     @Test
     void main() throws Exception {
-//        SystemProperty.pop("httpclient.debug");
+        SystemProperty.pop("httpclient.debug");
 
         List<Account> accounts = engine.getAccountService()
                 .acquireAccountsAsync()
@@ -213,8 +213,8 @@ class BankCloudScenario {
     }
 
     private void playWithDocflow(Docflow docflow) throws Exception {
-
         do {
+
             System.out.println("Docflow status: " + docflow.getStatus());
 
             if (docflow.getStatus() == DocflowStatus.FINISHED) {
@@ -224,7 +224,13 @@ class BankCloudScenario {
             System.out.println("Choose reply...");
             Document document = ChooseInDialog.replyForDocflow(docflow);
             if (document == null) {
-                System.out.println("You don't want to reply now?");
+                System.out.println("You don't want to reply now...");
+                System.out.println("Refreshing docflow...");
+
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
                 continue;
             }
 
@@ -238,7 +244,13 @@ class BankCloudScenario {
 
             String type = ChooseInDialog.replyType(document);
             if (type == null) {
-                System.out.println("You don't know how to reply now?");
+                System.out.println("You don't know how to reply now...");
+                System.out.println("Refreshing docflow...");
+
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
                 continue;
             }
 
@@ -440,6 +452,18 @@ class BankCloudScenario {
                     .stream()
                     .filter(Document::isNeedToReply)
                     .toArray(Document[]::new);
+
+            if (optDocs.length == 0) {
+                JOptionPane.showInternalMessageDialog(
+                        null,
+                        "There is no available documents to reply on. "
+                                + "Wait for the inspection to answer. "
+                                + "Click OK to refresh the docflow status.",
+                        "Inspector thinking...",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                return null;
+            }
 
             String[] colNames = Arrays.stream(optDocs)
                     .map(d -> d.getDescription().getType())
