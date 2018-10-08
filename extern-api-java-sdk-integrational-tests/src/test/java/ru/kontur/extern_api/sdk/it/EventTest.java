@@ -47,7 +47,7 @@ class EventTest {
 
         for (ApiEvent apiEvent : eventsPage.getApiEvents()) {
             Assertions.assertNotNull(apiEvent.getDocflowType());
-            //Assertions.assertNotNull(apiEvent.getNewState());
+            Assertions.assertNotNull(apiEvent.getNewState());
         }
 
     }
