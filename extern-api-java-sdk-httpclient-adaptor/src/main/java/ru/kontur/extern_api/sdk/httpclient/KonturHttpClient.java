@@ -244,12 +244,8 @@ public class KonturHttpClient implements HttpClient {
             deserialized = value;
 
         } else {
-            throw new ApiException(
-                    "Cannot convert response to " + returnType,
-                    code,
-                    rawResponse.headers().toMultimap(),
-                    null
-            );
+            // fallback to mimeJson
+            deserialized = getGson().fromJson(rawBody.string(), returnType);
         }
 
         return retrofit2.Response.success(deserialized, rawResponse);
