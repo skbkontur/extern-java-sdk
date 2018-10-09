@@ -124,7 +124,7 @@ class DocflowServiceTest {
     @DisplayName("get docflow by id")
     @MethodSource("docflowsLazyFactory")
     void testGetDocflow(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
         Docflow returned = docflowService
                 .lookupDocflow(docflowCxt.setDocflowId(docflow.getId()))
                 .getOrThrow();
@@ -140,7 +140,7 @@ class DocflowServiceTest {
     @DisplayName("get docflow documents")
     @MethodSource("docflowsLazyFactory")
     void testGetDocuments(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
                 .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
@@ -157,7 +157,7 @@ class DocflowServiceTest {
     @DisplayName("lookup single document")
     @MethodSource("docflowsLazyFactory")
     void testLookupDocument(QueryContext<Docflow> docflowCxt) throws Exception {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
                 .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
@@ -180,7 +180,7 @@ class DocflowServiceTest {
     @DisplayName("lookup document description")
     @MethodSource("docflowsLazyFactory")
     void testLookupDocumentDescription(QueryContext<Docflow> docflowCxt) throws Exception {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
                 .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
@@ -204,7 +204,7 @@ class DocflowServiceTest {
     @DisplayName("get encrypted document content")
     @MethodSource("docflowsLazyFactory")
     void testGetEncryptedContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -239,7 +239,7 @@ class DocflowServiceTest {
     @DisplayName("get decrypted document content")
     @MethodSource("docflowsLazyFactory")
     void testGetDecryptedContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -271,7 +271,7 @@ class DocflowServiceTest {
     @DisplayName("decrypt document content in cloud")
     @MethodSource("docflowsLazyFactory")
     void testDecryptContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -302,7 +302,7 @@ class DocflowServiceTest {
     @DisplayName("get document signatures")
     @MethodSource("docflowsLazyFactory")
     void testGetSignatures(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -324,7 +324,7 @@ class DocflowServiceTest {
     @DisplayName("get document single signature")
     @MethodSource("docflowsLazyFactory")
     void testGetSignature(QueryContext<Docflow> docflowCxt) throws Exception {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -353,7 +353,7 @@ class DocflowServiceTest {
     @DisplayName("get document signature content")
     @MethodSource("docflowsLazyFactory")
     void testGetSignatureContent(QueryContext<Docflow> docflowCxt) throws Exception {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -381,7 +381,7 @@ class DocflowServiceTest {
     @DisplayName("two options for generate reply works")
     @MethodSource("docflowsLazyFactory")
     void testGenerateReply(QueryContext<Docflow> docflowCxt) throws Exception {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -426,7 +426,7 @@ class DocflowServiceTest {
     @DisplayName("send reply documents by choosing its type")
     @MethodSource("docflowsFactory")
     void testSendOneReply(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -470,7 +470,7 @@ class DocflowServiceTest {
     @DisplayName("send reply document by choosing its type with cloud cert")
     @MethodSource("docflowsFactory")
     void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -520,7 +520,7 @@ class DocflowServiceTest {
     @DisplayName("send all replies for document by choosing type")
     @MethodSource("docflowsFactory")
     void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -595,7 +595,7 @@ class DocflowServiceTest {
 
         String base64 = dc.getBase64Content();
 
-        Docflow docflow = docflowCxt.getDocflow();
+        Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService

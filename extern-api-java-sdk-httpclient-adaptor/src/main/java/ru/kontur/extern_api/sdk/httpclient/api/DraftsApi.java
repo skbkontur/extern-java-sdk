@@ -99,8 +99,7 @@ public class DraftsApi extends RestApi {
     @Consumes("application/json; charset=utf-8")
     public ApiResponse<Draft> lookup(@PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId) throws ApiException {
-        return invoke("lookup", null, new TypeToken<Draft>() {
-        }.getType(), accountId, draftId);
+        return invoke("lookup", null, Draft.class, accountId, draftId);
     }
 
     /**
@@ -214,7 +213,7 @@ public class DraftsApi extends RestApi {
     public ApiResponse<Void> deleteDocument(@PathParam("accountId") String accountId,
             @PathParam("draftId") String draftId, @PathParam("documentId") String documentId)
             throws ApiException {
-        return invoke("deleteDocument", null, new TypeToken<List<Docflow>>() {
+        return invoke("deleteDocument", null, new TypeToken<Void>() {
         }.getType(), accountId, draftId, documentId);
     }
 

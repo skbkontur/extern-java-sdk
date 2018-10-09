@@ -53,8 +53,8 @@ import ru.kontur.extern_api.sdk.service.DraftService;
  */
 public class DraftServiceImpl extends AbstractService implements DraftService {
 
-    private static final String EN_DFT = "Черновик";
-    private static final String EN_DOC = "Документ";
+    private static final String EN_DFT = "draft";
+    private static final String EN_DOC = "draftDocument";
 
     private final DraftsAdaptor draftsAdaptor;
 

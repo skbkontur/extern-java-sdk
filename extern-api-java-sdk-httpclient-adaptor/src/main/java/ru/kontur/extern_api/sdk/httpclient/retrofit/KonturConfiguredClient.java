@@ -38,7 +38,7 @@ import retrofit2.adapter.java8.Java8CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import ru.kontur.extern_api.sdk.GsonProvider;
 
-public class RetrofitClient {
+public class KonturConfiguredClient {
 
     private final TokenAuth apiKeyAuth = new TokenAuth(TokenLocation.HEADER, "X-Kontur-Apikey");
     private final TokenAuth authSidAuth = new TokenAuth(TokenLocation.HEADER, "Authorization");
@@ -49,7 +49,7 @@ public class RetrofitClient {
 
     private String baseUrl;
 
-    public RetrofitClient(@NotNull Level loggingLevel, @NotNull String baseUrl) {
+    public KonturConfiguredClient(@NotNull Level loggingLevel, @NotNull String baseUrl) {
 
         this.baseUrl = Objects.requireNonNull(baseUrl, "baseUrl");
 
@@ -68,7 +68,7 @@ public class RetrofitClient {
                 .addCallAdapterFactory(Java8CallAdapterFactory.create());
     }
 
-    public RetrofitClient(Level body) {
+    public KonturConfiguredClient(Level body) {
         this(Level.BODY, "");
     }
 
@@ -83,7 +83,7 @@ public class RetrofitClient {
     /**
      * @param apiKey api key or null to disable apiKey authorization
      */
-    public RetrofitClient setApiKey(@Nullable String apiKey) {
+    public KonturConfiguredClient setApiKey(@Nullable String apiKey) {
         apiKeyAuth.setToken(apiKey);
         return this;
     }
@@ -91,7 +91,7 @@ public class RetrofitClient {
     /**
      * @param authSid auth sid or null to disable auth sid authorization
      */
-    public RetrofitClient setAuthSid(@Nullable String authSid) {
+    public KonturConfiguredClient setAuthSid(@Nullable String authSid) {
         authSidAuth.setToken(Optional
                 .ofNullable(authSid)
                 .map(sid -> "auth.sid " + sid)
@@ -103,12 +103,12 @@ public class RetrofitClient {
     /**
      * @param userAgent User agent string or null to disable user agent supply
      */
-    public RetrofitClient setUserAgent(@Nullable String userAgent) {
+    public KonturConfiguredClient setUserAgent(@Nullable String userAgent) {
         userAgentAuth.setToken(userAgent);
         return this;
     }
 
-    public RetrofitClient setServiceBaseUrl(String serviceBaseUrl) {
+    public KonturConfiguredClient setServiceBaseUrl(String serviceBaseUrl) {
         if (!serviceBaseUrl.endsWith("/")) {
             serviceBaseUrl += "/";
         }
@@ -116,12 +116,12 @@ public class RetrofitClient {
         return this;
     }
 
-    public RetrofitClient setConnectTimeout(long timeout, TimeUnit unit) {
+    public KonturConfiguredClient setConnectTimeout(long timeout, TimeUnit unit) {
         okBuilder.connectTimeout(timeout, unit);
         return this;
     }
 
-    public RetrofitClient setReadTimeout(long timeout, TimeUnit unit) {
+    public KonturConfiguredClient setReadTimeout(long timeout, TimeUnit unit) {
         okBuilder.readTimeout(timeout, unit);
         return this;
     }
@@ -129,7 +129,7 @@ public class RetrofitClient {
     /**
      * @return okBuilder to manual request configuration.
      */
-    public OkHttpClient.Builder getRequestBuilder() {
+    public OkHttpClient.Builder getHttpBuilder() {
         return okBuilder;
     }
 

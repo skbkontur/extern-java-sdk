@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.httpclient;
 
+import java.util.concurrent.TimeUnit;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
@@ -32,18 +33,20 @@ import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.EventsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 public class HttpClientBundle implements AdaptorBundle {
 
     private final ProviderHolder providerHolder;
-    private final RetrofitClient retrofitClient;
+    private final KonturConfiguredClient konturConfiguredClient;
 
     public HttpClientBundle(ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
-        this.retrofitClient = new RetrofitClient(Level.BODY);
+        this.konturConfiguredClient = new KonturConfiguredClient(Level.BODY)
+            .setConnectTimeout(60, TimeUnit.SECONDS)
+            .setReadTimeout(60, TimeUnit.SECONDS);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class HttpClientBundle implements AdaptorBundle {
                 .ensureSuccess()
                 .get();
 
-        EventsApi service = retrofitClient
+        EventsApi service = konturConfiguredClient
                 .setAuthSid(authSid)
                 .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
                 .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
@@ -100,7 +103,7 @@ public class HttpClientBundle implements AdaptorBundle {
 
     @Override
     public HttpClient getHttpClientAdaptor() {
-        return new HttpClientImpl()
+        return new KonturHttpClient(konturConfiguredClient)
                 .setUserAgentProvider(providerHolder.getUserAgentProvider());
     }
 }

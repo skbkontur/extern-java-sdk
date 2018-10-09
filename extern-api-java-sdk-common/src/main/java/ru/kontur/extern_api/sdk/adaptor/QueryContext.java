@@ -504,7 +504,7 @@ public class QueryContext<R> implements Serializable {
      */
     public QueryContext<R> setServiceError(ApiException x) {
         return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(),
-                x.getResponseHeaders(), x.getResponseBody(), x.getCause());
+                x.getResponseHeaders(), x.getResponseBody(), x.getCause() == null ? x : x.getCause());
     }
 
     /**
@@ -2088,7 +2088,7 @@ public class QueryContext<R> implements Serializable {
     public void failure() {
         ServiceError e = getServiceError();
         if (e != null) {
-            throw new ServiceException(e);
+            throw new ServiceException(e, prettyErrorPrint(e));
         }
     }
 

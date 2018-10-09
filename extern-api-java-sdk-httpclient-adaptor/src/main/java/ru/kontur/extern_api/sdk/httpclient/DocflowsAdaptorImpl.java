@@ -282,8 +282,15 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
         }
 
         try {
-            return new QueryContext<T>(cxt, cxt.getEntityName())
-                    .setResult(tSupplier.apply(transport(cxt)).getData(), cxt.getEntityName());
+            ApiResponse<T> response = tSupplier.apply(transport(cxt));
+
+            if (response.isSuccessful()) {
+                return new QueryContext<T>(cxt, cxt.getEntityName())
+                        .setResult(response.getData(), cxt.getEntityName());
+            } else {
+                return new QueryContext<T>(cxt, cxt.getEntityName())
+                        .setServiceError(response.asApiException());
+            }
 
         } catch (ApiException x) {
             return new QueryContext<T>(cxt, cxt.getEntityName()).setServiceError(x);

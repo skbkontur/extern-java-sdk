@@ -29,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.model.ErrorInfo;
@@ -102,4 +103,5 @@ public final class ApiUtils {
                 .orElse(param);
 
     }
+
 }

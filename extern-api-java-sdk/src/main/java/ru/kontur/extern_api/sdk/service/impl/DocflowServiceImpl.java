@@ -49,9 +49,9 @@ import ru.kontur.extern_api.sdk.service.DocflowService;
  */
 public class DocflowServiceImpl extends AbstractService implements DocflowService {
 
-    private static final String EN_DFW = "Документооборот";
-    private static final String EN_DOC = "Документ";
-    private static final String EN_SGN = "Подпись";
+    private static final String EN_DFW = "docflow";
+    private static final String EN_DOC = "document";
+    private static final String EN_SGN = "signature";
 
     private final DocflowsAdaptor docflowsAdaptor;
 

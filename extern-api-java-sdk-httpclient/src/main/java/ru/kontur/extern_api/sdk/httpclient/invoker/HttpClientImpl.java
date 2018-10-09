@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import okhttp3.MediaType;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
 import ru.kontur.extern_api.sdk.httpclient.invoker.HttpClientLogger.LogLevel;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;

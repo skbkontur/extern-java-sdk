@@ -103,7 +103,7 @@ class BankCloudScenario {
 
         senderCertificate = findWorkingCerts().get(0);
 
-        DocflowPage page = engine.getDocflowService().searchDocflows(DocflowFilter.page(0, 1)
+        DocflowPage page = engine.getDocflowService().searchDocflows(DocflowFilter.page(1, 1)
                 .finished(false)
                 .orderBy(SortOrder.DESCENDING)
         ).getOrThrow();

@@ -24,6 +24,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.it.model.TestData;
+import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
+import ru.kontur.extern_api.sdk.it.utils.DocType;
+import ru.kontur.extern_api.sdk.it.utils.OrganizationServiceUtils;
+import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
@@ -35,11 +40,6 @@ import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.it.model.TestData;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
-import ru.kontur.extern_api.sdk.it.utils.DocType;
-import ru.kontur.extern_api.sdk.it.utils.OrganizationServiceUtils;
-import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 import ru.kontur.extern_api.sdk.utils.Lazy;
 
 
@@ -254,16 +254,18 @@ class DraftServiceTest extends AbstractTest {
                 fail("No a test document");
             }
 
-            QueryContext<DraftDocument> draftDocumentCxt
-                    = CompletableFuture.supplyAsync(
-                    () -> addDecryptedDocument(engine, draftCxt, td.getDocs()[0],
-                            DocType.getDocType(draftCxt.getDraftMeta().getRecipient())))
-                    .thenApply(draftService::lookupDocument)
-                    .get();
+            DocType docType = DocType.getDocType(draftCxt.getDraftMeta().getRecipient());
+            DraftDocument doc = addDecryptedDocument(
+                    engine,
+                    draftCxt,
+                    td.getDocs()[0],
+                    docType
+            ).getOrThrow();
 
-            draftDocumentCxt.ensureSuccess();
-
-            assertNotNull(draftDocumentCxt.get());
+            DraftDocument document = draftService
+                    .lookupDocumentAsync(draftCxt.get().toString(), doc.getId().toString())
+                    .get()
+                    .getOrThrow();
         }
 
     }

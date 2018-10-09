@@ -214,8 +214,8 @@ public class TrustedAuthentication implements AuthenticationProvider {
 
             Map<String, Object> localVarFormParams = new HashMap<>();
 
-            httpClient.submitHttpRequest("/register-external-service-id", "PUT", queryParams, null,
-                    localHeaderParams, localVarFormParams, Object.class);
+            httpClient.submitHttpRequest("/register-external-service-id", "PUT", queryParams, new Object(),
+                    localHeaderParams, localVarFormParams, Void.class);
 
             registerCxt = new QueryContext<Void>().setResult(null, NOTHING);
         } catch (ApiException x) {

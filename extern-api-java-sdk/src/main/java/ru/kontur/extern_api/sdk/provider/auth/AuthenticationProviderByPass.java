@@ -130,8 +130,10 @@ public class AuthenticationProviderByPass implements AuthenticationProvider {
                     ResponseSid.class
             );
 
-            sid = resp.getData().getSid();
-            cxt.setResult(sid, SESSION_ID);
+            if (!resp.isSuccessful()) {
+                throw resp.asApiException();
+            }
+            cxt.setResult(sid = resp.getData().getSid(), SESSION_ID);
         } catch (ApiException x) {
             cxt.setServiceError(x);
         }

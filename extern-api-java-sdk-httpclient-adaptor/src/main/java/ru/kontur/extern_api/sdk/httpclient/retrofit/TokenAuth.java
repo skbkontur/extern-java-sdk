@@ -71,7 +71,7 @@ public class TokenAuth implements Interceptor {
         Request request = chain.request();
 
         if (token == null) {
-            chain.proceed(request);
+            return chain.proceed(request);
         }
 
         switch (location) {

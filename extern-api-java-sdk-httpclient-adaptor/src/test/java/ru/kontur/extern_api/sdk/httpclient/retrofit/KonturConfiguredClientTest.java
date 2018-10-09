@@ -36,13 +36,13 @@ import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 
 @Disabled("IT")
-class RetrofitClientTest {
+class KonturConfiguredClientTest {
 
     @Test
     @DisplayName("client should log body and/or headers depends on specified log level")
     void loggingTest() throws Exception {
 
-        RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
+        KonturConfiguredClient rc = new KonturConfiguredClient(Level.BODY, "https://extern-api.testkontur.ru")
                 .setAuthSid("***")
                 .setApiKey("***");
 
@@ -61,7 +61,7 @@ class RetrofitClientTest {
         @DisplayName("on success")
         void adaptorTestSuccess() {
 
-            RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
+            KonturConfiguredClient rc = new KonturConfiguredClient(Level.BODY, "https://extern-api.testkontur.ru")
                     .setAuthSid("***")
                     .setApiKey("***");
 
@@ -78,7 +78,7 @@ class RetrofitClientTest {
         @DisplayName("on error")
         void adaptorTestFail() {
 
-            RetrofitClient rc = new RetrofitClient(Level.BODY, "https://extern-api.testkontur.ru")
+            KonturConfiguredClient rc = new KonturConfiguredClient(Level.BODY, "https://extern-api.testkontur.ru")
                     .setAuthSid("***")
                     .setApiKey("***");
 
