@@ -241,14 +241,13 @@ public class DraftServiceImpl extends AbstractService implements DraftService {
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(String draftId, String documentId) {
-        return printDocumentAsync(draftId, documentId)
-                .thenApply(cxt -> {
-                    if (cxt.isFail()) {
-                        return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
-                    }
-                    return new QueryContext<byte[]>()
-                            .setResult(Base64.getDecoder().decode(cxt.get()), QueryContext.CONTENT);
-                });
+        return printDocumentAsync(draftId, documentId).thenApply(cxt -> {
+            if (cxt.isFail()) {
+                return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
+            }
+            return new QueryContext<byte[]>()
+                    .setResult(Base64.getDecoder().decode(cxt.get()), QueryContext.CONTENT);
+        });
     }
 
     @Override

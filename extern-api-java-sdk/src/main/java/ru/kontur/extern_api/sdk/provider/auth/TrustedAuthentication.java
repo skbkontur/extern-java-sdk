@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.ServiceError;
@@ -68,6 +69,8 @@ public class TrustedAuthentication implements AuthenticationProvider {
     private String timestamp;
     private CredentialProvider credentialProvider;
     private HttpClient httpClient;
+
+    private String savedSid;
 
     public TrustedAuthentication(String authPrefix) {
         this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
@@ -169,6 +172,10 @@ public class TrustedAuthentication implements AuthenticationProvider {
         if (cryptoProvider == null) {
             return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth,
                     Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null, null);
+        }
+
+        if (savedSid != null) {
+            return new QueryContext<String>().setResult(savedSid, QueryContext.SESSION_ID);
         }
 
         httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
@@ -274,7 +281,11 @@ public class TrustedAuthentication implements AuthenticationProvider {
                     .submitHttpRequest(approveRequest, "POST", Collections.emptyMap(), key,
                             localHeaderParams, localVarFormParams, ResponseSid.class);
 
-            authCxt = new QueryContext<String>().setResult(sid.getData().getSid(), SESSION_ID);
+            savedSid = Optional
+                    .ofNullable(sid.getData()).map(ResponseSid::getSid)
+                    .orElse(null);
+
+            authCxt = new QueryContext<String>().setResult(savedSid, SESSION_ID);
         } catch (ApiException x) {
             authCxt = new QueryContext<String>().setServiceError(x);
         }

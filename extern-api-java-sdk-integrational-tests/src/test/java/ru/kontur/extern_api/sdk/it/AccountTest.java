@@ -9,28 +9,23 @@ import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.service.AccountService;
 
-/**
- * @author AlexS
- */
-class AccountTest extends AbstractTest {
+
+class AccountTest {
+
+    private static AccountService accountService;
 
     @BeforeAll
     static void setUpClass() {
-        AbstractTest.initEngine();
-    }
-
-    @BeforeEach
-    void setUp() {
-        accountService = engine.getAccountService();
+        accountService = TestSuite.Load().engine.getAccountService();
     }
 
     @Test
