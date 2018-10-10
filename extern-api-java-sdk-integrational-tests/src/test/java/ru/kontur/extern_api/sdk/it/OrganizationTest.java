@@ -38,6 +38,7 @@ import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 class OrganizationTest {
 
@@ -92,16 +93,12 @@ class OrganizationTest {
     @Test
     void testDelete() throws Exception {
 
-        QueryContext deleteCxt = engine.getOrganizationService().deleteAsync(companyId)
-                .get();
-
-        deleteCxt.ensureSuccess();
+        engine.getOrganizationService().deleteAsync(companyId)
+                .get()
+                .ensureSuccess();
 
         assertTrue(engine.getOrganizationService().searchAsync(
-                INN,
-                null,
-                null,
-                null)
+                OrgFilter.maxPossibleBatch().inn(INN))
                 .get()
                 .ensureSuccess()
                 .get()
@@ -112,7 +109,8 @@ class OrganizationTest {
     @Test
     void testSearch() throws Exception {
 
-        Company company = searchOrganisations(true).get(0);
+        Company company = searchOrganisations(OrgFilter.maxPossibleBatch().inn(INN).kpp(KPP))
+                .get(0);
         assertNotNull(company);
         checkFields(company, NAME);
     }
@@ -120,18 +118,17 @@ class OrganizationTest {
     @Test
     void testSearchAll() throws Exception {
 
-        for (Company company : searchOrganisations(false)) {
+        for (Company company : searchOrganisations(OrgFilter.maxPossibleBatch().inn(INN))) {
             assertNotNull(company.getGeneral().getName());
         }
     }
 
-    private List<Company> searchOrganisations(boolean withKpp) throws Exception {
+    private List<Company> searchOrganisations(OrgFilter filter) throws Exception {
 
         QueryContext<CompanyBatch> batchCxt = engine.getOrganizationService()
-                .searchAsync(INN, withKpp ? KPP : null, null, null)
-                .get();
-
-        batchCxt.ensureSuccess();
+                .searchAsync(filter)
+                .get()
+                .ensureSuccess();
 
         return !batchCxt.get().getCompanies().isEmpty()
                 ? batchCxt.get().getCompanies()
@@ -141,7 +138,8 @@ class OrganizationTest {
 
     private String createOrFindOrganisation() throws Exception {
 
-        List<Company> companies = searchOrganisations(true);
+        List<Company> companies = searchOrganisations(
+                OrgFilter.maxPossibleBatch().inn(INN).kpp(KPP));
 
         if (companies != null) {
             return companies.get(0).getId().toString();

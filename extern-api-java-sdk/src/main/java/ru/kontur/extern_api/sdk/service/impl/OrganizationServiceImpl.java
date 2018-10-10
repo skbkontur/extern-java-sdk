@@ -108,19 +108,21 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
     }
 
     @Override
-    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(
-            String inn,
-            String kpp,
-            Long skip,
-            Integer take) {
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
 
         QueryContext<DocflowPage> cxt = createQueryContext(EN_ORG);
 
-        OrgFilter filter = new OrgFilter()
-                .inn(inn)
-                .kpp(kpp);
-
         return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(cxt, filter));
+    }
+
+    @Override
+    @Deprecated
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
+        QueryContext<CompanyBatch> cxt = createQueryContext(EN_ORG);
+
+        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(
+                cxt,
+                OrgFilter.page(skip, take).inn(inn).kpp(kpp)));
     }
 
     @Override

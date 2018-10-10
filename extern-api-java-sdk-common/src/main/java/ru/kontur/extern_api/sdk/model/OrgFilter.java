@@ -5,12 +5,15 @@ import org.jetbrains.annotations.Nullable;
 public class OrgFilter {
 
     private long skip;
-    private int take = 1000;
+    private int take;
 
+    @Nullable
     private String inn;
 
     @Nullable
     private String kpp;
+
+    private OrgFilter(){}
 
     private OrgFilter skip(long skip) {
         this.skip = skip;
@@ -42,14 +45,13 @@ public class OrgFilter {
         return page((long) skip, take);
     }
 
-    public long getSkip() {
-        return skip;
-    }
+    public static OrgFilter maxPossibleBatch(){return page(0, 1000 );}
 
-    public int getTake() {
-        return take;
-    }
+    public long getSkip() { return skip; }
 
+    public int getTake() { return take; }
+
+    @Nullable
     public String getInn() {
         return inn;
     }

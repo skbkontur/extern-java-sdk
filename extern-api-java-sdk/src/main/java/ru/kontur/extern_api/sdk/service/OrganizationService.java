@@ -117,18 +117,25 @@ public interface OrganizationService extends ProviderHolder {
     /**
      * <p>GET /v1/{accountId}/organizations</p>
      * Асинхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
-     * @param inn инн
-     * @param kpp кпп
+     * @param filter параметры поиска
+     * @return список организаций
+     * @see CompanyBatch
+     */
+    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter);
+
+    /**
+     * <p>GET /v1/{accountId}/organizations</p>
+     * Асинхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
+     * @param inn ИНН
+     * @param kpp КПП
      * @param skip смещение от начала списка
      * @param take максимальное количество организаций в возвращаемом списке
      * @return список организаций
      * @see CompanyBatch
      */
-    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(
-            String inn,
-            String kpp,
-            Long skip,
-            Integer take);
+    @Deprecated
+    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take);
+
     /**
      * <p>GET /v1/{accountId}/organizations</p>
      * Синхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
