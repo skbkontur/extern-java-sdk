@@ -23,8 +23,11 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -39,10 +42,14 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     private final ProviderHolder providerHolder;
     private final AdaptorBundle adaptorBundle;
+    private final RetrofitClient retrofitClient;
 
-    public DefaultServicesFactory(ProviderHolder providerHolder, AdaptorBundle adaptorBundle) {
+    public DefaultServicesFactory(
+            ProviderHolder providerHolder,
+            AdaptorBundle adaptorBundle) {
         this.providerHolder = providerHolder;
         this.adaptorBundle = adaptorBundle;
+        this.retrofitClient = new RetrofitClient(Level.BODY);
     }
 
 
@@ -80,9 +87,20 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public EventService getEventService() {
+
+        String authSid = providerHolder.getAuthenticationProvider()
+                .sessionId()
+                .ensureSuccess()
+                .get();
+
         return providerHolder.copyProvidersTo(new EventServiceImpl(
                 providerHolder,
-                adaptorBundle.getEventsAdaptor()
+                retrofitClient
+                        .setAuthSid(authSid)
+                        .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
+                        .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
+                        .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
+                        .createService(EventsApi.class)
         ));
     }
 
@@ -101,5 +119,4 @@ public class DefaultServicesFactory implements ServicesFactory {
                 .setServiceBaseUri(providerHolder.getServiceBaseUriProvider().getUri())
                 .setUserAgentProvider(providerHolder.getUserAgentProvider());
     }
-
 }
