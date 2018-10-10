@@ -40,51 +40,30 @@ public class CreateAccountRequest {
     @SerializedName("organization-name")
     private String organizationName = null;
 
-    /**
-     * Метод возвращает ИНН организации новой учетной записи
-     * @return ИНН новой организации
-     */
     public String getInn() {
         return inn;
     }
 
-    /**
-     * Метод устанавливает ИНН организации новой учетной записи
-     * @param inn ИНН новой организации
-     */
-    public void setInn(String inn) {
+    public CreateAccountRequest inn(String inn) {
         this.inn = inn;
+        return this;
     }
 
-    /**
-     * Метод возвращает КПП организации новой учетной записи
-     * @return КПП новой организации
-     */
     public String getKpp() {
         return kpp;
     }
 
-    /**
-     * Метод устанавливает КПП организации новой учетной записи
-     * @param kpp КПП новой организации
-     */
-    public void setKpp(String kpp) {
+    public CreateAccountRequest kpp(String kpp) {
         this.kpp = kpp;
+        return this;
     }
 
-    /**
-     * Метод возвращает имя организации новой учетной записи
-     * @return имя организации новой учетной записи
-     */
     public String getOrganizationName() {
         return organizationName;
     }
 
-    /**
-     * Метод устанавливает имя организации новой учетной записи
-     * @param organizationName имя организации новой учетной записи
-     */
-    public void setOrganizationName(String organizationName) {
+    public CreateAccountRequest organizationName(String organizationName) {
         this.organizationName = organizationName;
+        return this;
     }
 }

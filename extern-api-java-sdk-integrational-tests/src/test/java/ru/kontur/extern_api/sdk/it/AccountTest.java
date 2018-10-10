@@ -5,9 +5,10 @@
  */
 package ru.kontur.extern_api.sdk.it;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.List;
-import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,10 @@ import ru.kontur.extern_api.sdk.model.Link;
  */
 class AccountTest extends AbstractTest {
 
+    private static final String INN = "7810654318";
+    private static final String KPP = "781001001";
+    private static final String ORG_NAME = "Рога и Копыта";
+
     @BeforeAll
     static void setUpClass() {
         AbstractTest.initEngine();
@@ -37,9 +42,10 @@ class AccountTest extends AbstractTest {
     void acquireBaseUriLinks() throws Exception {
         QueryContext<List<Link>> cxt = accountService
                 .acquireBaseUriAsync()
-                .get().ensureSuccess();
+                .get()
+                .ensureSuccess();
 
-        Assertions.assertNotNull(cxt.get());
+        assertFalse(cxt.get().isEmpty());
     }
 
     @Test
@@ -49,22 +55,22 @@ class AccountTest extends AbstractTest {
                 .get()
                 .ensureSuccess();
 
-        Assertions.assertNotNull(cxt.get());
+        assertFalse(cxt.get().getAccounts().isEmpty());
     }
 
     @Test
     void createAccount() throws Exception {
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
-        createAccountRequest.setInn("7810123451");
-        createAccountRequest.setKpp("781001001");
-        createAccountRequest.setOrganizationName("Рога и Копыта");
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest()
+                .inn(INN)
+                .kpp(KPP)
+                .organizationName(ORG_NAME);
 
         QueryContext<Account> cxt = accountService
                 .createAccountAsync(createAccountRequest)
                 .get()
                 .ensureSuccess();
 
-        Assertions.assertNotNull(cxt.get());
+        checkFields(cxt.get(), INN, KPP, ORG_NAME);
     }
 
 
@@ -75,16 +81,23 @@ class AccountTest extends AbstractTest {
                 .get()
                 .ensureSuccess();
 
-        Assertions.assertNotNull(cxt.get());
-        Assertions.assertNotNull(cxt.get().getAccounts());
-        Assertions.assertFalse(cxt.get().getAccounts().isEmpty());
+        assertFalse(cxt.get().getAccounts().isEmpty());
 
-        UUID accountId = cxt.get().getAccounts().get(0).getId();
+        Account account = cxt.get().getAccounts().get(0);
 
         QueryContext<Account> accCxt = accountService
-                .getAccountAsync(accountId.toString())
-                .get().ensureSuccess();
+                .getAccountAsync(account.getId().toString())
+                .get()
+                .ensureSuccess();
 
-        Assertions.assertNotNull(accCxt.get());
+        checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());
+    }
+
+    private void checkFields(Account account, String inn, String kpp, String orgName){
+
+        assertEquals(account.getInn(), inn );
+        assertEquals(account.getKpp(), kpp);
+        assertEquals(account.getOrganizationName(), orgName);
+        assertFalse(account.getLinks().isEmpty());
     }
 }
