@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.it.utils.EventId;
 import ru.kontur.extern_api.sdk.model.ApiEvent;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
@@ -39,16 +40,13 @@ class EventTest {
 
     @Test
     void testGetEvents() throws Exception {
-        EventsPage eventsPage = engine
-                .getEventService()
-                .getEventsAsync("0_0", 20)
+
+        EventsPage page = engine.getEventService().getEventsAsync(EventId.START_ID, 10)
                 .get()
                 .getOrThrow();
 
-        for (ApiEvent apiEvent : eventsPage.getApiEvents()) {
+        for (ApiEvent apiEvent : page.getApiEvents()) {
             Assertions.assertNotNull(apiEvent.getDocflowType());
-            //Assertions.assertNotNull(apiEvent.getNewState());
         }
-
     }
 }
