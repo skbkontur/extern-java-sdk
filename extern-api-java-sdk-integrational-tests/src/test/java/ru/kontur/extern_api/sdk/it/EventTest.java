@@ -5,8 +5,9 @@
  */
 package ru.kontur.extern_api.sdk.it;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,8 @@ class EventTest {
                 .getOrThrow();
 
         for (ApiEvent apiEvent : page.getApiEvents()) {
-            Assertions.assertNotNull(apiEvent.getDocflowType());
+            assertNotNull(apiEvent.getDocflowType());
+            assertNotNull(apiEvent.getNewState());
         }
     }
 }

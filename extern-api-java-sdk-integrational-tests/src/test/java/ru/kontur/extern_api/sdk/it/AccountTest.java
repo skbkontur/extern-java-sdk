@@ -10,19 +10,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.service.AccountService;
 
-/**
- * @author AlexS
- */
-class AccountTest extends AbstractTest {
+
+class AccountTest {
+
+    private static AccountService accountService;
 
     private static final String INN = "7810654318";
     private static final String KPP = "781001001";
@@ -30,12 +30,7 @@ class AccountTest extends AbstractTest {
 
     @BeforeAll
     static void setUpClass() {
-        AbstractTest.initEngine();
-    }
-
-    @BeforeEach
-    void setUp() {
-        accountService = engine.getAccountService();
+        accountService = TestSuite.Load().engine.getAccountService();
     }
 
     @Test

@@ -42,11 +42,13 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ServiceException;
+import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.it.utils.PreparedTestData;
+import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
@@ -64,13 +66,7 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SortOrder;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
-import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.it.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.it.utils.TestSuite;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
@@ -82,23 +78,13 @@ class BankCloudScenario {
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.Load().engine;
+        engine = TestSuite.LoadManually((configuration, builder) -> builder
+                .trustedAuth(TrustedAuthCredentials.fromConfiguration(configuration))
+                .doNotUseCryptoProvider()
+                .doNotSetupAccount()
+                .build()
+        ).engine;
 
-        CryptoProvider cryptoProvider = new CryptoProviderRSA(
-                engine.getConfiguration().getJksPass(),
-                engine.getConfiguration().getRsaKeyPass()
-        );
-
-        engine.setAuthenticationProvider(
-                new TrustedAuthentication()
-                        .apiKeyProvider(() -> engine.getConfiguration().getApiKey())
-                        .serviceUserIdProvider(() -> engine.getConfiguration().getServiceUserId())
-                        .authBaseUriProvider(() -> engine.getConfiguration().getAuthBaseUri())
-                        .credentialProvider(() -> engine.getConfiguration().getCredential())
-                        .signatureKeyProvider(() -> engine.getConfiguration().getThumbprintRsa())
-                        .cryptoProvider(cryptoProvider)
-                        .httpClient(engine.getHttpClient())
-        );
     }
 
     @BeforeEach
@@ -113,7 +99,7 @@ class BankCloudScenario {
 
     @Test
     void playAroundWithDocflow() throws Exception {
-        SystemProperty.pop("httpclient.debug");
+//        SystemProperty.pop("httpclient.debug");
 
         senderCertificate = findWorkingCerts().get(0);
 
@@ -159,15 +145,7 @@ class BankCloudScenario {
                 workingCert.getKpp()
         );
 
-        Company org = findOrganizations().get(0);
-        CompanyGeneral general = org.getGeneral();
-        System.out.printf("Using organization: %s inn=%s kpp=%s\n",
-                general.getName(),
-                general.getInn(),
-                general.getKpp()
-        );
-
-        Docflow docflow = sendDraftWithUsn(account, org);
+        Docflow docflow = sendDraftWithUsn(account);
 
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
@@ -175,19 +153,18 @@ class BankCloudScenario {
 
     }
 
-    private Docflow sendDraftWithUsn(Account senderAccount, Company payer)
+    private Docflow sendDraftWithUsn(Account senderAcc)
             throws Exception {
 
         Sender sender = new Sender();
-        sender.setInn(senderAccount.getInn());
-        sender.setKpp(senderAccount.getKpp());
+        sender.setInn(senderAcc.getInn());
+        sender.setKpp(senderAcc.getKpp());
         sender.setIpaddress("8.8.8.8");
         sender.setCertificate(senderCertificate.getContent());
 
         Recipient recipient = new FnsRecipient("0087");
 
-        CompanyGeneral org = payer.getGeneral();
-        Organization oPayer = new Organization(org.getInn(), org.getKpp());
+        Organization oPayer = new Organization(senderAcc.getInn(), senderAcc.getKpp());
 
         String draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)
@@ -223,9 +200,8 @@ class BankCloudScenario {
                 .get()
                 .getOrThrow();
 
-        Assertions.assertTrue(
-                result.getStatus() == Status.OK ||
-                        result.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS
+        Assertions.assertTrue(result.getStatus() == Status.OK ||
+                result.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS
         );
 
         System.out.printf("Draft prepared to send: %s\n", result.getStatus());
@@ -237,8 +213,8 @@ class BankCloudScenario {
     }
 
     private void playWithDocflow(Docflow docflow) throws Exception {
-
         do {
+
             System.out.println("Docflow status: " + docflow.getStatus());
 
             if (docflow.getStatus() == DocflowStatus.FINISHED) {
@@ -248,7 +224,13 @@ class BankCloudScenario {
             System.out.println("Choose reply...");
             Document document = ChooseInDialog.replyForDocflow(docflow);
             if (document == null) {
-                System.out.println("You don't want to reply now?");
+                System.out.println("You don't want to reply now...");
+                System.out.println("Refreshing docflow...");
+
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
                 continue;
             }
 
@@ -262,7 +244,13 @@ class BankCloudScenario {
 
             String type = ChooseInDialog.replyType(document);
             if (type == null) {
-                System.out.println("You don't know how to reply now?");
+                System.out.println("You don't know how to reply now...");
+                System.out.println("Refreshing docflow...");
+
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
                 continue;
             }
 
@@ -454,18 +442,7 @@ class BankCloudScenario {
         return cloudCerts;
     }
 
-    private List<Company> findOrganizations() throws Exception {
-        List<Company> companies = engine.getOrganizationService()
-                .searchAsync(null , null, null, null)
-                .get()
-                .getOrThrow()
-                .getCompanies();
-
-        System.out.printf("Found %s organizations\n", companies.size());
-        return companies;
-    }
-
-    static class ChooseInDialog {
+    private static class ChooseInDialog {
 
         @Nullable
         private static Document replyForDocflow(Docflow docflow) {
@@ -475,6 +452,18 @@ class BankCloudScenario {
                     .stream()
                     .filter(Document::isNeedToReply)
                     .toArray(Document[]::new);
+
+            if (optDocs.length == 0) {
+                JOptionPane.showInternalMessageDialog(
+                        null,
+                        "There is no available documents to reply on. "
+                                + "Wait for the inspection to answer. "
+                                + "Click OK to refresh the docflow status.",
+                        "Inspector thinking...",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                return null;
+            }
 
             String[] colNames = Arrays.stream(optDocs)
                     .map(d -> d.getDescription().getType())
@@ -492,7 +481,7 @@ class BankCloudScenario {
             int result = JOptionPane.showOptionDialog(
                     null,
                     pane,
-                    "Select document to reply...",
+                    "Reply on...",
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
@@ -520,7 +509,7 @@ class BankCloudScenario {
 
             int opt = JOptionPane.showOptionDialog(null,
                     "How do you want to reply on " + document.getDescription().getType() + "?",
-                    "Choose reply type...",
+                    "Reply with...",
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
@@ -529,16 +518,6 @@ class BankCloudScenario {
             return opt == JOptionPane.CLOSED_OPTION ? null : options[opt];
         }
 
-        static class ChosenReply {
-
-            final Document document;
-            final String type;
-
-            public ChosenReply(Document document, String type) {
-                this.document = document;
-                this.type = type;
-            }
-        }
     }
 
     private static Object[][] transpose(Object[][] tss) {
