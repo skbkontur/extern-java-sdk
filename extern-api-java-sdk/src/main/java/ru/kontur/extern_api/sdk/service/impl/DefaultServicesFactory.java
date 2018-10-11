@@ -26,7 +26,7 @@ package ru.kontur.extern_api.sdk.service.impl;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
@@ -42,14 +42,14 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     private final ProviderHolder providerHolder;
     private final AdaptorBundle adaptorBundle;
-    private final RetrofitClient retrofitClient;
+    private final KonturConfiguredClient retrofitClient;
 
     public DefaultServicesFactory(
             ProviderHolder providerHolder,
             AdaptorBundle adaptorBundle) {
         this.providerHolder = providerHolder;
         this.adaptorBundle = adaptorBundle;
-        this.retrofitClient = new RetrofitClient(Level.BODY);
+        this.retrofitClient = new KonturConfiguredClient(Level.BODY);
     }
 
 
@@ -93,15 +93,13 @@ public class DefaultServicesFactory implements ServicesFactory {
                 .ensureSuccess()
                 .get();
 
-        return providerHolder.copyProvidersTo(new EventServiceImpl(
-                providerHolder,
-                retrofitClient
-                        .setAuthSid(authSid)
-                        .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
-                        .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                        .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                        .createService(EventsApi.class)
-        ));
+        return new EventServiceImpl(retrofitClient
+                .setAuthSid(authSid)
+                .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
+                .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
+                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
+                .createService(EventsApi.class)
+        );
     }
 
     @Override

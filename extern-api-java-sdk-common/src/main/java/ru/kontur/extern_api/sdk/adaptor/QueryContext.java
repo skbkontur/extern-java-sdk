@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2104,6 +2105,18 @@ public class QueryContext<R> implements Serializable {
 
     public R getOrThrow() {
         return ensureSuccess().get();
+    }
+
+    /**
+     * Same as {@link QueryContext#get()} but throws
+     * @throws java.util.NoSuchElementException when no such parameter presented in a context
+     */
+    @NotNull
+    public <T> T require(@NotNull String fieldName) {
+        if (!params.containsKey(fieldName)) {
+            throw new NoSuchElementException(fieldName);
+        }
+        return get(fieldName);
     }
 
     public QueryContext<R> setResultAware(String key, UncheckedSupplier<R> supplier) {

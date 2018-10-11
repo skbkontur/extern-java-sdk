@@ -24,13 +24,10 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.concurrent.ExecutionException;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.model.EventsPage;
-
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.EventsPage;
+import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 
 /**
@@ -38,28 +35,30 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
  * связанными с докуметооборотами (ДО):
  * <p>- получить список событий {@link EventService#getEventsAsync} | {@link EventService#getEvents};</p>
  */
-public interface EventService extends ProviderHolder {
+public interface EventService {
 
     /**
      * <p>GET /v1/events</p>
      * Асинхронный метод возвращает список событий
+     *
      * @param fromId идентификатор последнего обработанного события.
-     *  Для первого обращения к ленте событий необходимо передать значение "0"
+     *         Для первого обращения к ленте событий необходимо передать значение "0_0"
      * @param size максимальное количество возращаемых событий.
      * @return страница событий
-     * @see EventsPage
+     * @see EventsPage#getLastEventId() получение следующих fromId
      */
-    CompletableFuture<ApiResponse<EventsPage>> getEventsAsync(String fromId, int size)
-            throws ExecutionException, InterruptedException;
+    CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size);
 
     /**
      * <p>GET /v1/events</p>
      * Синхронный метод возвращает список событий
+     *
      * @param cxt контекст. Должен содержать следующие данные:
-     * <p>-  идентификатор последнего обработанного события. Для установки необходимо использовать метод {@link QueryContext#setFromId};</p>
-     * <p>-  максимальное количество возращаемых событий. Для установки необходимо использовать метод {@link QueryContext#setSize(int)}.</p>
+     *         <p>-  идентификатор последнего обработанного события. см. {@link QueryContext#setFromId};</p>
+     *         <p>-  максимальное количество возращаемых событий. см. {@link QueryContext#setSize(int)}.</p>
      * @return страница событий
-     * @see EventsPage
+     * @deprecated use {@link EventService#getEventsAsync(String, int)} instead
      */
+    @Deprecated
     QueryContext<EventsPage> getEvents(QueryContext<?> cxt);
 }

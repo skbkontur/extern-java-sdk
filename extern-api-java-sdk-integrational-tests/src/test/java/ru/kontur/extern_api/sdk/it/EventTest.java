@@ -42,8 +42,10 @@ class EventTest {
     @Test
     void testGetEvents() throws Exception {
 
-        EventsPage page = engine.getEventService().getEventsAsync(EventId.START_ID, 10)
-                .get().getData();
+        EventsPage page = engine.getEventService()
+                .getEventsAsync(EventId.START_ID, 10)
+                .get()
+                .getOrThrow();
 
         for (ApiEvent apiEvent : page.getApiEvents()) {
             assertNotNull(apiEvent.getDocflowType());
