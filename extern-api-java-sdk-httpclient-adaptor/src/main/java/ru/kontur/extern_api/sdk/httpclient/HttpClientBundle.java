@@ -29,11 +29,9 @@ import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.CertificatesAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.EventsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 public class HttpClientBundle implements AdaptorBundle {
@@ -72,23 +70,6 @@ public class HttpClientBundle implements AdaptorBundle {
         DraftsAdaptorImpl draftsAdaptor = new DraftsAdaptorImpl();
         draftsAdaptor.setHttpClient(this::getHttpClientAdaptor);
         return draftsAdaptor;
-    }
-
-    @Override
-    public EventsAdaptor getEventsAdaptor() {
-        String authSid = providerHolder.getAuthenticationProvider()
-                .sessionId()
-                .ensureSuccess()
-                .get();
-
-        EventsApi service = retrofitClient
-                .setAuthSid(authSid)
-                .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
-                .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                .createService(EventsApi.class);
-
-        return new EventsAdaptorImpl(service);
     }
 
     @Override

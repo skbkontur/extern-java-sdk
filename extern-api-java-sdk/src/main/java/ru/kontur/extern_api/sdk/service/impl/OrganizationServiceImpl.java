@@ -27,6 +27,8 @@ import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
@@ -41,7 +43,7 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
 
     private final OrganizationsAdaptor organizationsAdaptor;
 
-    public OrganizationServiceImpl(
+    OrganizationServiceImpl(
             ProviderHolder providerHolder,
             OrganizationsAdaptor organizationsAdaptor) {
         super(providerHolder);
@@ -106,20 +108,33 @@ public class OrganizationServiceImpl extends AbstractService  implements Organiz
     }
 
     @Override
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
+
+        QueryContext<DocflowPage> cxt = createQueryContext(EN_ORG);
+
+        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(cxt, filter));
+    }
+
+    @Override
+    @Deprecated
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
         QueryContext<CompanyBatch> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setInn(inn)
-            .setKpp(kpp)
-            .setSkip(skip)
-            .setTake(take)
-            .applyAsync(organizationsAdaptor::search);
+
+        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(
+                cxt,
+                OrgFilter.page(skip, take).inn(inn).kpp(kpp)));
     }
 
     @Override
     public QueryContext<CompanyBatch> search(QueryContext<?> parent) {
         QueryContext<CompanyBatch> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::search);
+
+        OrgFilter filter = OrgFilter
+                .page(parent.getSkip(), parent.getTake())
+                .inn(parent.getInn())
+                .kpp(parent.getKpp());
+
+        return organizationsAdaptor.search(cxt, filter);
     }
 
 }

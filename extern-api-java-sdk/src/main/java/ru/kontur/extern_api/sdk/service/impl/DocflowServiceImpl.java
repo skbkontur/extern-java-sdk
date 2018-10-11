@@ -62,14 +62,6 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         this.docflowsAdaptor = docflowsAdaptor;
     }
 
-    /**
-     * Allow API user to get Docflow object
-     * <p>
-     * GET /v1/{accountId}/docflows/{docflowId}
-     *
-     * @param docflowId String an docflow identity
-     * @return CompletableFuture&lt;QueryContext&lt;Docflow&gt;&gt;
-     */
     @Override
     public CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId) {
         QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
