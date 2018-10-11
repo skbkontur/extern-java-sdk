@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk.httpclient.retrofit;
 
 import java.io.IOException;
-import java.net.URI;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -77,11 +76,12 @@ public class TokenAuth implements Interceptor {
         switch (location) {
 
             case QUERY:
-                URI uri = request.url().uri();
-                String newQuery = ApiUtils.extendQuery(uri.getQuery(), paramName, token);
-                URI newUri = ApiUtils.changeUriQuery(uri, newQuery);
-
-                request = request.newBuilder().url(newUri.toURL()).build();
+                request = request.newBuilder()
+                        .url(request.url().newBuilder()
+                                .addQueryParameter(paramName, token)
+                                .build()
+                        )
+                        .build();
                 break;
 
             case HEADER:

@@ -58,6 +58,7 @@ public class KonturConfiguredClient {
         this.okBuilder = new OkHttpClient.Builder()
                 .addInterceptor(apiKeyAuth)
                 .addInterceptor(authSidAuth)
+                .addInterceptor(userAgentAuth)
                 .addInterceptor(new HttpLoggingInterceptor(logger::info).setLevel(loggingLevel))
                 .followRedirects(false)
                 .followSslRedirects(false);
@@ -68,8 +69,8 @@ public class KonturConfiguredClient {
                 .addCallAdapterFactory(Java8CallAdapterFactory.create());
     }
 
-    public KonturConfiguredClient(Level body) {
-        this(Level.BODY, "");
+    public KonturConfiguredClient(Level level) {
+        this(level, "");
     }
 
     public <S> S createService(Class<S> serviceClass) {
