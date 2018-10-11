@@ -34,7 +34,6 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.java8.Java8CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import ru.kontur.extern_api.sdk.GsonProvider;
 
@@ -66,7 +65,7 @@ public class KonturConfiguredClient {
         this.serviceBuilder = new Retrofit.Builder()
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonCustomConverterFactory.create(getGsonBuilder().create()))
-                .addCallAdapterFactory(Java8CallAdapterFactory.create());
+                .addCallAdapterFactory(ApiResponseCallAdapterFactory.create(getGsonBuilder().create()));
     }
 
     public KonturConfiguredClient(Level level) {

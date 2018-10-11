@@ -23,6 +23,55 @@
 
 package ru.kontur.extern_api.sdk.httpclient.retrofit.api;
 
-public class OrganizationsApi {
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyBatch;
+import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.CompanyName;
+
+public interface OrganizationsApi {
+
+    @GET("v1/{accountId}/organizations/{orgId}")
+    CompletableFuture<ApiResponse<Company>> lookup(
+            @Path("accountId") UUID accountId,
+            @Path("orgId") UUID orgId
+    );
+
+    @POST("v1/{accountId}/organizations")
+    CompletableFuture<ApiResponse<Company>> create(
+            @Path("accountId") UUID accountId,
+            @Body CompanyGeneral companyGeneral
+    );
+
+    @PUT("v1/{accountId}/organizations/{orgId}")
+    CompletableFuture<ApiResponse<Company>> update(
+            @Path("accountId") UUID accountId,
+            @Path("orgId") UUID orgId,
+            @Body CompanyName name
+    );
+
+    @DELETE("v1/{accountId}/organizations/{orgId}")
+    CompletableFuture<ApiResponse<Void>> delete(
+            @Path("accountId") UUID accountId,
+            @Path("orgId") UUID orgId
+    );
+
+    @GET("v1/{accountId}/organizations")
+    CompletableFuture<ApiResponse<CompanyBatch>> search(
+            @Path("accountId") UUID accountId,
+            @Query("inn") String inn,
+            @Query("kpp") String kpp,
+            @Query("skip") Long skip,
+            @Query("take") Integer take
+    );
 
 }

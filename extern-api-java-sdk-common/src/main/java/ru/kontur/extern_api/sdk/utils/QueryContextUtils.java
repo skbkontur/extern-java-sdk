@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.utils;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
@@ -48,6 +49,18 @@ public class QueryContextUtils {
         }
 
         return new QueryContext<T>(parent, resultKey).setServiceError(response.asApiException());
+    }
+
+
+    public static <T> QueryContext<T> join(ApiResponse<T> response, String resultKey) {
+        if (response.isSuccessful()) {
+            return new QueryContext<>(resultKey, response.getData());
+        }
+        return new QueryContext<T>(resultKey).setServiceError(response.asApiException());
+    }
+
+    public static <T> Function<ApiResponse<T>, QueryContext<T>> contextAdaptor(String withKey) {
+        return response -> join(response, withKey);
     }
 
 }

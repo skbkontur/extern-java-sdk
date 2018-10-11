@@ -401,6 +401,12 @@ public class QueryContext<R> implements Serializable {
         this.setEntityName(entityName);
     }
 
+    public QueryContext(String entityName, R value) {
+        this();
+        this.setEntityName(entityName);
+        this.setResult(value, entityName);
+    }
+
     /**
      * Конструктор для создания контекста
      *

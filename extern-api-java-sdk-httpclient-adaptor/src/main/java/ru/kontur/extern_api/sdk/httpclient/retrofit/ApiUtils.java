@@ -23,12 +23,16 @@
 
 package ru.kontur.extern_api.sdk.httpclient.retrofit;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
+
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
 public final class ApiUtils {
@@ -62,6 +66,16 @@ public final class ApiUtils {
                 response.headers().toMultimap(),
                 errorInfo
         );
+    }
+
+    public <T> CompletableFuture<QueryContext<T>> adapt(
+            CompletableFuture<Response<T>> fResponse,
+            String resultField) {
+
+        return fResponse
+                .thenApply(this::toApiResponse)
+                .exceptionally(ApiResponse::error)
+                .thenApply(rsp -> join(new QueryContext<>(), rsp, resultField));
     }
 
 

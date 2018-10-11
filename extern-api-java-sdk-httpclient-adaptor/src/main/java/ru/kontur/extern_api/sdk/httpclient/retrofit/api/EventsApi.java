@@ -24,9 +24,9 @@
 package ru.kontur.extern_api.sdk.httpclient.retrofit.api;
 
 import java.util.concurrent.CompletableFuture;
-import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 
@@ -41,7 +41,7 @@ public interface EventsApi {
      * @return ApiResponse&lt;EventsPage&gt;
      */
     @GET("v1/events")
-    CompletableFuture<Response<EventsPage>> getEvents(
+    CompletableFuture<ApiResponse<EventsPage>> getEvents(
             @Query("fromId") String fromId,
             @Query("batchSize") Integer batchSize
     );

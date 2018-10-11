@@ -24,13 +24,11 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
 import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.ApiUtils;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.EventService;
@@ -39,11 +37,9 @@ import ru.kontur.extern_api.sdk.service.EventService;
 public class EventServiceImpl implements EventService {
 
     private final EventsApi api;
-    private final ApiUtils utils;
 
     EventServiceImpl(EventsApi api) {
         this.api = api;
-        this.utils = new ApiUtils(GsonProvider.getGson());
     }
 
     @Override
@@ -52,14 +48,15 @@ public class EventServiceImpl implements EventService {
             throw new IllegalArgumentException("`size` should be greater than 0, but was " + size);
         }
         return api.getEvents(fromId, size)
-                .thenApply(utils::toApiResponse)
-                .exceptionally(ApiResponse::error)
-                .thenApply(rsp -> join(new QueryContext<>(), rsp, QueryContext.EVENTS_PAGE));
+                .thenApply(contextAdaptor(QueryContext.EVENTS_PAGE));
     }
 
     @Override
     @Deprecated
     public QueryContext<EventsPage> getEvents(QueryContext<?> parent) {
-        return join(getEventsAsync(parent.require(QueryContext.FROM_ID), parent.require(QueryContext.SIZE)));
+        return join(getEventsAsync(
+                parent.require(QueryContext.FROM_ID),
+                parent.require(QueryContext.SIZE)
+        ));
     }
 }

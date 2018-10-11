@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.AfterEach;
@@ -117,7 +118,7 @@ class OrganizationTest {
 
         return !batchCxt.get().getCompanies().isEmpty()
                 ? batchCxt.get().getCompanies()
-                : null;
+                : Collections.emptyList();
     }
 
 

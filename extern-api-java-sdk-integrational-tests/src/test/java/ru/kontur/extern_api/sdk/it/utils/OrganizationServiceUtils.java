@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.it.utils;
 
 import com.google.gson.Gson;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.GsonProvider;
@@ -32,6 +33,7 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 
 public class OrganizationServiceUtils {
@@ -60,16 +62,12 @@ public class OrganizationServiceUtils {
      * @throws ServiceException when something goes wrong
      * @returns registered or existed Company.
      */
-    public Company createIfNotExist(String inn, String kpp) {
-        QueryContext<Object> searchCxt = new QueryContext<>()
-                .setAccountId(accountId)
-                .setInn(inn)
-                .setKpp(kpp)
-                .setSkip(0L)
-                .setTake(1);
+    public Company createIfNotExist(String inn, String kpp)
+            throws ExecutionException, InterruptedException {
 
         CompanyBatch orgs = service
-                .search(searchCxt)
+                .searchAsync(OrgFilter.page(0, 1).inn(inn).kpp(kpp))
+                .get()
                 .getOrThrow();
 
         if (orgs.getTotalCount() > 0) {
@@ -86,7 +84,8 @@ public class OrganizationServiceUtils {
 
         log.info("Creating organization: " + gson.toJson(companyGeneral));
         return service
-                .create(searchCxt.setCompanyGeneral(companyGeneral))
+                .createAsync(companyGeneral)
+                .get()
                 .getOrThrow();
     }
 

@@ -23,6 +23,18 @@
 
 package ru.kontur.extern_api.sdk.httpclient.retrofit.api;
 
-public class CertificatesApi {
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.model.CertificateList;
+
+public interface CertificatesApi {
+
+    @GET("/v1/{accountId}/certificates")
+    CompletableFuture<ApiResponse<CertificateList>> getCertificates(
+            @Path("accountId") UUID accountId
+    );
 
 }

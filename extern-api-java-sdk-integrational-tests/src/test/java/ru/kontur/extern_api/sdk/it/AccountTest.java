@@ -8,7 +8,6 @@ package ru.kontur.extern_api.sdk.it;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -16,7 +15,6 @@ import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
-import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.service.AccountService;
 
 
@@ -31,16 +29,6 @@ class AccountTest {
     @BeforeAll
     static void setUpClass() {
         accountService = TestSuite.Load().engine.getAccountService();
-    }
-
-    @Test
-    void acquireBaseUriLinks() throws Exception {
-        QueryContext<List<Link>> cxt = accountService
-                .acquireBaseUriAsync()
-                .get()
-                .ensureSuccess();
-
-        assertFalse(cxt.get().isEmpty());
     }
 
     @Test
@@ -88,9 +76,9 @@ class AccountTest {
         checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());
     }
 
-    private void checkFields(Account account, String inn, String kpp, String orgName){
+    private void checkFields(Account account, String inn, String kpp, String orgName) {
 
-        assertEquals(account.getInn(), inn );
+        assertEquals(account.getInn(), inn);
         assertEquals(account.getKpp(), kpp);
         assertEquals(account.getOrganizationName(), orgName);
         assertFalse(account.getLinks().isEmpty());

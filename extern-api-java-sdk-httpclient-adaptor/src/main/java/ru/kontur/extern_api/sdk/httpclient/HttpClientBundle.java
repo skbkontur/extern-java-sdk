@@ -25,16 +25,11 @@ package ru.kontur.extern_api.sdk.httpclient;
 
 import java.util.concurrent.TimeUnit;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import ru.kontur.extern_api.sdk.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
-import ru.kontur.extern_api.sdk.adaptor.CertificatesAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.EventsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 public class HttpClientBundle implements AdaptorBundle {
@@ -45,22 +40,8 @@ public class HttpClientBundle implements AdaptorBundle {
     public HttpClientBundle(ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
         this.konturConfiguredClient = new KonturConfiguredClient(Level.BODY)
-            .setConnectTimeout(60, TimeUnit.SECONDS)
-            .setReadTimeout(60, TimeUnit.SECONDS);
-    }
-
-    @Override
-    public AccountsAdaptor getAccountsAdaptor() {
-        AccountsAdaptorImpl accountsAdaptor = new AccountsAdaptorImpl();
-        accountsAdaptor.setHttpClient(this::getHttpClientAdaptor);
-        return accountsAdaptor;
-    }
-
-    @Override
-    public CertificatesAdaptor getCertificatesAdaptor() {
-        CertificatesAdaptorImpl certificatesAdaptor = new CertificatesAdaptorImpl();
-        certificatesAdaptor.setHttpClient(this::getHttpClientAdaptor);
-        return certificatesAdaptor;
+                .setConnectTimeout(60, TimeUnit.SECONDS)
+                .setReadTimeout(60, TimeUnit.SECONDS);
     }
 
     @Override
@@ -75,13 +56,6 @@ public class HttpClientBundle implements AdaptorBundle {
         DraftsAdaptorImpl draftsAdaptor = new DraftsAdaptorImpl();
         draftsAdaptor.setHttpClient(this::getHttpClientAdaptor);
         return draftsAdaptor;
-    }
-
-    @Override
-    public OrganizationsAdaptor getOrganizationsAdaptor() {
-        OrganizationsAdaptorImpl organizationsAdaptor = new OrganizationsAdaptorImpl();
-        organizationsAdaptor.setHttpClient(this::getHttpClientAdaptor);
-        return organizationsAdaptor;
     }
 
     @Override

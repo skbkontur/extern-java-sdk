@@ -25,15 +25,9 @@ package ru.kontur.extern_api.sdk.adaptor;
 
 public interface AdaptorBundle {
 
-    AccountsAdaptor getAccountsAdaptor();
-
-    CertificatesAdaptor getCertificatesAdaptor();
-
     DocflowsAdaptor getDocflowsAdaptor();
 
     DraftsAdaptor getDraftsAdaptor();
-
-    OrganizationsAdaptor getOrganizationsAdaptor();
 
     HttpClient getHttpClientAdaptor();
 

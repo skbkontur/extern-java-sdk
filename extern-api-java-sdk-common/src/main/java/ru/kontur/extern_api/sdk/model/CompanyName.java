@@ -20,27 +20,18 @@
  * SOFTWARE.
  *
  */
-package ru.kontur.extern_api.sdk.httpclient.api;
 
-import com.google.gson.reflect.TypeToken;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+package ru.kontur.extern_api.sdk.model;
 
-/**
- *
- * @author alexs
- */
-public class CertificatesApi extends RestApi {
-	
-	@Path("/v1/{accountId}/certificates")
-    @GET
-    @Consumes("application/json; charset=utf-8")
-    public ApiResponse<CertificateList> getCertificates(@PathParam("accountId") String accountId) throws ApiException {
-		return invoke("getCertificates", null, new TypeToken<CertificateList>(){}.getType(), accountId);
+public class CompanyName {
+
+    private final String name;
+
+    public CompanyName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -21,37 +21,28 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.httpclient.retrofit.api;
 
-import com.google.gson.reflect.TypeToken;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import ru.kontur.extern_api.sdk.model.EventsPage;
-import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.model.Account;
+import ru.kontur.extern_api.sdk.model.AccountList;
+import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 
-/**
- * @author Mikhail Pavlenko
- */
+public interface AccountsApi {
 
-public class EventsApi extends RestApi {
+    @GET("/v1")
+    CompletableFuture<ApiResponse<AccountList>> getAll();
 
-    /**
-     * Shows docflow events for all users and accounts connected with external service (e.g.: bank)
-     *
-     * @param fromId Event Id from which data is read out (required)
-     * @param batchSize Max count of events to be returned (required)
-     * @return ApiResponse&lt;EventsPage&gt;
-     * @throws ApiException transport exception
-     */
-    @Path("/v1/events")
-    @GET
-    @Consumes("application/json; charset=utf-8")
-    @Produces("application/json; charset=utf-8")
-    public ApiResponse<EventsPage> getEvents(@QueryParam("fromId") String fromId, @QueryParam("batchSize") Integer batchSize) throws ApiException {
-        return invoke("getEvents", null, new TypeToken<EventsPage>() {}.getType(), fromId, batchSize);
-    }
+    @GET("/v1/{accountId}")
+    CompletableFuture<ApiResponse<Account>> get(@Path("accountId") UUID accountId);
+
+    @POST("/v1")
+    CompletableFuture<ApiResponse<Account>> create(@Body CreateAccountRequest createAccountRequest);
+
 }

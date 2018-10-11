@@ -24,83 +24,60 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import java.util.List;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
+
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.AccountsApi;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
-import ru.kontur.extern_api.sdk.adaptor.AccountsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
-/**
- * @author AlexS
- */
-public class AccountServiceImpl extends AbstractService implements AccountService {
+public class AccountServiceImpl implements AccountService {
 
-    private static final String EN_ACC = "account";
+    private final AccountsApi api;
 
-    private final AccountsAdaptor accountsAdaptor;
-
-    public AccountServiceImpl(
-            ProviderHolder providerHolder,
-            AccountsAdaptor accountsAdaptor) {
-        super(providerHolder);
-        this.accountsAdaptor = accountsAdaptor;
-    }
-    
-    @Override
-    public CompletableFuture<QueryContext<List<Link>>> acquireBaseUriAsync() {
-        QueryContext<List<Link>> cxt = createQueryContext(EN_ACC);
-        return cxt.applyAsync(accountsAdaptor::acquireBaseUri);
-    }
-
-    @Override
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> parent) {
-        QueryContext<List<Link>> cxt = createQueryContext(parent, EN_ACC);
-        return cxt.apply(accountsAdaptor::acquireBaseUri);
+    public AccountServiceImpl(AccountsApi api) {
+        this.api = api;
     }
 
     @Override
     public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync() {
-        QueryContext<AccountList> cxt = createQueryContext(EN_ACC);
-        return cxt.applyAsync(accountsAdaptor::acquireAccounts);
+        return api.getAll()
+                .thenApply(contextAdaptor(QueryContext.ACCOUNT_LIST));
     }
 
     @Override
+    @Deprecated
     public QueryContext<AccountList> acquireAccounts(QueryContext<?> parent) {
-        QueryContext<AccountList> cxt = createQueryContext(parent, EN_ACC);
-        return cxt.apply(accountsAdaptor::acquireAccounts);
+        return join(acquireAccountsAsync());
     }
 
     @Override
     public CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest) {
-        QueryContext<Account> cxt = createQueryContext(EN_ACC);
-        return cxt
-                .setCreateAccountRequest(createAccountRequest)
-                .applyAsync(accountsAdaptor::createAccount);
+        return api.create(createAccountRequest)
+                .thenApply(contextAdaptor(QueryContext.ACCOUNT));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Account> createAccount(QueryContext<?> parent) {
-        QueryContext<Account> cxt = createQueryContext(parent, EN_ACC);
-        return cxt.apply(accountsAdaptor::createAccount);
+        return join(createAccountAsync(parent.require(QueryContext.CREATE_ACCOUNT_REQUEST)));
     }
 
     @Override
     public CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId) {
-        QueryContext<Account> cxt = createQueryContext(EN_ACC);
-        return cxt
-                .setAccountId(accountId)
-                .applyAsync(accountsAdaptor::getAccount);
+        return api.get(UUID.fromString(accountId))
+                .thenApply(contextAdaptor(QueryContext.ACCOUNT));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Account> getAccount(QueryContext<?> parent) {
-        QueryContext<Account> cxt = createQueryContext(parent, EN_ACC);
-        return cxt.apply(accountsAdaptor::getAccount);
+        return join(getAccountAsync(parent.require(QueryContext.ACCOUNT_ID)));
     }
 }

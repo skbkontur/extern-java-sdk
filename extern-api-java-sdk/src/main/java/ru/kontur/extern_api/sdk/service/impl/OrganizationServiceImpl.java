@@ -23,118 +23,116 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
+
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.CompanyName;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
-/**
- * @author Aleksey Sukhorukov
- */
-public class OrganizationServiceImpl extends AbstractService  implements OrganizationService {
 
-    private static final String EN_ORG = "organization";
+public class OrganizationServiceImpl implements OrganizationService {
 
-    private final OrganizationsAdaptor organizationsAdaptor;
+    private final AccountProvider accountProvider;
+    private final OrganizationsApi api;
 
-    OrganizationServiceImpl(
-            ProviderHolder providerHolder,
-            OrganizationsAdaptor organizationsAdaptor) {
-        super(providerHolder);
-        this.organizationsAdaptor = organizationsAdaptor;
+    OrganizationServiceImpl(AccountProvider accountProvider, OrganizationsApi api) {
+        this.accountProvider = accountProvider;
+        this.api = api;
     }
 
     @Override
     public CompletableFuture<QueryContext<Company>> lookupAsync(String companyId) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .applyAsync(organizationsAdaptor::lookup);
+        return api.lookup(accountProvider.accountId(), UUID.fromString(companyId))
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Company> lookup(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::lookup);
+        return join(lookupAsync(parent.require(QueryContext.COMPANY_ID)));
     }
 
     @Override
     public CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyGeneral(companyGeneral)
-            .applyAsync(organizationsAdaptor::create);
+        return api.create(accountProvider.accountId(), companyGeneral)
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Company> create(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::create);
+        return join(createAsync(parent.require(QueryContext.COMPANY_GENERAL)));
     }
 
     @Override
     public CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .setName(name)
-            .applyAsync(organizationsAdaptor::update);
+        return api.update(
+                accountProvider.accountId(),
+                UUID.fromString(companyId),
+                new CompanyName(name)
+        ).thenApply(contextAdaptor(QueryContext.COMPANY));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Company> update(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::update);
+        return join(updateAsync(
+                parent.require(QueryContext.COMPANY_ID),
+                parent.require(QueryContext.NAME)
+        ));
     }
 
     @Override
     public CompletableFuture<QueryContext<Void>> deleteAsync(String companyId) {
-        QueryContext<Void> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .applyAsync(organizationsAdaptor::delete);
+        return api.delete(accountProvider.accountId(), UUID.fromString(companyId))
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
 
     @Override
+    @Deprecated
     public QueryContext<Void> delete(QueryContext<?> parent) {
-        QueryContext<Void> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::delete);
+        return join(deleteAsync(parent.require(QueryContext.COMPANY_ID)));
     }
 
     @Override
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
-
-        QueryContext<DocflowPage> cxt = createQueryContext(EN_ORG);
-
-        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(cxt, filter));
+        return api.search(
+                accountProvider.accountId(),
+                filter.getInn(),
+                filter.getKpp(),
+                filter.getSkip(),
+                filter.getTake()
+        ).thenApply(contextAdaptor(QueryContext.COMPANY_BATCH));
     }
 
     @Override
     @Deprecated
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
-        QueryContext<CompanyBatch> cxt = createQueryContext(EN_ORG);
-
-        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(
-                cxt,
-                OrgFilter.page(skip, take).inn(inn).kpp(kpp)));
+        return searchAsync(OrgFilter
+                .page(skip == null ? 0 : skip, take == null ? 0 : take)
+                .inn(inn)
+                .kpp(kpp)
+        );
     }
 
     @Override
+    @Deprecated
     public QueryContext<CompanyBatch> search(QueryContext<?> parent) {
-        QueryContext<CompanyBatch> cxt = createQueryContext(parent,EN_ORG);
-
-        OrgFilter filter = OrgFilter
-                .page(parent.getSkip(), parent.getTake())
-                .inn(parent.getInn())
-                .kpp(parent.getKpp());
-
-        return organizationsAdaptor.search(cxt, filter);
+        return join(searchAsync(
+                parent.require(QueryContext.INN),
+                parent.require(QueryContext.KPP),
+                parent.require(QueryContext.SKIP),
+                parent.require(QueryContext.TAKE)
+        ));
     }
 
 }

@@ -23,38 +23,35 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.CertificateService;
-import ru.kontur.extern_api.sdk.adaptor.CertificatesAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.service.CertificateService;
+import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
-/**
- * @author alexs
- */
-public class CertificateServiceImpl extends AbstractService implements CertificateService {
 
-    private static final String EN_CER = "certificate";
+public class CertificateServiceImpl implements CertificateService {
 
-    private final CertificatesAdaptor certificatesAdaptor;
+    private final AccountProvider accountProvider;
+    private final CertificatesApi api;
 
-    CertificateServiceImpl(
-            ProviderHolder providerHolder,
-            CertificatesAdaptor certificatesAdaptor) {
-        super(providerHolder);
-        this.certificatesAdaptor = certificatesAdaptor;
+    CertificateServiceImpl(AccountProvider accountProvider, CertificatesApi api) {
+        this.accountProvider = accountProvider;
+        this.api = api;
     }
 
     @Override
     public CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync() {
-        QueryContext<CertificateList> cxt = createQueryContext(EN_CER);
-        return cxt.applyAsync(certificatesAdaptor::getCertificates);
+        return api.getCertificates(accountProvider.accountId())
+                .thenApply(contextAdaptor(QueryContext.CERTIFICATE_LIST));
     }
 
     @Override
     public QueryContext<CertificateList> getCertificateList(QueryContext<?> parent) {
-        QueryContext<CertificateList> cxt = createQueryContext(parent, EN_CER);
-        return cxt.apply(certificatesAdaptor::getCertificates);
+        return QueryContextUtils.join(getCertificateListAsync());
     }
 }
