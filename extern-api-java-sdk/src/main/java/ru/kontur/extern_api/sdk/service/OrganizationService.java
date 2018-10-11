@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
@@ -116,6 +117,15 @@ public interface OrganizationService extends ProviderHolder {
     /**
      * <p>GET /v1/{accountId}/organizations</p>
      * Асинхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
+     * @param filter параметры поиска
+     * @return список организаций
+     * @see CompanyBatch
+     */
+    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter);
+
+    /**
+     * <p>GET /v1/{accountId}/organizations</p>
+     * Асинхронный метод поиска организаций по ИНН и КПП. Возвращает постранично список организаций.
      * @param inn ИНН
      * @param kpp КПП
      * @param skip смещение от начала списка
@@ -123,6 +133,7 @@ public interface OrganizationService extends ProviderHolder {
      * @return список организаций
      * @see CompanyBatch
      */
+    @Deprecated
     CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take);
 
     /**

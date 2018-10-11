@@ -59,5 +59,4 @@ public class EventsAdaptorImpl implements EventsAdaptor {
                 .exceptionally(ApiResponse::error)
                 .thenApply(rsp -> QueryContextUtils.join(cxt, rsp, QueryContext.EVENTS_PAGE));
     }
-
 }

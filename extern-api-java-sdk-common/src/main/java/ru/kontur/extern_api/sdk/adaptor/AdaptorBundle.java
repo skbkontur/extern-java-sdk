@@ -23,7 +23,6 @@
 
 package ru.kontur.extern_api.sdk.adaptor;
 
-
 public interface AdaptorBundle {
 
     AccountsAdaptor getAccountsAdaptor();
@@ -33,8 +32,6 @@ public interface AdaptorBundle {
     DocflowsAdaptor getDocflowsAdaptor();
 
     DraftsAdaptor getDraftsAdaptor();
-
-    EventsAdaptor getEventsAdaptor();
 
     OrganizationsAdaptor getOrganizationsAdaptor();
 

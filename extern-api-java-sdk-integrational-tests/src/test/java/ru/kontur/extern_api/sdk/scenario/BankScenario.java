@@ -96,7 +96,7 @@ class BankScenario {
         );
 
         List<Company> companies = engine.getOrganizationService()
-                .searchAsync(null, null, null, null)
+                .searchAsync(null, null,  null, null)
                 .get()
                 .getOrThrow()
                 .getCompanies();

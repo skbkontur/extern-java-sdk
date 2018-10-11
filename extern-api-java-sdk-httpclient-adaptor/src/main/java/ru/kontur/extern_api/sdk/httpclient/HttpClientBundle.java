@@ -78,23 +78,6 @@ public class HttpClientBundle implements AdaptorBundle {
     }
 
     @Override
-    public EventsAdaptor getEventsAdaptor() {
-        String authSid = providerHolder.getAuthenticationProvider()
-                .sessionId()
-                .ensureSuccess()
-                .get();
-
-        EventsApi service = konturConfiguredClient
-                .setAuthSid(authSid)
-                .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
-                .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                .createService(EventsApi.class);
-
-        return new EventsAdaptorImpl(service);
-    }
-
-    @Override
     public OrganizationsAdaptor getOrganizationsAdaptor() {
         OrganizationsAdaptorImpl organizationsAdaptor = new OrganizationsAdaptorImpl();
         organizationsAdaptor.setHttpClient(this::getHttpClientAdaptor);

@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.adaptor;
 
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 /**
  * @author Aleksey Sukhorukov
@@ -73,5 +74,5 @@ public interface OrganizationsAdaptor {
      *
      * @return QueryContext&lt;CompanyBatch&gt; a context with a result
      */
-    QueryContext<CompanyBatch> search(QueryContext<?> cxt);
+    QueryContext<CompanyBatch> search(QueryContext<?> cxt, OrgFilter filter);
 }

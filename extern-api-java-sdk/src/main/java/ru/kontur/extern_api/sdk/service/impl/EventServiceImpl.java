@@ -25,6 +25,11 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.httpclient.EventsAdaptorImpl;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.ApiUtils;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.EventService;
@@ -35,21 +40,37 @@ import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 public class EventServiceImpl extends AbstractService implements EventService {
 
+    private final EventsApi api;
+    private final ApiUtils utils;
+
+    @Deprecated
     private final EventsAdaptor eventsAdaptor;
 
     EventServiceImpl(
             ProviderHolder providerHolder,
-            EventsAdaptor eventsAdaptor) {
+            EventsApi api) {
+
         super(providerHolder);
-        this.eventsAdaptor = eventsAdaptor;
+        this.api = api;
+        this.utils = new ApiUtils(GsonProvider.getGson());
+
+        this.eventsAdaptor = new EventsAdaptorImpl(api);
     }
 
     @Override
-    public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size) {
-        return eventsAdaptor.getEvents(new QueryContext<>().setFromId(fromId).setSize(size));
+    public CompletableFuture<ApiResponse<EventsPage>> getEventsAsync(String fromId, int size) {
+
+        if (size == 0) {
+            throw new NullPointerException("`size` should be in context and greater than 0");
+        }
+
+        return api.getEvents(fromId, size)
+                .thenApply(utils::toApiResponse)
+                .exceptionally(ApiResponse::error);
     }
 
     @Override
+    @Deprecated
     public QueryContext<EventsPage> getEvents(QueryContext<?> parent) {
         return QueryContextUtils.join(eventsAdaptor.getEvents(parent));
     }

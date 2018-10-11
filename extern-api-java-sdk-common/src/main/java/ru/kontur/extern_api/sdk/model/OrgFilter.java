@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,50 +18,69 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * <p>
- * Класс предназначен для отправки информации на сервер о новой учетной записи
- * Используется в группе запросов {@code AccountService}
- * </p>
- * @author Aleksey Sukhorukov
- */
-public class CreateAccountRequest {
+public class OrgFilter {
 
-    private String inn = null;
-    private String kpp = null;
-    @SerializedName("organization-name")
-    private String organizationName = null;
+    private long skip;
+    private int take;
 
-    public String getInn() {
-        return inn;
+    @Nullable
+    private String inn;
+
+    @Nullable
+    private String kpp;
+
+    private OrgFilter(){}
+
+    private OrgFilter skip(long skip) {
+        this.skip = skip;
+        return this;
     }
 
-    public CreateAccountRequest inn(String inn) {
+    private OrgFilter take(int take) {
+        this.take = take;
+        return this;
+    }
+
+    public OrgFilter inn(String inn) {
         this.inn = inn;
         return this;
     }
 
-    public String getKpp() {
-        return kpp;
-    }
-
-    public CreateAccountRequest kpp(String kpp) {
+    public OrgFilter kpp(String kpp) {
         this.kpp = kpp;
         return this;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
+    public static OrgFilter page(long skip, int take) {
+        return new OrgFilter()
+                .skip(skip)
+                .take(take);
     }
 
-    public CreateAccountRequest organizationName(String organizationName) {
-        this.organizationName = organizationName;
-        return this;
+    public static OrgFilter page(int skip, int take) {
+        return page((long) skip, take);
+    }
+
+    public static OrgFilter maxPossibleBatch(){return page(0, 1000 );}
+
+    public long getSkip() { return skip; }
+
+    public int getTake() { return take; }
+
+    @Nullable
+    public String getInn() {
+        return inn;
+    }
+
+    @Nullable
+    public String getKpp() {
+        return kpp;
     }
 }

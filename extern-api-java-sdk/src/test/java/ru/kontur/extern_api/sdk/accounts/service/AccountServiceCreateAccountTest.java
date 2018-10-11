@@ -105,10 +105,11 @@ public class AccountServiceCreateAccountTest {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s}" , ACCOUNT));
         QueryContext<CertificateList> queryContext = new QueryContext<>();
-        CreateAccountRequest accountRequest = new CreateAccountRequest();
-        accountRequest.setInn("string");
-        accountRequest.setKpp("string");
-        accountRequest.setOrganizationName("string");
+        CreateAccountRequest accountRequest = new CreateAccountRequest()
+                .inn("inn")
+                .kpp("kpp")
+                .organizationName("org");
+
         queryContext.setCreateAccountRequest(accountRequest);
         Account account = engine.getAccountService().createAccount(queryContext).get();
         validateAccount(account, false);
@@ -118,10 +119,10 @@ public class AccountServiceCreateAccountTest {
     public void testCreateAccountAsync() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage(String.format("{%s}" , ACCOUNT));
-        CreateAccountRequest accountRequest = new CreateAccountRequest();
-        accountRequest.setInn("string");
-        accountRequest.setKpp("string");
-        accountRequest.setOrganizationName("string");
+        CreateAccountRequest accountRequest = new CreateAccountRequest()
+                .inn("inn")
+                .kpp("kpp")
+                .organizationName("org");
         try {
             Account account = engine.getAccountService().createAccountAsync(accountRequest).get().get();
             validateAccount(account, false);

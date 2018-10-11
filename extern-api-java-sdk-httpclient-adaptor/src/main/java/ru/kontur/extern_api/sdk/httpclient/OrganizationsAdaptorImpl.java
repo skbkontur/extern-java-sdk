@@ -32,6 +32,7 @@ import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 /**
  * @author Aleksey Sukhorukov
@@ -51,14 +52,15 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
-            QueryContext<Company> resultCxt = new QueryContext<Company>(cxt, cxt.getEntityName()).setResult(
-                transport(cxt)
-                    .lookup(
-                        cxt.getAccountProvider().accountId().toString(),
-                        cxt.getCompanyId().toString()
-                    ).getData(),
-                COMPANY
-            );
+            QueryContext<Company> resultCxt = new QueryContext<Company>(cxt, cxt.getEntityName())
+                    .setResult(
+                            transport(cxt)
+                                    .lookup(
+                                            cxt.getAccountProvider().accountId().toString(),
+                                            cxt.getCompanyId().toString()
+                                    ).getData(),
+                            COMPANY
+                    );
             return resultCxt.setCompanyId(resultCxt.getCompany().getId());
         } catch (ApiException x) {
             return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
@@ -73,14 +75,14 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
             }
 
             QueryContext<Company> resultCxt = new QueryContext<Company>(cxt, cxt.getEntityName())
-                .setResult(
-                    transport(cxt)
-                        .create(
-                            cxt.getAccountProvider().accountId().toString(),
-                            cxt.getCompanyGeneral()
-                        ).getData(),
-                    COMPANY
-                );
+                    .setResult(
+                            transport(cxt)
+                                    .create(
+                                            cxt.getAccountProvider().accountId().toString(),
+                                            cxt.getCompanyGeneral()
+                                    ).getData(),
+                            COMPANY
+                    );
             return resultCxt.setCompanyId(resultCxt.getCompany().getId());
         } catch (ApiException x) {
             return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
@@ -95,13 +97,13 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
             }
 
             return new QueryContext<Company>(cxt, cxt.getEntityName()).setResult(
-                transport(cxt)
-                    .update(
-                        cxt.getAccountProvider().accountId().toString(),
-                        cxt.getCompanyId().toString(),
-                        cxt.getName()
-                    ).getData(),
-                COMPANY
+                    transport(cxt)
+                            .update(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    cxt.getCompanyId().toString(),
+                                    cxt.getName()
+                            ).getData(),
+                    COMPANY
             );
         } catch (ApiException x) {
             return new QueryContext<Company>(cxt, cxt.getEntityName()).setServiceError(x);
@@ -116,10 +118,10 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
             }
 
             transport(cxt)
-                .delete(
-                    cxt.getAccountProvider().accountId().toString(),
-                    cxt.getCompanyId().toString()
-                );
+                    .delete(
+                            cxt.getAccountProvider().accountId().toString(),
+                            cxt.getCompanyId().toString()
+                    );
 
             return new QueryContext<Void>(cxt, cxt.getEntityName()).setResult(null, NOTHING);
         } catch (ApiException x) {
@@ -128,22 +130,22 @@ public class OrganizationsAdaptorImpl extends BaseAdaptor implements Organizatio
     }
 
     @Override
-    public QueryContext<CompanyBatch> search(QueryContext<?> cxt) {
+    public QueryContext<CompanyBatch> search(QueryContext<?> cxt, OrgFilter filter) {
         try {
             if (cxt.isFail()) {
                 return new QueryContext<>(cxt, cxt.getEntityName());
             }
 
             return new QueryContext<CompanyBatch>(cxt, cxt.getEntityName()).setResult(
-                transport(cxt)
-                    .search(
-                        cxt.getAccountProvider().accountId().toString(),
-                        cxt.getInn(),
-                        cxt.getKpp(),
-                        cxt.getSkip(),
-                        cxt.getTake()
-                    ).getData()
-                , COMPANY_BATCH
+                    transport(cxt)
+                            .search(
+                                    cxt.getAccountProvider().accountId().toString(),
+                                    filter.getInn(),
+                                    filter.getKpp(),
+                                    filter.getSkip(),
+                                    filter.getTake()
+                            ).getData()
+                    , COMPANY_BATCH
             );
         } catch (ApiException x) {
             return new QueryContext<CompanyBatch>(cxt, cxt.getEntityName()).setServiceError(x);
