@@ -36,13 +36,13 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 
 public interface AccountsApi {
 
-    @GET("/v1")
+    @GET("v1")
     CompletableFuture<ApiResponse<AccountList>> getAll();
 
-    @GET("/v1/{accountId}")
+    @GET("v1/{accountId}")
     CompletableFuture<ApiResponse<Account>> get(@Path("accountId") UUID accountId);
 
-    @POST("/v1")
+    @POST("v1")
     CompletableFuture<ApiResponse<Account>> create(@Body CreateAccountRequest createAccountRequest);
 
 }

@@ -32,7 +32,7 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
 
 public interface CertificatesApi {
 
-    @GET("/v1/{accountId}/certificates")
+    @GET("v1/{accountId}/certificates")
     CompletableFuture<ApiResponse<CertificateList>> getCertificates(
             @Path("accountId") UUID accountId
     );

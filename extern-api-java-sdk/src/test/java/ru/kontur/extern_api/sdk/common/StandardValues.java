@@ -55,13 +55,12 @@ public interface StandardValues {
 
     String DATE = "2018-04-03T06:24:33Z";
     String ID = "00000000-0000-0000-0000-000000000000";
-		
-		static Date standardDate() {
-			try {
-				return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").parse(DATE);
-			}
-			catch (ParseException x) {
-				return new Date();
-			}
-		}
+
+    static Date standardDate() {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").parse(DATE);
+        } catch (ParseException x) {
+            return new Date();
+        }
+    }
 }
