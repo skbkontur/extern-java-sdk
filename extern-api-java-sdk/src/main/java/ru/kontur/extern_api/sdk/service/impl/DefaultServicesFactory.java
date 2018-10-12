@@ -23,12 +23,14 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.concurrent.TimeUnit;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.AccountsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DraftsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
@@ -53,7 +55,8 @@ public class DefaultServicesFactory implements ServicesFactory {
         this.providerHolder = providerHolder;
         this.adaptorBundle = adaptorBundle;
         // todo: inject
-        this.configuredClient = new KonturConfiguredClient(Level.BODY);
+        this.configuredClient = new KonturConfiguredClient(Level.NONE)
+            .setReadTimeout(60, TimeUnit.SECONDS);
     }
 
 
@@ -80,10 +83,10 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public DraftService getDraftService() {
-        return providerHolder.copyProvidersTo(new DraftServiceImpl(
-                providerHolder,
-                adaptorBundle.getDraftsAdaptor()
-        ));
+        return new DraftServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(DraftsApi.class)
+        );
     }
 
     @Override

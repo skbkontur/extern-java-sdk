@@ -26,6 +26,7 @@
 package ru.kontur.extern_api.sdk.it.utils;
 
 import java.util.function.Function;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
@@ -54,7 +55,7 @@ public class ApproveCodeProvider implements Function<String, String> {
     }
 
     @Override
-    public String apply(String requestId) {
+    public String apply(@NotNull String requestId) {
         String sid = authenticationProvider.sessionId().get();
         String request = BACKDOOR_BASE + APPROVE_CODE_REQUEST + "?resultId=" + requestId;
 

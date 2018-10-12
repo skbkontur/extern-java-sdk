@@ -127,7 +127,7 @@ public class DraftServiceCloudSignTest {
     @Test
     public void cloudSignMethodWithSupplierShouldSignDraft() throws Exception {
 
-        String draftId = UUID.randomUUID().toString();
+        UUID draftId = UUID.randomUUID();
 
         serverPlease()
                 .when(request().withPath(".*/cloud-sign$"), exactly(1))

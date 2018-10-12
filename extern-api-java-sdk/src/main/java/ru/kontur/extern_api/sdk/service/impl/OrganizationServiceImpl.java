@@ -58,7 +58,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Deprecated
     public QueryContext<Company> lookup(QueryContext<?> parent) {
-        return join(lookupAsync(parent.require(QueryContext.COMPANY_ID)));
+        return join(lookupAsync(parent.<UUID>require(QueryContext.COMPANY_ID).toString()));
     }
 
     @Override
@@ -86,21 +86,26 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Deprecated
     public QueryContext<Company> update(QueryContext<?> parent) {
         return join(updateAsync(
-                parent.require(QueryContext.COMPANY_ID),
+                parent.<UUID>require(QueryContext.COMPANY_ID).toString(),
                 parent.require(QueryContext.NAME)
         ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> deleteAsync(String companyId) {
-        return api.delete(accountProvider.accountId(), UUID.fromString(companyId))
+    public CompletableFuture<QueryContext<Void>> deleteAsync(UUID companyId) {
+        return api.delete(accountProvider.accountId(), companyId)
                 .thenApply(contextAdaptor(QueryContext.NOTHING));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> deleteAsync(String companyId) {
+        return deleteAsync(UUID.fromString(companyId));
     }
 
     @Override
     @Deprecated
     public QueryContext<Void> delete(QueryContext<?> parent) {
-        return join(deleteAsync(parent.require(QueryContext.COMPANY_ID)));
+        return join(deleteAsync(parent.<UUID>require(QueryContext.COMPANY_ID).toString()));
     }
 
     @Override

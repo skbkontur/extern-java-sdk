@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.jetbrains.annotations.NotNull;
@@ -2123,6 +2124,17 @@ public class QueryContext<R> implements Serializable {
             throw new NoSuchElementException(fieldName);
         }
         return get(fieldName);
+    }
+
+    /**
+     * Changes result of QueryContext with mapper.
+     */
+    public <T> QueryContext<T> map(String newKey, Function<R, T> mapper) {
+        if (isFail()) {
+            return new QueryContext<>(this, this.getEntityName());
+        }
+        return new QueryContext<T>(this, this.getEntityName())
+                .setResult(mapper.apply(get()), newKey);
     }
 
     public QueryContext<R> setResultAware(String key, UncheckedSupplier<R> supplier) {

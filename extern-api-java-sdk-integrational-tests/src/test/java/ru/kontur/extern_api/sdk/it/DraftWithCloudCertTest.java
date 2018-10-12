@@ -89,7 +89,7 @@ class DraftWithCloudCertTest {
     void testCloudSign() throws Exception {
         ApproveCodeProvider backdoor = new ApproveCodeProvider(engine);
         engine.getDraftService()
-                .cloudSignAsync(draftId.toString(), cxt -> backdoor.apply(cxt.getRequestId()))
+                .cloudSignAsync(draftId, cxt -> backdoor.apply(cxt.getRequestId()))
                 .get()
                 .getOrThrow();
 
@@ -108,7 +108,7 @@ class DraftWithCloudCertTest {
     void testDecryptContent() throws Exception {
         ApproveCodeProvider backdoor = new ApproveCodeProvider(engine);
         engine.getDraftService()
-                .cloudSignAsync(draftId.toString(), cxt -> backdoor.apply(cxt.getRequestId()))
+                .cloudSignAsync(draftId, cxt -> backdoor.apply(cxt.getRequestId()))
                 .get()
                 .getOrThrow();
 

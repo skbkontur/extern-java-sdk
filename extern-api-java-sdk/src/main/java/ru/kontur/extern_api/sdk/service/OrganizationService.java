@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
@@ -112,6 +113,8 @@ public interface OrganizationService {
      */
     @Deprecated
     QueryContext<Company> update(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Void>> deleteAsync(UUID companyId);
 
     /**
      * <p>DELETE /v1/{accountId}/organizations/{orgId}</p>

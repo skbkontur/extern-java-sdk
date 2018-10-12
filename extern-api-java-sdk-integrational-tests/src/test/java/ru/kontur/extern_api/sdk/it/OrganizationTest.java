@@ -66,8 +66,8 @@ class OrganizationTest {
     }
 
     @AfterEach
-    void tearDown() throws ExecutionException, InterruptedException {
-        assertNull(engine.getOrganizationService().deleteAsync(companyId).get().getServiceError());
+    void tearDown() throws Exception {
+        engine.getOrganizationService().deleteAsync(companyId).get();
     }
 
     @Test
@@ -127,7 +127,7 @@ class OrganizationTest {
         List<Company> companies = searchOrganisations(
                 OrgFilter.maxPossibleBatch().inn(INN).kpp(KPP));
 
-        if (companies != null) {
+        if (companies != null && !companies.isEmpty()) {
             return companies.get(0).getId().toString();
         }
 

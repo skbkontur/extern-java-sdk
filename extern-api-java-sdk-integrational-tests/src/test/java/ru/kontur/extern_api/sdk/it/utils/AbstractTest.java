@@ -144,6 +144,8 @@ public class AbstractTest {
                 .addDecryptedDocument(current.setDocumentContents(documentContents));
     }
 
+
+
     protected byte[] loadUpdateDocument(String path) {
         return this.loadDocument(getUpdatedDocumentPath(path));
     }

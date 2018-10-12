@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
@@ -49,13 +48,6 @@ public class HttpClientBundle implements AdaptorBundle {
         DocflowsAdaptorImpl docflowsAdaptor = new DocflowsAdaptorImpl();
         docflowsAdaptor.setHttpClient(this::getHttpClientAdaptor);
         return docflowsAdaptor;
-    }
-
-    @Override
-    public DraftsAdaptor getDraftsAdaptor() {
-        DraftsAdaptorImpl draftsAdaptor = new DraftsAdaptorImpl();
-        draftsAdaptor.setHttpClient(this::getHttpClientAdaptor);
-        return draftsAdaptor;
     }
 
     @Override

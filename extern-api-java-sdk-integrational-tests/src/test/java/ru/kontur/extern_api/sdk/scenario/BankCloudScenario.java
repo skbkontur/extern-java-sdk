@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -103,7 +104,8 @@ class BankCloudScenario {
 
         senderCertificate = findWorkingCerts().get(0);
 
-        DocflowPage page = engine.getDocflowService().searchDocflows(DocflowFilter.page(1, 1)
+        DocflowPage page = engine.getDocflowService().searchDocflows(DocflowFilter
+                .page(1, 1)
                 .finished(false)
                 .orderBy(SortOrder.DESCENDING)
         ).getOrThrow();
@@ -166,11 +168,10 @@ class BankCloudScenario {
 
         Organization oPayer = new Organization(senderAcc.getInn(), senderAcc.getKpp());
 
-        String draftId = engine.getDraftService()
+        UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)
                 .get()
-                .getOrThrow()
-                .toString();
+                .getOrThrow();
 
         System.out.println("Draft created");
 
@@ -183,7 +184,7 @@ class BankCloudScenario {
 
         System.out.println("Usn document built and added to draft");
 
-        openDraftDocumentAsPdf(draftId, document.getId().toString());
+        openDraftDocumentAsPdf(draftId, document.getId());
 
         CheckResultData checkResult = engine.getDraftService()
                 .checkAsync(draftId)
@@ -284,7 +285,7 @@ class BankCloudScenario {
         return docflow;
     }
 
-    private void openDraftDocumentAsPdf(String draftId, String documentId) throws Exception {
+    private void openDraftDocumentAsPdf(UUID draftId, UUID documentId) throws Exception {
 
         byte[] pdf = engine.getDraftService()
                 .getDocumentAsPdfAsync(draftId, documentId)
@@ -365,12 +366,12 @@ class BankCloudScenario {
         return cloudDecryptDocument(docflowId, documentId);
     }
 
-    private boolean cloudSignDraft(String draftId) throws Exception {
+    private boolean cloudSignDraft(UUID draftId) throws Exception {
 
         ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
 
         SignedDraft signedDraft = engine.getDraftService()
-                .cloudSignAsync(draftId, cxt -> smsProvider.apply(cxt.getRequestId()))
+                .cloudSignAsync(draftId, cxt -> smsProvider.apply(cxt.get().getRequestId()))
                 .get()
                 .getOrThrow();
 

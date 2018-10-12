@@ -31,11 +31,8 @@ import java.util.List;
  */
 public class SignInitiation {
 
-    @SerializedName("links")
     private List<Link> links;
-    @SerializedName("documents-to-sign")
     private List<Link> documentsToSign;
-    @SerializedName("request-id")
     private String requestId;
 
     /**

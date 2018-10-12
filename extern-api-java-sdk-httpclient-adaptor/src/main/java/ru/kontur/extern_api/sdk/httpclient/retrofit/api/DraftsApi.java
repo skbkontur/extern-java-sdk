@@ -43,6 +43,7 @@ import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 
 public interface DraftsApi {
 
@@ -229,7 +230,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      */
     @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
-    CompletableFuture<ApiResponse<String>> getDecryptedDocumentContent(
+    CompletableFuture<ApiResponse<byte[]>> getDecryptedDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId
@@ -248,7 +249,7 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId,
-            byte[] content
+            @Body byte[] content
     );
 
     /**
@@ -259,7 +260,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      */
     @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content")
-    CompletableFuture<ApiResponse<String>> getEncryptedDocumentContent(
+    CompletableFuture<ApiResponse<byte[]>> getEncryptedDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId
@@ -273,7 +274,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      */
     @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
-    CompletableFuture<ApiResponse<String>> getSignatureContent(
+    CompletableFuture<ApiResponse<byte[]>> getSignatureContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId
@@ -292,7 +293,7 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId,
-            byte[] content
+            @Body byte[] content
     );
 
     /**
@@ -340,7 +341,7 @@ public interface DraftsApi {
             @Path("documentId") UUID documentId,
             @Query("type") String type,
             @Query("version") int version,
-            @Body String data
+            @Body UsnServiceContractInfo data
     );
 
     /**
@@ -358,7 +359,7 @@ public interface DraftsApi {
             @Path("draftId") UUID draftId,
             @Query("type") String type,
             @Query("version") int version,
-            @Body String data
+            @Body UsnServiceContractInfo data
     );
 
 }
