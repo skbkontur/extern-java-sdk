@@ -70,14 +70,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId) {
-        return api.get(UUID.fromString(accountId))
+    public CompletableFuture<QueryContext<Account>> getAccountAsync(UUID accountId) {
+        return api.get(accountId)
                 .thenApply(contextAdaptor(QueryContext.ACCOUNT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId) {
+        return getAccountAsync(UUID.fromString(accountId));
     }
 
     @Override
     @Deprecated
     public QueryContext<Account> getAccount(QueryContext<?> parent) {
-        return join(getAccountAsync(parent.require(QueryContext.ACCOUNT_ID)));
+        return join(getAccountAsync(parent.<UUID>require(QueryContext.ACCOUNT_ID)));
     }
 }

@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
@@ -82,6 +83,17 @@ public interface AccountService {
      */
     @Deprecated
     QueryContext<Account> createAccount(QueryContext<?> cxt);
+
+    /**
+     * <p>GET /v1/{accountId}</p>
+     * Асинхронный метод предназначен для получения учетной записи
+     *
+     * @param accountId идентификатор учетной записи
+     * @return учетная запись
+     * @see Account
+     */
+    CompletableFuture<QueryContext<Account>> getAccountAsync(UUID accountId);
+
 
     /**
      * <p>GET /v1/{accountId}</p>
