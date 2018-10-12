@@ -41,18 +41,23 @@ import ru.kontur.extern_api.sdk.service.OrganizationService;
 
 public class OrganizationServiceImpl implements OrganizationService {
 
-    private final AccountProvider accountProvider;
+    private final AccountProvider acc;
     private final OrganizationsApi api;
 
     OrganizationServiceImpl(AccountProvider accountProvider, OrganizationsApi api) {
-        this.accountProvider = accountProvider;
+        this.acc = accountProvider;
         this.api = api;
     }
 
     @Override
-    public CompletableFuture<QueryContext<Company>> lookupAsync(String companyId) {
-        return api.lookup(accountProvider.accountId(), UUID.fromString(companyId))
+    public CompletableFuture<QueryContext<Company>> lookupAsync(UUID companyId) {
+        return api.lookup(acc.accountId(), companyId)
                 .thenApply(contextAdaptor(QueryContext.COMPANY));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Company>> lookupAsync(String companyId) {
+        return lookupAsync(UUID.fromString(companyId));
     }
 
     @Override
@@ -63,7 +68,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral) {
-        return api.create(accountProvider.accountId(), companyGeneral)
+        return api.create(acc.accountId(), companyGeneral)
                 .thenApply(contextAdaptor(QueryContext.COMPANY));
     }
 
@@ -74,12 +79,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public CompletableFuture<QueryContext<Company>> updateAsync(UUID companyId, String name) {
+        return api.update(acc.accountId(), companyId, new CompanyName(name))
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
+    }
+
+    @Override
     public CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name) {
-        return api.update(
-                accountProvider.accountId(),
-                UUID.fromString(companyId),
-                new CompanyName(name)
-        ).thenApply(contextAdaptor(QueryContext.COMPANY));
+        return updateAsync(UUID.fromString(companyId), name);
     }
 
     @Override
@@ -93,7 +100,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public CompletableFuture<QueryContext<Void>> deleteAsync(UUID companyId) {
-        return api.delete(accountProvider.accountId(), companyId)
+        return api.delete(acc.accountId(), companyId)
                 .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
 
@@ -111,7 +118,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
         return api.search(
-                accountProvider.accountId(),
+                acc.accountId(),
                 filter.getInn(),
                 filter.getKpp(),
                 filter.getSkip(),

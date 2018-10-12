@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.it.utils;
 
 import java.util.Base64;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -58,15 +59,16 @@ public class EngineUtils {
         return documentContents;
     }
 
-    public QueryContext<DraftDocument> addDecryptedDocument(
-            QueryContext<?> current,
+    public <T> CompletableFuture<QueryContext<T>> addDecryptedDocument(
+            QueryContext<T> current,
             String path,
             DocType docType) {
 
         DocumentContents documentContents = createDocumentContents(path, docType);
         return engine
                 .getDraftService()
-                .addDecryptedDocument(current.setDocumentContents(documentContents));
+                .addDecryptedDocumentAsync(current.getDraftId(), documentContents)
+                .thenApply(cxt -> current);
     }
 
 

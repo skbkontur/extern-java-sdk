@@ -26,6 +26,7 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Certificate;
+import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -36,10 +37,10 @@ import ru.kontur.extern_api.sdk.model.DocflowType;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
@@ -568,8 +569,12 @@ class DocflowServiceTest {
     @ParameterizedTest
     @DisplayName("search docflows filtered")
     @MethodSource("docflowsLazyFactory")
-    void testGetDocflows(QueryContext<Docflow> df) {
-        Organization company = df.getDraftMeta().getPayer();
+    void testGetDocflows(QueryContext<Docflow> df) throws Exception {
+        CompanyGeneral company = engine.getOrganizationService()
+                .lookupAsync(df.get().getOrganizationId())
+                .get()
+                .getOrThrow()
+                .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
                 .page(0, 10)
@@ -588,6 +593,7 @@ class DocflowServiceTest {
     }
 
 
+    @Disabled("print it with decrypt")
     @ParameterizedTest
     @MethodSource("docflowsLazyFactory")
     void testPrintFromDocflows(QueryContext<Docflow> docflowCxt) {
@@ -638,9 +644,15 @@ class DocflowServiceTest {
             DocType docType = DocType.getDocType(dm.getRecipient());
 
             CompletableFuture<QueryContext<Docflow>> future = draftService
-                    .createAsync(dm.getSender(), dm.getRecipient(), dm.getPayer())
-                    .thenApply(cxt -> engineUtils.addDecryptedDocument(cxt, path, docType))
-                    .thenApply(draftService::send)
+                    .createAsync(dm)
+                    .thenApply(cxt -> cxt.map(QueryContext.DRAFT_ID, Draft::getId))
+                    .thenCompose(cxt -> draftService
+                            .addDecryptedDocumentAsync(cxt.get(), engineUtils
+                                    .createDocumentContents(path, docType)
+                            )
+                            .thenApply(o -> cxt)
+                    )
+                    .thenCompose(cxt -> draftService.sendAsync(cxt.getDraftId()))
                     .thenApply(QueryContext::ensureSuccess);
 
             return UncheckedSupplier.get(future::get);

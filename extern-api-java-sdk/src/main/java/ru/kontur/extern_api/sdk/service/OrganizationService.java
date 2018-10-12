@@ -49,6 +49,16 @@ public interface OrganizationService {
      * @return организация
      * @see Company
      */
+    CompletableFuture<QueryContext<Company>> lookupAsync(UUID companyId);
+
+    /**
+     * <p>GET /v1/{accountId}/organizations/{orgId}</p>
+     * Асинхронный метод возвращает организацию по ее внутреннему идентификатору
+     *
+     * @param companyId идентификатор организации
+     * @return организация
+     * @see Company
+     */
     CompletableFuture<QueryContext<Company>> lookupAsync(String companyId);
 
     /**
@@ -88,6 +98,8 @@ public interface OrganizationService {
      */
     @Deprecated
     QueryContext<Company> create(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<Company>> updateAsync(UUID companyId, String name);
 
     /**
      * <p>PUT /v1/{accountId}/organizations/{orgId}</p>
