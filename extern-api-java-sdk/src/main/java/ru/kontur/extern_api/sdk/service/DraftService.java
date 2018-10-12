@@ -882,6 +882,17 @@ public interface DraftService {
     @Deprecated
     QueryContext<DraftDocument> createAndBuildDeclaration(QueryContext<?> cxt);
 
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
+     * <p>Асинхронный метод создания декларации. В результате будет создан документ с переданным
+     * контентом</p>
+     *
+     * @param draftId идентификатор черновика
+     * @param version версия декларации
+     * @param usn описание УСН декрации
+     * @return {@code CompletableFuture<QueryContext<DraftDocument>>}
+     * @see DraftDocument
+     */
     CompletableFuture<QueryContext<DraftDocument>> createAndBuildDeclarationAsync(
             UUID draftId,
             int version,
