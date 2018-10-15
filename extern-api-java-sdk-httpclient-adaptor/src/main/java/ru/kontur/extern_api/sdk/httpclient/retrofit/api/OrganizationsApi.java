@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.httpclient.retrofit.api;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
@@ -32,6 +33,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
@@ -68,10 +70,9 @@ public interface OrganizationsApi {
     @GET("v1/{accountId}/organizations")
     CompletableFuture<ApiResponse<CompanyBatch>> search(
             @Path("accountId") UUID accountId,
-            @Query("inn") String inn,
-            @Query("kpp") String kpp,
-            @Query("skip") Long skip,
-            @Query("take") Integer take
+            @Query("skip") long skip,
+            @Query("take") int take,
+            @QueryMap(encoded = true) Map<String, String> filters
     );
 
 }

@@ -119,16 +119,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
         return api.search(
                 acc.accountId(),
-                filter.getInn(),
-                filter.getKpp(),
                 filter.getSkip(),
-                filter.getTake()
+                filter.getTake(),
+                filter.asFilterMap()
         ).thenApply(contextAdaptor(QueryContext.COMPANY_BATCH));
     }
 
     @Override
     @Deprecated
-    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(
+            String inn,
+            String kpp,
+            Long skip,
+            Integer take) {
         return searchAsync(OrgFilter
                 .page(skip == null ? 0 : skip, take == null ? 0 : take)
                 .inn(inn)

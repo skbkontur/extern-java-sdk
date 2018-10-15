@@ -23,20 +23,19 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import org.jetbrains.annotations.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class OrgFilter {
+public class OrgFilter implements Filter {
 
     private long skip;
     private int take;
 
-    @Nullable
-    private String inn;
+    private final HashMap<String, String> filterMap = new HashMap<>(2);
 
-    @Nullable
-    private String kpp;
-
-    private OrgFilter(){}
+    private OrgFilter() {
+    }
 
     private OrgFilter skip(long skip) {
         this.skip = skip;
@@ -49,12 +48,12 @@ public class OrgFilter {
     }
 
     public OrgFilter inn(String inn) {
-        this.inn = inn;
+        this.filterMap.put("inn", inn);
         return this;
     }
 
     public OrgFilter kpp(String kpp) {
-        this.kpp = kpp;
+        this.filterMap.put("kpp", kpp);
         return this;
     }
 
@@ -68,19 +67,22 @@ public class OrgFilter {
         return page((long) skip, take);
     }
 
-    public static OrgFilter maxPossibleBatch(){return page(0, 1000 );}
-
-    public long getSkip() { return skip; }
-
-    public int getTake() { return take; }
-
-    @Nullable
-    public String getInn() {
-        return inn;
+    public static OrgFilter maxPossibleBatch() {
+        return page(0, 1000);
     }
 
-    @Nullable
-    public String getKpp() {
-        return kpp;
+    @Override
+    public long getSkip() {
+        return skip;
+    }
+
+    @Override
+    public int getTake() {
+        return take;
+    }
+
+    @Override
+    public Map<String, String> asFilterMap() {
+        return Collections.unmodifiableMap(filterMap);
     }
 }
