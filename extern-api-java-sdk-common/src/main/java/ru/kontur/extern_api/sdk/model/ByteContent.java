@@ -17,32 +17,16 @@
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * @author Aleksey Sukhorukov
  */
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
+public class ByteContent {
 
-/**
- * <p>Класс содержит информацию об IP адресе отправителя</p>
- * @author Aleksey Sukhorukov
- */
-public class SenderIP {
+    private final byte[] content;
 
-    @SerializedName("sender-ip")
-    private String senderIP;
-
-    public SenderIP(String senderIP) {
-        this.senderIP = senderIP;
+    public ByteContent(byte[] content) {
+        this.content = content;
     }
 
-    /**
-     * Возвращает IP адрес отправителя
-     * @return IP адрес отправителя
-     */
-    public String getSenderIP() {
-        return senderIP;
-    }
 }

@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.httpclient;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -38,9 +39,9 @@ import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.PrintDocumentData;
+import ru.kontur.extern_api.sdk.model.ByteContent;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
@@ -170,7 +171,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 cxt.getAccountProvider().accountId().toString(),
                 cxt.getDocflowId().toString(),
                 cxt.getDocumentId().toString(),
-                new PrintDocumentData().content(cxt.getContentString())
+                new ByteContent(Base64.getDecoder().decode(cxt.getContentString()))
         ));
     }
 
@@ -203,7 +204,7 @@ public class DocflowsAdaptorImpl extends BaseAdaptor implements DocflowsAdaptor 
                 cxt.getDocflowId().toString(),
                 cxt.getDocumentId().toString(),
                 cxt.getReplyId().toString(),
-                new SendReplyDocumentRequestData().senderIp(cxt.getUserIP())
+                new SenderIp(cxt.getUserIP())
         ));
     }
 

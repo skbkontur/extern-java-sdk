@@ -45,9 +45,9 @@ import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.PrintDocumentData;
+import ru.kontur.extern_api.sdk.model.ByteContent;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
@@ -306,7 +306,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("accountId") String accountId,
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
-            PrintDocumentData request) throws ApiException {
+            ByteContent request) throws ApiException {
         return invoke("print", request, String.class, accountId, docflowId, documentId);
     }
 
@@ -422,7 +422,7 @@ public class DocflowsApi extends RestApi {
             @PathParam("docflowId") String docflowId,
             @PathParam("documentId") String documentId,
             @PathParam("replyId") String replyId,
-            SendReplyDocumentRequestData data
+            SenderIp data
     ) throws ApiException {
         return invoke("sendReply", data, Docflow.class, accountId, docflowId, documentId, replyId);
     }

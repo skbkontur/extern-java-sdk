@@ -17,39 +17,21 @@
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @author Aleksey Sukhorukov
  */
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
- * <p>Класс контент печатной формы документа в PDF формате в кодировке BASE64</p>
- * @author Mikhail Pavlenko
+ * Класс содержит информацию об IP адресе отправителя
  */
+public class SenderIp {
 
-public class PrintDocumentData {
-    @SerializedName("content")
-    private String content = null;
+    private final String senderIp;
 
-    public PrintDocumentData content(String content) {
-        this.content = content;
-        return this;
+    public SenderIp(String senderIp) {
+        this.senderIp = senderIp;
     }
 
-    /**
-     * Возвращает контент печатной формы документа в PDF формате в кодировке BASE64
-     * @return контент печатной формы документа в PDF формате в кодировке BASE64
-     */
-    public String getContent() {
-        return content;
-    }
-
-    /**
-     * Устанавливает контент печатной формы документа в PDF формате в кодировке BASE64
-     * @param content контент печатной формы документа в PDF формате в кодировке BASE64
-     */
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

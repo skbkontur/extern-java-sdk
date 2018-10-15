@@ -1032,19 +1032,19 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект, содержащий IP адрес отправителя {@link SenderIP}
+     * Метод возвращает объект, содержащий IP адрес отправителя {@link SenderIp}
      * @return IP адрес отправителя
      */
-    public SenderIP getSenderIP() {
-        return (SenderIP)params.get(SENDER_IP);
+    public SenderIp getSenderIP() {
+        return (SenderIp)params.get(SENDER_IP);
     }
 
     /**
-     * Метод устанавливает объект, содержащий IP адрес отправителя {@link SenderIP}
+     * Метод устанавливает объект, содержащий IP адрес отправителя {@link SenderIp}
      * @param senderIP объект, содержащий IP адрес отправителя
      * @return контекст
      */
-    public QueryContext<R> setSenderIP(SenderIP senderIP) {
+    public QueryContext<R> setSenderIP(SenderIp senderIP) {
         return set(SENDER_IP, senderIP);
     }
 

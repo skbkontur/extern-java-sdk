@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SendReplyDocumentRequestData;
+import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
@@ -463,7 +463,7 @@ class DocflowServiceTest {
 
         client.followPostLink(
                 reply.getSendLink().getHref(),
-                new SendReplyDocumentRequestData().senderIp(engine.getUserIPProvider().userIP()),
+                new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class);
     }
 
@@ -512,7 +512,7 @@ class DocflowServiceTest {
 
         client.followPostLink(
                 reply.getSendLink().getHref(),
-                new SendReplyDocumentRequestData().senderIp(engine.getUserIPProvider().userIP()),
+                new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class);
     }
 
@@ -561,7 +561,7 @@ class DocflowServiceTest {
 
         client.followPostLink(
                 reply.getSendLink().getHref(),
-                new SendReplyDocumentRequestData().senderIp(engine.getUserIPProvider().userIP()),
+                new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class);
     }
 
