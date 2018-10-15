@@ -238,7 +238,7 @@ class BankCloudScenario {
             System.out.println("Reply on " + document.getDescription().getType());
             System.out.println("Open target document");
             try {
-                openDocflowDocumentAsPdf(docflow.getId().toString(), document.getId().toString());
+                openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ServiceException e) {
                 System.out.println("Ok, Cannot print document. " + e.getMessage());
             }
@@ -303,7 +303,7 @@ class BankCloudScenario {
 
     }
 
-    private void openDocflowDocumentAsPdf(String docflowId, String documentId) throws Exception {
+    private void openDocflowDocumentAsPdf(UUID docflowId, UUID documentId) throws Exception {
 
         byte[] document = downloadDocumentContent(docflowId, documentId);
 
@@ -342,7 +342,7 @@ class BankCloudScenario {
 
     }
 
-    private byte[] downloadDocumentContent(String docflowId, String documentId) throws Exception {
+    private byte[] downloadDocumentContent(UUID docflowId, UUID documentId) throws Exception {
         Document document = engine.getDocflowService()
                 .lookupDocumentAsync(docflowId, documentId)
                 .get()
@@ -412,12 +412,15 @@ class BankCloudScenario {
     }
 
 
-    private byte[] cloudDecryptDocument(String docflowId, String documentId) {
+    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId) {
+        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
         return engine.getDocflowService()
-                .cloudDecryptDocument(docflowId, documentId, senderCertificate.getContent(), init -> {
-                    ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-                    return smsProvider.apply(init.getRequestId());
-                }).getOrThrow();
+                .cloudDecryptDocument(
+                        docflowId.toString(),
+                        documentId.toString(),
+                        senderCertificate.getContent(),
+                        init -> smsProvider.apply(init.getRequestId())
+                ).getOrThrow();
     }
 
     private List<Certificate> findWorkingCerts() throws Exception {

@@ -205,7 +205,7 @@ public interface DocflowsApi {
      * @param request (required)
      */
     @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print")
-    CompletableFuture<ApiResponse<String>> print(
+    CompletableFuture<ApiResponse<byte[]>> print(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,

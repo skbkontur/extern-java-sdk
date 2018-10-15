@@ -25,8 +25,6 @@ package ru.kontur.extern_api.sdk.adaptor;
 
 public interface AdaptorBundle {
 
-    DocflowsAdaptor getDocflowsAdaptor();
-    
     HttpClient getHttpClientAdaptor();
 
 }

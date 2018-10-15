@@ -44,13 +44,6 @@ public class HttpClientBundle implements AdaptorBundle {
     }
 
     @Override
-    public DocflowsAdaptor getDocflowsAdaptor() {
-        DocflowsAdaptorImpl docflowsAdaptor = new DocflowsAdaptorImpl();
-        docflowsAdaptor.setHttpClient(this::getHttpClientAdaptor);
-        return docflowsAdaptor;
-    }
-
-    @Override
     public HttpClient getHttpClientAdaptor() {
         return new KonturHttpClient(konturConfiguredClient)
                 .setUserAgentProvider(providerHolder.getUserAgentProvider());

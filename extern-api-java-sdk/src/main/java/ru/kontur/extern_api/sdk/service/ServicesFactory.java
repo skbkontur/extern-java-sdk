@@ -23,7 +23,6 @@
  */
 package ru.kontur.extern_api.sdk.service;
 
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 

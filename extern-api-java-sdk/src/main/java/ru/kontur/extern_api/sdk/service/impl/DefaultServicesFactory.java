@@ -30,6 +30,7 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.AccountsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DraftsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.OrganizationsApi;
@@ -55,7 +56,7 @@ public class DefaultServicesFactory implements ServicesFactory {
         this.providerHolder = providerHolder;
         this.adaptorBundle = adaptorBundle;
         // todo: inject
-        this.configuredClient = new KonturConfiguredClient(Level.NONE)
+        this.configuredClient = new KonturConfiguredClient(Level.BASIC)
             .setReadTimeout(60, TimeUnit.SECONDS);
     }
 
@@ -75,10 +76,11 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public DocflowService getDocflowService() {
-        return providerHolder.copyProvidersTo(new DocflowServiceImpl(
-                providerHolder,
-                adaptorBundle.getDocflowsAdaptor()
-        ));
+        return new DocflowServiceImpl(
+                providerHolder.getAccountProvider(),
+                providerHolder.getUserIPProvider(),
+                createApi(DocflowsApi.class)
+        );
     }
 
     @Override
