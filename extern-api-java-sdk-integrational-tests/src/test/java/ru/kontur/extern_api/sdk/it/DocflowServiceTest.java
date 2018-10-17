@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.it.model.TestData;
+import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.it.utils.DocType;
+import ru.kontur.extern_api.sdk.it.utils.EngineUtils;
+import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
+import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -49,17 +57,10 @@ import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.it.model.TestData;
-import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.it.utils.DocType;
-import ru.kontur.extern_api.sdk.it.utils.EngineUtils;
-import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.it.utils.TestSuite;
-import ru.kontur.extern_api.sdk.it.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.Lazy;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
-import ru.kontur.extern_api.sdk.utils.Lazy;
 
 
 @DisplayName("Docflow service should be able to")
@@ -204,24 +205,24 @@ class DocflowServiceTest {
     @ParameterizedTest
     @DisplayName("get encrypted document content")
     @MethodSource("docflowsLazyFactory")
-    void testGetEncryptedContent(QueryContext<Docflow> docflowCxt) {
+    void testGetEncryptedContent(QueryContext<Docflow> docflowCxt) throws Exception {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
-        QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .ensureSuccess();
+        List<Document> docs = docflowService
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .getOrThrow();
 
-        assertNotNull(docsCxt.get());
-
-        for (Document d : docsCxt.get()) {
+        for (Document d : docs) {
 
             if (!d.hasEncryptedContent()) {
                 continue;
             }
 
             byte[] encrypted = docflowService
-                    .getEncryptedContent(docsCxt.setDocumentId(d.getId()))
+                    .getEncryptedContentAsync(docflow.getId(), d.getId())
+                    .get()
                     .getOrThrow();
 
             byte[] decrypt = engineUtils
@@ -239,24 +240,24 @@ class DocflowServiceTest {
     @ParameterizedTest
     @DisplayName("get decrypted document content")
     @MethodSource("docflowsLazyFactory")
-    void testGetDecryptedContent(QueryContext<Docflow> docflowCxt) {
+    void testGetDecryptedContent(QueryContext<Docflow> docflowCxt) throws Exception {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
-        QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .ensureSuccess();
+        List<Document> docs = docflowService
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .getOrThrow();
 
-        assertNotNull(docsCxt.get());
-
-        for (Document d : docsCxt.get()) {
+        for (Document d : docs) {
 
             if (!d.hasDecryptedContent()) {
                 continue;
             }
 
             byte[] decrypted = docflowService
-                    .getDecryptedContent(docsCxt.setDocumentId(d.getId()))
+                    .getDecryptedContentAsync(docflow.getId(), d.getId())
+                    .get()
                     .getOrThrow();
 
             if (d.getDescription().getCompressed()) {
@@ -302,17 +303,19 @@ class DocflowServiceTest {
     @ParameterizedTest
     @DisplayName("get document signatures")
     @MethodSource("docflowsLazyFactory")
-    void testGetSignatures(QueryContext<Docflow> docflowCxt) {
+    void testGetSignatures(QueryContext<Docflow> docflowCxt) throws Exception {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
-        QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .ensureSuccess();
+        List<Document> docs = docflowService
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .getOrThrow();
 
-        for (Document d : docsCxt.get()) {
+        for (Document d : docs) {
             List<Signature> signs = docflowService
-                    .getSignatures(docsCxt.setDocumentId(d.getId()))
+                    .getSignaturesAsync(docflow.getId(), d.getId())
+                    .get()
                     .getOrThrow();
 
             for (Signature sign : signs) {
@@ -328,13 +331,15 @@ class DocflowServiceTest {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
-        QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .ensureSuccess();
+        List<Document> docs = docflowService
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .getOrThrow();
 
-        for (Document d : docsCxt.get()) {
+        for (Document d : docs) {
             List<Signature> signs = docflowService
-                    .getSignatures(docsCxt.setDocumentId(d.getId()))
+                    .getSignaturesAsync(docflow.getId(), d.getId())
+                    .get()
                     .getOrThrow();
 
             for (Signature sign : signs) {
@@ -357,21 +362,22 @@ class DocflowServiceTest {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
-        QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .ensureSuccess();
+        List<Document> docs = docflowService
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .getOrThrow();
 
-        for (Document d : docsCxt.get()) {
+        for (Document d : docs) {
             List<Signature> signs = docflowService
-                    .getSignatures(docsCxt.setDocumentId(d.getId()))
+                    .getSignaturesAsync(docflow.getId(), d.getId())
+                    .get()
                     .getOrThrow();
 
             for (Signature sign : signs) {
-                byte[] signatureContent = docflowService.getSignatureContentAsync(
-                        docflow.getId().toString(),
-                        d.getId().toString(),
-                        sign.getId().toString()
-                ).get().getOrThrow();
+                byte[] signatureContent = docflowService
+                        .getSignatureContentAsync(docflow.getId(), d.getId(), sign.getId())
+                        .get()
+                        .getOrThrow();
 
                 assertNotNull(signatureContent);
             }
@@ -406,13 +412,12 @@ class DocflowServiceTest {
         ReplyDocument linkReply = engine.getAuthorizedHttpClient()
                 .followPostLink(generateLink.getHref(), cert, ReplyDocument.class);
 
-        ReplyDocument funcReply = engine.getDocflowService()
-                .generateReplyAsync(
-                        docflow.getId().toString(),
-                        document.getId().toString(),
-                        document.getReplyOptions()[0],
-                        certificateBase64
-                ).get().getOrThrow();
+        ReplyDocument funcReply = engine.getDocflowService().generateReplyAsync(
+                docflow.getId(),
+                document.getId(),
+                document.getReplyOptions()[0],
+                Base64.getDecoder().decode(certificateBase64)
+        ).get().getOrThrow();
 
         String lName = linkReply.getFilename();
         lName = lName.substring(0, lName.lastIndexOf("_"));

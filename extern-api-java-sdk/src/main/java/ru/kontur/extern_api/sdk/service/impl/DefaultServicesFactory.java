@@ -56,7 +56,7 @@ public class DefaultServicesFactory implements ServicesFactory {
         this.providerHolder = providerHolder;
         this.adaptorBundle = adaptorBundle;
         // todo: inject
-        this.configuredClient = new KonturConfiguredClient(Level.BASIC)
+        this.configuredClient = new KonturConfiguredClient(Level.BODY)
             .setReadTimeout(60, TimeUnit.SECONDS);
     }
 

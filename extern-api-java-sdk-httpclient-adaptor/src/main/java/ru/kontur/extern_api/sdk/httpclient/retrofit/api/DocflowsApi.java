@@ -35,6 +35,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
@@ -226,7 +227,7 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Query("documentType") String documentType,
-            @Body byte[] certificate
+            @Body CertificateContent certificate
     );
 
     /**

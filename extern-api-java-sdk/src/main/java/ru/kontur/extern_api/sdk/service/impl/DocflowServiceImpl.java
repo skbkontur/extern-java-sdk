@@ -36,6 +36,7 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.model.ByteContent;
+import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
@@ -280,7 +281,13 @@ public class DocflowServiceImpl implements DocflowService {
             UUID documentId,
             String replyType,
             byte[] signerCert) {
-        return api.generateReplyDocument(acc.accountId(), docflowId, documentId, replyType, signerCert)
+        return api.generateReplyDocument(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyType,
+                new CertificateContent(signerCert)
+        )
                 .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
 

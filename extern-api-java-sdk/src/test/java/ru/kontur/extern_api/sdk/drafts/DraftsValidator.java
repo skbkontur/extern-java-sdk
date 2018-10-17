@@ -29,9 +29,9 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.Draft.StatusEnum;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
@@ -47,7 +47,7 @@ public class DraftsValidator {
     public static void validateDraft(Draft draft) {
         assertNotNull("Draft must not be null!", draft);
         StandardObjectsValidator.validateId(draft.getId());
-        assertEquals("Status is wrong!", "new", draft.getStatus().getValue());
+        assertEquals("Status is wrong!", StatusEnum.NEW, draft.getStatus());
     }
 
     public static void validateDraftMeta(DraftMeta draftMeta) {
