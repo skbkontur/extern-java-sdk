@@ -79,9 +79,9 @@ public class DraftServiceCloudSignTest {
         serverPlease()
                 .when(request().withMethod("POST"), exactly(1))
                 .respond(response().withBody("{ "
-                        + "'links': [] , "
-                        + "'documents-to-sign': [], "
-                        + "'request-id': '123' }"
+                        + "\"links\": [] , "
+                        + "\"documents-to-sign\": [], "
+                        + "\"request-id\": \"123\" }"
                 ));
 
         QueryContext<Object> context = magicContext()
@@ -108,7 +108,7 @@ public class DraftServiceCloudSignTest {
                                 .withQueryStringParameter("requestId", "321"),
                         exactly(1))
                 .respond(response().withBody("{ "
-                        + "'signed-documents': [] }"
+                        + "\"signed-documents\": [] }"
                 ));
 
         QueryContext<Object> context = magicContext()
@@ -132,9 +132,9 @@ public class DraftServiceCloudSignTest {
         serverPlease()
                 .when(request().withPath(".*/cloud-sign$"), exactly(1))
                 .respond(response().withBody("{ "
-                        + "'links': [] , "
-                        + "'documents-to-sign': [], "
-                        + "'request-id': '123' }"
+                        + "\"links\": [] , "
+                        + "\"documents-to-sign\": [], "
+                        + "\"request-id\": \"123\" }"
                 ));
 
         serverPlease()
@@ -143,7 +143,7 @@ public class DraftServiceCloudSignTest {
                                 .withPath(".*/cloud-sign-confirm$")
                                 .withQueryStringParameter("code", "1234"),
                         exactly(1))
-                .respond(response().withBody("{ 'signed-documents': [] }"));
+                .respond(response().withBody("{ \"signed-documents\": [] }"));
 
         SignedDraft signedDraft = draftService
                 .cloudSignAsync(draftId, cxt -> "1234")

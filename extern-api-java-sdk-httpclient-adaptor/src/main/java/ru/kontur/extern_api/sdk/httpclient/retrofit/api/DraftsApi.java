@@ -53,7 +53,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param clientInfo draft metadata
      */
-    @POST("/v1/{accountId}/drafts")
+    @POST("v1/{accountId}/drafts")
     CompletableFuture<ApiResponse<Draft>> create(
             @Path("accountId") UUID accountId,
             @Body DraftMeta clientInfo
@@ -66,7 +66,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @DELETE("/v1/{accountId}/drafts/{draftId}")
+    @DELETE("v1/{accountId}/drafts/{draftId}")
     CompletableFuture<ApiResponse<Void>> delete(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -78,7 +78,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}")
+    @GET("v1/{accountId}/drafts/{draftId}")
     CompletableFuture<ApiResponse<Draft>> lookup(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -90,7 +90,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/meta")
+    @GET("v1/{accountId}/drafts/{draftId}/meta")
     CompletableFuture<ApiResponse<DraftMeta>> lookupMeta(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -103,7 +103,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param newMeta DraftMeta draft meta data
      */
-    @PUT("/v1/{accountId}/drafts/{draftId}/meta")
+    @PUT("v1/{accountId}/drafts/{draftId}/meta")
     CompletableFuture<ApiResponse<DraftMeta>> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -116,7 +116,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/check")
+    @POST("v1/{accountId}/drafts/{draftId}/check")
     CompletableFuture<ApiResponse<DataWrapper<CheckResultData>>> check(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -128,7 +128,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/prepare")
+    @POST("v1/{accountId}/drafts/{draftId}/prepare")
     CompletableFuture<ApiResponse<PrepareResult>> prepare(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -142,7 +142,7 @@ public interface DraftsApi {
      * @param deferred if set then server perform async operation
      * @param force force send
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/send")
+    @POST("v1/{accountId}/drafts/{draftId}/send")
     CompletableFuture<ApiResponse<Docflow>> send(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -157,7 +157,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @DELETE("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
+    @DELETE("v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     CompletableFuture<ApiResponse<Void>> deleteDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -171,7 +171,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
+    @GET("v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     CompletableFuture<ApiResponse<DraftDocument>> lookupDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -186,7 +186,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      * @param documentContents DocumentContents
      */
-    @PUT("/v1/{accountId}/drafts/{draftId}/documents/{documentId}")
+    @PUT("v1/{accountId}/drafts/{draftId}/documents/{documentId}")
     CompletableFuture<ApiResponse<DraftDocument>> updateDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -201,7 +201,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/print")
+    @GET("v1/{accountId}/drafts/{draftId}/documents/{documentId}/print")
     CompletableFuture<ApiResponse<byte[]>> printDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -215,7 +215,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentContents DocumentContents
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/documents")
+    @POST("v1/{accountId}/drafts/{draftId}/documents")
     CompletableFuture<ApiResponse<DraftDocument>> addDecryptedDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -229,7 +229,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
+    @GET("v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
     CompletableFuture<ApiResponse<byte[]>> getDecryptedDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -244,7 +244,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      * @param content decrypted document content
      */
-    @PUT("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
+    @PUT("v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
     CompletableFuture<ApiResponse<Void>> updateDecryptedDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -259,7 +259,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content")
+    @GET("v1/{accountId}/drafts/{draftId}/documents/{documentId}/encrypted-content")
     CompletableFuture<ApiResponse<byte[]>> getEncryptedDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -273,7 +273,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param documentId document identifier
      */
-    @GET("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
+    @GET("v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
     CompletableFuture<ApiResponse<byte[]>> getSignatureContent(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -288,7 +288,7 @@ public interface DraftsApi {
      * @param documentId document identifier
      * @param content byte[], base64 signature content
      */
-    @PUT("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
+    @PUT("v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature")
     CompletableFuture<ApiResponse<Void>> updateSignature(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -302,7 +302,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/cloud-sign")
+    @POST("v1/{accountId}/drafts/{draftId}/cloud-sign")
     CompletableFuture<ApiResponse<SignInitiation>> cloudSignDraft(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -316,7 +316,7 @@ public interface DraftsApi {
      * @param requestId Sign operation identifier
      * @param code Confirmation code from sms
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/cloud-sign-confirm")
+    @POST("v1/{accountId}/drafts/{draftId}/cloud-sign-confirm")
     CompletableFuture<ApiResponse<SignedDraft>> confirmCloudSigning(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -334,7 +334,7 @@ public interface DraftsApi {
      * @param version Declaration version
      * @param data metadata of an USN document
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
+    @POST("v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
     CompletableFuture<ApiResponse<Void>> buildDeclaration(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -353,7 +353,7 @@ public interface DraftsApi {
      * @param version Declaration version
      * @param data UsnServiceContractInfo meta data of an USN document
      */
-    @POST("/v1/{accountId}/drafts/{draftId}/build-document")
+    @POST("v1/{accountId}/drafts/{draftId}/build-document")
     CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDeclaration(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,

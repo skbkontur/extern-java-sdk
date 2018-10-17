@@ -34,14 +34,15 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 
+import java.util.Base64;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
@@ -91,19 +92,17 @@ public class DraftServicePrintDocumentTest {
     @Test
     public void testPrintDocument_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{}");
-        assertEquals("Response string is wrong!", "{}", getString());
-        assertEquals("Response string is wrong!", "{}", getStringAsync());
+        ResponseData.INSTANCE.setResponseMessage("\"\"");
+        Assertions.assertArrayEquals(new byte[0], getPrintForm());
     }
 
     @Test
     public void testPrintDocument() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"}");
-        assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-            getString());
-        assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-            getStringAsync());
+        byte[] bytes = {1, 2, 3};
+
+        ResponseData.INSTANCE.setResponseMessage('"' + Base64.getEncoder().encodeToString(bytes) + '"');
+        Assertions.assertArrayEquals(bytes, getPrintForm());
     }
 
     @Test
@@ -152,15 +151,18 @@ public class DraftServicePrintDocumentTest {
         QueryContext<String> queryContext = new QueryContext<>();
         queryContext.setDraftId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
-        return engine.getDraftService().printDocument(queryContext).get();
+        return (queryContext).get();
     }
 
-    private String getStringAsync() {
+    private byte[] getPrintForm() {
         try {
-            return engine.getDraftService().printDocumentAsync(StandardValues.ID, StandardValues.ID)
+            return engine.getDraftService().getDocumentAsPdfAsync(
+                    UUID.fromString(StandardValues.ID),
+                    UUID.fromString(StandardValues.ID)
+            )
                 .get().get();
         }
-        catch (InterruptedException | ExecutionException e) {
+        catch (Exception e) {
             fail();
             return null;
         }

@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk.common;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * MIT License
@@ -55,6 +56,7 @@ public interface StandardValues {
 
     String DATE = "2018-04-03T06:24:33Z";
     String ID = "00000000-0000-0000-0000-000000000000";
+    UUID GUID = new UUID(0, 0);
 
     static Date standardDate() {
         try {

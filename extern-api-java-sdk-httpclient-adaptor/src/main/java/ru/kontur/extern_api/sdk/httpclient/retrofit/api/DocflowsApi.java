@@ -62,7 +62,7 @@ public interface DocflowsApi {
      * @param order sort order (sorting field -- date)
      * @param filters filters by {@link DocflowFilter}
      */
-    @GET("/v1/{accountId}/docflows")
+    @GET("v1/{accountId}/docflows")
     CompletableFuture<ApiResponse<DocflowPage>> search(
             @Path("accountId") UUID accountId,
             @Query("skip") long skip,
@@ -77,7 +77,7 @@ public interface DocflowsApi {
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}")
+    @GET("v1/{accountId}/docflows/{docflowId}")
     CompletableFuture<ApiResponse<Docflow>> get(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId
@@ -89,7 +89,7 @@ public interface DocflowsApi {
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents")
     CompletableFuture<ApiResponse<List<Document>>> getDocuments(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId
@@ -102,7 +102,7 @@ public interface DocflowsApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}")
     CompletableFuture<ApiResponse<Document>> getDocument(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -116,7 +116,7 @@ public interface DocflowsApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description")
     CompletableFuture<ApiResponse<DocflowDocumentDescription>> getDocumentDescription(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -130,7 +130,7 @@ public interface DocflowsApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content")
     CompletableFuture<ApiResponse<byte[]>> getEncryptedContent(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -144,7 +144,7 @@ public interface DocflowsApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content")
     CompletableFuture<ApiResponse<byte[]>> getDecryptedContent(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -158,7 +158,7 @@ public interface DocflowsApi {
      * @param docflowId Docflow object identifier (required)
      * @param documentId Document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures")
     CompletableFuture<ApiResponse<List<Signature>>> getSignatures(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -173,7 +173,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param signatureId Signature identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}")
     CompletableFuture<ApiResponse<Signature>> getSignature(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -189,7 +189,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param signatureId Signature identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content")
     CompletableFuture<ApiResponse<byte[]>> getSignatureContent(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -205,7 +205,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param request (required)
      */
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print")
     CompletableFuture<ApiResponse<byte[]>> print(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -221,7 +221,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param documentType Reply document identifier (required)
      */
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/generate-reply")
     CompletableFuture<ApiResponse<ReplyDocument>> generateReplyDocument(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -238,7 +238,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param replyId Reply document identifier (required)
      */
-    @GET("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}")
     CompletableFuture<ApiResponse<ReplyDocument>> getReplyDocument(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -255,7 +255,7 @@ public interface DocflowsApi {
      * @param replyId Reply document identifier (required)
      * @param content (required)
      */
-    @PUT("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
+    @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/content")
     CompletableFuture<ApiResponse<ReplyDocument>> updateReplyDocumentContent(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -264,7 +264,7 @@ public interface DocflowsApi {
             @Body byte[] content
     );
 
-    @PUT("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
+    @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
     CompletableFuture<ApiResponse<ReplyDocument>> putReplyDocumentSignature(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -282,7 +282,7 @@ public interface DocflowsApi {
      * @param replyId Reply document identifier (required)
      * @param data (required)
      */
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/send")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/send")
     CompletableFuture<ApiResponse<Docflow>> sendReply(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -299,7 +299,7 @@ public interface DocflowsApi {
      * @param documentId Document identifier (required)
      * @param replyId Reply document identifier (required)
      */
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign")
     CompletableFuture<ApiResponse<SignInitiation>> cloudSignReplyDocumentInit(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -308,7 +308,7 @@ public interface DocflowsApi {
             @Query("forceConfirmation") boolean forceConfirmation
     );
 
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
     CompletableFuture<ApiResponse<SignConfirmResultData>> cloudSignReplyDocumentConfirm(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -318,7 +318,7 @@ public interface DocflowsApi {
             @Query("code") String code
     );
 
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content")
     CompletableFuture<ApiResponse<DecryptInitiation>> cloudDecryptDocumentInit(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
@@ -326,7 +326,7 @@ public interface DocflowsApi {
             @Body byte[] certificate
     );
 
-    @POST("/v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content-confirm")
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content-confirm")
     CompletableFuture<ApiResponse<byte[]>> cloudDecryptDocumentConfirm(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,

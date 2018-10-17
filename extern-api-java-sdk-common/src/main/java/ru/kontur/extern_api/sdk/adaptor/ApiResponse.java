@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
-import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
 
@@ -43,6 +42,9 @@ public class ApiResponse<T> {
         this.headers = headers;
         this.data = data;
         this.errorInfo = error;
+        if (error != null) {
+            this.errorInfo.setStatusCode(code);
+        }
     }
 
     /**
@@ -51,7 +53,7 @@ public class ApiResponse<T> {
      * @param data The object deserialized from response bod
      */
     public ApiResponse(int statusCode, Map<String, List<String>> headers, T data) {
-        this(statusCode, headers, data, null);
+        this(statusCode, headers, data, new ErrorInfo());
     }
 
     /**
@@ -64,7 +66,7 @@ public class ApiResponse<T> {
     }
 
     public ApiResponse(int statusCode, Map<String, List<String>> headers) {
-        this(statusCode, headers, null, null);
+        this(statusCode, headers, null, new ErrorInfo());
     }
 
     public int getStatusCode() {
@@ -91,7 +93,7 @@ public class ApiResponse<T> {
 
     /**
      * @return ApiException with info from {@link ApiResponse#getErrorInfo()} or null if {@link
-     * ApiResponse#isSuccessful()}
+     *         ApiResponse#isSuccessful()}
      */
     public ApiException asApiException() {
 

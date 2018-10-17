@@ -25,7 +25,9 @@ package ru.kontur.extern_api.sdk.httpclient.retrofit;
 
 import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
+import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -81,9 +83,19 @@ public final class ApiUtils {
 
     private <T> ErrorInfo errorInfoFromBody(Response<T> response, ResponseBody body) {
         try {
-            return gson.fromJson(body.string(), ErrorInfo.class);
-        } catch (IOException e) {
+            String string = body.string();
+            ErrorInfo errorInfo = gson.fromJson(string, ErrorInfo.class);
+
+            if (errorInfo.getId() == null) {
+                // all errors from public should be ErrorInfo-like
+                errorInfo.setId("not-an-error-info");
+                errorInfo.setMessage(string);
+            }
+
+            return errorInfo;
+        } catch (JsonSyntaxException | NullPointerException | IOException e) {
             ErrorInfo ei = new ErrorInfo();
+            ei.setId("invalid-error-info");
             ei.setStatusCode(response.code());
             ei.setMessage(response.message());
             ei.setThrowable(e);

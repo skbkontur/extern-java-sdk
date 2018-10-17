@@ -34,6 +34,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
@@ -90,19 +92,17 @@ public class DraftServiceGetEncryptedDocumentContentTest {
     @Test
     public void testGetSignatureContent_Empty() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{}");
-        assertEquals("Response string is wrong!", "{}", getString());
-        assertEquals("Response string is wrong!", "{}", getStringAsync());
+        ResponseData.INSTANCE.setResponseMessage("\"\"");
+        Assertions.assertArrayEquals(new byte[0], getContent());
     }
 
     @Test
     public void testGetEncryptedDocumentContent() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"}");
-        assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-                getString());
-        assertEquals("Response string is wrong!", "{\"id\": \"" + StandardValues.ID + "\"}",
-                getStringAsync());
+        byte[] bytes = {1, 2, 3};
+
+        ResponseData.INSTANCE.setResponseMessage('"' + Base64.getEncoder().encodeToString(bytes) + '"');
+        Assertions.assertArrayEquals(bytes, getContent());
     }
 
     @Test
@@ -147,17 +147,10 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
 
-    private String getString() {
-        QueryContext<String> queryContext = new QueryContext<>();
-        queryContext.setDraftId(StandardValues.ID);
-        queryContext.setDocumentId(StandardValues.ID);
-        return engine.getDraftService().getEncryptedDocumentContent(queryContext).get();
-    }
-
-    private String getStringAsync() {
+    private byte[] getContent() {
         try {
             return engine.getDraftService()
-                    .getEncryptedDocumentContentAsync(StandardValues.ID, StandardValues.ID).get()
+                    .getEncryptedDocumentContentAsync(StandardValues.GUID, StandardValues.GUID).get()
                     .get();
         } catch (InterruptedException | ExecutionException e) {
             fail();

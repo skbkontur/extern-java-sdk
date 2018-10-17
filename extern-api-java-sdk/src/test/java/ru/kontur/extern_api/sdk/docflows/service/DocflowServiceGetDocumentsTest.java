@@ -213,10 +213,9 @@ public class DocflowServiceGetDocumentsTest {
     }
 
     private void checkResponseCode(int code) {
-        QueryContext<Object> queryContext = new QueryContext<>();
-        queryContext.setDocflowId(StandardValues.ID);
         QueryContext<Docflow> docflowQueryContext = engine.getDocflowService()
-                .lookupDocflow(queryContext);
+                .lookupDocflow(new QueryContext<>().setDocflowId(StandardValues.ID));
+
         assertNull("documents must be null!", docflowQueryContext.get());
         assertNotNull("ServiceError must not be null!", docflowQueryContext.getServiceError());
         assertEquals("Response code is wrong!", code,
