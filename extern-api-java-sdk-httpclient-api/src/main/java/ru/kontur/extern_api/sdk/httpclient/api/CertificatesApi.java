@@ -28,8 +28,12 @@ import java.util.concurrent.CompletableFuture;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 
+
+@ApiResponseConverter(LibapiResponseConverter.class)
 public interface CertificatesApi {
 
     @GET("v1/{accountId}/certificates")

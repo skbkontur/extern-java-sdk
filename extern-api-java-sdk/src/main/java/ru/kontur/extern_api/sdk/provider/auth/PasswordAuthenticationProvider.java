@@ -23,100 +23,44 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import static ru.kontur.extern_api.sdk.adaptor.QueryContext.SESSION_ID;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.portal.AuthApi;
+import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.provider.UriProvider;
+import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
-/**
- * @author Aleksey Sukhorukov
- */
+
 public class PasswordAuthenticationProvider implements AuthenticationProvider {
 
-    private ApiKeyProvider apiKeyProvider;
-    private LoginAndPasswordProvider loginAndPasswordProvider;
-    private UriProvider authBaseUriProvider;
-    private String sid;
-
-    private HttpClient httpClient;
+    private String apiKey;
+    private LoginAndPasswordProvider creds;
+    private final AuthApi authApi;
 
     public PasswordAuthenticationProvider(
-            UriProvider authBaseUriProvider,
-            LoginAndPasswordProvider loginAndPasswordProvider,
-            ApiKeyProvider apiKeyProvider) {
+            AuthApi authApi,
+            LoginAndPasswordProvider creds,
+            String apiKey
+    ) {
+        this.authApi = authApi;
 
-        this.authBaseUriProvider = authBaseUriProvider;
-        this.loginAndPasswordProvider = loginAndPasswordProvider;
-        this.apiKeyProvider = apiKeyProvider;
-    }
-
-    @Override
-    public PasswordAuthenticationProvider httpClient(HttpClient httpClient) {
-        this.httpClient = httpClient;
-        return this;
+        this.creds = creds;
+        this.apiKey = apiKey;
     }
 
     @Override
     public QueryContext<String> sessionId() {
-        QueryContext<String> cxt = new QueryContext<String>("")
-                .setApiKeyProvider(apiKeyProvider);
+        return QueryContextUtils.join(
+                authApi.passwordAuthentication(creds.getLogin(), apiKey, null, creds.getPass())
+                        .thenApply(QueryContextUtils.contextAdaptor("sid"))
+                        .thenApply(cxt -> cxt.map(QueryContext.SESSION_ID, SessionResponse::getSid))
+        );
+    }
 
-        if (sid != null) {
-            return new QueryContext<String>().setResult(sid, QueryContext.SESSION_ID);
-        }
-
-        try {
-
-            if (loginAndPasswordProvider == null) {
-                return cxt.setServiceError("Missing the login provider");
-            }
-
-            String login = loginAndPasswordProvider.getLogin();
-            String pass = loginAndPasswordProvider.getPass();
-            String apiKey = apiKeyProvider.getApiKey();
-
-            if (apiKey == null) {
-                cxt.setServiceError("Missing the required parameter 'api key'");
-            }
-
-            httpClient.setServiceBaseUri(authBaseUriProvider.getUri());
-
-            Map<String, Object> queryParams = new HashMap<String, Object>() {
-                private static final long serialVersionUID = 1L;
-
-                {
-                    put("login", login);
-                    put("apiKey", apiKey);
-                }
-            };
-
-            Map<String, String> headerParams = Collections.singletonMap("Content-Type", "text/plain");
-            ApiResponse<ResponseSid> resp = httpClient.submitHttpRequest("/authenticate-by-pass", "POST",
-                    queryParams,
-                    pass,
-                    headerParams,
-                    Collections.emptyMap(),
-                    ResponseSid.class
-            );
-
-            if (!resp.isSuccessful()) {
-                throw resp.asApiException();
-            }
-            cxt.setResult(sid = resp.getData().getSid(), SESSION_ID);
-        } catch (ApiException x) {
-            cxt.setServiceError(x);
-        }
-
-        return cxt;
+    @Override
+    public PasswordAuthenticationProvider httpClient(HttpClient httpClient) {
+        return this;
     }
 
 }

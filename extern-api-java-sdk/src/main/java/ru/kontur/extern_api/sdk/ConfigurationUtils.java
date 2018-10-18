@@ -23,12 +23,14 @@
 
 package ru.kontur.extern_api.sdk;
 
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
@@ -101,11 +103,9 @@ public final class ConfigurationUtils {
         requireParam(config::getAuthBaseUri, "auth base uri", authType);
         requireParam(config::getApiKey, "api key", authType);
 
-        LoginAndPasswordProvider form = form(config.getLogin(), config.getPass());
-
-        return new PasswordAuthenticationProvider(
-                config::getAuthBaseUri, form, config::getApiKey
-        );
+        return AuthenticationProviderBuilder.createFor(config.getAuthBaseUri(), Level.BODY)
+                .withApiKey(config.getApiKey())
+                .passwordAuthentication(config.getLogin(), config.getPass());
     }
 
     public static CertificateAuthenticationProvider createCertificateAuthProvider(

@@ -21,15 +21,27 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.adaptor;
+package ru.kontur.extern_api.sdk.portal.model;
 
-/**
- * @param <R> a result type
- * @author Aleksey Sukhorukov
- */
-@FunctionalInterface
-public interface Query<R> {
+import ru.kontur.extern_api.sdk.model.Link;
 
-    QueryContext<R> apply(QueryContext<?> context);
+public class CertificateAuthenticationQuest {
 
+    private byte[] encryptedKey;
+
+    private String[] trustedThumbprints;
+
+    private Link link;
+
+    public byte[] getEncryptedKey() {
+        return encryptedKey;
+    }
+
+    public String[] getTrustedThumbprints() {
+        return trustedThumbprints;
+    }
+
+    public Link getLink() {
+        return link;
+    }
 }

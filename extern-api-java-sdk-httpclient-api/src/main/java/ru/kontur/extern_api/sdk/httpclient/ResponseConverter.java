@@ -23,70 +23,12 @@
 
 package ru.kontur.extern_api.sdk.httpclient;
 
-
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import java.io.IOException;
-import java.util.Optional;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
-final class ResponseConverter {
+public interface ResponseConverter {
 
-    private final Gson gson;
-
-    ResponseConverter(Gson gson) {
-        this.gson = gson;
-    }
-
-    <T> ApiResponse<T> toApiResponse(Response<T> response) {
-        if (response.isSuccessful()) {
-            return new ApiResponse<>(
-                    response.code(),
-                    response.headers().toMultimap(),
-                    response.body());
-        }
-
-        ErrorInfo errorInfo = Optional
-                .ofNullable(response.errorBody())
-                .map(body -> errorInfoFromBody(response, body))
-                .orElseGet(() -> {
-                    ErrorInfo ei = new ErrorInfo();
-                    ei.setStatusCode(response.code());
-                    ei.setMessage(response.message());
-                    return ei;
-                });
-
-        return new ApiResponse<>(
-                response.code(),
-                response.headers().toMultimap(),
-                errorInfo
-        );
-    }
-
-
-    private <T> ErrorInfo errorInfoFromBody(Response<T> response, ResponseBody body) {
-        try {
-            String string = body.string();
-            ErrorInfo errorInfo = gson.fromJson(string, ErrorInfo.class);
-
-            if (errorInfo.getId() == null) {
-                // all errors from public should be ErrorInfo-like
-                errorInfo.setId("not-an-error-info");
-                errorInfo.setMessage(string);
-            }
-
-            return errorInfo;
-        } catch (JsonSyntaxException | NullPointerException | IOException e) {
-            ErrorInfo ei = new ErrorInfo();
-            ei.setId("invalid-error-info");
-            ei.setStatusCode(response.code());
-            ei.setMessage(response.message());
-            ei.setThrowable(e);
-            return ei;
-        }
-    }
+    <T> ApiResponse<T> toApiResponse(Gson gson, Response<T> response);
 
 }

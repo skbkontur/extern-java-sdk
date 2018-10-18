@@ -21,18 +21,16 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.provider.auth;
+package ru.kontur.extern_api.sdk.portal.model;
 
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+public class ServiceUserBinding {
 
-public interface AuthApi {
+    private final String serviceUserId;
 
+    private final String phone;
 
-//    @POST("/sessions/v5.12/sessions/refresh")
-//    OperationResult<SessionResponse> refreshSession(
-//            @Query("auth.sid") sessionId,
-//            @Query("refreshToken") refreshToken
-//    );
-
+    public ServiceUserBinding(String serviceUserId, String phone) {
+        this.serviceUserId = serviceUserId;
+        this.phone = phone;
+    }
 }

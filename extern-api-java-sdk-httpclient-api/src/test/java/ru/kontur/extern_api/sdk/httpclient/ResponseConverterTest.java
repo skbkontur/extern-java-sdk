@@ -39,11 +39,11 @@ class ResponseConverterTest {
     @DisplayName("`Ok` should be parsed to api response")
     void retrofitOk() {
 
-        ResponseConverter apiUtils = new ResponseConverter(GsonProvider.getGson());
+        LibapiResponseConverter apiUtils = new LibapiResponseConverter();
 
         Response<Object> response = Response.success(null);
 
-        ApiResponse<Object> apiResponse = apiUtils.toApiResponse(response);
+        ApiResponse<Object> apiResponse = apiUtils.toApiResponse(GsonProvider.getLibapiCompatibleGson(), response);
 
         Assertions.assertEquals(200, apiResponse.getStatusCode());
         Assertions.assertNull(apiResponse.getData());
@@ -53,7 +53,7 @@ class ResponseConverterTest {
     @DisplayName("`ErrorInfo` should be parsed to response with error")
     void retrofitError() {
 
-        ResponseConverter apiUtils = new ResponseConverter(GsonProvider.getGson());
+        LibapiResponseConverter apiUtils = new LibapiResponseConverter();
 
         ResponseBody errorBody = ResponseBody.create(MediaType.parse("application/json"), "{"
                 + "  'id': 'urn:nss:nid',"
@@ -66,7 +66,7 @@ class ResponseConverterTest {
 
         Response<Object> response = Response.error(404, errorBody);
 
-        ApiResponse<Object> apiResponse = apiUtils.toApiResponse(response);
+        ApiResponse<Object> apiResponse = apiUtils.toApiResponse(GsonProvider.getLibapiCompatibleGson(), response);
 
         Assertions.assertEquals(404, apiResponse.getStatusCode());
         Assertions.assertNotNull(apiResponse.getErrorInfo());

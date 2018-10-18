@@ -40,14 +40,16 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
  */
 public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
 
-    private final ResponseConverter apiUtils;
-
-    public static ApiResponseCallAdapterFactory create(Gson gson) {
-        return new ApiResponseCallAdapterFactory(new ResponseConverter(gson));
+    public static ApiResponseCallAdapterFactory create(Gson gson, ResponseConverter converter) {
+        return new ApiResponseCallAdapterFactory(gson, converter);
     }
 
-    private ApiResponseCallAdapterFactory(ResponseConverter apiUtils) {
-        this.apiUtils = apiUtils;
+    private final Gson gson;
+    private final ResponseConverter converter;
+
+    private ApiResponseCallAdapterFactory(Gson gson, ResponseConverter converter) {
+        this.gson = gson;
+        this.converter = converter;
     }
 
     @Override
@@ -63,7 +65,7 @@ public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
 
         if (getRawType(innerType) != ApiResponse.class) {
             // Generic type is not Response<T>. Use it for body-only adapter.
-            return new BodyCallAdapter<>(innerType, apiUtils);
+            return new BodyCallAdapter<>(innerType, gson, converter);
         }
 
         // Generic type is Response<T>. Extract T and create the Response version of the adapter.
@@ -72,17 +74,19 @@ public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
                     + " as Response<Foo> or Response<? extends Foo>");
         }
         Type responseType = getParameterUpperBound(0, (ParameterizedType) innerType);
-        return new ResponseCallAdapter<>(responseType, apiUtils);
+        return new ResponseCallAdapter<>(responseType, gson, converter);
     }
 
     private static final class BodyCallAdapter<R> implements CallAdapter<R, CompletableFuture<R>> {
 
         private final Type responseType;
-        private final ResponseConverter apiUtils;
+        private final Gson gson;
+        private final ResponseConverter converter;
 
-        BodyCallAdapter(Type responseType, ResponseConverter apiUtils) {
+        BodyCallAdapter(Type responseType, Gson gson, ResponseConverter converter) {
             this.responseType = responseType;
-            this.apiUtils = apiUtils;
+            this.gson = gson;
+            this.converter = converter;
         }
 
         @Override
@@ -109,7 +113,7 @@ public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
                         future.complete(response.body());
                     } else {
                         future.completeExceptionally(
-                                apiUtils.toApiResponse(response).asApiException()
+                                converter.toApiResponse(gson, response).asApiException()
                         );
                     }
                 }
@@ -128,11 +132,13 @@ public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
             implements CallAdapter<R, CompletableFuture<ApiResponse<R>>> {
 
         private final Type responseType;
-        private final ResponseConverter apiUtils;
+        private final Gson gson;
+        private final ResponseConverter converter;
 
-        ResponseCallAdapter(Type responseType, ResponseConverter apiUtils) {
+        ResponseCallAdapter(Type responseType, Gson gson, ResponseConverter converter) {
             this.responseType = responseType;
-            this.apiUtils = apiUtils;
+            this.gson = gson;
+            this.converter = converter;
         }
 
         @Override
@@ -165,7 +171,7 @@ public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
             });
 
             return future
-                    .thenApply(apiUtils::toApiResponse)
+                    .thenApply(response -> converter.toApiResponse(gson, response))
                     .exceptionally(ApiResponse::error);
         }
     }

@@ -27,9 +27,12 @@ import java.util.concurrent.CompletableFuture;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 
+@ApiResponseConverter(LibapiResponseConverter.class)
 public interface EventsApi {
 
     /**

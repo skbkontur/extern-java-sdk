@@ -3,6 +3,7 @@ package ru.kontur.extern_api.sdk.portal;
 import java.util.HashMap;
 import java.util.Map;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
@@ -33,9 +34,11 @@ public class CertificatesClient {
 
         ProviderSuite providerHolder = new ProviderSuite();
         providerHolder.setUserAgentProvider(new DefaultUserAgentProvider());
-        this.httpClient = new KonturHttpClient(
-                new KonturConfiguredClient(logLevel, serviceBaseUrl.getUri())
-        );
+        this.httpClient = new KonturHttpClient(new KonturConfiguredClient(
+                logLevel,
+                serviceBaseUrl.getUri(),
+                GsonProvider.getPortalCompatibleGson()
+        ));
     }
 
     /**

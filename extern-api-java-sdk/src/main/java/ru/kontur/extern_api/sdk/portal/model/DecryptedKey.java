@@ -20,13 +20,16 @@
  * SOFTWARE.
  *
  */
-package ru.kontur.extern_api.sdk.adaptor;
 
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.EventsPage;
+package ru.kontur.extern_api.sdk.portal.model;
 
+import org.jetbrains.annotations.NotNull;
 
-public interface EventsAdaptor {
-    
-    CompletableFuture<QueryContext<EventsPage>> getEvents(QueryContext<?> cxt);
+public class DecryptedKey {
+
+    private final byte[] decryptedKey;
+
+    public DecryptedKey(@NotNull byte[] decryptedKey) {
+        this.decryptedKey = decryptedKey;
+    }
 }

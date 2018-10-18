@@ -23,7 +23,9 @@
 
 package ru.kontur.extern_api.sdk.httpclient;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -43,14 +45,19 @@ public class KonturConfiguredClient {
     private final TokenAuth authSidAuth = new TokenAuth(TokenLocation.HEADER, "Authorization");
     private final TokenAuth userAgentAuth = new TokenAuth(TokenLocation.HEADER, "User-Agent");
 
-    private final Retrofit.Builder serviceBuilder;
     private final OkHttpClient.Builder okBuilder;
 
     private String baseUrl;
+    private Gson gson;
 
-    public KonturConfiguredClient(@NotNull Level loggingLevel, @NotNull String baseUrl) {
+    public KonturConfiguredClient(
+            @NotNull Level loggingLevel,
+            @NotNull String baseUrl,
+            @NotNull Gson gson
+    ) {
 
-        this.baseUrl = Objects.requireNonNull(baseUrl, "baseUrl");
+        setServiceBaseUrl(baseUrl);
+        setGson(gson);
 
         Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -61,19 +68,40 @@ public class KonturConfiguredClient {
                 .addInterceptor(new HttpLoggingInterceptor(logger::info).setLevel(loggingLevel))
                 .followRedirects(false)
                 .followSslRedirects(false);
-
-        this.serviceBuilder = new Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonCustomConverterFactory.create(getGsonBuilder().create()))
-                .addCallAdapterFactory(ApiResponseCallAdapterFactory.create(getGsonBuilder().create()));
     }
 
     public KonturConfiguredClient(@NotNull Level logLevel) {
-        this(logLevel, "");
+        this(logLevel, "", GsonProvider.getLibapiCompatibleGson());
     }
 
     public <S> S createService(Class<S> serviceClass) {
-        return serviceBuilder
+
+        ApiResponseConverter converter = serviceClass.getAnnotation(ApiResponseConverter.class);
+
+        if (converter == null) {
+            throw new IllegalArgumentException(
+                    "Service class must be annotated with " + ApiResponseConverter.class.getSimpleName()
+                            + " to specify response conversion policy."
+            );
+        }
+
+        ResponseConverter responseConverter;
+        try {
+            responseConverter = converter.value().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException |
+                IllegalAccessException |
+                InvocationTargetException |
+                NoSuchMethodException e) {
+            throw new IllegalArgumentException(
+                    "There is no default constructor in " + converter.value().getSimpleName(), e
+            );
+        }
+
+        return new Retrofit.Builder()
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonCustomConverterFactory.create(getGsonBuilder().create()))
+                .addCallAdapterFactory(ApiResponseCallAdapterFactory
+                        .create(getGsonBuilder().create(), responseConverter))
                 .baseUrl(baseUrl)
                 .client(okBuilder.build())
                 .build()
@@ -133,11 +161,16 @@ public class KonturConfiguredClient {
         return okBuilder;
     }
 
+    public KonturConfiguredClient setGson(Gson gson) {
+        this.gson = gson;
+        return this;
+    }
+
     /**
      * @return gson builder that creates gson with server-acceptable serialization politic
      */
     public GsonBuilder getGsonBuilder() {
-        return GsonProvider.getPreConfiguredGsonBuilder();
+        return gson.newBuilder();
     }
 
     public String getBaseUrl() {

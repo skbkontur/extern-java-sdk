@@ -2061,13 +2061,13 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query} в отдельном потоке. Операция принимает в качестве
+     * Метод выполняет операцию в отдельном потоке. Операция принимает в качестве
      * параметра данный контекст.
      *
      * @param query операция
      * @return квитанция на результат операции
      */
-    public CompletableFuture<QueryContext<R>> applyAsync(Query<R> query) {
+    public CompletableFuture<QueryContext<R>> applyAsync(Function<QueryContext<R>, QueryContext<R>> query) {
         if (isFail()) {
             return CompletableFuture.completedFuture(this);
         }
@@ -2076,13 +2076,13 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод выполняет операцию типа {@link Query} в текущем потоке. Операция принимает в качестве
+     * Метод выполняет операцию в текущем потоке. Операция принимает в качестве
      * параметра данный контекст.
      *
      * @param query операция
      * @return контекст с результатом операции
      */
-    public QueryContext<R> apply(Query<R> query) {
+    public QueryContext<R> apply(Function<QueryContext<R>, QueryContext<R>> query) {
         if (isFail()) {
             return this;
         }

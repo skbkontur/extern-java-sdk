@@ -43,7 +43,6 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.ISmsCodeProvider;
 
 
 /**
@@ -810,7 +809,7 @@ public interface DraftService {
      * Асинхронный метод для создания облачных подписей документов
      *
      * @param draftId идентификатор черновика, документы которого необходимо подписать
-     * @param codeProvider провайдер для получения смс-кода подтверждения {@link ISmsCodeProvider}
+     * @param codeProvider провайдер для получения смс-кода подтверждения
      * @return список подписанных документов
      * @see SignedDraft
      */

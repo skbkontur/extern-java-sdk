@@ -59,7 +59,7 @@ public class OrganizationServiceTest {
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
     private static final String PATH = "/organizations";
-    private static final Gson GSON = GsonProvider.getGson();
+    private static final Gson GSON = GsonProvider.getLibapiCompatibleGson();
 
     private static ClientAndServer mockServer;
     private OrganizationService organizationService;

@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9,8 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,19 +21,13 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.provider;
+package ru.kontur.extern_api.sdk.portal.model;
 
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+public class AuthError {
 
-@FunctionalInterface
-public interface ISmsCodeProvider {
+    private String code;
 
-    /**
-     * Returns confirmation code required in cloud-crypt methods.
-     *
-     * @param cxt context that might be useful for acquiring code
-     * @return confirmation codes
-     */
-    String getCode(QueryContext<?> cxt);
-
+    public String getCode() {
+        return code;
+    }
 }

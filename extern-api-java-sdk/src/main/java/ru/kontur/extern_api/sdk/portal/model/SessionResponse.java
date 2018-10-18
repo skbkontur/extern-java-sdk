@@ -21,10 +21,19 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.adaptor;
+package ru.kontur.extern_api.sdk.portal.model;
 
-public interface AdaptorBundle {
+public class SessionResponse {
 
-    HttpClient getHttpClientAdaptor();
+    private String sid;
 
+    private String refreshToken;
+
+    public String getSid() {
+        return sid;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 }

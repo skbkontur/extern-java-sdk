@@ -64,7 +64,7 @@ public class KonturHttpClient implements HttpClient {
 
 
     private final KonturConfiguredClient client;
-    private final ResponseConverter responseConverter;
+    private final LibapiResponseConverter responseConverter;
 
     private UserAgentProvider userAgentProvider;
     private String serviceBaseUri;
@@ -72,7 +72,7 @@ public class KonturHttpClient implements HttpClient {
 
     public KonturHttpClient(KonturConfiguredClient client) {
         this.client = client;
-        this.responseConverter = new ResponseConverter(client.getGsonBuilder().create());
+        this.responseConverter = new LibapiResponseConverter();
         this.serviceBaseUri = "";
         setReadTimeout(readTimeoutMillis);
     }
@@ -160,7 +160,7 @@ public class KonturHttpClient implements HttpClient {
         try {
             Call call = httpClient.newCall(request.build());
             retrofit2.Response<T> response = parseResponse(call.execute(), type);
-            return responseConverter.toApiResponse(response);
+            return responseConverter.toApiResponse(client.getGsonBuilder().create(), response);
         } catch (IOException e) {
             throw new ApiException(e);
         }

@@ -35,6 +35,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -51,6 +53,7 @@ import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.SortOrder;
 
 
+@ApiResponseConverter(LibapiResponseConverter.class)
 public interface DocflowsApi {
 
     /**

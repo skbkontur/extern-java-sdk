@@ -56,7 +56,7 @@ public class Resources {
     }
 
     public static <T> T loadFromJson(String path, Class<T> type) {
-        return loadFromJson(path, type, GsonProvider.getGson());
+        return loadFromJson(path, type, GsonProvider.getLibapiCompatibleGson());
     }
 
 }

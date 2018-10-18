@@ -20,23 +20,22 @@
  * SOFTWARE.
  *
  */
-package ru.kontur.extern_api.sdk.adaptor;
 
-import java.util.List;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
+package ru.kontur.extern_api.sdk.portal.model;
+
 import ru.kontur.extern_api.sdk.model.Link;
 
-/**
- * @author Aleksey Sukhorukov
- */
-public interface AccountsAdaptor {
+public class TrustedAuthenticationQuest {
 
-    public QueryContext<List<Link>> acquireBaseUri(QueryContext<?> cxt);
+    private String key;
 
-    public QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
+    private Link link;
 
-    public QueryContext<Account> createAccount(QueryContext<?> cxt);
+    public String getKey() {
+        return key;
+    }
 
-    public QueryContext<Account> getAccount(QueryContext<?> cxt);
+    public Link getLink() {
+        return link;
+    }
 }

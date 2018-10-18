@@ -20,14 +20,18 @@
  * SOFTWARE.
  *
  */
-package ru.kontur.extern_api.sdk.adaptor;
 
-import java.util.function.Supplier;
+package ru.kontur.extern_api.sdk.httpclient;
 
-/**
- * @author Aleksey Sukhorukov
- */
-public interface Adaptor {
-    HttpClient getHttpClient();
-    void setHttpClient(Supplier<HttpClient> httpClient);
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ApiResponseConverter {
+
+    Class<? extends ResponseConverter> value();
+
 }

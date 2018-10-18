@@ -30,6 +30,22 @@ import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
 
+/**
+ * Object represents possible answers from extern-api.
+ * Assumes that non successful responses will looks like:
+ * <code><pre>
+ * {
+ *   "id": "urn:nss:nid",
+ *   "status-code": "continue",
+ *   "message": "string",
+ *   "track-id": "string",
+ *   "trace-id": "string",
+ *   "properties": {}
+ * }
+ * </pre></code>
+ *
+ * and successful responses is json object of some parametrized type {@link T}
+ */
 public class ApiResponse<T> {
 
     private final int statusCode;
@@ -127,7 +143,7 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> error(int code, String message) {
         ErrorInfo errorInfo = new ErrorInfo();
         errorInfo.setStatusCode(code);
-        errorInfo.setId("urn:sdk:clientSideProblem");
+        errorInfo.setId("urn:sdk:error");
         errorInfo.setMessage(message);
         return new ApiResponse<>(code, Collections.emptyMap(), errorInfo);
     }
@@ -135,7 +151,7 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> error(Throwable throwable) {
         ErrorInfo errorInfo = new ErrorInfo();
         errorInfo.setStatusCode(0);
-        errorInfo.setId("urn:sdk:clientSideProblem");
+        errorInfo.setId("urn:sdk:exception-was-thrown");
         errorInfo.setMessage(throwable.getMessage());
         errorInfo.setThrowable(new RuntimeException(throwable));
         return new ApiResponse<>(0, Collections.emptyMap(), errorInfo);

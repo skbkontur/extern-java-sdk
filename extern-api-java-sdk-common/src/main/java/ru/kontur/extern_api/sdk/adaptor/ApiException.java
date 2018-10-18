@@ -29,14 +29,9 @@ import java.util.Map;
 
 public class ApiException extends RuntimeException {
 
-    private static final long serialVersionUID = 7069199494247540112L;
-
-    private int code = 0;
-    private Map<String, List<String>> responseHeaders = null;
-    private String responseBody = null;
-
-    public ApiException() {
-    }
+    private int code = -1;
+    private Map<String, List<String>> responseHeaders;
+    private String responseBody;
 
     public ApiException(Throwable throwable) {
         super(throwable);
@@ -46,27 +41,18 @@ public class ApiException extends RuntimeException {
         super(message);
     }
 
-    public ApiException(String message, Throwable x) {
-        super(message, x);
-    }
+    public ApiException(
+            String message,
+            Throwable throwable,
+            int code,
+            Map<String, List<String>> responseHeaders,
+            String responseBody) {
 
-    public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         super(message, throwable);
+
         this.code = code;
         this.responseHeaders = responseHeaders;
         this.responseBody = responseBody;
-    }
-
-    public ApiException(String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(message, null, code, responseHeaders, responseBody);
-    }
-
-    public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders) {
-        this(message, throwable, code, responseHeaders, null);
-    }
-
-    public ApiException(int code, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(null, null, code, responseHeaders, responseBody);
     }
 
     public ApiException(int code, String message) {
@@ -74,15 +60,7 @@ public class ApiException extends RuntimeException {
         this.code = code;
     }
 
-    public ApiException(int code, String message, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(code, message);
-        this.responseHeaders = responseHeaders;
-        this.responseBody = responseBody;
-    }
-
     /**
-     * Get the HTTP status code.
-     *
      * @return HTTP status code
      */
     public int getCode() {
@@ -90,18 +68,14 @@ public class ApiException extends RuntimeException {
     }
 
     /**
-     * Get the HTTP response headers.
-     *
-     * @return A map of list of string
+     * @return HTTP response headers
      */
     public Map<String, List<String>> getResponseHeaders() {
         return responseHeaders;
     }
 
     /**
-     * Get the HTTP response body.
-     *
-     * @return Response body in the form of string
+     * @return HTTP response body
      */
     public String getResponseBody() {
         return responseBody;

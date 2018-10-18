@@ -61,7 +61,7 @@ public class CertificateAuthenticationTest {
     private static final Header JSON_CONTENT_TYPE = new Header("Content-Type", "application/json");
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
-    private static final Gson GSON = GsonProvider.getGson();
+    private static final Gson GSON = GsonProvider.getLibapiCompatibleGson();
 
     private static ClientAndServer mockServer;
     private AuthenticationProvider auth;
@@ -148,7 +148,11 @@ public class CertificateAuthenticationTest {
                 .setSignatureKeyProvider(() -> "certificate")
                 .buildAuthenticationProvider();
 
-        auth.httpClient(new KonturHttpClient(new KonturConfiguredClient(Level.BODY, baseUri)));
+        auth.httpClient(new KonturHttpClient(new KonturConfiguredClient(
+                Level.BODY,
+                baseUri,
+                GsonProvider.getPortalCompatibleGson()
+        )));
     }
 
     @Test
