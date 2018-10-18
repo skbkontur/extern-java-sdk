@@ -29,7 +29,7 @@ import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;

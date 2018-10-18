@@ -25,8 +25,8 @@ public class GsonProvider {
 
         return new GsonBuilder()
                 .disableHtmlEscaping()
+                .setDateFormat(PublicDateFormat.FORMAT)
                 .setFieldNamingPolicy(getFieldNamingPolicy())
-                .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
                 .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer());

@@ -185,11 +185,6 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
         return response.getData();
     }
 
-    @Override
-    public String authPrefix() {
-        return DEFAULT_AUTH_PREFIX;
-    }
-
     /**
      * @param certificateProvider Supplier&lt;byte[]&gt; поставляет сертификат, которым производится
      * аутентификация

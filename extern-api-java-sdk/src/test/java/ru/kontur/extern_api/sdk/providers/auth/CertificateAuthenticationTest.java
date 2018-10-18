@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,7 +48,8 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.httpclient.HttpClientImpl;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
@@ -65,12 +67,12 @@ public class CertificateAuthenticationTest {
     private AuthenticationProvider auth;
 
     @BeforeClass
-    public static void startJetty() {
+    public static void startMock() {
         mockServer = ClientAndServer.startClientAndServer(PORT);
     }
 
     @AfterClass
-    public static void stopJetty() {
+    public static void stopMock() {
         mockServer.stop();
     }
 
@@ -146,7 +148,7 @@ public class CertificateAuthenticationTest {
                 .setSignatureKeyProvider(() -> "certificate")
                 .buildAuthenticationProvider();
 
-        auth.httpClient(new HttpClientImpl().setServiceBaseUri(baseUri));
+        auth.httpClient(new KonturHttpClient(new KonturConfiguredClient(Level.BODY, baseUri)));
     }
 
     @Test

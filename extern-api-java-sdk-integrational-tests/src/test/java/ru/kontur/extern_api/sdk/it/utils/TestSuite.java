@@ -3,10 +3,8 @@ package ru.kontur.extern_api.sdk.it.utils;
 import static ru.kontur.extern_api.sdk.ExternEngineBuilder.createExternEngine;
 
 import com.google.gson.Gson;
-import java.io.IOException;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.logging.LogManager;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
@@ -22,16 +20,6 @@ public class TestSuite {
     private TestSuite(ExternEngine engine) {
         this.engine = engine;
         this.gson = GsonProvider.getPreConfiguredGsonBuilder().setPrettyPrinting().create();
-        // because I like it ^)
-        System.setProperty(
-                "java.util.logging.SimpleFormatter.format",
-                "[%1$tF %1$tT] [%4$-7s] %5$s %n"
-        );
-        try {
-            LogManager.getLogManager().readConfiguration();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String serialize(Object obj) {
@@ -65,7 +53,4 @@ public class TestSuite {
         });
     }
 
-    public static class Secrets {
-
-    }
 }

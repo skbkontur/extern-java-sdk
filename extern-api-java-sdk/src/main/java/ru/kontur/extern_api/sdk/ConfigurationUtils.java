@@ -29,7 +29,7 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderByPass;
+import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
 import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
@@ -93,7 +93,7 @@ public final class ConfigurationUtils {
                 .isPresent();
     }
 
-    public static AuthenticationProviderByPass createPasswordAuthProvider(Configuration config) {
+    public static PasswordAuthenticationProvider createPasswordAuthProvider(Configuration config) {
         String authType = "password";
 
         requireParam(config::getLogin, "login", authType);
@@ -103,7 +103,7 @@ public final class ConfigurationUtils {
 
         LoginAndPasswordProvider form = form(config.getLogin(), config.getPass());
 
-        return new AuthenticationProviderByPass(
+        return new PasswordAuthenticationProvider(
                 config::getAuthBaseUri, form, config::getApiKey
         );
     }

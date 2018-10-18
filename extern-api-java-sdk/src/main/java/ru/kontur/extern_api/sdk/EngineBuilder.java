@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk;
 
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
@@ -34,7 +35,12 @@ public interface EngineBuilder {
 
     interface BuildSyntax {
 
-        ExternEngine build();
+        ExternEngine build(Level logLevel);
+
+        default ExternEngine build() {
+            return build(Level.BASIC);
+        }
+
     }
 
     interface OverrideDefaultsSyntax extends BuildSyntax {
@@ -50,6 +56,12 @@ public interface EngineBuilder {
 
         @NotNull
         OverrideDefaultsSyntax userIpProvider(@NotNull UserIPProvider userIPProvider);
+
+        @NotNull
+        OverrideDefaultsSyntax readTimeout(int milliseconds);
+
+        @NotNull
+        OverrideDefaultsSyntax connectTimeout(int milliseconds);
 
     }
 

@@ -132,8 +132,7 @@
     <modules>
         <module>extern-api-java-sdk</module>
         <module>extern-api-java-sdk-common</module>
-        <module>extern-api-java-sdk-httpclient</module>
-        <module>extern-api-java-sdk-httpclient-adaptor</module>
+        <module>extern-api-java-sdk-httpclient-api</module>
         <module>extern-api-java-sdk-integrational-tests</module>
     </modules>
 
@@ -424,17 +423,12 @@
             </dependency>
             <dependency>
                 <groupId>ru.kontur.extern-api</groupId>
-                <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+                <artifactId>extern-api-java-sdk-httpclient-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.kontur.extern-api</groupId>
                 <artifactId>extern-api-java-sdk-swagger-adaptor</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.kontur.extern-api</groupId>
-                <artifactId>extern-api-java-sdk-httpclient</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

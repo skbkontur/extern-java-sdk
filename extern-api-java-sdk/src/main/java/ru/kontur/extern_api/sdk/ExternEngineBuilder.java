@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.EngineBuilder.AccountSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
@@ -33,9 +35,8 @@ import ru.kontur.extern_api.sdk.EngineBuilder.CryptoProviderSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.MaybeCryptoProviderSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.OverrideDefaultsSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.Syntax;
-import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.HttpClientBundle;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderSuite;
@@ -76,6 +77,7 @@ public class ExternEngineBuilder implements Syntax {
     }
 
 
+
     private Configuration configuration;
     private AuthenticationProvider authenticationProvider;
     private CryptoProvider cryptoProvider;
@@ -85,6 +87,8 @@ public class ExternEngineBuilder implements Syntax {
     private AuthType authType = AuthType.UNSPECIFIED;
     private byte[] certificatePublicKey;
 
+    private int readTimeout = 60_000;
+    private int connectTimeout = 1_000;
 
     private ExternEngineBuilder() {
         configuration = new Configuration();
@@ -119,11 +123,10 @@ public class ExternEngineBuilder implements Syntax {
 
     @NotNull
     @Override
-    public ExternEngine build() {
+    public ExternEngine build(Level logLevel) {
 
         ProviderSuite providerSuite = new ProviderSuite();
 
-        // todo менять это в Configuration синхронно с ProviderHolder
         providerSuite.setAccountProvider(configuration::getAccountId);
         providerSuite.setApiKeyProvider(configuration::getApiKey);
         providerSuite.setServiceBaseUriProvider(configuration::getServiceBaseUri);
@@ -136,12 +139,11 @@ public class ExternEngineBuilder implements Syntax {
         providerSuite.setUserAgentProvider(userAgentProvider);
         providerSuite.setUserIPProvider(userIPProvider);
 
-        AdaptorBundle adaptorBundle = new HttpClientBundle(providerSuite);
+        KonturConfiguredClient konturClient = new KonturConfiguredClient(logLevel)
+                .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+                .setReadTimeout(readTimeout, TimeUnit.MILLISECONDS);
 
-        DefaultServicesFactory serviceFactory = new DefaultServicesFactory(
-                providerSuite,
-                adaptorBundle
-        );
+        DefaultServicesFactory serviceFactory = new DefaultServicesFactory(konturClient, providerSuite);
 
         HttpClient httpClient = serviceFactory
                 .getHttpClient()
@@ -241,6 +243,20 @@ public class ExternEngineBuilder implements Syntax {
     @Override
     public OverrideDefaultsSyntax accountId(@NotNull String accountId) {
         configuration.setAccountId(Objects.requireNonNull(accountId));
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax readTimeout(int milliseconds) {
+        readTimeout = milliseconds;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax connectTimeout(int milliseconds) {
+        connectTimeout = milliseconds;
         return this;
     }
 

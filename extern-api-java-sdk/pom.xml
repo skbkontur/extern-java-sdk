@@ -99,7 +99,7 @@
 
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+            <artifactId>extern-api-java-sdk-httpclient-api</artifactId>
         </dependency>
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>

@@ -23,17 +23,15 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import java.util.concurrent.TimeUnit;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.KonturConfiguredClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.AccountsApi;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.CertificatesApi;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DocflowsApi;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DraftsApi;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
+import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -47,17 +45,12 @@ import ru.kontur.extern_api.sdk.service.ServicesFactory;
 public class DefaultServicesFactory implements ServicesFactory {
 
     private final ProviderHolder providerHolder;
-    private final AdaptorBundle adaptorBundle;
     private final KonturConfiguredClient configuredClient;
 
-    public DefaultServicesFactory(
-            ProviderHolder providerHolder,
-            AdaptorBundle adaptorBundle) {
+    public DefaultServicesFactory(KonturConfiguredClient client, ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
-        this.adaptorBundle = adaptorBundle;
         // todo: inject
-        this.configuredClient = new KonturConfiguredClient(Level.BODY)
-            .setReadTimeout(60, TimeUnit.SECONDS);
+        this.configuredClient = client;
     }
 
 
@@ -106,10 +99,7 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public HttpClient getHttpClient() {
-        return adaptorBundle
-                .getHttpClientAdaptor()
-                .setServiceBaseUri(providerHolder.getServiceBaseUriProvider().getUri())
-                .setUserAgentProvider(providerHolder.getUserAgentProvider());
+        return new KonturHttpClient(configuredClient);
     }
 
     private <T> T createApi(Class<T> apiType) {

@@ -30,11 +30,8 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 public interface AuthenticationProvider {
 
-    String DEFAULT_AUTH_PREFIX = "auth.sid ";
-
     QueryContext<String> sessionId();
 
-    String authPrefix();
-
+    @Deprecated
     AuthenticationProvider httpClient(HttpClient httpClient);
 }

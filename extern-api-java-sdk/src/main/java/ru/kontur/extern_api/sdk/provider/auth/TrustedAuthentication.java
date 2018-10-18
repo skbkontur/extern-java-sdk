@@ -65,20 +65,11 @@ public class TrustedAuthentication implements AuthenticationProvider {
     private CryptoProvider cryptoProvider;
     private SignatureKeyProvider signatureKeyProvider;
     private ServiceUserIdProvider serviceUserIdProvider;
-    private String authPrefix;
     private String timestamp;
     private CredentialProvider credentialProvider;
     private HttpClient httpClient;
 
     private String savedSid;
-
-    public TrustedAuthentication(String authPrefix) {
-        this.authPrefix = authPrefix == null ? DEFAULT_AUTH_PREFIX : authPrefix;
-    }
-
-    public TrustedAuthentication() {
-        this.authPrefix = DEFAULT_AUTH_PREFIX;
-    }
 
     public ApiKeyProvider getApiKeyProvider() {
         return apiKeyProvider;
@@ -146,14 +137,6 @@ public class TrustedAuthentication implements AuthenticationProvider {
         return this;
     }
 
-    public String getAuthPrefix() {
-        return authPrefix;
-    }
-
-    public void setAuthPrefix(String authPrefix) {
-        this.authPrefix = authPrefix;
-    }
-
     public CredentialProvider getCredentialProvider() {
         return credentialProvider;
     }
@@ -183,11 +166,6 @@ public class TrustedAuthentication implements AuthenticationProvider {
         timestamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
 
         return authenticateRequest();
-    }
-
-    @Override
-    public String authPrefix() {
-        return authPrefix;
     }
 
     @Override

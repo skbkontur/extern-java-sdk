@@ -117,7 +117,7 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
         String sessionId = auth.sessionId().ensureSuccess().getSessionId();
         return servicesFactory
                 .getHttpClient()
-                .acceptAccessToken(auth.authPrefix(), sessionId)
+                .acceptAccessToken(sessionId)
                 .acceptApiKey(getApiKeyProvider().getApiKey());
     }
 

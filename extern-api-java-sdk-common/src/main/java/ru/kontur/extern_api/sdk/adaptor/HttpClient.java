@@ -35,7 +35,12 @@ public interface HttpClient {
 
     HttpClient setServiceBaseUri(String uri);
 
-    HttpClient acceptAccessToken(String authPrefix, String sessionId);
+    @Deprecated
+    default HttpClient acceptAccessToken(String authPrefix, String sessionId) {
+        return acceptAccessToken(sessionId);
+    }
+
+    HttpClient acceptAccessToken(String sessionId);
 
     HttpClient acceptApiKey(String apiKey);
 

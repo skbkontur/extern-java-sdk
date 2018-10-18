@@ -34,7 +34,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.model.ByteContent;
 import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;

@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9,8 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,22 +21,28 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.drafts.service;
+package ru.kontur.extern_api.sdk.httpclient.api;
 
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.model.EventsPage;
 
-public class AuthenticationProviderAdaptor implements AuthenticationProvider {
 
-    @Override
-    public QueryContext<String> sessionId() {
-        return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
-    }
+public interface EventsApi {
 
-    @Override
-    public AuthenticationProvider httpClient(HttpClient httpClient) {
-        return this;
-    }
-
+    /**
+     * Shows docflow events for all users and accounts connected with external service (e.g.: bank)
+     *
+     * @param fromId Event Id offset from which data is read out (required). {@code 0_0} - zero
+     * offset. next offsets will be returned
+     * @param batchSize Max count of events to be returned (default - 100)
+     * @return ApiResponse&lt;EventsPage&gt;
+     */
+    @GET("v1/events")
+    CompletableFuture<ApiResponse<EventsPage>> getEvents(
+            @Query("fromId") String fromId,
+            @Query("batchSize") Integer batchSize
+    );
 }
