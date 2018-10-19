@@ -49,7 +49,7 @@ public interface AuthApi {
     @POST("sessions/" + VERSION + "/sessions/refresh")
     CompletableFuture<SessionResponse> refreshSession(
             @NotNull @Query("auth.sid") String sessionId,
-            @Nullable @Query("refreshToken") String refreshToken
+            @Nullable @Query("refresh-token") String refreshToken
     );
 
     @POST("auth/" + VERSION + "/authenticate-by-pass")

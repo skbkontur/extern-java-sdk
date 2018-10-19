@@ -29,6 +29,11 @@ public class SessionResponse {
 
     private String refreshToken;
 
+    public SessionResponse(String sid, String refreshToken) {
+        this.sid = sid;
+        this.refreshToken = refreshToken;
+    }
+
     public String getSid() {
         return sid;
     }

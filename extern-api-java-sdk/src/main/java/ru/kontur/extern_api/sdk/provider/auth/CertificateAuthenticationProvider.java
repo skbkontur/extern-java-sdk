@@ -22,14 +22,13 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import java.time.temporal.TemporalAmount;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.portal.AuthApi;
 import ru.kontur.extern_api.sdk.portal.model.CertificateAuthenticationQuest;
 import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 /**
  * Провайдер аутентификации по сертификату.
@@ -37,12 +36,12 @@ import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
  * Описание процесса.
  * </a>
  */
-public final class CertificateAuthenticationProvider implements AuthenticationProvider {
+public final class CertificateAuthenticationProvider extends CachingRefreshingAuthProvider {
 
     private final String certThumbprint;
     private final CryptoProvider cryptoProvider;
-    private String apiKey;
-    private byte[] cert;
+    private final String apiKey;
+    private final byte[] cert;
     private final AuthApi authApi;
 
     public CertificateAuthenticationProvider(
@@ -50,8 +49,9 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
             byte[] cert,
             String certThumbprint,
             String apiKey,
-            CryptoProvider cryptoProvider
-    ) {
+            CryptoProvider cryptoProvider,
+            TemporalAmount cacheTime) {
+        super(cacheTime, authApi);
         this.authApi = authApi;
         this.cert = cert;
         this.certThumbprint = certThumbprint;
@@ -60,23 +60,15 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
     }
 
     @Override
-    public QueryContext<String> sessionId() {
-        return QueryContextUtils.join(authApi
+    public CompletableFuture<SessionResponse> authenticate() {
+        return authApi
                 .certificateAuthenticationInit(apiKey, null, null, cert)
                 .thenApply(CertificateAuthenticationQuest::getEncryptedKey)
                 .thenCompose(key -> cryptoProvider.decryptAsync(certThumbprint, key))
                 .thenApply(QueryContext::getOrThrow)
                 .thenCompose(decrypted -> authApi
                         .certificateAuthenticationConfirm(certThumbprint, apiKey, decrypted)
-                )
-                .thenApply(SessionResponse::getSid)
-                .thenApply(QueryContext.constructor(QueryContext.SESSION_ID))
-                .exceptionally(QueryContextUtils::completeCareful)
-        );
+                );
     }
 
-    @Override
-    public CertificateAuthenticationProvider httpClient(HttpClient httpClient) {
-        return this;
-    }
 }

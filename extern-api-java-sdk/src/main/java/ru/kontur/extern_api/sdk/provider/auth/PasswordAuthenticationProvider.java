@@ -23,45 +23,33 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import java.time.temporal.TemporalAmount;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.portal.AuthApi;
 import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
-import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 
-public class PasswordAuthenticationProvider implements AuthenticationProvider {
+public class PasswordAuthenticationProvider extends CachingRefreshingAuthProvider {
 
-    private String apiKey;
-    private LoginAndPasswordProvider creds;
+    private final String apiKey;
+    private final LoginAndPasswordProvider creds;
     private final AuthApi authApi;
 
     public PasswordAuthenticationProvider(
             AuthApi authApi,
             LoginAndPasswordProvider creds,
-            String apiKey
-    ) {
-        this.authApi = authApi;
+            String apiKey,
+            TemporalAmount cacheTime) {
+        super(cacheTime, authApi);
 
+        this.authApi = authApi;
         this.creds = creds;
         this.apiKey = apiKey;
     }
 
     @Override
-    public QueryContext<String> sessionId() {
-        return QueryContextUtils.join(
-                authApi.passwordAuthentication(creds.getLogin(), apiKey, null, creds.getPass())
-                        .thenApply(SessionResponse::getSid)
-                        .thenApply(QueryContext.constructor(QueryContext.SESSION_ID))
-                        .exceptionally(QueryContextUtils::completeCareful)
-        );
+    public CompletableFuture<SessionResponse> authenticate() {
+        return authApi.passwordAuthentication(creds.getLogin(), apiKey, null, creds.getPass());
     }
-
-    @Override
-    public PasswordAuthenticationProvider httpClient(HttpClient httpClient) {
-        return this;
-    }
-
 }

@@ -25,6 +25,8 @@ package ru.kontur.extern_api.sdk.provider.auth;
 
 import com.google.gson.Gson;
 import java.security.cert.CertificateException;
+import java.time.Duration;
+import java.time.temporal.TemporalAmount;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -41,6 +43,7 @@ public class AuthenticationProviderBuilder {
 
     private final KonturConfiguredClient configuredClient;
     private String apiKey;
+    private TemporalAmount cacheTime;
 
     public static AuthenticationProviderBuilder createFor(
             @NotNull String authServiceBaseUri,
@@ -52,11 +55,17 @@ public class AuthenticationProviderBuilder {
     private AuthenticationProviderBuilder(String authServiceBaseUri, Level logLevel) {
         Gson gson = GsonProvider.getPortalCompatibleGson();
         this.configuredClient = new KonturConfiguredClient(logLevel, authServiceBaseUri, gson);
+        this.cacheTime = Duration.ofDays(15);
     }
 
 
     public AuthenticationProviderBuilder withApiKey(@NotNull String apiKey) {
         this.apiKey = apiKey;
+        return this;
+    }
+
+    public AuthenticationProviderBuilder cacheKeyFor(TemporalAmount timeAmount) {
+        this.cacheTime = timeAmount;
         return this;
     }
 
@@ -66,7 +75,8 @@ public class AuthenticationProviderBuilder {
         return new PasswordAuthenticationProvider(
                 configuredClient.createService(AuthApi.class),
                 LoginAndPasswordProvider.form(login, pass),
-                apiKey
+                apiKey,
+                cacheTime
         );
     }
 
@@ -82,7 +92,8 @@ public class AuthenticationProviderBuilder {
                 certContent,
                 cryptoApi.getThumbprint(certContent),
                 apiKey,
-                cryptoProvider
+                cryptoProvider,
+                cacheTime
         );
     }
 
