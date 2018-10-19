@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.portal;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
+import java.util.Collections;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
@@ -44,22 +45,25 @@ public class PortalResponseConverter implements ResponseConverter {
                     response.body());
         }
 
-        ResponseBody responseBody = response.errorBody();
+        ErrorInfo errorInfo = new ErrorInfo();
+        try (ResponseBody responseBody = response.errorBody()) {
 
-        if (responseBody == null) {
-            return ApiResponse.error(response.code(), response.message());
+            if (responseBody == null || responseBody.contentLength() == 0) {
+                return ApiResponse.error(response.code(), response.message());
+            }
+
+            errorInfo = errorInfoFromBody(gson, responseBody.string());
+
+        } catch (IOException e) {
+            errorInfo.setId("empty-error-body");
+            errorInfo.setMessage(e.getMessage());
         }
 
-        try {
-            return ApiResponse.error(
-                    response.code(),
-                    response.headers().toMultimap(),
-                    toErrorInfo(errorFromBody(gson, responseBody))
-            );
-        } catch (JsonSyntaxException | NullPointerException | IOException e) {
-            return ApiResponse.error(e);
-        }
-
+        return ApiResponse.error(
+                response.code(),
+                response.headers().toMultimap(),
+                errorInfo
+        );
     }
 
     private ErrorInfo toErrorInfo(AuthError authError) {
@@ -70,8 +74,22 @@ public class PortalResponseConverter implements ResponseConverter {
         return errorInfo;
     }
 
-    private AuthError errorFromBody(Gson gson, ResponseBody body) throws IOException {
-        String string = body.string();
-        return gson.fromJson(string, AuthError.class);
+    private ErrorInfo errorInfoFromBody(Gson gson, String body) {
+        ErrorInfo errorInfo = new ErrorInfo();
+        try {
+            AuthError authError = gson.fromJson(body, AuthError.class);
+
+            if (authError.getCode() != null) {
+                return toErrorInfo(authError);
+            }
+
+        } catch (JsonSyntaxException | NullPointerException e) {
+            errorInfo = new ErrorInfo();
+            errorInfo.setProperties(Collections.singletonMap(e.getClass().getName(), e.getMessage()));
+        }
+
+        errorInfo.setId("unknown-error-format");
+        errorInfo.setMessage(body);
+        return errorInfo;
     }
 }

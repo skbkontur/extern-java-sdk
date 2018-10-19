@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk.httpclient;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
+import java.util.Collections;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
@@ -43,34 +44,44 @@ public final class LibapiResponseConverter implements ResponseConverter {
                     response.body());
         }
 
-        ResponseBody responseBody = response.errorBody();
+        ErrorInfo errorInfo = new ErrorInfo();
+        try (ResponseBody responseBody = response.errorBody()) {
 
-        if (responseBody == null) {
-            return ApiResponse.error(response.code(), response.message());
+            if (responseBody == null || responseBody.contentLength() == 0) {
+                return ApiResponse.error(response.code(), response.message());
+            }
+
+            errorInfo = errorInfoFromBody(gson, responseBody.string());
+
+        } catch (IOException e) {
+            errorInfo.setId("empty-error-body");
+            errorInfo.setMessage(e.getMessage());
         }
 
-        try {
-            return ApiResponse.error(
-                    response.code(),
-                    response.headers().toMultimap(),
-                    errorInfoFromBody(gson, responseBody)
-            );
-        } catch (JsonSyntaxException | NullPointerException | IOException e) {
-            return ApiResponse.error(e);
-        }
-
+        return ApiResponse.error(
+                response.code(),
+                response.headers().toMultimap(),
+                errorInfo
+        );
 
     }
 
-    private ErrorInfo errorInfoFromBody(Gson gson, ResponseBody body) throws IOException {
-        String string = body.string();
-        ErrorInfo errorInfo = gson.fromJson(string, ErrorInfo.class);
+    private ErrorInfo errorInfoFromBody(Gson gson, String body) {
+        ErrorInfo errorInfo;
+        try {
+            errorInfo = gson.fromJson(body, ErrorInfo.class);
 
-        if (errorInfo.getId() == null) {
-            // all errors from public should be ErrorInfo-like
-            errorInfo.setId("not-an-error-info");
-            errorInfo.setMessage(string);
+            if (errorInfo.getId() != null) {
+                return errorInfo;
+            }
+
+        } catch (JsonSyntaxException | NullPointerException e) {
+            errorInfo = new ErrorInfo();
+            errorInfo.setProperties(Collections.singletonMap(e.getClass().getName(), e.getMessage()));
         }
+
+        errorInfo.setId("unknown-error-format");
+        errorInfo.setMessage(body);
         return errorInfo;
     }
 

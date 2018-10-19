@@ -135,7 +135,7 @@ public class ApiResponse<T> {
         }
 
         return new ApiException(
-                e.getStatusCode(),
+                getStatusCode(),
                 e.getId(),
                 e.getMessage(),
                 headers,
