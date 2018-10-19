@@ -44,7 +44,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardValues;
@@ -213,7 +213,7 @@ public class DocflowServiceLookupDocumentTest {
         QueryContext<Document> documentQueryContext = engine.getDocflowService()
                 .lookupDocument(queryContext);
         assertNull("document must be null!", documentQueryContext.get());
-        ServiceError serviceError = documentQueryContext.getServiceError();
+        ApiException serviceError = documentQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

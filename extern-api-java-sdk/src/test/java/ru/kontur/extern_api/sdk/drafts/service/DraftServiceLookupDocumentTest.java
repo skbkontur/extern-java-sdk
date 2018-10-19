@@ -44,13 +44,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
 import ru.kontur.extern_api.sdk.drafts.DraftsValidator;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -74,8 +74,7 @@ public class DraftServiceLookupDocumentTest {
     public static void stopJetty() {
         try {
             server.stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -111,15 +110,15 @@ public class DraftServiceLookupDocumentTest {
     public void testLookupDocument_DecryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{"
-            + "\"id\": \"" + StandardValues.ID + "\","
-            + "\"decrypted-content-link\": {"
-            + "  \"href\": \"string\","
-            + "  \"rel\": \"string\","
-            + "  \"name\": \"string\","
-            + "  \"title\": \"string\","
-            + "  \"profile\": \"string\","
-            + "  \"templated\": true"
-            + "}}");
+                + "\"id\": \"" + StandardValues.ID + "\","
+                + "\"decrypted-content-link\": {"
+                + "  \"href\": \"string\","
+                + "  \"rel\": \"string\","
+                + "  \"name\": \"string\","
+                + "  \"title\": \"string\","
+                + "  \"profile\": \"string\","
+                + "  \"templated\": true"
+                + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), true, false, false);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), true, false, false);
     }
@@ -128,15 +127,15 @@ public class DraftServiceLookupDocumentTest {
     public void testLookupDocument_EncryptedContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{"
-            + "\"id\": \"" + StandardValues.ID + "\","
-            + "\"encrypted-content-link\": {"
-            + "  \"href\": \"string\","
-            + "  \"rel\": \"string\","
-            + "  \"name\": \"string\","
-            + "  \"title\": \"string\","
-            + "  \"profile\": \"string\","
-            + "  \"templated\": true"
-            + "}}");
+                + "\"id\": \"" + StandardValues.ID + "\","
+                + "\"encrypted-content-link\": {"
+                + "  \"href\": \"string\","
+                + "  \"rel\": \"string\","
+                + "  \"name\": \"string\","
+                + "  \"title\": \"string\","
+                + "  \"profile\": \"string\","
+                + "  \"templated\": true"
+                + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), false, true, false);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, true, false);
     }
@@ -145,15 +144,15 @@ public class DraftServiceLookupDocumentTest {
     public void testLookupDocument_SignatureContentLink() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{"
-            + "\"id\": \"" + StandardValues.ID + "\","
-            + "\"signature-content-link\": {"
-            + "  \"href\": \"string\","
-            + "  \"rel\": \"string\","
-            + "  \"name\": \"string\","
-            + "  \"title\": \"string\","
-            + "  \"profile\": \"string\","
-            + "  \"templated\": true"
-            + "}}");
+                + "\"id\": \"" + StandardValues.ID + "\","
+                + "\"signature-content-link\": {"
+                + "  \"href\": \"string\","
+                + "  \"rel\": \"string\","
+                + "  \"name\": \"string\","
+                + "  \"title\": \"string\","
+                + "  \"profile\": \"string\","
+                + "  \"templated\": true"
+                + "}}");
         DraftsValidator.validateDraftDocument(getDraftDocument(), false, false, true);
         DraftsValidator.validateDraftDocument(getDraftDocumentAsync(), false, false, true);
     }
@@ -162,17 +161,17 @@ public class DraftServiceLookupDocumentTest {
     public void testLookupDocument_DocumentDescription() {
         ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{"
-            + "\"id\": \"" + StandardValues.ID + "\","
-            + "\"description\": {"
-            + "  \"type\": \"urn:docflow:fns534-report\","
-            + "  \"filename\": \"string\","
-            + "  \"content-type\": \"string\""
-            + "}}");
+                + "\"id\": \"" + StandardValues.ID + "\","
+                + "\"description\": {"
+                + "  \"type\": \"urn:docflow:fns534-report\","
+                + "  \"filename\": \"string\","
+                + "  \"content-type\": \"string\""
+                + "}}");
         DraftsValidator.validateDocumentDescription(getDraftDocument().getDescription());
         DraftDocument draftDocumentAsync = getDraftDocumentAsync();
         if (draftDocumentAsync != null) {
             DraftsValidator
-                .validateDocumentDescription(draftDocumentAsync.getDescription());
+                    .validateDocumentDescription(draftDocumentAsync.getDescription());
         }
     }
 
@@ -211,9 +210,9 @@ public class DraftServiceLookupDocumentTest {
         queryContext.setDraftId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         QueryContext<DraftDocument> draftDocumentQueryContext = engine.getDraftService()
-            .lookupDocument(queryContext);
+                .lookupDocument(queryContext);
         assertNull("draftDocument must be null!", draftDocumentQueryContext.get());
-        ServiceError serviceError = draftDocumentQueryContext.getServiceError();
+        ApiException serviceError = draftDocumentQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
@@ -228,10 +227,9 @@ public class DraftServiceLookupDocumentTest {
     private DraftDocument getDraftDocumentAsync() {
         try {
             return engine.getDraftService()
-                .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
-                .get().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+                    .lookupDocumentAsync(StandardValues.ID, StandardValues.ID)
+                    .get().get();
+        } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

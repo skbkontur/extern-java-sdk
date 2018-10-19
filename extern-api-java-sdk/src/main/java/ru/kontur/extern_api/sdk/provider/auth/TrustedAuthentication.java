@@ -153,8 +153,8 @@ public class TrustedAuthentication implements AuthenticationProvider {
     @Override
     public QueryContext<String> sessionId() {
         if (cryptoProvider == null) {
-            return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth,
-                    Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null, null);
+            return new QueryContext<String>().setServiceError(ServiceError.ErrorCode.auth.message(),
+                    Messages.get(C_CRYPTO_ERROR_NO_CRYPTO_PROVIDER), 0, null, null);
         }
 
         if (savedSid != null) {

@@ -44,6 +44,7 @@ import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
@@ -152,7 +153,7 @@ public class DraftServiceLookupDraftMetaTest {
         QueryContext<DraftMeta> draftMetaQueryContext = engine.getDraftService()
             .lookupDraftMeta(queryContext);
         assertNull("DraftMeta must be null!", draftMetaQueryContext.get());
-        ServiceError serviceError = draftMetaQueryContext.getServiceError();
+        ApiException serviceError = draftMetaQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

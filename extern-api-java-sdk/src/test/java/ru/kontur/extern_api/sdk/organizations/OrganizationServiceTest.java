@@ -42,13 +42,12 @@ import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.GsonProvider;
 
 /**
  * @author Aleksey Sukhorukov
@@ -73,8 +72,9 @@ public class OrganizationServiceTest {
 
     @AfterClass
     public static void stopJetty() {
-        if (mockServer != null)
+        if (mockServer != null) {
             mockServer.stop();
+        }
     }
 
     @Before
@@ -104,7 +104,8 @@ public class OrganizationServiceTest {
 
     @Test
     public void testSuccessLookup() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 200, GSON.toJson(company));
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 200,
+                GSON.toJson(company));
         QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
         assertFalse(cxt.isFail());
         validateCompany(cxt.getCompany(), company);
@@ -116,8 +117,6 @@ public class OrganizationServiceTest {
         QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertEquals(ErrorCode.server, errorCode);
         assertEquals("string", message);
     }
 
@@ -135,15 +134,14 @@ public class OrganizationServiceTest {
         QueryContext<Company> cxt = organizationService.createAsync(company.getGeneral()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertEquals(ErrorCode.server, errorCode);
         assertEquals("string", message);
     }
 
     @Test
     public void testSuccessUpdate() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 201, GSON.toJson(company));
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(),"Pajero 2").get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 201,
+                GSON.toJson(company));
+        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
         assertFalse(cxt.isFail());
         validateCompany(cxt.getCompany(), company);
     }
@@ -151,55 +149,51 @@ public class OrganizationServiceTest {
     @Test
     public void testUncorrectUpdate() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 400, createError());
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(),"Pajero 2").get();
+        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertEquals(ErrorCode.server, errorCode);
         assertEquals("string", message);
     }
 
     @Test
     public void testSuccessDelete() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 201, GSON.toJson(company));
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 201,
+                GSON.toJson(company));
         QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
         assertFalse(cxt.isFail());
     }
 
     @Test
     public void testIncorrectDelete() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 400,  createError());
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 400,
+                createError());
         QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertEquals(ErrorCode.server, errorCode);
         assertEquals("string", message);
     }
 
     private void createAnswerFor(String restPath, String restMethod, int code, String body) {
         new MockServerClient(HOST, PORT)
-            .when(request().withMethod(restMethod).withPath(PATH + "/" + restPath), exactly(1))
-            .respond(
-                response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
-            );
+                .when(request().withMethod(restMethod).withPath(PATH + "/" + restPath), exactly(1))
+                .respond(
+                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
+                );
     }
 
     private String createError() {
-        StringBuilder error = new StringBuilder();
-        error.append("{")
-            .append("\"id\": \"urn:nss:nid\",")
-            .append("\"status-code\": 400,")
-            .append("\"message\": \"string\",")
-            .append("\"track-id\": \"string\",")
-            .append("\"properties\": {}")
-            .append("}");
-        return error.toString();
+        return "{"
+                + "\"id\": \"urn:nss:nid\","
+                + "\"status-code\": 400,"
+                + "\"message\": \"string\","
+                + "\"track-id\": \"string\","
+                + "\"properties\": {}"
+                + "}";
     }
 
     private void validateCompany(Company source, Company response) {
         assertNotNull(response);
-        assertEquals(response.getId().toString(),source.getId().toString());
+        assertEquals(response.getId().toString(), source.getId().toString());
         assertEquals(response.getGeneral().getInn(), source.getGeneral().getInn());
         assertEquals(response.getGeneral().getKpp(), source.getGeneral().getKpp());
         assertEquals(response.getGeneral().getName(), source.getGeneral().getName());

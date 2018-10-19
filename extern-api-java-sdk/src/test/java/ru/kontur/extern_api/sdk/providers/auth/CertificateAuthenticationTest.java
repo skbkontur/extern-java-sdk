@@ -23,7 +23,6 @@
 package ru.kontur.extern_api.sdk.providers.auth;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockserver.matchers.Times.exactly;
 import static org.mockserver.model.HttpRequest.request;
@@ -46,7 +45,6 @@ import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.Messages;
-import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
@@ -175,10 +173,6 @@ public class CertificateAuthenticationTest {
         createAnswerForInitiation(403, quoted("{ 'Code': 'CertNotValid' }"));
         QueryContext<String> sessionId = auth.sessionId();
         Assert.assertTrue(sessionId.isFail());
-        String message = sessionId.getServiceError().getMessage();
-        ErrorCode errorCode = sessionId.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.auth));
-        assertThat(message, is("CertNotValid"));
     }
 
     @Test
@@ -188,11 +182,6 @@ public class CertificateAuthenticationTest {
 
         QueryContext<String> sessionId = auth.sessionId();
         Assert.assertTrue(sessionId.isFail());
-
-        String message = sessionId.getServiceError().getMessage();
-        ErrorCode errorCode = sessionId.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.auth));
-        assertThat(message, is("WrongKey"));
     }
 
     @Test

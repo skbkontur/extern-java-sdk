@@ -26,12 +26,11 @@ package ru.kontur.extern_api.sdk.portal;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
-import java.util.Optional;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.ErrorInfo;
 import ru.kontur.extern_api.sdk.httpclient.ResponseConverter;
-import ru.kontur.extern_api.sdk.model.ErrorInfo;
 import ru.kontur.extern_api.sdk.portal.model.AuthError;
 
 public class PortalResponseConverter implements ResponseConverter {
@@ -45,21 +44,22 @@ public class PortalResponseConverter implements ResponseConverter {
                     response.body());
         }
 
-        ErrorInfo errorInfo = Optional
-                .ofNullable(response.errorBody())
-                .map(body -> errorFromBody(gson, response, body))
-                .orElseGet(() -> {
-                    ErrorInfo ei = new ErrorInfo();
-                    ei.setStatusCode(response.code());
-                    ei.setMessage(response.message());
-                    return ei;
-                });
+        ResponseBody responseBody = response.errorBody();
 
-        return new ApiResponse<>(
-                response.code(),
-                response.headers().toMultimap(),
-                errorInfo
-        );
+        if (responseBody == null) {
+            return ApiResponse.error(response.code(), response.message());
+        }
+
+        try {
+            return ApiResponse.error(
+                    response.code(),
+                    response.headers().toMultimap(),
+                    toErrorInfo(errorFromBody(gson, responseBody))
+            );
+        } catch (JsonSyntaxException | NullPointerException | IOException e) {
+            return ApiResponse.error(e);
+        }
+
     }
 
     private ErrorInfo toErrorInfo(AuthError authError) {
@@ -67,21 +67,11 @@ public class PortalResponseConverter implements ResponseConverter {
 
         errorInfo.setId("portal-auth-error");
         errorInfo.setMessage(authError.getCode());
-
         return errorInfo;
     }
 
-    private ErrorInfo errorFromBody(Gson gson, Response<?> response, ResponseBody body) {
-        try {
-            String string = body.string();
-            return toErrorInfo(gson.fromJson(string, AuthError.class));
-        } catch (JsonSyntaxException | NullPointerException | IOException e) {
-            ErrorInfo ei = new ErrorInfo();
-            ei.setId("invalid-error-json");
-            ei.setStatusCode(response.code());
-            ei.setMessage(response.message());
-            ei.setThrowable(e);
-            return ei;
-        }
+    private AuthError errorFromBody(Gson gson, ResponseBody body) throws IOException {
+        String string = body.string();
+        return gson.fromJson(string, AuthError.class);
     }
 }

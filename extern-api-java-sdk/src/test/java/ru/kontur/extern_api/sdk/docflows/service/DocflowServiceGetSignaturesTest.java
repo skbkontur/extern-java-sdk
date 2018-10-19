@@ -46,6 +46,7 @@ import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
@@ -177,7 +178,7 @@ public class DocflowServiceGetSignaturesTest {
         QueryContext<List<Signature>> signatureQueryContext = engine.getDocflowService()
             .getSignatures(queryContext);
         assertNull("signatures must be null!", signatureQueryContext.get());
-        ServiceError serviceError = signatureQueryContext.getServiceError();
+        ApiException serviceError = signatureQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

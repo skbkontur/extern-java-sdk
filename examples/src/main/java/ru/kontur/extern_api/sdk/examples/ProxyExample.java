@@ -332,7 +332,7 @@ public class ProxyExample {
                 );
 
             if (approvedCxt.isFail()) {
-                ServiceError e = approvedCxt.getServiceError();
+                ApiException e = approvedCxt.getServiceError();
                 System.out.println(MessageFormat.format("Method: {0}" + EOL + "Details:" + EOL + "{1}" + EOL, "ApproveCodeProviderImpl", e.toString()));
                 return "";
             }

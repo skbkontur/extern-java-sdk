@@ -44,7 +44,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardValues;
@@ -53,7 +54,6 @@ import ru.kontur.extern_api.sdk.docflows.DocflowsValidator;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -105,7 +105,7 @@ public class DocflowServiceGetSignatureTest {
     public void testGetSignature_Signature() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE
-            .setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
+                .setResponseMessage(String.format("{\"id\": \"%s\"}", StandardValues.ID));
         DocflowsValidator.validateSignature(getSignature(), false, false);
         DocflowsValidator.validateSignature(getSignatureAsync(), false, false);
     }
@@ -114,8 +114,8 @@ public class DocflowServiceGetSignatureTest {
     public void testGetSignature_ContentLink() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{\"id\": \"" + StandardValues.ID + "\"," +
-            "\"content-link\":" + StandardObjects.LINK +
-            "}");
+                "\"content-link\":" + StandardObjects.LINK +
+                "}");
         DocflowsValidator.validateSignature(getSignature(), true, false);
         DocflowsValidator.validateSignature(getSignatureAsync(), true, false);
     }
@@ -124,10 +124,10 @@ public class DocflowServiceGetSignatureTest {
     public void testGetSignature_Signature_Links() {
         ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
         ResponseData.INSTANCE.setResponseMessage("{" +
-            "\"id\": \"" + StandardValues.ID + "\"," +
-            "\"content-link\":" + StandardObjects.LINK + "," +
-            "\"links\": [" + StandardObjects.LINK + "]" +
-            "}");
+                "\"id\": \"" + StandardValues.ID + "\"," +
+                "\"content-link\":" + StandardObjects.LINK + "," +
+                "\"links\": [" + StandardObjects.LINK + "]" +
+                "}");
         DocflowsValidator.validateSignature(getSignature(), true, true);
         DocflowsValidator.validateSignature(getSignatureAsync(), true, true);
     }
@@ -168,9 +168,9 @@ public class DocflowServiceGetSignatureTest {
         queryContext.setDocumentId(StandardValues.ID);
         queryContext.setSignatureId(StandardValues.ID);
         QueryContext<Signature> signatureQueryContext = engine.getDocflowService()
-            .getSignature(queryContext);
+                .getSignature(queryContext);
         assertNull("documents must be null!", signatureQueryContext.get());
-        ServiceError serviceError = signatureQueryContext.getServiceError();
+        ApiException serviceError = signatureQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
@@ -186,8 +186,8 @@ public class DocflowServiceGetSignatureTest {
     private Signature getSignatureAsync() {
         try {
             return engine.getDocflowService()
-                .getSignatureAsync(StandardValues.ID, StandardValues.ID, StandardValues.ID).get()
-                .get();
+                    .getSignatureAsync(StandardValues.ID, StandardValues.ID, StandardValues.ID).get()
+                    .get();
         } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;

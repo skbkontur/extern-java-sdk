@@ -46,11 +46,11 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 /**
  * @author Mikhail Pavlenko
@@ -74,8 +74,7 @@ public class DraftServiceGetDecryptedDocumentContentTest {
     public static void stopJetty() {
         try {
             server.stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -143,9 +142,9 @@ public class DraftServiceGetDecryptedDocumentContentTest {
         queryContext.setDraftId(StandardValues.ID);
         queryContext.setDocumentId(StandardValues.ID);
         QueryContext<String> stringQueryContext = engine.getDraftService()
-            .getDecryptedDocumentContent(queryContext);
+                .getDecryptedDocumentContent(queryContext);
         assertNull(stringQueryContext.get());
-        ServiceError serviceError = stringQueryContext.getServiceError();
+        ApiException serviceError = stringQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
@@ -153,13 +152,12 @@ public class DraftServiceGetDecryptedDocumentContentTest {
     private byte[] getContent() {
         try {
             return engine.getDraftService()
-                .getDecryptedDocumentContentAsync(
-                        UUID.fromString(StandardValues.ID),
-                        UUID.fromString(StandardValues.ID))
+                    .getDecryptedDocumentContentAsync(
+                            UUID.fromString(StandardValues.ID),
+                            UUID.fromString(StandardValues.ID))
                     .get()
                     .get();
-        }
-        catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             fail();
             return null;
         }

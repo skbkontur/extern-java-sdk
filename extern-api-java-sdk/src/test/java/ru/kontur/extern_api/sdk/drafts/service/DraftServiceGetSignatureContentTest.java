@@ -143,9 +143,6 @@ public class DraftServiceGetSignatureContentTest {
         QueryContext<String> stringQueryContext = engine.getDraftService()
             .getSignatureContent(queryContext);
         assertNull(stringQueryContext.get());
-        ServiceError serviceError = stringQueryContext.getServiceError();
-        assertNotNull("ServiceError must not be null!", serviceError);
-        assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
 
     private byte[] getContent() {

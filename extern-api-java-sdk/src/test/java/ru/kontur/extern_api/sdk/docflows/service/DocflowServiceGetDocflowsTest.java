@@ -46,6 +46,7 @@ import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
@@ -175,7 +176,7 @@ public class DocflowServiceGetDocflowsTest {
                 .getDocflows(queryContext);
         DocflowPage docflowPage = docflowPageQueryContext.get();
         assertNull("docflowPage must be null!", docflowPage);
-        ServiceError serviceError = docflowPageQueryContext.getServiceError();
+        ApiException serviceError = docflowPageQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

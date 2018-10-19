@@ -32,13 +32,29 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import javax.net.ssl.HttpsURLConnection;
-
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.ServiceException;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.Account;
+import ru.kontur.extern_api.sdk.model.AccountList;
+import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.model.Company;
+import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentToSend;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.EventsPage;
+import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SenderIp;
+import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -373,7 +389,7 @@ public class QueryContext<R> implements Serializable {
 
     private String result;
 
-    private ServiceError serviceError;
+    private ApiException serviceError;
 
     private UriProvider serviceBaseUriProvider;
 
@@ -411,7 +427,7 @@ public class QueryContext<R> implements Serializable {
     /**
      * Конструктор для создания контекста
      *
-     * @param parent     контекст, из которого копируются параметры для создаваемого контекста
+     * @param parent контекст, из которого копируются параметры для создаваемого контекста
      * @param entityName наименования сущности, для которой создается контекст
      */
     public QueryContext(QueryContext<?> parent, String entityName) {
@@ -431,7 +447,7 @@ public class QueryContext<R> implements Serializable {
      * QueryContext#get()}
      *
      * @param result результат операции
-     * @param key    наименование параметра
+     * @param key наименование параметра
      * @return контекст
      */
     public QueryContext<R> setResult(R result, String key) {
@@ -445,9 +461,9 @@ public class QueryContext<R> implements Serializable {
      * QueryContext#isFail()} вернет true, иначе метод {@link QueryContext#isSuccess()} ()} вернет
      * true.
      *
-     * @return объект {@link ServiceError}
+     * @return объект {@link ApiException}
      */
-    public ServiceError getServiceError() {
+    public ApiException getServiceError() {
         return serviceError;
     }
 
@@ -459,7 +475,7 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setServiceError(String message) {
-        return setServiceError(ErrorCode.business, message, 0, EMPTY_MAP, null, null);
+        return setServiceError(ErrorCode.business.message(), message, 0, EMPTY_MAP, null);
     }
 
     /**
@@ -472,35 +488,7 @@ public class QueryContext<R> implements Serializable {
     public QueryContext<R> setServiceError(QueryContext<?> queryContext) {
         this.result = null;
         this.serviceError = queryContext.serviceError;
-        if (serviceError.getResponseCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-            set(SESSION_ID, null);
-        }
         return this;
-    }
-
-    /**
-     * Метод устанавливает ошибку {@link ServiceError} в контекст.
-     *
-     * @param serviceError ошибка
-     * @return контекст
-     */
-    public QueryContext<R> setServiceError(ServiceError serviceError) {
-        this.result = null;
-        this.serviceError = serviceError;
-        if (serviceError.getResponseCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-            set(SESSION_ID, null);
-        }
-        return this;
-    }
-
-    /**
-     * Метод устанавливает ошибку и дефолтное сообщение по переданному коду ошибки
-     *
-     * @param errorCode код ошибки {@link ErrorCode}
-     * @return контекст
-     */
-    public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode) {
-        return setServiceError(errorCode, errorCode.message(), 0, EMPTY_MAP, null, null);
     }
 
     /**
@@ -511,73 +499,51 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setServiceError(ApiException x) {
-        return setServiceError(ErrorCode.server, x.getMessage(), x.getCode(),
-                x.getResponseHeaders(), x.getResponseBody(), x.getCause() == null ? x : x.getCause());
+        this.result = null;
+        this.serviceError = x;
+        return this;
     }
 
     /**
      * Метод устанавливает значение ошибки
      *
-     * @param errorCode       код ошибки {@link ErrorCode}
-     * @param message         сообщение об ошибки
-     * @param code            HTTP код ошибки
+     * @param errorId ID ошибки
+     * @param message сообщение об ошибки
+     * @param code HTTP код ошибки
      * @param responseHeaders коллекция HTTP заголовков (ключ, значения)
-     * @param responseBody    ответ сервера
-     * @param thrown          эксепшин, приведший к ошибке
+     * @param thrown эксепшн, приведший к ошибке
      * @return контекст
      */
-    public QueryContext<R> setServiceError(ServiceError.ErrorCode errorCode, String message,
-                                           int code, Map<String, List<String>> responseHeaders, String responseBody,
-                                           Throwable thrown) {
-        return setServiceError(
-                new ServiceError() {
-                    @Override
-                    public ErrorCode getErrorCode() {
-                        return errorCode;
-                    }
+    public QueryContext<R> setServiceError(
+            String errorId,
+            String message,
+            int code,
+            Map<String, List<String>> responseHeaders,
+            Throwable thrown
+    ) {
+        ErrorInfo ei = new ErrorInfo();
+        ei.setStatusCode(code);
+        ei.setId(errorId);
+        ei.setMessage(message);
 
-                    @Override
-                    public int getResponseCode() {
-                        return code;
-                    }
-
-                    @Override
-                    public String getMessage() {
-                        return message;
-                    }
-
-                    @Override
-                    public Map<String, List<String>> getResponseHeaders() {
-                        return responseHeaders;
-                    }
-
-                    @Override
-                    public String getResponseBody() {
-                        return responseBody;
-                    }
-
-                    @Override
-                    public Throwable getCause() {
-                        return thrown;
-                    }
-
-                    @Override
-                    public String toString() {
-                        return prettyErrorPrint(this);
-                    }
-                }
-        );
+        return setServiceError(new ApiResponse<>(
+                code,
+                responseHeaders,
+                null,
+                ei,
+                thrown
+        ).asApiException());
     }
 
     /**
      * Метод устанавливает значение ошибки. При этом ErrorCode примет значение ErrorCode.business
      *
      * @param message сообщение с ошибкой
-     * @param x       эксепшин, приведший к ошибке
+     * @param x эксепшин, приведший к ошибке
      * @return контекст
      */
     public QueryContext<R> setServiceError(String message, Throwable x) {
-        return setServiceError(ErrorCode.business, message, 0, EMPTY_MAP, null, x);
+        return setServiceError(ErrorCode.business.message(), message, 0, EMPTY_MAP, x);
     }
 
     /**
@@ -1033,14 +999,16 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект, содержащий IP адрес отправителя {@link SenderIp}
+     *
      * @return IP адрес отправителя
      */
     public SenderIp getSenderIP() {
-        return (SenderIp)params.get(SENDER_IP);
+        return (SenderIp) params.get(SENDER_IP);
     }
 
     /**
      * Метод устанавливает объект, содержащий IP адрес отправителя {@link SenderIp}
+     *
      * @param senderIP объект, содержащий IP адрес отправителя
      * @return контекст
      */
@@ -1106,15 +1074,6 @@ public class QueryContext<R> implements Serializable {
     public QueryContext<R> setForce(boolean force) {
         return set(FORCE, force);
     }
-/*
-    public byte[] getContentBytes() {
-        return (byte[]) params.get(CONTENT_BYTES);
-    }
-
-    public QueryContext<R> setContentBytes(byte[] documentContent) {
-        return set(CONTENT_BYTES, documentContent);
-    }
-*/
 
     /**
      * Метод возвращает значение - строку
@@ -1212,7 +1171,6 @@ public class QueryContext<R> implements Serializable {
     }
 
 
-
     /**
      * Метод возвращает объект DraftDocument {@link DraftDocument}
      *
@@ -1251,7 +1209,7 @@ public class QueryContext<R> implements Serializable {
         return set(SIGNATURE_ID, UUID.fromString(signatureId));
     }
 
-    public QueryContext<R> setRawSignature(byte[] rawSignature){
+    public QueryContext<R> setRawSignature(byte[] rawSignature) {
         return set(RAW_SIGNATURE, rawSignature);
     }
 
@@ -1718,7 +1676,7 @@ public class QueryContext<R> implements Serializable {
      * сертификатов.
      *
      * @return объект {@link CertificateList}, предназначенный для постраничнего извлечения
-     * сертификатов
+     *         сертификатов
      */
     public CertificateList getCertificateList() {
         return (CertificateList) params.get(CERTIFICATE_LIST);
@@ -1729,7 +1687,7 @@ public class QueryContext<R> implements Serializable {
      * извлечения сертификатов.
      *
      * @param certificateList объект {@link CertificateList}, предназначенный для постраничнего
-     *                        извлечения сертификатов
+     *         извлечения сертификатов
      * @return контекст
      */
     public QueryContext<R> setCertificateList(CertificateList certificateList) {
@@ -1945,6 +1903,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает идентификатор запроса
+     *
      * @return идентификатор запроса
      */
     public String getRequestId() {
@@ -1953,6 +1912,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает идентификатор запроса
+     *
      * @param requestId идентификатор запроса
      * @return контекст
      */
@@ -1978,6 +1938,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает IP адрес отправителя
+     *
      * @return IP адрес отправителя
      */
     public String getUserIP() {
@@ -1986,6 +1947,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает IP адрес отправителя
+     *
      * @param userIP IP адрес отправителя
      * @return контекст
      */
@@ -1995,6 +1957,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает объект, содержащий информацию об ответном документе
+     *
      * @return объект, содержащий информацию об ответном документе
      */
     public ReplyDocument getReplyDocument() {
@@ -2003,6 +1966,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает объект, содержащий информацию об ответном документе
+     *
      * @param replyDocument объект, содержащий информацию об ответном документе
      * @return контекст
      */
@@ -2012,6 +1976,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод возвращает список объектов, содержащий информацию об ответных документах
+     *
      * @return список объектов, содержащий информацию об ответных документах
      * @see ReplyDocument
      */
@@ -2022,6 +1987,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Метод устанавливает список объектов, содержащий информацию об ответных документах
+     *
      * @param replyDocuments список объектов, содержащий информацию об ответных документах
      * @return контекст
      * @see ReplyDocument
@@ -2035,7 +2001,7 @@ public class QueryContext<R> implements Serializable {
      * удаляется.
      *
      * @param name имя параметра
-     * @param val  значение параметра
+     * @param val значение параметра
      * @return контекст
      */
     public QueryContext<R> set(String name, Object val) {
@@ -2052,7 +2018,7 @@ public class QueryContext<R> implements Serializable {
      * Метод возвращает параметр с именем "name", приводя его к типу переменной.
      *
      * @param name имя параметра
-     * @param <T>  задекларированный тип переменной
+     * @param <T> задекларированный тип переменной
      * @return возвращает параметр с именем "name", приводя его к типу переменной
      */
     @SuppressWarnings("unchecked")
@@ -2094,9 +2060,8 @@ public class QueryContext<R> implements Serializable {
      * Метод кидает исключение, если контекст содержит ошибку
      */
     public void failure() {
-        ServiceError e = getServiceError();
-        if (e != null) {
-            throw new ServiceException(e, prettyErrorPrint(e));
+        if (serviceError != null) {
+            throw serviceError;
         }
     }
 
@@ -2116,6 +2081,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Same as {@link QueryContext#get()} but throws
+     *
      * @throws java.util.NoSuchElementException when no such parameter presented in a context
      */
     @NotNull
@@ -2149,14 +2115,14 @@ public class QueryContext<R> implements Serializable {
     private String prettyErrorPrint(ServiceError se) {
         final String EOL = "\r\n";
 
-        ErrorCode errorCode = se.getErrorCode();
+        String errorCode = se.getErrorId();
         String message = se.getMessage();
         int responseCode = se.getResponseCode();
         Map<String, List<String>> responseHeaders = se.getResponseHeaders();
         String responseBody = se.getResponseBody();
 
         StringBuilder errorMsg = new StringBuilder("Message error: ")
-                .append(message == null ? errorCode.message() : message).append(EOL);
+                .append(message == null ? errorCode : message).append(EOL);
         if (responseCode != 0) {
             errorMsg.append("  Response code: ").append(responseCode).append(EOL);
             if (responseHeaders != null) {

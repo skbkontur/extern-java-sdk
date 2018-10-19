@@ -22,8 +22,6 @@
  */
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
-
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Collections;
@@ -103,13 +101,7 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
             initialResp = initAuth(certCxt.get(), apiKey, skipCertValidation);
             localCredentials = confirmAuth(initialResp, apiKey, thumbprint);
         } catch (ApiException e) {
-            switch (e.getCode()) {
-                case HTTP_FORBIDDEN:
-                    return new QueryContext<String>().setServiceError(
-                            AuthenticationServiceError.fromAuthenticationException(e));
-                default:
-                    return new QueryContext<String>().setServiceError(e);
-            }
+            return new QueryContext<String>().setServiceError(e);
         }
 
         this.credentials = localCredentials;
@@ -187,9 +179,9 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
 
     /**
      * @param certificateProvider Supplier&lt;byte[]&gt; поставляет сертификат, которым производится
-     * аутентификация
+     *         аутентификация
      * @param skipCertValidation {@code true} - не проверять валидность сертификата, по умолчанию -
-     * {@code false}
+     *         {@code false}
      * @return CertificateAuthenticationProviderBuilder
      */
     public static CertificateAuthenticationProviderBuilder usingCertificate(
@@ -201,7 +193,7 @@ public final class CertificateAuthenticationProvider implements AuthenticationPr
 
     /**
      * @param certificateProvider Supplier&lt;byte[]&gt; поставляет сертификат, которым производится
-     * аутентификация
+     *         аутентификация
      * @return CertificateAuthenticationProviderBuilder
      * @see CertificateAuthenticationProvider#usingCertificate(CertificateProvider)
      */

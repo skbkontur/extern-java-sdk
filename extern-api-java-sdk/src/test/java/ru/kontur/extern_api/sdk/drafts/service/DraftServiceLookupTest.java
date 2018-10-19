@@ -45,6 +45,7 @@ import org.junit.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.common.TestServlet;
@@ -144,7 +145,7 @@ public class DraftServiceLookupTest {
         QueryContext<Draft> draftQueryContext = engine.getDraftService().lookup(queryContext);
         Draft draft = draftQueryContext.get();
         assertNull("draft must be null!", draft);
-        ServiceError serviceError = draftQueryContext.getServiceError();
+        ApiException serviceError = draftQueryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

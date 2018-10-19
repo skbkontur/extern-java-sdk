@@ -21,13 +21,15 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.adaptor;
 
 import java.util.Map;
 
 public class ErrorInfo {
 
-    private Throwable throwable;
+    public ErrorInfo() {
+
+    }
 
     private String id;
 
@@ -89,11 +91,4 @@ public class ErrorInfo {
         this.properties = properties;
     }
 
-    public Throwable getThrowable() {
-        return throwable;
-    }
-
-    public void setThrowable(Throwable throwable) {
-        this.throwable = throwable;
-    }
 }

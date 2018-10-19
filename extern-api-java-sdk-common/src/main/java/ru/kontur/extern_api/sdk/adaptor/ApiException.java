@@ -29,35 +29,34 @@ import java.util.Map;
 
 public class ApiException extends RuntimeException {
 
-    private int code = -1;
-    private Map<String, List<String>> responseHeaders;
-    private String responseBody;
+    private final int code;
+    private final String errorId;
+    private final Map<String, List<String>> responseHeaders;
 
     public ApiException(Throwable throwable) {
-        super(throwable);
+        this(-1, null, null, null, throwable);
     }
 
     public ApiException(String message) {
-        super(message);
-    }
-
-    public ApiException(
-            String message,
-            Throwable throwable,
-            int code,
-            Map<String, List<String>> responseHeaders,
-            String responseBody) {
-
-        super(message, throwable);
-
-        this.code = code;
-        this.responseHeaders = responseHeaders;
-        this.responseBody = responseBody;
+        this(-1, null, message, null, null);
     }
 
     public ApiException(int code, String message) {
-        super(message);
+        this(code, null, message, null, null);
+    }
+
+    public ApiException(
+            int code,
+            String errorId,
+            String message,
+            Map<String, List<String>> responseHeaders,
+            Throwable throwable
+    ) {
+        super(message, throwable);
+
         this.code = code;
+        this.errorId = errorId;
+        this.responseHeaders = responseHeaders;
     }
 
     /**
@@ -68,6 +67,14 @@ public class ApiException extends RuntimeException {
     }
 
     /**
+     * @return HTTP status code
+     */
+    public int getResponseCode() {
+        return code;
+    }
+
+
+    /**
      * @return HTTP response headers
      */
     public Map<String, List<String>> getResponseHeaders() {
@@ -75,9 +82,9 @@ public class ApiException extends RuntimeException {
     }
 
     /**
-     * @return HTTP response body
+     * @return errorIdentifier
      */
-    public String getResponseBody() {
-        return responseBody;
+    public String getErrorId() {
+        return errorId;
     }
 }

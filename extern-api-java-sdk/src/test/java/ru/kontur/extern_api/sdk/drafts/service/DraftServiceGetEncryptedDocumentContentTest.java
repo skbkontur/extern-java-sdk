@@ -142,9 +142,6 @@ public class DraftServiceGetEncryptedDocumentContentTest {
         QueryContext<String> stringQueryContext = engine.getDraftService()
                 .getEncryptedDocumentContent(queryContext);
         assertNull(stringQueryContext.get());
-        ServiceError serviceError = stringQueryContext.getServiceError();
-        assertNotNull("ServiceError must not be null!", serviceError);
-        assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }
 
     private byte[] getContent() {
