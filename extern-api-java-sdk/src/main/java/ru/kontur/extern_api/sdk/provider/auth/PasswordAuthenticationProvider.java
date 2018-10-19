@@ -53,8 +53,9 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
     public QueryContext<String> sessionId() {
         return QueryContextUtils.join(
                 authApi.passwordAuthentication(creds.getLogin(), apiKey, null, creds.getPass())
-                        .thenApply(QueryContextUtils.contextAdaptor("sid"))
-                        .thenApply(cxt -> cxt.map(QueryContext.SESSION_ID, SessionResponse::getSid))
+                        .thenApply(SessionResponse::getSid)
+                        .thenApply(QueryContext.constructor(QueryContext.SESSION_ID))
+                        .exceptionally(QueryContextUtils::completeCareful)
         );
     }
 

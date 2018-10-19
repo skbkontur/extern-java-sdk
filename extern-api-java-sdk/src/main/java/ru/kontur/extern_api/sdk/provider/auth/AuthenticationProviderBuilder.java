@@ -24,13 +24,18 @@
 package ru.kontur.extern_api.sdk.provider.auth;
 
 import com.google.gson.Gson;
+import java.security.cert.CertificateException;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
+import ru.argosgrp.cryptoservice.CryptoException;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.model.Credential;
 import ru.kontur.extern_api.sdk.portal.AuthApi;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 public class AuthenticationProviderBuilder {
 
@@ -65,8 +70,25 @@ public class AuthenticationProviderBuilder {
         );
     }
 
-    public CertificateAuthenticationProvider certificateAuthentication(@NotNull byte[] certContent) {
-        return null;
+    public CertificateAuthenticationProvider certificateAuthentication(
+            @NotNull CryptoProvider cryptoProvider,
+            @NotNull byte[] certContent)
+            throws CryptoException, CertificateException {
+
+        CryptoApi cryptoApi = new CryptoApi();
+
+        return new CertificateAuthenticationProvider(
+                configuredClient.createService(AuthApi.class),
+                certContent,
+                cryptoApi.getThumbprint(certContent),
+                apiKey,
+                cryptoProvider
+        );
+    }
+
+    public CertificateAuthenticationProvider certificateAuthentication(@NotNull byte[] certContent)
+            throws CryptoException, CertificateException {
+        return certificateAuthentication(new CryptoProviderMSCapi(), certContent);
     }
 
     public TrustedAuthentication trustedAuthentication(@NotNull String serviceUserId) {

@@ -28,6 +28,9 @@ import com.google.gson.JsonParseException;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +56,11 @@ class GsonCustomConverterFactory extends Converter.Factory {
     }
 
     @Override
-    public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
-            Retrofit retrofit) {
+    public Converter<ResponseBody, ?> responseBodyConverter(
+            Type type,
+            Annotation[] annotations,
+            Retrofit retrofit
+    ) {
         if (type.equals(String.class)) {
             return new GsonResponseBodyConverterToString<>(gson, type);
         } else {
@@ -63,10 +69,28 @@ class GsonCustomConverterFactory extends Converter.Factory {
     }
 
     @Override
-    public Converter<?, RequestBody> requestBodyConverter(Type type,
-            Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-        return gsonConverterFactory
-                .requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
+    public Converter<?, RequestBody> requestBodyConverter(
+            Type type,
+            Annotation[] parameterAnnotations,
+            Annotation[] methodAnnotations,
+            Retrofit retrofit
+    ) {
+
+        boolean rawBodyRequired = Stream
+                .of(parameterAnnotations)
+                .map(Annotation::annotationType)
+                .anyMatch(Predicate.isEqual(Raw.class));
+
+        if (!rawBodyRequired) {
+            return gsonConverterFactory
+                    .requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
+        }
+
+        if (type.equals(byte[].class)) {
+            return new RequestBodyConverterRaw();
+        }
+
+        throw new IllegalStateException("@Raw annotation only allowed on byte[] request body");
     }
 
 
@@ -94,5 +118,14 @@ class GsonCustomConverterFactory extends Converter.Factory {
                 return (T) returned;
             }
         }
+    }
+
+    static class RequestBodyConverterRaw implements Converter<byte[], RequestBody> {
+
+        @Override
+        public RequestBody convert(byte[] value) throws IOException {
+            return RequestBody.create(MediaType.parse("application/octet-stream"), value);
+        }
+
     }
 }

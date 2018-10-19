@@ -29,11 +29,6 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 import com.google.gson.Gson;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -44,14 +39,10 @@ import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
-import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
-import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.Link;
 
 public class CertificateAuthenticationTest {
@@ -90,8 +81,7 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForInitiation(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(
-                        request().withMethod("POST").withPath("**/authenticate-by-cert"),
+                .when(request().withMethod("POST").withPath(".*/authenticate-by-cert"),
                         exactly(1))
                 .respond(response()
                         .withStatusCode(code)
@@ -102,7 +92,7 @@ public class CertificateAuthenticationTest {
 
     private void createAnswerForApprove(int code, String body) {
         new MockServerClient(HOST, PORT)
-                .when(request().withMethod("POST").withPath("**/approve-cert"), exactly(1))
+                .when(request().withMethod("POST").withPath(".*/approve-cert"), exactly(1))
                 .respond(
                         response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
                 );
@@ -117,40 +107,11 @@ public class CertificateAuthenticationTest {
     }
 
     @Before
-    public void setupProvider() {
-
-        CertificateProvider certificateProvider = (String thumbprint) -> {
-            URL resource1 = CertificateAuthenticationTest.this.getClass().getClassLoader()
-                    .getResource(thumbprint + ".cer");
-            if (resource1 == null) {
-                return new QueryContext<byte[]>().setServiceError(
-                        Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint));
-            }
-
-            try {
-                return new QueryContext<byte[]>()
-                        .setResult(Files.readAllBytes(Paths.get(resource1.toURI())),
-                                QueryContext.CONTENT);
-            } catch (URISyntaxException | IOException x) {
-                return new QueryContext<byte[]>().setServiceError(
-                        Messages.get(Messages.C_CRYPTO_ERROR_CERTIFICATE_NOT_FOUND, thumbprint), x);
-            }
-        };
+    public void setupProvider() throws Exception {
 
         String baseUri = String.format("http://%s:%s/", HOST, PORT);
-        auth = CertificateAuthenticationProvider
-                .usingCertificate(certificateProvider)
-                .setCryptoProvider(new MockCryptoProvider())
-                .setApiKeyProvider(() -> "apikey")
-                .setServiceBaseUriProvider(() -> baseUri)
-                .setSignatureKeyProvider(() -> "certificate")
-                .buildAuthenticationProvider();
-
-        auth.httpClient(new KonturHttpClient(new KonturConfiguredClient(
-                Level.BODY,
-                baseUri,
-                GsonProvider.getPortalCompatibleGson()
-        )));
+        auth = AuthenticationProviderBuilder.createFor(baseUri, Level.BODY)
+                .certificateAuthentication(new MockCryptoProvider(), new byte[]{1, 2, 3});
     }
 
     @Test
@@ -160,11 +121,8 @@ public class CertificateAuthenticationTest {
         String expectedSid = "qwerty";
         createAnswerForValidApprove(expectedSid);
 
-        QueryContext<String> sessionId = auth.sessionId();
+        String actualSid = auth.sessionId().getOrThrow();
 
-        sessionId.ensureSuccess();
-
-        String actualSid = sessionId.getSessionId();
         assertThat(actualSid, equalTo(expectedSid));
     }
 
@@ -173,6 +131,9 @@ public class CertificateAuthenticationTest {
         createAnswerForInitiation(403, quoted("{ 'Code': 'CertNotValid' }"));
         QueryContext<String> sessionId = auth.sessionId();
         Assert.assertTrue(sessionId.isFail());
+
+        Assert.assertEquals(403, sessionId.getServiceError().getResponseCode());
+        Assert.assertEquals("CertNotValid", sessionId.getServiceError().getMessage());
     }
 
     @Test
@@ -182,13 +143,8 @@ public class CertificateAuthenticationTest {
 
         QueryContext<String> sessionId = auth.sessionId();
         Assert.assertTrue(sessionId.isFail());
+        Assert.assertEquals(403, sessionId.getServiceError().getResponseCode());
+        Assert.assertEquals("WrongKey", sessionId.getServiceError().getMessage());
     }
 
-    @Test
-    public void testIncorrectDataDuringInitialization() {
-        createAnswerForInitiation(200, createInitResp(null, "this is link", "go"));
-        createAnswerForValidApprove("lol");
-        QueryContext<String> sessionId = auth.sessionId();
-        Assert.assertTrue(sessionId.isSuccess());
-    }
 }

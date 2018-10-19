@@ -33,6 +33,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.portal.model.CertificateAuthenticationQuest;
 import ru.kontur.extern_api.sdk.portal.model.DecryptedKey;
 import ru.kontur.extern_api.sdk.portal.model.ServiceUserBinding;
@@ -46,14 +47,14 @@ public interface AuthApi {
     String VERSION = "v5.12";
 
     @POST("sessions/" + VERSION + "/sessions/refresh")
-    CompletableFuture<ApiResponse<SessionResponse>> refreshSession(
+    CompletableFuture<SessionResponse> refreshSession(
             @NotNull @Query("auth.sid") String sessionId,
             @Nullable @Query("refreshToken") String refreshToken
     );
 
     @POST("auth/" + VERSION + "/authenticate-by-pass")
     @Headers("Content-Type: text/plain")
-    CompletableFuture<ApiResponse<SessionResponse>> passwordAuthentication(
+    CompletableFuture<SessionResponse> passwordAuthentication(
             @NotNull @Query("login") String login,
             @Nullable @Query("api-key") String apiKey,
             @Nullable @Query("auth.sid") String authSid,
@@ -61,22 +62,23 @@ public interface AuthApi {
     );
 
     @POST("/auth/" + VERSION + "/authenticate-by-cert")
-    CompletableFuture<ApiResponse<CertificateAuthenticationQuest>> certificateAuthenticationInit(
+    @Headers("Content-Type: application/octet-stream")
+    CompletableFuture<CertificateAuthenticationQuest> certificateAuthenticationInit(
             @Nullable @Query("api-key") String apiKey,
             @Nullable @Query("auth.sid") String authSid,
-            @Nullable @Query("free") String withoutValidation,
-            @NotNull @Body byte[] cert
+            @Nullable @Query("free") Boolean withoutValidation,
+            @NotNull @Body @Raw byte[] cert
     );
 
     @POST("auth/" + VERSION + "/approve-cert")
-    CompletableFuture<ApiResponse<SessionResponse>> certificateAuthenticationConfirm(
+    CompletableFuture<SessionResponse> certificateAuthenticationConfirm(
             @NotNull @Query("thumbprint") String thumbprint,
             @Nullable @Query("api-key") String apiKey,
-            @NotNull @Body DecryptedKey decryptedKey
+            @NotNull @Body @Raw byte[] decryptedKey
     );
 
     @POST("auth/" + VERSION + "/authenticate-by-truster")
-    CompletableFuture<ApiResponse<TrustedAuthenticationQuest>> trustedAuthenticationInit(
+    CompletableFuture<TrustedAuthenticationQuest> trustedAuthenticationInit(
             @NotNull @Query("timestamp") Date timestamp,
             @NotNull @Query("identityKey") String identityKey,
             @NotNull @Query("identityValue") String identityValue,
@@ -86,14 +88,14 @@ public interface AuthApi {
     );
 
     @POST("auth/" + VERSION + "/approve-truster")
-    CompletableFuture<ApiResponse<SessionResponse>> trustedAuthenticationConfirm(
+    CompletableFuture<SessionResponse> trustedAuthenticationConfirm(
             @NotNull @Query("key") String key,
             @NotNull @Query("id") String identityValue,
             @Nullable @Query("api-key") String apiKey
     );
 
     @POST("auth/" + VERSION + "/register-external-service-id")
-    CompletableFuture<ApiResponse<Void>> registerExternalServiceId(
+    CompletableFuture<Void> registerExternalServiceId(
             @Nullable @Query("api-key") String apiKey,
             @NotNull @Body ServiceUserBinding serviceUserBinding
     );

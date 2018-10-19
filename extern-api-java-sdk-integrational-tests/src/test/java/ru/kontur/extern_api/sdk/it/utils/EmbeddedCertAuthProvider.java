@@ -23,14 +23,7 @@ public class EmbeddedCertAuthProvider extends AuthenticationProviderAdaptor {
         CertificateProvider certificateProvider = thumbprint -> new QueryContext<byte[]>()
                 .setResult(CertificateResource.read(thumbprint), QueryContext.CONTENT);
 
-        auth = CertificateAuthenticationProvider
-                .usingCertificate(certificateProvider)
-                .setApiKeyProvider(engine.getApiKeyProvider())
-                .setCryptoProvider(engine.getCryptoProvider())
-                .setServiceBaseUriProvider(engine.getConfiguration()::getAuthBaseUri)
-                .setSignatureKeyProvider(engine.getConfiguration()::getThumbprint)
-                .buildAuthenticationProvider()
-                .httpClient(engine.getHttpClient());
+        auth = null;
     }
 
     @Override

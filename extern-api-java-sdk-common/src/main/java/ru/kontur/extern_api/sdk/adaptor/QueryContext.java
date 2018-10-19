@@ -498,6 +498,20 @@ public class QueryContext<R> implements Serializable {
      * @param x ошибка сервера (4XX, 5XX)
      * @return контекст
      */
+    public QueryContext<R> setServiceError(Throwable x) {
+        if (x instanceof ApiException) {
+            return setServiceError((ApiException) x);
+        }
+        return setServiceError(x.getMessage(), x);
+    }
+
+    /**
+     * Метод устанавливает значение ошибки, которое вернул сервис, при этом ErrorCode примет
+     * значение ErrorCode.server
+     *
+     * @param x ошибка сервера (4XX, 5XX)
+     * @return контекст
+     */
     public QueryContext<R> setServiceError(ApiException x) {
         this.result = null;
         this.serviceError = x;
@@ -2147,6 +2161,14 @@ public class QueryContext<R> implements Serializable {
     @Override
     public String toString() {
         return "context{" + result + "=" + get() + " with " + params.size() + "params}";
+    }
+
+    public static <T> QueryContext<T> error(Throwable throwable) {
+        return new QueryContext<T>().setServiceError(throwable);
+    }
+
+    public static <T> Function<T, QueryContext<T>> constructor(String resultKey) {
+        return t -> new QueryContext<>(resultKey, t);
     }
 
 }

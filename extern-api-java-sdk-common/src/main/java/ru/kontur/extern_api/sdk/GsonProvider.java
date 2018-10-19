@@ -3,10 +3,12 @@ package ru.kontur.extern_api.sdk;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonByteArrayAdaptor;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDeserializer;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonRecipientAdaptor;
 
@@ -25,6 +27,7 @@ public class GsonProvider {
                 .setDateFormat(PublicDateFormat.FORMAT)
                 .setFieldNamingPolicy(getFieldNamingPolicy())
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
+                .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
                 .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer());
     }

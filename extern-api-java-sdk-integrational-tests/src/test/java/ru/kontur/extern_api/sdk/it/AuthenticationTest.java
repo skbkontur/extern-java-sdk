@@ -1,53 +1,70 @@
 package ru.kontur.extern_api.sdk.it;
 
-import java.net.URI;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.Configuration;
-import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.it.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.it.utils.TestConfig;
-import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
+import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 
 class AuthenticationTest {
 
-
     private static Configuration cfg;
+    private static AuthenticationProviderBuilder build;
 
     @BeforeAll
     static void setUp() {
         cfg = TestConfig.LoadConfigFromEnvironment();
-    }
-
-    @Test
-    void certAuth() throws Exception {
-        // cache installed keys before starting dialog with auth.
-        new CryptoApi().getInstalledKeys(false);
-
-        ExternEngine engine = TestSuite.LoadManually((configuration, builder) -> builder
-                .certificateAuth(CertificateResource.read(configuration.getThumbprint()))
-                .cryptoProvider(new CryptoProviderMSCapi())
-                .doNotSetupAccount()
-                .build()
-        ).engine;
-
-        engine.getAuthenticationProvider().sessionId().ensureSuccess();
-    }
-
-    @Test
-    void passwordAuth() throws Exception {
-        PasswordAuthenticationProvider auth = AuthenticationProviderBuilder
+        build = AuthenticationProviderBuilder
                 .createFor(cfg.getAuthBaseUri(), Level.BODY)
-                .passwordAuthentication(cfg.getLogin(), cfg.getPass());
+                .withApiKey(cfg.getApiKey());
+    }
 
-        Assertions.assertNotNull(auth.sessionId().getOrThrow());
+    @Nested
+    @DisplayName("password authentication")
+    class PasswordAuthTest {
+
+        @Test
+        void passwordAuth() throws Exception {
+
+            PasswordAuthenticationProvider auth = build
+                    .passwordAuthentication(cfg.getLogin(), cfg.getPass());
+
+            Assertions.assertNotNull(auth.sessionId().getOrThrow());
+        }
 
     }
+
+    @Nested
+    @DisplayName("cert authentication")
+    class CertAuthTest {
+
+        CertAuthTest() throws Exception {
+            // cache installed keys before start working with auth.
+            new CryptoApi().getCertificatesInstalledLocally();
+        }
+
+        @Test
+        void certAuth() throws Exception {
+            CertificateAuthenticationProvider auth = build
+                    .certificateAuthentication(CertificateResource.read(cfg.getThumbprint()));
+
+            Assertions.assertNotNull(auth.sessionId().getOrThrow());
+        }
+    }
+
+    @Nested
+    @DisplayName("trusted authentication")
+    class TrustedAuthTest {}
+
+
+
 }

@@ -118,13 +118,7 @@ public final class ConfigurationUtils {
         CertificateProvider certificateProvider = t -> new QueryContext<byte[]>()
                 .setResult(certificate, QueryContext.CONTENT);
 
-        return CertificateAuthenticationProvider
-                .usingCertificate(certificateProvider)
-                .setCryptoProvider(cryptoProvider)
-                .setApiKeyProvider(configuration::getApiKey)
-                .setServiceBaseUriProvider(configuration::getAuthBaseUri)
-                .setSignatureKeyProvider(() -> thumbprint)
-                .buildAuthenticationProvider();
+        return null;
     }
 
     private static void requireParam(Supplier<?> s, String paramName, String authType) {
