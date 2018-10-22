@@ -50,7 +50,7 @@ public class CertificateAuthenticationTest {
     private static final Header JSON_CONTENT_TYPE = new Header("Content-Type", "application/json");
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
-    private static final Gson GSON = GsonProvider.getLibapiCompatibleGson();
+    private static final Gson GSON = GsonProvider.getPortalCompatibleGson();
 
     private static ClientAndServer mockServer;
     private AuthenticationProvider auth;
