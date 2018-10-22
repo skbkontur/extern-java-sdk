@@ -67,7 +67,6 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SortOrder;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
@@ -79,8 +78,15 @@ class BankCloudScenario {
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.LoadManually((configuration, builder) -> builder
-                .trustedAuth(TrustedAuthCredentials.fromConfiguration(configuration))
+        engine = TestSuite.LoadManually((cfg, builder) -> builder
+                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
+                        .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
+                        .configureEncryption(
+                                cfg.getJksPass(),
+                                cfg.getRsaKeyPass(),
+                                cfg.getThumbprintRsa()
+                        )
+                )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
                 .build()

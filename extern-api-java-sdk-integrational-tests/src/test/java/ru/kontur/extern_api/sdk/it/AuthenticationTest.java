@@ -1,6 +1,7 @@
 package ru.kontur.extern_api.sdk.it;
 
 import java.time.Duration;
+import java.util.UUID;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,9 +13,10 @@ import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.it.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.it.utils.TestConfig;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
+import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
 
 
 class AuthenticationTest {
@@ -35,7 +37,7 @@ class AuthenticationTest {
     class CacheRefreshTest {
 
         @Test
-        void cachingTest() throws Exception {
+        void cachingTest() {
             CachingRefreshingAuthProvider auth = build
                     .passwordAuthentication(cfg.getLogin(), cfg.getPass());
 
@@ -68,7 +70,7 @@ class AuthenticationTest {
     class PasswordAuthTest {
 
         @Test
-        void passwordAuth() throws Exception {
+        void passwordAuth() {
             PasswordAuthenticationProvider auth = build
                     .passwordAuthentication(cfg.getLogin(), cfg.getPass());
 
@@ -97,8 +99,37 @@ class AuthenticationTest {
 
     @Nested
     @DisplayName("trusted authentication")
-    class TrustedAuthTest {}
+    class TrustedAuthTest {
 
+        @Test
+        void trustedAuth() {
+            TrustedAuthenticationProvider auth = build
+                    .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
+                    .configureEncryption(
+                            cfg.getJksPass(),
+                            cfg.getRsaKeyPass(),
+                            cfg.getThumbprintRsa()
+                    );
+
+            Assertions.assertNotNull(auth.sessionId().getOrThrow());
+        }
+
+        @Test
+        void registerExternalServiceId() {
+            TrustedAuthenticationProvider auth = build
+                    .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
+                    .configureEncryption(
+                            cfg.getJksPass(),
+                            cfg.getRsaKeyPass(),
+                            cfg.getThumbprintRsa()
+                    );
+
+            final UUID serviceUserId = UUID.fromString("47024bf5-8c2c-4f1a-8a28-4b41b104a030");
+            final String phone = "9500308900";
+
+            auth.registerExternalServiceId(serviceUserId, phone).getOrThrow();
+        }
+    }
 
 
 }

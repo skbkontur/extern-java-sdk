@@ -23,13 +23,14 @@
 
 package ru.kontur.extern_api.sdk;
 
+import java.util.function.Function;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 
 public interface EngineBuilder {
 
@@ -49,9 +50,6 @@ public interface EngineBuilder {
         OverrideDefaultsSyntax serviceBaseUrl(@NotNull String serviceBaseUrl);
 
         @NotNull
-        OverrideDefaultsSyntax authServiceBaseUrl(@NotNull String authServiceBaseUrl);
-
-        @NotNull
         OverrideDefaultsSyntax userAgentProvider(@NotNull UserAgentProvider userAgentProvider);
 
         @NotNull
@@ -68,18 +66,13 @@ public interface EngineBuilder {
     interface AuthProviderSyntax {
 
         @NotNull
-        MaybeCryptoProviderSyntax authProvider(
-                @NotNull AuthenticationProvider authenticationProvider);
+        MaybeCryptoProviderSyntax authProvider(@NotNull AuthenticationProvider authenticationProvider);
 
         @NotNull
-        MaybeCryptoProviderSyntax passwordAuth(@NotNull String login, @NotNull String password);
-
-        @NotNull
-        MaybeCryptoProviderSyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials);
-
-        @NotNull
-        CryptoProviderSyntax certificateAuth(@NotNull byte[] certificatePublicKey);
-
+        MaybeCryptoProviderSyntax buildAuthentication(
+                String authBaseUrl,
+                Function<AuthenticationProviderBuilder, AuthenticationProvider> providerCtor
+        );
     }
 
     interface CryptoProviderSyntax {

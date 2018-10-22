@@ -32,24 +32,21 @@ import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 
 public class PasswordAuthenticationProvider extends CachingRefreshingAuthProvider {
 
-    private final String apiKey;
     private final LoginAndPasswordProvider creds;
     private final AuthApi authApi;
 
-    public PasswordAuthenticationProvider(
+    PasswordAuthenticationProvider(
             AuthApi authApi,
             LoginAndPasswordProvider creds,
-            String apiKey,
             TemporalAmount cacheTime) {
         super(cacheTime, authApi);
 
         this.authApi = authApi;
         this.creds = creds;
-        this.apiKey = apiKey;
     }
 
     @Override
     public CompletableFuture<SessionResponse> authenticate() {
-        return authApi.passwordAuthentication(creds.getLogin(), apiKey, null, creds.getPass());
+        return authApi.passwordAuthentication(creds.getLogin(), null, creds.getPass());
     }
 }

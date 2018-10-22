@@ -24,6 +24,8 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import java.util.Map;
+
 /**
  * <p>
  * Класс предназначен для отправки данных, предоставляющие информацию о личности.
@@ -33,7 +35,7 @@ package ru.kontur.extern_api.sdk.model;
  *
  * @author Aleksey Sukhorukov
  */
-public class Credential {
+public class Credential implements Map.Entry<String, String> {
 
     private String name;
     private String value;
@@ -44,7 +46,8 @@ public class Credential {
     }
 
     /**
-     * <p>Возвращает наименование параметра для идентификации пользователя. Должен возвращать одно из следующих значений:</p>
+     * <p>Возвращает наименование параметра для идентификации пользователя. Должен возвращать одно из следующих
+     * значений:</p>
      * <ul>
      * <li>thumbprint - отпечаток сертификата пользователя</li>
      * <li>login - логин пользователя</li>
@@ -62,24 +65,34 @@ public class Credential {
     /**
      * <p>Устанавливает наименование параметра для идентификации пользователя</p>
      *
-     * @param name наименование параметра для идентификации пользователя. Может принимать одно из следующих значений:
-     *             <ul>
-     *             <li>thumbprint - отпечаток сертификата пользователя</li>
-     *             <li>login - логин пользователя</li>
-     *             <li>phone - номер телефона пользователя</li>
-     *             <li>snils - СНИЛС пользователя</li>
-     *             <li>serviceUserId - идентификатор пользователя</li>
-     *             </ul>
+     * @param name наименование параметра для идентификации пользователя. Может принимать одно из следующих
+     *         значений:
+     *         <ul>
+     *         <li>thumbprint - отпечаток сертификата пользователя</li>
+     *         <li>login - логин пользователя</li>
+     *         <li>phone - номер телефона пользователя</li>
+     *         <li>snils - СНИЛС пользователя</li>
+     *         <li>serviceUserId - идентификатор пользователя</li>
+     *         </ul>
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * <p>Возвращает значение параметра, устанавливающий личность пользователя</p>
+     * Alias for {@link Credential#getValue()}
+     */
+    @Override
+    public String getKey() {
+        return name;
+    }
+
+    /**
+     * Возвращает значение параметра, устанавливающий личность пользователя
      *
      * @return значение параметра, устанавливающий личность пользователя
      */
+    @Override
     public String getValue() {
         return value;
     }
@@ -89,7 +102,9 @@ public class Credential {
      *
      * @param value значение параметра, устанавливающий личность пользователя
      */
-    public void setValue(String value) {
+    @Override
+    public String setValue(String value) {
         this.value = value;
+        return value;
     }
 }

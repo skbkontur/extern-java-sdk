@@ -23,6 +23,13 @@
 
 package ru.kontur.extern_api.sdk;
 
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
+import static ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider.form;
+
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Supplier;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
@@ -31,18 +38,10 @@ import ru.kontur.extern_api.sdk.provider.CertificateProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
-import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthentication;
-import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
-
-import java.util.Optional;
-import java.util.function.Supplier;
+import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
-
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
-import static ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider.form;
 
 public final class ConfigurationUtils {
 
@@ -61,7 +60,7 @@ public final class ConfigurationUtils {
         return Optional.empty();
     }
 
-    public static TrustedAuthentication createTrustedAuth(Configuration configuration) {
+    public static TrustedAuthenticationProvider createTrustedAuth(Configuration configuration) {
         String authType = "trusted";
 
         requireParam(configuration::getAuthBaseUri, "auth base uri", authType);
@@ -72,17 +71,14 @@ public final class ConfigurationUtils {
         requireParam(configuration::getJksPass, "jks pass", authType);
         requireParam(configuration::getRsaKeyPass, "rsa key pass", authType);
 
-        CryptoProviderRSA cryptoProviderRSA = new CryptoProviderRSA(
-                configuration.getJksPass(),
-                configuration.getRsaKeyPass());
-
-        return new TrustedAuthentication()
-                .apiKeyProvider(configuration::getApiKey)
-                .authBaseUriProvider(configuration::getAuthBaseUri)
-                .credentialProvider(configuration::getCredential)
-                .serviceUserIdProvider(configuration::getServiceUserId)
-                .signatureKeyProvider(configuration::getThumbprintRsa)
-                .cryptoProvider(cryptoProviderRSA);
+        return AuthenticationProviderBuilder
+                .createFor(configuration.getAuthBaseUri(), Level.BODY)
+                .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
+                .configureEncryption(
+                        configuration.getJksPass(),
+                        configuration.getRsaKeyPass(),
+                        configuration.getThumbprintRsa()
+                );
 
     }
 

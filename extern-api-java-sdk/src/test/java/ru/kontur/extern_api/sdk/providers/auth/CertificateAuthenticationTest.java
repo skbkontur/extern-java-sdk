@@ -40,10 +40,10 @@ import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.portal.model.CertificateAuthenticationQuest;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.auth.AuthInitResponse;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
-import ru.kontur.extern_api.sdk.provider.auth.Link;
 
 public class CertificateAuthenticationTest {
 
@@ -70,13 +70,11 @@ public class CertificateAuthenticationTest {
     }
 
     private static String createInitResp(String key, String rel, String href) {
-        AuthInitResponse authInitResponse = new AuthInitResponse();
-        authInitResponse.setEncryptedKey(key);
-        Link link = new Link();
-        link.setHref(href);
-        link.setRel(rel);
-        authInitResponse.setLink(link);
-        return GSON.toJson(authInitResponse);
+        return GSON.toJson(new CertificateAuthenticationQuest(
+                key.getBytes(),
+                null,
+                new Link(rel, href)
+        ));
     }
 
     private void createAnswerForInitiation(int code, String body) {

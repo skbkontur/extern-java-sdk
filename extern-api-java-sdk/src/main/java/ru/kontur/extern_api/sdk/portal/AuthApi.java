@@ -23,20 +23,20 @@
 
 package ru.kontur.extern_api.sdk.portal;
 
-import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import retrofit2.http.QueryMap;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.portal.model.CertificateAuthenticationQuest;
-import ru.kontur.extern_api.sdk.portal.model.DecryptedKey;
-import ru.kontur.extern_api.sdk.portal.model.ServiceUserBinding;
 import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
 import ru.kontur.extern_api.sdk.portal.model.TrustedAuthenticationQuest;
 
@@ -56,7 +56,6 @@ public interface AuthApi {
     @Headers("Content-Type: text/plain")
     CompletableFuture<SessionResponse> passwordAuthentication(
             @NotNull @Query("login") String login,
-            @Nullable @Query("api-key") String apiKey,
             @Nullable @Query("auth.sid") String authSid,
             @NotNull @Body String password
     );
@@ -64,7 +63,6 @@ public interface AuthApi {
     @POST("/auth/" + VERSION + "/authenticate-by-cert")
     @Headers("Content-Type: application/octet-stream")
     CompletableFuture<CertificateAuthenticationQuest> certificateAuthenticationInit(
-            @Nullable @Query("api-key") String apiKey,
             @Nullable @Query("auth.sid") String authSid,
             @Nullable @Query("free") Boolean withoutValidation,
             @NotNull @Body @Raw byte[] cert
@@ -73,18 +71,16 @@ public interface AuthApi {
     @POST("auth/" + VERSION + "/approve-cert")
     CompletableFuture<SessionResponse> certificateAuthenticationConfirm(
             @NotNull @Query("thumbprint") String thumbprint,
-            @Nullable @Query("api-key") String apiKey,
             @NotNull @Body @Raw byte[] decryptedKey
     );
 
     @POST("auth/" + VERSION + "/authenticate-by-truster")
     CompletableFuture<TrustedAuthenticationQuest> trustedAuthenticationInit(
-            @NotNull @Query("timestamp") Date timestamp,
-            @NotNull @Query("identityKey") String identityKey,
-            @NotNull @Query("identityValue") String identityValue,
-            @Nullable @Query("serviceUserId") String serviceUserId,
+            @NotNull @Query("timestamp") String stringifiedTimestamp,
+            @NotNull @QueryMap Map<String, String> identities,
+            @NotNull @Query("serviceUserId") UUID serviceUserId,
             @Nullable @Query("api-key") String apiKey,
-            @NotNull @Body byte[] signature
+            @NotNull @Body @Raw byte[] signature
     );
 
     @POST("auth/" + VERSION + "/approve-truster")
@@ -94,10 +90,11 @@ public interface AuthApi {
             @Nullable @Query("api-key") String apiKey
     );
 
-    @POST("auth/" + VERSION + "/register-external-service-id")
+    @PUT("auth/" + VERSION + "/register-external-service-id")
     CompletableFuture<Void> registerExternalServiceId(
             @Nullable @Query("api-key") String apiKey,
-            @NotNull @Body ServiceUserBinding serviceUserBinding
+            @NotNull @Query("serviceUserId") UUID serviceUserId,
+            @NotNull @Query("phone") String phone
     );
 
 }

@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk.provider.auth;
 
 import java.time.Clock;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import java.util.Optional;
@@ -44,7 +43,7 @@ public abstract class CachingRefreshingAuthProvider implements AuthenticationPro
     private SessionResponse cachedSession;
     private Instant timestamp;
 
-    public CachingRefreshingAuthProvider(TemporalAmount cacheTime, AuthApi authApi) {
+    protected CachingRefreshingAuthProvider(TemporalAmount cacheTime, AuthApi authApi) {
         this.cacheTime = cacheTime;
         this.authApi = authApi;
         cachedSession = null;

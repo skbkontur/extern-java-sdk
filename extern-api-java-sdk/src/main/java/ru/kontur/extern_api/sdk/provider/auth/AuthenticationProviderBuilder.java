@@ -27,6 +27,8 @@ import com.google.gson.Gson;
 import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
+import java.util.UUID;
+import java.util.function.BiFunction;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -38,12 +40,19 @@ import ru.kontur.extern_api.sdk.portal.AuthApi;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.provider.crypt.rsa.CryptoProviderRSA;
 
-public class AuthenticationProviderBuilder {
+public final class AuthenticationProviderBuilder {
 
     private final KonturConfiguredClient configuredClient;
     private String apiKey;
     private TemporalAmount cacheTime;
+
+    public static AuthenticationProviderBuilder createFor(
+            @NotNull String authServiceBaseUri
+    ) {
+        return createFor(authServiceBaseUri, Level.BASIC);
+    }
 
     public static AuthenticationProviderBuilder createFor(
             @NotNull String authServiceBaseUri,
@@ -60,7 +69,7 @@ public class AuthenticationProviderBuilder {
 
 
     public AuthenticationProviderBuilder withApiKey(@NotNull String apiKey) {
-        this.apiKey = apiKey;
+        configuredClient.setApiKey(this.apiKey = apiKey);
         return this;
     }
 
@@ -75,7 +84,6 @@ public class AuthenticationProviderBuilder {
         return new PasswordAuthenticationProvider(
                 configuredClient.createService(AuthApi.class),
                 LoginAndPasswordProvider.form(login, pass),
-                apiKey,
                 cacheTime
         );
     }
@@ -91,7 +99,6 @@ public class AuthenticationProviderBuilder {
                 configuredClient.createService(AuthApi.class),
                 certContent,
                 cryptoApi.getThumbprint(certContent),
-                apiKey,
                 cryptoProvider,
                 cacheTime
         );
@@ -102,14 +109,54 @@ public class AuthenticationProviderBuilder {
         return certificateAuthentication(new CryptoProviderMSCapi(), certContent);
     }
 
-    public TrustedAuthentication trustedAuthentication(@NotNull String serviceUserId) {
-        return trustedAuthentication(serviceUserId, new Credential("serviceUserId", serviceUserId));
+    public TrustedAuthenticationProviderBuilder trustedAuthentication(@NotNull UUID serviceUserId) {
+        return trustedAuthentication(
+                serviceUserId,
+                new Credential("serviceUserId", serviceUserId.toString())
+        );
     }
 
-    public TrustedAuthentication trustedAuthentication(
-            @NotNull String serviceUserId,
+    public TrustedAuthenticationProviderBuilder trustedAuthentication(
+            @NotNull UUID serviceUserId,
             @NotNull Credential credential) {
-        return null;
+        return new TrustedAuthenticationProviderBuilder(
+                (cryptoProvider, signerThumbprint) -> new TrustedAuthenticationProvider(
+                        configuredClient.createService(AuthApi.class),
+                        apiKey,
+                        cryptoProvider,
+                        signerThumbprint,
+                        serviceUserId,
+                        credential,
+                        cacheTime
+                )
+        );
+    }
+
+
+    public class TrustedAuthenticationProviderBuilder {
+
+        private final BiFunction<CryptoProvider, String, TrustedAuthenticationProvider> authCtor;
+
+        private TrustedAuthenticationProviderBuilder
+                (BiFunction<CryptoProvider, String, TrustedAuthenticationProvider> authCtor) {
+            this.authCtor = authCtor;
+        }
+
+        public TrustedAuthenticationProvider configureEncryption(
+                CryptoProvider cryptoProvider,
+                String signerThumbprint
+        ) {
+            return authCtor.apply(cryptoProvider, signerThumbprint);
+        }
+
+        public TrustedAuthenticationProvider configureEncryption(
+                String jksPass,
+                String rsaKeyStorePass,
+                String signerThumbprint
+        ) {
+            return configureEncryption(new CryptoProviderRSA(jksPass, rsaKeyStorePass), signerThumbprint);
+        }
+
     }
 
 

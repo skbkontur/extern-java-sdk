@@ -27,6 +27,16 @@ import ru.kontur.extern_api.sdk.model.Link;
 
 public class CertificateAuthenticationQuest {
 
+    public CertificateAuthenticationQuest(
+            byte[] encryptedKey,
+            String[] trustedThumbprints,
+            Link link
+    ) {
+        this.encryptedKey = encryptedKey;
+        this.trustedThumbprints = trustedThumbprints;
+        this.link = link;
+    }
+
     private byte[] encryptedKey;
 
     private String[] trustedThumbprints;

@@ -40,34 +40,32 @@ public final class CertificateAuthenticationProvider extends CachingRefreshingAu
 
     private final String certThumbprint;
     private final CryptoProvider cryptoProvider;
-    private final String apiKey;
     private final byte[] cert;
     private final AuthApi authApi;
 
-    public CertificateAuthenticationProvider(
+    CertificateAuthenticationProvider(
             AuthApi authApi,
             byte[] cert,
             String certThumbprint,
-            String apiKey,
             CryptoProvider cryptoProvider,
-            TemporalAmount cacheTime) {
+            TemporalAmount cacheTime
+    ) {
         super(cacheTime, authApi);
         this.authApi = authApi;
         this.cert = cert;
         this.certThumbprint = certThumbprint;
-        this.apiKey = apiKey;
         this.cryptoProvider = cryptoProvider;
     }
 
     @Override
     public CompletableFuture<SessionResponse> authenticate() {
         return authApi
-                .certificateAuthenticationInit(apiKey, null, null, cert)
+                .certificateAuthenticationInit(null, null, cert)
                 .thenApply(CertificateAuthenticationQuest::getEncryptedKey)
                 .thenCompose(key -> cryptoProvider.decryptAsync(certThumbprint, key))
                 .thenApply(QueryContext::getOrThrow)
                 .thenCompose(decrypted -> authApi
-                        .certificateAuthenticationConfirm(certThumbprint, apiKey, decrypted)
+                        .certificateAuthenticationConfirm(certThumbprint, decrypted)
                 );
     }
 

@@ -42,6 +42,11 @@ public class Link {
     private String profile = null;
     private Boolean templated = null;
 
+    public Link(String rel, String href) {
+        this.href = href;
+        this.rel = rel;
+    }
+
     /**
      * <p>Возвращает ссылку на ресурс.</p>
      * @return ссылка на ресурс
