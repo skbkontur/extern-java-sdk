@@ -53,8 +53,14 @@ public class CryptoApi {
     private final X509CertificateFactory certificateFactory;
 
 
-    public CryptoApi() throws CryptoException, CertificateException {
-        cryptoService = new MSCapi();
+    public CryptoApi() throws CertificateException {
+        CryptoService cryptoService = null;
+        try {
+            cryptoService = new MSCapi();
+        } catch (CryptoException e) {
+            log.warning(e.getMessage());
+        }
+        this.cryptoService = cryptoService;
         certificateFactory = new X509CertificateFactory();
     }
 
@@ -91,6 +97,9 @@ public class CryptoApi {
     }
 
     public CryptoService getCryptoService() {
+        if (cryptoService == null) {
+            throw new IllegalStateException("crypto service unavailable");
+        }
         return cryptoService;
     }
 
@@ -99,7 +108,7 @@ public class CryptoApi {
             synchronized (lock) {
                 if (keyCache == null || refreshCache) {
                     log.info("Installed keys loading...");
-                    keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
+                    keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
                 }
             }
         }
