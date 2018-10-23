@@ -68,7 +68,7 @@ public class KonturConfiguredClient {
         this(logLevel, "");
     }
 
-    public <S> S createService(Class<S> serviceClass) {
+    public <S> S createApi(Class<S> serviceClass) {
 
         ResponseConverter responseConverter = createResponseConverter(
                 serviceClass.getAnnotation(ApiResponseConverter.class)

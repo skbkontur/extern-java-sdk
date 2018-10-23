@@ -79,7 +79,7 @@ public final class AuthenticationProviderBuilder {
             @NotNull String login,
             @NotNull String pass) {
         return new PasswordAuthenticationProvider(
-                configuredClient.createService(AuthApi.class),
+                configuredClient.createApi(AuthApi.class),
                 LoginAndPasswordProvider.form(login, pass),
                 cacheTime
         );
@@ -93,7 +93,7 @@ public final class AuthenticationProviderBuilder {
         CryptoApi cryptoApi = new CryptoApi();
 
         return new CertificateAuthenticationProvider(
-                configuredClient.createService(AuthApi.class),
+                configuredClient.createApi(AuthApi.class),
                 certContent,
                 cryptoApi.getThumbprint(certContent),
                 cryptoProvider,
@@ -118,7 +118,7 @@ public final class AuthenticationProviderBuilder {
             @NotNull Credential credential) {
         return new TrustedAuthenticationProviderBuilder(
                 (cryptoProvider, signerThumbprint) -> new TrustedAuthenticationProvider(
-                        configuredClient.createService(AuthApi.class),
+                        configuredClient.createApi(AuthApi.class),
                         apiKey,
                         cryptoProvider,
                         signerThumbprint,

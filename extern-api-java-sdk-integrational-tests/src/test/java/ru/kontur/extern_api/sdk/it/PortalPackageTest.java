@@ -8,10 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.Configuration;
-import ru.kontur.extern_api.sdk.portal.CertificatesClient;
-import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.it.utils.TestConfig;
+import ru.kontur.extern_api.sdk.portal.CertificatesClient;
+import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
+import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 
 @DisplayName("portal services tests")
 class PortalPackageTest {
@@ -35,13 +36,14 @@ class PortalPackageTest {
 
         CertificatesClient certClient = new CertificatesClient(
                 config::getApiKey,
-                () -> "http://api.testkontur.ru/certapi/v1");
+                () -> "http://api.testkontur.ru/certapi/");
 
         @Test
         @DisplayName("search certificates")
-        void searchCertificates() {
-            String query = String.format("(thumbprint=\"%s\")", config.getThumbprint());
-            CertificateSearchResult search = certClient.searchCertificates(0, 10, query);
+        void searchCertificates() throws Exception {
+
+            SearchQuery query = SearchQuery.equal("thumbprint", config.getThumbprint());
+            CertificateSearchResult search = certClient.searchCertificates(0, 10, query).get();
 
             Assertions.assertEquals(1, search.getTotalHits());
             Assertions.assertEquals(config.getThumbprint(),

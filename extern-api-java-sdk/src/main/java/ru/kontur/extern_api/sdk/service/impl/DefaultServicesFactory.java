@@ -114,6 +114,6 @@ public class DefaultServicesFactory implements ServicesFactory {
                 .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
                 .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
                 .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                .createService(apiType);
+                .createApi(apiType);
     }
 }

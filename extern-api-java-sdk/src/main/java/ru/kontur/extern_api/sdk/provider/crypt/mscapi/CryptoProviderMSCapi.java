@@ -39,7 +39,6 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 public class CryptoProviderMSCapi implements CryptoProvider {
 
@@ -51,7 +50,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
             cryptoApi = new CryptoApi();
             cryptoService = cryptoApi.getCryptoService();
 
-        } catch (CryptoException | CertificateException x) {
+        } catch (CertificateException x) {
             throw new SDKException(Messages.get(C_CRYPTO_ERROR_INIT), x);
         }
     }
