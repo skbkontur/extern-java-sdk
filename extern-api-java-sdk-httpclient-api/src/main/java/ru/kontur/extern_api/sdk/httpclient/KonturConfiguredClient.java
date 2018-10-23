@@ -24,9 +24,7 @@
 package ru.kontur.extern_api.sdk.httpclient;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -37,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import ru.kontur.extern_api.sdk.GsonProvider;
 
 public class KonturConfiguredClient {
 
@@ -48,16 +45,13 @@ public class KonturConfiguredClient {
     private final OkHttpClient.Builder okBuilder;
 
     private String baseUrl;
-    private Gson gson;
 
     public KonturConfiguredClient(
             @NotNull Level loggingLevel,
-            @NotNull String baseUrl,
-            @NotNull Gson gson
+            @NotNull String baseUrl
     ) {
 
         setServiceBaseUrl(baseUrl);
-        setGson(gson);
 
         Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -71,37 +65,21 @@ public class KonturConfiguredClient {
     }
 
     public KonturConfiguredClient(@NotNull Level logLevel) {
-        this(logLevel, "", GsonProvider.getLibapiCompatibleGson());
+        this(logLevel, "");
     }
 
     public <S> S createService(Class<S> serviceClass) {
 
-        ApiResponseConverter converter = serviceClass.getAnnotation(ApiResponseConverter.class);
+        ResponseConverter responseConverter = createResponseConverter(
+                serviceClass.getAnnotation(ApiResponseConverter.class)
+        );
 
-        if (converter == null) {
-            throw new IllegalArgumentException(
-                    "Service class must be annotated with " + ApiResponseConverter.class.getSimpleName()
-                            + " to specify response conversion policy."
-            );
-        }
-
-        ResponseConverter responseConverter;
-        try {
-            responseConverter = converter.value().getDeclaredConstructor().newInstance();
-        } catch (InstantiationException |
-                IllegalAccessException |
-                InvocationTargetException |
-                NoSuchMethodException e) {
-            throw new IllegalArgumentException(
-                    "There is no default constructor in " + converter.value().getSimpleName(), e
-            );
-        }
+        Gson gson = createGson(serviceClass.getAnnotation(JsonSerialization.class));
 
         return new Retrofit.Builder()
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonCustomConverterFactory.create(getGsonBuilder().create()))
-                .addCallAdapterFactory(ApiResponseCallAdapterFactory
-                        .create(getGsonBuilder().create(), responseConverter))
+                .addConverterFactory(GsonCustomConverterFactory.create(gson))
+                .addCallAdapterFactory(ApiResponseCallAdapterFactory.create(gson, responseConverter))
                 .baseUrl(baseUrl)
                 .client(okBuilder.build())
                 .build()
@@ -161,19 +139,39 @@ public class KonturConfiguredClient {
         return okBuilder;
     }
 
-    public KonturConfiguredClient setGson(Gson gson) {
-        this.gson = gson;
-        return this;
-    }
-
-    /**
-     * @return gson builder that creates gson with server-acceptable serialization politic
-     */
-    public GsonBuilder getGsonBuilder() {
-        return gson.newBuilder();
-    }
-
     public String getBaseUrl() {
         return baseUrl;
+    }
+
+
+    private ResponseConverter createResponseConverter(@Nullable ApiResponseConverter annotation) {
+        if (annotation == null) {
+            throw new IllegalStateException(
+                    "Service class must be annotated with " + ApiResponseConverter.class.getSimpleName()
+                            + " to specify response conversion policy."
+            );
+        }
+
+        try {
+            return annotation.value().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException |
+                IllegalAccessException |
+                InvocationTargetException |
+                NoSuchMethodException e) {
+            throw new IllegalStateException(
+                    "There is no default constructor in " + annotation.value().getSimpleName(), e
+            );
+        }
+    }
+
+    private Gson createGson(@Nullable JsonSerialization annotation) {
+        if (annotation == null) {
+            throw new IllegalStateException(
+                    "Service class must be annotated with " + JsonSerialization.class.getSimpleName()
+                            + " to specify json serialization policy."
+            );
+        }
+
+        return annotation.value().getGson();
     }
 }

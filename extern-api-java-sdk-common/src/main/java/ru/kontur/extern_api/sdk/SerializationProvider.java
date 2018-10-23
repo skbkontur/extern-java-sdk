@@ -21,35 +21,12 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
-import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+import com.google.gson.Gson;
 
+public interface SerializationProvider {
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface AccountsApi {
-
-    @GET("v1")
-    CompletableFuture<ApiResponse<AccountList>> getAll();
-
-    @GET("v1/{accountId}")
-    CompletableFuture<ApiResponse<Account>> get(@Path("accountId") UUID accountId);
-
-    @POST("v1")
-    CompletableFuture<ApiResponse<Account>> create(@Body CreateAccountRequest createAccountRequest);
+    Gson getGson();
 
 }

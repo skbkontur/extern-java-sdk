@@ -45,7 +45,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.internal.http.HttpMethod;
 import okio.Buffer;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
+import ru.kontur.extern_api.sdk.SerializationProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
@@ -64,14 +66,16 @@ public class KonturHttpClient implements HttpClient {
 
 
     private final KonturConfiguredClient client;
+    private SerializationProvider gsonProvider;
     private final LibapiResponseConverter responseConverter;
 
     private UserAgentProvider userAgentProvider;
     private String serviceBaseUri;
     private int readTimeoutMillis = 60_000;
 
-    public KonturHttpClient(KonturConfiguredClient client) {
+    public KonturHttpClient(KonturConfiguredClient client, GsonProvider gsonProvider) {
         this.client = client;
+        this.gsonProvider = gsonProvider;
         this.responseConverter = new LibapiResponseConverter();
         this.serviceBaseUri = "";
         setReadTimeout(readTimeoutMillis);
@@ -160,7 +164,7 @@ public class KonturHttpClient implements HttpClient {
         try {
             Call call = httpClient.newCall(request.build());
             retrofit2.Response<T> response = parseResponse(call.execute(), type);
-            return responseConverter.toApiResponse(client.getGsonBuilder().create(), response);
+            return responseConverter.toApiResponse(getGson(), response);
         } catch (IOException e) {
             throw new ApiException(e);
         }
@@ -168,12 +172,13 @@ public class KonturHttpClient implements HttpClient {
 
     @Override
     public HttpClient setGson(Gson gson) {
+        gsonProvider = () -> gson;
         return this;
     }
 
     @Override
     public Gson getGson() {
-        return client.getGsonBuilder().create();
+        return gsonProvider.getGson();
     }
 
     private RequestBody body(Object body, String httpMethod) {

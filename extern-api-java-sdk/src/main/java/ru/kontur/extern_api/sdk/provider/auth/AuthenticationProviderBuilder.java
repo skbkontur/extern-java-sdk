@@ -23,7 +23,6 @@
 
 package ru.kontur.extern_api.sdk.provider.auth;
 
-import com.google.gson.Gson;
 import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.temporal.TemporalAmount;
@@ -32,7 +31,6 @@ import java.util.function.BiFunction;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
-import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.model.Credential;
@@ -62,8 +60,7 @@ public final class AuthenticationProviderBuilder {
     }
 
     private AuthenticationProviderBuilder(String authServiceBaseUri, Level logLevel) {
-        Gson gson = GsonProvider.getPortalCompatibleGson();
-        this.configuredClient = new KonturConfiguredClient(logLevel, authServiceBaseUri, gson);
+        this.configuredClient = new KonturConfiguredClient(logLevel, authServiceBaseUri);
         this.cacheTime = Duration.ofDays(15);
     }
 

@@ -31,17 +31,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.CertificateProvider;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
-import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 public final class ConfigurationUtils {
 
@@ -102,19 +96,6 @@ public final class ConfigurationUtils {
         return AuthenticationProviderBuilder.createFor(config.getAuthBaseUri(), Level.BODY)
                 .withApiKey(config.getApiKey())
                 .passwordAuthentication(config.getLogin(), config.getPass());
-    }
-
-    public static CertificateAuthenticationProvider createCertificateAuthProvider(
-            Configuration configuration,
-            CryptoProvider cryptoProvider,
-            byte[] certificate
-    ) {
-        String thumbprint = UncheckedSupplier.get(CryptoApi::new).getThumbprint(certificate);
-
-        CertificateProvider certificateProvider = t -> new QueryContext<byte[]>()
-                .setResult(certificate, QueryContext.CONTENT);
-
-        return null;
     }
 
     private static void requireParam(Supplier<?> s, String paramName, String authType) {

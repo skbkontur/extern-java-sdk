@@ -36,9 +36,8 @@ public class CertificatesClient {
         providerHolder.setUserAgentProvider(new DefaultUserAgentProvider());
         this.httpClient = new KonturHttpClient(new KonturConfiguredClient(
                 logLevel,
-                serviceBaseUrl.getUri(),
-                GsonProvider.getPortalCompatibleGson()
-        ));
+                serviceBaseUrl.getUri()
+        ), GsonProvider.PORTAL);
     }
 
     /**

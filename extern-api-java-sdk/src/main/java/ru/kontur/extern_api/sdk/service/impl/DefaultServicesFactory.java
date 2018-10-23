@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
@@ -99,7 +100,7 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public HttpClient getHttpClient() {
-        return new KonturHttpClient(configuredClient);
+        return new KonturHttpClient(configuredClient, GsonProvider.LIBAPI);
     }
 
     private <T> T createApi(Class<T> apiType) {

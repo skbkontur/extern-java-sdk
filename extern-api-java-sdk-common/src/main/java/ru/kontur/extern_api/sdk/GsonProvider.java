@@ -12,7 +12,25 @@ import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDeserializer;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonRecipientAdaptor;
 
-public class GsonProvider {
+public enum GsonProvider implements SerializationProvider {
+
+    /**
+     * Libapi compatible means that {@link FieldNamingPolicy#LOWER_CASE_WITH_DASHES} will be used.
+     */
+    LIBAPI() {
+        @Override public Gson getGson() {
+            return GsonProvider.getLibapiCompatibleGson();
+        }
+    },
+
+    /**
+     * Portal compatible means that {@link FieldNamingPolicy#UPPER_CAMEL_CASE} will be used.
+     */
+    PORTAL() {
+        @Override public Gson getGson() {
+            return GsonProvider.getPortalCompatibleGson();
+        }
+    };
 
     @NotNull
     public static Gson getLibapiCompatibleGson() {

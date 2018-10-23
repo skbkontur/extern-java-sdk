@@ -27,12 +27,15 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 
 
+@JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface CertificatesApi {
 

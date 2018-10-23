@@ -21,34 +21,18 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.httpclient;
 
-import java.util.concurrent.CompletableFuture;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.EventsPage;
 
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonSerialization {
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface EventsApi {
+    GsonProvider value();
 
-    /**
-     * Shows docflow events for all users and accounts connected with external service (e.g.: bank)
-     *
-     * @param fromId Event Id offset from which data is read out (required). {@code 0_0} - zero
-     * offset. next offsets will be returned
-     * @param batchSize Max count of events to be returned (default - 100)
-     * @return ApiResponse&lt;EventsPage&gt;
-     */
-    @GET("v1/events")
-    CompletableFuture<ApiResponse<EventsPage>> getEvents(
-            @Query("fromId") String fromId,
-            @Query("batchSize") Integer batchSize
-    );
 }

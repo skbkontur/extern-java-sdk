@@ -34,13 +34,16 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.portal.model.CertificateAuthenticationQuest;
 import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
 import ru.kontur.extern_api.sdk.portal.model.TrustedAuthenticationQuest;
 
 
+@JsonSerialization(GsonProvider.PORTAL)
 @ApiResponseConverter(PortalResponseConverter.class)
 public interface AuthApi {
 
