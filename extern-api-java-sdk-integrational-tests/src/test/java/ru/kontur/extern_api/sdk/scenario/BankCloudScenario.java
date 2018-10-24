@@ -42,7 +42,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ServiceException;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.it.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.it.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
@@ -75,6 +75,7 @@ class BankCloudScenario {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
+    private List<Certificate> cloudCerts;
 
     @BeforeAll
     static void setUpClass() {
@@ -245,7 +246,7 @@ class BankCloudScenario {
             System.out.println("Open target document");
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
-            } catch (ServiceException e) {
+            } catch (ApiException e) {
                 System.out.println("Ok, Cannot print document. " + e.getMessage());
             }
 
@@ -420,6 +421,23 @@ class BankCloudScenario {
 
     private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId) {
         ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
+
+//        CompletableFuture<Stream<String>> serials = engine.getDocflowService()
+//                .getEncryptedContentAsync(docflowId, documentId)
+//                .thenApply(QueryContext::getOrThrow)
+//                .thenApply(calm(CryptoApi::getSerialNumbers));
+//
+//        List<String> stringStream = get(serials::get).collect(Collectors.toList());
+//
+//        List<String> integers = cloudCerts.stream()
+//                .map(Certificate::getContent)
+//                .map(Base64.getDecoder()::decode)
+//                .map(calm(get(X509CertificateFactory::new)::create))
+//                .map(cw -> cw.getCert().getSerialNumber())
+//                .map(BigInteger::toByteArray)
+//                .map(IOUtil::bytesToHex)
+//                .collect(Collectors.toList());
+
         return engine.getDocflowService()
                 .cloudDecryptDocument(
                         docflowId.toString(),
@@ -449,6 +467,7 @@ class BankCloudScenario {
                 cloudCerts.size()
         );
 
+        this.cloudCerts = cloudCerts;
         return cloudCerts;
     }
 

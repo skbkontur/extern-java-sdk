@@ -329,7 +329,7 @@ public interface DocflowsApi {
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
-            @Body byte[] certificate
+            @Body CertificateContent certificate
     );
 
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content-confirm")

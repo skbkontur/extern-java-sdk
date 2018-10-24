@@ -17,11 +17,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.it.model.TestData;
-import ru.kontur.extern_api.sdk.it.utils.AbstractTest;
+import ru.kontur.extern_api.sdk.it.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.it.utils.DocType;
-import ru.kontur.extern_api.sdk.it.utils.OrganizationServiceUtils;
+import ru.kontur.extern_api.sdk.it.utils.EngineUtils;
+import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -32,23 +34,26 @@ import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.Lazy;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-class DraftServiceTest extends AbstractTest {
+class DraftServiceTest {
 
-    private static OrganizationServiceUtils orgUtils;
+    private static ExternEngine engine;
+
+    private DraftService draftService;
+    private CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+    private EngineUtils engineUtils = EngineUtils.with(engine);
 
     static class TestPack {
 
         final TestData data;
-
         final DraftMeta meta;
 
         final Lazy<QueryContext<UUID>> draft = Lazy.of(this::newDraft);
-
         final Lazy<QueryContext<UUID>> withDocument = Lazy.of(this::newDraftWithDoc);
 
         TestPack(TestData data) {
@@ -57,9 +62,12 @@ class DraftServiceTest extends AbstractTest {
         }
 
         private QueryContext<UUID> newDraft() {
-            return engine.getDraftService()
-                    .create(new QueryContext<>().setDraftMeta(meta))
-                    .ensureSuccess();
+            return UncheckedSupplier.get(() -> engine.getDraftService()
+                    .createAsync(meta)
+                    .get()
+                    .ensureSuccess()
+                    .map(QueryContext.DRAFT_ID, Draft::getId)
+            );
         }
 
         private QueryContext<UUID> newDraftWithDoc() {
@@ -72,7 +80,8 @@ class DraftServiceTest extends AbstractTest {
         private UUID addDocument(UUID draftId) {
             String path = data.getDocs()[0];
             DocType docType = DocType.getDocType(meta.getRecipient());
-            DocumentContents dc = createDocumentContents(engine, path, docType);
+            DocumentContents dc = EngineUtils.with(engine)
+                    .createDocumentContents(path, docType);
 
             DraftDocument document = UncheckedSupplier.get(() -> engine
                     .getDraftService()
@@ -85,26 +94,20 @@ class DraftServiceTest extends AbstractTest {
     }
 
     private final Lazy<List<TestPack>> tests = Lazy.of(() -> Arrays
-            .stream(getTestData(loadX509(engine)))
+            .stream(TestUtils.getTestData(cryptoUtils.loadX509(engine.getConfiguration().getThumbprint())))
             .map(TestPack::new)
             .collect(Collectors.toList())
     );
 
     @BeforeAll
     static void setUpClass() {
-        AbstractTest.initEngine();
+        engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
-
-        orgUtils = new OrganizationServiceUtils(
-                engine.getOrganizationService(),
-                engine.getAccountProvider().accountId().toString()
-        );
     }
 
     @BeforeEach
     void setUp() {
         draftService = engine.getDraftService();
-        docflowService = engine.getDocflowService();
     }
 
     /**
@@ -126,10 +129,11 @@ class DraftServiceTest extends AbstractTest {
      * GET /v1/{accountId}/drafts/{draftId}
      */
     @Test
-    void testGetDraft() {
+    void testGetDraft() throws Exception {
         for (TestPack testPack : tests.get()) {
             Draft found = draftService
-                    .lookup(testPack.draft.get())
+                    .lookupAsync(testPack.draft.get().getOrThrow())
+                    .get()
                     .ensureSuccess()
                     .get();
 
@@ -148,13 +152,13 @@ class DraftServiceTest extends AbstractTest {
      * Test of the deleteDraft method
      */
     @Test
-    void testDeleteDraft() {
+    void testDeleteDraft() throws Exception {
 
         for (TestPack testPack : tests.get()) {
             QueryContext<UUID> cxt = testPack.newDraft();
-            draftService.delete(cxt).ensureSuccess();
+            draftService.deleteAsync(cxt.getOrThrow()).get().ensureSuccess();
 
-            QueryContext<Draft> lookup = draftService.lookup(cxt);
+            QueryContext<Draft> lookup = draftService.lookupAsync(cxt.getOrThrow()).get();
             assertTrue(lookup.isFail());
             assertEquals(404, lookup.getServiceError().getResponseCode());
         }
@@ -166,10 +170,11 @@ class DraftServiceTest extends AbstractTest {
      * Test of the getDraftMeta method
      */
     @Test
-    void testGetDraftMeta() {
+    void testGetDraftMeta() throws Exception {
         for (TestPack testPack : tests.get()) {
             DraftMeta found = draftService
-                    .lookupDraftMeta(testPack.draft.get())
+                    .lookupDraftMetaAsync(testPack.draft.get().getOrThrow())
+                    .get()
                     .ensureSuccess()
                     .get();
 
@@ -273,9 +278,8 @@ class DraftServiceTest extends AbstractTest {
             DraftDocument newDoc = draftService.updateDocumentAsync(
                     draftId,
                     documentId,
-                    DraftServiceTest.createDocumentContents(
-                            engine,
-                            this.getUpdatedDocumentPath(path),
+                    engineUtils.createDocumentContents(
+                            TestUtils.getUpdatedDocumentPath(path),
                             DocType.FNS
                     )
             ).get().getOrThrow();
@@ -340,7 +344,7 @@ class DraftServiceTest extends AbstractTest {
             }
 
             String path = test.data.getDocs()[0];
-            byte[] updatedContent = this.loadUpdateDocument(path);
+            byte[] updatedContent = TestUtils.loadUpdateDocument(path);
 
             draftService
                     .updateDecryptedDocumentContentAsync(draftId, documentId, updatedContent)
@@ -407,7 +411,8 @@ class DraftServiceTest extends AbstractTest {
                     .get()
                     .getOrThrow();
 
-            byte[] signature = sign(engine, Zip.unzip(docContent));
+            byte[] signature = cryptoUtils
+                    .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
 
             draftService
                     .updateSignatureAsync(draftId, documentId, signature)

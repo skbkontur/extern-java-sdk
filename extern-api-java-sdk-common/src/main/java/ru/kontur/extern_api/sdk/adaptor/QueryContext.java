@@ -566,7 +566,7 @@ public class QueryContext<R> implements Serializable {
      * @return результат операции
      */
     public R get() {
-        if (result == null) {
+        if (result == null || result == NOTHING) {
             return null;
         }
         return get(result);
@@ -2037,7 +2037,14 @@ public class QueryContext<R> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String name) {
-        return (T) params.get(name);
+        T t = (T) params.get(name);
+        if (t == null) {
+            if (serviceError != null) {
+                throw serviceError;
+            }
+            throw new NoSuchElementException(name);
+        }
+        return t;
     }
 
     /**

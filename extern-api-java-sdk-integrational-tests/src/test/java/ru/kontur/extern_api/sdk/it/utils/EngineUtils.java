@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
 
 public class EngineUtils {
 

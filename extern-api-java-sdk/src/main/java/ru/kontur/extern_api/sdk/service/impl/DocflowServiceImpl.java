@@ -616,7 +616,12 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             byte[] certificate) {
-        return api.cloudDecryptDocumentInit(acc.accountId(), docflowId, documentId, certificate)
+        return api.cloudDecryptDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                new CertificateContent(certificate)
+        )
                 .thenApply(contextAdaptor("decrypt-init"));
     }
 

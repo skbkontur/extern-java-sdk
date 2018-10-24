@@ -24,12 +24,15 @@
 package ru.kontur.extern_api.sdk.it.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.w3c.dom.Document;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
@@ -40,6 +43,7 @@ import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
 import ru.kontur.extern_api.sdk.it.model.ClientInfo;
 import ru.kontur.extern_api.sdk.it.model.TestData;
+import ru.kontur.extern_api.sdk.service.SDKException;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 
 public class TestUtils {
@@ -86,7 +90,7 @@ public class TestUtils {
 
     public static DocumentContents loadDocumentContents(String path, DocType docType) {
         Document dom;
-        try (InputStream is = AbstractTest.class.getResourceAsStream(path)) {
+        try (InputStream is = TestUtils.class.getResourceAsStream(path)) {
             dom = XMLUtil.deserialize(is);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -117,5 +121,27 @@ public class TestUtils {
         return documentContents;
 
     }
+
+    public static byte[] loadDocument(String path) {
+        try (InputStream is = Objects.requireNonNull(TestUtils.class.getResourceAsStream(path))) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            IOUtil.copyStream(is, os);
+            return os.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getUpdatedDocumentPath(String path) throws SDKException {
+        File file = new File(path);
+        String name = IOUtil.getFileNameWithoutExt(file.getName());
+
+        return Resources.getPath(file.getParentFile().getPath(), name, "1.xml");
+    }
+
+    public static byte[] loadUpdateDocument(String path) {
+        return loadDocument(getUpdatedDocumentPath(path));
+    }
+
 
 }

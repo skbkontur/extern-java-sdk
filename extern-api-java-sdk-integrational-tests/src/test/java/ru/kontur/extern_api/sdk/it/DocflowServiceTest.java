@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ import ru.kontur.extern_api.sdk.model.DocflowType;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.Link;
@@ -650,14 +651,12 @@ class DocflowServiceTest {
 
             CompletableFuture<QueryContext<Docflow>> future = draftService
                     .createAsync(dm)
-                    .thenApply(cxt -> cxt.map(QueryContext.DRAFT_ID, Draft::getId))
-                    .thenCompose(cxt -> draftService
-                            .addDecryptedDocumentAsync(cxt.get(), engineUtils
-                                    .createDocumentContents(path, docType)
-                            )
-                            .thenApply(o -> cxt)
+                    .thenApply(QueryContext::getOrThrow)
+                    .thenCompose(draft -> addDocument(dm, td, draft.getId())
+                        .thenApply(QueryContext::getOrThrow)
+                        .thenApply(o -> draft)
                     )
-                    .thenCompose(cxt -> draftService.sendAsync(cxt.getDraftId()))
+                    .thenCompose(draft -> draftService.sendAsync(draft.getId()))
                     .thenApply(QueryContext::ensureSuccess);
 
             return UncheckedSupplier.get(future::get);
@@ -667,6 +666,21 @@ class DocflowServiceTest {
         UncheckedRunnable.run(() -> Thread.sleep(3000));
 
         return testCtxs;
+    }
+
+    private static CompletableFuture<QueryContext<DraftDocument>> addDocument(
+            DraftMeta meta,
+            TestData data,
+            UUID draftId
+    ) {
+        String path = data.getDocs()[0];
+        DocType docType = DocType.getDocType(meta.getRecipient());
+        DocumentContents dc = EngineUtils.with(engine)
+                .createDocumentContents(path, docType);
+
+        return engine
+                .getDraftService()
+                .addDecryptedDocumentAsync(draftId, dc);
     }
 
 

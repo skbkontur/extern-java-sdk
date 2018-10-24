@@ -35,7 +35,7 @@ public class QueryContextUtils {
 
     public static <T> QueryContext<T> join(CompletableFuture<QueryContext<T>> future) {
         try {
-            return future.get();
+            return future.exceptionally(QueryContextUtils::completeCareful).get();
         } catch (InterruptedException | ExecutionException e) {
             return new QueryContext<T>().setServiceError(e.getMessage(), e);
         }
