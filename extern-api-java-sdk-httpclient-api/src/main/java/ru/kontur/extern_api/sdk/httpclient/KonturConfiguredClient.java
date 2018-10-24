@@ -27,10 +27,10 @@ import com.google.gson.Gson;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import retrofit2.Retrofit;
@@ -38,30 +38,45 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class KonturConfiguredClient {
 
+    private static final String SID_PREFIX = "auth.sid ";
+
     private final TokenAuth apiKeyAuth = new TokenAuth(TokenLocation.HEADER, "X-Kontur-Apikey");
     private final TokenAuth authSidAuth = new TokenAuth(TokenLocation.HEADER, "Authorization");
     private final TokenAuth userAgentAuth = new TokenAuth(TokenLocation.HEADER, "User-Agent");
 
     private final OkHttpClient.Builder okBuilder;
+    private final Level loggingLevel;
 
     private String baseUrl;
 
+    private long connectTimeout;
+    private TimeUnit connectTimeoutUnit;
+
+    private long readTimeout;
+    private TimeUnit readTimeoutUnit;
+
     public KonturConfiguredClient(
-            @NotNull Level loggingLevel,
-            @NotNull String baseUrl
+            @NotNull Level loggingVerbosity,
+            @NotNull String baseUrl,
+            @NotNull Logger logger
     ) {
-
+        this.loggingLevel = loggingVerbosity;
         setServiceBaseUrl(baseUrl);
-
-        Logger logger = Logger.getLogger(this.getClass().getName());
 
         this.okBuilder = new OkHttpClient.Builder()
                 .addInterceptor(apiKeyAuth)
                 .addInterceptor(authSidAuth)
                 .addInterceptor(userAgentAuth)
-                .addInterceptor(new HttpLoggingInterceptor(logger::info).setLevel(loggingLevel))
+                .addInterceptor(new HttpLoggingInterceptor(logger).setLevel(loggingVerbosity))
                 .followRedirects(false)
                 .followSslRedirects(false);
+    }
+
+    public KonturConfiguredClient(
+            @NotNull Level loggingVerbosity,
+            @NotNull String baseUrl
+    ) {
+        this(loggingVerbosity, baseUrl, Logger.DEFAULT);
     }
 
     public KonturConfiguredClient(@NotNull Level logLevel) {
@@ -100,7 +115,7 @@ public class KonturConfiguredClient {
     public KonturConfiguredClient setAuthSid(@Nullable String authSid) {
         authSidAuth.setToken(Optional
                 .ofNullable(authSid)
-                .map(sid -> "auth.sid " + sid)
+                .map(sid -> sid.startsWith(SID_PREFIX) ? sid : SID_PREFIX + sid)
                 .orElse(null)
         );
         return this;
@@ -123,11 +138,15 @@ public class KonturConfiguredClient {
     }
 
     public KonturConfiguredClient setConnectTimeout(long timeout, TimeUnit unit) {
+        connectTimeout = timeout;
+        connectTimeoutUnit = unit;
         okBuilder.connectTimeout(timeout, unit);
         return this;
     }
 
     public KonturConfiguredClient setReadTimeout(long timeout, TimeUnit unit) {
+        readTimeout = timeout;
+        readTimeoutUnit = unit;
         okBuilder.readTimeout(timeout, unit);
         return this;
     }
@@ -141,6 +160,15 @@ public class KonturConfiguredClient {
 
     public String getBaseUrl() {
         return baseUrl;
+    }
+
+    public KonturConfiguredClient copy() {
+        return new KonturConfiguredClient(loggingLevel, getBaseUrl())
+                .setApiKey(apiKeyAuth.getToken())
+                .setAuthSid(authSidAuth.getToken())
+                .setUserAgent(userAgentAuth.getToken())
+                .setConnectTimeout(connectTimeout, connectTimeoutUnit)
+                .setReadTimeout(readTimeout, readTimeoutUnit);
     }
 
 

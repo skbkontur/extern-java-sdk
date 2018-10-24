@@ -24,9 +24,12 @@
 package ru.kontur.extern_api.sdk;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.EngineBuilder.AccountSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
@@ -59,7 +62,15 @@ public final class ExternEngineBuilder implements Syntax {
         return new ExternEngineBuilder().setConfiguration(defaults);
     }
 
+    /**
+     * Trying to guess authentication type from given configuration by provided
+     * either login+pass or rsa thumbprint+credential strings.
+     *
+     * @deprecated Unreliable magic detection. Use explicit
+     *         {@link ExternEngineBuilder#buildAuthentication(String, Function)} instead.
+     */
     @NotNull
+    @Deprecated
     public static MaybeCryptoProviderSyntax authFromConfiguration(@NotNull Configuration configuration) {
         Objects.requireNonNull(configuration);
 
@@ -76,6 +87,7 @@ public final class ExternEngineBuilder implements Syntax {
                 .authProvider(authProvider);
     }
 
+
     private Configuration configuration;
     private AuthenticationProvider authenticationProvider;
     private CryptoProvider cryptoProvider;
@@ -84,6 +96,7 @@ public final class ExternEngineBuilder implements Syntax {
 
     private int readTimeout = 60_000;
     private int connectTimeout = 1_000;
+    private Logger logger = Logger.DEFAULT;
 
     private ExternEngineBuilder() {
         configuration = new Configuration();
@@ -100,7 +113,7 @@ public final class ExternEngineBuilder implements Syntax {
 
     @NotNull
     @Override
-    public ExternEngine build(Level logLevel) {
+    public ExternEngine build(Level logVerbosity) {
 
         ProviderSuite providerSuite = new ProviderSuite();
 
@@ -110,7 +123,7 @@ public final class ExternEngineBuilder implements Syntax {
 
         if (authenticationProvider == null) {
             authenticationProvider = providerCtor.apply(AuthenticationProviderBuilder
-                    .createFor(configuration.getAuthBaseUri())
+                    .createFor(configuration.getAuthBaseUri(), logVerbosity)
                     .withApiKey(configuration.getApiKey())
             );
         }
@@ -121,7 +134,8 @@ public final class ExternEngineBuilder implements Syntax {
         providerSuite.setUserAgentProvider(userAgentProvider);
         providerSuite.setUserIPProvider(userIPProvider);
 
-        KonturConfiguredClient konturClient = new KonturConfiguredClient(logLevel)
+        String uri = Optional.ofNullable(configuration.getServiceBaseUri()).orElse("");
+        KonturConfiguredClient konturClient = new KonturConfiguredClient(logVerbosity, uri, logger)
                 .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
                 .setReadTimeout(readTimeout, TimeUnit.MILLISECONDS);
 
@@ -192,7 +206,7 @@ public final class ExternEngineBuilder implements Syntax {
 
     @NotNull
     @Override
-    public OverrideDefaultsSyntax accountId(@NotNull String accountId) {
+    public OverrideDefaultsSyntax accountId(@NotNull UUID accountId) {
         configuration.setAccountId(Objects.requireNonNull(accountId));
         return this;
     }
@@ -208,6 +222,13 @@ public final class ExternEngineBuilder implements Syntax {
     @Override
     public OverrideDefaultsSyntax connectTimeout(int milliseconds) {
         connectTimeout = milliseconds;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax logger(Logger logger) {
+        this.logger = logger;
         return this;
     }
 

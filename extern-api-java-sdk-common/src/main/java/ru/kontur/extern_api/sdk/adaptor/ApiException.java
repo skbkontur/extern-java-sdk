@@ -82,9 +82,27 @@ public class ApiException extends RuntimeException {
     }
 
     /**
-     * @return errorIdentifier
+     * @return error identifier
      */
     public String getErrorId() {
         return errorId;
+    }
+
+    @Override
+    public String toString() {
+        return prettyPrint(getCode(), getErrorId(), getMessage(), getResponseHeaders());
+    }
+
+    private static String prettyPrint(
+            int code,
+            String errorId,
+            String message,
+            Map<String, List<String>> responseHeaders
+    ) {
+        return "ApiException: " + String.valueOf(code) + " " + errorId + ": " + message + "\n" +
+                String.join("\n", responseHeaders.entrySet().stream()
+                        .map(e -> e.getKey() + ": " + String.join(" ", e.getValue().toArray(new String[0])))
+                        .toArray(String[]::new)
+                );
     }
 }

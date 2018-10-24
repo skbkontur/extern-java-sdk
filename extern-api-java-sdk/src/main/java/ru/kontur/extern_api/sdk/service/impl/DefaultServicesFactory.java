@@ -50,7 +50,6 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     public DefaultServicesFactory(KonturConfiguredClient client, ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
-        // todo: inject
         this.configuredClient = client;
     }
 
@@ -100,20 +99,22 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public HttpClient getHttpClient() {
-        return new KonturHttpClient(configuredClient, GsonProvider.LIBAPI);
+        return new KonturHttpClient(postConfigure(configuredClient).copy(), GsonProvider.LIBAPI);
     }
 
-    private <T> T createApi(Class<T> apiType) {
+    private KonturConfiguredClient postConfigure(KonturConfiguredClient client) {
         String authSid = providerHolder.getAuthenticationProvider()
                 .sessionId()
-                .ensureSuccess()
-                .get();
+                .getOrThrow();
 
-        return configuredClient
+        return client
                 .setAuthSid(authSid)
                 .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
                 .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                .createApi(apiType);
+                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent());
+    }
+
+    private <T> T createApi(Class<T> apiType) {
+        return postConfigure(configuredClient).createApi(apiType);
     }
 }

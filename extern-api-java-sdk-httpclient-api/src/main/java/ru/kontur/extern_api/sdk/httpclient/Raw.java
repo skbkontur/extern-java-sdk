@@ -29,6 +29,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
+/**
+ * Use @Raw with request {@link retrofit2.http.Body} parameter to say that
+ * request body should be serialized as raw bytes body with octet-stream content type.
+ *
+ * @see GsonCustomConverterFactory.RequestBodyConverterRaw
+ */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Raw {

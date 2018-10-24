@@ -23,8 +23,10 @@
 
 package ru.kontur.extern_api.sdk;
 
+import java.util.UUID;
 import java.util.function.Function;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
@@ -36,7 +38,7 @@ public interface EngineBuilder {
 
     interface BuildSyntax {
 
-        ExternEngine build(Level logLevel);
+        ExternEngine build(Level logVerbosity);
 
         default ExternEngine build() {
             return build(Level.BASIC);
@@ -60,6 +62,9 @@ public interface EngineBuilder {
 
         @NotNull
         OverrideDefaultsSyntax connectTimeout(int milliseconds);
+
+        @NotNull
+        OverrideDefaultsSyntax logger(Logger logger);
 
     }
 
@@ -97,10 +102,15 @@ public interface EngineBuilder {
     interface AccountSyntax {
 
         @NotNull
-        OverrideDefaultsSyntax accountId(@NotNull String accountId);
+        OverrideDefaultsSyntax accountId(@NotNull UUID accountId);
 
         @NotNull
         OverrideDefaultsSyntax doNotSetupAccount();
+
+        @NotNull
+        default OverrideDefaultsSyntax accountId(@NotNull String accountId) {
+            return accountId(UUID.fromString(accountId));
+        }
 
     }
 
