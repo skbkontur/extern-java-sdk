@@ -35,7 +35,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
@@ -57,7 +56,7 @@ public class CryptoApi {
         CryptoService cryptoService = null;
         try {
             cryptoService = new MSCapi();
-        } catch (CryptoException e) {
+        } catch (Exception e) {
             log.warning(e.getMessage());
         }
         this.cryptoService = cryptoService;
