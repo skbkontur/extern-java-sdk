@@ -56,11 +56,10 @@ public interface AuthApi {
     );
 
     @POST("auth/" + VERSION + "/authenticate-by-pass")
-    @Headers("Content-Type: text/plain")
     CompletableFuture<SessionResponse> passwordAuthentication(
             @NotNull @Query("login") String login,
             @Nullable @Query("auth.sid") String authSid,
-            @NotNull @Body String password
+            @NotNull @Body @Raw String password
     );
 
     @POST("/auth/" + VERSION + "/authenticate-by-cert")

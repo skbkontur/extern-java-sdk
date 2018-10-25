@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,26 +21,23 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.it.utils;
+package ru.kontur.extern_api.sdk.httpclient.api;
 
-import java.util.function.Function;
-import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
-import ru.kontur.extern_api.sdk.testapi.ExternTestMethods;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
-public class ApproveCodeProvider implements Function<String, String> {
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
-    private final TestApi api;
 
-    public ApproveCodeProvider(ExternEngine engine) {
-        api = ExternTestMethods.build(engine);
-    }
+@JsonSerialization(GsonProvider.LIBAPI)
+@ApiResponseConverter(LibapiResponseConverter.class)
+public interface TestApi {
 
-    @Override
-    public String apply(@NotNull String requestId) {
-        return UncheckedSupplier.get(() -> api.getSmsCode(requestId).get());
-    }
+    @GET("v1/get-confirmationcode")
+    CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
 
 }

@@ -92,7 +92,6 @@ public class KonturConfiguredClient {
         Gson gson = createGson(serviceClass.getAnnotation(JsonSerialization.class));
 
         return new Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonCustomConverterFactory.create(gson))
                 .addCallAdapterFactory(ApiResponseCallAdapterFactory.create(gson, responseConverter))
                 .baseUrl(baseUrl)

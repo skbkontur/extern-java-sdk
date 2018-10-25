@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -90,7 +91,7 @@ class BankCloudScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build()
+                .build(Level.BODY)
         ).engine;
 
     }
@@ -192,6 +193,7 @@ class BankCloudScenario {
         System.out.println("Usn document built and added to draft");
 
         openDraftDocumentAsPdf(draftId, document.getId());
+        Assertions.assertTrue(cloudSignDraft(draftId));
 
         CheckResultData checkResult = engine.getDraftService()
                 .checkAsync(draftId)
@@ -200,8 +202,6 @@ class BankCloudScenario {
 
         Assertions.assertTrue(checkResult.hasNoErrors());
         System.out.println("Usn document has no errors");
-
-        Assertions.assertTrue(cloudSignDraft(draftId));
 
         PrepareResult result = engine.getDraftService()
                 .prepareAsync(draftId)

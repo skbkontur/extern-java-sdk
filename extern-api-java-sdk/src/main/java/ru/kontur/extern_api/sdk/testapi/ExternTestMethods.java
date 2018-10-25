@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,26 +21,32 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.it.utils;
+package ru.kontur.extern_api.sdk.testapi;
 
-import java.util.function.Function;
-import org.jetbrains.annotations.NotNull;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import ru.kontur.extern_api.sdk.DefaultExtern;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
-import ru.kontur.extern_api.sdk.testapi.ExternTestMethods;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
+import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 
-public class ApproveCodeProvider implements Function<String, String> {
+/**
+ * Just examples.
+ */
+public final class ExternTestMethods {
 
-    private final TestApi api;
-
-    public ApproveCodeProvider(ExternEngine engine) {
-        api = ExternTestMethods.build(engine);
+    public static TestApi build(ExternEngine ee) {
+        return build(ee.getApiKeyProvider(), ee.getAuthenticationProvider());
     }
 
-    @Override
-    public String apply(@NotNull String requestId) {
-        return UncheckedSupplier.get(() -> api.getSmsCode(requestId).get());
+    public static TestApi build(
+            ApiKeyProvider apiKeyProvider,
+            AuthenticationProvider authenticationProvider
+    ) {
+        return new KonturConfiguredClient(Level.BODY, DefaultExtern.BASE_URL)
+                .setApiKey(apiKeyProvider.getApiKey())
+                .setAuthSid(authenticationProvider.sessionId().getOrThrow())
+                .createApi(TestApi.class);
     }
-
 }

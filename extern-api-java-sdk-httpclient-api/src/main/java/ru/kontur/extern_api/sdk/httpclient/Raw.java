@@ -30,12 +30,16 @@ import java.lang.annotation.Target;
 
 
 /**
- * Use @Raw with request {@link retrofit2.http.Body} parameter to say that
- * request body should be serialized as raw bytes body with octet-stream content type.
- *
- * @see GsonCustomConverterFactory.RequestBodyConverterRaw
+ * <p> Use @Raw with request {@link retrofit2.http.Body} parameter to say that
+ * {@code byte[]} should be serialized as application/octet-stream body or
+ * {@code String} as text/plain.
+ * </p>
+ * <p>
+ * Use it with response return type String or byte[] to say that response body
+ * should be interpreted as raw data of given type.
+ * </p>
  */
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Raw {
 

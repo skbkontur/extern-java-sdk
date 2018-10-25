@@ -48,6 +48,7 @@ import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
 
 
 public class DraftServiceImpl implements DraftService {
@@ -490,11 +491,13 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<SignedDraft>> cloudSignAsync
             (UUID draftId, Function<QueryContext<SignInitiation>, String> codeProvider) {
         return cloudSignInitAsync(draftId)
+                .thenApply(QueryContext::getOrThrow)
                 .thenCompose(init -> cloudSignConfirmAsync(
                         draftId,
-                        init.get().getRequestId(),
-                        codeProvider.apply(init)
-                ));
+                        init.getRequestId(),
+                        codeProvider.apply(new QueryContext<>("init", init))
+                ))
+                .exceptionally(QueryContextUtils::completeCareful);
     }
 
     @Override
