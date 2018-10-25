@@ -450,8 +450,6 @@ class DraftServiceTest {
         for (TestPack test : tests.get()) {
             UUID draftId = test.withDocument.get().getOrThrow();
 
-            // after sign
-
             PrepareResult prepareResult = draftService.prepareAsync(draftId)
                     .get()
                     .getOrThrow();
@@ -471,8 +469,6 @@ class DraftServiceTest {
     void testSend() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.newDraftWithDoc().getOrThrow();
-
-            // sign !
 
             draftService.sendAsync(draftId)
                     .get()
