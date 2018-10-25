@@ -53,13 +53,19 @@ public final class ExternEngineBuilder implements Syntax {
     private Function<AuthenticationProviderBuilder, AuthenticationProvider> providerCtor;
 
     @NotNull
+    public static ApiKeySyntax createExternEngine(String externApiBaseUrl) {
+        return new ExternEngineBuilder(externApiBaseUrl);
+    }
+
+    @NotNull
+    @Deprecated
     public static ApiKeySyntax createExternEngine() {
-        return new ExternEngineBuilder();
+        return createExternEngine(DefaultExtern.BASE_URL);
     }
 
     @NotNull
     public static ApiKeyOrAuth createExternEngine(Configuration defaults) {
-        return new ExternEngineBuilder().setConfiguration(defaults);
+        return new ExternEngineBuilder(defaults.getServiceBaseUri()).setConfiguration(defaults);
     }
 
     /**
@@ -81,7 +87,7 @@ public final class ExternEngineBuilder implements Syntax {
                                 "provide either login+pass or rsa thumbprint+credential. "
                 ));
 
-        return new ExternEngineBuilder()
+        return new ExternEngineBuilder(configuration.getServiceBaseUri())
                 .setConfiguration(configuration)
                 .apiKey(configuration.getApiKey())
                 .authProvider(authProvider);
@@ -98,10 +104,9 @@ public final class ExternEngineBuilder implements Syntax {
     private int connectTimeout = 1_000;
     private Logger logger = Logger.DEFAULT;
 
-    private ExternEngineBuilder() {
+    private ExternEngineBuilder(String externApiBaseUrl) {
         configuration = new Configuration();
-        configuration.setAuthBaseUri(DefaultExtern.BASE_AUTH);
-        configuration.setServiceBaseUri(DefaultExtern.BASE_URL);
+        configuration.setServiceBaseUri(externApiBaseUrl);
         userAgentProvider = new DefaultUserAgentProvider();
         userIPProvider = () -> "80.247.184.194";
     }
