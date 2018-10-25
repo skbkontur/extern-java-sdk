@@ -448,16 +448,6 @@
                 <artifactId>retrofit</artifactId>
                 <version>${retrofit-version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.squareup.retrofit2</groupId>
-                <artifactId>converter-scalars</artifactId>
-                <version>${retrofit-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.retrofit2</groupId>
-                <artifactId>adapter-java8</artifactId>
-                <version>${retrofit-version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.google.code.gson</groupId>

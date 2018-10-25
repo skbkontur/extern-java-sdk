@@ -51,7 +51,7 @@ import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 
 @Disabled("Cert problems")
-class DraftWithCloudCertTest {
+class DraftWithCloudCertIT {
 
     private static Certificate cloudCert;
     private static ExternEngine engine;

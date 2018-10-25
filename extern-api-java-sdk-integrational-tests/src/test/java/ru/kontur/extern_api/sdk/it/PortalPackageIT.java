@@ -15,7 +15,7 @@ import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 
 @DisplayName("portal services tests")
-class PortalPackageTest {
+class PortalPackageIT {
 
     private static Configuration config;
 

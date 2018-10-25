@@ -16,7 +16,7 @@ import ru.kontur.extern_api.sdk.model.ApiEvent;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 
-class EventTest {
+class EventIT {
 
     private static ExternEngine engine;
 

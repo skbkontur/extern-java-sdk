@@ -66,7 +66,7 @@ import ru.kontur.extern_api.sdk.utils.Zip;
 
 @DisplayName("Docflow service should be able to")
 @Execution(ExecutionMode.CONCURRENT)
-class DocflowServiceTest {
+class DocflowServiceIT {
 
     private static class TestPack {
 
@@ -77,13 +77,13 @@ class DocflowServiceTest {
         }
     }
 
-    private static Logger log = Logger.getLogger(DocflowServiceTest.class.getName());
+    private static Logger log = Logger.getLogger(DocflowServiceIT.class.getName());
     private static ExternEngine engine;
     private static EngineUtils engineUtils;
 
     private static Lazy<TestPack> testPack = Lazy.of(() -> getTestPack(engine));
     private static HttpClient client;
-    private static Lazy<Certificate> cloudCert = Lazy.of(DocflowServiceTest::getCloudCertificate);
+    private static Lazy<Certificate> cloudCert = Lazy.of(DocflowServiceIT::getCloudCertificate);
     private static Lazy<ApproveCodeProvider> codeProvider = Lazy
             .of(() -> new ApproveCodeProvider(engine));
 
@@ -269,7 +269,7 @@ class DocflowServiceTest {
         }
     }
 
-    @Disabled("@see DraftWithCloudCertTest")
+    @Disabled("@see DraftWithCloudCertIT")
     @ParameterizedTest
     @DisplayName("decrypt document content in cloud")
     @MethodSource("docflowsLazyFactory")

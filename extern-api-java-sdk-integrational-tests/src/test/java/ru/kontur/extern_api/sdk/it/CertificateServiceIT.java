@@ -16,7 +16,7 @@ import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 
 
-class CertificateServiceTest {
+class CertificateServiceIT {
 
     private static ExternEngine engine;
 

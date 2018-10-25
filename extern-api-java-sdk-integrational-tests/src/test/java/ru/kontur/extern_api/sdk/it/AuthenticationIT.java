@@ -19,7 +19,7 @@ import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
 
 
-class AuthenticationTest {
+class AuthenticationIT {
 
     private static Configuration cfg;
     private static AuthenticationProviderBuilder build;

@@ -40,7 +40,7 @@ import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 
-class OrganizationTest {
+class OrganizationIT {
 
     private static final String INN = "7810654318";
     private static final String KPP = "781001001";

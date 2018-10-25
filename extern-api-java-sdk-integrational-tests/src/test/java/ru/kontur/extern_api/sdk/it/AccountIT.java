@@ -18,7 +18,7 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.service.AccountService;
 
 
-class AccountTest {
+class AccountIT {
 
     private static AccountService accountService;
 

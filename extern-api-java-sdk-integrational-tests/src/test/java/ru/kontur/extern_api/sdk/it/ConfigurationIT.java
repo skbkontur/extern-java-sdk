@@ -37,12 +37,12 @@ import ru.kontur.extern_api.sdk.it.utils.TestConfig;
 import ru.kontur.extern_api.sdk.service.AccountService;
 
 @DisplayName("Configuration tokens should")
-class ConfigurationTest {
+class ConfigurationIT {
 
     private Configuration C = TestConfig.LoadConfigFromEnvironment();
 
     private ExternEngine newEngine() {
-        return ExternEngineBuilder.createExternEngine()
+        return ExternEngineBuilder.createExternEngine(C.getServiceBaseUri())
                 .apiKey(C.getApiKey())
                 .buildAuthentication(C.getAuthBaseUri(), builder -> builder.
                         passwordAuthentication(C.getLogin(), C.getPass())

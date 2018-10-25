@@ -52,7 +52,7 @@ import ru.kontur.extern_api.sdk.it.utils.TestUtils;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
-class UsnTest {
+class UsnIT {
 
     private static DraftService ds;
     private static DraftMeta draftMeta;
@@ -105,7 +105,7 @@ class UsnTest {
 
         ds.checkAsync(draftId)
                 .thenApply(QueryContext::getOrThrow)
-                .thenAccept(UsnTest::assertCheckHasNoErrors)
+                .thenAccept(UsnIT::assertCheckHasNoErrors)
                 .get();
     }
 

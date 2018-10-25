@@ -40,7 +40,7 @@ import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-class DraftServiceTest {
+class DraftServiceIT {
 
     private static ExternEngine engine;
 

@@ -36,7 +36,8 @@ import retrofit2.Retrofit;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 
 /**
- * Augmented {@link retrofit2.adapter.java8.Java8CallAdapterFactory} with {@link ApiResponse} result
+ * Inspired by {@code retrofit2.adapter.java8.Java8CallAdapterFactory}.
+ * Augmented with {@link ApiResponse} result and annotated converters.
  */
 public final class ApiResponseCallAdapterFactory extends CallAdapter.Factory {
 
