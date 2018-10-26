@@ -91,24 +91,13 @@ class BankCloudScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build(Level.BODY)
+                .build(Level.NONE)
         ).engine;
 
     }
 
-    @BeforeEach
-    void setUp() {
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
-    }
-
     @Test
     void playAroundWithDocflow() throws Exception {
-//        SystemProperty.pop("httpclient.debug");
 
         senderCertificate = findWorkingCerts().get(0);
 
@@ -129,7 +118,6 @@ class BankCloudScenario {
 
     @Test
     void main() throws Exception {
-        SystemProperty.pop("httpclient.debug");
 
         List<Account> accounts = engine.getAccountService()
                 .acquireAccountsAsync()

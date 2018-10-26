@@ -48,8 +48,8 @@ Snapshot версии полезно использовать для актив�
 
 Информацию самых новых версиях sdk можно найти [здесь](https://github.com/skbkontur/extern-java-sdk/releases) 
 
-![Maven Central](https://img.shields.io/maven-central/v/ru.kontur.extern-api/extern-api-java-sdk.svg)
-![oss.sonatype](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.kontur.extern-api/extern-api-java-sdk.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/ru.kontur.extern-api/extern-api-java-sdk.svg)](https://mvnrepository.com/artifact/ru.kontur.extern-api/extern-api-java-sdk)
+[![oss.sonatype](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.kontur.extern-api/extern-api-java-sdk.svg)](https://oss.sonatype.org/content/repositories/snapshots/ru/kontur/extern-api/extern-api-java-sdk/)
 
 > указывать без префикса `v`
 
