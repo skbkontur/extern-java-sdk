@@ -1,7 +1,9 @@
 # SDK для работы с API Контур.Экстерна
 
-![Maven Central](https://img.shields.io/maven-central/v/ru.kontur.extern-api/extern-api-java-sdk.svg)
-![oss.sonatype](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.kontur.extern-api/extern-api-java-sdk.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/ru.kontur.extern-api/extern-api-java-sdk.svg)](https://mvnrepository.com/artifact/ru.kontur.extern-api/extern-api-java-sdk)
+[![oss.sonatype](https://img.shields.io/nexus/s/https/oss.sonatype.org/ru.kontur.extern-api/extern-api-java-sdk.svg)](https://oss.sonatype.org/content/repositories/snapshots/ru/kontur/extern-api/extern-api-java-sdk/)
+
+![License](https://img.shields.io/github/license/skbkontur/extern-java-sdk.svg)
 
 Предназначен для интеграции внешних систем с [API Контур.Экстерна](https://github.com/skbkontur/extern-api-docs). 
 Библиотека предоставляет классы и методы для работы с сервисами СКБ Контур.
