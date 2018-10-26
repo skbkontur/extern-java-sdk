@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2018 SKB Kontur
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+package ru.kontur.extern_api.sdk.utils;
+
+import java.util.function.Function;
+import org.jetbrains.annotations.NotNull;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
+import ru.kontur.extern_api.sdk.testapi.ExternTestMethods;
+import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
+
+public class ApproveCodeProvider implements Function<String, String> {
+
+    private final TestApi api;
+
+    public ApproveCodeProvider(ExternEngine engine) {
+        api = ExternTestMethods.build(engine);
+    }
+
+    @Override
+    public String apply(@NotNull String requestId) {
+        return UncheckedSupplier.get(() -> api.getSmsCode(requestId).get());
+    }
+
+}
