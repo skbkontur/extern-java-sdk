@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
 import ru.kontur.extern_api.sdk.testapi.ExternTestMethods;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 public class ApproveCodeProvider implements Function<String, String> {
 

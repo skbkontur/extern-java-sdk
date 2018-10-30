@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.scenario;
 
 import java.awt.Desktop;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -36,18 +37,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
@@ -68,11 +63,14 @@ import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.SortOrder;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.utils.PreparedTestData;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
 @Disabled
-class BankCloudScenario {
+class BankCloudInteractiveScenario {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
@@ -287,15 +285,7 @@ class BankCloudScenario {
                 .get()
                 .getOrThrow();
 
-        Path tmpPdf = Files.write(Files.createTempFile(documentId + "-", ".pdf"), pdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Draft document printed. Pdf opened.");
-        } else {
-            System.out.println("Draft document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
+        openPrinted("draft document", pdf);
     }
 
     private void openDocflowDocumentAsPdf(UUID docflowId, UUID documentId) throws Exception {
@@ -312,29 +302,11 @@ class BankCloudScenario {
                 .get()
                 .getOrThrow();
 
-        Path tmpPdf = Files.write(Files.createTempFile(documentId + "-", ".pdf"), pdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Docflow document printed. Pdf opened.");
-        } else {
-            System.out.println("Docflow document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
+        openPrinted("docflow document", pdf);
     }
 
     private void openReplyAsPdf(ReplyDocument reply) throws Exception {
-        byte[] replyPdf = reply.getPrintContent();
-
-        Path tmpPdf = Files.write(Files.createTempFile(reply.getId() + "-", ".pdf"), replyPdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Reply document printed. Pdf opened.");
-        } else {
-            System.out.println("Reply document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
+        openPrinted("reply", reply.getPrintContent());
     }
 
     private byte[] downloadDocumentContent(UUID docflowId, UUID documentId) throws Exception {
@@ -457,6 +429,17 @@ class BankCloudScenario {
 
         this.cloudCerts = cloudCerts;
         return cloudCerts;
+    }
+
+    private void openPrinted(String label, byte[] pdf) throws IOException {
+        Path tmpPdf = Files.write(Files.createTempFile(label + "-", ".pdf"), pdf);
+
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(tmpPdf.toFile());
+            System.out.println("Reply document printed. Pdf opened.");
+        } else {
+            System.out.println(label + " printed. Trust me. Check it here: " + tmpPdf.toString());
+        }
     }
 
     private static class ChooseInDialog {

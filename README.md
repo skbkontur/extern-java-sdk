@@ -12,15 +12,25 @@
 
 ### Указать библиотеку как зависимость из [maven.central](https://mvnrepository.com/artifact/ru.kontur.extern-api/extern-api-java-sdk):
 
+##### maven
 ```xml
 <dependency>
-    <groupId>ru.kontur.extern-api</groupId>
-    <artifactId>extern-api-java-sdk</artifactId>
-    <version>${extern-api-java-sdk.version}</version>
+  <groupId>ru.kontur.extern-api</groupId>
+  <artifactId>extern-api-java-sdk</artifactId>
+  <version>${version}</version>
 </dependency>
 ```
 
+##### gradle
+```groovy
+dependencies {
+  compile group: 'ru.kontur.extern-api', name: 'extern-api-java-sdk', version: '${version}'
+}
+```
+
 #### [Использовать SNAPSHOT версии sdk](https://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
+
+##### maven
 
 Для использования SNAPSHOT версий sdk нужно разрешить использование **sonatype snapshot repository**.
 Для этого добавьте в ` ~/.m2/settings.xml`
@@ -39,6 +49,15 @@
      </repositories>
    </profile>
 </profiles>
+```
+
+##### build.gradle
+```groovy
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
 ```
 
 Snapshot версии полезно использовать для активной разработки, оперативного исправления багов
@@ -126,7 +145,7 @@ ExternEngine ee = ExternEngineBuilder
 ## Архитектура
 В SDK реализован класс **ExternEngine**, обеспечивающий доступ к операциям Контур Экстерн. Все операции разделены на следующие группы:
 
-- сервис для работы с учетными записями конечных пользователей (**AccoutService**);
+- сервис для работы с учетными записями конечных пользователей (**AccountService**);
 - сервис для получения информации о сертификатах конечных пользователей (**CertificateService**);
 - сервис для работы со списком организаций (**OrganizationService**);
 - сервис для работы с черновиками (**DraftService**);
@@ -135,8 +154,8 @@ ExternEngine ee = ExternEngineBuilder
 
 Для получения доступа к сервису необходимо у объекта ExternEngine вызвать соответствующий метод 
 типа **get<имя сервиса>**. Например для того чтобы получить доступ к операциям сервиса для работы 
-с учетными записями необходимо использовать метод **getAccoutService()**, который вернет экземпляр класса, 
-реализующий интерфейс **AccoutService**. 
+с учетными записями необходимо использовать метод **getAccountService()**, который вернет экземпляр класса, 
+реализующий интерфейс **AccountService**. 
 
 
 #### QueryContext

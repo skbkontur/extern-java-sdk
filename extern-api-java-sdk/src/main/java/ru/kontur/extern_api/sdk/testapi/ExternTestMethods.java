@@ -44,7 +44,7 @@ public final class ExternTestMethods {
             ApiKeyProvider apiKeyProvider,
             AuthenticationProvider authenticationProvider
     ) {
-        return new KonturConfiguredClient(Level.BODY, DefaultExtern.BASE_URL)
+        return new KonturConfiguredClient(Level.NONE, DefaultExtern.BASE_URL)
                 .setApiKey(apiKeyProvider.getApiKey())
                 .setAuthSid(authenticationProvider.sessionId().getOrThrow())
                 .createApi(TestApi.class);
