@@ -23,143 +23,44 @@
  */
 package ru.kontur.extern_api.sdk.drafts.service;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.fail;
+import static junit.framework.TestCase.assertTrue;
 
-import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.common.ResponseData;
+import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.common.StandardValues;
-import ru.kontur.extern_api.sdk.common.TestServlet;
 
 /**
  * @author Mikhail Pavlenko
  */
-public class DraftServiceGetDecryptedDocumentContentTest {
+class DraftServiceGetDecryptedDocumentContentTest extends DraftServiceTestBase {
 
-    private static ExternEngine engine;
-    private static Server server;
+    @Test
+    void testGetDecryptedDocumentContent_Empty() throws ExecutionException, InterruptedException {
 
-    @BeforeClass
-    public static void startJetty() throws Exception {
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        context.addServlet(TestServlet.class, "/drafts/*");
-        server = new Server(8080);
-        server.setHandler(context);
-        server.start();
-    }
+        serverPleaseGetSuccessful(GSON.toJson(new byte[0]));
 
-    @AfterClass
-    public static void stopJetty() {
-        try {
-            server.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        byte[] decryptedContent = draftService
+                .getDecryptedDocumentContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get()
+                .ensureSuccess()
+                .get();
 
-    @BeforeClass
-    public static void setUpClass() {
-        engine = ExternEngineBuilder.createExternEngine()
-                .apiKey(UUID.randomUUID().toString())
-                .authProvider(new AuthenticationProviderAdaptor())
-                .doNotUseCryptoProvider()
-                .accountId(UUID.randomUUID().toString())
-                .serviceBaseUrl("http://localhost:8080/drafts")
-                .build();
-
+        assertTrue(new String(decryptedContent).isEmpty());
     }
 
     @Test
-    public void testGetDecryptedDocumentContent_Empty() {
-        ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("\"\"");
-        Assertions.assertArrayEquals(new byte[0], getContent());
-    }
+    void testGetDecryptedDocumentContent() throws ExecutionException, InterruptedException {
 
-    @Test
-    public void testGetDecryptedDocumentContent() {
-        ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        byte[] bytes = {1, 2, 3};
+        serverPleaseGetSuccessful(GSON.toJson("decrypted".getBytes()));
 
-        ResponseData.INSTANCE.setResponseMessage('"' + Base64.getEncoder().encodeToString(bytes) + '"');
-        Assertions.assertArrayEquals(bytes, getContent());
-    }
+        byte[] decryptedContent = draftService
+                .getDecryptedDocumentContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get()
+                .ensureSuccess()
+                .get();
 
-    @Test
-    public void testGetDecryptedDocumentContent_BAD_REQUEST() {
-        ResponseData.INSTANCE.setResponseCode(SC_BAD_REQUEST); // 400
-        checkResponseCode(SC_BAD_REQUEST);
-    }
-
-    @Test
-    public void testGetDecryptedDocumentContent_UNAUTHORIZED() {
-        ResponseData.INSTANCE.setResponseCode(SC_UNAUTHORIZED); // 401
-        checkResponseCode(SC_UNAUTHORIZED);
-    }
-
-    @Test
-    public void testGetDecryptedDocumentContent_FORBIDDEN() {
-        ResponseData.INSTANCE.setResponseCode(SC_FORBIDDEN); // 403
-        checkResponseCode(SC_FORBIDDEN);
-    }
-
-    @Test
-    public void testGetDecryptedDocumentContent_NOT_FOUND() {
-        ResponseData.INSTANCE.setResponseCode(SC_NOT_FOUND); // 404
-        checkResponseCode(SC_NOT_FOUND);
-    }
-
-    @Test
-    public void testGetDecryptedDocumentContent_INTERNAL_SERVER_ERROR() {
-        ResponseData.INSTANCE.setResponseCode(SC_INTERNAL_SERVER_ERROR); // 500
-        checkResponseCode(SC_INTERNAL_SERVER_ERROR);
-    }
-
-    private void checkResponseCode(int code) {
-        QueryContext<String> queryContext = new QueryContext<>();
-        queryContext.setDraftId(StandardValues.ID);
-        queryContext.setDocumentId(StandardValues.ID);
-        QueryContext<String> stringQueryContext = engine.getDraftService()
-                .getDecryptedDocumentContent(queryContext);
-        assertNull(stringQueryContext.get());
-        ApiException serviceError = stringQueryContext.getServiceError();
-        assertNotNull("ServiceError must not be null!", serviceError);
-        assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
-    }
-
-    private byte[] getContent() {
-        try {
-            return engine.getDraftService()
-                    .getDecryptedDocumentContentAsync(
-                            UUID.fromString(StandardValues.ID),
-                            UUID.fromString(StandardValues.ID))
-                    .get()
-                    .get();
-        } catch (InterruptedException | ExecutionException e) {
-            fail();
-            return null;
-        }
+        assertEquals(new String(decryptedContent), "decrypted");
     }
 }
