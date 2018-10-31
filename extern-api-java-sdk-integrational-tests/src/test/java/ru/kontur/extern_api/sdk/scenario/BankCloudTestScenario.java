@@ -23,37 +23,19 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
-import java.awt.Desktop;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.jetbrains.annotations.Nullable;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
@@ -66,17 +48,18 @@ import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.SortOrder;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.utils.PreparedTestData;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-@Disabled
-class BankCloudScenario {
+class BankCloudTestScenario {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
-    private List<Certificate> cloudCerts;
 
     @BeforeAll
     static void setUpClass() {
@@ -91,45 +74,13 @@ class BankCloudScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build(Level.BODY)
+                .build(Level.NONE)
         ).engine;
 
     }
 
-    @BeforeEach
-    void setUp() {
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
-    }
-
-    @Test
-    void playAroundWithDocflow() throws Exception {
-//        SystemProperty.pop("httpclient.debug");
-
-        senderCertificate = findWorkingCerts().get(0);
-
-        DocflowPage page = engine.getDocflowService().searchDocflows(DocflowFilter
-                .page(1, 1)
-                .finished(false)
-                .orderBy(SortOrder.DESCENDING)
-        ).getOrThrow();
-
-        String docflowId = page.getDocflowsPageItem().get(0).getId().toString();
-        Docflow docflow = engine.getDocflowService()
-                .lookupDocflowAsync(docflowId)
-                .get()
-                .getOrThrow();
-
-        playWithDocflow(docflow);
-    }
-
     @Test
     void main() throws Exception {
-        SystemProperty.pop("httpclient.debug");
 
         List<Account> accounts = engine.getAccountService()
                 .acquireAccountsAsync()
@@ -159,8 +110,7 @@ class BankCloudScenario {
 
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
-        playWithDocflow(docflow);
-
+        finishDocflow(docflow);
     }
 
     private Docflow sendDraftWithUsn(Account senderAcc)
@@ -220,21 +170,27 @@ class BankCloudScenario {
                 .getOrThrow();
     }
 
-    private void playWithDocflow(Docflow docflow) throws Exception {
-        do {
+    /** Создаёт и отправляет ответные документы до завершения ДО. */
+    private void finishDocflow(Docflow docflow) throws Exception {
 
+        int i = 0;
+        while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
             if (docflow.getStatus() == DocflowStatus.FINISHED) {
                 break;
             }
 
-            System.out.println("Choose reply...");
-            Document document = ChooseInDialog.replyForDocflow(docflow);
-            if (document == null) {
-                System.out.println("You don't want to reply now...");
-                System.out.println("Refreshing docflow...");
+            Document document = docflow.getDocuments().stream()
+                    .filter(Document::isNeedToReply)
+                    .findFirst()
+                    .orElse(null);
 
+            if (document == null) {
+                int[] t = {10, 20, 30, 20};
+                int timeout = t[i++ % t.length];
+                System.out.println("No reply available yet. Waiting " + timeout + " seconds");
+                UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
                 docflow = engine.getDocflowService()
                         .lookupDocflowAsync(docflow.getId().toString())
                         .get()
@@ -243,29 +199,16 @@ class BankCloudScenario {
             }
 
             System.out.println("Reply on " + document.getDescription().getType());
-            System.out.println("Open target document");
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
                 System.out.println("Ok, Cannot print document. " + e.getMessage());
             }
 
-            String type = ChooseInDialog.replyType(document);
-            if (type == null) {
-                System.out.println("You don't know how to reply now...");
-                System.out.println("Refreshing docflow...");
-
-                docflow = engine.getDocflowService()
-                        .lookupDocflowAsync(docflow.getId().toString())
-                        .get()
-                        .getOrThrow();
-                continue;
-            }
-
+            String type = document.getReplyOptions()[0];
             System.out.println("Reply with " + type);
             docflow = sendReply(docflow.getId().toString(), document, type);
-
-        } while (!ChooseInDialog.exit());
+        }
 
     }
 
@@ -279,9 +222,8 @@ class BankCloudScenario {
                 .getOrThrow();
 
         System.out.println("Reply generated");
-        openReplyAsPdf(replyDocument);
 
-        Assertions.assertTrue(cloudSignReplyDocument(docflowId, documentId, replyDocument));
+        cloudSignReplyDocument(docflowId, documentId, replyDocument);
 
         Docflow docflow = engine.getDocflowService()
                 .sendReplyAsync(docflowId, documentId, replyDocument.getId())
@@ -293,21 +235,10 @@ class BankCloudScenario {
     }
 
     private void openDraftDocumentAsPdf(UUID draftId, UUID documentId) throws Exception {
-
-        byte[] pdf = engine.getDraftService()
+        engine.getDraftService()
                 .getDocumentAsPdfAsync(draftId, documentId)
                 .get()
                 .getOrThrow();
-
-        Path tmpPdf = Files.write(Files.createTempFile(documentId + "-", ".pdf"), pdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Draft document printed. Pdf opened.");
-        } else {
-            System.out.println("Draft document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
     }
 
     private void openDocflowDocumentAsPdf(UUID docflowId, UUID documentId) throws Exception {
@@ -319,34 +250,10 @@ class BankCloudScenario {
             return;
         }
 
-        byte[] pdf = engine.getDocflowService()
+        engine.getDocflowService()
                 .getDocumentAsPdfAsync(docflowId, documentId, document)
                 .get()
                 .getOrThrow();
-
-        Path tmpPdf = Files.write(Files.createTempFile(documentId + "-", ".pdf"), pdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Docflow document printed. Pdf opened.");
-        } else {
-            System.out.println("Docflow document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
-    }
-
-    private void openReplyAsPdf(ReplyDocument reply) throws Exception {
-        byte[] replyPdf = reply.getPrintContent();
-
-        Path tmpPdf = Files.write(Files.createTempFile(reply.getId() + "-", ".pdf"), replyPdf);
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Reply document printed. Pdf opened.");
-        } else {
-            System.out.println("Reply document printed. Trust me. Check it here: " + tmpPdf.toString());
-        }
-
     }
 
     private byte[] downloadDocumentContent(UUID docflowId, UUID documentId) throws Exception {
@@ -389,7 +296,7 @@ class BankCloudScenario {
         return true;
     }
 
-    private boolean cloudSignReplyDocument(String docflowId, String documentId, ReplyDocument reply)
+    private void cloudSignReplyDocument(String docflowId, String documentId, ReplyDocument reply)
             throws Exception {
 
         ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
@@ -399,7 +306,7 @@ class BankCloudScenario {
                 .get()
                 .getOrThrow();
 
-        if (init.getRequestId() == null) {
+        if (!init.needToConfirmSigning()) {
             System.out.println("Wow! You shouldn't confirm this signing!");
         } else {
             engine.getDocflowService()
@@ -415,28 +322,11 @@ class BankCloudScenario {
         }
 
         System.out.println("Reply signed in cloud");
-        return true;
     }
 
 
     private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId) {
         ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-//        CompletableFuture<Stream<String>> serials = engine.getDocflowService()
-//                .getEncryptedContentAsync(docflowId, documentId)
-//                .thenApply(QueryContext::getOrThrow)
-//                .thenApply(calm(CryptoApi::getSerialNumbers));
-//
-//        List<String> stringStream = get(serials::get).collect(Collectors.toList());
-//
-//        List<String> integers = cloudCerts.stream()
-//                .map(Certificate::getContent)
-//                .map(Base64.getDecoder()::decode)
-//                .map(calm(get(X509CertificateFactory::new)::create))
-//                .map(cw -> cw.getCert().getSerialNumber())
-//                .map(BigInteger::toByteArray)
-//                .map(IOUtil::bytesToHex)
-//                .collect(Collectors.toList());
 
         return engine.getDocflowService()
                 .cloudDecryptDocument(
@@ -467,104 +357,6 @@ class BankCloudScenario {
                 cloudCerts.size()
         );
 
-        this.cloudCerts = cloudCerts;
         return cloudCerts;
-    }
-
-    private static class ChooseInDialog {
-
-        @Nullable
-        private static Document replyForDocflow(Docflow docflow) {
-
-            Document[] optDocs = docflow
-                    .getDocuments()
-                    .stream()
-                    .filter(Document::isNeedToReply)
-                    .toArray(Document[]::new);
-
-            if (optDocs.length == 0) {
-                JOptionPane.showInternalMessageDialog(
-                        null,
-                        "There is no available documents to reply on. "
-                                + "Wait for the inspection to answer. "
-                                + "Click OK to refresh the docflow status.",
-                        "Inspector thinking...",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-                return null;
-            }
-
-            String[] colNames = Arrays.stream(optDocs)
-                    .map(d -> d.getDescription().getType())
-                    .map(Objects::toString)
-                    .toArray(String[]::new);
-
-            String[][] cols = Arrays.stream(optDocs)
-                    .map(Document::getReplyOptions)
-                    .toArray(String[][]::new);
-
-            JTable view = new JTable(transpose(cols), colNames);
-            view.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-            JScrollPane pane = new JScrollPane(view);
-
-            int result = JOptionPane.showOptionDialog(
-                    null,
-                    pane,
-                    "Reply on...",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    colNames,
-                    null
-            );
-
-            return result == JOptionPane.CLOSED_OPTION ? null : optDocs[result];
-        }
-
-        private static boolean exit() {
-            int exit = JOptionPane.showConfirmDialog(
-                    null,
-                    "Stop send replies and exit?",
-                    "exit",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            return exit == JOptionPane.YES_OPTION;
-        }
-
-        @Nullable
-        private static String replyType(Document document) {
-            String[] options = document.getReplyOptions();
-
-            int opt = JOptionPane.showOptionDialog(null,
-                    "How do you want to reply on " + document.getDescription().getType() + "?",
-                    "Reply with...",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    null);
-            return opt == JOptionPane.CLOSED_OPTION ? null : options[opt];
-        }
-
-    }
-
-    private static Object[][] transpose(Object[][] tss) {
-
-        int nCols = tss.length;
-        int nRows = Arrays.stream(tss)
-                .mapToInt(value -> value.length)
-                .max()
-                .orElse(1);
-
-        Object[][] rss = new Object[nRows][nCols];
-
-        for (int i = 0; i < tss.length; i++) {
-            for (int j = 0; j < tss[i].length; j++) {
-                rss[j][i] = tss[i][j];
-            }
-        }
-
-        return rss;
     }
 }
