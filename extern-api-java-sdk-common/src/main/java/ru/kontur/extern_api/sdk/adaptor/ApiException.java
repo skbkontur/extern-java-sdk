@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.adaptor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,21 @@ public class ApiException extends RuntimeException {
     private final Map<String, List<String>> responseHeaders;
 
     public ApiException(Throwable throwable) {
-        this(-1, null, null, null, throwable);
+        super(
+                throwable instanceof ApiException ? throwable.getMessage() : null,
+                throwable instanceof ApiException ? null : throwable
+        );
+
+        if (throwable instanceof ApiException) {
+            ApiException parent = (ApiException) throwable;
+            code = parent.getCode();
+            errorId = parent.getErrorId();
+            responseHeaders = parent.getResponseHeaders();
+        } else {
+            code = -1;
+            errorId = "exception-was-thrown";
+            responseHeaders = Collections.emptyMap();
+        }
     }
 
     public ApiException(String message) {
@@ -56,7 +71,7 @@ public class ApiException extends RuntimeException {
 
         this.code = code;
         this.errorId = errorId;
-        this.responseHeaders = responseHeaders;
+        this.responseHeaders = responseHeaders == null ? Collections.emptyMap() : responseHeaders;
     }
 
     /**
@@ -99,10 +114,17 @@ public class ApiException extends RuntimeException {
             String message,
             Map<String, List<String>> responseHeaders
     ) {
-        return "ApiException: " + String.valueOf(code) + " " + errorId + ": " + message + "\n" +
-                String.join("\n", responseHeaders.entrySet().stream()
-                        .map(e -> e.getKey() + ": " + String.join(" ", e.getValue().toArray(new String[0])))
-                        .toArray(String[]::new)
-                );
+        String headers = String.join("\n", responseHeaders
+                .entrySet()
+                .stream()
+                .map(e -> e.getKey() + ": " + String.join(" ", e.getValue().toArray(new String[0])))
+                .toArray(String[]::new)
+        );
+
+        if (!headers.isEmpty()) {
+            headers = "\n" + headers;
+        }
+
+        return "ApiException: " + String.valueOf(code) + " " + errorId + ": " + message + headers;
     }
 }

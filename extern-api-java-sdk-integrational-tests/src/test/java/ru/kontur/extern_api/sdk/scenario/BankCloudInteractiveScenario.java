@@ -436,7 +436,7 @@ class BankCloudInteractiveScenario {
 
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().open(tmpPdf.toFile());
-            System.out.println("Reply document printed. Pdf opened.");
+            System.out.println(label + " document printed. Pdf opened.");
         } else {
             System.out.println(label + " printed. Trust me. Check it here: " + tmpPdf.toString());
         }

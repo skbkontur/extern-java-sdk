@@ -23,30 +23,24 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import com.google.gson.Gson;
-import ru.kontur.extern_api.sdk.model.Docflow;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public final class Caches {
+public final class OSUtils {
 
-    public static ObjectCache<Docflow> createDocflowCache(Gson gson, String accountId) {
-        return UncheckedSupplier.get(() -> new TemporaryObjectCache<>(
-                "docflow-",
-                ".json",
-                accountId,
-                gson,
-                docflow -> docflow.getId().toString(),
-                Docflow.class
-        ));
+    public static Path open(String ext, byte[] pdf) throws IOException {
+        if (!ext.startsWith(".")) {
+            ext = "." + ext;
+        }
+
+        Path tmp = Files.write(Files.createTempFile("", ext), pdf);
+
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(tmp.toFile());
+        }
+        return tmp;
     }
 
-    public static ObjectCache<byte[]> createDocumentCache(Gson gson, String accountId, String prefix) {
-        return UncheckedSupplier.get(() -> new TemporaryObjectCache<>(
-                prefix + "-document-",
-                ".json",
-                accountId,
-                gson,
-                null,
-                byte[].class
-        ));
-    }
 }
