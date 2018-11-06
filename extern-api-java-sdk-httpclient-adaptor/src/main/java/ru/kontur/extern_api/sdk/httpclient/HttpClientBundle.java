@@ -23,7 +23,6 @@
 
 package ru.kontur.extern_api.sdk.httpclient;
 
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.adaptor.AccountsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
 import ru.kontur.extern_api.sdk.adaptor.CertificatesAdaptor;
@@ -31,17 +30,17 @@ import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.DraftsAdaptor;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 
 public class HttpClientBundle implements AdaptorBundle {
 
     private final ProviderHolder providerHolder;
-    private final RetrofitClient retrofitClient;
+
+    private int connectTimeout = 3 * 0xDEAD;
+    private int readTimeout = 3 * 0xB01;
 
     public HttpClientBundle(ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
-        this.retrofitClient = new RetrofitClient(Level.BODY);
     }
 
     @Override
@@ -81,7 +80,22 @@ public class HttpClientBundle implements AdaptorBundle {
 
     @Override
     public HttpClient getHttpClientAdaptor() {
-        return new HttpClientImpl()
+        HttpClient httpClient = new HttpClientImpl()
                 .setUserAgentProvider(providerHolder.getUserAgentProvider());
+
+        httpClient.setConnectWaiting(connectTimeout);
+        httpClient.setReadTimeout(readTimeout);
+        return httpClient;
+
+    }
+
+    public HttpClientBundle setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+        return this;
+    }
+
+    public HttpClientBundle setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
     }
 }

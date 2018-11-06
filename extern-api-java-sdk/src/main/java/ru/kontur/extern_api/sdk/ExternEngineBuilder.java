@@ -47,7 +47,6 @@ import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 
 public class ExternEngineBuilder implements Syntax {
 
-
     @NotNull
     public static ApiKeySyntax createExternEngine() {
         return new ExternEngineBuilder();
@@ -85,6 +84,8 @@ public class ExternEngineBuilder implements Syntax {
     private AuthType authType = AuthType.UNSPECIFIED;
     private byte[] certificatePublicKey;
 
+    private int readTimeout = 3 * 0xDEAD;
+    private int connectTimeout = 3 * 0xB01;
 
     private ExternEngineBuilder() {
         configuration = new Configuration();
@@ -136,7 +137,9 @@ public class ExternEngineBuilder implements Syntax {
         providerSuite.setUserAgentProvider(userAgentProvider);
         providerSuite.setUserIPProvider(userIPProvider);
 
-        AdaptorBundle adaptorBundle = new HttpClientBundle(providerSuite);
+        AdaptorBundle adaptorBundle = new HttpClientBundle(providerSuite)
+                .setConnectTimeout(connectTimeout)
+                .setReadTimeout(readTimeout);
 
         DefaultServicesFactory serviceFactory = new DefaultServicesFactory(
                 providerSuite,
@@ -177,6 +180,20 @@ public class ExternEngineBuilder implements Syntax {
     @Override
     public OverrideDefaultsSyntax userIpProvider(@NotNull UserIPProvider userIPProvider) {
         this.userIPProvider = Objects.requireNonNull(userIPProvider);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax connectTimeout(int connectTimeoutMillis) {
+        connectTimeout = connectTimeoutMillis;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax readTimeout(int readTimeoutMillis) {
+        readTimeout = readTimeoutMillis;
         return this;
     }
 

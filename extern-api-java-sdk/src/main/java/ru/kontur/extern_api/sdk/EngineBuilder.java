@@ -51,6 +51,12 @@ public interface EngineBuilder {
         @NotNull
         OverrideDefaultsSyntax userIpProvider(@NotNull UserIPProvider userIPProvider);
 
+        @NotNull
+        OverrideDefaultsSyntax connectTimeout(int connectTimeoutMillis);
+
+        @NotNull
+        OverrideDefaultsSyntax readTimeout(int readTimeoutMillis);
+
     }
 
     interface AuthProviderSyntax {

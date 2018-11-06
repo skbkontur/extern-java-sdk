@@ -5,13 +5,25 @@
  */
 package ru.kontur.extern_api.sdk.it;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.concurrent.CompletionException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.Configuration;
+import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
+import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.invoker.HttpClientException;
+import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.it.utils.TestConfig;
 import ru.kontur.extern_api.sdk.it.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
@@ -30,7 +42,35 @@ class AccountTest {
 
     @BeforeAll
     static void setUpClass() {
+        SystemProperty.push("httpclient.debug");
         accountService = TestSuite.Load().engine.getAccountService();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        SystemProperty.pop("httpclient.debug");
+    }
+
+    @Test
+    void timeoutTest() {
+        Configuration cfg = TestConfig.LoadConfigFromEnvironment();
+        ExternEngine engine = ExternEngineBuilder.createExternEngine()
+                .apiKey(cfg.getApiKey())
+                .passwordAuth(cfg.getLogin(), cfg.getPass())
+                .doNotUseCryptoProvider()
+                .accountId(cfg.getAccountId().toString())
+                .readTimeout(1)
+                .build();
+
+        ServiceException ex = Assertions.assertThrows(
+                ServiceException.class,
+                () -> engine.getAccountService().acquireAccountsAsync()
+                        .join()
+                        .getOrThrow()
+        );
+
+        assertTrue(ex.getCause() instanceof HttpClientException);
+        assertTrue(ex.getCause().getCause() instanceof SocketTimeoutException);
     }
 
     @Test
@@ -88,9 +128,9 @@ class AccountTest {
         checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());
     }
 
-    private void checkFields(Account account, String inn, String kpp, String orgName){
+    private void checkFields(Account account, String inn, String kpp, String orgName) {
 
-        assertEquals(account.getInn(), inn );
+        assertEquals(account.getInn(), inn);
         assertEquals(account.getKpp(), kpp);
         assertEquals(account.getOrganizationName(), orgName);
         assertFalse(account.getLinks().isEmpty());
