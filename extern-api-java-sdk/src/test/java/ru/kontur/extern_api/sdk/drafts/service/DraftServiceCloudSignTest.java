@@ -32,7 +32,11 @@ import static org.mockserver.model.HttpResponse.response;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.StandardValues;
+import ru.kontur.extern_api.sdk.drafts.testBase.DraftServiceTestBase;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 
@@ -85,8 +89,6 @@ class DraftServiceCloudSignTest extends DraftServiceTestBase {
     @Test
     void cloudSignMethodWithSupplierShouldSignDraft() throws Exception {
 
-        UUID draftId = UUID.randomUUID();
-
         serverPlease()
                 .when(request().withPath(".*/cloud-sign$"), exactly(1))
                 .respond(response().withBody("{ "
@@ -104,11 +106,28 @@ class DraftServiceCloudSignTest extends DraftServiceTestBase {
                 .respond(response().withBody("{ \"signed-documents\": [] }"));
 
         SignedDraft signedDraft = draftService
-                .cloudSignAsync(draftId, cxt -> "1234")
+                .cloudSignAsync(StandardValues.GUID, cxt -> "1234")
                 .get()
                 .ensureSuccess()
                 .get();
 
         assertTrue(signedDraft.getSignedDocuments().isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {400, 401, 403, 404, 500})
+    void testCloudSignWithError(int code)
+            throws ExecutionException, InterruptedException {
+
+        serverPleasePostError(code);
+
+        draftService.cloudSignInitAsync(StandardValues.GUID).get();
+
+        QueryContext signedDraftCxt = draftService
+                .cloudSignAsync(StandardValues.GUID, cxt -> "1234")
+                .get();
+
+        assertTrue(signedDraftCxt.isFail());
+        assertEquals(code, signedDraftCxt.getServiceError().getResponseCode());
     }
 }

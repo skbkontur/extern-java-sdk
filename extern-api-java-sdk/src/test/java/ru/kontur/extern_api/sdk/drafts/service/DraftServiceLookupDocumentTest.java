@@ -23,10 +23,17 @@
  */
 package ru.kontur.extern_api.sdk.drafts.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.drafts.DraftsValidator;
+import ru.kontur.extern_api.sdk.drafts.testBase.DraftServiceTestBase;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 
 /**
@@ -154,5 +161,20 @@ class DraftServiceLookupDocumentTest extends DraftServiceTestBase {
                 .get();
 
         DraftsValidator.validateDocumentDescription(draftDocument.getDescription());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 400, 401, 403, 404, 500})
+    void testLookupDocumentWithError(int code)
+            throws ExecutionException, InterruptedException {
+
+        serverPleaseGetError(code);
+
+        QueryContext draftDocumentCxt = draftService
+                .getDecryptedDocumentContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get();
+
+        assertTrue(draftDocumentCxt.isFail());
+        assertEquals(code, draftDocumentCxt.getServiceError().getResponseCode());
     }
 }

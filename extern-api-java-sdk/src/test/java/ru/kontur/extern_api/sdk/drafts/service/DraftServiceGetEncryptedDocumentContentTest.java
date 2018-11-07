@@ -26,10 +26,13 @@ package ru.kontur.extern_api.sdk.drafts.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.common.StandardValues;
+import ru.kontur.extern_api.sdk.drafts.testBase.DraftServiceTestBase;
 
 /**
  * @author Mikhail Pavlenko
@@ -65,5 +68,20 @@ class DraftServiceGetEncryptedDocumentContentTest extends DraftServiceTestBase {
                 .get();
 
         assertEquals(new String(decryptedContent), new String(content));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 400, 401, 403, 404, 500})
+    void testGetEncryptedDocumentContentWithError(int code)
+            throws ExecutionException, InterruptedException {
+
+        serverPleaseGetError(code);
+
+        QueryContext encryptedContentCxt = draftService
+                .getEncryptedDocumentContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get();
+
+        assertTrue(encryptedContentCxt.isFail());
+        assertEquals(code, encryptedContentCxt.getServiceError().getResponseCode());
     }
 }

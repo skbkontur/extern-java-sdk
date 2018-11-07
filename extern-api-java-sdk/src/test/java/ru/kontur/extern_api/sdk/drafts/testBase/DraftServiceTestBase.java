@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.drafts.service;
+package ru.kontur.extern_api.sdk.drafts.testBase;
 
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
@@ -30,7 +30,6 @@ import static org.mockserver.model.HttpResponse.response;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockserver.client.server.MockServerClient;
@@ -39,21 +38,22 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.common.StandardValues;
+import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.service.DraftService;
 
 
-class DraftServiceTestBase {
+public class DraftServiceTestBase {
 
     private static final String HOST = "localhost";
     private static final int PORT = getFreePort();
 
     private static ClientAndServer mockServer;
 
-    static DraftService draftService;
-    static final Gson GSON = GsonProvider.PORTAL.getGson();
+    protected static DraftService draftService;
+    protected static final Gson GSON = GsonProvider.LIBAPI.getGson();
 
     @BeforeEach
-    void startMock() {
+    protected void startMock() {
         mockServer = ClientAndServer.startClientAndServer(PORT);
 
         ExternEngine engine = ExternEngineBuilder
@@ -68,11 +68,11 @@ class DraftServiceTestBase {
     }
 
     @AfterEach
-    void stopMock() {
+    protected void stopMock() {
         mockServer.stop();
     }
 
-    static void serverPleaseGetSuccessful(String body){
+    protected static void serverPleaseGetSuccessful(String body) {
         serverPlease()
                 .when(request().withMethod("GET"))
                 .respond(response()
@@ -80,9 +80,31 @@ class DraftServiceTestBase {
                         .withStatusCode(200));
     }
 
+    protected static void serverPleaseGetError(int code) {
+        serverPleaseError("GET", code);
+    }
 
-    static MockServerClient serverPlease() {
+    protected static void serverPleasePostError(int code) {
+        serverPleaseError("POST", code);
+    }
+
+    protected static MockServerClient serverPlease() {
         return new MockServerClient(HOST, PORT);
+    }
+
+
+    private static void serverPleaseError(String command, int code) {
+        serverPlease()
+                .when(request().withMethod(command))
+                .respond(response()
+                        .withBody(String.format("{\n"
+                                + "\"id\": \"urn:error:externapi:error\",\n"
+                                + "\"status-code\": %s,\n"
+                                + "\"track-id\": %s,\n"
+                                + "\"message\": \"Message\",\n"
+                                + "\"trace-id\": %s \n"
+                                + "}", code, StandardValues.TRACK_ID, StandardValues.TRACE_ID))
+                        .withStatusCode(code));
     }
 
     private static int getFreePort() {
