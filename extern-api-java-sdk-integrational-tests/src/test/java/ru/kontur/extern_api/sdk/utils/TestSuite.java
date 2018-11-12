@@ -28,6 +28,7 @@ import static ru.kontur.extern_api.sdk.ExternEngineBuilder.createExternEngine;
 import com.google.gson.Gson;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
@@ -38,7 +39,7 @@ public class TestSuite {
 
     public final ExternEngine engine;
 
-    public final Gson gson;
+    private final Gson gson;
 
     private TestSuite(ExternEngine engine) {
         this.engine = engine;
@@ -50,15 +51,20 @@ public class TestSuite {
     }
 
     public static TestSuite Load(Consumer<Configuration> configOverride) {
-        Configuration config = TestConfig.LoadConfigFromEnvironment();
 
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
         configOverride.accept(config);
 
         ExternEngine engine = ExternEngineBuilder
-                .authFromConfiguration(config)
+                .createExternEngine(config)
+                .apiKey(config.getApiKey())
+                .buildAuthentication(
+                        config.getAuthBaseUri(),
+                        builder -> builder.passwordAuthentication(
+                                config.getLogin(), config.getPass())
+                )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .userIpProvider(() -> "80.247.184.194")
                 .build();
 
         return new TestSuite(engine);

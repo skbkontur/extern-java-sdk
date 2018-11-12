@@ -45,6 +45,7 @@ import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
@@ -62,9 +63,7 @@ import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-class DraftServiceIT {
-
-    private static ExternEngine engine;
+class DraftServiceIT extends TestBaseIT {
 
     private DraftService draftService;
     private CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
@@ -122,8 +121,7 @@ class DraftServiceIT {
     );
 
     @BeforeAll
-    static void setUpClass() {
-        engine = TestSuite.Load().engine;
+    static void init() {
         engine.setCryptoProvider(new CryptoProviderMSCapi());
     }
 

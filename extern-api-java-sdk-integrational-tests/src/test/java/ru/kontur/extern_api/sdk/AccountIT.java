@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
@@ -41,18 +42,14 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.service.AccountService;
 
 
-class AccountIT {
+class AccountIT extends TestBaseIT {
 
-    private static AccountService accountService;
+    private static AccountService accountService = engine.getAccountService();
 
     private static final String INN = "7810654318";
     private static final String KPP = "781001001";
     private static final String ORG_NAME = "Рога и Копыта";
 
-    @BeforeAll
-    static void setUpClass() {
-        accountService = TestSuite.Load().engine.getAccountService();
-    }
 
     @Test
     void acquireAccounts() throws Exception {

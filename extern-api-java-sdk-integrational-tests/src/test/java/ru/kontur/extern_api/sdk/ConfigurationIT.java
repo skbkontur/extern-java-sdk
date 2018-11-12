@@ -26,34 +26,22 @@ package ru.kontur.extern_api.sdk;
 
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.utils.AuthenticationProviderAdaptor;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.service.AccountService;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 @DisplayName("Configuration tokens should")
-class ConfigurationIT {
-
-    private Configuration C = TestConfig.LoadConfigFromEnvironment();
-
-    private ExternEngine newEngine() {
-        return ExternEngineBuilder.createExternEngine(C.getServiceBaseUri())
-                .apiKey(C.getApiKey())
-                .buildAuthentication(C.getAuthBaseUri(), builder -> builder.
-                        passwordAuthentication(C.getLogin(), C.getPass())
-                )
-                .doNotUseCryptoProvider()
-                .accountId(C.getAccountId())
-                .build(Level.BODY);
-    }
+class ConfigurationIT extends TestBaseIT {
 
     @Test
     @DisplayName("share same sid across all services")
     void shareSameSid() throws Exception {
-
-        ExternEngine engine = newEngine();
 
         AccountService accountService = engine.getAccountService();
         accountService.acquireAccountsAsync().get().getOrThrow();

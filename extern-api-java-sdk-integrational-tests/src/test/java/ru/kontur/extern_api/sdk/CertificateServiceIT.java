@@ -35,18 +35,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-class CertificateServiceIT {
-
-    private static ExternEngine engine;
-
-    @BeforeAll
-    static void setUpClass() {
-        engine = TestSuite.Load().engine;
-    }
-
+class CertificateServiceIT extends TestBaseIT {
 
     @BeforeEach
     void setUp() {

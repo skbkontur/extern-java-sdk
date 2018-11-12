@@ -46,22 +46,20 @@ import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
-class UsnIT {
+class UsnIT extends TestBaseIT {
 
-    private static DraftService ds;
+    private static DraftService ds = engine.getDraftService();
     private static DraftMeta draftMeta;
 
     @BeforeAll
     static void init() {
-        ExternEngine ee = TestSuite.Load().engine;
-        ee.setCryptoProvider(new CryptoProviderMSCapi());
-        ds = ee.getDraftService();
-        String cert = CertificateResource.readBase64(ee.getConfiguration().getThumbprint());
+        String cert = CertificateResource.readBase64(engine.getConfiguration().getThumbprint());
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
                 .filter(td -> td.getClientInfo().getRecipient().getIfnsCode() != null)
@@ -94,8 +92,11 @@ class UsnIT {
     private void checkUsn(int version, UsnServiceContractInfo usn) throws Exception {
 
         String draftId = ds
-                .create(new QueryContext<>().setDraftMeta(draftMeta))
-                .getOrThrow()
+                .createAsync(draftMeta)
+                .get()
+                .ensureSuccess()
+                .get()
+                .getId()
                 .toString();
 
         ds.createAndBuildDeclarationAsync(draftId, version, usn)

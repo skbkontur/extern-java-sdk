@@ -31,20 +31,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.portal.CertificatesClient;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 
 @DisplayName("portal services tests")
-class PortalPackageIT {
+class PortalPackageIT extends TestBaseIT {
 
-    private static Configuration config;
+    private static Configuration config = engine.getConfiguration();
 
     @BeforeAll
-    static void setUp() {
+    static void init() {
         SystemProperty.push("httpclient.debug");
-        config = TestConfig.LoadConfigFromEnvironment();
     }
 
     @AfterAll
@@ -71,7 +71,5 @@ class PortalPackageIT {
             Assertions.assertEquals(config.getThumbprint(),
                     search.getResults().get(0).getThumbprint());
         }
-
     }
-
 }

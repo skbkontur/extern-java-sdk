@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,6 +55,7 @@ import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
@@ -88,7 +90,7 @@ import ru.kontur.extern_api.sdk.utils.Zip;
 
 @DisplayName("Docflow service should be able to")
 @Execution(ExecutionMode.CONCURRENT)
-class DocflowServiceIT {
+class DocflowServiceIT extends TestBaseIT {
 
     private static class TestPack {
 
@@ -100,7 +102,6 @@ class DocflowServiceIT {
     }
 
     private static Logger log = Logger.getLogger(DocflowServiceIT.class.getName());
-    private static ExternEngine engine;
     private static EngineUtils engineUtils;
 
     private static Lazy<TestPack> testPack = Lazy.of(() -> getTestPack(engine));
@@ -127,8 +128,7 @@ class DocflowServiceIT {
     }
 
     @BeforeAll
-    static void setUpClass() {
-        engine = TestSuite.Load().engine;
+    static void init() {
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
     }
@@ -148,11 +148,14 @@ class DocflowServiceIT {
     @ParameterizedTest
     @DisplayName("get docflow by id")
     @MethodSource("docflowsLazyFactory")
-    void testGetDocflow(QueryContext<Docflow> docflowCxt) {
+    void testGetDocflow(QueryContext<Docflow> docflowCxt)
+            throws ExecutionException, InterruptedException {
         Docflow docflow = docflowCxt.get();
         Docflow returned = docflowService
-                .lookupDocflow(docflowCxt.setDocflowId(docflow.getId()))
-                .getOrThrow();
+                .lookupDocflowAsync(docflow.getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
         assertEquals(docflow.getId(), returned.getId());
         assertEquals(docflow.getType(), returned.getType());
@@ -164,12 +167,15 @@ class DocflowServiceIT {
     @ParameterizedTest
     @DisplayName("get docflow documents")
     @MethodSource("docflowsLazyFactory")
-    void testGetDocuments(QueryContext<Docflow> docflowCxt) {
+    void testGetDocuments(QueryContext<Docflow> docflowCxt)
+            throws ExecutionException, InterruptedException {
         Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .getOrThrow();
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
         Assertions.assertNotEquals(0, docs.size());
         for (Document document : docs) {
@@ -185,8 +191,10 @@ class DocflowServiceIT {
         Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .getOrThrow();
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
         for (Document d : docs) {
             Document actual = docflowService
@@ -208,8 +216,10 @@ class DocflowServiceIT {
         Docflow docflow = docflowCxt.get();
 
         List<Document> docs = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
-                .getOrThrow();
+                .getDocumentsAsync(docflow.getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
         for (Document d : docs) {
             DocflowDocumentDescription actual = docflowService
@@ -295,12 +305,14 @@ class DocflowServiceIT {
     @ParameterizedTest
     @DisplayName("decrypt document content in cloud")
     @MethodSource("docflowsLazyFactory")
-    void testDecryptContent(QueryContext<Docflow> docflowCxt) {
+    void testDecryptContent(QueryContext<Docflow> docflowCxt)
+            throws ExecutionException, InterruptedException {
         Docflow docflow = docflowCxt.get();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
-                .getDocuments(docflowCxt.setDocflowId(docflow.getId()))
+                .getDocumentsAsync(docflow.getId())
+                .get()
                 .ensureSuccess();
 
         assertNotNull(docsCxt.get());
