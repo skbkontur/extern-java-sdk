@@ -149,7 +149,7 @@ public class KonturConfiguredClient {
         readTimeout = timeout;
         readTimeoutUnit = unit;
         okBuilder.readTimeout(timeout, unit);
-        timeoutToken.setToken(String.valueOf(unit.toNanos(timeout) * 10));
+        timeoutToken.setToken(String.valueOf(unit.toMicros(timeout) * 10));
         return this;
     }
 
