@@ -30,14 +30,14 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class TokenAuth implements Interceptor {
+class TokenInterceptor implements Interceptor {
 
     private final TokenLocation location;
     private final String paramName;
 
     private String token;
 
-    public TokenAuth(TokenLocation location, String paramName) {
+    public TokenInterceptor(TokenLocation location, String paramName) {
         this.location = location;
         this.paramName = paramName;
     }

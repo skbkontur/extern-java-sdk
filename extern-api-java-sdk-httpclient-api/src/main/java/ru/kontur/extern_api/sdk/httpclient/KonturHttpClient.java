@@ -55,8 +55,6 @@ import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 public class KonturHttpClient implements HttpClient {
 
-    private static final String X_KONTUR_TIMEOUT = "X-Kontur-Request-Timeout";
-
     private static final String DEFAULT_CONTENT_TYPE = "application/json; charset=utf-8";
     private static final String OCTET_STREAM_CONTENT_TYPE = "application/octet-stream";
 
@@ -71,14 +69,12 @@ public class KonturHttpClient implements HttpClient {
 
     private UserAgentProvider userAgentProvider;
     private String serviceBaseUri;
-    private int readTimeoutMillis = 60_000;
 
     public KonturHttpClient(KonturConfiguredClient client, GsonProvider gsonProvider) {
         this.client = client;
         this.gsonProvider = gsonProvider;
         this.responseConverter = new LibapiResponseConverter();
         this.serviceBaseUri = "";
-        setReadTimeout(readTimeoutMillis);
     }
 
     @Override
@@ -109,7 +105,6 @@ public class KonturHttpClient implements HttpClient {
 
     @Override
     public void setReadTimeout(int millisecond) {
-        readTimeoutMillis = millisecond;
         client.setReadTimeout(millisecond, TimeUnit.MILLISECONDS);
     }
 
@@ -125,9 +120,16 @@ public class KonturHttpClient implements HttpClient {
     }
 
     @Override
-    public <T> ApiResponse<T> submitHttpRequest(String httpRequestUri, String httpMethod,
-            Map<String, Object> queryParams, Object body, Map<String, String> headerParams,
-            Map<String, Object> formParams, Type type) throws ApiException {
+    public <T> ApiResponse<T> submitHttpRequest(
+            String httpRequestUri,
+            String httpMethod,
+            Map<String, Object> queryParams,
+            Object body,
+            Map<String, String> headerParams,
+            Map<String, Object> formParams,
+            Type type
+    ) throws ApiException {
+        
         if (queryParams == null) {
             queryParams = Collections.emptyMap();
         }
@@ -156,8 +158,7 @@ public class KonturHttpClient implements HttpClient {
         Request.Builder request = new Request.Builder()
                 .method(httpMethod, body(body, httpMethod))
                 .url(queryBuilder.build())
-                .headers(Headers.of(headerParams))
-                .header(X_KONTUR_TIMEOUT, String.valueOf(readTimeoutMillis * 10_000L));
+                .headers(Headers.of(headerParams));
 
         OkHttpClient httpClient = client.getHttpBuilder().build();
 
