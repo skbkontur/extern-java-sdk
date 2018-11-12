@@ -65,7 +65,7 @@ public class TestSuite {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build();
+                .build(Level.BODY);
 
         return new TestSuite(engine);
     }
