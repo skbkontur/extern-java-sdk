@@ -23,21 +23,24 @@
 
 package ru.kontur.extern_api.sdk;
 
-
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.utils.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 @DisplayName("Configuration tokens should")
-class ConfigurationIT extends TestBaseIT {
+class ConfigurationIT{
+
+    protected static ExternEngine engine;
+
+    @BeforeAll
+    static void setUpClass() {
+        engine = TestSuite.Load().engine;
+    }
 
     @Test
     @DisplayName("share same sid across all services")

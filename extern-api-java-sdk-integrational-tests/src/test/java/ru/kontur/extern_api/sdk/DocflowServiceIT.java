@@ -55,7 +55,6 @@ import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
@@ -90,7 +89,9 @@ import ru.kontur.extern_api.sdk.utils.Zip;
 
 @DisplayName("Docflow service should be able to")
 @Execution(ExecutionMode.CONCURRENT)
-class DocflowServiceIT extends TestBaseIT {
+class DocflowServiceIT  {
+
+    protected static ExternEngine engine;
 
     private static class TestPack {
 
@@ -128,7 +129,8 @@ class DocflowServiceIT extends TestBaseIT {
     }
 
     @BeforeAll
-    static void init() {
+    static void setUpClass()  {
+        engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
     }

@@ -32,14 +32,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 
-class OrganizationIT extends TestBaseIT {
+class OrganizationIT{
 
     private static final String INN = "7810654318";
     private static final String KPP = "781001001";
@@ -47,6 +46,13 @@ class OrganizationIT extends TestBaseIT {
     private static final String NAME_NEW = "NEW ASBEST, LLC";
 
     private String companyId = null;
+
+    private static ExternEngine engine;
+
+    @BeforeAll
+    static void setUpClass() {
+        engine = TestSuite.Load().engine;
+    }
 
     @BeforeEach
     void setUp() throws Exception {

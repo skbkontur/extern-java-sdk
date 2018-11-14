@@ -33,8 +33,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
@@ -43,17 +41,19 @@ import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-class AuthenticationIT extends TestBaseIT {
+class AuthenticationIT{
 
     private static AuthenticationProviderBuilder build;
-    private static Configuration configuration = engine.getConfiguration();
+    private static Configuration configuration;
+
 
     @BeforeAll
-    static void init() {
-
+    static void setUpClass() {
+        ExternEngine engine = TestSuite.Load().engine;
         build = AuthenticationProviderBuilder
                 .createFor(engine.getConfiguration().getAuthBaseUri(), Level.BODY)
                 .withApiKey(engine.getConfiguration().getApiKey());
+        configuration = engine.getConfiguration();
     }
 
     @Nested

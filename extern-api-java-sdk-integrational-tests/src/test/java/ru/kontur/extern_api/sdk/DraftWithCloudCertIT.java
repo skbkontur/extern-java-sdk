@@ -46,17 +46,19 @@ import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @Disabled("Cert problems")
-class DraftWithCloudCertIT extends TestBaseIT {
+class DraftWithCloudCertIT {
 
     private static Certificate cloudCert;
+    private static ExternEngine engine;
 
     @BeforeAll
-    static void init() throws Exception {
+    static void SetUpClass() throws Exception {
+
+        engine = TestSuite.Load().engine;
 
         SystemProperty.push("httpclient.debug");
 

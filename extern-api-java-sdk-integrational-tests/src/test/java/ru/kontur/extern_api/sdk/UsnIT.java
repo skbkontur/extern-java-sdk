@@ -40,25 +40,28 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
-class UsnIT extends TestBaseIT {
+class UsnIT {
 
-    private static DraftService ds = engine.getDraftService();
+    private static DraftService draftService;
     private static DraftMeta draftMeta;
 
+    private static ExternEngine engine;
+
     @BeforeAll
-    static void init() {
+     static void setUpClass() {
+        engine = TestSuite.Load().engine;
+        draftService = engine.getDraftService();
+
         String cert = CertificateResource.readBase64(engine.getConfiguration().getThumbprint());
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
@@ -91,7 +94,7 @@ class UsnIT extends TestBaseIT {
 
     private void checkUsn(int version, UsnServiceContractInfo usn) throws Exception {
 
-        String draftId = ds
+        String draftId = draftService
                 .createAsync(draftMeta)
                 .get()
                 .ensureSuccess()
@@ -99,11 +102,11 @@ class UsnIT extends TestBaseIT {
                 .getId()
                 .toString();
 
-        ds.createAndBuildDeclarationAsync(draftId, version, usn)
+        draftService.createAndBuildDeclarationAsync(draftId, version, usn)
                 .thenApply(QueryContext::getOrThrow)
                 .get();
 
-        ds.checkAsync(draftId)
+        draftService.checkAsync(draftId)
                 .thenApply(QueryContext::getOrThrow)
                 .thenAccept(UsnIT::assertCheckHasNoErrors)
                 .get();

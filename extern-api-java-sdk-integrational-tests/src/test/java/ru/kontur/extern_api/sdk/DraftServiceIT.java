@@ -29,13 +29,14 @@
 package ru.kontur.extern_api.sdk;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,6 @@ import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
-import ru.kontur.extern_api.sdk.utils.TestBaseIT;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
@@ -63,7 +63,14 @@ import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-class DraftServiceIT extends TestBaseIT {
+class DraftServiceIT {
+
+    private static ExternEngine engine;
+
+    @BeforeAll
+    static void setUpClass() {
+        engine = TestSuite.Load().engine;
+    }
 
     private DraftService draftService;
     private CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
@@ -94,11 +101,11 @@ class DraftServiceIT extends TestBaseIT {
         private QueryContext<UUID> newDraftWithDoc() {
             UUID id = newDraft().getOrThrow();
             return new QueryContext<>(QueryContext.DRAFT_ID, id)
-                    .setDocumentId(addDocument(id));
+                    .setDocumentId(addDocument(id).getId());
 
         }
 
-        private UUID addDocument(UUID draftId) {
+        private DraftDocument addDocument(UUID draftId) {
             String path = data.getDocs()[0];
             DocType docType = DocType.getDocType(meta.getRecipient());
             DocumentContents dc = EngineUtils.with(engine)
@@ -110,7 +117,7 @@ class DraftServiceIT extends TestBaseIT {
                     .get()
                     .getOrThrow());
 
-            return document.getId();
+            return document;
         }
     }
 
@@ -139,7 +146,9 @@ class DraftServiceIT extends TestBaseIT {
     @Test
     void testCreateDraft() {
         for (TestPack test : tests.get()) {
-            Assert.assertNotNull(test.newDraft().get());
+            QueryContext<UUID> result = test.newDraft();
+            assertNotNull(result.get());
+            assertNull(result.getServiceError());
         }
     }
 
@@ -158,11 +167,11 @@ class DraftServiceIT extends TestBaseIT {
                     .get();
 
             QueryContext<UUID> draftCxt = testPack.draft.get();
-            Assert.assertEquals(draftCxt.getDraftId(), found.getId());
 
-            String inn = testPack.data.getClientInfo().getSender().getInn();
-
-            Assert.assertEquals(inn, found.getMeta().getSender().getInn());
+            assertEquals(draftCxt.getDraftId(), found.getId());
+            assertEquals(
+                    testPack.data.getClientInfo().getSender().getInn(),
+                    found.getMeta().getSender().getInn());
         }
     }
 
@@ -175,10 +184,11 @@ class DraftServiceIT extends TestBaseIT {
     void testDeleteDraft() throws Exception {
 
         for (TestPack testPack : tests.get()) {
-            QueryContext<UUID> cxt = testPack.newDraft();
-            draftService.deleteAsync(cxt.getOrThrow()).get().ensureSuccess();
+            QueryContext<UUID> deleteCxt = testPack.newDraft();
+            draftService.deleteAsync(deleteCxt.getOrThrow()).get().ensureSuccess();
 
-            QueryContext<Draft> lookup = draftService.lookupAsync(cxt.getOrThrow()).get();
+            QueryContext<Draft> lookup = draftService.lookupAsync(deleteCxt.getOrThrow()).get();
+
             assertTrue(lookup.isFail());
             assertEquals(404, lookup.getServiceError().getResponseCode());
         }
@@ -198,8 +208,9 @@ class DraftServiceIT extends TestBaseIT {
                     .ensureSuccess()
                     .get();
 
-            String inn = testPack.data.getClientInfo().getSender().getInn();
-            Assert.assertEquals(inn, found.getSender().getInn());
+            assertEquals(
+                    testPack.data.getClientInfo().getSender().getInn(),
+                    found.getSender().getInn());
         }
     }
 
@@ -227,7 +238,6 @@ class DraftServiceIT extends TestBaseIT {
 
             assertEquals(ip, newDraftMeta.getSender().getIpaddress());
         }
-
     }
 
     /**
@@ -236,12 +246,11 @@ class DraftServiceIT extends TestBaseIT {
      * POST /v1/{accountId}/drafts/{draftId}/documents
      */
     @Test
-    void testAddDecryptedDocument() {
+    void testAddDecryptedDocument(){
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            DraftDocument document = test.addDocument(draftId);
         }
-
     }
 
     /**
@@ -253,7 +262,7 @@ class DraftServiceIT extends TestBaseIT {
     void testDeleteDocument() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
             draftService.deleteDocumentAsync(draftId, documentId)
                     .get()
                     .getOrThrow();
@@ -270,7 +279,7 @@ class DraftServiceIT extends TestBaseIT {
     void testGetDocument() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
             draftService.lookupDocumentAsync(draftId, documentId)
                     .get()
                     .getOrThrow();
@@ -287,7 +296,7 @@ class DraftServiceIT extends TestBaseIT {
     void testUpdateDocument() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             if (!(test.meta.getRecipient() instanceof FnsRecipient)) {
                 continue;
@@ -315,7 +324,7 @@ class DraftServiceIT extends TestBaseIT {
     void testPrintDocument() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             byte[] pdf = draftService
                     .getDocumentAsPdfAsync(draftId, documentId)
@@ -337,7 +346,7 @@ class DraftServiceIT extends TestBaseIT {
     void testGetDecryptedDocumentContent() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             byte[] decrypted = draftService
                     .getDecryptedDocumentContentAsync(draftId, documentId)
@@ -357,7 +366,7 @@ class DraftServiceIT extends TestBaseIT {
     void testUpdateDecryptedDocumentContent() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             if (!(test.meta.getRecipient() instanceof FnsRecipient)) {
                 continue;
@@ -383,7 +392,7 @@ class DraftServiceIT extends TestBaseIT {
     void testGetEncryptedDocumentContent() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.newDraft().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             draftService.prepareAsync(draftId).get().getOrThrow();
 
@@ -403,7 +412,7 @@ class DraftServiceIT extends TestBaseIT {
     void testGetSignatureContent() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             // after prepare?
 
@@ -424,7 +433,7 @@ class DraftServiceIT extends TestBaseIT {
     void testUpdateSignature() throws Exception {
         for (TestPack test : tests.get()) {
             UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId);
+            UUID documentId = test.addDocument(draftId).getId();
 
             byte[] docContent = draftService
                     .getDecryptedDocumentContentAsync(draftId, documentId)
