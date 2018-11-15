@@ -65,6 +65,7 @@ public class TestSuite {
                 .accountId(config.getAccountId())
                 .build(Level.BODY);
 
+        engine.getConfiguration().setThumbprint(config.getThumbprint());
         return new TestSuite(engine);
     }
 

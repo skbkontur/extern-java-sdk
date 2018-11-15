@@ -37,6 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -54,6 +55,7 @@ import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
@@ -128,8 +130,18 @@ class DocflowServiceIT {
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+        engine = ExternEngineBuilder
+                .createExternEngine(config.getServiceBaseUri())
+                .apiKey(config.getApiKey())
+                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(config.getLogin(), config.getPass())
+                )
+                .cryptoProvider(new CryptoProviderMSCapi())
+                .accountId(config.getAccountId())
+                .build(Level.BODY);
+
+        engine.getConfiguration().setThumbprint(config.getThumbprint());
         engineUtils = EngineUtils.with(engine);
     }
 

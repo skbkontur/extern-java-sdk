@@ -66,9 +66,9 @@ class DraftServiceIT {
 
     private static ExternEngine engine;
 
-    private DraftService draftService;
-    private CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
-    private EngineUtils engineUtils = EngineUtils.with(engine);
+    private static DraftService draftService;
+    private static CryptoUtils cryptoUtils;
+    private static EngineUtils engineUtils;
 
     static class TestPack {
 
@@ -125,6 +125,9 @@ class DraftServiceIT {
     static void setUpClass() {
         engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
+
+        cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+        engineUtils = EngineUtils.with(engine);
     }
 
     @BeforeEach

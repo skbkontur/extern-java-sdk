@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,7 @@ import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
@@ -58,10 +59,19 @@ class UsnIT {
 
     @BeforeAll
     static void init() {
-        ExternEngine ee = TestSuite.Load().engine;
-        ee.setCryptoProvider(new CryptoProviderMSCapi());
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+        ExternEngine ee = ExternEngineBuilder
+                .createExternEngine(config.getServiceBaseUri())
+                .apiKey(config.getApiKey())
+                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(config.getLogin(), config.getPass())
+                )
+                .cryptoProvider(new CryptoProviderMSCapi())
+                .accountId(config.getAccountId())
+                .build(Level.BODY);
+
         ds = ee.getDraftService();
-        String cert = CertificateResource.readBase64(ee.getConfiguration().getThumbprint());
+        String cert = CertificateResource.readBase64(config.getThumbprint());
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
                 .filter(td -> td.getClientInfo().getRecipient().getIfnsCode() != null)
