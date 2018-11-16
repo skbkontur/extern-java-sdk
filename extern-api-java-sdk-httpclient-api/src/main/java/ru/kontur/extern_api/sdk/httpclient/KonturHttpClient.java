@@ -129,7 +129,7 @@ public class KonturHttpClient implements HttpClient {
             Map<String, Object> formParams,
             Type type
     ) throws ApiException {
-        
+
         if (queryParams == null) {
             queryParams = Collections.emptyMap();
         }
