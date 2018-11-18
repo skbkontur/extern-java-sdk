@@ -58,7 +58,7 @@ class UsnIT {
     private static ExternEngine engine;
 
     @BeforeAll
-     static void setUpClass() {
+    static void setUpClass() {
         engine = TestSuite.Load().engine;
         draftService = engine.getDraftService();
 

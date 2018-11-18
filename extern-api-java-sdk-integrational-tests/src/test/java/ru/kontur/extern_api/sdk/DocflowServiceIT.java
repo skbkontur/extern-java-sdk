@@ -38,6 +38,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,6 +56,7 @@ import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
@@ -89,7 +91,7 @@ import ru.kontur.extern_api.sdk.utils.Zip;
 
 @DisplayName("Docflow service should be able to")
 @Execution(ExecutionMode.CONCURRENT)
-class DocflowServiceIT  {
+class DocflowServiceIT {
 
     protected static ExternEngine engine;
 
@@ -129,7 +131,7 @@ class DocflowServiceIT  {
     }
 
     @BeforeAll
-    static void setUpClass()  {
+    static void setUpClass() {
         engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
@@ -672,7 +674,8 @@ class DocflowServiceIT  {
         }
     }
 
-    private static List<QueryContext<Docflow>> createDocflows(ExternEngine engine, TestData[] testData) {
+    private static List<QueryContext<Docflow>> createDocflows(ExternEngine engine,
+            TestData[] testData) {
 
         DraftService draftService = engine.getDraftService();
 
@@ -689,8 +692,8 @@ class DocflowServiceIT  {
                     .createAsync(dm)
                     .thenApply(QueryContext::getOrThrow)
                     .thenCompose(draft -> addDocument(dm, td, draft.getId())
-                        .thenApply(QueryContext::getOrThrow)
-                        .thenApply(o -> draft)
+                            .thenApply(QueryContext::getOrThrow)
+                            .thenApply(o -> draft)
                     )
                     .thenCompose(draft -> draftService.sendAsync(draft.getId()))
                     .thenApply(QueryContext::ensureSuccess);

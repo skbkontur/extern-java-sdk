@@ -173,7 +173,6 @@ class BankCloudTestScenario {
     /** Создаёт и отправляет ответные документы до завершения ДО. */
     private void finishDocflow(Docflow docflow) throws Exception {
 
-        int i = 0;
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
@@ -187,8 +186,8 @@ class BankCloudTestScenario {
                     .orElse(null);
 
             if (document == null) {
-                int[] t = {10, 20, 30, 20};
-                int timeout = t[i++ % t.length];
+
+                int timeout = 20;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
                 docflow = engine.getDocflowService()
