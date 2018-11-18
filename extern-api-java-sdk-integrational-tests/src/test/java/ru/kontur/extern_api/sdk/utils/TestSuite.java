@@ -34,6 +34,7 @@ import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 public class TestSuite {
 
@@ -63,7 +64,7 @@ public class TestSuite {
                         builder -> builder.passwordAuthentication(
                                 config.getLogin(), config.getPass())
                 )
-                .doNotUseCryptoProvider()
+                .cryptoProvider(new CryptoProviderMSCapi())
                 .doNotSetupAccount()
                 .build(Level.BODY);
 

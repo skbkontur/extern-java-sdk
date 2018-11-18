@@ -36,105 +36,200 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Assertions;
+import java.util.stream.Stream;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.Lazy;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
+import org.apache.commons.lang3.tuple.Pair;
 import ru.kontur.extern_api.sdk.utils.Zip;
-
 
 class DraftServiceIT {
 
     private static ExternEngine engine;
+    private static List<TestPack> tests;
+    private static CryptoUtils cryptoUtils;
 
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
+        engine.setCryptoProvider(new CryptoProviderMSCapi());
+        cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+        tests = Arrays
+                .stream(TestUtils
+                        .getTestData(
+                                cryptoUtils.loadX509(engine.getConfiguration().getThumbprint())))
+                .map(TestPack::new)
+                .collect(Collectors.toList()
+                );
+        tests.forEach(TestPack::createNewEmptyDraft);
     }
 
-    private DraftService draftService;
-    private CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
-    private EngineUtils engineUtils = EngineUtils.with(engine);
+    @BeforeEach
+    void setUp() {
+        tests.forEach(TestPack::createNewEmptyDraftIfNecessary);
+    }
 
     static class TestPack {
 
         final TestData data;
         final DraftMeta meta;
 
-        final Lazy<QueryContext<UUID>> draft = Lazy.of(this::newDraft);
-        final Lazy<QueryContext<UUID>> withDocument = Lazy.of(this::newDraftWithDoc);
+        private QueryContext<UUID> createDefaultDraftCxt;
 
         TestPack(TestData data) {
+
             this.data = data;
-            this.meta = TestUtils.toDraftMeta(data);
+            meta = TestUtils.toDraftMeta(data);
         }
 
-        private QueryContext<UUID> newDraft() {
-            return UncheckedSupplier.get(() -> engine.getDraftService()
+        private QueryContext<UUID> getCreateDraftCxt() {
+
+            if (getDraft().get().getDocuments().size() > 0) {
+                createNewEmptyDraft();
+            }
+            return createDefaultDraftCxt;
+        }
+
+        private void createNewEmptyDraftIfNecessary() {
+
+            QueryContext<Draft> draft = getDraft();
+
+            if (createDefaultDraftCxt == null
+                    || draft.getServiceError() != null
+                    || draft.get().getStatus().name().equals("sent")) {
+                createNewEmptyDraft();
+            }
+        }
+
+        private void createNewEmptyDraft() {
+
+            createDefaultDraftCxt = UncheckedSupplier.get(() -> engine.getDraftService()
                     .createAsync(meta)
                     .get()
-                    .ensureSuccess()
-                    .map(QueryContext.DRAFT_ID, Draft::getId)
-            );
+                    .ensureSuccess())
+                    .map(QueryContext.DRAFT_ID, Draft::getId);
         }
 
-        private QueryContext<UUID> newDraftWithDoc() {
-            UUID id = newDraft().getOrThrow();
-            return new QueryContext<>(QueryContext.DRAFT_ID, id)
-                    .setDocumentId(addDocument(id).getId());
+        private QueryContext<Draft> getEmptyDraft() {
 
+            QueryContext<Draft> getDraftCxt = getDraft();
+
+            if (getDraftCxt.get().getDocuments().size() > 0) {
+                createNewEmptyDraft();
+                return getDraft();
+            }
+            return getDraftCxt;
         }
 
-        private DraftDocument addDocument(UUID draftId) {
+        private QueryContext<Draft> getDraft() {
+
+            return UncheckedSupplier.get(() -> engine.getDraftService()
+                    .lookupAsync(createDefaultDraftCxt.get())
+                    .get());
+        }
+
+        private QueryContext<DraftDocument> addDocument() {
+
             String path = data.getDocs()[0];
             DocType docType = DocType.getDocType(meta.getRecipient());
-            DocumentContents dc = EngineUtils.with(engine)
+            DocumentContents documentContents = EngineUtils.with(engine)
                     .createDocumentContents(path, docType);
 
-            DraftDocument document = UncheckedSupplier.get(() -> engine
+            return UncheckedSupplier.get(() -> engine
                     .getDraftService()
-                    .addDecryptedDocumentAsync(draftId, dc)
+                    .addDecryptedDocumentAsync(createDefaultDraftCxt.get(), documentContents)
                     .get()
-                    .getOrThrow());
+                    .ensureSuccess());
+        }
 
-            return document;
+        private void signDocument(UUID documentId) {
+
+            byte[] docContent = UncheckedSupplier.get(() -> engine.getDraftService()
+                    .getDecryptedDocumentContentAsync(
+                            createDefaultDraftCxt.get(),
+                            documentId)
+                    .get()
+                    .ensureSuccess()
+                    .get());
+
+            byte[] signature = cryptoUtils
+                    .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
+
+            UncheckedSupplier.get(() -> engine.getDraftService()
+                    .updateSignatureAsync(
+                            createDefaultDraftCxt.get(),
+                            documentId,
+                            signature)
+                    .get());
         }
     }
 
-    private final Lazy<List<TestPack>> tests = Lazy.of(() -> Arrays
-            .stream(TestUtils.getTestData(cryptoUtils.loadX509(engine.getConfiguration().getThumbprint())))
-            .map(TestPack::new)
-            .collect(Collectors.toList())
-    );
 
-    @BeforeAll
-    static void init() {
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
+    private static Stream<QueryContext<UUID>> createDraftCxtFactory() {
+        return tests.stream().map(TestPack::getCreateDraftCxt);
     }
 
-    @BeforeEach
-    void setUp() {
-        draftService = engine.getDraftService();
+    private static Stream<QueryContext<Draft>> getEmptyDraftCxtFactory() {
+        return tests.stream().map(TestPack::getEmptyDraft);
+    }
+
+    private static Stream<QueryContext<Draft>> getDraftWithDocumentCxtFactory() {
+        return tests.stream().map(testPack -> {
+            testPack.addDocument();
+            return testPack.getDraft();
+        });
+    }
+
+    private static Stream<QueryContext<Draft>> getNewDraftWithDocumentCxtFactory() {
+        return tests.stream().map(testPack -> {
+            testPack.createNewEmptyDraft();
+            testPack.addDocument();
+            return testPack.getDraft();
+        });
+    }
+
+    private static Stream<QueryContext<Draft>> getDraftWithSignedDocumentCxtFactory() {
+        return tests.stream().map(testPack -> {
+            DraftDocument document = testPack.addDocument().get();
+            testPack.signDocument(document.getId());
+            return testPack.getDraft();
+        });
+    }
+
+    private static Stream<Pair<QueryContext<Draft>, QueryContext<DraftDocument>>> getAddDocumentPackFactory() {
+        return tests.stream().map(testPack -> new ImmutablePair<>(
+                testPack.getEmptyDraft(), testPack.addDocument()));
+    }
+
+    private static Stream<Pair<QueryContext<Draft>, QueryContext<DraftDocument>>> getAddDocumentNoFnsPackFactory() {
+        return tests.stream()
+                .filter(testPack -> !(testPack.meta.getRecipient() instanceof FnsRecipient))
+                .map(testPack -> new ImmutablePair<>(
+                        testPack.getEmptyDraft(), testPack.addDocument()));
     }
 
     /**
@@ -143,13 +238,12 @@ class DraftServiceIT {
      *
      * POST /v1/{accountId}/drafts
      */
-    @Test
-    void testCreateDraft() {
-        for (TestPack test : tests.get()) {
-            QueryContext<UUID> result = test.newDraft();
-            assertNotNull(result.get());
-            assertNull(result.getServiceError());
-        }
+    @ParameterizedTest
+    @MethodSource({"createDraftCxtFactory"})
+    void testCreateDraft(QueryContext<UUID> draftCxt) {
+
+        assertNotNull(draftCxt.get());
+        assertNull(draftCxt.getServiceError());
     }
 
     /**
@@ -157,22 +251,24 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}
      */
-    @Test
-    void testGetDraft() throws Exception {
-        for (TestPack testPack : tests.get()) {
-            Draft found = draftService
-                    .lookupAsync(testPack.draft.get().getOrThrow())
-                    .get()
-                    .ensureSuccess()
-                    .get();
+    @ParameterizedTest
+    @MethodSource({
+            "getEmptyDraftCxtFactory",
+            "getDraftWithDocumentCxtFactory",
+            "getDraftWithSignedDocumentCxtFactory"})
+    void testGetDraft(QueryContext<Draft> draftCxt)
+            throws ExecutionException, InterruptedException {
 
-            QueryContext<UUID> draftCxt = testPack.draft.get();
+        Draft found = engine.getDraftService()
+                .lookupAsync(draftCxt.get().getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
-            assertEquals(draftCxt.getDraftId(), found.getId());
-            assertEquals(
-                    testPack.data.getClientInfo().getSender().getInn(),
-                    found.getMeta().getSender().getInn());
-        }
+        assertEquals(draftCxt.get().getId(), found.getId());
+        assertEquals(
+                draftCxt.getDraft().getMeta().getSender().getInn(),
+                found.getMeta().getSender().getInn());
     }
 
     /**
@@ -180,18 +276,22 @@ class DraftServiceIT {
      *
      * Test of the deleteDraft method
      */
-    @Test
-    void testDeleteDraft() throws Exception {
+    @ParameterizedTest
+    @MethodSource({
+            "getEmptyDraftCxtFactory",
+            "getDraftWithDocumentCxtFactory",
+            "getDraftWithSignedDocumentCxtFactory"})
+    void testDeleteDraft(QueryContext<Draft> draftCxt)
+            throws ExecutionException, InterruptedException {
 
-        for (TestPack testPack : tests.get()) {
-            QueryContext<UUID> deleteCxt = testPack.newDraft();
-            draftService.deleteAsync(deleteCxt.getOrThrow()).get().ensureSuccess();
+        UUID id = draftCxt.get().getId();
 
-            QueryContext<Draft> lookup = draftService.lookupAsync(deleteCxt.getOrThrow()).get();
+        engine.getDraftService().deleteAsync(id).get().ensureSuccess();
 
-            assertTrue(lookup.isFail());
-            assertEquals(404, lookup.getServiceError().getResponseCode());
-        }
+        QueryContext<Draft> lookup = engine.getDraftService().lookupAsync(id).get();
+
+        assertTrue(lookup.isFail());
+        assertEquals(404, lookup.getServiceError().getResponseCode());
     }
 
     /**
@@ -199,19 +299,24 @@ class DraftServiceIT {
      *
      * Test of the getDraftMeta method
      */
-    @Test
-    void testGetDraftMeta() throws Exception {
-        for (TestPack testPack : tests.get()) {
-            DraftMeta found = draftService
-                    .lookupDraftMetaAsync(testPack.draft.get().getOrThrow())
-                    .get()
-                    .ensureSuccess()
-                    .get();
+    @ParameterizedTest
+    @MethodSource({
+            "getEmptyDraftCxtFactory",
+            "getDraftWithDocumentCxtFactory",
+            "getDraftWithSignedDocumentCxtFactory"})
+    void testGetDraftMeta(QueryContext<Draft> draftCxt)
+            throws ExecutionException, InterruptedException {
 
-            assertEquals(
-                    testPack.data.getClientInfo().getSender().getInn(),
-                    found.getSender().getInn());
-        }
+        DraftMeta draftMeta = engine.getDraftService()
+                .lookupDraftMetaAsync(draftCxt.get().getId())
+                .get()
+                .ensureSuccess()
+                .get();
+
+        assertEquals(
+                draftCxt.getDraft().getMeta().getSender().getInn(),
+                draftMeta.getSender().getInn());
+
     }
 
     /**
@@ -219,25 +324,30 @@ class DraftServiceIT {
      *
      * PUT /v1/{accountId}/drafts/{draftId}/meta
      */
-    @Test
-    void testUpdateDraftMeta() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            DraftMeta draftMeta = draftService
-                    .lookupDraftMetaAsync(draftId)
-                    .get()
-                    .getOrThrow();
+    @ParameterizedTest
+    @MethodSource({
+            "getEmptyDraftCxtFactory",
+            "getDraftWithDocumentCxtFactory",
+            "getDraftWithSignedDocumentCxtFactory"})
+    void testUpdateDraftMeta(QueryContext<Draft> draftCxt)
+            throws ExecutionException, InterruptedException {
 
-            String ip = "8.8.8.8";
-            draftMeta.getSender().setIpaddress(ip);
+        DraftMeta draftMeta = engine.getDraftService()
+                .lookupDraftMetaAsync(draftCxt.get().getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
-            DraftMeta newDraftMeta = draftService
-                    .updateDraftMetaAsync(draftId, draftMeta)
-                    .get()
-                    .getOrThrow();
+        String ip = "8.8.8.8";
+        draftMeta.getSender().setIpaddress(ip);
 
-            assertEquals(ip, newDraftMeta.getSender().getIpaddress());
-        }
+        DraftMeta newDraftMeta = engine.getDraftService()
+                .updateDraftMetaAsync(draftCxt.get().getId(), draftMeta)
+                .get()
+                .ensureSuccess()
+                .get();
+
+        assertEquals(ip, newDraftMeta.getSender().getIpaddress());
     }
 
     /**
@@ -245,29 +355,34 @@ class DraftServiceIT {
      *
      * POST /v1/{accountId}/drafts/{draftId}/documents
      */
-    @Test
-    void testAddDecryptedDocument(){
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            DraftDocument document = test.addDocument(draftId);
-        }
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testAddDecryptedDocument(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack) {
+
+        assertNotNull(addDocumentPack.getValue().get());
+        assertNull(addDocumentPack.getValue().getServiceError());
     }
+
 
     /**
      * Test of the deleteDocument method
      *
      * delete /v1/{accountId}/drafts/{draftId}/documents/{documentId}
      */
-    @Test
-    void testDeleteDocument() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
-            draftService.deleteDocumentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
-        }
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testDeleteDocument(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
+        QueryContext deleteDocument = engine.getDraftService()
+                .deleteDocumentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get();
+
+        assertNull(deleteDocument.getServiceError());
     }
 
     /**
@@ -275,16 +390,32 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}
      */
-    @Test
-    void testGetDocument() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
-            draftService.lookupDocumentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
-        }
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testGetDocument(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
+        QueryContext<DraftDocument> getDocument = engine.getDraftService()
+                .lookupDocumentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get();
+
+        assertEquals(addDocumentPack.getValue().get().getId(), getDocument.get().getId());
+        assertEquals(addDocumentPack.getValue().get().getDecryptedContentLink(),
+                getDocument.get().getDecryptedContentLink());
+
+        assertEquals(addDocumentPack.getValue().get().getEncryptedContentLink(),
+                getDocument.get().getEncryptedContentLink());
+
+        assertEquals(addDocumentPack.getValue().get().getSignatureContentLink(),
+                getDocument.get().getSignatureContentLink());
+
+        assertEquals(addDocumentPack.getValue().get().getDescription(),
+                getDocument.get().getDescription());
+
+        assertNull(getDocument.getServiceError());
     }
 
     /**
@@ -292,27 +423,23 @@ class DraftServiceIT {
      *
      * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}
      */
-    @Test
-    void testUpdateDocument() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentNoFnsPackFactory"})
+    void testUpdateDocument(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            if (!(test.meta.getRecipient() instanceof FnsRecipient)) {
-                continue;
-            }
+        DocumentContents newContents = new DocumentContents();
+        newContents.setDocumentDescription(new DocumentDescription().filename("my favorite file"));
 
-            String path = test.data.getDocs()[0];
+        QueryContext updateDocument = engine.getDraftService()
+                .updateDocumentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId(),
+                        newContents)
+                .get();
 
-            DraftDocument newDoc = draftService.updateDocumentAsync(
-                    draftId,
-                    documentId,
-                    engineUtils.createDocumentContents(
-                            TestUtils.getUpdatedDocumentPath(path),
-                            DocType.FNS
-                    )
-            ).get().getOrThrow();
-        }
+        assertNull(updateDocument.getServiceError());
     }
 
     /**
@@ -320,21 +447,22 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print
      */
-    @Test
-    void testPrintDocument() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testPrintDocument(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            byte[] pdf = draftService
-                    .getDocumentAsPdfAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
+        byte[] pdf = engine.getDraftService()
+                .getDocumentAsPdfAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
-            String pdfFileHeader = "%PDF";
-            assertEquals(pdfFileHeader, new String(Arrays.copyOfRange(pdf, 0, 4)));
-        }
-
+        String pdfFileHeader = "%PDF";
+        assertEquals(pdfFileHeader, new String(Arrays.copyOfRange(pdf, 0, 4)));
     }
 
     /**
@@ -342,19 +470,20 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
      */
-    @Test
-    void testGetDecryptedDocumentContent() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testGetDecryptedDocumentContent(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            byte[] decrypted = draftService
-                    .getDecryptedDocumentContentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
+        QueryContext<byte[]> decrypted = engine.getDraftService()
+                .getDecryptedDocumentContentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get();
 
-        }
-
+        assertNotNull(decrypted.get());
+        assertNull(decrypted.getServiceError());
     }
 
     /**
@@ -362,25 +491,20 @@ class DraftServiceIT {
      *
      * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
      */
-    @Test
-    void testUpdateDecryptedDocumentContent() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentNoFnsPackFactory"})
+    void testUpdateDecryptedDocumentContent(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            if (!(test.meta.getRecipient() instanceof FnsRecipient)) {
-                continue;
-            }
+        QueryContext update = engine.getDraftService()
+                .updateDecryptedDocumentContentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId(),
+                        Base64.encodeBase64(new byte[0]))
+                .get();
 
-            String path = test.data.getDocs()[0];
-            byte[] updatedContent = TestUtils.loadUpdateDocument(path);
-
-            draftService
-                    .updateDecryptedDocumentContentAsync(draftId, documentId, updatedContent)
-                    .get()
-                    .getOrThrow();
-
-        }
+        assertNull(update.getServiceError());
     }
 
     /**
@@ -388,19 +512,24 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
      */
-    @Test
-    void testGetEncryptedDocumentContent() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.newDraft().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testGetEncryptedDocumentContent(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            draftService.prepareAsync(draftId).get().getOrThrow();
+        engine.getDraftService().prepareAsync(addDocumentPack.getKey().get().getId())
+                .get()
+                .ensureSuccess();
 
-            byte[] content = draftService
-                    .getEncryptedDocumentContentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
-        }
+        QueryContext<byte[]> content = engine.getDraftService()
+                .getEncryptedDocumentContentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get();
+
+        assertNull(content.getServiceError());
+        assertNotNull(content.get());
     }
 
     /**
@@ -408,20 +537,22 @@ class DraftServiceIT {
      *
      * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
      */
-    @Test
-    void testGetSignatureContent() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testGetSignatureContent(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            // after prepare?
+        // after prepare?
 
-            byte[] content = draftService
-                    .getSignatureContentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
-        }
+        QueryContext<byte[]> content = engine.getDraftService()
+                .getSignatureContentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get();
 
+        assertNull(content.getServiceError());
+        assertNotNull(content.get());
     }
 
     /**
@@ -429,25 +560,31 @@ class DraftServiceIT {
      *
      * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
      */
-    @Test
-    void testUpdateSignature() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.draft.get().getOrThrow();
-            UUID documentId = test.addDocument(draftId).getId();
+    @ParameterizedTest
+    @MethodSource({"getAddDocumentPackFactory"})
+    void testUpdateSignature(
+            ImmutablePair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPack)
+            throws ExecutionException, InterruptedException {
 
-            byte[] docContent = draftService
-                    .getDecryptedDocumentContentAsync(draftId, documentId)
-                    .get()
-                    .getOrThrow();
+        byte[] docContent = engine.getDraftService()
+                .getDecryptedDocumentContentAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId())
+                .get()
+                .ensureSuccess()
+                .get();
 
-            byte[] signature = cryptoUtils
-                    .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
+        byte[] signature = cryptoUtils
+                .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
 
-            draftService
-                    .updateSignatureAsync(draftId, documentId, signature)
-                    .get()
-                    .getOrThrow();
-        }
+        QueryContext update = engine.getDraftService()
+                .updateSignatureAsync(
+                        addDocumentPack.getKey().get().getId(),
+                        addDocumentPack.getValue().get().getId(),
+                        signature)
+                .get();
+
+        assertNull(update.getServiceError());
 
     }
 
@@ -456,17 +593,16 @@ class DraftServiceIT {
      *
      * POST /v1/{accountId}/drafts/drafts/{draftId}/check
      */
-    @Test
-    void testCheck() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.withDocument.get().getOrThrow();
+    @ParameterizedTest
+    @MethodSource({"getNewDraftWithDocumentCxtFactory"})
+    void testCheck(QueryContext<Draft> draftCxt) throws ExecutionException, InterruptedException {
 
-            CheckResultData checkResult = draftService.checkAsync(draftId)
-                    .get()
-                    .getOrThrow();
+        QueryContext<CheckResultData> checkResult = engine.getDraftService()
+                .checkAsync(draftCxt.get().getId())
+                .get()
+                .ensureSuccess();
 
-            Assertions.assertTrue(checkResult.hasNoErrors());
-        }
+        assertTrue(checkResult.get().hasNoErrors());
     }
 
     /**
@@ -474,18 +610,17 @@ class DraftServiceIT {
      *
      * POST /v1/{accountId}/drafts/drafts/{draftId}/prepare
      */
-    @Test
-    void testPrepare() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.withDocument.get().getOrThrow();
+    @ParameterizedTest
+    @MethodSource({"getNewDraftWithDocumentCxtFactory"})
+    void testPrepare(QueryContext<Draft> draftCxt) throws ExecutionException, InterruptedException {
 
-            PrepareResult prepareResult = draftService.prepareAsync(draftId)
-                    .get()
-                    .getOrThrow();
+        QueryContext<PrepareResult> prepareResult = engine.getDraftService()
+                .prepareAsync(draftCxt.get().getId())
+                .get();
 
-            Assertions.assertTrue(prepareResult.getStatus() == Status.OK ||
-                    prepareResult.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
-        }
+        assertTrue(prepareResult.get().getStatus() == Status.OK ||
+                prepareResult.get().getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
+
     }
 
 
@@ -494,15 +629,15 @@ class DraftServiceIT {
      *
      * POST /v1/{accountId}/drafts/drafts/{draftId}/send
      */
-    @Test
-    void testSend() throws Exception {
-        for (TestPack test : tests.get()) {
-            UUID draftId = test.newDraftWithDoc().getOrThrow();
+    @ParameterizedTest
+    @MethodSource({"getDraftWithDocumentCxtFactory"})
+    void testSend(QueryContext<Draft> draftCxt) throws ExecutionException, InterruptedException {
 
-            draftService.sendAsync(draftId)
-                    .get()
-                    .getOrThrow();
-        }
+        QueryContext<Docflow> send = engine.getDraftService()
+                .sendAsync(draftCxt.get().getId())
+                .get();
+
+        assertNull(send.getServiceError());
+        assertEquals(send.get().getStatus().getName(), "sent");
     }
-
 }
