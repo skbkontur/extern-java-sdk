@@ -79,7 +79,7 @@ public interface OrganizationsApi {
             @Path("accountId") UUID accountId,
             @Query("skip") long skip,
             @Query("take") int take,
-            @QueryMap(encoded = true) Map<String, String> filters
+            @QueryMap Map<String, String> filters
     );
 
 }

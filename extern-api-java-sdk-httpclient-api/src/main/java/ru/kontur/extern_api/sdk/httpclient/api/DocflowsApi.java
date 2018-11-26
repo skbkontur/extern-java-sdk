@@ -74,7 +74,7 @@ public interface DocflowsApi {
             @Query("skip") long skip,
             @Query("take") int take,
             @Query("orderBy") SortOrder order,
-            @QueryMap(encoded = true) Map<String, String> filters
+            @QueryMap Map<String, String> filters
     );
 
     /**

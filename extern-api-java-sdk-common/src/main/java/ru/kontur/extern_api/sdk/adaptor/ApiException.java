@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.adaptor;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 
 public class ApiException extends RuntimeException {
@@ -105,6 +106,20 @@ public class ApiException extends RuntimeException {
 
     @Override
     public String toString() {
+        String sCode = code >= 100 ? "code=" + code : null;
+        String sTrace = responseHeaders.containsKey("x-kontur-trace-id")
+                ? "trace-id=" + line(responseHeaders.get("x-kontur-trace-id"))
+                : null;
+
+        String info = YAStringUtils.joinIfExists(" ", sCode, sTrace);
+        if (!YAStringUtils.isNullOrEmpty(info)) {
+            info = " (" + info + ")";
+        }
+
+        return super.toString().trim() + info;
+    }
+
+    public String prettyPrint() {
         return prettyPrint(getCode(), getErrorId(), getMessage(), getResponseHeaders());
     }
 
@@ -117,7 +132,7 @@ public class ApiException extends RuntimeException {
         String headers = String.join("\n", responseHeaders
                 .entrySet()
                 .stream()
-                .map(e -> e.getKey() + ": " + String.join(" ", e.getValue().toArray(new String[0])))
+                .map(e -> e.getKey() + ": " + line(e.getValue()))
                 .toArray(String[]::new)
         );
 
@@ -126,5 +141,9 @@ public class ApiException extends RuntimeException {
         }
 
         return "ApiException: " + String.valueOf(code) + " " + errorId + ": " + message + headers;
+    }
+
+    private static String line(List<String> strings) {
+        return String.join(" ", strings.toArray(new String[0]));
     }
 }
