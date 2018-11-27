@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.Date;
-
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -13,10 +12,28 @@ import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDeserializer;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonRecipientAdaptor;
 
-public class GsonProvider {
+public enum GsonProvider implements SerializationProvider {
+
+    /**
+     * Libapi compatible means that {@link FieldNamingPolicy#LOWER_CASE_WITH_DASHES} will be used.
+     */
+    LIBAPI() {
+        @Override public Gson getGson() {
+            return GsonProvider.getLibapiCompatibleGson();
+        }
+    },
+
+    /**
+     * Portal compatible means that {@link FieldNamingPolicy#UPPER_CAMEL_CASE} will be used.
+     */
+    PORTAL() {
+        @Override public Gson getGson() {
+            return GsonProvider.getPortalCompatibleGson();
+        }
+    };
 
     @NotNull
-    public static Gson getGson() {
+    public static Gson getLibapiCompatibleGson() {
         return getPreConfiguredGsonBuilder().create();
     }
 
@@ -25,9 +42,10 @@ public class GsonProvider {
 
         return new GsonBuilder()
                 .disableHtmlEscaping()
+                .setDateFormat(PublicDateFormat.FORMAT)
                 .setFieldNamingPolicy(getFieldNamingPolicy())
-                .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
+                .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
                 .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer());
     }
@@ -36,4 +54,11 @@ public class GsonProvider {
     public static FieldNamingPolicy getFieldNamingPolicy() {
         return FieldNamingPolicy.LOWER_CASE_WITH_DASHES;
     }
+
+    public static Gson getPortalCompatibleGson() {
+        return getPreConfiguredGsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .create();
+    }
+
 }

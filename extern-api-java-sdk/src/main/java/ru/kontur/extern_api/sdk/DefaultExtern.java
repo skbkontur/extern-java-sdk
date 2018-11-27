@@ -27,7 +27,6 @@ package ru.kontur.extern_api.sdk;
 
 public class DefaultExtern {
 
-    public static final String BASE_URL = "http://extern-api.testkontur.ru";
-    public static final String BASE_AUTH = "http://api.testkontur.ru/auth/v5.11";
+    public static final String BASE_URL = "https://extern-api.testkontur.ru";
 
 }

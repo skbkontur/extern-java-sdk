@@ -35,10 +35,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class CreateAccountRequest {
 
-    private String inn = null;
-    private String kpp = null;
-    @SerializedName("organization-name")
-    private String organizationName = null;
+    private String inn;
+    private String kpp;
+    private String organizationName;
 
     public String getInn() {
         return inn;

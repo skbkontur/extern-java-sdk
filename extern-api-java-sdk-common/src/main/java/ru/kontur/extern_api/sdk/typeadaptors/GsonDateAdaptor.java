@@ -35,10 +35,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import ru.kontur.extern_api.sdk.PublicDateFormat;
 
-/**
- *
- * @author alexs
- */
+
 public class GsonDateAdaptor implements JsonSerializer<Date>, JsonDeserializer<Date> {
 
     @Override

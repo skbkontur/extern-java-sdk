@@ -35,11 +35,6 @@ public class AuthenticationProviderAdaptor implements AuthenticationProvider {
     }
 
     @Override
-    public String authPrefix() {
-        return "auth.sid ";
-    }
-
-    @Override
     public AuthenticationProvider httpClient(HttpClient httpClient) {
         return this;
     }

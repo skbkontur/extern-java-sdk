@@ -34,9 +34,11 @@ import java.util.logging.Logger;
 
 
 /**
- * Thread safe DateParser. ke.api.public compaitble
+ * Thread safe DateParser. ke.api.public compatible
  */
 public final class PublicDateFormat {
+
+    public static final String FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     private static final List<ThreadLocal<DateFormat>> supportedFormats
             = new ArrayList<ThreadLocal<DateFormat>>() {
@@ -48,7 +50,7 @@ public final class PublicDateFormat {
         }
     };
 
-    private static final DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final DateFormat outputFormat = new SimpleDateFormat(FORMAT);
     private static final Logger logger = Logger.getLogger(PublicDateFormat.class.getName());
 
     /**

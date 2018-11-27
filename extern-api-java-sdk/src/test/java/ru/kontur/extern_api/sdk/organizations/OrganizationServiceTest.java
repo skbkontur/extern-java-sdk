@@ -23,11 +23,9 @@
  */
 package ru.kontur.extern_api.sdk.organizations;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockserver.matchers.Times.exactly;
 import static org.mockserver.model.HttpRequest.request;
@@ -35,7 +33,6 @@ import static org.mockserver.model.HttpResponse.response;
 
 import com.google.gson.Gson;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,13 +42,12 @@ import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.GsonProvider;
 
 /**
  * @author Aleksey Sukhorukov
@@ -62,7 +58,7 @@ public class OrganizationServiceTest {
     private static final int PORT = 1080;
     private static final String HOST = "localhost";
     private static final String PATH = "/organizations";
-    private static final Gson GSON = GsonProvider.getGson();
+    private static final Gson GSON = GsonProvider.getLibapiCompatibleGson();
 
     private static ClientAndServer mockServer;
     private OrganizationService organizationService;
@@ -76,8 +72,9 @@ public class OrganizationServiceTest {
 
     @AfterClass
     public static void stopJetty() {
-        if (mockServer != null)
+        if (mockServer != null) {
             mockServer.stop();
+        }
     }
 
     @Before
@@ -106,26 +103,25 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void testSuccessLookup() throws ExecutionException, InterruptedException {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 200, GSON.toJson(company));
+    public void testSuccessLookup() throws Exception {
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 200,
+                GSON.toJson(company));
         QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
         assertFalse(cxt.isFail());
         validateCompany(cxt.getCompany(), company);
     }
 
     @Test
-    public void testUncorrectLookup() throws ExecutionException, InterruptedException {
+    public void testUncorrectLookup() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 400, createError());
         QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.server));
-        assertThat(message, is("Bad Request"));
+        assertEquals("string", message);
     }
 
     @Test
-    public void testSuccessCreate() throws ExecutionException, InterruptedException {
+    public void testSuccessCreate() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations", "POST", 201, GSON.toJson(company));
         QueryContext<Company> cxt = organizationService.createAsync(company.getGeneral()).get();
         assertFalse(cxt.isFail());
@@ -133,76 +129,71 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void testUncorrectCreate() throws ExecutionException, InterruptedException {
+    public void testUncorrectCreate() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations", "POST", 400, createError());
         QueryContext<Company> cxt = organizationService.createAsync(company.getGeneral()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.server));
-        assertThat(message, is("Bad Request"));
+        assertEquals("string", message);
     }
 
     @Test
-    public void testSuccessUpdate() throws ExecutionException, InterruptedException {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 201, GSON.toJson(company));
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(),"Pajero 2").get();
+    public void testSuccessUpdate() throws Exception {
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 201,
+                GSON.toJson(company));
+        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
         assertFalse(cxt.isFail());
         validateCompany(cxt.getCompany(), company);
     }
 
     @Test
-    public void testUncorrectUpdate() throws ExecutionException, InterruptedException {
+    public void testUncorrectUpdate() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 400, createError());
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(),"Pajero 2").get();
+        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.server));
-        assertThat(message, is("Bad Request"));
+        assertEquals("string", message);
     }
 
     @Test
-    public void testSuccessDelete() throws ExecutionException, InterruptedException {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 201, GSON.toJson(company));
+    public void testSuccessDelete() throws Exception {
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 201,
+                GSON.toJson(company));
         QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
         assertFalse(cxt.isFail());
     }
 
     @Test
-    public void testUncorrectDelete() throws ExecutionException, InterruptedException {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 400, GSON.toJson(company));
+    public void testIncorrectDelete() throws Exception {
+        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 400,
+                createError());
         QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
-        ErrorCode errorCode = cxt.getServiceError().getErrorCode();
-        assertThat(errorCode, is(ErrorCode.server));
-        assertThat(message, is("Bad Request"));
+        assertEquals("string", message);
     }
 
     private void createAnswerFor(String restPath, String restMethod, int code, String body) {
         new MockServerClient(HOST, PORT)
-            .when(request().withMethod(restMethod).withPath(PATH + "/" + restPath), exactly(1))
-            .respond(
-                response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
-            );
+                .when(request().withMethod(restMethod).withPath(PATH + "/" + restPath), exactly(1))
+                .respond(
+                        response().withStatusCode(code).withHeader(JSON_CONTENT_TYPE).withBody(body)
+                );
     }
 
     private String createError() {
-        StringBuilder error = new StringBuilder();
-        error.append("{")
-            .append("\"id\": \"urn:nss:nid\",")
-            .append("\"status-code\": \"continue\",")
-            .append("\"message\": \"string\",")
-            .append("\"track-id\": \"string\",")
-            .append("\"properties\": {}")
-            .append("}");
-        return error.toString();
+        return "{"
+                + "\"id\": \"urn:nss:nid\","
+                + "\"status-code\": 400,"
+                + "\"message\": \"string\","
+                + "\"track-id\": \"string\","
+                + "\"properties\": {}"
+                + "}";
     }
 
     private void validateCompany(Company source, Company response) {
         assertNotNull(response);
-        assertEquals(response.getId().toString(),source.getId().toString());
+        assertEquals(response.getId().toString(), source.getId().toString());
         assertEquals(response.getGeneral().getInn(), source.getGeneral().getInn());
         assertEquals(response.getGeneral().getKpp(), source.getGeneral().getKpp());
         assertEquals(response.getGeneral().getName(), source.getGeneral().getName());

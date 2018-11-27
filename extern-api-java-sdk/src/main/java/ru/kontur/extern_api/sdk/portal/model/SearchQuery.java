@@ -120,7 +120,10 @@ class Operation implements Token {
 
     @Override
     public String toString() {
-        String joined = String.join(op, Arrays.stream(tokens).map(Token::translate).collect(Collectors.toList()));
+        String joined = String.join(op, Stream.of(tokens)
+                .map(Token::translate)
+                .collect(Collectors.toList())
+        );
 
         if (tokens.length <= 1)
             return joined;

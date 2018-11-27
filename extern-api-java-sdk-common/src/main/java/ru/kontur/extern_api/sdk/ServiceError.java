@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public interface ServiceError {
 
-    ErrorCode getErrorCode();
+    String getErrorId();
 
     int getResponseCode();
 

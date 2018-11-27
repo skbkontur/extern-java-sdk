@@ -38,6 +38,10 @@ import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 
+
+/**
+ * @see ExternEngineBuilder#createExternEngine()
+ */
 public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
 
     private final ServicesFactory servicesFactory;
@@ -117,7 +121,7 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
         String sessionId = auth.sessionId().ensureSuccess().getSessionId();
         return servicesFactory
                 .getHttpClient()
-                .acceptAccessToken(auth.authPrefix(), sessionId)
+                .acceptAccessToken(sessionId)
                 .acceptApiKey(getApiKeyProvider().getApiKey());
     }
 

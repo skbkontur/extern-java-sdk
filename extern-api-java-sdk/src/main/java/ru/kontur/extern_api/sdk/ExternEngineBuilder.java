@@ -24,41 +24,59 @@
 package ru.kontur.extern_api.sdk;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.EngineBuilder.AccountSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeySyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.AuthProviderSyntax;
-import ru.kontur.extern_api.sdk.EngineBuilder.CryptoProviderSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.MaybeCryptoProviderSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.OverrideDefaultsSyntax;
 import ru.kontur.extern_api.sdk.EngineBuilder.Syntax;
-import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.HttpClientBundle;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderSuite;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
 import ru.kontur.extern_api.sdk.service.impl.DefaultServicesFactory;
 
-public class ExternEngineBuilder implements Syntax {
+public final class ExternEngineBuilder implements Syntax {
 
+    private Function<AuthenticationProviderBuilder, AuthenticationProvider> providerCtor;
 
     @NotNull
+    public static ApiKeySyntax createExternEngine(String externApiBaseUrl) {
+        return new ExternEngineBuilder(externApiBaseUrl);
+    }
+
+    @NotNull
+    @Deprecated
     public static ApiKeySyntax createExternEngine() {
-        return new ExternEngineBuilder();
+        return createExternEngine(DefaultExtern.BASE_URL);
     }
 
     @NotNull
     public static ApiKeyOrAuth createExternEngine(Configuration defaults) {
-        return new ExternEngineBuilder().setConfiguration(defaults);
+        return new ExternEngineBuilder(defaults.getServiceBaseUri()).setConfiguration(defaults);
     }
 
+    /**
+     * Trying to guess authentication type from given configuration by provided
+     * either login+pass or rsa thumbprint+credential strings.
+     *
+     * @deprecated Unreliable magic detection. Use explicit
+     *         {@link ExternEngineBuilder#buildAuthentication(String, Function)} instead.
+     */
     @NotNull
+    @Deprecated
     public static MaybeCryptoProviderSyntax authFromConfiguration(@NotNull Configuration configuration) {
         Objects.requireNonNull(configuration);
 
@@ -69,7 +87,7 @@ public class ExternEngineBuilder implements Syntax {
                                 "provide either login+pass or rsa thumbprint+credential. "
                 ));
 
-        return new ExternEngineBuilder()
+        return new ExternEngineBuilder(configuration.getServiceBaseUri())
                 .setConfiguration(configuration)
                 .apiKey(configuration.getApiKey())
                 .authProvider(authProvider);
@@ -82,14 +100,13 @@ public class ExternEngineBuilder implements Syntax {
     private UserAgentProvider userAgentProvider;
     private UserIPProvider userIPProvider;
 
-    private AuthType authType = AuthType.UNSPECIFIED;
-    private byte[] certificatePublicKey;
+    private int readTimeout = 3 * 0xDEAD;
+    private int connectTimeout = 3 * 0xB01;
+    private Logger logger = Logger.DEFAULT;
 
-
-    private ExternEngineBuilder() {
+    private ExternEngineBuilder(String externApiBaseUrl) {
         configuration = new Configuration();
-        configuration.setAuthBaseUri(DefaultExtern.BASE_AUTH);
-        configuration.setServiceBaseUri(DefaultExtern.BASE_URL);
+        configuration.setServiceBaseUri(externApiBaseUrl);
         userAgentProvider = new DefaultUserAgentProvider();
         userIPProvider = () -> "80.247.184.194";
     }
@@ -99,36 +116,22 @@ public class ExternEngineBuilder implements Syntax {
         return this;
     }
 
-    private AuthenticationProvider buildAuth(Configuration configuration) {
-        switch (authType) {
-            case PASSWORD:
-                return ConfigurationUtils.createPasswordAuthProvider(configuration);
-            case TRUSTED:
-                return ConfigurationUtils.createTrustedAuth(configuration);
-            case CERTIFICATE:
-                return ConfigurationUtils.createCertificateAuthProvider(
-                        configuration,
-                        cryptoProvider,
-                        certificatePublicKey
-                );
-            case UNSPECIFIED:
-                break;
-        }
-        return authenticationProvider;
-    }
-
     @NotNull
     @Override
-    public ExternEngine build() {
+    public ExternEngine build(Level logVerbosity) {
 
         ProviderSuite providerSuite = new ProviderSuite();
 
-        // todo менять это в Configuration синхронно с ProviderHolder
         providerSuite.setAccountProvider(configuration::getAccountId);
         providerSuite.setApiKeyProvider(configuration::getApiKey);
         providerSuite.setServiceBaseUriProvider(configuration::getServiceBaseUri);
 
-        authenticationProvider = buildAuth(configuration);
+        if (authenticationProvider == null) {
+            authenticationProvider = providerCtor.apply(AuthenticationProviderBuilder
+                    .createFor(configuration.getAuthBaseUri(), logVerbosity)
+                    .withApiKey(configuration.getApiKey())
+            );
+        }
 
         providerSuite.setAuthenticationProvider(authenticationProvider);
         providerSuite.setCryptoProvider(cryptoProvider);
@@ -136,18 +139,12 @@ public class ExternEngineBuilder implements Syntax {
         providerSuite.setUserAgentProvider(userAgentProvider);
         providerSuite.setUserIPProvider(userIPProvider);
 
-        AdaptorBundle adaptorBundle = new HttpClientBundle(providerSuite);
+        String uri = Optional.ofNullable(configuration.getServiceBaseUri()).orElse("");
+        KonturConfiguredClient konturClient = new KonturConfiguredClient(logVerbosity, uri, logger)
+                .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+                .setReadTimeout(readTimeout, TimeUnit.MILLISECONDS);
 
-        DefaultServicesFactory serviceFactory = new DefaultServicesFactory(
-                providerSuite,
-                adaptorBundle
-        );
-
-        HttpClient httpClient = serviceFactory
-                .getHttpClient()
-                .setServiceBaseUri(configuration.getAuthBaseUri());
-
-        authenticationProvider.httpClient(httpClient);
+        DefaultServicesFactory serviceFactory = new DefaultServicesFactory(konturClient, providerSuite);
 
         return new ExternEngine(configuration, providerSuite, serviceFactory);
     }
@@ -156,13 +153,6 @@ public class ExternEngineBuilder implements Syntax {
     @Override
     public OverrideDefaultsSyntax serviceBaseUrl(@NotNull String serviceBaseUrl) {
         configuration.setServiceBaseUri(Objects.requireNonNull(serviceBaseUrl));
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public OverrideDefaultsSyntax authServiceBaseUrl(@NotNull String authServiceBaseUrl) {
-        configuration.setAuthBaseUri(Objects.requireNonNull(authServiceBaseUrl));
         return this;
     }
 
@@ -187,32 +177,14 @@ public class ExternEngineBuilder implements Syntax {
         return this;
     }
 
+    @NotNull
     @Override
-    public @NotNull MaybeCryptoProviderSyntax passwordAuth(@NotNull String login, @NotNull String password) {
-        authType = AuthType.PASSWORD;
-        configuration.setLogin(login);
-        configuration.setPass(password);
-        return this;
-    }
-
-    @Override
-    public @NotNull MaybeCryptoProviderSyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials) {
-        authType = AuthType.TRUSTED;
-
-        configuration.setAuthBaseUri(authCredentials.getAuthBaseUri());
-        configuration.setApiKey(authCredentials.getApiKey());
-        configuration.setThumbprintRsa(authCredentials.getThumbprintRsa());
-        configuration.setCredential(authCredentials.getCredential());
-        configuration.setServiceUserId(authCredentials.getServiceUserId());
-        configuration.setJksPass(authCredentials.getJksPass());
-        configuration.setRsaKeyPass(authCredentials.getRsaKeyPass());
-        return this;
-    }
-
-    @Override
-    public @NotNull CryptoProviderSyntax certificateAuth(@NotNull byte[] certificatePublicKey) {
-        authType = AuthType.CERTIFICATE;
-        this.certificatePublicKey = certificatePublicKey;
+    public MaybeCryptoProviderSyntax buildAuthentication(
+            @NotNull String authBaseUrl,
+            @NotNull Function<AuthenticationProviderBuilder, AuthenticationProvider> providerCtor
+    ) {
+        configuration.setAuthBaseUri(authBaseUrl);
+        this.providerCtor = providerCtor;
         return this;
     }
 
@@ -239,8 +211,29 @@ public class ExternEngineBuilder implements Syntax {
 
     @NotNull
     @Override
-    public OverrideDefaultsSyntax accountId(@NotNull String accountId) {
+    public OverrideDefaultsSyntax accountId(@NotNull UUID accountId) {
         configuration.setAccountId(Objects.requireNonNull(accountId));
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax readTimeout(int milliseconds) {
+        readTimeout = milliseconds;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax connectTimeout(int milliseconds) {
+        connectTimeout = milliseconds;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public OverrideDefaultsSyntax logger(Logger logger) {
+        this.logger = logger;
         return this;
     }
 
@@ -250,10 +243,4 @@ public class ExternEngineBuilder implements Syntax {
         return this;
     }
 
-    enum AuthType {
-        UNSPECIFIED,
-        PASSWORD,
-        CERTIFICATE,
-        TRUSTED
-    }
 }

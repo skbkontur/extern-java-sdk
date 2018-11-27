@@ -24,24 +24,23 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.CertificateList;
 
 
 /**
  * Предназначен для получения списка сертификатов
  *
- * @see QueryContext
  * @author Aleksey Sukhorukov
+ * @see QueryContext
  */
-public interface CertificateService extends ProviderHolder {
+public interface CertificateService {
 
     /**
      * <p>GET /v1/{accountId}/certificates</p>
      * Асинхронный метод возвращает список сертификатов
+     *
      * @return список сертификатов
      * @see CertificateList
      */
@@ -50,9 +49,12 @@ public interface CertificateService extends ProviderHolder {
     /**
      * <p>GET /v1/{accountId}/certificates</p>
      * Синхронный метод возвращает список сертификатов
+     *
      * @param cxt контекст
      * @return список сертификатов
      * @see CertificateList
+     * @deprecated use {@link CertificateService#getCertificateListAsync()}
      */
+    @Deprecated
     QueryContext<CertificateList> getCertificateList(QueryContext<?> cxt);
 }

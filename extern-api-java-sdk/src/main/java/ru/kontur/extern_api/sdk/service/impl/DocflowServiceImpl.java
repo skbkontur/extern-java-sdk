@@ -23,14 +23,20 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
+
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.adaptor.DocflowsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import java.util.function.Function;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.model.ByteContent;
+import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
@@ -38,176 +44,251 @@ import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 
-/**
- * @author AlexS
- */
-public class DocflowServiceImpl extends AbstractService implements DocflowService {
 
-    private static final String EN_DFW = "Документооборот";
-    private static final String EN_DOC = "Документ";
-    private static final String EN_SGN = "Подпись";
+public class DocflowServiceImpl implements DocflowService {
 
-    private final DocflowsAdaptor docflowsAdaptor;
+    private final AccountProvider acc;
+    private final UserIPProvider ip;
+    private final DocflowsApi api;
 
     DocflowServiceImpl(
-            ProviderHolder providerHolder,
-            DocflowsAdaptor docflowsAdaptor) {
-        super(providerHolder);
-        this.docflowsAdaptor = docflowsAdaptor;
+            AccountProvider accountProvider,
+            UserIPProvider ipProvider,
+            DocflowsApi api) {
+        this.acc = accountProvider;
+        this.ip = ipProvider;
+        this.api = api;
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(UUID docflowId) {
+        return api.get(acc.accountId(), docflowId)
+                .thenApply(contextAdaptor(QueryContext.DOCFLOW));
     }
 
     @Override
     public CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(String docflowId) {
-        QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .applyAsync(docflowsAdaptor::lookupDocflow);
+        return lookupDocflowAsync(UUID.fromString(docflowId));
     }
 
     @Override
     public QueryContext<Docflow> lookupDocflow(QueryContext<?> parent) {
-        QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::lookupDocflow);
+        return join(lookupDocflowAsync(parent.<UUID>require(QueryContext.DOCFLOW_ID)));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(UUID docflowId) {
+        return api.getDocuments(acc.accountId(), docflowId)
+                .thenApply(contextAdaptor(QueryContext.DOCUMENTS));
     }
 
     @Override
     public CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(String docflowId) {
-        QueryContext<List<Document>> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .applyAsync(docflowsAdaptor::getDocuments);
+        return getDocumentsAsync(UUID.fromString(docflowId));
     }
 
     @Override
     public QueryContext<List<Document>> getDocuments(QueryContext<?> parent) {
-        QueryContext<List<Document>> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::getDocuments);
+        return join(getDocumentsAsync(parent.<UUID>require(QueryContext.DOCFLOW_ID)));
     }
 
     @Override
-    public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId,
+    public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
+            UUID docflowId,
+            UUID documentId) {
+        return api.getDocument(acc.accountId(), docflowId, documentId)
+                .thenApply(contextAdaptor(QueryContext.DOCUMENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
+            String docflowId,
             String documentId) {
-        QueryContext<Document> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .applyAsync(docflowsAdaptor::lookupDocument);
+        return lookupDocumentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
     @Override
     public QueryContext<Document> lookupDocument(QueryContext<?> parent) {
-        QueryContext<Document> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::lookupDocument);
+        return join(lookupDocumentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID)
+        ));
     }
 
     @Override
     public CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
-            String docflowId, String documentId) {
-        QueryContext<DocflowDocumentDescription> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .applyAsync(docflowsAdaptor::lookupDescription);
+            UUID docflowId,
+            UUID documentId) {
+        return api.getDocumentDescription(acc.accountId(), docflowId, documentId)
+                .thenApply(contextAdaptor(QueryContext.DOCUMENT_DESCRIPTION));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
+            String docflowId,
+            String documentId) {
+        return lookupDescriptionAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
     @Override
     public QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent) {
-        QueryContext<DocflowDocumentDescription> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::lookupDescription);
+        return join(lookupDescriptionAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId,
+    public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
+            UUID docflowId,
+            UUID documentId) {
+        return api.getEncryptedContent(acc.accountId(), docflowId, documentId)
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
+            String docflowId,
             String documentId) {
-        QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .applyAsync(docflowsAdaptor::getEncryptedContent);
+        return getEncryptedContentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
     @Override
     public QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent) {
-        QueryContext<byte[]> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::getEncryptedContent);
+        return join(getEncryptedContentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId,
+    public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
+            UUID docflowId,
+            UUID documentId) {
+        return api.getDecryptedContent(acc.accountId(), docflowId, documentId)
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
+            String docflowId,
             String documentId) {
-        QueryContext<byte[]> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .applyAsync(docflowsAdaptor::getDecryptedContent);
+        return getDecryptedContentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
     @Override
     public QueryContext<byte[]> getDecryptedContent(QueryContext<?> parent) {
-        QueryContext<byte[]> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::getDecryptedContent);
+        return join(getDecryptedContentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId,
+    public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
+            UUID docflowId,
+            UUID documentId) {
+        return api.getSignatures(acc.accountId(), docflowId, documentId)
+                .thenApply(contextAdaptor(QueryContext.SIGNATURES));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
+            String docflowId,
             String documentId) {
-        QueryContext<List<Signature>> cxt = createQueryContext(EN_DOC);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .applyAsync(docflowsAdaptor::getSignatures);
+        return getSignaturesAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
     @Override
     public QueryContext<List<Signature>> getSignatures(QueryContext<?> parent) {
-        QueryContext<List<Signature>> cxt = createQueryContext(parent, EN_DOC);
-        return cxt.apply(docflowsAdaptor::getSignatures);
+        return join(getSignaturesAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId,
-            String documentId, String signatureId) {
-        QueryContext<Signature> cxt = createQueryContext(EN_SGN);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setSignatureId(signatureId)
-                .applyAsync(docflowsAdaptor::getSignature);
+    public CompletableFuture<QueryContext<Signature>> getSignatureAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID signatureId) {
+        return api.getSignature(acc.accountId(), docflowId, documentId, signatureId)
+                .thenApply(contextAdaptor(QueryContext.SIGNATURE));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Signature>> getSignatureAsync(
+            String docflowId,
+            String documentId,
+            String signatureId) {
+        return getSignatureAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(signatureId)
+        );
     }
 
     @Override
     public QueryContext<Signature> getSignature(QueryContext<?> parent) {
-        QueryContext<Signature> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::getSignature);
+        return join(getSignatureAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.SIGNATURE_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId,
-            String documentId, String signatureId) {
-        QueryContext<byte[]> cxt = createQueryContext(EN_SGN);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setSignatureId(signatureId)
-                .applyAsync(docflowsAdaptor::getSignatureContent);
+    public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID signatureId) {
+        return api.getSignatureContent(acc.accountId(), docflowId, documentId, signatureId)
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
+            String docflowId,
+            String documentId,
+            String signatureId) {
+        return getSignatureContentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(signatureId)
+        );
     }
 
     @Override
     public QueryContext<byte[]> getSignatureContent(QueryContext<?> parent) {
-        QueryContext<byte[]> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::getSignatureContent);
+        return join(getSignatureContentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.SIGNATURE_ID)
+        ));
     }
 
     @Override
-    public QueryContext<ReplyDocument> generateReply(QueryContext<?> parent) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::generateReply);
+    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            String replyType,
+            byte[] signerCert) {
+        return api.generateReplyDocument(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyType,
+                new CertificateContent(signerCert)
+        )
+                .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
 
     @Override
@@ -215,21 +296,33 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String docflowId,
             String documentId,
             String replyType,
-            String signerX509Base64) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setDocumentType(replyType)
-                .setCertificate(signerX509Base64)
-                .applyAsync(docflowsAdaptor::generateReply);
+            String signerCertBase64) {
+        return generateReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                replyType,
+                Base64.getDecoder().decode(signerCertBase64)
+        );
     }
 
+    @Override
+    public QueryContext<ReplyDocument> generateReply(QueryContext<?> parent) {
+        return join(generateReplyAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.TYPE),
+                parent.require(QueryContext.CONTENT)
+        ));
+    }
 
     @Override
-    public QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_SGN);
-        return cxt.apply(docflowsAdaptor::putReplyDocumentSignature);
+    public CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            byte[] signature) {
+        return api.updateReplyDocumentContent(acc.accountId(), docflowId, documentId, replyId, signature)
+                .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
 
     @Override
@@ -238,14 +331,31 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String documentId,
             String replyId,
             byte[] signature) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(EN_SGN);
+        return uploadReplyDocumentSignatureAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                signature
+        );
+    }
 
-        return cxt
-                .setDocumentId(documentId)
-                .setDocflowId(docflowId)
-                .setReplyId(replyId)
-                .setContent(signature)
-                .applyAsync(docflowsAdaptor::putReplyDocumentSignature);
+    @Override
+    public QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent) {
+        return join(uploadReplyDocumentSignatureAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID),
+                parent.require(QueryContext.CONTENT)
+        ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId) {
+        return api.sendReply(acc.accountId(), docflowId, documentId, replyId, new SenderIp(ip.userIP()))
+                .thenApply(contextAdaptor(QueryContext.DOCFLOW));
     }
 
     @Override
@@ -253,57 +363,84 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String docflowId,
             String documentId,
             String replyId) {
-        QueryContext<Docflow> cxt = createQueryContext(EN_DFW);
-        String userIP = this.getUserIPProvider().userIP();
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setReplyId(replyId)
-                .setUserIP(userIP)
-                .applyAsync(docflowsAdaptor::sendReply);
+        return sendReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId)
+        );
     }
 
     @Override
     public QueryContext<Docflow> sendReply(QueryContext<?> parent) {
-        QueryContext<Docflow> cxt = createQueryContext(parent, EN_DFW);
-        String userIP = this.getUserIPProvider().userIP();
-        return cxt
-                .setUserIP(userIP)
-                .apply(docflowsAdaptor::sendReply);
+        return join(sendReplyAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(String docflowId,
-            String documentId, String replyId) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setReplyId(replyId)
-                .applyAsync(docflowsAdaptor::getReplyDocument);
+    public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId) {
+        return api.getReplyDocument(acc.accountId(), docflowId, documentId, replyId)
+                .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId) {
+        return getReplyDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId)
+        );
     }
 
     @Override
     public QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> parent) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::getReplyDocument);
+        return join(getReplyDocumentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID)
+        ));
     }
 
+    @Override
     public CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
-            String docflowId, String documentId, String replyId, byte[] content) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setReplyId(replyId)
-                .setContent(content)
-                .applyAsync(docflowsAdaptor::updateReplyDocumentContent);
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            byte[] content) {
+        return api.updateReplyDocumentContent(acc.accountId(), docflowId, documentId, replyId, content)
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] content) {
+        return updateReplyDocumentContentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                content
+        );
     }
 
     @Override
     public QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> parent) {
-        QueryContext<ReplyDocument> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::getReplyDocument);
+        return join(updateReplyDocumentContentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID),
+                parent.require(QueryContext.CONTENT)
+        ));
     }
 
     @Override
@@ -319,8 +456,6 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             Date createdTo,
             String type
     ) {
-        QueryContext<DocflowPage> cxt = createQueryContext(EN_DFW);
-
         DocflowFilter filter = DocflowFilter
                 .page(skip, take)
                 .inn(innKpp)
@@ -333,13 +468,11 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         Optional.ofNullable(finished).ifPresent(filter::finished);
         Optional.ofNullable(incoming).ifPresent(filter::incoming);
 
-        return CompletableFuture.supplyAsync(() -> docflowsAdaptor.getDocflows(cxt, filter));
+        return searchDocflowsAsync(filter);
     }
 
     @Override
     public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent) {
-        QueryContext<DocflowPage> cxt = createQueryContext(parent, EN_DFW);
-
         DocflowFilter filter = DocflowFilter
                 .page(parent.getSkip(), parent.getTake())
                 .inn(parent.getInnKpp())
@@ -352,44 +485,103 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
         Optional.ofNullable(parent.getFinished()).ifPresent(filter::finished);
         Optional.ofNullable(parent.getIncoming()).ifPresent(filter::incoming);
 
-        return docflowsAdaptor.getDocflows(cxt, filter);
+        return join(searchDocflowsAsync(filter));
     }
 
     @Override
-    public QueryContext<DocflowPage> searchDocflows(DocflowFilter searchFilter) {
-        return docflowsAdaptor.getDocflows(createQueryContext(EN_DFW), searchFilter);
+    public CompletableFuture<QueryContext<DocflowPage>> searchDocflowsAsync(DocflowFilter filter) {
+        return api.search(
+                acc.accountId(),
+                filter.getSkip(),
+                filter.getTake(),
+                filter.getOrder(),
+                filter.asFilterMap()
+        )
+                .thenApply(contextAdaptor(QueryContext.DOCFLOW_PAGE));
     }
 
     @Override
-    public CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
+    public QueryContext<DocflowPage> searchDocflows(DocflowFilter filter) {
+        return join(searchDocflowsAsync(filter));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<String>> printAsync(
+            String docflowId,
+            String documentId,
             String documentContentBase64) {
-        QueryContext<String> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setContentString(documentContentBase64)
-                .applyAsync(docflowsAdaptor::print);
+        return getDocumentAsPdfAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                Base64.getDecoder().decode(documentContentBase64)
+        )
+                .thenApply(cxt -> cxt.map(QueryContext.CONTENT_STRING, Base64.getEncoder()::encodeToString));
+    }
+
+    @Override
+    public QueryContext<String> print(QueryContext<?> parent) {
+        return join(printAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID).toString(),
+                parent.<UUID>require(QueryContext.DOCUMENT_ID).toString(),
+                parent.require(QueryContext.CONTENT_STRING)
+        ));
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent) {
+
+        return api.print(acc.accountId(), docflowId, documentId, new ByteContent(documentContent))
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId) {
+        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, false)
+                .thenApply(contextAdaptor("sign-reply"));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             String docflowId,
             String documentId,
-            byte[] documentContent) {
-        return printAsync(docflowId, documentId, Base64.getEncoder().encodeToString(documentContent))
-                .thenApply(cxt -> {
-                    if (cxt.isFail()) {
-                        return new QueryContext<byte[]>().setServiceError(cxt.getServiceError());
-                    }
-                    byte[] decoded = Base64.getDecoder().decode(cxt.get());
-                    return new QueryContext<byte[]>().setResult(decoded, QueryContext.CONTENT);
-                });
+            String replyId) {
+        return cloudSignReplyDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId)
+        );
     }
 
     @Override
     public QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent) {
-        QueryContext<SignInitiation> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::cloudSignReplyDocument);
+        return join(cloudSignReplyDocumentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID)
+        ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            String requestId,
+            String smsCode) {
+        return api.cloudSignReplyDocumentConfirm(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                requestId,
+                smsCode
+        ).thenApply(contextAdaptor("sign-reply-result"));
     }
 
     @Override
@@ -399,40 +591,38 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String replyId,
             String requestId,
             String smsCode) {
-        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setReplyId(replyId)
-                .setRequestId(requestId)
-                .setSmsCode(smsCode)
-                .applyAsync(docflowsAdaptor::confirmSignReplyDocument);
+        return cloudSignConfirmReplyDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                requestId,
+                smsCode
+        );
     }
 
     @Override
-    public QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(
-            QueryContext<?> parent) {
-        QueryContext<SignConfirmResultData> cxt = createQueryContext(EN_DFW);
-        return cxt.apply(docflowsAdaptor::confirmSignReplyDocument);
+    public QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent) {
+        return join(cloudSignConfirmReplyDocumentAsync(
+                parent.<UUID>require(QueryContext.DOCFLOW_ID),
+                parent.require(QueryContext.DOCUMENT_ID),
+                parent.require(QueryContext.REPLY_ID),
+                parent.require(QueryContext.REQUEST_ID),
+                parent.require(QueryContext.SMS_CODE)
+        ));
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
-            String docflowId,
-            String documentId,
-            String replyId) {
-        QueryContext<SignInitiation> cxt = createQueryContext(EN_DFW);
-        return cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setReplyId(replyId)
-                .applyAsync(docflowsAdaptor::cloudSignReplyDocument);
-    }
-
-    @Override
-    public QueryContext<String> print(QueryContext<?> parent) {
-        QueryContext<String> cxt = createQueryContext(parent, EN_DFW);
-        return cxt.apply(docflowsAdaptor::print);
+    public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] certificate) {
+        return api.cloudDecryptDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                new CertificateContent(certificate)
+        )
+                .thenApply(contextAdaptor("decrypt-init"));
     }
 
     @Override
@@ -440,12 +630,21 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String docflowId,
             String documentId,
             String certBase64) {
-        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
-        return docflowsAdaptor.cloudDecryptDocumentInit(cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setCertificate(certBase64)
-        );
+        return join(cloudDecryptDocumentInitAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                Base64.getDecoder().decode(certBase64)
+        ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentConfirmAsync(
+            UUID docflowId,
+            UUID documentId,
+            String requestId,
+            String code) {
+        return api.cloudDecryptDocumentConfirm(acc.accountId(), docflowId, documentId, requestId, code, true)
+                .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
 
     @Override
@@ -454,14 +653,33 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String documentId,
             String requestId,
             String code) {
-        QueryContext<String> cxt = this.createQueryContext(EN_DFW);
-        return docflowsAdaptor.cloudDecryptDocumentConfirm(cxt
-                .setDocflowId(docflowId)
-                .setDocumentId(documentId)
-                .setRequestId(requestId)
-                .setSmsCode(code)
-        );
+        return join(cloudDecryptDocumentConfirmAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                requestId,
+                code
+        ));
+    }
 
+    @Override
+    public CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] certBase64,
+            Function<QueryContext<DecryptInitiation>, String> smsCodeProvider) {
+
+        CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
+                docflowId, documentId, certBase64
+        );
+        return future.thenCompose(cxt -> future
+                .thenApply(smsCodeProvider)
+                .thenCompose(code -> cloudDecryptDocumentConfirmAsync(
+                        docflowId,
+                        documentId,
+                        cxt.get().getRequestId(),
+                        code)
+                )
+        );
     }
 
     @Override
@@ -471,20 +689,12 @@ public class DocflowServiceImpl extends AbstractService implements DocflowServic
             String certBase64,
             Function<DecryptInitiation, String> smsCodeProvider) {
 
-        QueryContext<DecryptInitiation> initCxt = cloudDecryptDocumentInit(docflowId, documentId, certBase64);
-
-        if (initCxt.isFail()) {
-            return new QueryContext<byte[]>(initCxt, initCxt.getEntityName())
-                    .setServiceError(initCxt.getServiceError());
-        }
-
-        DecryptInitiation init = initCxt.get();
-        return cloudDecryptDocumentConfirm(
-                docflowId,
-                documentId,
-                init.getRequestId(),
-                smsCodeProvider.apply(init)
-        );
+        return join(cloudDecryptDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                Base64.getDecoder().decode(certBase64),
+                cxt -> smsCodeProvider.apply(cxt.get())
+        ));
     }
 
 }

@@ -24,16 +24,18 @@
 package ru.kontur.extern_api.sdk.utils;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.ErrorInfo;
 
 public class QueryContextUtils {
 
     public static <T> QueryContext<T> join(CompletableFuture<QueryContext<T>> future) {
         try {
-            return future.get();
+            return future.exceptionally(QueryContextUtils::completeCareful).get();
         } catch (InterruptedException | ExecutionException e) {
             return new QueryContext<T>().setServiceError(e.getMessage(), e);
         }
@@ -49,6 +51,32 @@ public class QueryContextUtils {
         }
 
         return new QueryContext<T>(parent, resultKey).setServiceError(response.asApiException());
+    }
+
+
+    public static <T> QueryContext<T> join(ApiResponse<T> response, String resultKey) {
+        if (response.isSuccessful()) {
+            return new QueryContext<>(resultKey, response.getData());
+        }
+        return new QueryContext<T>(resultKey).setServiceError(response.asApiException());
+    }
+
+    public static <T> Function<ApiResponse<T>, QueryContext<T>> contextAdaptor(String withKey) {
+        return response -> join(response, withKey);
+    }
+
+    public static <T> QueryContext<T> completeCareful(Throwable t) {
+        Throwable cause = t.getCause();
+        if (t instanceof ApiException) {
+            return QueryContext.error(t);
+        }
+        if (t instanceof CompletionException && cause != null) {
+            return QueryContext.error(cause);
+        }
+        if (cause instanceof ApiException) {
+            return QueryContext.error(cause);
+        }
+        return QueryContext.error(t);
     }
 
 }

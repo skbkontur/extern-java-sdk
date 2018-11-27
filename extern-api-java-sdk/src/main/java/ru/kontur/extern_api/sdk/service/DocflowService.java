@@ -26,8 +26,10 @@ package ru.kontur.extern_api.sdk.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
@@ -40,43 +42,14 @@ import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
 
 /**
- * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО):
- * <p>- поиск ДО по идентификатору {@link DocflowService#lookupDocflowAsync} | {@link
- * DocflowService#lookupDocflow};</p>
- * <p>- получение списка документов {@link DocflowService#lookupDocflowAsync} | {@link
- * DocflowService#lookupDocflow};</p>
- * <p>- получение документа ДО по идентификатору {@link DocflowService#lookupDocumentAsync} | {@link
- * DocflowService#lookupDocument};</p>
- * <p>- получение мета-данных документа {@link DocflowService#lookupDescriptionAsync} | {@link
- * DocflowService#lookupDescription};</p>
- * <p>- получение зашифрованного контента документа {@link DocflowService#getEncryptedContentAsync}
- * | {@link DocflowService#getEncryptedContent};</p>
- * <p>- получение расшифрованного контента документа {@link DocflowService#getDecryptedContentAsync}
- * | {@link DocflowService#getDecryptedContent};</p>
- * <p>- получение подписей документа {@link DocflowService#getSignaturesAsync} | {@link
- * DocflowService#getSignatures};</p>
- * <p>- получение подписи документа по идентификатору {@link DocflowService#getSignatureAsync} |
- * {@link DocflowService#getSignature};</p>
- * <p>- создание регламентного документа с указанным типом (УОП, ИОП) {@link
- * DocflowService#generateReplyAsync} | {@link DocflowService#generateReply};</p>
- * <p>- создание всех регламентных документов для ДО {@link DocflowService#generateReplyAsync} |
- * {@link DocflowService#generateReply};</p>
- * <p>- отправка регламентных документов {@link DocflowService#sendReplyAsync} | {@link
- * DocflowService#sendReply};</p>
- * <p>- получение списка ДО {@link DocflowService#getDocflowsAsync} | {@link
- * DocflowService#getDocflows};</p>
- * <p>- получение печатной формы {@link DocflowService#printAsync} | {@link
- * DocflowService#print};</p>
- *
- * @author Aleksey Sukhorukov
- * @see QueryContext
+ * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
  */
-public interface DocflowService extends ProviderHolder {
+public interface DocflowService {
+
+    CompletableFuture<QueryContext<Docflow>> lookupDocflowAsync(UUID docflowId);
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}</p>
@@ -93,12 +66,15 @@ public interface DocflowService extends ProviderHolder {
      * Синхронный метод возвращает ДО по идентификатору
      *
      * @param cxt контекст. Должен содержать следующие данные:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId}</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId}</p>
      * @return ДО
      * @see Docflow
      */
+    @Deprecated
     QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt);
+
+    CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(UUID docflowId);
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents</p>
@@ -115,12 +91,18 @@ public interface DocflowService extends ProviderHolder {
      * Синхронный метод возвращает список документов ДО
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId}</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId}</p>
      * @return список документов
      * @see Document
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<List<Document>> getDocuments(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
+            UUID docflowId,
+            UUID documentId);
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}</p>
@@ -131,22 +113,31 @@ public interface DocflowService extends ProviderHolder {
      * @return документ
      * @see Document
      */
-    CompletableFuture<QueryContext<Document>> lookupDocumentAsync(String docflowId,
-            String documentId);
+    CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
+            String docflowId,
+            String documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}</p>
      * Cинхронный метод возвращает документ из ДО
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId}.</p>
      * @return документ
      * @see Document
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<Document> lookupDocument(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
+            UUID docflowId,
+            UUID documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description</p>
@@ -157,22 +148,31 @@ public interface DocflowService extends ProviderHolder {
      * @return мета-данные
      * @see DocumentDescription
      */
-    CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(String docflowId,
-            String documentId);
+    CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
+            String docflowId,
+            String documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description</p>
      * Синхронный метод возвращает мета-данные для документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId}.</p>
      * @return мета-данные
      * @see DocumentDescription
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
+            UUID docflowId,
+            UUID documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content/</p>
@@ -182,21 +182,30 @@ public interface DocflowService extends ProviderHolder {
      * @param documentId идентификатор документа
      * @return массив байт зашифрованного контента документа
      */
-    CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(String docflowId,
-            String documentId);
+    CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
+            String docflowId,
+            String documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/encrypted-content</p>
      * Синхронный метод возвращает зашифрованный контент документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId}.</p>
      * @return массив байт зашифрованного контента документа
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<byte[]> getEncryptedContent(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
+            UUID docflowId,
+            UUID documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content</p>
@@ -206,21 +215,30 @@ public interface DocflowService extends ProviderHolder {
      * @param documentId идентификатор документа
      * @return массив байт расшифрованного контента документа
      */
-    CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(String docflowId,
-            String documentId);
+    CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
+            String docflowId,
+            String documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypted-content</p>
      * Синхронный метод возвращает расшифрованный контент документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId}.</p>
      * @return массив байт расшифрованного контента документа
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<byte[]> getDecryptedContent(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
+            UUID docflowId,
+            UUID documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures</p>
@@ -230,21 +248,31 @@ public interface DocflowService extends ProviderHolder {
      * @param documentId идентификатор документа
      * @return список подписей
      */
-    CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(String docflowId,
-            String documentId);
+    CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
+            String docflowId,
+            String documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures</p>
      * Синхронный метод возвращает список подписей для документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId}.</p>
      * @return список подписей
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<List<Signature>> getSignatures(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<Signature>> getSignatureAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID signatureId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}</p>
@@ -256,24 +284,35 @@ public interface DocflowService extends ProviderHolder {
      * @return подпись
      * @see Signature
      */
-    CompletableFuture<QueryContext<Signature>> getSignatureAsync(String docflowId,
-            String documentId, String signatureId);
+    CompletableFuture<QueryContext<Signature>> getSignatureAsync(
+            String docflowId,
+            String documentId,
+            String signatureId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}</p>
      * Синхронный метод возвращает подпись для документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- идентификатор подписи. Для установки необходимо использовать метод {@link
-     * QueryContext#setSignatureId} Id}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</p>
+     *         <p>- идентификатор подписи. Для установки необходимо использовать метод {@link
+     *         QueryContext#setSignatureId} Id}.</p>
      * @return подпись
      * @see Signature
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<Signature> getSignature(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID signatureId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content</p>
@@ -284,29 +323,41 @@ public interface DocflowService extends ProviderHolder {
      * @param signatureId идентификатор ДО
      * @return массив байт контента подписи
      */
-    CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(String docflowId,
-            String documentId, String signatureId);
+    CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
+            String docflowId,
+            String documentId,
+            String signatureId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/signatures/{signatureId}/content</p>
      * Синхронный метод возвращает контент подписи для документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};
-     * <p>- идентификатор подписи. Для установки необходимо использовать метод {@link
-     * QueryContext#setSignatureId} Id}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};
+     *         <p>- идентификатор подписи. Для установки необходимо использовать метод {@link
+     *         QueryContext#setSignatureId} Id}.</p>
      * @return массив байт контента подписи
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<byte[]> getSignatureContent(QueryContext<?> parent);
 
+    CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            String replyType,
+            byte[] signerCert
+    );
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
      * <p>Асинхронный метод создает служебный документ для документа ДО с заданным типом.</p>
      * <p>Возможные типы ответного документа можно найти в Document#getReplyOptions </p>
+     *
      * @param docflowId id документооборота
      * @param documentId id документа для которого генерируется ответный
      * @param replyType тип ответного документа (см выше)
@@ -318,24 +369,27 @@ public interface DocflowService extends ProviderHolder {
             String docflowId,
             String documentId,
             String replyType,
-            String signerX509Base64);
+            String signerX509Base64
+    );
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
      * Асинхронный метод создает служебный документ для документа ДО с заданным типом
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- id ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- id создаваемого документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- тип документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentType};</p>
-     * <p>- сертификат ключа подписи в кодировке BASE64 без тегов. Для установки необходимо
-     * использовать метод {@link QueryContext#setCertificate}.</p>
+     *         <p>- id ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- id создаваемого документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</p>
+     *         <p>- тип документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentType};</p>
+     *         <p>- сертификат ключа подписи в кодировке BASE64 без тегов. Для установки необходимо
+     *         использовать метод {@link QueryContext#setCertificate}.</p>
      * @return структура данных для отправки
      * @see DocumentToSend
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<ReplyDocument> generateReply(QueryContext<?> parent);
 
     /**
@@ -348,14 +402,29 @@ public interface DocflowService extends ProviderHolder {
      *
      * @param parent см. выше
      * @return Обновлённую модель ReplyDocument
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<ReplyDocument> uploadReplyDocumentSignature(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            byte[] signature
+    );
 
     CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
             String docflowId,
             String documentId,
             String replyId,
             byte[] signature
+    );
+
+    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
     );
 
     /**
@@ -374,17 +443,25 @@ public interface DocflowService extends ProviderHolder {
      * Синхронный метод отправляет документ в контролирующий орган
      *
      * @param parent контекст.
-     * <p>Должен содержать объект {@link ReplyDocument}, полученная с помощью метода {@link
-     * DocflowService#generateReply} | {@link DocflowService#generateReply}.</p>
-     * <p>В объект {@link ReplyDocument} необходимо установить подпись в формате PKCS#7, вычесленную
-     * для массива байт {@link ReplyDocument#content}, с помощью метода {@link
-     * ReplyDocument#setSignature}.</p>
-     * <p>Для установки в контекст необходимо использовать метод {@link
-     * QueryContext#setReplyDocument}.</p>
+     *         <p>Должен содержать объект {@link ReplyDocument}, полученная с помощью метода {@link
+     *         DocflowService#generateReply} | {@link DocflowService#generateReply}.</p>
+     *         <p>В объект {@link ReplyDocument} необходимо установить подпись в формате PKCS#7, вычесленную
+     *         для массива байт {@link ReplyDocument#content}, с помощью метода {@link
+     *         ReplyDocument#setSignature}.</p>
+     *         <p>Для установки в контекст необходимо использовать метод {@link
+     *         QueryContext#setReplyDocument}.</p>
      * @return ДО
      * @see ReplyDocument
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<Docflow> sendReply(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    );
 
     /**
      * Асинхронный метод получения ответного документа по идентификатору
@@ -398,24 +475,34 @@ public interface DocflowService extends ProviderHolder {
     CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
             String docflowId,
             String documentId,
-            String replyId);
+            String replyId
+    );
 
     /**
      * Синхронный метод получения ответного документа по идентификатору
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <ul>
-     * <li> идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</li>
-     * <li> идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</li>
-     * <li> идентификатор ответного документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setReplyId}.</li>
-     * </ul>
+     *         <ul>
+     *         <li> идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</li>
+     *         <li> идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</li>
+     *         <li> идентификатор ответного документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setReplyId}.</li>
+     *         </ul>
      * @return объект с данными ответного документа
      * @see ReplyDocument
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            byte[] content
+    );
 
     /**
      * Асинхронный метод обновления контента ответного документа
@@ -427,52 +514,38 @@ public interface DocflowService extends ProviderHolder {
      * @return объект с данными ответного документа
      * @see ReplyDocument
      */
-    CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(String docflowId,
-            String documentId, String replyId, byte[] content);
+    CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] content
+    );
 
     /**
      * Синхронный метод обновления контента ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <ul>
-     * <li> идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</li>
-     * <li> идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</li>
-     * <li> идентификатор ответного документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setReplyId};</li>
-     * <li> контент ответного документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setContent}.</li>
-     * </ul>
+     *         <ul>
+     *         <li> идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</li>
+     *         <li> идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</li>
+     *         <li> идентификатор ответного документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setReplyId};</li>
+     *         <li> контент ответного документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setContent}.</li>
+     *         </ul>
      * @return объект с данными ответного документа
      * @see ReplyDocument
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<ReplyDocument> updateReplyDocumentContent(QueryContext<?> parent);
 
     /**
      * <p>GET /v1/{accountId}/docflows</p>
      * Асинхронный метод постранично возвращает список ДО.
      *
-     * @param finished признак завершенности ДО. Если присвоить значение null, то в выборку попадут
-     * как завершенные, так и не завершенные ДО
-     * @param incoming признак входящего ДО, true - входящие ДО, иначе - исходящие. Если присвоить
-     * значение null, то в выборку попадут, как входящие, так и исходящие ДО
-     * @param skip порядковый номер первого ДО в выходном списке
-     * @param take максимальное количество ДО в выходном списке
-     * @param innKpp ИНН+КПП подотчетной организации. Можно передать пустую строку или значение
-     * null, тогда параметр не буде участвовать при формировании выборки ДО
-     * @param updatedFrom дата обновления ДО, с которой производится поиск. Если передано значение
-     * null, то критерий не учитывается
-     * @param updatedTo дата обновления ДО, до которой производится поиск. Если передано значение
-     * null, то критерий не учитывается
-     * @param createdFrom дата создания ДО, с которой производится поиск. Если передано значение
-     * null, то критерий не учитывается
-     * @param createdTo дата создания ДО, до которой производится поиск. Если передано значение
-     * null, то критерий не учитывается
-     * @param type типы ДО, для которых производится поиск. Можно передавать список значений,
-     * разделенных запятой
-     * @return список ДО
-     * @see DocflowPage
      * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
      */
     @Deprecated
@@ -484,38 +557,19 @@ public interface DocflowService extends ProviderHolder {
      * <p>GET /v1/{accountId}/docflows</p>
      * Синхронный метод постранично возвращает список ДО.
      *
-     * @param parent контекст. Должен принимать следующие параметры:
-     * <p>- признак завершенности ДО: true - ДО завершен, false - незавершен. Для установки
-     * необходимо использовать метод {@link QueryContext#setFinished}</p>
-     * <p>- признак входящего ДО, true - входящие ДО, иначе - исходящие. Для установки необходимо
-     * использовать метод {@link QueryContext#setIncoming}</p>
-     * <p>- порядковый номер первого ДО в выходном списке. Для установки необходимо использовать
-     * метод {@link QueryContext#setSkip}</p>
-     * <p>- максимальное количество ДО в выходном списке. Для установки необходимо использовать
-     * метод {@link QueryContext#setTake}</p>
-     * <p>- ИНН+КПП подотчетной организации. Для установки необходимо использовать метод {@link
-     * QueryContext#setInnKpp}</p>
-     * <p>- дата обновления ДО, с которой производится поиск. Если передано значение null, то
-     * критерий не учитывается.
-     * Для установки необходимо использовать метод {@link QueryContext#setUpdatedFrom}</p>
-     * <p>- дата обновления ДО, до которой производится поиск. Если передано значение null, то
-     * критерий не учитывается
-     * Для установки необходимо использовать метод {@link QueryContext#setUpdatedTo}</p>
-     * <p>- дата создания ДО, с которой производится поиск. Если передано значение null, то критерий
-     * не учитывается
-     * Для установки необходимо использовать метод {@link QueryContext#setCreatedFrom}</p>
-     * <p>- дата создания ДО, до которой производится поиск. Если передано значение null, то
-     * критерий не учитывается
-     * Для установки необходимо использовать метод {@link QueryContext#setCreatedTo}</p>
-     * <p>- type типы ДО, для которых производится поиск. Можно передавать список значений,
-     * разделенных запятой
-     * Для установки необходимо использовать метод {@link QueryContext#setType}</p>
-     * @return список ДО
      * @see DocflowPage
      * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
      */
     @Deprecated
     QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
+
+    /**
+     * Возвращает документообороты удовлетворяющие поисковому фильтру
+     *
+     * @param searchFilter {@link DocflowFilter}
+     * @return список документооборотов
+     */
+    CompletableFuture<QueryContext<DocflowPage>> searchDocflowsAsync(DocflowFilter searchFilter);
 
     /**
      * Возвращает документообороты удовлетворяющие поисковому фильтру
@@ -533,11 +587,14 @@ public interface DocflowService extends ProviderHolder {
      * @param docflowId идентификатор ДО
      * @param documentId идентификатор документа
      * @param documentContentBase64 формализованный документ в кодировке BASE64, для которого
-     * необходимо создать печатную форму
+     *         необходимо создать печатную форму
      * @return печатная форма
      */
-    CompletableFuture<QueryContext<String>> printAsync(String docflowId, String documentId,
-            String documentContentBase64);
+    CompletableFuture<QueryContext<String>> printAsync(
+            String docflowId,
+            String documentId,
+            String documentContentBase64
+    );
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print</p>
@@ -546,13 +603,14 @@ public interface DocflowService extends ProviderHolder {
      * @param docflowId идентификатор ДО
      * @param documentId идентификатор документа
      * @param documentContent расшифрованый формализованный документ, для которого
-     * необходимо создать печатную форму
+     *         необходимо создать печатную форму
      * @return печатная форма
      */
     CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
-            String docflowId,
-            String documentId,
-            byte[] documentContent);
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent
+    );
 
 
     /**
@@ -561,15 +619,23 @@ public interface DocflowService extends ProviderHolder {
      * BASE64
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- формализованный документ в кодировке BASE64. Для установки необходимо использовать метод
-     * {@link QueryContext#setContentString}.</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</p>
+     *         <p>- формализованный документ в кодировке BASE64. Для установки необходимо использовать метод
+     *         {@link QueryContext#setContentString}.</p>
      * @return печатная форма
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<String> print(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    );
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
@@ -583,7 +649,8 @@ public interface DocflowService extends ProviderHolder {
     CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             String docflowId,
             String documentId,
-            String replyId);
+            String replyId
+    );
 
 
     /**
@@ -591,15 +658,25 @@ public interface DocflowService extends ProviderHolder {
      * Cинхронный метод инициирует облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- идентификатор ответного документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setReplyId(String)};</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</p>
+     *         <p>- идентификатор ответного документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setReplyId(String)};</p>
      * @return объект с результатом инициации облачной паодписи
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            String requestId,
+            String smsCode
+    );
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign-confirm</p>
@@ -616,7 +693,8 @@ public interface DocflowService extends ProviderHolder {
             String documentId,
             String replyId,
             String requestCode,
-            String smsCode);
+            String smsCode
+    );
 
 
     /**
@@ -624,37 +702,64 @@ public interface DocflowService extends ProviderHolder {
      * Cинхронный метод подтверждает облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
-     * <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocflowId};</p>
-     * <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setDocumentId};</p>
-     * <p>- идентификатор ответного документа. Для установки необходимо использовать метод {@link
-     * QueryContext#setReplyId(String)};</p>
+     *         <p>- идентификатор ДО. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocflowId};</p>
+     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setDocumentId};</p>
+     *         <p>- идентификатор ответного документа. Для установки необходимо использовать метод {@link
+     *         QueryContext#setReplyId(String)};</p>
      * @return объект с результатом инициации облачной паодписи
+     * @deprecated use async method instead
      */
+    @Deprecated
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
+
+    CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] certificate
+    );
 
     /**
      * Инициация процесса облачного расшифрования документа из Docflow
+     *
      * @return ссылка на подтверждение расшифрования
      */
     QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
-            String certBase64);
+            String certBase64
+    );
+
+    CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentConfirmAsync(
+            UUID docflowId,
+            UUID documentId,
+            String requestId,
+            String code
+    );
 
     /**
      * Подтверждение облачного расшифрования документа из Docflow
+     *
      * @return Расшифрованый конент документа
      */
     QueryContext<byte[]> cloudDecryptDocumentConfirm(
             String docflowId,
             String documentId,
             String requestId,
-            String code);
+            String code
+    );
+
+    CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] certBase64,
+            Function<QueryContext<DecryptInitiation>, String> smsCodeProvider
+    );
 
     /**
      * Инициация и подтверждение облачного расшифрования документа из Docflow
+     *
      * @param smsCodeProvider метод получения кода подтверждения.
      * @return Расшифрованый конент документа
      */
@@ -662,5 +767,6 @@ public interface DocflowService extends ProviderHolder {
             String docflowId,
             String documentId,
             String certBase64,
-            Function<DecryptInitiation, String> smsCodeProvider);
+            Function<DecryptInitiation, String> smsCodeProvider
+    );
 }

@@ -23,40 +23,22 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import static ru.kontur.extern_api.sdk.PublicDateFormat.formatDatetime;
+
+import java.util.Collections;
 import java.util.Date;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
-public class DocflowFilter {
+public class DocflowFilter implements Filter {
 
     private long skip;
     private int take = 1000;
-
-    @Nullable
-    private Boolean finished;
-    @Nullable
-    private Boolean incoming;
-    @Nullable
-    private String innKpp;
-    @Nullable
-    private UUID orgId;
-    @Nullable
     private SortOrder orderBy;
-    @Nullable
-    private Date updatedFrom;
-    @Nullable
-    private Date updatedTo;
-    @Nullable
-    private Date createdFrom;
-    @Nullable
-    private Date createdTo;
-    @Nullable
-    private DocflowType type;
 
-    @Deprecated
-    private String stringType;
+    private final HashMap<String, String> filterMap = new HashMap<>(14);
 
     private DocflowFilter() {
 
@@ -73,32 +55,27 @@ public class DocflowFilter {
     }
 
     public DocflowFilter finished(boolean finished) {
-        this.finished = finished;
+        filterMap.put("finished", String.valueOf(finished));
         return this;
     }
 
     public DocflowFilter incoming(boolean incoming) {
-        this.incoming = incoming;
+        filterMap.put("incoming", String.valueOf(incoming));
         return this;
     }
 
     public DocflowFilter innKpp(String inn, String kpp) {
-        this.innKpp = YAStringUtils.joinIfExists("-", inn, kpp);
+        filterMap.put("innKpp", YAStringUtils.joinIfExists("-", inn, kpp));
         return this;
     }
 
     public DocflowFilter inn(String inn) {
-        this.innKpp = inn;
+        filterMap.put("innKpp", inn);
         return this;
     }
 
     public DocflowFilter orgId(UUID orgId) {
-        this.orgId = orgId;
-        return this;
-    }
-
-    public DocflowFilter orgId(String orgId) {
-        this.orgId = UUID.fromString(orgId);
+        filterMap.put("orgId", orgId.toString());
         return this;
     }
 
@@ -111,27 +88,27 @@ public class DocflowFilter {
     }
 
     public DocflowFilter updatedFrom(Date updatedFrom) {
-        this.updatedFrom = updatedFrom;
+        filterMap.put("updatedFrom", formatDatetime(updatedFrom));
         return this;
     }
 
     public DocflowFilter updatedTo(Date updatedTo) {
-        this.updatedTo = updatedTo;
+        filterMap.put("updatedTo", formatDatetime(updatedTo));
         return this;
     }
 
     public DocflowFilter createdFrom(Date createdFrom) {
-        this.createdFrom = createdFrom;
+        filterMap.put("createdFrom", formatDatetime(createdFrom));
         return this;
     }
 
     public DocflowFilter createdTo(Date createdTo) {
-        this.createdTo = createdTo;
+        filterMap.put("createdTo", formatDatetime(createdTo));
         return this;
     }
 
     public DocflowFilter type(DocflowType type) {
-        this.type = type;
+        filterMap.put("type", type.getName());
         return this;
     }
 
@@ -140,81 +117,27 @@ public class DocflowFilter {
      */
     @Deprecated
     public DocflowFilter type(String rawType) {
-        this.stringType = rawType;
+        filterMap.put("type", rawType);
         return this;
     }
 
+    public SortOrder getOrder() {
+        return orderBy;
+    }
+
+    @Override
     public long getSkip() {
         return skip;
     }
 
+    @Override
     public int getTake() {
         return take;
     }
 
-    @Nullable
-    public Boolean getFinished() {
-        return finished;
-    }
-
-    @Nullable
-    public Boolean getIncoming() {
-        return incoming;
-    }
-
-    @Nullable
-    public String getInnKpp() {
-        return innKpp;
-    }
-
-    @Nullable
-    public String getOrgId() {
-        return Optional.ofNullable(orgId).map(UUID::toString).orElse(null);
-    }
-
-    @Nullable
-    public SortOrder getOrderBy() {
-        return orderBy;
-    }
-
-    @Nullable
-    public Date getUpdatedFrom() {
-        return updatedFrom;
-    }
-
-    @Nullable
-    public Date getUpdatedTo() {
-        return updatedTo;
-    }
-
-    @Nullable
-    public Date getCreatedFrom() {
-        return createdFrom;
-    }
-
-    @Nullable
-    public Date getCreatedTo() {
-        return createdTo;
-    }
-
-    @Nullable
-    public DocflowType getType() {
-        return type;
-    }
-
-    /**
-     * @deprecated it's not recommended use raw string types in a search query
-     */
-    @Deprecated
-    public String getRawType() {
-        return stringType;
-    }
-
-    public String getTypeAsString() {
-        return Optional
-                .ofNullable(getType())
-                .map(DocflowType::getName)
-                .orElse(getRawType());
+    @Override
+    public Map<String, String> asFilterMap() {
+        return Collections.unmodifiableMap(filterMap);
     }
 
     public static DocflowFilter page(long skip, int take) {

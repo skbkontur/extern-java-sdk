@@ -23,118 +23,131 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
+
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.CompanyName;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
-import ru.kontur.extern_api.sdk.provider.ProviderHolder;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.adaptor.OrganizationsAdaptor;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
-/**
- * @author Aleksey Sukhorukov
- */
-public class OrganizationServiceImpl extends AbstractService  implements OrganizationService {
 
-    private static final String EN_ORG = "organization";
+public class OrganizationServiceImpl implements OrganizationService {
 
-    private final OrganizationsAdaptor organizationsAdaptor;
+    private final AccountProvider acc;
+    private final OrganizationsApi api;
 
-    OrganizationServiceImpl(
-            ProviderHolder providerHolder,
-            OrganizationsAdaptor organizationsAdaptor) {
-        super(providerHolder);
-        this.organizationsAdaptor = organizationsAdaptor;
+    OrganizationServiceImpl(AccountProvider accountProvider, OrganizationsApi api) {
+        this.acc = accountProvider;
+        this.api = api;
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Company>> lookupAsync(UUID companyId) {
+        return api.lookup(acc.accountId(), companyId)
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
     }
 
     @Override
     public CompletableFuture<QueryContext<Company>> lookupAsync(String companyId) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .applyAsync(organizationsAdaptor::lookup);
-    }
-
-    @Override
-    public QueryContext<Company> lookup(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::lookup);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyGeneral(companyGeneral)
-            .applyAsync(organizationsAdaptor::create);
-    }
-
-    @Override
-    public QueryContext<Company> create(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::create);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name) {
-        QueryContext<Company> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .setName(name)
-            .applyAsync(organizationsAdaptor::update);
-    }
-
-    @Override
-    public QueryContext<Company> update(QueryContext<?> parent) {
-        QueryContext<Company> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::update);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Void>> deleteAsync(String companyId) {
-        QueryContext<Void> cxt = createQueryContext(EN_ORG);
-        return cxt
-            .setCompanyId(companyId)
-            .applyAsync(organizationsAdaptor::delete);
-    }
-
-    @Override
-    public QueryContext<Void> delete(QueryContext<?> parent) {
-        QueryContext<Void> cxt = createQueryContext(parent,EN_ORG);
-        return cxt.apply(organizationsAdaptor::delete);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
-
-        QueryContext<DocflowPage> cxt = createQueryContext(EN_ORG);
-
-        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(cxt, filter));
+        return lookupAsync(UUID.fromString(companyId));
     }
 
     @Override
     @Deprecated
-    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take) {
-        QueryContext<CompanyBatch> cxt = createQueryContext(EN_ORG);
-
-        return CompletableFuture.supplyAsync(() -> organizationsAdaptor.search(
-                cxt,
-                OrgFilter.page(skip, take).inn(inn).kpp(kpp)));
+    public QueryContext<Company> lookup(QueryContext<?> parent) {
+        return join(lookupAsync(parent.<UUID>require(QueryContext.COMPANY_ID).toString()));
     }
 
     @Override
+    public CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral) {
+        return api.create(acc.accountId(), companyGeneral)
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
+    }
+
+    @Override
+    @Deprecated
+    public QueryContext<Company> create(QueryContext<?> parent) {
+        return join(createAsync(parent.require(QueryContext.COMPANY_GENERAL)));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Company>> updateAsync(UUID companyId, String name) {
+        return api.update(acc.accountId(), companyId, new CompanyName(name))
+                .thenApply(contextAdaptor(QueryContext.COMPANY));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name) {
+        return updateAsync(UUID.fromString(companyId), name);
+    }
+
+    @Override
+    @Deprecated
+    public QueryContext<Company> update(QueryContext<?> parent) {
+        return join(updateAsync(
+                parent.<UUID>require(QueryContext.COMPANY_ID).toString(),
+                parent.require(QueryContext.NAME)
+        ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> deleteAsync(UUID companyId) {
+        return api.delete(acc.accountId(), companyId)
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> deleteAsync(String companyId) {
+        return deleteAsync(UUID.fromString(companyId));
+    }
+
+    @Override
+    @Deprecated
+    public QueryContext<Void> delete(QueryContext<?> parent) {
+        return join(deleteAsync(parent.<UUID>require(QueryContext.COMPANY_ID).toString()));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter) {
+        return api.search(
+                acc.accountId(),
+                filter.getSkip(),
+                filter.getTake(),
+                filter.asFilterMap()
+        ).thenApply(contextAdaptor(QueryContext.COMPANY_BATCH));
+    }
+
+    @Override
+    @Deprecated
+    public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(
+            String inn,
+            String kpp,
+            Long skip,
+            Integer take) {
+        return searchAsync(OrgFilter
+                .page(skip == null ? 0 : skip, take == null ? 0 : take)
+                .inn(inn)
+                .kpp(kpp)
+        );
+    }
+
+    @Override
+    @Deprecated
     public QueryContext<CompanyBatch> search(QueryContext<?> parent) {
-        QueryContext<CompanyBatch> cxt = createQueryContext(parent,EN_ORG);
-
-        OrgFilter filter = OrgFilter
-                .page(parent.getSkip(), parent.getTake())
-                .inn(parent.getInn())
-                .kpp(parent.getKpp());
-
-        return organizationsAdaptor.search(cxt, filter);
+        return join(searchAsync(
+                parent.require(QueryContext.INN),
+                parent.require(QueryContext.KPP),
+                parent.require(QueryContext.SKIP),
+                parent.require(QueryContext.TAKE)
+        ));
     }
 
 }

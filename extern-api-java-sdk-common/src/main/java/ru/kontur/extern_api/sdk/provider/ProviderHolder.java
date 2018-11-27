@@ -56,15 +56,4 @@ public interface ProviderHolder {
 
     UserAgentProvider getUserAgentProvider();
 
-    default <T extends ProviderHolder> T copyProvidersTo(T ph) {
-        ph.setServiceBaseUriProvider(this.getServiceBaseUriProvider());
-        ph.setAuthenticationProvider(this.getAuthenticationProvider());
-        ph.setAccountProvider(this.getAccountProvider());
-        ph.setApiKeyProvider(this.getApiKeyProvider());
-        ph.setCryptoProvider(this.getCryptoProvider());
-        ph.setUserIPProvider(this.getUserIPProvider());
-        ph.setUserAgentProvider(this.getUserAgentProvider());
-        return ph;
-    }
-
 }

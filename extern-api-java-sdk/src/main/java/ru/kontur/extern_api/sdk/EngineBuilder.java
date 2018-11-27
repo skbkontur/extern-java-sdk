@@ -23,18 +23,27 @@
 
 package ru.kontur.extern_api.sdk;
 
+import java.util.UUID;
+import java.util.function.Function;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
-import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthCredentials;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 
 public interface EngineBuilder {
 
     interface BuildSyntax {
 
-        ExternEngine build();
+        ExternEngine build(Level logVerbosity);
+
+        default ExternEngine build() {
+            return build(Level.BASIC);
+        }
+
     }
 
     interface OverrideDefaultsSyntax extends BuildSyntax {
@@ -43,31 +52,32 @@ public interface EngineBuilder {
         OverrideDefaultsSyntax serviceBaseUrl(@NotNull String serviceBaseUrl);
 
         @NotNull
-        OverrideDefaultsSyntax authServiceBaseUrl(@NotNull String authServiceBaseUrl);
-
-        @NotNull
         OverrideDefaultsSyntax userAgentProvider(@NotNull UserAgentProvider userAgentProvider);
 
         @NotNull
         OverrideDefaultsSyntax userIpProvider(@NotNull UserIPProvider userIPProvider);
+
+        @NotNull
+        OverrideDefaultsSyntax readTimeout(int milliseconds);
+
+        @NotNull
+        OverrideDefaultsSyntax connectTimeout(int milliseconds);
+
+        @NotNull
+        OverrideDefaultsSyntax logger(Logger logger);
 
     }
 
     interface AuthProviderSyntax {
 
         @NotNull
-        MaybeCryptoProviderSyntax authProvider(
-                @NotNull AuthenticationProvider authenticationProvider);
+        MaybeCryptoProviderSyntax authProvider(@NotNull AuthenticationProvider authenticationProvider);
 
         @NotNull
-        MaybeCryptoProviderSyntax passwordAuth(@NotNull String login, @NotNull String password);
-
-        @NotNull
-        MaybeCryptoProviderSyntax trustedAuth(@NotNull TrustedAuthCredentials authCredentials);
-
-        @NotNull
-        CryptoProviderSyntax certificateAuth(@NotNull byte[] certificatePublicKey);
-
+        MaybeCryptoProviderSyntax buildAuthentication(
+                String authBaseUrl,
+                Function<AuthenticationProviderBuilder, AuthenticationProvider> providerCtor
+        );
     }
 
     interface CryptoProviderSyntax {
@@ -92,10 +102,15 @@ public interface EngineBuilder {
     interface AccountSyntax {
 
         @NotNull
-        OverrideDefaultsSyntax accountId(@NotNull String accountId);
+        OverrideDefaultsSyntax accountId(@NotNull UUID accountId);
 
         @NotNull
         OverrideDefaultsSyntax doNotSetupAccount();
+
+        @NotNull
+        default OverrideDefaultsSyntax accountId(@NotNull String accountId) {
+            return accountId(UUID.fromString(accountId));
+        }
 
     }
 

@@ -23,11 +23,16 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import ru.kontur.extern_api.sdk.adaptor.AdaptorBundle;
+import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.RetrofitClient;
-import ru.kontur.extern_api.sdk.httpclient.retrofit.api.EventsApi;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
+import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -41,82 +46,75 @@ import ru.kontur.extern_api.sdk.service.ServicesFactory;
 public class DefaultServicesFactory implements ServicesFactory {
 
     private final ProviderHolder providerHolder;
-    private final AdaptorBundle adaptorBundle;
-    private final RetrofitClient retrofitClient;
+    private final KonturConfiguredClient configuredClient;
 
-    public DefaultServicesFactory(
-            ProviderHolder providerHolder,
-            AdaptorBundle adaptorBundle) {
+    public DefaultServicesFactory(KonturConfiguredClient client, ProviderHolder providerHolder) {
         this.providerHolder = providerHolder;
-        this.adaptorBundle = adaptorBundle;
-        this.retrofitClient = new RetrofitClient(Level.BODY);
+        this.configuredClient = client;
     }
 
 
     @Override
     public AccountService getAccountService() {
-        return providerHolder.copyProvidersTo(new AccountServiceImpl(
-                providerHolder,
-                adaptorBundle.getAccountsAdaptor()
-        ));
+        return new AccountServiceImpl(createApi(AccountsApi.class));
     }
 
     @Override
     public CertificateService getCertificateService() {
-        return providerHolder.copyProvidersTo(new CertificateServiceImpl(
-                providerHolder,
-                adaptorBundle.getCertificatesAdaptor()
-        ));
+        return new CertificateServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(CertificatesApi.class)
+        );
     }
 
     @Override
     public DocflowService getDocflowService() {
-        return providerHolder.copyProvidersTo(new DocflowServiceImpl(
-                providerHolder,
-                adaptorBundle.getDocflowsAdaptor()
-        ));
+        return new DocflowServiceImpl(
+                providerHolder.getAccountProvider(),
+                providerHolder.getUserIPProvider(),
+                createApi(DocflowsApi.class)
+        );
     }
 
     @Override
     public DraftService getDraftService() {
-        return providerHolder.copyProvidersTo(new DraftServiceImpl(
-                providerHolder,
-                adaptorBundle.getDraftsAdaptor()
-        ));
+        return new DraftServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(DraftsApi.class)
+        );
     }
 
     @Override
     public EventService getEventService() {
-
-        String authSid = providerHolder.getAuthenticationProvider()
-                .sessionId()
-                .ensureSuccess()
-                .get();
-
-        return providerHolder.copyProvidersTo(new EventServiceImpl(
-                providerHolder,
-                retrofitClient
-                        .setAuthSid(authSid)
-                        .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
-                        .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                        .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent())
-                        .createService(EventsApi.class)
-        ));
+        return new EventServiceImpl(createApi(EventsApi.class));
     }
 
     @Override
     public OrganizationService getOrganizationService() {
-        return providerHolder.copyProvidersTo(new OrganizationServiceImpl(
-                providerHolder,
-                adaptorBundle.getOrganizationsAdaptor()
-        ));
+        return new OrganizationServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(OrganizationsApi.class)
+        );
     }
 
     @Override
     public HttpClient getHttpClient() {
-        return adaptorBundle
-                .getHttpClientAdaptor()
-                .setServiceBaseUri(providerHolder.getServiceBaseUriProvider().getUri())
-                .setUserAgentProvider(providerHolder.getUserAgentProvider());
+        return new KonturHttpClient(postConfigure(configuredClient).copy(), GsonProvider.LIBAPI);
+    }
+
+    private KonturConfiguredClient postConfigure(KonturConfiguredClient client) {
+        String authSid = providerHolder.getAuthenticationProvider()
+                .sessionId()
+                .getOrThrow();
+
+        return client
+                .setAuthSid(authSid)
+                .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
+                .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
+                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent());
+    }
+
+    private <T> T createApi(Class<T> apiType) {
+        return postConfigure(configuredClient).createApi(apiType);
     }
 }

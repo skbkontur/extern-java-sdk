@@ -24,19 +24,17 @@
 
 package ru.kontur.extern_api.sdk.provider.crypt.rsa;
 
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
+import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
+import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
+
 import com.argos.asn1.Asn1Exception;
 import com.argos.cipher.asn1ext.X509certificate;
-import java.nio.file.Paths;
-import ru.argosgrp.cryptoservice.CryptoException;
-import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
-import ru.argosgrp.cryptoservice.utils.IOUtil;
-import ru.kontur.extern_api.sdk.Messages;
-import ru.kontur.extern_api.sdk.provider.CryptoProvider;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -52,10 +50,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
-
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR;
-import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_KEY_NOT_FOUND;
-import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
+import ru.argosgrp.cryptoservice.CryptoException;
+import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
+import ru.kontur.extern_api.sdk.Messages;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 
 
 /**
@@ -83,9 +83,7 @@ public class CryptoProviderRSA implements CryptoProvider {
     private Supplier<String> keyStoreProvider;
 
     public CryptoProviderRSA(String keyStorePass, String keyPass) {
-        // default key store source: the jre key store
-        keyStoreProvider = () -> Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts")
-                .toString();
+        keyStoreProvider = () -> findCacerts().toString();
 
         // cache for keys
         this.cacheSignKey = new ConcurrentHashMap<>();
@@ -113,7 +111,8 @@ public class CryptoProviderRSA implements CryptoProvider {
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
-        return CompletableFuture.supplyAsync(() -> sign(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
+        return CompletableFuture
+                .supplyAsync(() -> sign(new QueryContext<byte[]>().setThumbprint(thumbprint).setContent(content)));
     }
 
     @Override
@@ -123,7 +122,8 @@ public class CryptoProviderRSA implements CryptoProvider {
 
             KeyPair key = getKeyByThumbprint(thumbprint);
             if (key == null) {
-                return new QueryContext<byte[]>().setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
+                return new QueryContext<byte[]>()
+                        .setServiceError(Messages.get(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
             }
 
             byte[] content = cxt.getContent();
@@ -138,7 +138,8 @@ public class CryptoProviderRSA implements CryptoProvider {
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
-        return CompletableFuture.supplyAsync(() -> getSignerCertificate(new QueryContext<byte[]>().setThumbprint(thumbprint)));
+        return CompletableFuture
+                .supplyAsync(() -> getSignerCertificate(new QueryContext<byte[]>().setThumbprint(thumbprint)));
     }
 
     @Override
@@ -148,7 +149,8 @@ public class CryptoProviderRSA implements CryptoProvider {
 
             KeyPair key = getKeyByThumbprint(thumbprint);
             if (key == null) {
-                return new QueryContext<byte[]>().setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
+                return new QueryContext<byte[]>()
+                        .setServiceError(MessageFormat.format(C_CRYPTO_ERROR_KEY_NOT_FOUND, thumbprint));
             }
 
             return new QueryContext<byte[]>().setContent(key.getX509() == null ? null : key.getX509().getEncoded());
@@ -228,7 +230,8 @@ public class CryptoProviderRSA implements CryptoProvider {
                     X509Certificate x509 = (X509Certificate) keyStore.getCertificate(alias);
                     byte[] theThumbprint = getThumbprint(x509);
                     if (Arrays.equals(goal, theThumbprint)) {
-                        PrivateKey privateKey = (PrivateKey) keyStore.getKey(alias, keyPass == null ? new char[0] : keyPass.toCharArray());
+                        PrivateKey privateKey = (PrivateKey) keyStore
+                                .getKey(alias, keyPass == null ? new char[0] : keyPass.toCharArray());
                         if (privateKey != null) {
                             key = new KeyPair();
                             key.setPrivateKey(privateKey);
@@ -252,7 +255,8 @@ public class CryptoProviderRSA implements CryptoProvider {
         }
     }
 
-    private String extractSigningAlgorithm(X509Certificate x509Cert) throws CertificateEncodingException, Asn1Exception {
+    private String extractSigningAlgorithm(X509Certificate x509Cert)
+            throws CertificateEncodingException, Asn1Exception {
         return PKCS7.getEncryptOID(new X509certificate(x509Cert.getEncoded()));
     }
 
@@ -293,5 +297,13 @@ public class CryptoProviderRSA implements CryptoProvider {
         private void setSigningAlgorithm(String signingAlgorithm) {
             this.signingAlgorithm = signingAlgorithm;
         }
+    }
+
+    private static Path findCacerts() {
+        Path legacy = Paths.get(System.getProperty("java.home"), "jre", "lib", "security", "cacerts");
+        if (Files.exists(legacy)) {
+            return legacy;
+        }
+        return Paths.get(System.getProperty("java.home"), "lib", "security", "cacerts");
     }
 }

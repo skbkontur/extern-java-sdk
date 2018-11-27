@@ -28,7 +28,7 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.8-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk</artifactId>
@@ -99,7 +99,7 @@
 
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
-            <artifactId>extern-api-java-sdk-httpclient-adaptor</artifactId>
+            <artifactId>extern-api-java-sdk-httpclient-api</artifactId>
         </dependency>
         <dependency>
             <groupId>ru.kontur.extern-api</groupId>
@@ -140,6 +140,14 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
         </dependency>
 
     </dependencies>

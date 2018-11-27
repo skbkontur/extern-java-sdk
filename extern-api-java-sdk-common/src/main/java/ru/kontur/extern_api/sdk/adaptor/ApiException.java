@@ -23,66 +23,59 @@
 
 package ru.kontur.extern_api.sdk.adaptor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 
 public class ApiException extends RuntimeException {
 
-    private static final long serialVersionUID = 7069199494247540112L;
-
-    private int code = 0;
-    private Map<String, List<String>> responseHeaders = null;
-    private String responseBody = null;
-
-    public ApiException() {
-    }
+    private final int code;
+    private final String errorId;
+    private final Map<String, List<String>> responseHeaders;
 
     public ApiException(Throwable throwable) {
-        super(throwable);
+        super(
+                throwable instanceof ApiException ? throwable.getMessage() : null,
+                throwable instanceof ApiException ? null : throwable
+        );
+
+        if (throwable instanceof ApiException) {
+            ApiException parent = (ApiException) throwable;
+            code = parent.getCode();
+            errorId = parent.getErrorId();
+            responseHeaders = parent.getResponseHeaders();
+        } else {
+            code = -1;
+            errorId = "exception-was-thrown";
+            responseHeaders = Collections.emptyMap();
+        }
     }
 
     public ApiException(String message) {
-        super(message);
-    }
-
-    public ApiException(String message, Throwable x) {
-        super(message, x);
-    }
-
-    public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
-        super(message, throwable);
-        this.code = code;
-        this.responseHeaders = responseHeaders;
-        this.responseBody = responseBody;
-    }
-
-    public ApiException(String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(message, null, code, responseHeaders, responseBody);
-    }
-
-    public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders) {
-        this(message, throwable, code, responseHeaders, null);
-    }
-
-    public ApiException(int code, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(null, null, code, responseHeaders, responseBody);
+        this(-1, null, message, null, null);
     }
 
     public ApiException(int code, String message) {
-        super(message);
-        this.code = code;
+        this(code, null, message, null, null);
     }
 
-    public ApiException(int code, String message, Map<String, List<String>> responseHeaders, String responseBody) {
-        this(code, message);
-        this.responseHeaders = responseHeaders;
-        this.responseBody = responseBody;
+    public ApiException(
+            int code,
+            String errorId,
+            String message,
+            Map<String, List<String>> responseHeaders,
+            Throwable throwable
+    ) {
+        super(message, throwable);
+
+        this.code = code;
+        this.errorId = errorId;
+        this.responseHeaders = responseHeaders == null ? Collections.emptyMap() : responseHeaders;
     }
 
     /**
-     * Get the HTTP status code.
-     *
      * @return HTTP status code
      */
     public int getCode() {
@@ -90,20 +83,67 @@ public class ApiException extends RuntimeException {
     }
 
     /**
-     * Get the HTTP response headers.
-     *
-     * @return A map of list of string
+     * @return HTTP status code
+     */
+    public int getResponseCode() {
+        return code;
+    }
+
+
+    /**
+     * @return HTTP response headers
      */
     public Map<String, List<String>> getResponseHeaders() {
         return responseHeaders;
     }
 
     /**
-     * Get the HTTP response body.
-     *
-     * @return Response body in the form of string
+     * @return error identifier
      */
-    public String getResponseBody() {
-        return responseBody;
+    public String getErrorId() {
+        return errorId;
+    }
+
+    @Override
+    public String toString() {
+        String sCode = code >= 100 ? "code=" + code : null;
+        String sTrace = responseHeaders.containsKey("x-kontur-trace-id")
+                ? "trace-id=" + line(responseHeaders.get("x-kontur-trace-id"))
+                : null;
+
+        String info = YAStringUtils.joinIfExists(" ", sCode, sTrace);
+        if (!YAStringUtils.isNullOrEmpty(info)) {
+            info = " (" + info + ")";
+        }
+
+        return super.toString().trim() + info;
+    }
+
+    public String prettyPrint() {
+        return prettyPrint(getCode(), getErrorId(), getMessage(), getResponseHeaders());
+    }
+
+    private static String prettyPrint(
+            int code,
+            String errorId,
+            String message,
+            Map<String, List<String>> responseHeaders
+    ) {
+        String headers = String.join("\n", responseHeaders
+                .entrySet()
+                .stream()
+                .map(e -> e.getKey() + ": " + line(e.getValue()))
+                .toArray(String[]::new)
+        );
+
+        if (!headers.isEmpty()) {
+            headers = "\n" + headers;
+        }
+
+        return "ApiException: " + String.valueOf(code) + " " + errorId + ": " + message + headers;
+    }
+
+    private static String line(List<String> strings) {
+        return String.join(" ", strings.toArray(new String[0]));
     }
 }

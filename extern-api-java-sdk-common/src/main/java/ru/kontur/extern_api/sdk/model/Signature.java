@@ -34,10 +34,10 @@ import java.util.UUID;
  */
 public class Signature {
 
-    private UUID id = null;
-    private Link contentLink = null;
+    private UUID id;
+    private Link contentLink;
     private List<Link> links = new ArrayList<>();
-    private String title = null;
+    private String title;
     private String signatureCertificateThumbprint;
 
     public Signature id(UUID id) {

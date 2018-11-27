@@ -1,15 +1,13 @@
 package ru.kontur.extern_api.sdk.portal;
 
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.httpclient.HttpClientBundle;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.portal.model.CertificateFields.Names;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.ProviderSuite;
 import ru.kontur.extern_api.sdk.provider.UriProvider;
-import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
 
 
 /**
@@ -17,59 +15,21 @@ import ru.kontur.extern_api.sdk.provider.useragent.DefaultUserAgentProvider;
  */
 public class CertificatesClient {
 
-    private final ApiKeyProvider apiKeyPorvider;
-    private final UriProvider serviceBaseUrlProvider;
-    private final HttpClient httpClient;
+    private final CertificatesApi api;
 
-    public CertificatesClient(ApiKeyProvider apiKeyPorvider, UriProvider serviceBaseUrlProvider) {
-        this.apiKeyPorvider = apiKeyPorvider;
-        this.serviceBaseUrlProvider = serviceBaseUrlProvider;
-
-        ProviderSuite providerHolder = new ProviderSuite();
-        providerHolder.setUserAgentProvider(new DefaultUserAgentProvider());
-        this.httpClient = new HttpClientBundle(providerHolder).getHttpClientAdaptor();
+    public CertificatesClient(ApiKeyProvider apiKeyProvider, UriProvider serviceBaseUrlProvider) {
+        this(apiKeyProvider, serviceBaseUrlProvider, Level.BASIC);
     }
 
-    /**
-     * @deprecated typo :c.
-     *         use {@link CertificatesClient#searchCertificates(int, int, String)} instead
-     */
-    @Deprecated
-    public CertificateSearchResult searchCeritficates(int skip, int take, String query) {
-        return searchCertificates(skip, take, query);
-    }
+    public CertificatesClient(ApiKeyProvider apiKey, UriProvider serviceBaseUrl, Level logLevel) {
 
-    /**
-     * @deprecated typo :c.
-     *         use {@link CertificatesClient#searchCertificates(int, int, SearchQuery)} instead
-     */
-    @Deprecated
-    public CertificateSearchResult searchCeritficates(int skip, int take, SearchQuery query) {
-        return searchCertificates(skip, take, query);
-    }
+        KonturConfiguredClient client = new KonturConfiguredClient(
+                logLevel,
+                serviceBaseUrl.getUri()
+        ).setApiKey(apiKey.getApiKey());
 
-    /**
-     * Search certificates by a specified search query
-     *
-     * @param skip pagination skip
-     * @param take pagination take
-     * @param query search query. If you don't know syntax see
-     *         {@link CertificatesClient#searchCeritficates(int, int, SearchQuery)}
-     * @return paginated certificate search result (thumbprints only)
-     */
-    public CertificateSearchResult searchCertificates(int skip, int take, String query) {
-        String url = serviceBaseUrlProvider.getUri() + "/certificates/search";
+        api = client.createApi(CertificatesApi.class);
 
-        take = Math.min(take, 50000);
-
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("api-key", apiKeyPorvider.getApiKey());
-        queryParams.put("skip", skip);
-        queryParams.put("take", take);
-        queryParams.put("filter", query);
-        queryParams.put("fields", "thumbprint");
-
-        return httpClient.followGetLink(url, queryParams, CertificateSearchResult.class);
     }
 
     /**
@@ -80,8 +40,8 @@ public class CertificatesClient {
      * @param query search query. See {@link SearchQuery}
      * @return paginated certificate search result (thumbprints only)
      */
-    public CertificateSearchResult searchCertificates(int skip, int take, SearchQuery query) {
-        return searchCertificates(skip, take, query.translate());
+    public CompletableFuture<CertificateSearchResult> searchCertificates(int skip, int take, SearchQuery query) {
+        return api.search(skip, take, query, Names.of("thumbprint"));
     }
 
 }

@@ -46,6 +46,7 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.accounts.AccountsValidator;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.common.ResponseData;
 import ru.kontur.extern_api.sdk.common.StandardObjects;
 import ru.kontur.extern_api.sdk.common.StandardValues;
@@ -200,7 +201,7 @@ public class AccountServiceGetAccountTest {
     private void checkResponseCode(int code) {
         QueryContext<AccountList> queryContext = engine.getAccountService().acquireAccounts(new QueryContext<CertificateList>());
         assertNull("List of links must be null!", queryContext.get());
-        ServiceError serviceError = queryContext.getServiceError();
+        ApiException serviceError = queryContext.getServiceError();
         assertNotNull("ServiceError must not be null!", serviceError);
         assertEquals("Response code is wrong!", code, serviceError.getResponseCode());
     }

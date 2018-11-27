@@ -39,7 +39,6 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 import ru.kontur.extern_api.sdk.service.SDKException;
-import ru.kontur.extern_api.sdk.utils.Stopwatch;
 
 public class CryptoProviderMSCapi implements CryptoProvider {
 
@@ -51,7 +50,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
             cryptoApi = new CryptoApi();
             cryptoService = cryptoApi.getCryptoService();
 
-        } catch (CryptoException | CertificateException x) {
+        } catch (CertificateException x) {
             throw new SDKException(Messages.get(C_CRYPTO_ERROR_INIT), x);
         }
     }
@@ -101,8 +100,25 @@ public class CryptoProviderMSCapi implements CryptoProvider {
             Key key = getKeyByThumbprint(cxt.getThumbprint());
             byte[] content = cxt.getContent();
 
-            return Stopwatch.timeIt("decrypt", () -> new PKCS7(cryptoService).decrypt(key, null, content));
+            return decrypt(key, content);
         });
+    }
+
+    private byte[] decrypt(Key key, byte[] content) throws CryptoException {
+        int credit = 5;
+        CryptoException t = null;
+        while (credit > 0) {
+            credit = credit - 1;
+            try {
+                return new PKCS7(cryptoService).decrypt(key, null, content);
+            } catch (CryptoException e) {
+                if (e.getErrorCode() != 28) {
+                    throw e;
+                }
+                t = e;
+            }
+        }
+        throw t;
     }
 
     @NotNull

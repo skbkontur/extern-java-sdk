@@ -35,7 +35,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
@@ -53,8 +52,14 @@ public class CryptoApi {
     private final X509CertificateFactory certificateFactory;
 
 
-    public CryptoApi() throws CryptoException, CertificateException {
-        cryptoService = new MSCapi();
+    public CryptoApi() throws CertificateException {
+        CryptoService cryptoService = null;
+        try {
+            cryptoService = new MSCapi();
+        } catch (Exception e) {
+            log.warning(e.getMessage());
+        }
+        this.cryptoService = cryptoService;
         certificateFactory = new X509CertificateFactory();
     }
 
@@ -91,17 +96,18 @@ public class CryptoApi {
     }
 
     public CryptoService getCryptoService() {
+        if (cryptoService == null) {
+            throw new IllegalStateException("crypto service unavailable");
+        }
         return cryptoService;
     }
 
     public List<Key> getInstalledKeys(boolean refreshCache) {
-        log.info("Working dir: " + System.getProperty("user.dir"));
-
         if (keyCache == null || refreshCache) {
             synchronized (lock) {
                 if (keyCache == null || refreshCache) {
                     log.info("Installed keys loading...");
-                    keyCache = Arrays.asList(catchCryptoException(cryptoService::getKeys));
+                    keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
                 }
             }
         }

@@ -38,8 +38,9 @@ import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.it.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.it.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 
 @Disabled
@@ -96,7 +97,7 @@ class BankScenario {
         );
 
         List<Company> companies = engine.getOrganizationService()
-                .searchAsync(null, null,  null, null)
+                .searchAsync(OrgFilter.page(0, 1000))
                 .get()
                 .getOrThrow()
                 .getCompanies();

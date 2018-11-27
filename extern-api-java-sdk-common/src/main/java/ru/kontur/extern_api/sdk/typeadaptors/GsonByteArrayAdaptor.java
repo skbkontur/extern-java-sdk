@@ -33,10 +33,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.Base64;
 
-/**
- *
- * @author alexs
- */
+
 public class GsonByteArrayAdaptor implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
 
     @Override
