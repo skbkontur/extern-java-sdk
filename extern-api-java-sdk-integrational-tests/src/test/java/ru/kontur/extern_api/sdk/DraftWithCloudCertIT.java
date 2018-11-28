@@ -48,6 +48,7 @@ import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 
 @Disabled("Cert problems")
 class DraftWithCloudCertIT {
@@ -56,21 +57,22 @@ class DraftWithCloudCertIT {
     private static ExternEngine engine;
 
     @BeforeAll
-    static void SetUpClass() throws Exception {
+    static void SetUpClass() {
 
         engine = TestSuite.Load().engine;
 
         SystemProperty.push("httpclient.debug");
 
-        List<Certificate> certs = engine
+        List<Certificate> certs = UncheckedSupplier.get(() -> engine
                 .getCertificateService()
                 .getCertificateListAsync()
-                .get().getOrThrow()
+                .get()
+                .get()
                 .getCertificates().stream()
                 .filter(Certificate::getIsCloud)
                 .filter(Certificate::getIsQualified)
                 .filter(Certificate::getIsValid)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
 
         Assertions.assertNotEquals(0, certs.size());
 

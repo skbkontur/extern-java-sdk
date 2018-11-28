@@ -38,6 +38,7 @@ import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
@@ -49,11 +50,10 @@ class AuthenticationIT{
 
     @BeforeAll
     static void setUpClass() {
-        ExternEngine engine = TestSuite.Load().engine;
+        configuration = TestConfig.LoadConfigFromEnvironment();
         build = AuthenticationProviderBuilder
-                .createFor(engine.getConfiguration().getAuthBaseUri(), Level.BODY)
-                .withApiKey(engine.getConfiguration().getApiKey());
-        configuration = engine.getConfiguration();
+                .createFor(configuration.getAuthBaseUri(), Level.BODY)
+                .withApiKey(configuration.getApiKey());
     }
 
     @Nested

@@ -152,8 +152,7 @@ class DocflowServiceIT {
     @ParameterizedTest
     @DisplayName("get docflow by id")
     @MethodSource("docflowsLazyFactory")
-    void testGetDocflow(QueryContext<Docflow> docflowCxt)
-            throws ExecutionException, InterruptedException {
+    void testGetDocflow(QueryContext<Docflow> docflowCxt) throws Exception {
         Docflow docflow = docflowCxt.get();
         Docflow returned = docflowService
                 .lookupDocflowAsync(docflow.getId())
@@ -674,7 +673,8 @@ class DocflowServiceIT {
         }
     }
 
-    private static List<QueryContext<Docflow>> createDocflows(ExternEngine engine,
+    private static List<QueryContext<Docflow>> createDocflows(
+            ExternEngine engine,
             TestData[] testData) {
 
         DraftService draftService = engine.getDraftService();

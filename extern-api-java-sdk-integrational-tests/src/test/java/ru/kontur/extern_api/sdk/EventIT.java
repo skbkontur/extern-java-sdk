@@ -43,7 +43,7 @@ class EventIT {
     private static ExternEngine engine;
 
     @BeforeAll
-    static void setUpClass() throws Exception {
+    static void setUpClass() {
         engine = TestSuite.Load().engine;
     }
 
