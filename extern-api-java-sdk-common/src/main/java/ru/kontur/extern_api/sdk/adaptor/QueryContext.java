@@ -35,6 +35,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
+import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
