@@ -28,6 +28,7 @@ import static ru.kontur.extern_api.sdk.ExternEngineBuilder.createExternEngine;
 import com.google.gson.Gson;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
@@ -55,12 +56,16 @@ public class TestSuite {
         configOverride.accept(config);
 
         ExternEngine engine = ExternEngineBuilder
-                .authFromConfiguration(config)
+                .createExternEngine(config.getServiceBaseUri())
+                .apiKey(config.getApiKey())
+                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(config.getLogin(), config.getPass())
+                )
                 .doNotUseCryptoProvider()
-                .doNotSetupAccount()
-                .userIpProvider(() -> "80.247.184.194")
-                .build();
+                .accountId(config.getAccountId())
+                .build(Level.BODY);
 
+        engine.getConfiguration().setThumbprint(config.getThumbprint());
         return new TestSuite(engine);
     }
 

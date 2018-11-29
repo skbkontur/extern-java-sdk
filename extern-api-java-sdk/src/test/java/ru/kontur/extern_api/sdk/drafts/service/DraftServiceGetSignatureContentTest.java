@@ -23,136 +23,65 @@
  */
 package ru.kontur.extern_api.sdk.drafts.service;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Base64;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.ExternEngineBuilder;
-import ru.kontur.extern_api.sdk.ServiceError;
-import ru.kontur.extern_api.sdk.common.ResponseData;
-import ru.kontur.extern_api.sdk.common.StandardValues;
-import ru.kontur.extern_api.sdk.common.TestServlet;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.common.StandardValues;
+import ru.kontur.extern_api.sdk.drafts.testBase.DraftServiceTestBase;
 
 /**
  * @author Mikhail Pavlenko
  */
-public class DraftServiceGetSignatureContentTest {
+class DraftServiceGetSignatureContentTest extends DraftServiceTestBase {
 
-    private static ExternEngine engine;
-    private static Server server;
 
-    @BeforeClass
-    public static void startJetty() throws Exception {
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        context.addServlet(TestServlet.class, "/drafts/*");
-        server = new Server(8080);
-        server.setHandler(context);
-        server.start();
-    }
+    @Test
+    void testGetSignatureContent_Empty() throws ExecutionException, InterruptedException {
 
-    @AfterClass
-    public static void stopJetty() {
-        try {
-            server.stop();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        serverPleaseGetSuccessful(GSON.toJson(new byte[0]));
 
-    @BeforeClass
-    public static void setUpClass() {
-        engine = ExternEngineBuilder.createExternEngine()
-                .apiKey(UUID.randomUUID().toString()).authProvider(new AuthenticationProviderAdaptor())
-                .doNotUseCryptoProvider()
-                .accountId(UUID.randomUUID().toString())
-                .serviceBaseUrl("http://localhost:8080/drafts")
-                .build();
+        byte[] signatureContent = draftService
+                .getSignatureContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get()
+                .ensureSuccess()
+                .get();
+
+        assertTrue(new String(signatureContent).isEmpty());
     }
 
     @Test
-    public void testGetSignatureContent_Empty() {
-        ResponseData.INSTANCE.setResponseCode(SC_OK); // 200
-        ResponseData.INSTANCE.setResponseMessage("\"\"");
-        Assertions.assertArrayEquals(new byte[0], getContent());
+    void testGetSignatureContent() throws ExecutionException, InterruptedException {
+
+        byte[] content = new byte[]{1, 2, 3};
+
+        serverPleaseGetSuccessful(GSON.toJson(content));
+
+        byte[] signatureContent = draftService
+                .getSignatureContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get()
+                .ensureSuccess()
+                .get();
+
+        assertEquals(new String(signatureContent), new String(content));
     }
 
-    @Test
-    public void testGetSignatureContent() {
-        ResponseData.INSTANCE.setResponseCode(HttpServletResponse.SC_OK); // 200
-        byte[] bytes = {1, 2, 3};
+    @ParameterizedTest
+    @ValueSource(ints = { 400, 401, 403, 404, 500})
+    void testGetSignatureContentWithError(int code)
+            throws ExecutionException, InterruptedException {
 
-        ResponseData.INSTANCE.setResponseMessage('"' + Base64.getEncoder().encodeToString(bytes) + '"');
-        Assertions.assertArrayEquals(bytes, getContent());
-    }
+        serverPleaseGetError(code);
 
-    @Test
-    public void testGetSignatureContent_BAD_REQUEST() {
-        ResponseData.INSTANCE.setResponseCode(SC_BAD_REQUEST); // 400
-        checkResponseCode(SC_BAD_REQUEST);
-    }
+        QueryContext signatureContentCxt = draftService
+                .getSignatureContentAsync(StandardValues.GUID, StandardValues.GUID)
+                .get();
 
-    @Test
-    public void testGetSignatureContent_UNAUTHORIZED() {
-        ResponseData.INSTANCE.setResponseCode(SC_UNAUTHORIZED); // 401
-        checkResponseCode(SC_UNAUTHORIZED);
-    }
-
-    @Test
-    public void testGetSignatureContent_FORBIDDEN() {
-        ResponseData.INSTANCE.setResponseCode(SC_FORBIDDEN); // 403
-        checkResponseCode(SC_FORBIDDEN);
-    }
-
-    @Test
-    public void testGetSignatureContent_NOT_FOUND() {
-        ResponseData.INSTANCE.setResponseCode(SC_NOT_FOUND); // 404
-        checkResponseCode(SC_NOT_FOUND);
-    }
-
-    @Test
-    public void testGetSignatureContent_INTERNAL_SERVER_ERROR() {
-        ResponseData.INSTANCE.setResponseCode(SC_INTERNAL_SERVER_ERROR); // 500
-        checkResponseCode(SC_INTERNAL_SERVER_ERROR);
-    }
-
-    private void checkResponseCode(int code) {
-        QueryContext<String> queryContext = new QueryContext<>();
-        queryContext.setDraftId(StandardValues.ID);
-        queryContext.setDocumentId(StandardValues.ID);
-        QueryContext<String> stringQueryContext = engine.getDraftService()
-            .getSignatureContent(queryContext);
-        assertNull(stringQueryContext.get());
-    }
-
-    private byte[] getContent() {
-        try {
-            return engine.getDraftService()
-                .getSignatureContentAsync(StandardValues.GUID, StandardValues.GUID).get().get();
-        }
-        catch (InterruptedException | ExecutionException e) {
-            fail();
-            return null;
-        }
+        assertTrue(signatureContentCxt.isFail());
+        assertEquals(code, signatureContentCxt.getServiceError().getResponseCode());
     }
 }

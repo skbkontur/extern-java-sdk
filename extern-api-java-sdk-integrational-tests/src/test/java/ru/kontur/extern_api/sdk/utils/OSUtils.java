@@ -21,32 +21,26 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.testapi;
+package ru.kontur.extern_api.sdk.utils;
 
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import ru.kontur.extern_api.sdk.DefaultExtern;
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
-import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
-import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-/**
- * Just examples.
- */
-public final class ExternTestMethods {
+public final class OSUtils {
 
-    public static TestApi build(ExternEngine ee) {
-        return build(ee.getApiKeyProvider(), ee.getAuthenticationProvider());
+    public static Path open(String ext, byte[] pdf) throws IOException {
+        if (!ext.startsWith(".")) {
+            ext = "." + ext;
+        }
+
+        Path tmp = Files.write(Files.createTempFile("", ext), pdf);
+
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(tmp.toFile());
+        }
+        return tmp;
     }
 
-    public static TestApi build(
-            ApiKeyProvider apiKeyProvider,
-            AuthenticationProvider authenticationProvider
-    ) {
-        return new KonturConfiguredClient(Level.NONE, DefaultExtern.BASE_URL)
-                .setApiKey(apiKeyProvider.getApiKey())
-                .setAuthSid(authenticationProvider.sessionId().getOrThrow())
-                .createApi(TestApi.class);
-    }
 }

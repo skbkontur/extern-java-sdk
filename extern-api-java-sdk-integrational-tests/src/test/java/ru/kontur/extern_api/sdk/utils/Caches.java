@@ -39,9 +39,9 @@ public final class Caches {
         ));
     }
 
-    public static ObjectCache<byte[]> createDocumentCache(Gson gson, String accountId) {
+    public static ObjectCache<byte[]> createDocumentCache(Gson gson, String accountId, String prefix) {
         return UncheckedSupplier.get(() -> new TemporaryObjectCache<>(
-                "encrypted-document-",
+                prefix + "-document-",
                 ".json",
                 accountId,
                 gson,

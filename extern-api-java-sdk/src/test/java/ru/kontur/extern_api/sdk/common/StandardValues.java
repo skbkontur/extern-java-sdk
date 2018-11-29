@@ -56,6 +56,8 @@ public interface StandardValues {
     String DATE = "2018-04-03T06:24:33Z";
     String ID = "00000000-0000-0000-0000-000000000000";
     UUID GUID = new UUID(0, 0);
+    String TRACE_ID = "[T-aaaaaaaa(-)]";
+    String TRACK_ID = "aaaaaaaaaaaaaaaaaaaa";
 
     static Date standardDate() {
         return PublicDateFormat.parseDateTime(DATE);

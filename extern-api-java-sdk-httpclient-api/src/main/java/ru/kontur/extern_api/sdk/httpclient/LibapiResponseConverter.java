@@ -28,6 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
@@ -63,7 +65,6 @@ public final class LibapiResponseConverter implements ResponseConverter {
                 response.headers().toMultimap(),
                 errorInfo
         );
-
     }
 
     private ErrorInfo errorInfoFromBody(Gson gson, String body) {
@@ -77,7 +78,8 @@ public final class LibapiResponseConverter implements ResponseConverter {
 
         } catch (JsonSyntaxException | NullPointerException e) {
             errorInfo = new ErrorInfo();
-            errorInfo.setProperties(Collections.singletonMap(e.getClass().getName(), e.getMessage()));
+            errorInfo.setProperties(
+                    Collections.singletonMap(e.getClass().getName(), e.getMessage()));
         }
 
         errorInfo.setId("unknown-error-format");

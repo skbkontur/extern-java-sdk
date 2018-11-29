@@ -67,6 +67,9 @@ public class QueryContextUtils {
 
     public static <T> QueryContext<T> completeCareful(Throwable t) {
         Throwable cause = t.getCause();
+        if (t instanceof ApiException) {
+            return QueryContext.error(t);
+        }
         if (t instanceof CompletionException && cause != null) {
             return QueryContext.error(cause);
         }

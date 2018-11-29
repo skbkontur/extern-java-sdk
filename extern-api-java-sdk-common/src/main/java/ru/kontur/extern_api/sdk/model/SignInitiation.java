@@ -86,4 +86,8 @@ public class SignInitiation {
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
+
+    public boolean needToConfirmSigning() {
+        return requestId != null;
+    }
 }

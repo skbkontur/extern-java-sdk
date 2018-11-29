@@ -31,9 +31,11 @@ package ru.kontur.extern_api.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
@@ -51,7 +53,19 @@ class AccountIT {
 
     @BeforeAll
     static void setUpClass() {
-        accountService = TestSuite.Load().engine.getAccountService();
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+
+        ExternEngine engine = ExternEngineBuilder
+                .createExternEngine(config.getServiceBaseUri())
+                .apiKey(config.getApiKey())
+                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(config.getLogin(), config.getPass())
+                )
+                .doNotUseCryptoProvider()
+                .accountId(config.getAccountId())
+                .build(Level.BODY);
+
+        accountService = engine.getAccountService();
     }
 
     @Test

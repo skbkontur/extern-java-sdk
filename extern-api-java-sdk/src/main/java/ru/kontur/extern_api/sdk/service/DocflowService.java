@@ -71,6 +71,7 @@ public interface DocflowService {
      * @return ДО
      * @see Docflow
      */
+    @Deprecated
     QueryContext<Docflow> lookupDocflow(QueryContext<?> cxt);
 
     CompletableFuture<QueryContext<List<Document>>> getDocumentsAsync(UUID docflowId);
