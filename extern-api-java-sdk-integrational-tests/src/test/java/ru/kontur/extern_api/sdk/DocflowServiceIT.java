@@ -119,11 +119,11 @@ class DocflowServiceIT {
         return new TestPack(qcs);
     }
 
-    private static Stream<QueryContext<Docflow>> getDocflowLazy() {
+    private static Stream<QueryContext<Docflow>> docflowLazyFactory() {
         return testPack.get().testDocflows.stream();
     }
 
-    private static Stream<QueryContext<Docflow>> getDocflow() {
+    private static Stream<QueryContext<Docflow>> docflowFactory() {
         return getTestPack(engine).testDocflows.stream();
     }
 
@@ -148,7 +148,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get docflow by id")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetDocflow(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
         Docflow returned = docflowService
@@ -165,7 +165,7 @@ class DocflowServiceIT {
     @Disabled("KA-1871")
     @ParameterizedTest
     @DisplayName("get docflow documents")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetDocuments(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -183,7 +183,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("lookup single document")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testLookupDocument(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -207,7 +207,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("lookup document description")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testLookupDocumentDescription(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -232,7 +232,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get encrypted document content")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetEncryptedContent(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -267,7 +267,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get decrypted document content")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetDecryptedContent(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -299,7 +299,7 @@ class DocflowServiceIT {
     @Disabled("@see DraftWithCloudCertIT")
     @ParameterizedTest
     @DisplayName("decrypt document content in cloud")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testDecryptContent(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -331,7 +331,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get document signatures")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetSignatures(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -355,7 +355,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get document single signature")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetSignature(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -386,7 +386,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("get document signature content")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGetSignatureContent(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -415,7 +415,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("two options for generate reply works")
-    @MethodSource("getDocflowLazy")
+    @MethodSource("docflowLazyFactory")
     void testGenerateReply(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -459,7 +459,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("send reply documents by choosing its type")
-    @MethodSource("getDocflow")
+    @MethodSource("docflowFactory")
     void testSendOneReply(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -503,7 +503,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("send reply document by choosing its type with cloud cert")
-    @MethodSource("getDocflow")
+    @MethodSource("docflowFactory")
     void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -553,7 +553,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("send all replies for document by choosing type")
-    @MethodSource("getDocflow")
+    @MethodSource("docflowFactory")
     void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
         Docflow docflow = docflowCxt.get();
 
@@ -602,7 +602,7 @@ class DocflowServiceIT {
 
     @ParameterizedTest
     @DisplayName("search docflows filtered")
-    @MethodSource("getDocflow")
+    @MethodSource("docflowFactory")
     void testGetDocflows(QueryContext<Docflow> df) {
         CompanyGeneral company = engine.getOrganizationService()
                 .lookupAsync(df.get().getOrganizationId())
@@ -629,7 +629,7 @@ class DocflowServiceIT {
 
     @Disabled("print it with decrypt")
     @ParameterizedTest
-    @MethodSource("getDocflow")
+    @MethodSource("docflowFactory")
     void testPrintFromDocflows(QueryContext<Docflow> docflowCxt) {
         DocumentContents dc = docflowCxt.getDocumentContents();
 

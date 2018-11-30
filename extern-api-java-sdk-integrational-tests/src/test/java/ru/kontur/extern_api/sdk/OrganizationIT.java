@@ -57,7 +57,7 @@ class OrganizationIT{
     }
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         this.companyId = createOrFindOrganisation();
         assertNotNull(companyId);
     }

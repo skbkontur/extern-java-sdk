@@ -91,31 +91,31 @@ class DraftServiceIT {
         tests.forEach(DraftTestPack::createNewEmptyDraftIfNecessary);
     }
 
-    private static Stream<UUID> getNewDraftId() {
+    private static Stream<UUID> newDraftIdFactory() {
         return tests.stream().map(DraftTestPack::createDraft);
     }
 
-    private static Stream<Draft> getEmptyDraft() {
+    private static Stream<Draft> emptyDraftFactory() {
         return tests.stream().map(DraftTestPack::emptyDraft);
     }
 
-    private static Stream<Draft> getDraftWithDocument() {
+    private static Stream<Draft> draftWithDocumentFactory() {
         return tests.stream().map(DraftTestPack::draftWithDocument);
     }
 
-    private static Stream<Draft> getNewDraftWithDocument() {
+    private static Stream<Draft> newDraftWithDocumentFactory() {
         return tests.stream().map(DraftTestPack::newDraftWithDocument);
     }
 
-    private static Stream<Draft> getDraftWithSignedDocument() {
+    private static Stream<Draft> draftWithSignedDocumentFactory() {
         return tests.stream().map(DraftTestPack::draftWithSignedDocument);
     }
 
-    private static Stream<Pair<Draft, DraftDocument>> getAddDocumentPack() {
+    private static Stream<Pair<Draft, DraftDocument>> addDocumentPackFactory() {
         return tests.stream().map(DraftTestPack::addDocumentPack);
     }
 
-    private static Stream<Pair<Draft, DraftDocument>> getAddDocumentNoFnsPack() {
+    private static Stream<Pair<Draft, DraftDocument>> addDocumentNoFnsPackFactory() {
         return tests.stream()
                 .map(DraftTestPack::addDocumentNoFnsPack)
                 .filter(Objects::nonNull);
@@ -129,7 +129,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("create")
-    @MethodSource({"getNewDraftId"})
+    @MethodSource({"newDraftIdFactory"})
     void testCreateDraft(UUID draftId) {
 
         assertNotNull(draftId);
@@ -143,9 +143,9 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("get")
     @MethodSource({
-            "getEmptyDraft",
-            "getDraftWithDocument",
-            "getDraftWithSignedDocument"})
+            "emptyDraftFactory",
+            "draftWithDocumentFactory",
+            "draftWithSignedDocumentFactory"})
     void testGetDraft(Draft draft) {
 
         Draft found = engine.getDraftService()
@@ -167,9 +167,9 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("delete")
     @MethodSource({
-            "getEmptyDraft",
-            "getDraftWithDocument",
-            "getDraftWithSignedDocument"})
+            "emptyDraftFactory",
+            "draftWithDocumentFactory",
+            "draftWithSignedDocumentFactory"})
     void testDeleteDraft(Draft draft) {
 
         UUID id = draft.getId();
@@ -190,9 +190,9 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("get meta")
     @MethodSource({
-            "getEmptyDraft",
-            "getDraftWithDocument",
-            "getDraftWithSignedDocument"})
+            "emptyDraftFactory",
+            "draftWithDocumentFactory",
+            "draftWithSignedDocumentFactory"})
     void testGetDraftMeta(Draft draft) {
 
         DraftMeta draftMeta = engine.getDraftService()
@@ -214,9 +214,9 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("update meta")
     @MethodSource({
-            "getEmptyDraft",
-            "getDraftWithDocument",
-            "getDraftWithSignedDocument"})
+            "emptyDraftFactory",
+            "draftWithDocumentFactory",
+            "draftWithSignedDocumentFactory"})
     void testUpdateDraftMeta(Draft draft) {
 
         DraftMeta draftMeta = engine.getDraftService()
@@ -242,7 +242,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("add decrypted document")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testAddDecryptedDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         assertNotNull(addDocumentPack.second);
@@ -256,7 +256,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("delete document")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testDeleteDocument(
             Pair<Draft, DraftDocument> addDocumentPack) {
 
@@ -276,7 +276,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("get document")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testGetDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DraftDocument draftDocument = addDocumentPack.second;
@@ -310,7 +310,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("update document")
-    @MethodSource({"getAddDocumentNoFnsPack"})
+    @MethodSource({"addDocumentNoFnsPackFactory"})
     void testUpdateDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DocumentContents newContents = new DocumentContents();
@@ -333,7 +333,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("print document")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testPrintDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         byte[] pdf = engine.getDraftService()
@@ -354,7 +354,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("get decrypted document content")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testGetDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         QueryContext<byte[]> decrypted = engine.getDraftService()
@@ -374,7 +374,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("update decrypted document content")
-    @MethodSource({"getAddDocumentNoFnsPack"})
+    @MethodSource({"addDocumentNoFnsPackFactory"})
     void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         QueryContext update = engine.getDraftService()
@@ -394,7 +394,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("get encrypted document content")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testGetEncryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         engine.getDraftService().prepareAsync(addDocumentPack.first.getId())
@@ -418,7 +418,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("get document signature")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testGetSignatureContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         // after prepare?
@@ -440,7 +440,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("update document signature")
-    @MethodSource({"getAddDocumentPack"})
+    @MethodSource({"addDocumentPackFactory"})
     void testUpdateSignature(Pair<Draft, DraftDocument> addDocumentPack) {
 
         byte[] docContent = engine.getDraftService()
@@ -471,7 +471,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("command \"Check\"")
-    @MethodSource({"getNewDraftWithDocument"})
+    @MethodSource({"newDraftWithDocumentFactory"})
     void testCheck(Draft draft) {
 
         QueryContext<CheckResultData> checkResult = engine.getDraftService()
@@ -488,7 +488,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("command \"Prepare\"")
-    @MethodSource({"getNewDraftWithDocument"})
+    @MethodSource({"newDraftWithDocumentFactory"})
     void testPrepare(Draft draft) {
 
         QueryContext<PrepareResult> prepareResult = engine.getDraftService()
@@ -508,7 +508,7 @@ class DraftServiceIT {
      */
     @ParameterizedTest
     @DisplayName("command \"Send\"")
-    @MethodSource({"getDraftWithDocument"})
+    @MethodSource({"newDraftWithDocumentFactory"})
     void testSend(Draft draft) {
 
         QueryContext<Docflow> send = engine.getDraftService()
