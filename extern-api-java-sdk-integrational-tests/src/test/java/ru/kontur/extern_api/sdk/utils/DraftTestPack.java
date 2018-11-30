@@ -108,44 +108,44 @@ public class DraftTestPack {
                 .get());
     }
 
-    public QueryContext<UUID> createDraftCxtFactory() {
-        return getCreateDraftCxt();
+    public UUID createDraft() {
+        return getCreateDraftCxt().get();
     }
 
-    public QueryContext<Draft> emptyDraftCxtFactory() {
-        return getEmptyDraft();
+    public Draft emptyDraft() {
+        return getEmptyDraft().get();
     }
 
-    public QueryContext<Draft> draftWithDocumentCxtFactory() {
+    public Draft draftWithDocument() {
         addDocument();
-        return getDraft();
+        return getDraft().get();
 
     }
 
-    public QueryContext<Draft> newDraftWithDocumentCxtFactory() {
+    public Draft newDraftWithDocument() {
         createNewEmptyDraft();
         addDocument();
-        return getDraft();
+        return getDraft().get();
     }
 
-    public QueryContext<Draft> draftWithSignedDocumentCxtFactory() {
+    public Draft draftWithSignedDocument() {
         DraftDocument document = addDocument().get();
         signDocument(document.getId());
-        return getDraft();
+        return getDraft().get();
     }
 
-    public Pair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentPackFactory() {
+    public Pair<Draft, DraftDocument> addDocumentPack() {
         return new Pair<>(
-                getEmptyDraft(), addDocument());
+                getEmptyDraft().get(), addDocument().get());
     }
 
-    public Pair<QueryContext<Draft>, QueryContext<DraftDocument>> addDocumentNoFnsPackFactory() {
+    public Pair<Draft, DraftDocument> addDocumentNoFnsPack() {
         if (!(meta.getRecipient() instanceof FnsRecipient)) {
             return null;
         }
 
         return new Pair<>(
-                getEmptyDraft(), addDocument());
+                getEmptyDraft().get(), addDocument().get());
 
     }
 }

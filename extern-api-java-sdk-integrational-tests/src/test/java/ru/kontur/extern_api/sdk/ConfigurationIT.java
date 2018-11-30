@@ -51,15 +51,15 @@ class ConfigurationIT {
 
     @Test
     @DisplayName("share same sid across all services")
-    void shareSameSid() throws Exception {
+    void shareSameSid() {
 
         ExternEngine engine = newEngine();
 
         AccountService accountService = engine.getAccountService();
-        accountService.acquireAccountsAsync().get().getOrThrow();
+        accountService.acquireAccountsAsync().join().getOrThrow();
 
         engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
-        accountService.acquireAccountsAsync().get().getOrThrow();
+        accountService.acquireAccountsAsync().join().getOrThrow();
 
         ApiException apiException = Assertions.assertThrows(ApiException.class,
                 () -> engine.getAccountService().acquireAccountsAsync().get().getOrThrow()

@@ -55,17 +55,17 @@ class AccountIT {
     private static final String ORG_NAME = "Рога и Копыта";
 
     @Test
-    void acquireAccounts() throws Exception {
+    void acquireAccounts() {
         QueryContext<AccountList> cxt = accountService
                 .acquireAccountsAsync()
-                .get()
+                .join()
                 .ensureSuccess();
 
         assertFalse(cxt.get().getAccounts().isEmpty());
     }
 
     @Test
-    void createAccount() throws Exception {
+    void createAccount() {
         CreateAccountRequest createAccountRequest = new CreateAccountRequest()
                 .inn(INN)
                 .kpp(KPP)
@@ -73,7 +73,7 @@ class AccountIT {
 
         QueryContext<Account> cxt = accountService
                 .createAccountAsync(createAccountRequest)
-                .get()
+                .join()
                 .ensureSuccess();
 
         checkFields(cxt.get(), INN, KPP, ORG_NAME);
@@ -81,10 +81,10 @@ class AccountIT {
 
 
     @Test
-    void acquireAccount() throws Exception {
+    void acquireAccount(){
         QueryContext<AccountList> cxt = accountService
                 .acquireAccountsAsync()
-                .get()
+                .join()
                 .ensureSuccess();
 
         assertFalse(cxt.get().getAccounts().isEmpty());
@@ -93,7 +93,7 @@ class AccountIT {
 
         QueryContext<Account> accCxt = accountService
                 .getAccountAsync(account.getId().toString())
-                .get()
+                .join()
                 .ensureSuccess();
 
         checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());

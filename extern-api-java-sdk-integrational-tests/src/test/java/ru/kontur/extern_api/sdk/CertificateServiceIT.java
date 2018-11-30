@@ -59,11 +59,11 @@ class CertificateServiceIT{
 
 
     @Test
-    void getCertificatesTest() throws Exception {
+    void getCertificatesTest() {
 
         CertificateList certificateList = certificateService
                 .getCertificateListAsync()
-                .get()
+                .join()
                 .ensureSuccess()
                 .get();
 

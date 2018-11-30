@@ -35,7 +35,6 @@ import ru.kontur.extern_api.sdk.portal.CertificatesClient;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 @DisplayName("portal services tests")
 class PortalPackageIT {
@@ -64,10 +63,10 @@ class PortalPackageIT {
 
         @Test
         @DisplayName("search certificates")
-        void searchCertificates() throws Exception {
+        void searchCertificates() {
 
             SearchQuery query = SearchQuery.equal("thumbprint", configuration.getThumbprint());
-            CertificateSearchResult search = certClient.searchCertificates(0, 10, query).get();
+            CertificateSearchResult search = certClient.searchCertificates(0, 10, query).join();
 
             Assertions.assertEquals(1, search.getTotalHits());
             Assertions.assertEquals(configuration.getThumbprint(),

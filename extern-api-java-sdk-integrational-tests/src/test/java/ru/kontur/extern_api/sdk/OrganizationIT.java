@@ -64,16 +64,16 @@ class OrganizationIT{
 
     @AfterEach
     void tearDown() throws Exception {
-        engine.getOrganizationService().deleteAsync(companyId).get();
+        engine.getOrganizationService().deleteAsync(companyId).join();
         Thread.sleep(100);
     }
 
     @Test
-    void testLookup() throws Exception {
+    void testLookup() {
 
         QueryContext<Company> companyCxt = engine.getOrganizationService()
                 .lookupAsync(companyId)
-                .get()
+                .join()
                 .ensureSuccess();
 
         assertCompanyEquals(companyCxt.get(), COMPANY);
@@ -84,7 +84,8 @@ class OrganizationIT{
         String newName = "Emerald";
         Company company = engine.getOrganizationService()
                 .updateAsync(companyId, newName)
-                .join().getOrThrow();
+                .join()
+                .getOrThrow();
 
         Assertions.assertEquals(company.getGeneral().getName(), newName);
     }
@@ -112,7 +113,7 @@ class OrganizationIT{
                 .getCompanies();
     }
 
-    private UUID createOrFindOrganisation() throws Exception {
+    private UUID createOrFindOrganisation() {
         List<Company> companies = searchOrganisations(likeGiven(COMPANY));
 
         if (companies != null && !companies.isEmpty()) {

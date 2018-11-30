@@ -92,11 +92,11 @@ class UsnIT {
         );
     }
 
-    private void checkUsn(int version, UsnServiceContractInfo usn) throws Exception {
+    private void checkUsn(int version, UsnServiceContractInfo usn) {
 
         String draftId = draftService
                 .createAsync(draftMeta)
-                .get()
+                .join()
                 .ensureSuccess()
                 .get()
                 .getId()
@@ -104,12 +104,12 @@ class UsnIT {
 
         draftService.createAndBuildDeclarationAsync(draftId, version, usn)
                 .thenApply(QueryContext::getOrThrow)
-                .get();
+                .join();
 
         draftService.checkAsync(draftId)
                 .thenApply(QueryContext::getOrThrow)
                 .thenAccept(UsnIT::assertCheckHasNoErrors)
-                .get();
+                .join();
     }
 
 
