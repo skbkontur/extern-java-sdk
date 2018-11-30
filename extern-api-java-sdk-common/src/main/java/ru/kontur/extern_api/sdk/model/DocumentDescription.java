@@ -24,6 +24,9 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * <p>
  * Класс содержит данные, описывающие документ, для отправки.
@@ -36,6 +39,7 @@ public class DocumentDescription {
     private String type = null;
     private String filename = null;
     private String contentType = null;
+    private Map<String, String> properties = Collections.emptyMap();
 
     public DocumentDescription type(String type) {
         this.type = type;
@@ -122,6 +126,10 @@ public class DocumentDescription {
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
     /**

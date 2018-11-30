@@ -107,13 +107,32 @@ public class DocflowFilter implements Filter {
         return this;
     }
 
+    public DocflowFilter periodFrom(Date periodFrom) {
+        filterMap.put("periodFrom", formatDatetime(periodFrom));
+        return this;
+    }
+
+    public DocflowFilter periodTo(Date periodTo) {
+        filterMap.put("periodTo", formatDatetime(periodTo));
+        return this;
+    }
+
+    public DocflowFilter knd(String knd) {
+        filterMap.put("knd", knd);
+        return this;
+    }
+
+    public DocflowFilter knd(int knd) {
+        return knd(String.valueOf(knd));
+    }
+
     public DocflowFilter type(DocflowType type) {
         filterMap.put("type", type.getName());
         return this;
     }
 
     /**
-     * @deprecated it's not recommended use raw string types in a search query
+     * @deprecated it's a unreliable solution to use raw string types in a search query
      */
     @Deprecated
     public DocflowFilter type(String rawType) {
