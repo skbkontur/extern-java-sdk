@@ -39,7 +39,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
@@ -55,7 +55,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 class UsnIT {
 
     private static DraftService ds;
-    private static DraftMeta draftMeta;
+    private static CreateDraftMeta draftMeta;
 
     @BeforeAll
     static void init() {
@@ -76,7 +76,7 @@ class UsnIT {
                 .stream(TestUtils.getTestData(cert))
                 .filter(td -> td.getClientInfo().getRecipient().getIfnsCode() != null)
                 .findAny()
-                .map(TestUtils::toDraftMeta)
+                .map(TestUtils::toCreateDraftMeta)
                 .orElseThrow(() -> new RuntimeException("no suitable data for usn tests"));
     }
 
@@ -104,7 +104,7 @@ class UsnIT {
     private void checkUsn(int version, UsnServiceContractInfo usn) throws Exception {
 
         String draftId = ds
-                .create(new QueryContext<>().setDraftMeta(draftMeta))
+                .create(new QueryContext<>().setCreateDraftMeta(draftMeta))
                 .getOrThrow()
                 .toString();
 

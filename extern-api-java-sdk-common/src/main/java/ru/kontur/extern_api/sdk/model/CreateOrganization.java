@@ -24,72 +24,36 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
- * <p>
- *     Класс содержит информацию об организации
- * </p>
- * @author Aleksey Sukhorukov
+ * Класс содержит информацию об организации
  */
-public class Organization {
+public class CreateOrganization {
 
-    private String inn;
-    private String name;
+    private final String inn;
     private final OrganizationInfo organization;
 
-    public Organization(String inn, String kpp, String name) {
+    public CreateOrganization(String inn, String kpp) {
         this.inn = inn;
-        this.name = name;
         this.organization = new OrganizationInfo(kpp);
     }
 
     /**
-     * <p>Возвращает ИНН</p>
-     * @return ИНН
+     * Возвращает ИНН
      */
-    public String getInn() { return inn; }
-
-    /**
-     * <p>Устанавливает ИНН</p>
-     * @param inn ИНН
-     */
-    public void setInn(String inn) {
-        this.inn = inn;
+    public String getInn() {
+        return inn;
     }
 
     /**
-     * <p>Возвращает название/p>
-     * @return название
-     */
-    public String getName() { return name; }
-
-    /**
-     * <p>Устанавливает название</p>
-     * @param name название
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * <p>Возвращает КПП.</p>
-     * @return КПП
+     * Возвращает КПП
      */
     public String getKpp() {
         return organization.getKpp();
     }
 
-    /**
-     * <p>Устанавливает КПП.</p>
-     * @param kpp КПП
-     */
-    public void setKpp(String kpp) {
-        this.organization.setKpp(kpp);
-    }
 
     public static class OrganizationInfo {
-        private String kpp;
+        private final String kpp;
         
         public OrganizationInfo(String kpp) {
             this.kpp = kpp;
@@ -97,10 +61,6 @@ public class Organization {
         
         public String getKpp() {
             return kpp;
-        }
-
-        public void setKpp(String kpp) {
-            this.kpp = kpp;
         }
     }
 }

@@ -26,33 +26,29 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * <p>Класс содержит информацию об отправителе черновика</p>
- * @author Aleksey Sukhorukov
+ * Класс содержит информацию об отправителе черновика
  */
-public class Sender {
+public class CreateSender {
 
 	private String inn;
 	private String kpp;
-	private String name;
 	private Certificate certificate;
 	private String ipaddress;
 
 	private String thumbprint;
 
-	public Sender() {
+	public CreateSender() {
 	}
 
-	public Sender(String inn, String kpp, String name, String certificate, String ipaddress) {
+	public CreateSender(String inn, String kpp, String certificate, String ipaddress) {
 		this.inn = inn;
 		this.kpp = kpp;
-		this.name = name;
 		this.certificate = new Certificate(certificate);
 		this.ipaddress = ipaddress;
 	}
 
 	/**
 	 * Возвращает ИНН
-	 * @return ИНН
 	 */
 	public String getInn() {
 		return inn;
@@ -68,7 +64,6 @@ public class Sender {
 
 	/**
 	 * Возвращает КПП
-	 * @return КПП
 	 */
 	public String getKpp() {
 		return kpp;
@@ -83,24 +78,7 @@ public class Sender {
 	}
 
 	/**
-	 * Возвращает название организации
-	 * @return название организации
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Устанавливает название организации
-	 * @param name название организации
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * Возвращает сертификат в кодировке BASE64
-	 * @return сертификат в кодировке BASE64
 	 */
 	public String getCertificate() {
 		return certificate.content;
@@ -116,7 +94,6 @@ public class Sender {
 
 	/**
 	 * Возвращает IP адрес отправителя
-	 * @return IP адрес отправителя
 	 */
 	public String getIpaddress() {
 		return ipaddress;
@@ -132,7 +109,6 @@ public class Sender {
 
 	/**
 	 * Возвращает отпечаток сертификата отправителя
-	 * @return отпечаток сертификата отправителя
 	 */
 	public String getThumbprint() {
 		return thumbprint;

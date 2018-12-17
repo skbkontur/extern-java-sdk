@@ -56,10 +56,10 @@ import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -679,7 +679,7 @@ class DocflowServiceIT {
                 Assertions.fail("No a test document");
             }
 
-            DraftMeta dm = TestUtils.toDraftMeta(td);
+            CreateDraftMeta dm = TestUtils.toCreateDraftMeta(td);
             String path = td.getDocs()[0];
             DocType docType = DocType.getDocType(dm.getRecipient());
 
@@ -703,7 +703,7 @@ class DocflowServiceIT {
     }
 
     private static CompletableFuture<QueryContext<DraftDocument>> addDocument(
-            DraftMeta meta,
+            CreateDraftMeta meta,
             TestData data,
             UUID draftId
     ) {

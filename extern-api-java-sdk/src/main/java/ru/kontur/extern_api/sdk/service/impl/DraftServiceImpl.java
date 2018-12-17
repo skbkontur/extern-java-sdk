@@ -33,16 +33,17 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
+import ru.kontur.extern_api.sdk.model.CreateOrganization;
+import ru.kontur.extern_api.sdk.model.CreateSender;
 import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
@@ -62,23 +63,23 @@ public class DraftServiceImpl implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Draft>> createAsync(DraftMeta draftMeta) {
+    public CompletableFuture<QueryContext<Draft>> createAsync(CreateDraftMeta draftMeta) {
         return api.create(acc.accountId(), draftMeta)
                 .thenApply(contextAdaptor(QueryContext.DRAFT));
     }
 
     @Override
     public CompletableFuture<QueryContext<UUID>> createAsync(
-            Sender sender,
+            CreateSender sender,
             Recipient recipient,
-            Organization payer) {
-        return createAsync(new DraftMeta(sender, recipient, payer))
+            CreateOrganization payer) {
+        return createAsync(new CreateDraftMeta(sender, recipient, payer))
                 .thenApply(cxt -> cxt.map(QueryContext.DRAFT_ID, Draft::getId));
     }
 
     @Override
     public QueryContext<UUID> create(QueryContext<?> parent) {
-        QueryContext<Draft> join = join(createAsync(parent.require(QueryContext.DRAFT_META)));
+        QueryContext<Draft> join = join(createAsync(parent.require(QueryContext.CREATE_DRAFT_META)));
         return join.map(QueryContext.DRAFT_ID, Draft::getId);
     }
 
@@ -133,7 +134,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             UUID draftId,
-            DraftMeta draftMeta) {
+            CreateDraftMeta draftMeta) {
         return api.updateMeta(acc.accountId(), draftId, draftMeta)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_META));
     }
@@ -141,7 +142,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             String draftId,
-            DraftMeta draftMeta) {
+            CreateDraftMeta draftMeta) {
         return updateDraftMetaAsync(UUID.fromString(draftId), draftMeta);
     }
 
@@ -149,7 +150,7 @@ public class DraftServiceImpl implements DraftService {
     public QueryContext<DraftMeta> updateDraftMeta(QueryContext<?> parent) {
         return join(updateDraftMetaAsync(
                 parent.<UUID>require(QueryContext.DRAFT_ID),
-                parent.require(QueryContext.DRAFT_META)
+                parent.require(QueryContext.CREATE_DRAFT_META)
         ));
     }
 

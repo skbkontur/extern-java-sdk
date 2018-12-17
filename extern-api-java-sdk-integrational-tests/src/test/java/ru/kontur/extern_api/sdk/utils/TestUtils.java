@@ -34,15 +34,7 @@ import java.util.UUID;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
-import ru.kontur.extern_api.sdk.model.ClientInfo;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
-import ru.kontur.extern_api.sdk.model.Sender;
-import ru.kontur.extern_api.sdk.model.TestData;
-import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
@@ -55,33 +47,33 @@ public class TestUtils {
         return data;
     }
 
-    public static DraftMeta toDraftMeta(TestData td) {
+    public static CreateDraftMeta toCreateDraftMeta(TestData td) {
         String senderIp = td.getClientInfo().getSender().getIpAddress();
-        DraftMeta dm = new DraftMeta();
+        CreateDraftMeta dm = new CreateDraftMeta();
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new Organization(org.getInn(), org.getKpp()));
+        dm.setPayer(new CreateOrganization(org.getInn(), org.getKpp()));
 
-        ClientInfo.Recipient recipient = clientInfo.getRecipient();
+        ClientInfo.Recipient clientInfoRecipient = clientInfo.getRecipient();
 
-        Optional.of(recipient)
+        Optional.of(clientInfoRecipient)
                 .map(ClientInfo.Recipient::getTogsCode)
                 .filter(s -> !s.isEmpty())
                 .map(TogsRecipient::new)
                 .ifPresent(dm::setRecipient);
 
-        Optional.of(recipient)
+        Optional.of(clientInfoRecipient)
                 .map(ClientInfo.Recipient::getIfnsCode)
                 .filter(s -> !s.isEmpty())
                 .map(FnsRecipient::new)
                 .ifPresent(dm::setRecipient);
 
-        ClientInfo.Sender sender = clientInfo.getSender();
-        dm.setSender(new Sender(
-                sender.getInn(),
-                sender.getKpp(),
-                sender.getCertificate(),
+        ClientInfo.Sender clientInfoSender = clientInfo.getSender();
+        dm.setSender(new CreateSender(
+                clientInfoSender.getInn(),
+                clientInfoSender.getKpp(),
+                clientInfoSender.getCertificate(),
                 senderIp
         ));
         return dm;

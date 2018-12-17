@@ -41,19 +41,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
@@ -73,14 +66,14 @@ class DraftServiceIT {
     static class TestPack {
 
         final TestData data;
-        final DraftMeta meta;
+        final CreateDraftMeta meta;
 
         final Lazy<QueryContext<UUID>> draft = Lazy.of(this::newDraft);
         final Lazy<QueryContext<UUID>> withDocument = Lazy.of(this::newDraftWithDoc);
 
         TestPack(TestData data) {
             this.data = data;
-            this.meta = TestUtils.toDraftMeta(data);
+            this.meta = TestUtils.toCreateDraftMeta(data);
         }
 
         private QueryContext<UUID> newDraft() {
@@ -222,15 +215,20 @@ class DraftServiceIT {
                     .get()
                     .getOrThrow();
 
+            Sender currentSender = draftMeta.getSender();
+            Organization currentPayer = draftMeta.getPayer();
             String ip = "8.8.8.8";
-            draftMeta.getSender().setIpaddress(ip);
+            CreateDraftMeta newDraftMeta = new CreateDraftMeta(
+                    new CreateSender(currentSender.getInn(),currentSender.getKpp(), currentSender.getCertificate(), ip),
+                    draftMeta.getRecipient(),
+                    new CreateOrganization(currentPayer.getInn(), currentPayer.getKpp()));
 
-            DraftMeta newDraftMeta = draftService
-                    .updateDraftMetaAsync(draftId, draftMeta)
+            DraftMeta updatedDraftMeta = draftService
+                    .updateDraftMetaAsync(draftId, newDraftMeta)
                     .get()
                     .getOrThrow();
 
-            assertEquals(ip, newDraftMeta.getSender().getIpaddress());
+            assertEquals(ip, updatedDraftMeta.getSender().getIpaddress());
         }
 
     }

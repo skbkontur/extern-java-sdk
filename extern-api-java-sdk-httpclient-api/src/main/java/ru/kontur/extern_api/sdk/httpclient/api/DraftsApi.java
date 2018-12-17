@@ -38,6 +38,7 @@ import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
 import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -63,7 +64,7 @@ public interface DraftsApi {
     @POST("v1/{accountId}/drafts")
     CompletableFuture<ApiResponse<Draft>> create(
             @Path("accountId") UUID accountId,
-            @Body DraftMeta clientInfo
+            @Body CreateDraftMeta clientInfo
     );
 
     /**
@@ -108,13 +109,13 @@ public interface DraftsApi {
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
-     * @param newMeta DraftMeta draft meta data
+     * @param newMeta CreateDraftMeta draft meta data
      */
     @PUT("v1/{accountId}/drafts/{draftId}/meta")
     CompletableFuture<ApiResponse<DraftMeta>> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Body DraftMeta newMeta
+            @Body CreateDraftMeta newMeta
     );
 
     /**
