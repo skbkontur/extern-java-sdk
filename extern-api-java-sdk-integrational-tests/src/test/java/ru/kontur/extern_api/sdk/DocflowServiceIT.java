@@ -50,35 +50,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.DocflowPageItem;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
-import ru.kontur.extern_api.sdk.model.DocflowType;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SenderIp;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
@@ -679,7 +657,7 @@ class DocflowServiceIT {
                 Assertions.fail("No a test document");
             }
 
-            CreateDraftMeta dm = TestUtils.toCreateDraftMeta(td);
+            DraftMetaRequest dm = TestUtils.toDraftMetaRequest(td);
             String path = td.getDocs()[0];
             DocType docType = DocType.getDocType(dm.getRecipient());
 
@@ -703,7 +681,7 @@ class DocflowServiceIT {
     }
 
     private static CompletableFuture<QueryContext<DraftDocument>> addDocument(
-            CreateDraftMeta meta,
+            DraftMetaRequest meta,
             TestData data,
             UUID draftId
     ) {

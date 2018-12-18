@@ -24,40 +24,35 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
-import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.model.Sender;
-
 
 /**
  *  Класс содержит информацию для создания черновике
  */
-public class CreateDraftMeta {
+public class DraftMetaRequest {
 
-    private CreateSender sender;
+    private SenderRequest sender;
     private Recipient recipient;
-    private CreateOrganization payer;
+    private OrganizationRequest payer;
 
-    public CreateDraftMeta() {
+    public DraftMetaRequest() {
     }
 
-    public CreateDraftMeta(CreateSender sender, Recipient recipient, CreateOrganization payer) {
+    public DraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer) {
         this.sender = sender;
         this.recipient = recipient;
         this.payer = payer;
     }
 
     /**
-     * Возвращает объект {@link CreateSender}, описывающий отправителя документа
+     * Возвращает объект {@link SenderRequest}, описывающий отправителя документа
      */
-    public CreateSender getSender() { return sender; }
+    public SenderRequest getSender() { return sender; }
 
     /**
-     * Устанавливает объект {@link CreateSender}, описывающий отправителя документа
+     * Устанавливает объект {@link SenderRequest}, описывающий отправителя документа
      * @param sender объект, описывающий отправителя документа
      */
-    public void setSender(CreateSender sender) {
+    public void setSender(SenderRequest sender) {
         this.sender = sender;
     }
 
@@ -75,15 +70,15 @@ public class CreateDraftMeta {
     }
 
     /**
-     * Возвращает объект {@link CreateOrganization}, описывающий организацию, за которую производится сдача документа
+     * Возвращает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
      */
-    public CreateOrganization getPayer() { return payer; }
+    public OrganizationRequest getPayer() { return payer; }
 
     /**
-     * Устанавливает объект {@link CreateOrganization}, описывающий организацию, за которую производится сдача документа
-     * @param payer объект {@link CreateOrganization}, описывающий организацию, за которую производится сдача документа
+     * Устанавливает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
+     * @param payer объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
      */
-    public void setPayer(CreateOrganization payer) {
+    public void setPayer(OrganizationRequest payer) {
         this.payer = payer;
     }
 }

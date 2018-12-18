@@ -28,22 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
-import ru.kontur.extern_api.sdk.model.CreateOrganization;
-import ru.kontur.extern_api.sdk.model.CreateSender;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.TogsRecipient;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.*;
 
 
 /**
@@ -56,15 +41,15 @@ public interface DraftService {
      * <p>POST /v1/{accountId}/drafts</p>
      * Асинхронный метод создает черновик
      *
-     * @param sender отправитель декларации {@link CreateSender}
+     * @param sender отправитель декларации {@link SenderRequest}
      * @param recipient получатель декларации {@link FnsRecipient} | {@link TogsRecipient}
-     * @param organization организация, на которую создана декларация {@link CreateOrganization}
+     * @param organization организация, на которую создана декларация {@link OrganizationRequest}
      * @return идентификатор черновика
      */
     CompletableFuture<QueryContext<UUID>> createAsync(
-            CreateSender sender,
+            SenderRequest sender,
             Recipient recipient,
-            CreateOrganization organization
+            OrganizationRequest organization
     );
 
     /**
@@ -74,7 +59,7 @@ public interface DraftService {
      * @param draftMeta мета-данные черновика
      * @return идентификатор черновика
      */
-    CompletableFuture<QueryContext<Draft>> createAsync(CreateDraftMeta draftMeta);
+    CompletableFuture<QueryContext<Draft>> createAsync(DraftMetaRequest draftMeta);
 
     /**
      * <p>POST /v1/{accountId}/drafts</p>
@@ -82,14 +67,14 @@ public interface DraftService {
      *
      * @param cxt контекст. Должен содержать следующие данные:
      *         <p>- объект мета-данные черновика, полученный с помощью конструктора {@link
-     *         CreateDraftMeta#CreateDraftMeta(CreateSender, Recipient, CreateOrganization)}, где:</p>
+     *         DraftMetaRequest#DraftMetaRequest(SenderRequest, Recipient, OrganizationRequest)}, где:</p>
      *         <ul>
-     *         <li>sender отправитель декларации {@link CreateSender};</li>
+     *         <li>sender отправитель декларации {@link SenderRequest};</li>
      *         <li>recipient получатель декларации {@link FnsRecipient}  | {@link
      *         TogsRecipient};</li>
-     *         <li>organization организация, на которую создана декларация {@link CreateOrganization}.</li>
+     *         <li>organization организация, на которую создана декларация {@link OrganizationRequest}.</li>
      *         </ul>
-     *         <p>Для установки необходимо использовать метод {@link QueryContext#setCreateDraftMeta}.</p>
+     *         <p>Для установки необходимо использовать метод {@link QueryContext#setDraftMetaRequest}.</p>
      * @return идентификатор черновика
      * @deprecated use async method instead
      */
@@ -204,7 +189,7 @@ public interface DraftService {
      */
     CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             UUID draftId,
-            CreateDraftMeta draftMeta
+            DraftMetaRequest draftMeta
     );
 
     /**
@@ -218,7 +203,7 @@ public interface DraftService {
      */
     CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             String draftId,
-            CreateDraftMeta draftMeta
+            DraftMetaRequest draftMeta
     );
 
     /**
@@ -229,7 +214,7 @@ public interface DraftService {
      *         <p>  - индентификатор черновика. Для установки необходимо использовать метод {@link
      *         QueryContext#setDraftId};</p>
      *         <p>  - мета-данные черновика для его создания. Для установки необходимо использовать метод {@link
-     *         QueryContext#setCreateDraftMeta}.</p>
+     *         QueryContext#setDraftMetaRequest}.</p>
      * @return мета-данные черновика
      * @see DraftMeta
      * @deprecated use async method instead

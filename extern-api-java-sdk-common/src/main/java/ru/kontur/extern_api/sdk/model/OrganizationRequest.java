@@ -27,12 +27,12 @@ package ru.kontur.extern_api.sdk.model;
 /**
  * Класс содержит информацию об организации
  */
-public class CreateOrganization {
+public class OrganizationRequest {
 
     private final String inn;
     private final OrganizationInfo organization;
 
-    public CreateOrganization(String inn, String kpp) {
+    public OrganizationRequest(String inn, String kpp) {
         this.inn = inn;
         this.organization = new OrganizationInfo(kpp);
     }

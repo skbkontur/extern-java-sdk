@@ -35,14 +35,13 @@ import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
-import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -168,7 +167,7 @@ public class QueryContext<R> implements Serializable {
     /**
      * Объект "Описание черновика для его создания" {@link DraftMeta}
      */
-    public static final String CREATE_DRAFT_META = "createDraftMeta";
+    public static final String DRAFT_META_REQUEST = "draftMetaRequest";
     /**
      * Режим задержки (отсрочки)
      */
@@ -1056,22 +1055,22 @@ public class QueryContext<R> implements Serializable {
     }
 
     /**
-     * Метод возвращает объект метаданные черновика для его создания {@link CreateDraftMeta}
+     * Метод возвращает объект метаданные черновика для его создания {@link DraftMetaRequest}
      *
      * @return метаданные черновика для его создания
      */
-    public CreateDraftMeta getCreateDraftMeta() {
-        return (CreateDraftMeta) params.get(CREATE_DRAFT_META);
+    public DraftMetaRequest getDraftMetaRequest() {
+        return (DraftMetaRequest) params.get(DRAFT_META_REQUEST);
     }
 
     /**
-     * Метод устанавливает объект метаданные черновика для его создания {@link CreateDraftMeta}
+     * Метод устанавливает объект метаданные черновика для его создания {@link DraftMetaRequest}
      *
-     * @param createDraftMeta объект метаданные черновика для его создания
+     * @param draftMetaRequest объект метаданные черновика для его создания
      * @return контекст
      */
-    public QueryContext<R> setCreateDraftMeta(CreateDraftMeta createDraftMeta) {
-        return set(CREATE_DRAFT_META, createDraftMeta);
+    public QueryContext<R> setDraftMetaRequest(DraftMetaRequest draftMetaRequest) {
+        return set(DRAFT_META_REQUEST, draftMetaRequest);
     }
 
     /**

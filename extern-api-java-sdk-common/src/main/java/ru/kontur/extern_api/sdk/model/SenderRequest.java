@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Класс содержит информацию об отправителе черновика
  */
-public class CreateSender {
+public class SenderRequest {
 
 	private String inn;
 	private String kpp;
@@ -37,10 +37,10 @@ public class CreateSender {
 
 	private String thumbprint;
 
-	public CreateSender() {
+	public SenderRequest() {
 	}
 
-	public CreateSender(String inn, String kpp, String certificate, String ipaddress) {
+	public SenderRequest(String inn, String kpp, String certificate, String ipaddress) {
 		this.inn = inn;
 		this.kpp = kpp;
 		this.certificate = new Certificate(certificate);

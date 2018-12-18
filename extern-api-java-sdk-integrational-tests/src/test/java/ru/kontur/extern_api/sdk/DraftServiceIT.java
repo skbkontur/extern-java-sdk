@@ -66,14 +66,14 @@ class DraftServiceIT {
     static class TestPack {
 
         final TestData data;
-        final CreateDraftMeta meta;
+        final DraftMetaRequest meta;
 
         final Lazy<QueryContext<UUID>> draft = Lazy.of(this::newDraft);
         final Lazy<QueryContext<UUID>> withDocument = Lazy.of(this::newDraftWithDoc);
 
         TestPack(TestData data) {
             this.data = data;
-            this.meta = TestUtils.toCreateDraftMeta(data);
+            this.meta = TestUtils.toDraftMetaRequest(data);
         }
 
         private QueryContext<UUID> newDraft() {
@@ -218,10 +218,10 @@ class DraftServiceIT {
             Sender currentSender = draftMeta.getSender();
             Organization currentPayer = draftMeta.getPayer();
             String ip = "8.8.8.8";
-            CreateDraftMeta newDraftMeta = new CreateDraftMeta(
-                    new CreateSender(currentSender.getInn(),currentSender.getKpp(), currentSender.getCertificate(), ip),
+            DraftMetaRequest newDraftMeta = new DraftMetaRequest(
+                    new SenderRequest(currentSender.getInn(),currentSender.getKpp(), currentSender.getCertificate(), ip),
                     draftMeta.getRecipient(),
-                    new CreateOrganization(currentPayer.getInn(), currentPayer.getKpp()));
+                    new OrganizationRequest(currentPayer.getInn(), currentPayer.getKpp()));
 
             DraftMeta updatedDraftMeta = draftService
                     .updateDraftMetaAsync(draftId, newDraftMeta)

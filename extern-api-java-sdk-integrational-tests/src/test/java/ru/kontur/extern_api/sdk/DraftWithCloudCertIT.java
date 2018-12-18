@@ -35,14 +35,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CreateDraftMeta;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
@@ -142,7 +136,7 @@ class DraftWithCloudCertIT {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("data"));
 
-        CreateDraftMeta dm = TestUtils.toCreateDraftMeta(testData);
+        DraftMetaRequest dm = TestUtils.toDraftMetaRequest(testData);
         dm.getSender().setKpp(certificate.getKpp());
         dm.getSender().setInn(certificate.getInn());
 

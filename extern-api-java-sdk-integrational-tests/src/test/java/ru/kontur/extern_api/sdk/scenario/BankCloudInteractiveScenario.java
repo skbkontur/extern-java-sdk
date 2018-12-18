@@ -46,8 +46,8 @@ import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.CreateOrganization;
-import ru.kontur.extern_api.sdk.model.CreateSender;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
@@ -152,7 +152,7 @@ class BankCloudInteractiveScenario {
     private Docflow sendDraftWithUsn(Account senderAcc)
             throws Exception {
 
-        CreateSender sender = new CreateSender(
+        SenderRequest sender = new SenderRequest(
                 senderAcc.getInn(),
                 senderAcc.getKpp(),
                 senderCertificate.getContent(),
@@ -160,7 +160,7 @@ class BankCloudInteractiveScenario {
 
         Recipient recipient = new FnsRecipient("0087");
 
-        CreateOrganization oPayer = new CreateOrganization(senderAcc.getInn(), senderAcc.getKpp());
+        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp());
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)

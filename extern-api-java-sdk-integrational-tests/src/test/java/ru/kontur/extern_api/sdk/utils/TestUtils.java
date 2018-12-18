@@ -47,13 +47,13 @@ public class TestUtils {
         return data;
     }
 
-    public static CreateDraftMeta toCreateDraftMeta(TestData td) {
+    public static DraftMetaRequest toDraftMetaRequest(TestData td) {
         String senderIp = td.getClientInfo().getSender().getIpAddress();
-        CreateDraftMeta dm = new CreateDraftMeta();
+        DraftMetaRequest dm = new DraftMetaRequest();
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new CreateOrganization(org.getInn(), org.getKpp()));
+        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp()));
 
         ClientInfo.Recipient clientInfoRecipient = clientInfo.getRecipient();
 
@@ -70,7 +70,7 @@ public class TestUtils {
                 .ifPresent(dm::setRecipient);
 
         ClientInfo.Sender clientInfoSender = clientInfo.getSender();
-        dm.setSender(new CreateSender(
+        dm.setSender(new SenderRequest(
                 clientInfoSender.getInn(),
                 clientInfoSender.getKpp(),
                 clientInfoSender.getCertificate(),
