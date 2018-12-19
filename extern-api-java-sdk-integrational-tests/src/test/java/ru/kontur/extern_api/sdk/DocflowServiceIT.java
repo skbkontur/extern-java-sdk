@@ -57,7 +57,7 @@ import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
@@ -604,7 +604,7 @@ class DocflowServiceIT {
     @DisplayName("search docflows filtered")
     @MethodSource("docflowFactory")
     void testGetDocflows(QueryContext<Docflow> df) {
-        CompanyGeneral company = engine.getOrganizationService()
+        OrganizationGeneral company = engine.getOrganizationService()
                 .lookupAsync(df.get().getOrganizationId())
                 .join()
                 .getOrThrow()

@@ -32,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.model.AccountInfo;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -71,7 +72,7 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<UUID>> createAsync(
             Sender sender,
             Recipient recipient,
-            Organization payer) {
+            AccountInfo payer) {
         return createAsync(new DraftMeta(sender, recipient, payer))
                 .thenApply(cxt -> cxt.map(QueryContext.DRAFT_ID, Draft::getId));
     }

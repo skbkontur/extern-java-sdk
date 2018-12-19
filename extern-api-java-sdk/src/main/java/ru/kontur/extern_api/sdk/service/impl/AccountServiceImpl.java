@@ -41,8 +41,14 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountsApi api;
 
-    public AccountServiceImpl(AccountsApi api) {
+    AccountServiceImpl(AccountsApi api) {
         this.api = api;
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync(int skip, int take) {
+        return api.getAll(skip, take)
+                .thenApply(contextAdaptor(QueryContext.ACCOUNT_LIST));
     }
 
     @Override
@@ -52,7 +58,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Deprecated
     public QueryContext<AccountList> acquireAccounts(QueryContext<?> parent) {
         return join(acquireAccountsAsync());
     }
@@ -64,7 +69,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Deprecated
     public QueryContext<Account> createAccount(QueryContext<?> parent) {
         return join(createAccountAsync(parent.require(QueryContext.CREATE_ACCOUNT_REQUEST)));
     }
@@ -81,7 +85,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Deprecated
     public QueryContext<Account> getAccount(QueryContext<?> parent) {
         return join(getAccountAsync(parent.<UUID>require(QueryContext.ACCOUNT_ID)));
     }

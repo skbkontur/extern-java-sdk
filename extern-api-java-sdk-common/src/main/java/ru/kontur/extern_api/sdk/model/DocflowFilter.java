@@ -34,7 +34,7 @@ import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 public class DocflowFilter implements Filter {
 
-    private long skip;
+    private int skip;
     private int take = 1000;
     private SortOrder orderBy;
 
@@ -44,7 +44,7 @@ public class DocflowFilter implements Filter {
 
     }
 
-    private DocflowFilter skip(long skip) {
+    private DocflowFilter skip(int skip) {
         this.skip = skip;
         return this;
     }
@@ -145,7 +145,7 @@ public class DocflowFilter implements Filter {
     }
 
     @Override
-    public long getSkip() {
+    public int getSkip() {
         return skip;
     }
 
@@ -159,13 +159,9 @@ public class DocflowFilter implements Filter {
         return Collections.unmodifiableMap(filterMap);
     }
 
-    public static DocflowFilter page(long skip, int take) {
+    public static DocflowFilter page(int skip, int take) {
         return new DocflowFilter()
                 .skip(skip)
                 .take(take);
-    }
-
-    public static DocflowFilter page(int skip, int take) {
-        return page((long) skip, take);
     }
 }

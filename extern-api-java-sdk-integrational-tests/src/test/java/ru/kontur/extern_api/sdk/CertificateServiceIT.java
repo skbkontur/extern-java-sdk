@@ -59,7 +59,7 @@ class CertificateServiceIT{
 
 
     @Test
-    void getCertificatesTest() {
+    void getAllCertificatesTest() {
 
         CertificateList certificateList = certificateService
                 .getCertificateListAsync()
@@ -73,6 +73,22 @@ class CertificateServiceIT{
             Assert.assertNotNull(certificate.getInn());
             Assert.assertNotNull(certificate.getKpp());
         });
+    }
 
+    @Test
+    void getCertificatesTest() {
+
+        CertificateList certificateList = certificateService
+                .getCertificateListAsync(0,1)
+                .join()
+                .ensureSuccess()
+                .get();
+
+        Assert.assertNotNull(certificateList);
+
+        certificateList.getCertificates().forEach(certificate -> {
+            Assert.assertNotNull(certificate.getInn());
+            Assert.assertNotNull(certificate.getKpp());
+        });
     }
 }

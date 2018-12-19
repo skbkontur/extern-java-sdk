@@ -43,11 +43,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("`size` should be greater than 0, but was " + size);
+    public CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int take) {
+        if (take <= 0) {
+            throw new IllegalArgumentException("`size` should be greater than 0, but was " + take);
         }
-        return api.getEvents(fromId, size)
+        return api.getEvents(fromId, take)
                 .thenApply(contextAdaptor(QueryContext.EVENTS_PAGE));
     }
 

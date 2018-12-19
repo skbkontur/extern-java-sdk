@@ -43,11 +43,11 @@ public interface EventService {
      *
      * @param fromId идентификатор последнего обработанного события.
      *         Для первого обращения к ленте событий необходимо передать значение "0_0"
-     * @param size максимальное количество возращаемых событий.
+     * @param take максимальное количество возращаемых событий.
      * @return страница событий
      * @see EventsPage#getLastEventId() получение следующих fromId
      */
-    CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int size);
+    CompletableFuture<QueryContext<EventsPage>> getEventsAsync(String fromId, int take);
 
     /**
      * <p>GET /v1/events</p>

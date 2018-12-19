@@ -31,50 +31,63 @@ import java.util.List;
  * <p>
  * Класс содержит список компаний, возвращаемый сервисом {@code OrganizationService.search}
  * </p>
+ *
  * @author Aleksey Sukhorukov
  */
-public class CompanyBatch {
-    @SerializedName("organizations")
-    private List<Company> companies;
+public class OrganizationBatch {
+
+    private List<Organization> organizations;
 
     @SerializedName("total-count")
     private Long totalCount;
 
-    public CompanyBatch() {
-        companies = new ArrayList<>();
+    private Long skip = null;
+
+    private Long take = null;
+
+    private List<Link> links;
+
+    public Long getTake() {
+        return take;
+    }
+
+    public void setTake(Long take) {
+        this.take = take;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public Long getSkip() {
+        return skip;
+    }
+
+    public void setSkip(Long skip) {
+        this.skip = skip;
+    }
+
+    public OrganizationBatch() {
+        organizations = new ArrayList<>();
         totalCount = 0L;
     }
 
-    /**
-     * Возвращает список организаций
-     * @return список организаций
-     * @see Company
-     */
-    public List<Company> getCompanies() {
-        return companies;
+    public List<Organization> getOrganizations() {
+        return organizations;
     }
 
-    /**
-     * Устанавливает список организаций
-     * @param companies список организаций
-     * @see Company
-     */
-    public void setCompanies(List<Company> companies) {
-        this.companies = companies;
+    public void setOrganizations(List<Organization> organizations) {
+        this.organizations = organizations;
     }
 
-    /**
-     * Возвращает общее количество организаций удовлетворяющих критерию поиска
-     * @return общее количество организаций удовлетворяющих критерию поиска
-     */
     public Long getTotalCount() {
         return totalCount;
     }
 
-    /**
-     * Устанавливает общее количество организаций удовлетворяющих критерию поиска
-     * @param totalCount общее количество организаций удовлетворяющих критерию поиска
-     */
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
     }

@@ -447,7 +447,7 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
             Boolean finished,
             Boolean incoming,
-            long skip,
+            int skip,
             int take,
             String innKpp,
             Date updatedFrom,

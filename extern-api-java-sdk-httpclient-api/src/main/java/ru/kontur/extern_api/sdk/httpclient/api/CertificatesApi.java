@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
@@ -41,7 +42,13 @@ public interface CertificatesApi {
 
     @GET("v1/{accountId}/certificates")
     CompletableFuture<ApiResponse<CertificateList>> getCertificates(
-            @Path("accountId") UUID accountId
+            @Path("accountId") UUID accountId,
+            @Query("skip") int skip,
+            @Query("take") int take
     );
 
+    @GET("v1/{accountId}/certificates")
+    CompletableFuture<ApiResponse<CertificateList>> getCertificates(
+            @Path("accountId") UUID accountId
+    );
 }

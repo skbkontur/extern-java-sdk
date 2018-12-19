@@ -33,14 +33,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationBatch;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-class OrganizationIT{
+class OrganizationIT {
 
-    private static final Company COMPANY = new Company();
+    private static final Organization ORGANIZATION = new Organization();
 
     private UUID companyId;
 
@@ -48,22 +49,25 @@ class OrganizationIT{
 
     @BeforeAll
     static void setUpClass() {
+
         engine = TestSuite.Load().engine;
-        CompanyGeneral general = new CompanyGeneral();
+        OrganizationGeneral general = new OrganizationGeneral();
         general.setInn("7810654318");
         general.setKpp("781001001");
         general.setName("ASBEST, LLC");
-        COMPANY.setGeneral(general);
+        ORGANIZATION.setGeneral(general);
     }
 
     @BeforeEach
     void setUp() {
+
         this.companyId = createOrFindOrganisation();
         assertNotNull(companyId);
     }
 
     @AfterEach
     void tearDown() throws Exception {
+
         engine.getOrganizationService().deleteAsync(companyId).get();
         // please don't hurt me .^.
         //                       -
@@ -73,74 +77,83 @@ class OrganizationIT{
     @Test
     void testLookup() {
 
-        QueryContext<Company> companyCxt = engine.getOrganizationService()
+        QueryContext<Organization> companyCxt = engine.getOrganizationService()
                 .lookupAsync(companyId)
                 .join()
                 .ensureSuccess();
 
-        assertCompanyEquals(companyCxt.get(), COMPANY);
+        assertCompanyEquals(companyCxt.get());
     }
 
     @Test
     void testUpdate() {
+
         String newName = "Emerald";
-        Company company = engine.getOrganizationService()
+        Organization organization = engine.getOrganizationService()
                 .updateAsync(companyId, newName)
                 .join()
                 .getOrThrow();
 
-        Assertions.assertEquals(company.getGeneral().getName(), newName);
+        Assertions.assertEquals(organization.getGeneral().getName(), newName);
     }
 
     @Test
     void testSearch() {
-        Company company = searchOrganisations(likeGiven(COMPANY)).get(0);
-        assertNotNull(company);
-        assertCompanyEquals(company, COMPANY);
+
+        Organization organization = searchOrganisations(likeGiven())
+                .getOrganizations()
+                .get(0);
+
+        assertNotNull(organization);
+        assertCompanyEquals(organization);
     }
 
     @Test
     void testSearchAll() {
-        OrgFilter innFilter = OrgFilter.maxPossibleBatch().inn(COMPANY.getGeneral().getInn());
-        for (Company company : searchOrganisations(innFilter)) {
-            assertNotNull(company.getGeneral().getName());
+
+        OrgFilter innFilter = OrgFilter.maxPossibleBatch().inn(ORGANIZATION.getGeneral().getInn());
+        OrganizationBatch organizationBatch = searchOrganisations(innFilter);
+
+        for (Organization organization : organizationBatch.getOrganizations()) {
+            assertNotNull(organization.getGeneral().getName());
         }
     }
 
-    private List<Company> searchOrganisations(OrgFilter filter) {
+    private OrganizationBatch searchOrganisations(OrgFilter filter) {
+
         return engine.getOrganizationService()
                 .searchAsync(filter)
                 .join()
-                .getOrThrow()
-                .getCompanies();
+                .getOrThrow();
     }
 
     private UUID createOrFindOrganisation() {
-        List<Company> companies = searchOrganisations(likeGiven(COMPANY));
+        List<Organization> companies = searchOrganisations(likeGiven())
+                .getOrganizations();
 
         if (companies != null && !companies.isEmpty()) {
             return companies.get(0).getId();
         }
 
-        Company company = engine.getOrganizationService()
-                .createAsync(COMPANY.getGeneral())
+        Organization organization = engine.getOrganizationService()
+                .createAsync(ORGANIZATION.getGeneral())
                 .join()
                 .getOrThrow();
 
-        assertNotNull(company);
-        return company.getId();
+        assertNotNull(organization);
+        return organization.getId();
     }
 
-    private static OrgFilter likeGiven(Company company) {
+    private static OrgFilter likeGiven() {
         return OrgFilter.maxPossibleBatch()
-                .inn(company.getGeneral().getInn())
-                .kpp(company.getGeneral().getKpp());
+                .inn(ORGANIZATION.getGeneral().getInn())
+                .kpp(ORGANIZATION.getGeneral().getKpp());
     }
 
-    private static void assertCompanyEquals(Company actual, Company expected) {
-        assertEquals(actual.getGeneral().getInn(), expected.getGeneral().getInn());
-        assertEquals(actual.getGeneral().getKpp(), expected.getGeneral().getKpp());
-        assertEquals(actual.getGeneral().getName(), expected.getGeneral().getName());
+    private static void assertCompanyEquals(Organization actual) {
+        assertEquals(actual.getGeneral().getInn(), ORGANIZATION.getGeneral().getInn());
+        assertEquals(actual.getGeneral().getKpp(), ORGANIZATION.getGeneral().getKpp());
+        assertEquals(actual.getGeneral().getName(), ORGANIZATION.getGeneral().getName());
         assertNotNull(actual.getId());
     }
 }

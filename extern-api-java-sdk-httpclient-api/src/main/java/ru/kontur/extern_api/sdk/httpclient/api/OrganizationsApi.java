@@ -39,10 +39,10 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyBatch;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.CompanyName;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationBatch;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)
@@ -50,19 +50,27 @@ import ru.kontur.extern_api.sdk.model.CompanyName;
 public interface OrganizationsApi {
 
     @GET("v1/{accountId}/organizations/{orgId}")
-    CompletableFuture<ApiResponse<Company>> lookup(
+    CompletableFuture<ApiResponse<Organization>> lookup(
             @Path("accountId") UUID accountId,
             @Path("orgId") UUID orgId
     );
 
-    @POST("v1/{accountId}/organizations")
-    CompletableFuture<ApiResponse<Company>> create(
+    @GET("v1/{accountId}/organizations")
+    CompletableFuture<ApiResponse<OrganizationBatch>> search(
             @Path("accountId") UUID accountId,
-            @Body CompanyGeneral companyGeneral
+            @Query("skip") int skip,
+            @Query("take") int take,
+            @QueryMap Map<String, String> filters
+    );
+
+    @POST("v1/{accountId}/organizations")
+    CompletableFuture<ApiResponse<Organization>> create(
+            @Path("accountId") UUID accountId,
+            @Body OrganizationGeneral companyGeneral
     );
 
     @PUT("v1/{accountId}/organizations/{orgId}")
-    CompletableFuture<ApiResponse<Company>> update(
+    CompletableFuture<ApiResponse<Organization>> update(
             @Path("accountId") UUID accountId,
             @Path("orgId") UUID orgId,
             @Body CompanyName name
@@ -73,13 +81,4 @@ public interface OrganizationsApi {
             @Path("accountId") UUID accountId,
             @Path("orgId") UUID orgId
     );
-
-    @GET("v1/{accountId}/organizations")
-    CompletableFuture<ApiResponse<CompanyBatch>> search(
-            @Path("accountId") UUID accountId,
-            @Query("skip") long skip,
-            @Query("take") int take,
-            @QueryMap Map<String, String> filters
-    );
-
 }

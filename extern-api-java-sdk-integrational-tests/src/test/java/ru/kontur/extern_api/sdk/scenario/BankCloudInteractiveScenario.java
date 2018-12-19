@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.model.Account;
+import ru.kontur.extern_api.sdk.model.AccountInfo;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -53,7 +54,6 @@ import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.model.Recipient;
@@ -160,7 +160,7 @@ class BankCloudInteractiveScenario {
 
         Recipient recipient = new FnsRecipient("0087");
 
-        Organization oPayer = new Organization(senderAcc.getInn(), senderAcc.getKpp());
+        AccountInfo oPayer = new AccountInfo(senderAcc.getInn(), senderAcc.getKpp());
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)

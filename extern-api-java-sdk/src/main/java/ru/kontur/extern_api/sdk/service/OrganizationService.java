@@ -26,10 +26,10 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyBatch;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationBatch;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с организациями:
@@ -47,9 +47,9 @@ public interface OrganizationService {
      *
      * @param companyId идентификатор организации
      * @return организация
-     * @see Company
+     * @see ru.kontur.extern_api.sdk.model.Organization
      */
-    CompletableFuture<QueryContext<Company>> lookupAsync(UUID companyId);
+    CompletableFuture<QueryContext<Organization>> lookupAsync(UUID companyId);
 
     /**
      * <p>GET /v1/{accountId}/organizations/{orgId}</p>
@@ -57,9 +57,9 @@ public interface OrganizationService {
      *
      * @param companyId идентификатор организации
      * @return организация
-     * @see Company
+     * @see Organization
      */
-    CompletableFuture<QueryContext<Company>> lookupAsync(String companyId);
+    CompletableFuture<QueryContext<Organization>> lookupAsync(String companyId);
 
     /**
      * <p>GET /v1/{accountId}/organizations/{orgId}</p>
@@ -69,37 +69,37 @@ public interface OrganizationService {
      *         <p>-  идентификатор организации. Для установки необходимо использовать метод {@link
      *         QueryContext#setCompanyId};</p>
      * @return организация
-     * @see Company
+     * @see Organization
      * @deprecated use async method instead
      */
     @Deprecated
-    QueryContext<Company> lookup(QueryContext<?> cxt);
+    QueryContext<Organization> lookup(QueryContext<?> cxt);
 
     /**
      * <p>POST /v1/{accountId}/organizations</p>
      * Асинхронный метод создает новую организацию
      *
-     * @param companyGeneral данные новой организации {@link CompanyGeneral}
+     * @param companyGeneral данные новой организации {@link ru.kontur.extern_api.sdk.model.OrganizationGeneral}
      * @return организация
-     * @see Company
+     * @see Organization
      */
-    CompletableFuture<QueryContext<Company>> createAsync(CompanyGeneral companyGeneral);
+    CompletableFuture<QueryContext<Organization>> createAsync(OrganizationGeneral companyGeneral);
 
     /**
      * <p>POST /v1/{accountId}/organizations</p>
      * Асинхронный метод создает новую организацию
      *
      * @param cxt контекст. Должен содержать следующие данные:
-     *         <p>-  данные новой организации {@link CompanyGeneral}. Для установки необходимо использовать метод {@link
+     *         <p>-  данные новой организации {@link OrganizationGeneral}. Для установки необходимо использовать метод {@link
      *         QueryContext#setCompanyGeneral};</p>
      * @return организация
-     * @see Company
+     * @see  Organization
      * @deprecated use async method instead
      */
     @Deprecated
-    QueryContext<Company> create(QueryContext<?> cxt);
+    QueryContext<Organization> create(QueryContext<?> cxt);
 
-    CompletableFuture<QueryContext<Company>> updateAsync(UUID companyId, String name);
+    CompletableFuture<QueryContext<Organization>> updateAsync(UUID companyId, String name);
 
     /**
      * <p>PUT /v1/{accountId}/organizations/{orgId}</p>
@@ -108,9 +108,9 @@ public interface OrganizationService {
      * @param companyId идентификатор организации
      * @param name наименование организации
      * @return организация
-     * @see Company
+     * @see Organization
      */
-    CompletableFuture<QueryContext<Company>> updateAsync(String companyId, String name);
+    CompletableFuture<QueryContext<Organization>> updateAsync(String companyId, String name);
 
     /**
      * <p>PUT /v1/{accountId}/organizations/{orgId}</p>
@@ -120,11 +120,11 @@ public interface OrganizationService {
      *         <p>-  идентификатор организации. Для установки необходимо использовать метод {@link
      *         QueryContext#setCompanyId}.</p>
      * @return организация
-     * @see Company
+     * @see Organization
      * @deprecated use async method instead
      */
     @Deprecated
-    QueryContext<Company> update(QueryContext<?> cxt);
+    QueryContext<Organization> update(QueryContext<?> cxt);
 
     CompletableFuture<QueryContext<Void>> deleteAsync(UUID companyId);
 
@@ -156,9 +156,9 @@ public interface OrganizationService {
      *
      * @param filter параметры поиска
      * @return список организаций
-     * @see CompanyBatch
+     * @see OrganizationBatch
      */
-    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(OrgFilter filter);
+    CompletableFuture<QueryContext<OrganizationBatch>> searchAsync(OrgFilter filter);
 
     /**
      * <p>GET /v1/{accountId}/organizations</p>
@@ -169,11 +169,11 @@ public interface OrganizationService {
      * @param skip смещение от начала списка
      * @param take максимальное количество организаций в возвращаемом списке
      * @return список организаций
-     * @see CompanyBatch
+     * @see OrganizationBatch
      * @deprecated use {@link OrganizationService#searchAsync(OrgFilter)} instead
      */
     @Deprecated
-    CompletableFuture<QueryContext<CompanyBatch>> searchAsync(String inn, String kpp, Long skip, Integer take);
+    CompletableFuture<QueryContext<OrganizationBatch>> searchAsync(String inn, String kpp, Integer skip, Integer take);
 
     /**
      * <p>GET /v1/{accountId}/organizations</p>
@@ -187,9 +187,9 @@ public interface OrganizationService {
      *         <p>-  максимальное количество организаций в возвращаемом списке. Для установки необходимо использовать
      *         метод {@link QueryContext#setTake}.</p>
      * @return список организаций
-     * @see CompanyBatch
+     * @see OrganizationBatch
      * @deprecated use async method instead
      */
     @Deprecated
-    QueryContext<CompanyBatch> search(QueryContext<?> cxt);
+    QueryContext<OrganizationBatch> search(QueryContext<?> cxt);
 }

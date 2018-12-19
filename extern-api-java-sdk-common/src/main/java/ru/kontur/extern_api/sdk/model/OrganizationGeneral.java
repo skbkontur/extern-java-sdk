@@ -28,57 +28,33 @@ package ru.kontur.extern_api.sdk.model;
  * Класс содержит данные организации. Используется для создании новой организации или получения информации о новой в {@code OrganizationService}
  * </p>
  */
-public class CompanyGeneral {
+public class OrganizationGeneral {
 
     private String inn = null;
     private String kpp = null;
     private String name = null;
     private boolean isMainOrg;
 
-    /**
-     * Возвращает ИНН
-     * @return ИНН
-     */
     public String getInn() {
         return inn;
     }
 
-    /**
-     * Устанавливает ИНН
-     * @param inn ИНН
-     */
     public void setInn(String inn) {
         this.inn = inn;
     }
 
-    /**
-     * Возвращает КПП
-     * @return КПП
-     */
     public String getKpp() {
         return kpp;
     }
 
-    /**
-     * Устанавливает КПП
-     * @param kpp КПП
-     */
     public void setKpp(String kpp) {
         this.kpp = kpp;
     }
 
-    /**
-     * Возвращает имя организации
-     * @return имя организации
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Устанавливает имя организации
-     * @param name имя организации
-     */
     public void setName(String name) {
         this.name = name;
     }

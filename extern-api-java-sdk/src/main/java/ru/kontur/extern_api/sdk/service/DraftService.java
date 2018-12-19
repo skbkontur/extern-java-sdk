@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.AccountInfo;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -63,7 +64,7 @@ public interface DraftService {
     CompletableFuture<QueryContext<UUID>> createAsync(
             Sender sender,
             Recipient recipient,
-            Organization organization
+            AccountInfo organization
     );
 
     /**

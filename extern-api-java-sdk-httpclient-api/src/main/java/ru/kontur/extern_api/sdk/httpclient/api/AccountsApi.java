@@ -29,6 +29,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
@@ -42,6 +43,12 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface AccountsApi {
+
+    @GET("v1")
+    CompletableFuture<ApiResponse<AccountList>> getAll(
+            @Query("skip") int skip,
+            @Query("take") int take
+    );
 
     @GET("v1")
     CompletableFuture<ApiResponse<AccountList>> getAll();

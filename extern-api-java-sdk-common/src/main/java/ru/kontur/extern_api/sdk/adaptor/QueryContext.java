@@ -35,12 +35,9 @@ import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
@@ -52,6 +49,8 @@ import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.Signature;
@@ -341,25 +340,25 @@ public class QueryContext<R> implements Serializable {
     /**
      * Идетификатор организации
      */
-    public static final String COMPANY_ID = "companyId";
+    public static final String ORGANIZATION_ID = "organizationId";
     /**
      * Объект "Организация". Возвращается сервисом и содержит идентификатор организации. {@link
-     * Company}
+     * Organization}
      */
-    public static final String COMPANY = "company";
+    public static final String ORGANIZATION = "organization";
     /**
      * Объект "Организация". Передается сервису для создания новой организации. Не содержит
-     * идентификатор. {@link CompanyGeneral}
+     * идентификатор. {@link OrganizationGeneral}
      */
-    public static final String COMPANY_GENERAL = "companyGeneral";
+    public static final String ORGANIZATION_GENERAL = "organizationGeneral";
     /**
      * Имя
      */
     public static final String NAME = "name";
     /**
-     * Объект "Страница списка организации". {@link ru.kontur.extern_api.sdk.model.CompanyBatch}
+     * Объект "Страница списка организации". {@link ru.kontur.extern_api.sdk.model.OrganizationBatch
      */
-    public static final String COMPANY_BATCH = "companyBatch";
+    public static final String ORGANIZATION_BATCH = "organizationBatch";
     /**
      * Идентификатор запроса на облачную подпись
      */
@@ -1469,8 +1468,8 @@ public class QueryContext<R> implements Serializable {
      *
      * @return порядковый номер первой записи от начала списка в возвращаемой колекции
      */
-    public Long getSkip() {
-        return (Long) params.get(SKIP);
+    public int getSkip() {
+        return (int)params.get(SKIP);
     }
 
     /**
@@ -1480,7 +1479,7 @@ public class QueryContext<R> implements Serializable {
      * @param skip порядковый номер первой записи от начала списка в возвращаемой колекции
      * @return контекст
      */
-    public QueryContext<R> setSkip(Long skip) {
+    public QueryContext<R> setSkip(int skip) {
         return set(SKIP, skip);
     }
 
@@ -1761,7 +1760,7 @@ public class QueryContext<R> implements Serializable {
      * @return идентификатор организации
      */
     public UUID getCompanyId() {
-        return (UUID) params.get(COMPANY_ID);
+        return (UUID) params.get(ORGANIZATION_ID);
     }
 
     /**
@@ -1772,7 +1771,7 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setCompanyId(String companyId) {
-        return set(COMPANY_ID, UUID.fromString(companyId));
+        return set(ORGANIZATION_ID, UUID.fromString(companyId));
     }
 
     /**
@@ -1783,53 +1782,53 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setCompanyId(UUID companyId) {
-        return set(COMPANY_ID, companyId);
+        return set(ORGANIZATION_ID, companyId);
     }
 
     /**
-     * Метод возвращает объект "Организация" {@link Company}. Используется в группе запросов для
+     * Метод возвращает объект "Организация" {@link Organization}. Используется в группе запросов для
      * работы с организациями {@code OrganizationService}.
      *
      * @return объект "Организация"
      */
-    public Company getCompany() {
-        return (Company) params.get(COMPANY);
+    public Organization getOrganization() {
+        return (Organization) params.get(ORGANIZATION);
     }
 
     /**
-     * Метод устанавливает объект "Организация" {@link Company}. Используется в группе запросов для
+     * Метод устанавливает объект "Организация" {@link Organization}. Используется в группе запросов для
      * работы с организациями {@code OrganizationService}.
      *
      * @param company объект "Организация"
      * @return контекст
      */
-    public QueryContext<R> setCompany(Company company) {
-        return set(COMPANY, company);
+    public QueryContext<R> setCompany(Organization company) {
+        return set(ORGANIZATION, company);
     }
 
     /**
-     * Метод возвращает объект "Новая организация" {@link CompanyGeneral}. Объект предназначен для
-     * создания новой организации. В отличии от класса {@link Company}, в нем отсутствует
+     * Метод возвращает объект "Новая организация" {@link OrganizationGeneral}. Объект предназначен для
+     * создания новой организации. В отличии от класса {@link OrganizationGeneral}, в нем отсутствует
      * идентификатор организации. Используется в группе запросов для работы с организациями {@code
      * OrganizationService}.
      *
      * @return объект "Новая организация"
      */
-    public CompanyGeneral getCompanyGeneral() {
-        return (CompanyGeneral) params.get(COMPANY_GENERAL);
+    public OrganizationGeneral getCompanyGeneral() {
+        return (OrganizationGeneral) params.get(ORGANIZATION_GENERAL);
     }
 
     /**
-     * Метод устанавливает объект "Новая организация" {@link CompanyGeneral}. Объект предназначен
-     * для создания новой организации. В отличии от класса {@link Company}, в нем отсутствует
+     * Метод устанавливает объект "Новая организация" {@link OrganizationGeneral}. Объект предназначен
+     * для создания новой организации. В отличии от класса {@link Organization}, в нем отсутствует
      * идентификатор организации. Используется в группе запросов для работы с организациями {@code
      * OrganizationService}.
      *
      * @param companyGeneral объект "Новая организация"
      * @return контекст
      */
-    public QueryContext<R> setCompanyGeneral(CompanyGeneral companyGeneral) {
-        return set(COMPANY_GENERAL, companyGeneral);
+    public QueryContext<R> setCompanyGeneral(OrganizationGeneral companyGeneral) {
+        return set(ORGANIZATION_GENERAL, companyGeneral);
     }
 
     /**

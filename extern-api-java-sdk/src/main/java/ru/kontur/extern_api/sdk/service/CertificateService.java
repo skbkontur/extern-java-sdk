@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk.service;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 
 /**
@@ -44,6 +45,17 @@ public interface CertificateService {
      * @return список сертификатов
      * @see CertificateList
      */
+    CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync(int skip, int take);
+
+    /**
+     * <p>GET /v1/{accountId}/certificates</p>
+     * Асинхронный метод возвращает список сертификатов
+     *
+     * @return список сертификатов
+     * @see CertificateList
+     * @deprecated use {@link CertificateService#getCertificateListAsync(int, int)} instead
+     */
+    @Deprecated
     CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
 
     /**

@@ -36,8 +36,8 @@ import ru.kontur.extern_api.sdk.crypt.CertificateWrapper;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
@@ -96,16 +96,16 @@ class BankScenario {
                 workingCert.getSubjectFields().get("GIVENNAME")
         );
 
-        List<Company> companies = engine.getOrganizationService()
+        List<Organization> companies = engine.getOrganizationService()
                 .searchAsync(OrgFilter.page(0, 1000))
                 .get()
                 .getOrThrow()
-                .getCompanies();
+                .getOrganizations();
 
         System.out.printf("Found %s organizations\n", companies.size());
 
-        Company org = companies.get(1);
-        CompanyGeneral general = org.getGeneral();
+        Organization org = companies.get(1);
+        OrganizationGeneral general = org.getGeneral();
 
         System.out.printf("Using organization: %s inn=%s kpp=%s\n",
                 general.getName(),

@@ -45,8 +45,8 @@ import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.drafts.service.AuthenticationProviderAdaptor;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.Organization;
+import ru.kontur.extern_api.sdk.model.OrganizationGeneral;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 
 /**
@@ -63,7 +63,7 @@ public class OrganizationServiceTest {
     private static ClientAndServer mockServer;
     private OrganizationService organizationService;
     private UUID accountId;
-    private Company company;
+    private Organization organization;
 
     @BeforeClass
     public static void startJetty() {
@@ -79,13 +79,13 @@ public class OrganizationServiceTest {
 
     @Before
     public void setupCompany() {
-        company = new Company();
-        company.setId(UUID.randomUUID());
-        CompanyGeneral g = new CompanyGeneral();
+        organization = new Organization();
+        organization.setId(UUID.randomUUID());
+        OrganizationGeneral g = new OrganizationGeneral();
         g.setInn("7810123456");
         g.setKpp("781001001");
         g.setName("Pajero");
-        company.setGeneral(g);
+        organization.setGeneral(g);
     }
 
     @Before
@@ -104,17 +104,17 @@ public class OrganizationServiceTest {
 
     @Test
     public void testSuccessLookup() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 200,
-                GSON.toJson(company));
-        QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "GET", 200,
+                GSON.toJson(organization));
+        QueryContext<Organization> cxt = organizationService.lookupAsync(organization.getId().toString()).get();
         assertFalse(cxt.isFail());
-        validateCompany(cxt.getCompany(), company);
+        validateCompany(cxt.getOrganization(), organization);
     }
 
     @Test
     public void testUncorrectLookup() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "GET", 400, createError());
-        QueryContext<Company> cxt = organizationService.lookupAsync(company.getId().toString()).get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "GET", 400, createError());
+        QueryContext<Organization> cxt = organizationService.lookupAsync(organization.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
         assertEquals("string", message);
@@ -122,16 +122,16 @@ public class OrganizationServiceTest {
 
     @Test
     public void testSuccessCreate() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations", "POST", 201, GSON.toJson(company));
-        QueryContext<Company> cxt = organizationService.createAsync(company.getGeneral()).get();
+        createAnswerFor("v1/" + accountId + "/organizations", "POST", 201, GSON.toJson(organization));
+        QueryContext<Organization> cxt = organizationService.createAsync(organization.getGeneral()).get();
         assertFalse(cxt.isFail());
-        validateCompany(cxt.getCompany(), company);
+        validateCompany(cxt.getOrganization(), organization);
     }
 
     @Test
     public void testUncorrectCreate() throws Exception {
         createAnswerFor("v1/" + accountId + "/organizations", "POST", 400, createError());
-        QueryContext<Company> cxt = organizationService.createAsync(company.getGeneral()).get();
+        QueryContext<Organization> cxt = organizationService.createAsync(organization.getGeneral()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
         assertEquals("string", message);
@@ -139,17 +139,17 @@ public class OrganizationServiceTest {
 
     @Test
     public void testSuccessUpdate() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 201,
-                GSON.toJson(company));
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "PUT", 201,
+                GSON.toJson(organization));
+        QueryContext<Organization> cxt = organizationService.updateAsync(organization.getId().toString(), "Pajero 2").get();
         assertFalse(cxt.isFail());
-        validateCompany(cxt.getCompany(), company);
+        validateCompany(cxt.getOrganization(), organization);
     }
 
     @Test
     public void testUncorrectUpdate() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "PUT", 400, createError());
-        QueryContext<Company> cxt = organizationService.updateAsync(company.getId().toString(), "Pajero 2").get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "PUT", 400, createError());
+        QueryContext<Organization> cxt = organizationService.updateAsync(organization.getId().toString(), "Pajero 2").get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
         assertEquals("string", message);
@@ -157,17 +157,17 @@ public class OrganizationServiceTest {
 
     @Test
     public void testSuccessDelete() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 201,
-                GSON.toJson(company));
-        QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "DELETE", 201,
+                GSON.toJson(organization));
+        QueryContext<Void> cxt = organizationService.deleteAsync(organization.getId().toString()).get();
         assertFalse(cxt.isFail());
     }
 
     @Test
     public void testIncorrectDelete() throws Exception {
-        createAnswerFor("v1/" + accountId + "/organizations/" + company.getId().toString(), "DELETE", 400,
+        createAnswerFor("v1/" + accountId + "/organizations/" + organization.getId().toString(), "DELETE", 400,
                 createError());
-        QueryContext<Void> cxt = organizationService.deleteAsync(company.getId().toString()).get();
+        QueryContext<Void> cxt = organizationService.deleteAsync(organization.getId().toString()).get();
         assertTrue(cxt.isFail());
         String message = cxt.getServiceError().getMessage();
         assertEquals("string", message);
@@ -191,7 +191,7 @@ public class OrganizationServiceTest {
                 + "}";
     }
 
-    private void validateCompany(Company source, Company response) {
+    private void validateCompany(Organization source, Organization response) {
         assertNotNull(response);
         assertEquals(response.getId().toString(), source.getId().toString());
         assertEquals(response.getGeneral().getInn(), source.getGeneral().getInn());

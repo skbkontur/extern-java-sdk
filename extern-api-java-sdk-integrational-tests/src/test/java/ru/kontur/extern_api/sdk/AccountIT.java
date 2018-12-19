@@ -55,9 +55,19 @@ class AccountIT {
     private static final String ORG_NAME = "Рога и Копыта";
 
     @Test
-    void acquireAccounts() {
+    void acquireAllAccounts() {
         QueryContext<AccountList> cxt = accountService
                 .acquireAccountsAsync()
+                .join()
+                .ensureSuccess();
+
+        assertFalse(cxt.get().getAccounts().isEmpty());
+    }
+
+    @Test
+    void acquireAccounts() {
+        QueryContext<AccountList> cxt = accountService
+                .acquireAccountsAsync(0, 1)
                 .join()
                 .ensureSuccess();
 

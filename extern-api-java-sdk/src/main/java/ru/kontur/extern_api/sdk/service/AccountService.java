@@ -30,6 +30,7 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+import ru.kontur.extern_api.sdk.model.OrgFilter;
 
 
 /**
@@ -40,6 +41,7 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
  */
 public interface AccountService {
 
+
     /**
      * <p>GET /v1</p>
      * Асинхронный метод возвращает список учетных записей с разбивкой по страницам
@@ -47,6 +49,17 @@ public interface AccountService {
      * @return список учетных записей
      * @see AccountList
      */
+
+    CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync(int skip, int take);
+    /**
+     * <p>GET /v1</p>
+     * Асинхронный метод возвращает список учетных записей с разбивкой по страницам
+     *
+     * @return список учетных записей
+     * @see AccountList
+     * @deprecated use {@link AccountService#acquireAccountsAsync(int, int)} instead
+     */
+    @Deprecated
     CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync();
 
     /**
