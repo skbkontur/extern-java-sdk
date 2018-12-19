@@ -44,7 +44,7 @@ public class DraftMetaRequest {
     }
 
     /**
-     * Возвращает объект {@link SenderRequest}, описывающий отправителя документа
+     * @return объект {@link SenderRequest}, описывающий отправителя документа
      */
     public SenderRequest getSender() { return sender; }
 
@@ -57,7 +57,7 @@ public class DraftMetaRequest {
     }
 
     /**
-     * Возвращает объект {@link FnsRecipient}, описывающий получателя документа
+     * @return объект {@link FnsRecipient}, описывающий получателя документа
      */
     public Recipient getRecipient() { return recipient; }
 
@@ -70,7 +70,7 @@ public class DraftMetaRequest {
     }
 
     /**
-     * Возвращает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
+     * @return объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
      */
     public OrganizationRequest getPayer() { return payer; }
 

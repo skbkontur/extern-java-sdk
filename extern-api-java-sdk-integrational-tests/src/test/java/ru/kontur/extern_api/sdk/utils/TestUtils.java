@@ -55,25 +55,25 @@ public class TestUtils {
         ClientInfo.Organization org = clientInfo.getOrganization();
         dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp()));
 
-        ClientInfo.Recipient clientInfoRecipient = clientInfo.getRecipient();
+        ClientInfo.Recipient recipient = clientInfo.getRecipient();
 
-        Optional.of(clientInfoRecipient)
+        Optional.of(recipient)
                 .map(ClientInfo.Recipient::getTogsCode)
                 .filter(s -> !s.isEmpty())
                 .map(TogsRecipient::new)
                 .ifPresent(dm::setRecipient);
 
-        Optional.of(clientInfoRecipient)
+        Optional.of(recipient)
                 .map(ClientInfo.Recipient::getIfnsCode)
                 .filter(s -> !s.isEmpty())
                 .map(FnsRecipient::new)
                 .ifPresent(dm::setRecipient);
 
-        ClientInfo.Sender clientInfoSender = clientInfo.getSender();
+        ClientInfo.Sender sender = clientInfo.getSender();
         dm.setSender(new SenderRequest(
-                clientInfoSender.getInn(),
-                clientInfoSender.getKpp(),
-                clientInfoSender.getCertificate(),
+                sender.getInn(),
+                sender.getKpp(),
+                sender.getCertificate(),
                 senderIp
         ));
         return dm;

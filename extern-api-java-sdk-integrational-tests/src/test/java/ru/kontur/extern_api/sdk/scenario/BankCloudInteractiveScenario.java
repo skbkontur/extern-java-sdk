@@ -156,7 +156,8 @@ class BankCloudInteractiveScenario {
                 senderAcc.getInn(),
                 senderAcc.getKpp(),
                 senderCertificate.getContent(),
-                "8.8.8.8");
+                "8.8.8.8"
+        );
 
         Recipient recipient = new FnsRecipient("0087");
 

@@ -38,14 +38,14 @@ public class OrganizationRequest {
     }
 
     /**
-     * Возвращает ИНН
+     * @return ИНН
      */
     public String getInn() {
         return inn;
     }
 
     /**
-     * Возвращает КПП
+     * @return КПП
      */
     public String getKpp() {
         return organization.getKpp();

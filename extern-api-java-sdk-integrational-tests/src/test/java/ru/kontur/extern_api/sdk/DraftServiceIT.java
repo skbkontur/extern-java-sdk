@@ -215,13 +215,10 @@ class DraftServiceIT {
                     .get()
                     .getOrThrow();
 
-            Sender currentSender = draftMeta.getSender();
-            Organization currentPayer = draftMeta.getPayer();
-            String ip = "8.8.8.8";
-            DraftMetaRequest newDraftMeta = new DraftMetaRequest(
-                    new SenderRequest(currentSender.getInn(),currentSender.getKpp(), currentSender.getCertificate(), ip),
-                    draftMeta.getRecipient(),
-                    new OrganizationRequest(currentPayer.getInn(), currentPayer.getKpp()));
+            final String ip = "8.8.8.8";
+
+            DraftMetaRequest newDraftMeta = draftMeta.asRequest();
+            newDraftMeta.getSender().setIpaddress(ip);
 
             DraftMeta updatedDraftMeta = draftService
                     .updateDraftMetaAsync(draftId, newDraftMeta)
