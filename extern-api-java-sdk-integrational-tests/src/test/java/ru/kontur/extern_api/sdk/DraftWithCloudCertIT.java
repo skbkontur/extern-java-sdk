@@ -56,7 +56,7 @@ class DraftWithCloudCertIT {
     private static ExternEngine engine;
 
     @BeforeAll
-    static void SetUpClass() {
+    static void setUpClass() {
 
         engine = TestSuite.Load().engine;
 

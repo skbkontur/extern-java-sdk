@@ -48,23 +48,23 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DraftTestPack;
 import ru.kontur.extern_api.sdk.utils.Pair;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
-@DisplayName("Draft function checking")
+@DisplayName("Draft service should be able to")
 class DraftServiceIT {
 
     private static ExternEngine engine;
@@ -76,13 +76,13 @@ class DraftServiceIT {
         engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+        String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
+        TestData[] testData = TestUtils.getTestData(certificate);
         tests = Arrays
-                .stream(TestUtils
-                        .getTestData(
-                                cryptoUtils.loadX509(engine.getConfiguration().getThumbprint())))
+                .stream(testData)
                 .map((TestData data) -> new DraftTestPack(data, engine, cryptoUtils))
-                .collect(Collectors.toList()
-                );
+                .collect(Collectors.toList());
+
         tests.forEach(DraftTestPack::createNewEmptyDraft);
     }
 
@@ -111,37 +111,25 @@ class DraftServiceIT {
         return tests.stream().map(DraftTestPack::draftWithSignedDocument);
     }
 
-    private static Stream<Pair<Draft, DraftDocument>> addDocumentPackFactory() {
+    private static Stream<Pair<Draft, DraftDocument>> draftWithNewDocumentFactory() {
         return tests.stream().map(DraftTestPack::addDocumentPack);
     }
 
-    private static Stream<Pair<Draft, DraftDocument>> addDocumentNoFnsPackFactory() {
+    private static Stream<Pair<Draft, DraftDocument>> draftWithNewNonFnsDocumentFactory() {
         return tests.stream()
                 .map(DraftTestPack::addDocumentNoFnsPack)
                 .filter(Objects::nonNull);
     }
 
-    /**
-     * Test of the createDraft method
-     *
-     *
-     * POST /v1/{accountId}/drafts
-     */
     @ParameterizedTest
-    @DisplayName("create")
+    @DisplayName("create draft")
     @MethodSource({"newDraftIdFactory"})
     void testCreateDraft(UUID draftId) {
-
         assertNotNull(draftId);
     }
 
-    /**
-     * Test of the getDraftById method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}
-     */
     @ParameterizedTest
-    @DisplayName("get")
+    @DisplayName("get draft")
     @MethodSource({
             "emptyDraftFactory",
             "draftWithDocumentFactory",
@@ -159,11 +147,6 @@ class DraftServiceIT {
                 found.getMeta().getSender().getInn());
     }
 
-    /**
-     * DELETE /v1/{accountId}/drafts/{draftId}
-     *
-     * Test of the deleteDraft method
-     */
     @ParameterizedTest
     @DisplayName("delete")
     @MethodSource({
@@ -183,9 +166,7 @@ class DraftServiceIT {
     }
 
     /**
-     * GET /v1/{accountId}/drafts/{draftId}/meta
      *
-     * Test of the getDraftMeta method
      */
     @ParameterizedTest
     @DisplayName("get meta")
@@ -206,11 +187,6 @@ class DraftServiceIT {
 
     }
 
-    /**
-     * Test of the updateDraftMeta method
-     *
-     * PUT /v1/{accountId}/drafts/{draftId}/meta
-     */
     @ParameterizedTest
     @DisplayName("update meta")
     @MethodSource({
@@ -235,28 +211,18 @@ class DraftServiceIT {
         assertEquals(ip, newDraftMeta.getSender().getIpaddress());
     }
 
-    /**
-     * Test of the addDecryptedDocument method
-     *
-     * POST /v1/{accountId}/drafts/{draftId}/documents
-     */
     @ParameterizedTest
     @DisplayName("add decrypted document")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testAddDecryptedDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         assertNotNull(addDocumentPack.second);
     }
 
 
-    /**
-     * Test of the deleteDocument method
-     *
-     * delete /v1/{accountId}/drafts/{draftId}/documents/{documentId}
-     */
     @ParameterizedTest
     @DisplayName("delete document")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testDeleteDocument(
             Pair<Draft, DraftDocument> addDocumentPack) {
 
@@ -269,14 +235,9 @@ class DraftServiceIT {
         assertNull(deleteDocument.getServiceError());
     }
 
-    /**
-     * Test of the getDocument method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}
-     */
     @ParameterizedTest
     @DisplayName("get document")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testGetDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DraftDocument draftDocument = addDocumentPack.second;
@@ -303,14 +264,9 @@ class DraftServiceIT {
         assertNull(getDocument.getServiceError());
     }
 
-    /**
-     * Test of updateDocument method, of class ExternSDKDocument.
-     *
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}
-     */
     @ParameterizedTest
     @DisplayName("update document")
-    @MethodSource({"addDocumentNoFnsPackFactory"})
+    @MethodSource({"draftWithNewNonFnsDocumentFactory"})
     void testUpdateDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DocumentContents newContents = new DocumentContents();
@@ -326,14 +282,9 @@ class DraftServiceIT {
         assertNull(updateDocument.getServiceError());
     }
 
-    /**
-     * Test of the printDocument method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/print
-     */
     @ParameterizedTest
     @DisplayName("print document")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testPrintDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         byte[] pdf = engine.getDraftService()
@@ -347,14 +298,9 @@ class DraftServiceIT {
         assertEquals(pdfFileHeader, new String(Arrays.copyOfRange(pdf, 0, 4)));
     }
 
-    /**
-     * Test of getDecryptedDocumentContent method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
-     */
     @ParameterizedTest
     @DisplayName("get decrypted document content")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testGetDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         QueryContext<byte[]> decrypted = engine.getDraftService()
@@ -367,14 +313,9 @@ class DraftServiceIT {
         assertNull(decrypted.getServiceError());
     }
 
-    /**
-     * Test of updateDecryptedDocumentContent method
-     *
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/decrypted
-     */
     @ParameterizedTest
     @DisplayName("update decrypted document content")
-    @MethodSource({"addDocumentNoFnsPackFactory"})
+    @MethodSource({"draftWithNewNonFnsDocumentFactory"})
     void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         QueryContext update = engine.getDraftService()
@@ -387,14 +328,9 @@ class DraftServiceIT {
         assertNull(update.getServiceError());
     }
 
-    /**
-     * Test of getEncryptedDocumentContent method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/content/encrypted
-     */
     @ParameterizedTest
     @DisplayName("get encrypted document content")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testGetEncryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         engine.getDraftService().prepareAsync(addDocumentPack.first.getId())
@@ -411,14 +347,9 @@ class DraftServiceIT {
         assertNotNull(content.get());
     }
 
-    /**
-     * Test of getSignatureContent method
-     *
-     * GET /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
-     */
     @ParameterizedTest
     @DisplayName("get document signature")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testGetSignatureContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         // after prepare?
@@ -433,14 +364,9 @@ class DraftServiceIT {
         assertNotNull(content.get());
     }
 
-    /**
-     * Test of updateSignature method
-     *
-     * PUT /v1/{accountId}/drafts/{draftId}/documents/{documentId}/signature
-     */
     @ParameterizedTest
     @DisplayName("update document signature")
-    @MethodSource({"addDocumentPackFactory"})
+    @MethodSource({"draftWithNewDocumentFactory"})
     void testUpdateSignature(Pair<Draft, DraftDocument> addDocumentPack) {
 
         byte[] docContent = engine.getDraftService()
@@ -464,11 +390,6 @@ class DraftServiceIT {
 
     }
 
-    /**
-     * Test of check method
-     *
-     * POST /v1/{accountId}/drafts/drafts/{draftId}/check
-     */
     @ParameterizedTest
     @DisplayName("command \"Check\"")
     @MethodSource({"newDraftWithDocumentFactory"})
@@ -481,11 +402,6 @@ class DraftServiceIT {
         assertTrue(checkResult.get().hasNoErrors());
     }
 
-    /**
-     * Test of prepare method
-     *
-     * POST /v1/{accountId}/drafts/drafts/{draftId}/prepare
-     */
     @ParameterizedTest
     @DisplayName("command \"Prepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
@@ -501,11 +417,6 @@ class DraftServiceIT {
     }
 
 
-    /**
-     * Test of send method.
-     *
-     * POST /v1/{accountId}/drafts/drafts/{draftId}/send
-     */
     @ParameterizedTest
     @DisplayName("command \"Send\"")
     @MethodSource({"newDraftWithDocumentFactory"})

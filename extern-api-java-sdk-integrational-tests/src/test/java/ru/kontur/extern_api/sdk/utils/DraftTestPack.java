@@ -17,7 +17,7 @@ public class DraftTestPack {
     private final ExternEngine engine;
     private final CryptoUtils cryptoUtils;
 
-    private QueryContext<UUID> createDefaultDraftCxt;
+    private QueryContext<UUID> defaultDraftCxt;
 
     public DraftTestPack(TestData data, ExternEngine engine, CryptoUtils cryptoUtils) {
 
@@ -31,7 +31,7 @@ public class DraftTestPack {
 
         QueryContext<Draft> draft = getDraft();
 
-        if (createDefaultDraftCxt == null
+        if (defaultDraftCxt == null
                 || draft.getServiceError() != null
                 || draft.get().getStatus().name().equals("sent")) {
             createNewEmptyDraft();
@@ -43,12 +43,12 @@ public class DraftTestPack {
         if (getDraft().get().getDocuments().size() > 0) {
             createNewEmptyDraft();
         }
-        return createDefaultDraftCxt;
+        return defaultDraftCxt;
     }
 
     public void createNewEmptyDraft() {
 
-        createDefaultDraftCxt = UncheckedSupplier.get(() -> engine.getDraftService()
+        defaultDraftCxt = UncheckedSupplier.get(() -> engine.getDraftService()
                 .createAsync(meta)
                 .get()
                 .ensureSuccess())
@@ -69,7 +69,7 @@ public class DraftTestPack {
     private QueryContext<Draft> getDraft() {
 
         return UncheckedSupplier.get(() -> engine.getDraftService()
-                .lookupAsync(createDefaultDraftCxt.get())
+                .lookupAsync(defaultDraftCxt.get())
                 .get());
     }
 
@@ -82,7 +82,7 @@ public class DraftTestPack {
 
         return UncheckedSupplier.get(() -> engine
                 .getDraftService()
-                .addDecryptedDocumentAsync(createDefaultDraftCxt.get(), documentContents)
+                .addDecryptedDocumentAsync(defaultDraftCxt.get(), documentContents)
                 .get()
                 .ensureSuccess());
     }
@@ -91,7 +91,7 @@ public class DraftTestPack {
 
         byte[] docContent = UncheckedSupplier.get(() -> engine.getDraftService()
                 .getDecryptedDocumentContentAsync(
-                        createDefaultDraftCxt.get(),
+                        defaultDraftCxt.get(),
                         documentId)
                 .get()
                 .ensureSuccess()
@@ -102,7 +102,7 @@ public class DraftTestPack {
 
         UncheckedSupplier.get(() -> engine.getDraftService()
                 .updateSignatureAsync(
-                        createDefaultDraftCxt.get(),
+                        defaultDraftCxt.get(),
                         documentId,
                         signature)
                 .get());
@@ -135,8 +135,7 @@ public class DraftTestPack {
     }
 
     public Pair<Draft, DraftDocument> addDocumentPack() {
-        return new Pair<>(
-                getEmptyDraft().get(), addDocument().get());
+        return new Pair<>(getEmptyDraft().get(), addDocument().get());
     }
 
     public Pair<Draft, DraftDocument> addDocumentNoFnsPack() {
@@ -144,8 +143,7 @@ public class DraftTestPack {
             return null;
         }
 
-        return new Pair<>(
-                getEmptyDraft().get(), addDocument().get());
+        return new Pair<>(getEmptyDraft().get(), addDocument().get());
 
     }
 }
