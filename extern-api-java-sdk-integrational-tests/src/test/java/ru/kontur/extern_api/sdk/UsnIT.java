@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.AfterEach;
@@ -54,7 +55,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 @Execution(ExecutionMode.CONCURRENT)
 class UsnIT {
 
-    private static DraftService ds;
+    private static DraftService draftService;
     private static DraftMetaRequest draftMeta;
 
     @BeforeAll
@@ -70,7 +71,7 @@ class UsnIT {
                 .accountId(config.getAccountId())
                 .build(Level.BODY);
 
-        ds = ee.getDraftService();
+        draftService = ee.getDraftService();
         String cert = CertificateResource.readBase64(config.getThumbprint());
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
@@ -101,21 +102,22 @@ class UsnIT {
         );
     }
 
-    private void checkUsn(int version, UsnServiceContractInfo usn) throws Exception {
+    private void checkUsn(int version, UsnServiceContractInfo usn) {
 
-        String draftId = ds
-                .create(new QueryContext<>().setDraftMetaRequest(draftMeta))
+        UUID draftId = draftService
+                .createAsync(draftMeta)
+                .join()
                 .getOrThrow()
-                .toString();
+                .getId();
 
-        ds.createAndBuildDeclarationAsync(draftId, version, usn)
+        draftService.createAndBuildDeclarationAsync(draftId, version, usn)
                 .thenApply(QueryContext::getOrThrow)
-                .get();
+                .join();
 
-        ds.checkAsync(draftId)
+        draftService.checkAsync(draftId)
                 .thenApply(QueryContext::getOrThrow)
                 .thenAccept(UsnIT::assertCheckHasNoErrors)
-                .get();
+                .join();
     }
 
 

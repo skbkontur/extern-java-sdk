@@ -34,12 +34,13 @@ import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 public class TestSuite {
 
     public final ExternEngine engine;
 
-    public final Gson gson;
+    private final Gson gson;
 
     private TestSuite(ExternEngine engine) {
         this.engine = engine;
@@ -51,18 +52,20 @@ public class TestSuite {
     }
 
     public static TestSuite Load(Consumer<Configuration> configOverride) {
-        Configuration config = TestConfig.LoadConfigFromEnvironment();
 
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
         configOverride.accept(config);
 
         ExternEngine engine = ExternEngineBuilder
-                .createExternEngine(config.getServiceBaseUri())
+                .createExternEngine(config)
                 .apiKey(config.getApiKey())
-                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
-                        passwordAuthentication(config.getLogin(), config.getPass())
+                .buildAuthentication(
+                        config.getAuthBaseUri(),
+                        builder -> builder.passwordAuthentication(
+                                config.getLogin(), config.getPass())
                 )
-                .doNotUseCryptoProvider()
-                .accountId(config.getAccountId())
+                .cryptoProvider(new CryptoProviderMSCapi())
+                .doNotSetupAccount()
                 .build(Level.BODY);
 
         engine.getConfiguration().setThumbprint(config.getThumbprint());

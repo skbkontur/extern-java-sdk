@@ -34,19 +34,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
+class CertificateServiceIT{
 
-class CertificateServiceIT {
-
-    private static ExternEngine engine;
+    private static CertificateService certificateService;
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.Load().engine;
+        certificateService = TestSuite.Load().engine.getCertificateService();
     }
-
 
     @BeforeEach
     void setUp() {
@@ -60,12 +59,11 @@ class CertificateServiceIT {
 
 
     @Test
-    void getCertificatesTest() throws Exception {
+    void getCertificatesTest() {
 
-        CertificateList certificateList = engine
-                .getCertificateService()
+        CertificateList certificateList = certificateService
                 .getCertificateListAsync()
-                .get()
+                .join()
                 .ensureSuccess()
                 .get();
 

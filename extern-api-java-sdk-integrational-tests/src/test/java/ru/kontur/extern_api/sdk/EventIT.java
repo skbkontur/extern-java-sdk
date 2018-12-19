@@ -48,11 +48,11 @@ class EventIT {
     }
 
     @Test
-    void testGetEvents() throws Exception {
+    void testGetEvents() {
 
         EventsPage page = engine.getEventService()
                 .getEventsAsync(EventId.START_ID, 10)
-                .get()
+                .join()
                 .getOrThrow();
 
         for (ApiEvent apiEvent : page.getApiEvents()) {
