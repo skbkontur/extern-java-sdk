@@ -25,11 +25,11 @@ package ru.kontur.extern_api.sdk.model;
 
 import static ru.kontur.extern_api.sdk.PublicDateFormat.formatDatetime;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 
 public class DocflowFilter implements Filter {
@@ -64,17 +64,19 @@ public class DocflowFilter implements Filter {
         return this;
     }
 
-    public DocflowFilter innKpp(String inn, String kpp) {
+    public DocflowFilter innKpp(@Nullable String inn, @Nullable String kpp) {
+        if (inn == null)
+            return this;
         filterMap.put("innKpp", YAStringUtils.joinIfExists("-", inn, kpp));
         return this;
     }
 
-    public DocflowFilter inn(String inn) {
+    public DocflowFilter inn(@Nullable String inn) {
         filterMap.put("innKpp", inn);
         return this;
     }
 
-    public DocflowFilter orgId(UUID orgId) {
+    public DocflowFilter orgId(@Nullable UUID orgId) {
         filterMap.put("orgId", orgId.toString());
         return this;
     }
@@ -82,42 +84,42 @@ public class DocflowFilter implements Filter {
     /**
      * @param orderBy SendDate is used to order docflows
      */
-    public DocflowFilter orderBy(SortOrder orderBy) {
+    public DocflowFilter orderBy(@Nullable SortOrder orderBy) {
         this.orderBy = orderBy;
         return this;
     }
 
-    public DocflowFilter updatedFrom(Date updatedFrom) {
+    public DocflowFilter updatedFrom(@Nullable Date updatedFrom) {
         filterMap.put("updatedFrom", formatDatetime(updatedFrom));
         return this;
     }
 
-    public DocflowFilter updatedTo(Date updatedTo) {
+    public DocflowFilter updatedTo(@Nullable Date updatedTo) {
         filterMap.put("updatedTo", formatDatetime(updatedTo));
         return this;
     }
 
-    public DocflowFilter createdFrom(Date createdFrom) {
+    public DocflowFilter createdFrom(@Nullable Date createdFrom) {
         filterMap.put("createdFrom", formatDatetime(createdFrom));
         return this;
     }
 
-    public DocflowFilter createdTo(Date createdTo) {
+    public DocflowFilter createdTo(@Nullable Date createdTo) {
         filterMap.put("createdTo", formatDatetime(createdTo));
         return this;
     }
 
-    public DocflowFilter periodFrom(Date periodFrom) {
+    public DocflowFilter periodFrom(@Nullable Date periodFrom) {
         filterMap.put("periodFrom", formatDatetime(periodFrom));
         return this;
     }
 
-    public DocflowFilter periodTo(Date periodTo) {
+    public DocflowFilter periodTo(@Nullable Date periodTo) {
         filterMap.put("periodTo", formatDatetime(periodTo));
         return this;
     }
 
-    public DocflowFilter knd(String knd) {
+    public DocflowFilter knd(@Nullable String knd) {
         filterMap.put("knd", knd);
         return this;
     }
@@ -126,7 +128,7 @@ public class DocflowFilter implements Filter {
         return knd(String.valueOf(knd));
     }
 
-    public DocflowFilter type(DocflowType type) {
+    public DocflowFilter type(@Nullable DocflowType type) {
         filterMap.put("type", type.getName());
         return this;
     }
@@ -156,7 +158,7 @@ public class DocflowFilter implements Filter {
 
     @Override
     public Map<String, String> asFilterMap() {
-        return Collections.unmodifiableMap(filterMap);
+        return Filter.stripNullKeys(filterMap);
     }
 
     public static DocflowFilter page(long skip, int take) {

@@ -75,7 +75,7 @@ class DraftWithCloudCertIT {
     private UUID draftId;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         draftId = createDraftWithCert(cloudCert);
     }
 

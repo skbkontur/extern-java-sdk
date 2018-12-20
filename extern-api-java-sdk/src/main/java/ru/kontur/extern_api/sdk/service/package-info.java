@@ -21,33 +21,7 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+@ParametersAreNonnullByDefault
+package ru.kontur.extern_api.sdk.service;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-public interface Filter {
-
-    long getSkip();
-
-    int getTake();
-
-    /**
-     * Should not return mapping like {@code o->null}. {@link #stripNullKeys(Map)} might help/
-     * @return resulting filters
-     * @see #stripNullKeys(Map)
-     */
-    Map<String, String> asFilterMap();
-
-    /**
-     * @param map input map
-     * @return copy of a given map without {@code o->null} mappings
-     */
-    static Map<String, String> stripNullKeys(Map<String, String> map) {
-        return map.entrySet().stream()
-                .filter(e -> e.getValue() != null)
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-    }
-
-}
+import javax.annotation.ParametersAreNonnullByDefault;

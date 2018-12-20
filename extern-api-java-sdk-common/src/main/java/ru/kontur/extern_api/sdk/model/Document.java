@@ -34,9 +34,7 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 
 /**
- * <p>
  * Класс содержит информацию документа документооборота
- * </p>
  */
 public class Document {
 
@@ -188,5 +186,24 @@ public class Document {
                 .stream(getReplyLinks())
                 .map(Link::getName)
                 .toArray(String[]::new);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Document document = (Document) o;
+
+        return id.equals(document.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

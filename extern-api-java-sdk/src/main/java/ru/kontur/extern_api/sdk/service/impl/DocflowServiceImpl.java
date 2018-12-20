@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.model.ByteContent;
@@ -445,16 +446,16 @@ public class DocflowServiceImpl implements DocflowService {
 
     @Override
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
-            Boolean finished,
-            Boolean incoming,
+            @Nullable Boolean finished,
+            @Nullable Boolean incoming,
             long skip,
             int take,
-            String innKpp,
-            Date updatedFrom,
-            Date updatedTo,
-            Date createdFrom,
-            Date createdTo,
-            String type
+            @Nullable String innKpp,
+            @Nullable Date updatedFrom,
+            @Nullable Date updatedTo,
+            @Nullable Date createdFrom,
+            @Nullable Date createdTo,
+            @Nullable String type
     ) {
         DocflowFilter filter = DocflowFilter
                 .page(skip, take)
