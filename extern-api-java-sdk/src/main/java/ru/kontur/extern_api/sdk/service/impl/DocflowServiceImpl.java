@@ -475,7 +475,7 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent) {
         DocflowFilter filter = DocflowFilter
-                .page(parent.getSkip(), parent.getTake())
+                .page(parent.getLongSkip(), parent.getTake())
                 .inn(parent.getInnKpp())
                 .updatedFrom(parent.getUpdatedFrom())
                 .updatedTo(parent.getUpdatedTo())

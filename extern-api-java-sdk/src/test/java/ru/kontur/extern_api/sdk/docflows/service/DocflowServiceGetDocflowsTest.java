@@ -164,7 +164,7 @@ public class DocflowServiceGetDocflowsTest {
         QueryContext<Docflow> queryContext = new QueryContext<>();
         queryContext.setFinished(true);
         queryContext.setIncoming(true);
-        queryContext.setSkip(0);
+        queryContext.setIntSkip(0);
         queryContext.setTake(0);
         queryContext.setInnKpp("string");
         queryContext.setUpdatedFrom(new Date());
@@ -186,7 +186,7 @@ public class DocflowServiceGetDocflowsTest {
         QueryContext<Docflow> queryContext = new QueryContext<>();
         queryContext.setFinished(true);
         queryContext.setIncoming(true);
-        queryContext.setSkip(0);
+        queryContext.setIntSkip(0);
         queryContext.setTake(0);
         queryContext.setInnKpp("string");
         queryContext.setUpdatedFrom(new Date());

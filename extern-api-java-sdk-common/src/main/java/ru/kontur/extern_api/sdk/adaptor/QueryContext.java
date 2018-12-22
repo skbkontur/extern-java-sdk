@@ -361,7 +361,7 @@ public class QueryContext<R> implements Serializable {
      */
     public static final String NAME = "name";
     /**
-     * Объект "Страница списка организации". {@link ru.kontur.extern_api.sdk.model.OrganizationBatch
+     * Объект "Страница списка организации". 
      */
     public static final String ORGANIZATION_BATCH = "organizationBatch";
     /**
@@ -1492,7 +1492,28 @@ public class QueryContext<R> implements Serializable {
      *
      * @return порядковый номер первой записи от начала списка в возвращаемой колекции
      */
-    public int getSkip() {
+    public long getLongSkip() {
+        return (long)params.get(SKIP);
+    }
+
+    /**
+     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в
+     * возвращаемой колекции. Необходим для организации постраничной загрузки.
+     *
+     * @param skip порядковый номер первой записи от начала списка в возвращаемой колекции
+     * @return контекст
+     */
+    public QueryContext<R> setLongSkip(long skip) {
+        return set(SKIP, skip);
+    }
+
+    /**
+     * Метод возвращает порядковый номер первой записи от начала упорядоченного списка в
+     * возвращаемой колекции. Необходим для организации постраничной загрузки.
+     *
+     * @return порядковый номер первой записи от начала списка в возвращаемой колекции
+     */
+    public long getIntSkip() {
         return (int)params.get(SKIP);
     }
 
@@ -1503,7 +1524,7 @@ public class QueryContext<R> implements Serializable {
      * @param skip порядковый номер первой записи от начала списка в возвращаемой колекции
      * @return контекст
      */
-    public QueryContext<R> setSkip(int skip) {
+    public QueryContext<R> setIntSkip(int skip) {
         return set(SKIP, skip);
     }
 
