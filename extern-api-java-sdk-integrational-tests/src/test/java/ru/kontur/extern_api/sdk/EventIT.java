@@ -48,7 +48,7 @@ class EventIT {
     }
 
     @Test
-    void testGetEvents(){
+    void testGetEvents() {
 
         EventsPage page = engine.getEventService()
                 .getEventsAsync(EventId.START_ID, 10)

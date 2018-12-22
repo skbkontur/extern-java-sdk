@@ -37,17 +37,7 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DataWrapper;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.*;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)
@@ -63,7 +53,7 @@ public interface DraftsApi {
     @POST("v1/{accountId}/drafts")
     CompletableFuture<ApiResponse<Draft>> create(
             @Path("accountId") UUID accountId,
-            @Body DraftMeta clientInfo
+            @Body DraftMetaRequest clientInfo
     );
 
     /**
@@ -108,13 +98,13 @@ public interface DraftsApi {
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
-     * @param newMeta DraftMeta draft meta data
+     * @param newMeta DraftMetaRequest draft meta data
      */
     @PUT("v1/{accountId}/drafts/{draftId}/meta")
     CompletableFuture<ApiResponse<DraftMeta>> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Body DraftMeta newMeta
+            @Body DraftMetaRequest newMeta
     );
 
     /**

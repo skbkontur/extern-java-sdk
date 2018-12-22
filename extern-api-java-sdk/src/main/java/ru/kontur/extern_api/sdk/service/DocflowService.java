@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -102,7 +103,8 @@ public interface DocflowService {
 
     CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
             UUID docflowId,
-            UUID documentId);
+            UUID documentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}</p>
@@ -442,14 +444,7 @@ public interface DocflowService {
     /**
      * Синхронный метод отправляет документ в контролирующий орган
      *
-     * @param parent контекст.
-     *         <p>Должен содержать объект {@link ReplyDocument}, полученная с помощью метода {@link
-     *         DocflowService#generateReply} | {@link DocflowService#generateReply}.</p>
-     *         <p>В объект {@link ReplyDocument} необходимо установить подпись в формате PKCS#7, вычесленную
-     *         для массива байт {@link ReplyDocument#content}, с помощью метода {@link
-     *         ReplyDocument#setSignature}.</p>
-     *         <p>Для установки в контекст необходимо использовать метод {@link
-     *         QueryContext#setReplyDocument}.</p>
+     * @param parent контекст. с id документооборота, документа и ответного документа
      * @return ДО
      * @see ReplyDocument
      * @deprecated use async method instead
@@ -549,9 +544,18 @@ public interface DocflowService {
      * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
      */
     @Deprecated
-    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(Boolean finished,
-            Boolean incoming, int skip, int take, String innKpp, Date updatedFrom, Date updatedTo,
-            Date createdFrom, Date createdTo, String type);
+    CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
+            @Nullable Boolean finished,
+            @Nullable Boolean incoming,
+            long skip,
+            int take,
+            @Nullable String innKpp,
+            @Nullable Date updatedFrom,
+            @Nullable Date updatedTo,
+            @Nullable Date createdFrom,
+            @Nullable Date createdTo,
+            @Nullable String type
+    );
 
     /**
      * <p>GET /v1/{accountId}/docflows</p>

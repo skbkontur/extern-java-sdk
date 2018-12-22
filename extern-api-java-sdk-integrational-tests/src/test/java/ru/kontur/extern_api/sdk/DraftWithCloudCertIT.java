@@ -35,14 +35,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
@@ -56,7 +50,7 @@ class DraftWithCloudCertIT {
     private static ExternEngine engine;
 
     @BeforeAll
-    static void SetUpClass() {
+    static void setUpClass() {
 
         engine = TestSuite.Load().engine;
 
@@ -81,7 +75,7 @@ class DraftWithCloudCertIT {
     private UUID draftId;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         draftId = createDraftWithCert(cloudCert);
     }
 
@@ -144,7 +138,7 @@ class DraftWithCloudCertIT {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("data"));
 
-        DraftMeta dm = TestUtils.toDraftMeta(testData);
+        DraftMetaRequest dm = TestUtils.toDraftMetaRequest(testData);
         dm.getSender().setKpp(certificate.getKpp());
         dm.getSender().setInn(certificate.getInn());
 

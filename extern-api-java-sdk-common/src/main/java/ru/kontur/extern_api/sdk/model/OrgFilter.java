@@ -23,13 +23,13 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
 public class OrgFilter implements Filter {
 
-    private int skip;
+    private long skip;
     private int take;
 
     private final HashMap<String, String> filterMap = new HashMap<>(2);
@@ -37,7 +37,7 @@ public class OrgFilter implements Filter {
     private OrgFilter() {
     }
 
-    private OrgFilter skip(int skip) {
+    private OrgFilter skip(long skip) {
         this.skip = skip;
         return this;
     }
@@ -47,17 +47,17 @@ public class OrgFilter implements Filter {
         return this;
     }
 
-    public OrgFilter inn(String inn) {
+    public OrgFilter inn(@Nullable String inn) {
         this.filterMap.put("inn", inn);
         return this;
     }
 
-    public OrgFilter kpp(String kpp) {
+    public OrgFilter kpp(@Nullable String kpp) {
         this.filterMap.put("kpp", kpp);
         return this;
     }
 
-    public static OrgFilter page(int skip, int take) {
+    public static OrgFilter page(long skip, int take) {
         return new OrgFilter()
                 .skip(skip)
                 .take(take);
@@ -68,7 +68,7 @@ public class OrgFilter implements Filter {
     }
 
     @Override
-    public int getSkip() {
+    public long getSkip() {
         return skip;
     }
 
@@ -79,6 +79,6 @@ public class OrgFilter implements Filter {
 
     @Override
     public Map<String, String> asFilterMap() {
-        return Collections.unmodifiableMap(filterMap);
+        return Filter.stripNullKeys(filterMap);
     }
 }

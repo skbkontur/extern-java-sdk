@@ -29,14 +29,13 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
-import ru.kontur.extern_api.sdk.model.AccountInfo;
+import ru.kontur.extern_api.sdk.model.AccountInfoRequest;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.Draft;
 import ru.kontur.extern_api.sdk.model.Draft.StatusEnum;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Sender;
 
 /**
@@ -71,7 +70,7 @@ public class DraftsValidator {
         assertEquals("IfnsCode is wrong!", "string", recipient.getIfnsCode());
     }
 
-    private static void validatePayer(AccountInfo payer) {
+    private static void validatePayer(AccountInfoRequest payer) {
         assertNotNull("Payer must not be null!", payer);
         assertEquals("Inn is wrong!", "string", payer.getInn());
         assertEquals("Kpp is wrong!", "string", payer.getKpp());

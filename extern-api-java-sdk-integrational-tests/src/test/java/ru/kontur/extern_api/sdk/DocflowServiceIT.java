@@ -49,7 +49,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
@@ -69,7 +69,6 @@ import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
 import ru.kontur.extern_api.sdk.model.GenerateReplyDocumentRequestData;
 import ru.kontur.extern_api.sdk.model.Link;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
@@ -677,7 +676,7 @@ class DocflowServiceIT {
                 Assertions.fail("No a test document");
             }
 
-            DraftMeta dm = TestUtils.toDraftMeta(td);
+            DraftMetaRequest dm = TestUtils.toDraftMetaRequest(td);
             String path = td.getDocs()[0];
             DocType docType = DocType.getDocType(dm.getRecipient());
 
@@ -701,7 +700,7 @@ class DocflowServiceIT {
     }
 
     private static CompletableFuture<QueryContext<DraftDocument>> addDocument(
-            DraftMeta meta,
+            DraftMetaRequest meta,
             TestData data,
             UUID draftId
     ) {

@@ -27,7 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.Stream;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,14 +40,15 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
@@ -53,21 +56,28 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 class UsnIT {
 
     private static DraftService draftService;
-    private static DraftMeta draftMeta;
-
-    private static ExternEngine engine;
+    private static DraftMetaRequest draftMeta;
 
     @BeforeAll
-    static void setUpClass() {
-        engine = TestSuite.Load().engine;
-        draftService = engine.getDraftService();
+    static void init() {
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+        ExternEngine ee = ExternEngineBuilder
+                .createExternEngine(config.getServiceBaseUri())
+                .apiKey(config.getApiKey())
+                .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(config.getLogin(), config.getPass())
+                )
+                .cryptoProvider(new CryptoProviderMSCapi())
+                .accountId(config.getAccountId())
+                .build(Level.BODY);
 
-        String cert = CertificateResource.readBase64(engine.getConfiguration().getThumbprint());
+        draftService = ee.getDraftService();
+        String cert = CertificateResource.readBase64(config.getThumbprint());
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
                 .filter(td -> td.getClientInfo().getRecipient().getIfnsCode() != null)
                 .findAny()
-                .map(TestUtils::toDraftMeta)
+                .map(TestUtils::toDraftMetaRequest)
                 .orElseThrow(() -> new RuntimeException("no suitable data for usn tests"));
     }
 
@@ -94,13 +104,11 @@ class UsnIT {
 
     private void checkUsn(int version, UsnServiceContractInfo usn) {
 
-        String draftId = draftService
+        UUID draftId = draftService
                 .createAsync(draftMeta)
                 .join()
-                .ensureSuccess()
-                .get()
-                .getId()
-                .toString();
+                .getOrThrow()
+                .getId();
 
         draftService.createAndBuildDeclarationAsync(draftId, version, usn)
                 .thenApply(QueryContext::getOrThrow)

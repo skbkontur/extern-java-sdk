@@ -1,6 +1,4 @@
 /*
- * MIT License
- *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,57 +18,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
-package ru.kontur.extern_api.sdk.model;
+@ParametersAreNonnullByDefault
+package ru.kontur.extern_api.sdk.service;
 
-import com.google.gson.annotations.SerializedName;
-
-/**
- * <p>
- *     Класс содержит информацию об организации
- * </p>
- * @author Aleksey Sukhorukov
- */
-public class AccountInfo {
-
-    private String inn;
-    private final OrganizationInfo organization;
-
-    public AccountInfo(String inn, String kpp) {
-        this.inn = inn;
-        this.organization = new OrganizationInfo(kpp);
-    }
-
-    public String getInn() {
-        return inn;
-    }
-
-    public void setInn(String inn) {
-        this.inn = inn;
-    }
-
-    public String getKpp() {
-        return organization.getKpp();
-    }
-
-    public void setKpp(String kpp) {
-        this.organization.setKpp(kpp);
-    }
-
-    public static class OrganizationInfo {
-        private String kpp;
-
-        OrganizationInfo(String kpp) {
-            this.kpp = kpp;
-        }
-
-        public String getKpp() {
-            return kpp;
-        }
-
-        public void setKpp(String kpp) {
-            this.kpp = kpp;
-        }
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

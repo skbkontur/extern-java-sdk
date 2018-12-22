@@ -24,38 +24,25 @@
 package ru.kontur.extern_api.sdk.model;
 
 /**
- * <p>Класс содержит информацию об отправителе черновика</p>
- *
- * @author Aleksey Sukhorukov
+ * Класс содержит информацию об отправителе черновика
  */
-public class Sender {
+public class SenderRequest {
 
     private String inn;
     private String kpp;
-    private String name;
     private Certificate certificate;
     private String ipaddress;
 
     private String thumbprint;
 
-    public Sender() {
-    }
-
-    public Sender(String inn, String kpp, String certificate, String ipaddress) {
-        this(inn, kpp, null, certificate, ipaddress);
-    }
-
-    public Sender(String inn, String kpp, String name, String certificate, String ipaddress) {
+    public SenderRequest(String inn, String kpp, String certificate, String ipaddress) {
         this.inn = inn;
         this.kpp = kpp;
-        this.name = name;
         this.certificate = new Certificate(certificate);
         this.ipaddress = ipaddress;
     }
 
     /**
-     * Возвращает ИНН
-     *
      * @return ИНН
      */
     public String getInn() {
@@ -72,8 +59,6 @@ public class Sender {
     }
 
     /**
-     * Возвращает КПП
-     *
      * @return КПП
      */
     public String getKpp() {
@@ -90,26 +75,6 @@ public class Sender {
     }
 
     /**
-     * Возвращает название организации
-     *
-     * @return название организации
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Устанавливает название организации
-     *
-     * @param name название организации
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Возвращает сертификат в кодировке BASE64
-     *
      * @return сертификат в кодировке BASE64
      */
     public String getCertificate() {
@@ -126,8 +91,6 @@ public class Sender {
     }
 
     /**
-     * Возвращает IP адрес отправителя
-     *
      * @return IP адрес отправителя
      */
     public String getIpaddress() {
@@ -144,8 +107,6 @@ public class Sender {
     }
 
     /**
-     * Возвращает отпечаток сертификата отправителя
-     *
      * @return отпечаток сертификата отправителя
      */
     public String getThumbprint() {

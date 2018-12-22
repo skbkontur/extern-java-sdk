@@ -1,4 +1,6 @@
 /*
+ * MIT License
+ *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,36 +20,44 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 package ru.kontur.extern_api.sdk.model;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
-public interface Filter {
+/**
+ *  Класс содержит информацию для создания черновике
+ */
+public class DraftMetaRequest {
 
-    long getSkip();
+    private SenderRequest sender;
+    private Recipient recipient;
+    private AccountInfoRequest payer;
 
-    int getTake();
-
-    /**
-     * Should not return mapping like {@code o->null}. {@link #stripNullKeys(Map)} might help/
-     * @return resulting filters
-     * @see #stripNullKeys(Map)
-     */
-    Map<String, String> asFilterMap();
-
-    /**
-     * @param map input map
-     * @return copy of a given map without {@code o->null} mappings
-     */
-    static Map<String, String> stripNullKeys(Map<String, String> map) {
-        return map.entrySet().stream()
-                .filter(e -> e.getValue() != null)
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    public DraftMetaRequest() {
     }
 
+    public DraftMetaRequest(SenderRequest sender, Recipient recipient, AccountInfoRequest payer) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.payer = payer;
+    }
+
+    public SenderRequest getSender() { return sender; }
+
+    public void setSender(SenderRequest sender) {
+        this.sender = sender;
+    }
+
+    public Recipient getRecipient() { return recipient; }
+
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
+    }
+
+    public AccountInfoRequest getPayer() { return payer; }
+
+    public void setPayer(AccountInfoRequest payer) {
+        this.payer = payer;
+    }
 }

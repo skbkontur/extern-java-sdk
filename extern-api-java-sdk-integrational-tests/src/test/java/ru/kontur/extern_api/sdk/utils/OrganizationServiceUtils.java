@@ -56,7 +56,7 @@ public class OrganizationServiceUtils {
     }
 
     /**
-     * Creates an AccountInfo if AccountInfo with given inn & kpp does not exist
+     * Creates an AccountInfoRequest if AccountInfoRequest with given inn & kpp does not exist
      *
      * @throws ServiceException when something goes wrong
      * @returns registered or existed Organization.

@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.service;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.model.Organization;
@@ -173,7 +174,12 @@ public interface OrganizationService {
      * @deprecated use {@link OrganizationService#searchAsync(OrgFilter)} instead
      */
     @Deprecated
-    CompletableFuture<QueryContext<OrganizationBatch>> searchAsync(String inn, String kpp, Integer skip, Integer take);
+    CompletableFuture<QueryContext<OrganizationBatch>> searchAsync(
+            @Nullable String inn,
+            @Nullable String kpp,
+            @Nullable Long skip,
+            @Nullable Integer take
+    );
 
     /**
      * <p>GET /v1/{accountId}/organizations</p>

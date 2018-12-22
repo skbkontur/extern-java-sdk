@@ -26,11 +26,7 @@ package ru.kontur.extern_api.sdk.model;
 import java.util.UUID;
 
 /**
- * <p>
- * Класс содержит информацию об организации.
- * Используется в сервисе {@code OrganizationService}
- * </p>
- * @author Aleksey Sukhorukov
+ *  Класс содержит информацию об организации
  */
 public class Organization {
     private UUID id;
@@ -54,5 +50,6 @@ public class Organization {
 
     public void setGeneral(OrganizationGeneral general) {
         this.general = general;
+
     }
 }

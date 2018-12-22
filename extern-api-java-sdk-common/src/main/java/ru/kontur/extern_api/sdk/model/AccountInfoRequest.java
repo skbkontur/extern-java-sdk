@@ -1,4 +1,6 @@
 /*
+ * MIT License
+ *
  * Copyright (c) 2018 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,36 +20,56 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 package ru.kontur.extern_api.sdk.model;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
-public interface Filter {
+/**
+ * <p>
+ *     Класс содержит информацию об организации
+ * </p>
+ * @author Aleksey Sukhorukov
+ */
+public class AccountInfoRequest {
 
-    long getSkip();
+    private String inn;
+    private final OrganizationInfo organization;
 
-    int getTake();
-
-    /**
-     * Should not return mapping like {@code o->null}. {@link #stripNullKeys(Map)} might help/
-     * @return resulting filters
-     * @see #stripNullKeys(Map)
-     */
-    Map<String, String> asFilterMap();
-
-    /**
-     * @param map input map
-     * @return copy of a given map without {@code o->null} mappings
-     */
-    static Map<String, String> stripNullKeys(Map<String, String> map) {
-        return map.entrySet().stream()
-                .filter(e -> e.getValue() != null)
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    public AccountInfoRequest(String inn, String kpp) {
+        this.inn = inn;
+        this.organization = new OrganizationInfo(kpp);
     }
 
+    public String getInn() {
+        return inn;
+    }
+
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public String getKpp() {
+        return organization.getKpp();
+    }
+
+    public void setKpp(String kpp) {
+        this.organization.setKpp(kpp);
+    }
+
+    public static class OrganizationInfo {
+        private String kpp;
+
+        OrganizationInfo(String kpp) {
+            this.kpp = kpp;
+        }
+
+        public String getKpp() {
+            return kpp;
+        }
+
+        public void setKpp(String kpp) {
+            this.kpp = kpp;
+        }
+    }
 }

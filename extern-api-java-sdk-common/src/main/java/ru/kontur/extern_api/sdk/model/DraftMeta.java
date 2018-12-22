@@ -24,9 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
-
 /**
  * <p>
  *     Класс содержит информацию о черновике
@@ -37,12 +34,12 @@ public class DraftMeta {
 
     private Sender sender;
     private Recipient recipient;
-    private AccountInfo payer;
+    private AccountInfoRequest payer;
 
     public DraftMeta() {
     }
 
-    public DraftMeta(Sender sender, Recipient recipient, AccountInfo payer) {
+    public DraftMeta(Sender sender, Recipient recipient, AccountInfoRequest payer) {
         this.sender = sender;
         this.recipient = recipient;
         this.payer = payer;
@@ -64,11 +61,27 @@ public class DraftMeta {
         this.recipient = recipient;
     }
 
-    public AccountInfo getPayer() {
+    public AccountInfoRequest getPayer() {
         return payer;
     }
 
-    public void setPayer(AccountInfo payer) {
+    public void setPayer(AccountInfoRequest payer) {
         this.payer = payer;
+    }
+
+    public DraftMetaRequest asRequest() {
+        Sender sender = this.getSender();
+        return new DraftMetaRequest(
+                new SenderRequest(
+                        sender.getInn(),
+                        sender.getKpp(),
+                        sender.getCertificate(),
+                        sender.getIpaddress()
+                ),
+                getRecipient(),
+                new AccountInfoRequest(getPayer().getInn(), getPayer().getKpp())
+        );
+
+
     }
 }
