@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class OrgFilter implements Filter {
 
-    private long skip;
+    private int skip;
     private int take;
 
     private final HashMap<String, String> filterMap = new HashMap<>(2);
@@ -37,7 +37,7 @@ public class OrgFilter implements Filter {
     private OrgFilter() {
     }
 
-    private OrgFilter skip(long skip) {
+    private OrgFilter skip(int skip) {
         this.skip = skip;
         return this;
     }
@@ -57,7 +57,7 @@ public class OrgFilter implements Filter {
         return this;
     }
 
-    public static OrgFilter page(long skip, int take) {
+    public static OrgFilter page(int skip, int take) {
         return new OrgFilter()
                 .skip(skip)
                 .take(take);
@@ -68,7 +68,7 @@ public class OrgFilter implements Filter {
     }
 
     @Override
-    public long getSkip() {
+    public int getSkip() {
         return skip;
     }
 

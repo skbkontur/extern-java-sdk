@@ -547,7 +547,7 @@ public interface DocflowService {
     CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
             @Nullable Boolean finished,
             @Nullable Boolean incoming,
-            long skip,
+            int skip,
             int take,
             @Nullable String innKpp,
             @Nullable Date updatedFrom,

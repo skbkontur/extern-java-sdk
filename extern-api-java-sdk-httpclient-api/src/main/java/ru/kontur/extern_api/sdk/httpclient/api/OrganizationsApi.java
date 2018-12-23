@@ -58,7 +58,7 @@ public interface OrganizationsApi {
     @GET("v1/{accountId}/organizations")
     CompletableFuture<ApiResponse<OrganizationBatch>> search(
             @Path("accountId") UUID accountId,
-            @Query("skip") long skip,
+            @Query("skip") int skip,
             @Query("take") int take,
             @QueryMap Map<String, String> filters
     );

@@ -177,7 +177,7 @@ public interface OrganizationService {
     CompletableFuture<QueryContext<OrganizationBatch>> searchAsync(
             @Nullable String inn,
             @Nullable String kpp,
-            @Nullable Long skip,
+            @Nullable Integer skip,
             @Nullable Integer take
     );
 

@@ -448,7 +448,7 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
             @Nullable Boolean finished,
             @Nullable Boolean incoming,
-            long skip,
+            int skip,
             int take,
             @Nullable String innKpp,
             @Nullable Date updatedFrom,
@@ -475,7 +475,7 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public QueryContext<DocflowPage> getDocflows(QueryContext<?> parent) {
         DocflowFilter filter = DocflowFilter
-                .page(parent.getLongSkip(), parent.getTake())
+                .page(parent.getSkip(), parent.getTake())
                 .inn(parent.getInnKpp())
                 .updatedFrom(parent.getUpdatedFrom())
                 .updatedTo(parent.getUpdatedTo())

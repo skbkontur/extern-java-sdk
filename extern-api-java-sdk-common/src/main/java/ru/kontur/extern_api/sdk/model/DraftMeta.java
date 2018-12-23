@@ -81,7 +81,5 @@ public class DraftMeta {
                 getRecipient(),
                 new AccountInfoRequest(getPayer().getInn(), getPayer().getKpp())
         );
-
-
     }
 }

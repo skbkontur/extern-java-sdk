@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 public interface Filter {
 
-    long getSkip();
+    int getSkip();
 
     int getTake();
 
