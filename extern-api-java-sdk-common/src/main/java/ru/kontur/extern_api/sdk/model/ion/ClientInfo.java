@@ -21,21 +21,37 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.ion;
 
-public class DocumentSender {
+import org.jetbrains.annotations.NotNull;
+import ru.kontur.extern_api.sdk.model.DocumentSender;
+import ru.kontur.extern_api.sdk.model.SignerType;
 
-    private String senderFullName;
+public class ClientInfo {
 
-    public String getSenderFullName() {
-        return senderFullName;
+    private DocumentSender documentSender;
+    private SignerType signerType;
+    private Taxpayer taxpayer;
+
+    public ClientInfo(
+            @NotNull String senderFullName,
+            @NotNull SignerType signerType,
+            @NotNull Taxpayer taxpayer
+    ) {
+        this.documentSender = new DocumentSender(senderFullName);
+        this.signerType = signerType;
+        this.taxpayer = taxpayer;
     }
 
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public DocumentSender getDocumentSender() {
+        return documentSender;
     }
 
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public SignerType getSignerType() {
+        return signerType;
+    }
+
+    public Taxpayer getTaxpayer() {
+        return taxpayer;
     }
 }

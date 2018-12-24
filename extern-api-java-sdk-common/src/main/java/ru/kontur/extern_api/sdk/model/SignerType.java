@@ -23,6 +23,18 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class IonRequest implements BuildDocumentContract {
+import com.google.gson.annotations.SerializedName;
+
+public enum SignerType {
+
+    /** неизвестный */
+    @SerializedName("unknown")
+    UNKNOWN,
+    /** руководитель */
+    @SerializedName("chief")
+    CHIEF,
+    /** представитель */
+    @SerializedName("representative")
+    REPRESENTATIVE
 
 }
