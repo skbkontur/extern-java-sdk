@@ -332,13 +332,13 @@ public interface DraftsApi {
      * @param data metadata of an USN document
      */
     @POST("v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
-    CompletableFuture<ApiResponse<Void>> buildDeclaration(
+    CompletableFuture<ApiResponse<Void>> buildDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId,
-            @Query("type") String type,
+            @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body UsnServiceContractInfo data
+            @Body BuildDocumentContract data
     );
 
     /**
@@ -351,12 +351,12 @@ public interface DraftsApi {
      * @param data UsnServiceContractInfo meta data of an USN document
      */
     @POST("v1/{accountId}/drafts/{draftId}/build-document")
-    CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDeclaration(
+    CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Query("type") String type,
+            @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body UsnServiceContractInfo data
+            @Body BuildDocumentContract data
     );
 
 }

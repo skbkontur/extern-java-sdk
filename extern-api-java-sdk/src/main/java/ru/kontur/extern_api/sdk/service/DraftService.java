@@ -805,7 +805,7 @@ public interface DraftService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/buildDeclaration</p>
+     * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build</p>
      * <p>Синхронный метод создания декларации. Контент документа будет заменен на переданный</p>
      *
      * @param cxt контекст. Должен содержать следующие данные:

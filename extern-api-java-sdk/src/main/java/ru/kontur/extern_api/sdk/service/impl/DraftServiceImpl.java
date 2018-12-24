@@ -493,7 +493,7 @@ public class DraftServiceImpl implements DraftService {
             UUID documentId,
             int version,
             UsnServiceContractInfo usn) {
-        return api.buildDeclaration(acc.accountId(), draftId, documentId, "USN", version, usn)
+        return api.buildDocument(acc.accountId(), draftId, documentId, BuildDocumentType.USN, version, usn)
                 .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
 
@@ -526,7 +526,7 @@ public class DraftServiceImpl implements DraftService {
             UUID draftId,
             int version,
             UsnServiceContractInfo usn) {
-        return api.createAndBuildDeclaration(acc.accountId(), draftId, "USN", version, usn)
+        return api.createAndBuildDocument(acc.accountId(), draftId, BuildDocumentType.USN, version, usn)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
 
