@@ -28,7 +28,7 @@ import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
 
-public class IonRequest implements BuildDocumentContract {
+public class IonRequestContract implements BuildDocumentContract {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -36,7 +36,7 @@ public class IonRequest implements BuildDocumentContract {
     private ClientInfo additionalOrgInfo;
     private IonRequestData data;
 
-    public IonRequest(
+    public IonRequestContract(
             @NotNull ClientInfo additionalOrgInfo,
             @NotNull Type type,
             @NotNull AcceptType acceptType,

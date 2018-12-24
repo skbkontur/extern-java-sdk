@@ -28,7 +28,25 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
+import ru.kontur.extern_api.sdk.model.BuildDocumentType;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
 
 
 /**
@@ -806,7 +824,7 @@ public interface DraftService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build</p>
-     * <p>Синхронный метод создания декларации. Контент документа будет заменен на переданный</p>
+     * <p>Синхронный метод создания USN декларации. Контент документа будет заменен на переданный</p>
      *
      * @param cxt контекст. Должен содержать следующие данные:
      *         <ul><li>индентификатор черновика. Для установки необходимо использовать метод {@link
@@ -833,7 +851,7 @@ public interface DraftService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/documents/{documentId}/build</p>
-     * <p>Асинхронный метод создания декларации. Контент документа будет заменен на переданный</p>
+     * <p>Асинхронный метод создания USN декларации. Контент документа будет заменен на переданный</p>
      *
      * @param draftId идентификатор черновика
      * @param documentId идентификатор документа
@@ -850,7 +868,7 @@ public interface DraftService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
-     * <p>Синхронный метод создания декларации. В результате будет создан документ с переданным
+     * <p>Синхронный метод создания USN декларации. В результате будет создан документ с переданным
      * контентом</p>
      *
      * @param cxt контекст. Должен содержать следующие данные:
@@ -869,7 +887,7 @@ public interface DraftService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
-     * <p>Асинхронный метод создания декларации. В результате будет создан документ с переданным
+     * <p>Асинхронный метод создания USN декларации. В результате будет создан документ с переданным
      * контентом</p>
      *
      * @param draftId идентификатор черновика
@@ -886,7 +904,7 @@ public interface DraftService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/build-document</p>
-     * <p>Асинхронный метод создания декларации. В результате будет создан документ с переданным
+     * <p>Асинхронный метод создания USN декларации. В результате будет создан документ с переданным
      * контентом</p>
      *
      * @param draftId идентификатор черновика
@@ -899,5 +917,74 @@ public interface DraftService {
             String draftId,
             int version,
             UsnServiceContractInfo usn
+    );
+
+    /**
+     * Асинхронный метод изменения контента документа на ИОН запрос.
+     * По {@link IonRequestContract} создаётся ИОН запрос.
+     * Контент документа с переданным documentId будет заменён.
+     *
+     * @param draftId ID драфта с которым производится работа
+     * @param documentId ID документа для которого создать контент
+     * @param requestContract данные для создания ИОН запроса
+     * @return статус успеха в QueryContext
+     */
+    CompletableFuture<QueryContext<Void>> buildIonRequestAsync(
+            UUID draftId,
+            UUID documentId,
+            IonRequestContract requestContract
+    );
+
+    /**
+     * Асинхронный метод создания документа "ИОН запрос".
+     * По {@link IonRequestContract} создаётся ИОН запрос.
+     *
+     * @param draftId ID драфта с которым производится работа
+     * @param requestContract данные для создания ИОН запроса
+     * @return созданный документ
+     */
+    CompletableFuture<QueryContext<DraftDocument>> newIonRequestAsync(
+            UUID draftId,
+            IonRequestContract requestContract
+    );
+
+
+    /**
+     * Асинхронный метод изменения контента документа на документ установленного формата.
+     * Контент документа с переданным documentId будет заменён.
+     *
+     * @param draftId ID драфта с которым производится работа
+     * @param documentId ID документа для которого создать контент
+     * @param documentType требуемый тип документа
+     * @param requestContract данные для создания документа
+     * @param contractVersion версия контракта
+     * @return статус успеха в QueryContext
+     * @see #newIonRequestAsync(UUID, IonRequestContract) создать ИОН
+     * @see #createAndBuildDeclarationAsync(UUID, int, UsnServiceContractInfo) создать USN
+     */
+    CompletableFuture<QueryContext<Void>> buildDocumentAsync(
+            UUID draftId,
+            UUID documentId,
+            BuildDocumentType documentType,
+            BuildDocumentContract requestContract,
+            int contractVersion
+    );
+
+    /**
+     * Асинхронный метод создания документа установленного формата.
+     *
+     * @param draftId ID драфта с которым производится работа
+     * @param documentType требуемый тип документа
+     * @param requestContract данные для создания документа
+     * @param contractVersion версия контракта
+     * @return созданный документ
+     * @see #newIonRequestAsync(UUID, IonRequestContract) создать ИОН
+     * @see #createAndBuildDeclarationAsync(UUID, int, UsnServiceContractInfo) создать USN
+     */
+    CompletableFuture<QueryContext<DraftDocument>> newDocumentAsync(
+            UUID draftId,
+            BuildDocumentType documentType,
+            BuildDocumentContract requestContract,
+            int contractVersion
     );
 }

@@ -25,11 +25,11 @@ package ru.kontur.extern_api.sdk.model.ion;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
-import ru.kontur.extern_api.sdk.model.ion.IonRequest.AcceptType;
-import ru.kontur.extern_api.sdk.model.ion.IonRequest.Type;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract.AcceptType;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract.Type;
 
 /**
- * @see IonRequest#IonRequest(ClientInfo, Type, AcceptType, Date)
+ * @see IonRequestContract#IonRequestContract(ClientInfo, Type, AcceptType, Date)
  */
 public class IonRequestData {
 

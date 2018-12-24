@@ -322,14 +322,14 @@ public interface DraftsApi {
     );
 
     /**
-     * Create an USN declaration and replace context in document
+     * Create an document and replace context in document
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
      * @param documentId document identifier
      * @param type Document type
      * @param version Declaration version
-     * @param data metadata of an USN document
+     * @param data metadata of a document. Actual type {@link BuildDocumentContract}
      */
     @POST("v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
     CompletableFuture<ApiResponse<Void>> buildDocument(
@@ -338,17 +338,17 @@ public interface DraftsApi {
             @Path("documentId") UUID documentId,
             @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body BuildDocumentContract data
+            @Body Object data
     );
 
     /**
-     * Create an USN declaration and replace context in document
+     * Create new document of given format
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
      * @param type Document type
      * @param version Declaration version
-     * @param data UsnServiceContractInfo meta data of an USN document
+     * @param data metadata of a document. Actual type {@link BuildDocumentContract}
      */
     @POST("v1/{accountId}/drafts/{draftId}/build-document")
     CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDocument(
@@ -356,7 +356,7 @@ public interface DraftsApi {
             @Path("draftId") UUID draftId,
             @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body BuildDocumentContract data
+            @Body Object data
     );
 
 }
