@@ -24,17 +24,13 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>Класс содержит информацию для представителя организации</p>
  * @author Aleksey Sukhorukov
  */
 public class Representative {
 
-    @SerializedName("representative-document")
     private String representativeDocument = null;
-
     private PassportInfo passport = null;
 
     /**

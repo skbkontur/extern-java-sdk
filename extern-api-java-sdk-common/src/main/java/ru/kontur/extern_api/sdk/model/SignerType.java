@@ -23,22 +23,18 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class DocumentSender {
+import com.google.gson.annotations.SerializedName;
 
-    private String senderFullName;
+public enum SignerType {
 
-    public String getSenderFullName() {
-        return senderFullName;
-    }
+    /** неизвестный */
+    @SerializedName("unknown")
+    UNKNOWN,
+    /** руководитель */
+    @SerializedName("chief")
+    CHIEF,
+    /** представитель */
+    @SerializedName("representative")
+    REPRESENTATIVE
 
-    public DocumentSender() {
-    }
-
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
-
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
 }

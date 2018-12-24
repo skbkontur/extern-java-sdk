@@ -21,24 +21,22 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.ion;
 
-public class DocumentSender {
+import ru.kontur.extern_api.sdk.model.Address;
 
-    private String senderFullName;
+/**
+ * Taxpayer для ИОН имеет адрес.
+ */
+public class Taxpayer extends ru.kontur.extern_api.sdk.model.Taxpayer {
 
-    public String getSenderFullName() {
-        return senderFullName;
+    private Address address = null;
+
+    public Address getAddress() {
+        return address;
     }
 
-    public DocumentSender() {
-    }
-
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
-
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

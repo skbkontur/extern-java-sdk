@@ -21,24 +21,42 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.ion;
 
-public class DocumentSender {
+import com.google.gson.annotations.SerializedName;
+import java.util.Date;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract.AcceptType;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract.Type;
 
-    private String senderFullName;
+/**
+ * @see IonRequestContract#IonRequestContract(ClientInfo, Type, AcceptType, Date)
+ */
+public class IonRequestData {
 
-    public String getSenderFullName() {
-        return senderFullName;
+    @SerializedName("ВидЗапр")
+    private int type;
+
+    @SerializedName("ФормОтв")
+    private int formType;
+
+    @SerializedName("НаДату")
+    private String date;
+
+    IonRequestData(int type, int acceptType, String onDate) {
+        this.type = type;
+        this.formType = acceptType;
+        this.date = onDate;
     }
 
-    public DocumentSender() {
+    public int getType() {
+        return type;
     }
 
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public int getFormType() {
+        return formType;
     }
 
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
+    public String getDate() {
+        return date;
     }
 }

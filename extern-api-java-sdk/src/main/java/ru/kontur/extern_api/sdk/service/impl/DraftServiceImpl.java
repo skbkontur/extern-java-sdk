@@ -33,6 +33,7 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
@@ -58,7 +59,8 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<UUID>> createAsync(
             SenderRequest sender,
             Recipient recipient,
-            OrganizationRequest payer) {
+            OrganizationRequest payer
+    ) {
         return createAsync(new DraftMetaRequest(sender, recipient, payer))
                 .thenApply(cxt -> cxt.map(QueryContext.DRAFT_ID, Draft::getId));
     }
@@ -120,7 +122,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             UUID draftId,
-            DraftMetaRequest draftMeta) {
+            DraftMetaRequest draftMeta
+    ) {
         return api.updateMeta(acc.accountId(), draftId, draftMeta)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_META));
     }
@@ -128,7 +131,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             String draftId,
-            DraftMetaRequest draftMeta) {
+            DraftMetaRequest draftMeta
+    ) {
         return updateDraftMetaAsync(UUID.fromString(draftId), draftMeta);
     }
 
@@ -212,7 +216,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(
             UUID draftId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.lookupDocument(acc.accountId(), draftId, documentId)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
@@ -220,7 +225,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftDocument>> lookupDocumentAsync(
             String draftId,
-            String documentId) {
+            String documentId
+    ) {
         return lookupDocumentAsync(UUID.fromString(draftId), UUID.fromString(documentId));
     }
 
@@ -236,7 +242,8 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(
             UUID draftId,
             UUID documentId,
-            DocumentContents documentContents) {
+            DocumentContents documentContents
+    ) {
         return api.updateDocument(acc.accountId(), draftId, documentId, documentContents)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
@@ -245,11 +252,13 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<DraftDocument>> updateDocumentAsync(
             String draftId,
             String documentId,
-            DocumentContents documentContents) {
+            DocumentContents documentContents
+    ) {
         return updateDocumentAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId),
-                documentContents);
+                documentContents
+        );
     }
 
     @Override
@@ -270,7 +279,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<String>> printDocumentAsync(
             String draftId,
-            String documentId) {
+            String documentId
+    ) {
         return getDocumentAsPdfAsync(UUID.fromString(draftId), UUID.fromString(documentId))
                 .thenApply(cxt -> cxt.map(QueryContext.CONTENT_STRING, Base64.getEncoder()::encodeToString));
     }
@@ -286,7 +296,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<DraftDocument>> addDecryptedDocumentAsync(
             UUID draftId,
-            DocumentContents documentContents) {
+            DocumentContents documentContents
+    ) {
         return api.addDecryptedDocument(acc.accountId(), draftId, documentContents)
                 .thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
@@ -302,7 +313,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDecryptedDocumentContentAsync(
             UUID draftId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getDecryptedDocumentContent(acc.accountId(), draftId, documentId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -310,7 +322,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<String>> getDecryptedDocumentContentAsync(
             String draftId,
-            String documentId) {
+            String documentId
+    ) {
         return getDecryptedDocumentContentAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId)
@@ -329,7 +342,8 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
             UUID draftId,
             UUID documentId,
-            byte[] content) {
+            byte[] content
+    ) {
         return api.updateDecryptedDocumentContent(acc.accountId(), draftId, documentId, content)
                 .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
@@ -338,11 +352,13 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
             String draftId,
             String documentId,
-            byte[] content) {
+            byte[] content
+    ) {
         return updateDecryptedDocumentContentAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId),
-                content);
+                content
+        );
     }
 
     @Override
@@ -357,7 +373,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getEncryptedDocumentContentAsync(
             UUID draftId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getEncryptedDocumentContent(acc.accountId(), draftId, documentId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -365,7 +382,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<String>> getEncryptedDocumentContentAsync(
             String draftId,
-            String documentId) {
+            String documentId
+    ) {
         return getEncryptedDocumentContentAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId)
@@ -383,7 +401,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
             UUID draftId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getSignatureContent(acc.accountId(), draftId, documentId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -391,7 +410,8 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public CompletableFuture<QueryContext<String>> getSignatureContentAsync(
             String draftId,
-            String documentId) {
+            String documentId
+    ) {
         return getSignatureContentAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId)
@@ -410,7 +430,8 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<Void>> updateSignatureAsync(
             UUID draftId,
             UUID documentId,
-            byte[] content) {
+            byte[] content
+    ) {
         return api.updateSignature(acc.accountId(), draftId, documentId, content)
                 .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
@@ -419,7 +440,8 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<Void>> updateSignatureAsync(
             String draftId,
             String documentId,
-            byte[] content) {
+            byte[] content
+    ) {
         return updateSignatureAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId),
@@ -492,9 +514,9 @@ public class DraftServiceImpl implements DraftService {
             UUID draftId,
             UUID documentId,
             int version,
-            UsnServiceContractInfo usn) {
-        return api.buildDeclaration(acc.accountId(), draftId, documentId, "USN", version, usn)
-                .thenApply(contextAdaptor(QueryContext.NOTHING));
+            UsnServiceContractInfo usn
+    ) {
+        return buildDocumentAsync(draftId, documentId, BuildDocumentType.USN, usn, version);
     }
 
     @Override
@@ -502,7 +524,8 @@ public class DraftServiceImpl implements DraftService {
             String draftId,
             String documentId,
             int version,
-            UsnServiceContractInfo usn) {
+            UsnServiceContractInfo usn
+    ) {
         return buildDeclarationAsync(
                 UUID.fromString(draftId),
                 UUID.fromString(documentId),
@@ -525,16 +548,17 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<DraftDocument>> createAndBuildDeclarationAsync(
             UUID draftId,
             int version,
-            UsnServiceContractInfo usn) {
-        return api.createAndBuildDeclaration(acc.accountId(), draftId, "USN", version, usn)
-                .thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
+            UsnServiceContractInfo usn
+    ) {
+        return newDocumentAsync(draftId, BuildDocumentType.USN, usn, version);
     }
 
     @Override
     public CompletableFuture<QueryContext<DraftDocument>> createAndBuildDeclarationAsync(
             String draftId,
             int version,
-            UsnServiceContractInfo usn) {
+            UsnServiceContractInfo usn
+    ) {
         return createAndBuildDeclarationAsync(UUID.fromString(draftId), version, usn);
     }
 
@@ -545,6 +569,57 @@ public class DraftServiceImpl implements DraftService {
                 parent.require(QueryContext.VERSION),
                 parent.require(QueryContext.USN_SERVICE_CONTRACT_INFO)
         ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> buildIonRequestAsync(
+            UUID draftId,
+            UUID documentId,
+            IonRequestContract requestContract
+    ) {
+        return buildDocumentAsync(draftId, documentId, BuildDocumentType.ION1, requestContract, 1);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<DraftDocument>> newIonRequestAsync(
+            UUID draftId,
+            IonRequestContract requestContract
+    ) {
+        return newDocumentAsync(draftId, BuildDocumentType.ION1, requestContract, 1);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> buildDocumentAsync(
+            UUID draftId,
+            UUID documentId,
+            BuildDocumentType documentType,
+            BuildDocumentContract requestContract,
+            int contractVersion
+    ) {
+        return api.buildDocument(
+                acc.accountId(),
+                draftId,
+                documentId,
+                documentType,
+                contractVersion,
+                requestContract
+        ).thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<DraftDocument>> newDocumentAsync(
+            UUID draftId,
+            BuildDocumentType documentType,
+            BuildDocumentContract requestContract,
+            int contractVersion
+    ) {
+        return api.createAndBuildDocument(
+                acc.accountId(),
+                draftId,
+                documentType,
+                contractVersion,
+                requestContract
+        ).thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
 
 }

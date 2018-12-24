@@ -23,22 +23,19 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class DocumentSender {
+import com.google.gson.annotations.SerializedName;
 
-    private String senderFullName;
 
-    public String getSenderFullName() {
-        return senderFullName;
-    }
+public enum BuildDocumentType {
 
-    public DocumentSender() {
-    }
+    @SerializedName("USN")
+    USN,
 
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
+    /**
+     * код типа запроса 1 "Cправка о состоянии расчетов по налогам,
+     * сборам, страховым взносам, пеням, штрафам, процентам"
+     */
+    @SerializedName("ION1")
+    ION1
 
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
 }

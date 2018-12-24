@@ -23,22 +23,9 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class DocumentSender {
+/**
+ * Marker interface for a different usn data types
+ */
+public interface UsnData {
 
-    private String senderFullName;
-
-    public String getSenderFullName() {
-        return senderFullName;
-    }
-
-    public DocumentSender() {
-    }
-
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
-
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
 }

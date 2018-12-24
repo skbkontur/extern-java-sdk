@@ -23,22 +23,11 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class DocumentSender {
 
-    private String senderFullName;
+/**
+ * Marker interface for different declaration types
+ * @see BuildDocumentType
+ */
+public interface BuildDocumentContract {
 
-    public String getSenderFullName() {
-        return senderFullName;
-    }
-
-    public DocumentSender() {
-    }
-
-    public DocumentSender(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
-
-    public void setSenderFullName(String senderFullName) {
-        this.senderFullName = senderFullName;
-    }
 }

@@ -23,16 +23,16 @@
 
 package ru.kontur.extern_api.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -42,18 +42,18 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
-import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
-class UsnIT {
+class DocumentBuildIT {
 
     private static DraftService draftService;
     private static DraftMetaRequest draftMeta;
@@ -81,26 +81,47 @@ class UsnIT {
                 .orElseThrow(() -> new RuntimeException("no suitable data for usn tests"));
     }
 
-    @BeforeEach
-    void setUp() {
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
-    }
-
     @TestFactory
     @DisplayName("allow to create a valid usn")
     Stream<DynamicTest> usnTests() {
         return Stream.of(
                 dynamicTest("V1 from file", () -> checkUsn(1, loadUsn("/docs/USN/usn.json"))),
-                dynamicTest("V1 from dto NOT_SUPPORTED ???", System.out::println),
+                dynamicTest("V1 from dto NOT_SUPPORTED", System.out::println),
                 dynamicTest("V2 from file", () -> checkUsn(2, loadUsn("/docs/USN/usnV2.json"))),
                 dynamicTest("V2 from dto", () -> checkUsn(2, PreparedTestData.usnV2()))
         );
     }
+
+    @TestFactory
+    @DisplayName("allow to create a ion from file")
+    Stream<DynamicTest> ionTests() throws IOException {
+        String prefix = "/Docs/ion1/";
+        return Resources.walk(prefix)
+                .map(file -> dynamicTest(file, () -> checkIon(loadIon(prefix + file), file)));
+    }
+
+    private void checkIon(IonRequestContract ion, String name) {
+        UUID draftId = draftService
+                .createAsync(draftMeta)
+                .join()
+                .getOrThrow()
+                .getId();
+
+        draftService.newIonRequestAsync(draftId, ion)
+                .thenApply(QueryContext::getOrThrow)
+                .join();
+
+        CheckResultData result = draftService.checkAsync(draftId).join().getOrThrow();
+
+        boolean isPositive = name.startsWith("+");
+
+        if (isPositive) {
+            assertTrue(result.hasNoErrors());
+        } else {
+            assertFalse(result.hasNoErrors());
+        }
+    }
+
 
     private void checkUsn(int version, UsnServiceContractInfo usn) {
 
@@ -114,15 +135,12 @@ class UsnIT {
                 .thenApply(QueryContext::getOrThrow)
                 .join();
 
-        draftService.checkAsync(draftId)
-                .thenApply(QueryContext::getOrThrow)
-                .thenAccept(UsnIT::assertCheckHasNoErrors)
-                .join();
+        CheckResultData result = draftService.checkAsync(draftId).join().getOrThrow();
+        assertTrue(result.hasNoErrors());
     }
 
-
-    private static void assertCheckHasNoErrors(CheckResultData checkResult) {
-        assertTrue(checkResult.hasNoErrors());
+    private static IonRequestContract loadIon(String path) {
+        return Resources.loadFromJson(path, IonRequestContract.class);
     }
 
     private static UsnServiceContractInfo loadUsn(String path) {
