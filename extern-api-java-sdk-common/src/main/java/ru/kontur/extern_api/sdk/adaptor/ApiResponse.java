@@ -39,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
  *   "message": "string",
  *   "track-id": "string",
  *   "trace-id": "string",
- *   "properties": {}
  * }
  * </code></pre>
  *

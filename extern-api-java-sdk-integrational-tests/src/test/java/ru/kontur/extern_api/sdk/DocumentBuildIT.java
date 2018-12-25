@@ -30,8 +30,10 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
@@ -40,12 +42,15 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
@@ -57,11 +62,21 @@ class DocumentBuildIT {
 
     private static DraftService draftService;
     private static DraftMetaRequest draftMeta;
+    private static Configuration config;
+    private static ExternEngine ee;
+
+    private static IonRequestContractV1 loadIon(String path) {
+        return Resources.loadFromJson(path, IonRequestContractV1.class);
+    }
+
+    private static UsnServiceContractInfo loadUsn(String path) {
+        return Resources.loadFromJson(path, UsnServiceContractInfo.class);
+    }
 
     @BeforeAll
     static void init() {
-        Configuration config = TestConfig.LoadConfigFromEnvironment();
-        ExternEngine ee = ExternEngineBuilder
+        config = TestConfig.LoadConfigFromEnvironment();
+        ee = ExternEngineBuilder
                 .createExternEngine(config.getServiceBaseUri())
                 .apiKey(config.getApiKey())
                 .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
@@ -79,11 +94,17 @@ class DocumentBuildIT {
                 .findAny()
                 .map(TestUtils::toDraftMetaRequest)
                 .orElseThrow(() -> new RuntimeException("no suitable data for usn tests"));
+
     }
+
+    private static byte[] sign(byte[] bytes) {
+        return CryptoUtils.with(ee.getCryptoProvider()).sign(config.getThumbprint(), bytes);
+    }
+
 
     @TestFactory
     @DisplayName("allow to create a valid usn")
-    Stream<DynamicTest> usnTests() {
+    Stream<DynamicTest> createUsnTests() {
         return Stream.of(
                 dynamicTest("V1 from file", () -> checkUsn(1, loadUsn("/docs/USN/usn.json"))),
                 dynamicTest("V1 from dto NOT_SUPPORTED", System.out::println),
@@ -94,13 +115,13 @@ class DocumentBuildIT {
 
     @TestFactory
     @DisplayName("allow to create a ion from file")
-    Stream<DynamicTest> ionTests() throws IOException {
+    Stream<DynamicTest> createIonTests() throws IOException {
         String prefix = "/Docs/ion1/";
         return Resources.walk(prefix)
                 .map(file -> dynamicTest(file, () -> checkIon(loadIon(prefix + file), file)));
     }
 
-    private void checkIon(IonRequestContract ion, String name) {
+    private void checkIon(IonRequestContractV1 ion, String name) {
         UUID draftId = draftService
                 .createAsync(draftMeta)
                 .join()
@@ -122,7 +143,6 @@ class DocumentBuildIT {
         }
     }
 
-
     private void checkUsn(int version, UsnServiceContractInfo usn) {
 
         UUID draftId = draftService
@@ -139,12 +159,48 @@ class DocumentBuildIT {
         assertTrue(result.hasNoErrors());
     }
 
-    private static IonRequestContract loadIon(String path) {
-        return Resources.loadFromJson(path, IonRequestContract.class);
+
+    @TestFactory
+    @DisplayName("to send created")
+    Stream<DynamicTest> send() {
+        return Stream.of(
+                dynamicTest("usn", this::sendCheckedUsn),
+                dynamicTest("ion", this::sendCheckedIon)
+        );
     }
 
-    private static UsnServiceContractInfo loadUsn(String path) {
-        return Resources.loadFromJson(path, UsnServiceContractInfo.class);
+    private void sendCheckedUsn() {
+        UsnServiceContractInfo usn = loadUsn("/docs/USN/usnV2.json");
+        sendDraftTest(draftId -> draftService
+                .createAndBuildDeclarationAsync(draftId, 2, usn)
+                .thenApply(QueryContext::getOrThrow)
+                .join()
+                .getId()
+        );
+    }
+
+    private void sendCheckedIon() {
+        sendDraftTest(draftId -> draftService
+                .newIonRequestAsync(draftId, loadIon("/docs/ion.json"))
+                .thenApply(QueryContext::getOrThrow)
+                .join()
+                .getId()
+        );
+    }
+
+    private void sendDraftTest(Function<UUID, UUID> fillDraft) {
+        UUID draftId = draftService.createAsync(draftMeta).join().getOrThrow().getId();
+
+        UUID documentId = fillDraft.apply(draftId);
+
+        byte[] doc = draftService.getDecryptedDocumentContentAsync(draftId, documentId)
+                .join().getOrThrow();
+
+        draftService.updateSignatureAsync(draftId, documentId, sign(doc))
+                .join().getOrThrow();
+
+        Docflow docflow = draftService.sendAsync(draftId).join().getOrThrow();
+        Assertions.assertEquals(DocflowStatus.SENT, docflow.getStatus());
     }
 
 }

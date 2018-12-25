@@ -23,40 +23,57 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import com.google.gson.annotations.SerializedName;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1.AcceptType;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1.Type;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * @see IonRequestContractV1#IonRequestContractV1(ClientInfo, Type, AcceptType, Date)
- */
-public class IonRequestData {
+public class IonRequestContractV1 implements IonRequestContract {
 
-    @SerializedName("ВидЗапр")
-    private int type;
-
-    @SerializedName("ФормОтв")
-    private int formType;
-
-    @SerializedName("НаДату")
-    private String date;
-
-    IonRequestData(int type, int acceptType, String onDate) {
-        this.type = type;
-        this.formType = acceptType;
-        this.date = onDate;
+    public enum Type {
+        WHOLE_ORGANIZATION,
+        ALL_KPPS,
+        ONE_KPP
     }
 
-    public int getType() {
-        return type;
+    public enum AcceptType {
+        RTF,
+        XML,
+        XLS,
+        PDF
     }
 
-    public int getFormType() {
-        return formType;
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+    private int version;
+    private ClientInfo additionalOrgInfo;
+    private IonRequestData data;
+
+    public IonRequestContractV1(
+            @NotNull ClientInfo additionalOrgInfo,
+            @NotNull Type type,
+            @NotNull AcceptType acceptType,
+            @NotNull Date onDate
+    ) {
+        this.version = 1;
+        this.additionalOrgInfo = additionalOrgInfo;
+
+        int iType = type.ordinal() + 1;
+        int iAcceptType = acceptType.ordinal() + 1;
+        String sDate = formatter.format(onDate);
+
+        this.data = new IonRequestData(iType, iAcceptType, sDate);
     }
 
-    public String getDate() {
-        return date;
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    public ClientInfo getAdditionalOrgInfo() {
+        return additionalOrgInfo;
+    }
+
+    public IonRequestData getData() {
+        return data;
     }
 }

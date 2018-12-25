@@ -23,57 +23,10 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
 
-public class IonRequestContract implements BuildDocumentContract {
+public interface IonRequestContract extends BuildDocumentContract {
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    int getVersion();
 
-    private int version;
-    private ClientInfo additionalOrgInfo;
-    private IonRequestData data;
-
-    public IonRequestContract(
-            @NotNull ClientInfo additionalOrgInfo,
-            @NotNull Type type,
-            @NotNull AcceptType acceptType,
-            @NotNull Date onDate
-    ) {
-        this.version = 1;
-        this.additionalOrgInfo = additionalOrgInfo;
-
-        int iType = type.ordinal() + 1;
-        int iAcceptType = acceptType.ordinal() + 1;
-        String sDate = formatter.format(onDate);
-
-        this.data = new IonRequestData(iType, iAcceptType, sDate);
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public ClientInfo getAdditionalOrgInfo() {
-        return additionalOrgInfo;
-    }
-
-    public IonRequestData getData() {
-        return data;
-    }
-
-    public enum Type {
-        WHOLE_ORGANIZATION,
-        ALL_KPPS,
-        ONE_KPP
-    }
-
-    public enum AcceptType {
-        RTF,
-        XML,
-        XLS,
-        PDF
-    }
 }

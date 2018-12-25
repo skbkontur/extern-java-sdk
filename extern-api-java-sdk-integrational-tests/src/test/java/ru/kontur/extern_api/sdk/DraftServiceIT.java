@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -407,12 +408,13 @@ class DraftServiceIT {
     @MethodSource({"newDraftWithDocumentFactory"})
     void testPrepare(Draft draft) {
 
-        QueryContext<PrepareResult> prepareResult = engine.getDraftService()
+        PrepareResult prepareResult = engine.getDraftService()
                 .prepareAsync(draft.getId())
-                .join();
+                .join()
+                .getOrThrow();
 
-        assertTrue(prepareResult.get().getStatus() == Status.OK ||
-                prepareResult.get().getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
+        Status status = prepareResult.getStatus();
+        assertTrue(status == Status.OK || status == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
 
     }
 
