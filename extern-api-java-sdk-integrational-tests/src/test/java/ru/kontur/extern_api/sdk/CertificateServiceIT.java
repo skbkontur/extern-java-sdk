@@ -28,11 +28,14 @@
  */
 package ru.kontur.extern_api.sdk;
 
+import java.util.List;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
@@ -46,17 +49,6 @@ class CertificateServiceIT{
     static void setUpClass() {
         certificateService = TestSuite.Load().engine.getCertificateService();
     }
-
-    @BeforeEach
-    void setUp() {
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
-    }
-
 
     @Test
     void getCertificatesTest() {
@@ -74,5 +66,19 @@ class CertificateServiceIT{
             Assert.assertNotNull(certificate.getKpp());
         });
 
+    }
+
+    @Test
+    void getCertificatesPageTest() {
+
+        List<Certificate> l12 = certificateService
+                .getCertificates(0, 2).join().getOrThrow().getCertificates();
+
+        List<Certificate> l2 = certificateService
+                .getCertificates(1, 1).join().getOrThrow().getCertificates();
+
+        Assertions.assertEquals(2, l12.size());
+        Assertions.assertEquals(1, l2.size());
+        Assertions.assertEquals(l2.get(0).getContent(), l12.get(1).getContent());
     }
 }

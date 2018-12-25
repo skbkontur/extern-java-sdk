@@ -31,6 +31,7 @@ package ru.kontur.extern_api.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -62,6 +63,23 @@ class AccountIT {
                 .ensureSuccess();
 
         assertFalse(cxt.get().getAccounts().isEmpty());
+    }
+
+    @Test
+    void getAccounts() {
+        AccountList l12 = accountService
+                .getAccountsAsync(0, 2)
+                .join().getOrThrow();
+
+        AccountList l2 = accountService
+                .getAccountsAsync(1, 1)
+                .join().getOrThrow();
+
+        Assertions.assertEquals(2, l12.getAccounts().size());
+        Assertions.assertEquals(1, l2.getAccounts().size());
+
+        Assertions.assertEquals(l2.getAccounts().get(0).getId(), l12.getAccounts().get(1).getId());
+
     }
 
     @Test
