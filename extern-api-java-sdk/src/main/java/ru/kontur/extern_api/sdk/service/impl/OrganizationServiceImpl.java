@@ -28,6 +28,7 @@ import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
 import ru.kontur.extern_api.sdk.model.Company;
@@ -128,10 +129,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Deprecated
     public CompletableFuture<QueryContext<CompanyBatch>> searchAsync(
-            String inn,
-            String kpp,
-            Long skip,
-            Integer take) {
+            @Nullable String inn,
+            @Nullable String kpp,
+            @Nullable Long skip,
+            @Nullable Integer take
+    ) {
         return searchAsync(OrgFilter
                 .page(skip == null ? 0 : skip, take == null ? 0 : take)
                 .inn(inn)

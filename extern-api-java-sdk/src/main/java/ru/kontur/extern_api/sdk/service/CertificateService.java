@@ -38,22 +38,34 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
 public interface CertificateService {
 
     /**
-     * <p>GET /v1/{accountId}/certificates</p>
-     * Асинхронный метод возвращает список сертификатов
+     * Асинхронный метод возвращает список сертификатов привязанных к accountId
+     * с разбивкой по страницам.
+     * Сертификаты возвращаются в алфавитном порядке по ИНН из поля subject.
      *
+     * @param skip начальный индекс первого возвращённого сертификата
+     * @param take требуемое количество возвращённых сертификатов (максимум - 100)
      * @return список сертификатов
      * @see CertificateList
      */
+    CompletableFuture<QueryContext<CertificateList>> getCertificates(int skip, int take);
+
+    /**
+     * Асинхронный метод возвращает список сертификатов
+     *
+     * @return список сертификатов
+     * @see #getCertificates(int, int) рекомендуемый метод получения сертификатов
+     * @deprecated возвращает только 100 аккаутнов
+     */
+    @Deprecated
     CompletableFuture<QueryContext<CertificateList>> getCertificateListAsync();
 
     /**
-     * <p>GET /v1/{accountId}/certificates</p>
      * Синхронный метод возвращает список сертификатов
      *
      * @param cxt контекст
      * @return список сертификатов
      * @see CertificateList
-     * @deprecated use {@link CertificateService#getCertificateListAsync()}
+     * @deprecated use {@link CertificateService#getCertificates(int, int)}
      */
     @Deprecated
     QueryContext<CertificateList> getCertificateList(QueryContext<?> cxt);

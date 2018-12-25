@@ -35,17 +35,17 @@ import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.Sender;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.SignedDraft;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
@@ -116,15 +116,16 @@ class BankCloudTestScenario {
     private Docflow sendDraftWithUsn(Account senderAcc)
             throws Exception {
 
-        Sender sender = new Sender();
-        sender.setInn(senderAcc.getInn());
-        sender.setKpp(senderAcc.getKpp());
-        sender.setIpaddress("8.8.8.8");
-        sender.setCertificate(senderCertificate.getContent());
+        SenderRequest sender = new SenderRequest(
+                senderAcc.getInn(),
+                senderAcc.getKpp(),
+                senderCertificate.getContent(),
+                "8.8.8.8"
+        );
 
         Recipient recipient = new FnsRecipient("0087");
 
-        Organization oPayer = new Organization(senderAcc.getInn(), senderAcc.getKpp());
+        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp());
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)

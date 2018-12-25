@@ -23,9 +23,9 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
 public class OrgFilter implements Filter {
 
@@ -47,12 +47,12 @@ public class OrgFilter implements Filter {
         return this;
     }
 
-    public OrgFilter inn(String inn) {
+    public OrgFilter inn(@Nullable String inn) {
         this.filterMap.put("inn", inn);
         return this;
     }
 
-    public OrgFilter kpp(String kpp) {
+    public OrgFilter kpp(@Nullable String kpp) {
         this.filterMap.put("kpp", kpp);
         return this;
     }
@@ -83,6 +83,6 @@ public class OrgFilter implements Filter {
 
     @Override
     public Map<String, String> asFilterMap() {
-        return Collections.unmodifiableMap(filterMap);
+        return Filter.stripNullKeys(filterMap);
     }
 }

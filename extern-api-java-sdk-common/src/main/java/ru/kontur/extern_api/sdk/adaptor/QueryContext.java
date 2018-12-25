@@ -35,13 +35,13 @@ import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.ServiceException;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentContents;
@@ -164,6 +164,10 @@ public class QueryContext<R> implements Serializable {
      * Объект "Описание черновика" {@link DraftMeta}
      */
     public static final String DRAFT_META = "draftMeta";
+    /**
+     * Объект "Описание черновика для его создания" {@link DraftMeta}
+     */
+    public static final String DRAFT_META_REQUEST = "draftMetaRequest";
     /**
      * Режим задержки (отсрочки)
      */
@@ -1048,6 +1052,25 @@ public class QueryContext<R> implements Serializable {
      */
     public QueryContext<R> setDraftMeta(DraftMeta draftMeta) {
         return set(DRAFT_META, draftMeta);
+    }
+
+    /**
+     * Метод возвращает объект метаданные черновика для его создания {@link DraftMetaRequest}
+     *
+     * @return метаданные черновика для его создания
+     */
+    public DraftMetaRequest getDraftMetaRequest() {
+        return (DraftMetaRequest) params.get(DRAFT_META_REQUEST);
+    }
+
+    /**
+     * Метод устанавливает объект метаданные черновика для его создания {@link DraftMetaRequest}
+     *
+     * @param draftMetaRequest объект метаданные черновика для его создания
+     * @return контекст
+     */
+    public QueryContext<R> setDraftMetaRequest(DraftMetaRequest draftMetaRequest) {
+        return set(DRAFT_META_REQUEST, draftMetaRequest);
     }
 
     /**

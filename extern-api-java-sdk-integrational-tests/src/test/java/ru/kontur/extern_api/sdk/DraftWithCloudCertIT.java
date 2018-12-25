@@ -35,14 +35,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
@@ -56,7 +50,8 @@ class DraftWithCloudCertIT {
     private static ExternEngine engine;
 
     @BeforeAll
-    static void setUpClass() throws Exception {
+    static void setUpClass() {
+
         engine = TestSuite.Load().engine;
 
         SystemProperty.push("httpclient.debug");
@@ -64,7 +59,8 @@ class DraftWithCloudCertIT {
         List<Certificate> certs = engine
                 .getCertificateService()
                 .getCertificateListAsync()
-                .get().getOrThrow()
+                .join()
+                .get()
                 .getCertificates().stream()
                 .filter(Certificate::getIsCloud)
                 .filter(Certificate::getIsQualified)
@@ -79,22 +75,22 @@ class DraftWithCloudCertIT {
     private UUID draftId;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         draftId = createDraftWithCert(cloudCert);
     }
 
     @Test
     @DisplayName("cloud sign draft")
-    void testCloudSign() throws Exception {
+    void testCloudSign() {
         ApproveCodeProvider backdoor = new ApproveCodeProvider(engine);
         engine.getDraftService()
                 .cloudSignAsync(draftId, cxt -> backdoor.apply(cxt.getRequestId()))
-                .get()
+                .join()
                 .getOrThrow();
 
         PrepareResult prepareResult = engine.getDraftService()
                 .prepareAsync(draftId.toString())
-                .get()
+                .join()
                 .getOrThrow();
 
         Status status = prepareResult.getStatus();
@@ -104,16 +100,16 @@ class DraftWithCloudCertIT {
 
     @Test
     @DisplayName("decrypt docflow document in cloud")
-    void testDecryptContent() throws Exception {
+    void testDecryptContent(){
         ApproveCodeProvider backdoor = new ApproveCodeProvider(engine);
         engine.getDraftService()
                 .cloudSignAsync(draftId, cxt -> backdoor.apply(cxt.getRequestId()))
-                .get()
+                .join()
                 .getOrThrow();
 
         Docflow docflow = engine.getDraftService()
                 .sendAsync(draftId.toString())
-                .get()
+                .join()
                 .getOrThrow();
 
         for (Document d : docflow.getDocuments()) {
@@ -134,7 +130,7 @@ class DraftWithCloudCertIT {
     }
 
 
-    private static UUID createDraftWithCert(Certificate certificate) throws Exception {
+    private static UUID createDraftWithCert(Certificate certificate) {
         TestData[] data = TestUtils.getTestData(certificate.getContent());
 
         TestData testData = Arrays.stream(data)
@@ -142,14 +138,14 @@ class DraftWithCloudCertIT {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("data"));
 
-        DraftMeta dm = TestUtils.toDraftMeta(testData);
+        DraftMetaRequest dm = TestUtils.toDraftMetaRequest(testData);
         dm.getSender().setKpp(certificate.getKpp());
         dm.getSender().setInn(certificate.getInn());
 
         UUID draftId = engine
                 .getDraftService()
                 .createAsync(dm.getSender(), dm.getRecipient(), dm.getPayer())
-                .get()
+                .join()
                 .getOrThrow();
 
         String testDocPath = Arrays.stream(testData.getDocs())
@@ -160,7 +156,7 @@ class DraftWithCloudCertIT {
 
         engine.getDraftService()
                 .addDecryptedDocumentAsync(draftId, docs)
-                .get().ensureSuccess();
+                .join().ensureSuccess();
 
         return draftId;
     }

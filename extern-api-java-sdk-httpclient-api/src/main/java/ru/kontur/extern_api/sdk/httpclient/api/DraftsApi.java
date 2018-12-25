@@ -37,17 +37,8 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DataWrapper;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.httpclient.Raw;
+import ru.kontur.extern_api.sdk.model.*;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)
@@ -63,7 +54,7 @@ public interface DraftsApi {
     @POST("v1/{accountId}/drafts")
     CompletableFuture<ApiResponse<Draft>> create(
             @Path("accountId") UUID accountId,
-            @Body DraftMeta clientInfo
+            @Body DraftMetaRequest clientInfo
     );
 
     /**
@@ -108,13 +99,13 @@ public interface DraftsApi {
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
-     * @param newMeta DraftMeta draft meta data
+     * @param newMeta DraftMetaRequest draft meta data
      */
     @PUT("v1/{accountId}/drafts/{draftId}/meta")
     CompletableFuture<ApiResponse<DraftMeta>> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Body DraftMeta newMeta
+            @Body DraftMetaRequest newMeta
     );
 
     /**
@@ -300,7 +291,7 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId,
-            @Body byte[] content
+            @Body @Raw byte[] content
     );
 
     /**
@@ -332,41 +323,41 @@ public interface DraftsApi {
     );
 
     /**
-     * Create an USN declaration and replace context in document
+     * Create an document and replace context in document
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
      * @param documentId document identifier
      * @param type Document type
      * @param version Declaration version
-     * @param data metadata of an USN document
+     * @param data metadata of a document. Actual type {@link BuildDocumentContract}
      */
     @POST("v1/{accountId}/drafts/{draftId}/documents/{documentId}/build")
-    CompletableFuture<ApiResponse<Void>> buildDeclaration(
+    CompletableFuture<ApiResponse<Void>> buildDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("documentId") UUID documentId,
-            @Query("type") String type,
+            @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body UsnServiceContractInfo data
+            @Body Object data
     );
 
     /**
-     * Create an USN declaration and replace context in document
+     * Create new document of given format
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
      * @param type Document type
      * @param version Declaration version
-     * @param data UsnServiceContractInfo meta data of an USN document
+     * @param data metadata of a document. Actual type {@link BuildDocumentContract}
      */
     @POST("v1/{accountId}/drafts/{draftId}/build-document")
-    CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDeclaration(
+    CompletableFuture<ApiResponse<DraftDocument>> createAndBuildDocument(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Query("type") String type,
+            @Query("type") BuildDocumentType type,
             @Query("version") int version,
-            @Body UsnServiceContractInfo data
+            @Body Object data
     );
 
 }

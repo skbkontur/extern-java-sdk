@@ -34,15 +34,7 @@ import java.util.UUID;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
-import ru.kontur.extern_api.sdk.model.ClientInfo;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.Organization;
-import ru.kontur.extern_api.sdk.model.Sender;
-import ru.kontur.extern_api.sdk.model.TestData;
-import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
@@ -55,13 +47,13 @@ public class TestUtils {
         return data;
     }
 
-    public static DraftMeta toDraftMeta(TestData td) {
+    public static DraftMetaRequest toDraftMetaRequest(TestData td) {
         String senderIp = td.getClientInfo().getSender().getIpAddress();
-        DraftMeta dm = new DraftMeta();
+        DraftMetaRequest dm = new DraftMetaRequest();
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new Organization(org.getInn(), org.getKpp()));
+        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp()));
 
         ClientInfo.Recipient recipient = clientInfo.getRecipient();
 
@@ -78,7 +70,7 @@ public class TestUtils {
                 .ifPresent(dm::setRecipient);
 
         ClientInfo.Sender sender = clientInfo.getSender();
-        dm.setSender(new Sender(
+        dm.setSender(new SenderRequest(
                 sender.getInn(),
                 sender.getKpp(),
                 sender.getCertificate(),

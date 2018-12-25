@@ -39,6 +39,7 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.CertificateContent;
 import ru.kontur.extern_api.sdk.model.DecryptInitiation;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -267,7 +268,7 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Path("replyId") UUID replyId,
-            @Body byte[] content
+            @Body @Raw byte[] content
     );
 
     @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
@@ -276,7 +277,7 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Path("replyId") UUID replyId,
-            @Body byte[] signature
+            @Body @Raw byte[] signature
     );
 
     /**

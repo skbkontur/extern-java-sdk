@@ -28,7 +28,7 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.7.2-SNAPSHOT</version>
+        <version>1.7.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-httpclient-api</artifactId>
@@ -46,10 +46,6 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
         </dependency>
 
         <dependency>

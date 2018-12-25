@@ -31,6 +31,13 @@ public class DocumentSender {
         return senderFullName;
     }
 
+    public DocumentSender() {
+    }
+
+    public DocumentSender(String senderFullName) {
+        this.senderFullName = senderFullName;
+    }
+
     public void setSenderFullName(String senderFullName) {
         this.senderFullName = senderFullName;
     }

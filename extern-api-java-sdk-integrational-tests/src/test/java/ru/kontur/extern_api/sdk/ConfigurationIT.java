@@ -36,30 +36,30 @@ import ru.kontur.extern_api.sdk.service.AccountService;
 @DisplayName("Configuration tokens should")
 class ConfigurationIT {
 
-    private Configuration C = TestConfig.LoadConfigFromEnvironment();
+    private Configuration configuration = TestConfig.LoadConfigFromEnvironment();
 
     private ExternEngine newEngine() {
-        return ExternEngineBuilder.createExternEngine(C.getServiceBaseUri())
-                .apiKey(C.getApiKey())
-                .buildAuthentication(C.getAuthBaseUri(), builder -> builder.
-                        passwordAuthentication(C.getLogin(), C.getPass())
+        return ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
+                .apiKey(configuration.getApiKey())
+                .buildAuthentication(configuration.getAuthBaseUri(), builder -> builder.
+                        passwordAuthentication(configuration.getLogin(), configuration.getPass())
                 )
                 .doNotUseCryptoProvider()
-                .accountId(C.getAccountId())
+                .accountId(configuration.getAccountId())
                 .build(Level.BODY);
     }
 
     @Test
     @DisplayName("share same sid across all services")
-    void shareSameSid() throws Exception {
+    void shareSameSid() {
 
         ExternEngine engine = newEngine();
 
         AccountService accountService = engine.getAccountService();
-        accountService.acquireAccountsAsync().get().getOrThrow();
+        accountService.acquireAccountsAsync().join().getOrThrow();
 
         engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
-        accountService.acquireAccountsAsync().get().getOrThrow();
+        accountService.acquireAccountsAsync().join().getOrThrow();
 
         ApiException apiException = Assertions.assertThrows(ApiException.class,
                 () -> engine.getAccountService().acquireAccountsAsync().get().getOrThrow()
