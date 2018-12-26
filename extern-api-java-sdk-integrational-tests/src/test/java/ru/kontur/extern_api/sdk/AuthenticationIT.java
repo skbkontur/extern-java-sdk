@@ -33,25 +33,26 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 
 
-class AuthenticationIT {
+class AuthenticationIT{
 
-    private static Configuration cfg;
     private static AuthenticationProviderBuilder build;
+    private static Configuration configuration;
+
 
     @BeforeAll
-    static void setUp() {
-        cfg = TestConfig.LoadConfigFromEnvironment();
+    static void setUpClass() {
+        configuration = TestConfig.LoadConfigFromEnvironment();
         build = AuthenticationProviderBuilder
-                .createFor(cfg.getAuthBaseUri(), Level.BODY)
-                .withApiKey(cfg.getApiKey());
+                .createFor(configuration.getAuthBaseUri(), Level.BODY)
+                .withApiKey(configuration.getApiKey());
     }
 
     @Nested
@@ -60,8 +61,10 @@ class AuthenticationIT {
 
         @Test
         void cachingTest() {
+
             CachingRefreshingAuthProvider auth = build
-                    .passwordAuthentication(cfg.getLogin(), cfg.getPass());
+                    .passwordAuthentication(
+                            configuration.getLogin(), configuration.getPass());
 
             String s1 = auth.sessionId().getOrThrow();
             String s2 = auth.sessionId().getOrThrow();
@@ -73,10 +76,10 @@ class AuthenticationIT {
         void refreshTest() throws Exception {
 
             CachingRefreshingAuthProvider auth = AuthenticationProviderBuilder
-                    .createFor(cfg.getAuthBaseUri(), Level.BODY)
-                    .withApiKey(cfg.getApiKey())
+                    .createFor(configuration.getAuthBaseUri(), Level.BODY)
+                    .withApiKey(configuration.getApiKey())
                     .cacheKeyFor(Duration.ofSeconds(0))
-                    .passwordAuthentication(cfg.getLogin(), cfg.getPass());
+                    .passwordAuthentication(configuration.getLogin(), configuration.getPass());
 
             String s1 = auth.sessionId().getOrThrow();
             Thread.sleep(1);
@@ -94,7 +97,7 @@ class AuthenticationIT {
         @Test
         void passwordAuth() {
             PasswordAuthenticationProvider auth = build
-                    .passwordAuthentication(cfg.getLogin(), cfg.getPass());
+                    .passwordAuthentication(configuration.getLogin(), configuration.getPass());
 
             Assertions.assertNotNull(auth.sessionId().getOrThrow());
         }
@@ -112,8 +115,10 @@ class AuthenticationIT {
 
         @Test
         void certAuth() throws Exception {
+
             CertificateAuthenticationProvider auth = build
-                    .certificateAuthentication(CertificateResource.read(cfg.getThumbprint()));
+                    .certificateAuthentication(
+                            CertificateResource.read(configuration.getThumbprint()));
 
             Assertions.assertNotNull(auth.sessionId().getOrThrow());
         }
@@ -126,11 +131,11 @@ class AuthenticationIT {
         @Test
         void trustedAuth() {
             TrustedAuthenticationProvider auth = build
-                    .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
+                    .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
                     .configureEncryption(
-                            cfg.getJksPass(),
-                            cfg.getRsaKeyPass(),
-                            cfg.getThumbprintRsa()
+                            configuration.getJksPass(),
+                            configuration.getRsaKeyPass(),
+                            configuration.getThumbprintRsa()
                     );
 
             Assertions.assertNotNull(auth.sessionId().getOrThrow());
@@ -139,11 +144,11 @@ class AuthenticationIT {
         @Test
         void registerExternalServiceId() {
             TrustedAuthenticationProvider auth = build
-                    .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
+                    .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
                     .configureEncryption(
-                            cfg.getJksPass(),
-                            cfg.getRsaKeyPass(),
-                            cfg.getThumbprintRsa()
+                            configuration.getJksPass(),
+                            configuration.getRsaKeyPass(),
+                            configuration.getThumbprintRsa()
                     );
 
             final UUID serviceUserId = UUID.fromString("47024bf5-8c2c-4f1a-8a28-4b41b104a030");

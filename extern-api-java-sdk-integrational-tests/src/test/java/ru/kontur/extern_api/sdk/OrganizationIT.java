@@ -38,7 +38,7 @@ import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-class OrganizationIT {
+class OrganizationIT{
 
     private static final Company COMPANY = new Company();
 
@@ -57,7 +57,7 @@ class OrganizationIT {
     }
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         this.companyId = createOrFindOrganisation();
         assertNotNull(companyId);
     }
@@ -65,15 +65,17 @@ class OrganizationIT {
     @AfterEach
     void tearDown() throws Exception {
         engine.getOrganizationService().deleteAsync(companyId).get();
-        Thread.sleep(100);
+        // please don't hurt me .^.
+        //                       -
+        Thread.sleep(5000);
     }
 
     @Test
-    void testLookup() throws Exception {
+    void testLookup() {
 
         QueryContext<Company> companyCxt = engine.getOrganizationService()
                 .lookupAsync(companyId)
-                .get()
+                .join()
                 .ensureSuccess();
 
         assertCompanyEquals(companyCxt.get(), COMPANY);
@@ -84,7 +86,8 @@ class OrganizationIT {
         String newName = "Emerald";
         Company company = engine.getOrganizationService()
                 .updateAsync(companyId, newName)
-                .join().getOrThrow();
+                .join()
+                .getOrThrow();
 
         Assertions.assertEquals(company.getGeneral().getName(), newName);
     }
@@ -112,7 +115,7 @@ class OrganizationIT {
                 .getCompanies();
     }
 
-    private UUID createOrFindOrganisation() throws Exception {
+    private UUID createOrFindOrganisation() {
         List<Company> companies = searchOrganisations(likeGiven(COMPANY));
 
         if (companies != null && !companies.isEmpty()) {

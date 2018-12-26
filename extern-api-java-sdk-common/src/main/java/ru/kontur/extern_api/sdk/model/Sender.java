@@ -23,131 +23,163 @@
  */
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>Класс содержит информацию об отправителе черновика</p>
+ *
  * @author Aleksey Sukhorukov
  */
 public class Sender {
 
-	private String inn;
-	private String kpp;
-	private Certificate certificate;
-	private String ipaddress;
+    private String inn;
+    private String kpp;
+    private String name;
+    private Certificate certificate;
+    private String ipaddress;
 
-	private String thumbprint;
+    private String thumbprint;
 
-	public Sender() {
-	}
+    public Sender() {
+    }
 
-	public Sender(String inn, String kpp, String certificate, String ipaddress) {
-		this.inn = inn;
-		this.kpp = kpp;
-		this.certificate = new Certificate(certificate);
-		this.ipaddress = ipaddress;
-	}
+    public Sender(String inn, String kpp, String certificate, String ipaddress) {
+        this(inn, kpp, null, certificate, ipaddress);
+    }
 
-	/**
-	 * Возвращает ИНН
-	 * @return ИНН
-	 */
-	public String getInn() {
-		return inn;
-	}
+    public Sender(String inn, String kpp, String name, String certificate, String ipaddress) {
+        this.inn = inn;
+        this.kpp = kpp;
+        this.name = name;
+        this.certificate = new Certificate(certificate);
+        this.ipaddress = ipaddress;
+    }
 
-	/**
-	 * Устанавливает ИНН
-	 * @param inn ИНН
-	 */
-	public void setInn(String inn) {
-		this.inn = inn;
-	}
+    /**
+     * Возвращает ИНН
+     *
+     * @return ИНН
+     */
+    public String getInn() {
+        return inn;
+    }
 
-	/**
-	 * Возвращает КПП
-	 * @return КПП
-	 */
-	public String getKpp() {
-		return kpp;
-	}
+    /**
+     * Устанавливает ИНН
+     *
+     * @param inn ИНН
+     */
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
 
-	/**
-	 * Устанавливает КПП
-	 * @param kpp КПП
-	 */
-	public void setKpp(String kpp) {
-		this.kpp = kpp;
-	}
+    /**
+     * Возвращает КПП
+     *
+     * @return КПП
+     */
+    public String getKpp() {
+        return kpp;
+    }
 
-	/**
-	 * Возвращает сертификат в кодировке BASE64
-	 * @return сертификат в кодировке BASE64
-	 */
-	public String getCertificate() {
-		return certificate.content;
-	}
+    /**
+     * Устанавливает КПП
+     *
+     * @param kpp КПП
+     */
+    public void setKpp(String kpp) {
+        this.kpp = kpp;
+    }
 
-	/**
-	 * Устанавливает сертификат в кодировке BASE64
-	 * @param certificate сертификат в кодировке BASE64
-	 */
-	public void setCertificate(String certificate) {
-		this.certificate = new Certificate(certificate);
-	}
+    /**
+     * Возвращает название организации
+     *
+     * @return название организации
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Возвращает IP адрес отправителя
-	 * @return IP адрес отправителя
-	 */
-	public String getIpaddress() {
-		return ipaddress;
-	}
+    /**
+     * Устанавливает название организации
+     *
+     * @param name название организации
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Устанавливает IP адрес отправителя
-	 * @param ipaddress IP адрес отправителя
-	 */
-	public void setIpaddress(String ipaddress) {
-		this.ipaddress = ipaddress;
-	}
+    /**
+     * Возвращает сертификат в кодировке BASE64
+     *
+     * @return сертификат в кодировке BASE64
+     */
+    public String getCertificate() {
+        return certificate.content;
+    }
 
-	/**
-	 * Возвращает отпечаток сертификата отправителя
-	 * @return отпечаток сертификата отправителя
-	 */
-	public String getThumbprint() {
-		return thumbprint;
-	}
+    /**
+     * Устанавливает сертификат в кодировке BASE64
+     *
+     * @param certificate сертификат в кодировке BASE64
+     */
+    public void setCertificate(String certificate) {
+        this.certificate = new Certificate(certificate);
+    }
 
-	/**
-	 * Устанавливает отпечаток сертификата отправителя
-	 * @param thumbprint отпечаток сертификата отправителя
-	 */
-	public void setThumbprint(String thumbprint) {
-		this.thumbprint = thumbprint;
-	}
+    /**
+     * Возвращает IP адрес отправителя
+     *
+     * @return IP адрес отправителя
+     */
+    public String getIpaddress() {
+        return ipaddress;
+    }
 
-	public static class Certificate {
+    /**
+     * Устанавливает IP адрес отправителя
+     *
+     * @param ipaddress IP адрес отправителя
+     */
+    public void setIpaddress(String ipaddress) {
+        this.ipaddress = ipaddress;
+    }
 
-		@SerializedName("content")
-		private String content = null;
+    /**
+     * Возвращает отпечаток сертификата отправителя
+     *
+     * @return отпечаток сертификата отправителя
+     */
+    public String getThumbprint() {
+        return thumbprint;
+    }
 
-		public Certificate(String content) {
-			this.content = content;
-		}
-		
-		public Certificate content(String content) {
-			this.content = content;
-			return this;
-		}
+    /**
+     * Устанавливает отпечаток сертификата отправителя
+     *
+     * @param thumbprint отпечаток сертификата отправителя
+     */
+    public void setThumbprint(String thumbprint) {
+        this.thumbprint = thumbprint;
+    }
 
-		public String getContent() {
-			return content;
-		}
+    public static class Certificate {
 
-		public void setContent(String content) {
-			this.content = content;
-		}
-	}
+        private String content;
+
+        public Certificate(String content) {
+            this.content = content;
+        }
+
+        public Certificate content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+    }
 }

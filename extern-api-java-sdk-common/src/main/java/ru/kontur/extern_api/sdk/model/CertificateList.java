@@ -24,30 +24,24 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * <p>
  * Класс реализует постраничное чтение сертификатов
  * Используется в группе запросов {@code CertificateService}
- * </p>
- * @author Aleksey Sukhorukov
  */
 public class CertificateList {
 
     private List<Certificate> certificates = new ArrayList<>();
-    @SerializedName("total-count")
     private Long totalCount = null;
-    @SerializedName("skip")
     private Long skip = null;
-    @SerializedName("take")
     private Long take = null;
 
     /**
      * Метод возвращает список объектов класса Certificate
+     *
      * @return список объектов класса Certificate
      * @see Certificate
      */
@@ -57,6 +51,7 @@ public class CertificateList {
 
     /**
      * Метод устанавливает список объектов класса Certificate
+     *
      * @param certificates список объектов класса
      * @see Certificate
      */
@@ -66,6 +61,7 @@ public class CertificateList {
 
     /**
      * Метод возвращает общее количество учетных записей
+     *
      * @return общее количество учетных записей
      */
     public Long getTotalCount() {
@@ -74,6 +70,7 @@ public class CertificateList {
 
     /**
      * Метод устанавливает общее количество учетных записей
+     *
      * @param totalCount общее количество учетных записей
      */
     public void setTotalCount(Long totalCount) {
@@ -82,6 +79,7 @@ public class CertificateList {
 
     /**
      * Метод возвращает порядковый номер первой записи в коллекции accounts
+     *
      * @return порядковый номер первой записи в коллекции accounts
      */
     public Long getSkip() {
@@ -90,6 +88,7 @@ public class CertificateList {
 
     /**
      * Метод устанавливает порядковый номер первой записи в коллекции accounts
+     *
      * @param skip порядковый номер первой записи в коллекции accounts
      */
     public void setSkip(Long skip) {
@@ -98,6 +97,7 @@ public class CertificateList {
 
     /**
      * Метод возврвщвет максимальное количество элементов в возвращаемой коллекции accounts
+     *
      * @return максимальное количество элементов в возвращаемой коллекции accounts
      */
     public Long getTake() {
@@ -106,6 +106,7 @@ public class CertificateList {
 
     /**
      * Метод устанавливает максимальное количество элементов в возвращаемой коллекции accounts
+     *
      * @param take максимальное количество элементов в возвращаемой коллекции accounts
      */
     public void setTake(Long take) {

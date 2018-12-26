@@ -46,9 +46,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public CompletableFuture<QueryContext<AccountList>> getAccountsAsync(int skip, int take) {
+        return api.get(skip, take).thenApply(contextAdaptor(QueryContext.ACCOUNT_LIST));
+    }
+
+    @Override
     public CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync() {
-        return api.getAll()
-                .thenApply(contextAdaptor(QueryContext.ACCOUNT_LIST));
+        return api.get100().thenApply(contextAdaptor(QueryContext.ACCOUNT_LIST));
     }
 
     @Override
@@ -58,9 +62,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest) {
-        return api.create(createAccountRequest)
-                .thenApply(contextAdaptor(QueryContext.ACCOUNT));
+    public CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest request) {
+        return api.create(request).thenApply(contextAdaptor(QueryContext.ACCOUNT));
     }
 
     @Override
@@ -71,8 +74,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public CompletableFuture<QueryContext<Account>> getAccountAsync(UUID accountId) {
-        return api.get(accountId)
-                .thenApply(contextAdaptor(QueryContext.ACCOUNT));
+        return api.get(accountId).thenApply(contextAdaptor(QueryContext.ACCOUNT));
     }
 
     @Override

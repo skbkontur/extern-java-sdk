@@ -24,34 +24,30 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 
 /**
- * <p>
- *     Класс содержит информацию об организации
- * </p>
- * @author Aleksey Sukhorukov
+ *  Класс содержит информацию об организации
  */
 public class Organization {
 
     private String inn;
+    private String name;
     private final OrganizationInfo organization;
 
-    public Organization(String inn, String kpp) {
+    public Organization(String inn, String kpp, String name) {
         this.inn = inn;
+        this.name = name;
         this.organization = new OrganizationInfo(kpp);
     }
 
     /**
-     * <p>Возвращает ИНН.</p>
+     * Возвращает ИНН.
      * @return ИНН
      */
-    public String getInn() {
-        return inn;
-    }
+    public String getInn() { return inn; }
 
     /**
-     * <p>Устанавливает ИНН.</p>
+     * Устанавливает ИНН.
      * @param inn ИНН
      */
     public void setInn(String inn) {
@@ -59,7 +55,21 @@ public class Organization {
     }
 
     /**
-     * <p>Возвращает КПП.</p>
+     * Возвращает название.
+     * @return название
+     */
+    public String getName() { return name; }
+
+    /**
+     * Устанавливает название.
+     * @param name название
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Возвращает КПП.
      * @return КПП
      */
     public String getKpp() {
@@ -67,7 +77,7 @@ public class Organization {
     }
 
     /**
-     * <p>Устанавливает КПП.</p>
+     * Устанавливает КПП.
      * @param kpp КПП
      */
     public void setKpp(String kpp) {

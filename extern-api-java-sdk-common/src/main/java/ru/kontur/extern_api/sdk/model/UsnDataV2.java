@@ -31,7 +31,7 @@ import com.google.gson.annotations.SerializedName;
  * </p>
  * @author Aleksey Sukhorukov
  */
-public class UsnDataV2 {
+public class UsnDataV2 implements UsnData {
 
     private Integer nomKorr = null;
     private Integer poMestu = null;

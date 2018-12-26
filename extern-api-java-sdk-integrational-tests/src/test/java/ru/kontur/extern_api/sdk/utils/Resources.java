@@ -27,9 +27,14 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 import ru.kontur.extern_api.sdk.GsonProvider;
 
 public class Resources {
@@ -57,6 +62,24 @@ public class Resources {
 
     public static <T> T loadFromJson(String path, Class<T> type) {
         return loadFromJson(path, type, GsonProvider.getLibapiCompatibleGson());
+    }
+
+    public static Stream<String> walk(String resourcePrefix) throws IOException {
+        URL resource = Resources.class.getResource(resourcePrefix);
+
+        try {
+            if (!Files.isDirectory(Paths.get(resource.toURI()))) {
+                throw new IllegalArgumentException(resourcePrefix + " is not a directory");
+            }
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
+
+        InputStream inputStream = resource.openStream();
+        byte[] targetArray = new byte[inputStream.available()];
+        inputStream.read(targetArray);
+
+        return Stream.of(new String(targetArray).split("\n"));
     }
 
 }

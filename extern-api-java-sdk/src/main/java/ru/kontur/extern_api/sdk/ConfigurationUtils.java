@@ -37,9 +37,9 @@ import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
 
-public final class ConfigurationUtils {
+final class ConfigurationUtils {
 
-    public static Optional<AuthenticationProvider> guessAuthProvider(Configuration configuration) {
+    static Optional<AuthenticationProvider> guessAuthProvider(Configuration configuration) {
 
         LoginAndPasswordProvider form = form(configuration.getLogin(), configuration.getPass());
 
@@ -54,7 +54,7 @@ public final class ConfigurationUtils {
         return Optional.empty();
     }
 
-    public static TrustedAuthenticationProvider createTrustedAuth(Configuration configuration) {
+    private static TrustedAuthenticationProvider createTrustedAuth(Configuration configuration) {
         String authType = "trusted";
 
         requireParam(configuration::getAuthBaseUri, "auth base uri", authType);
@@ -85,7 +85,7 @@ public final class ConfigurationUtils {
                 .isPresent();
     }
 
-    public static PasswordAuthenticationProvider createPasswordAuthProvider(Configuration config) {
+    private static PasswordAuthenticationProvider createPasswordAuthProvider(Configuration config) {
         String authType = "password";
 
         requireParam(config::getLogin, "login", authType);

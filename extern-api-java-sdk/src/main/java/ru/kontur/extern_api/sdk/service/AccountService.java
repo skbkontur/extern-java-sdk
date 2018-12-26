@@ -41,17 +41,28 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 public interface AccountService {
 
     /**
-     * <p>GET /v1</p>
-     * Асинхронный метод возвращает список учетных записей с разбивкой по страницам
+     * Асинхронный метод возвращает список учетных записей с разбивкой по страницам.
+     * Аккаунты возвращаются в алфавитном порядке по ИНН.
      *
+     * @param skip начальный индекс первого возвращённого аккаунта
+     * @param take требуемое количество возвращённых аккаунтов (максимум - 100)
      * @return список учетных записей
      * @see AccountList
      */
+    CompletableFuture<QueryContext<AccountList>> getAccountsAsync(int skip, int take);
+
+    /**
+     * Асинхронный метод возвращает первую сотню учетных записей
+     *
+     * @return список учетных записей
+     * @see #getAccountsAsync(int, int) рекомендуемый метод получения аккаунтов
+     * @deprecated возвращает только 100 аккаутнов
+     */
+    @Deprecated
     CompletableFuture<QueryContext<AccountList>> acquireAccountsAsync();
 
     /**
-     * <p>GET /v1</p>
-     * Синхронный метод возвращает список учетных записей с разбивкой по страницам
+     * Синхронный метод возвращает первую сотню учетных записей
      *
      * @param cxt контекст
      * @return список учетных записей
@@ -62,17 +73,16 @@ public interface AccountService {
     QueryContext<AccountList> acquireAccounts(QueryContext<?> cxt);
 
     /**
-     * <p>POST /v1</p>
      * Асинхронный метод предназначен для создания новой учетной записи
      *
-     * @param createAccountRequest {@link CreateAccountRequest} структура данных, содержащая информацию для
+     * @param createAccountRequest {@link CreateAccountRequest} структура данных, содержащая
+     *         информацию для
      *         создания новой учетной записи
      * @return новая учетная запись {@link Account}
      */
     CompletableFuture<QueryContext<Account>> createAccountAsync(CreateAccountRequest createAccountRequest);
 
     /**
-     * <p>POST /v1</p>
      * Синхронный метод предназначен для создания новой учетной записи
      *
      * @param cxt контекст, содержащий следующие параметры:
@@ -96,7 +106,6 @@ public interface AccountService {
 
 
     /**
-     * <p>GET /v1/{accountId}</p>
      * Асинхронный метод предназначен для получения учетной записи
      *
      * @param accountId идентификатор учетной записи
@@ -106,7 +115,6 @@ public interface AccountService {
     CompletableFuture<QueryContext<Account>> getAccountAsync(String accountId);
 
     /**
-     * <p>GET /v1/{accountId}</p>
      * Асинхронный метод предназначен для получения учетной записи
      *
      * @param cxt контекст, содержащий следующие параметры:

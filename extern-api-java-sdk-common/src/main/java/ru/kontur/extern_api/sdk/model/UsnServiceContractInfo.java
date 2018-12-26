@@ -27,7 +27,7 @@ package ru.kontur.extern_api.sdk.model;
  * </p>
  * @author Mikhail Pavlenko
  */
-public class UsnServiceContractInfo {
+public class UsnServiceContractInfo implements BuildDocumentContract {
 
     private UsnFormatPeriod period = null;
     private AdditionalClientInfo additionalOrgInfo = null;
@@ -82,7 +82,14 @@ public class UsnServiceContractInfo {
      * Устанавливает JSON документ с информацией об УСН декларации
      * @param data JSON документ с информацией об УСН декларации
      */
-    public void setData(Object data) {
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    /**
+     * @param data экземпляр UsnData с информацией об УСН декларации
+     */
+    public void setData(UsnData data) {
         this.data = data;
     }
 
