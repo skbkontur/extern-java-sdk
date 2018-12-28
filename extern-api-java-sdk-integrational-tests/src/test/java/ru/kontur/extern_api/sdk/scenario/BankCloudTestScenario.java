@@ -173,7 +173,7 @@ class BankCloudTestScenario {
 
     /** Создаёт и отправляет ответные документы до завершения ДО. */
     private void finishDocflow(Docflow docflow) throws Exception {
-
+        Thread.sleep(0xDEAD / 0x601 * 100);
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
