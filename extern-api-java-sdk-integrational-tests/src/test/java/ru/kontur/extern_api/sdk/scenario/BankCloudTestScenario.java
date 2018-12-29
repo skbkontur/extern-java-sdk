@@ -32,6 +32,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
@@ -173,7 +174,21 @@ class BankCloudTestScenario {
 
     /** Создаёт и отправляет ответные документы до завершения ДО. */
     private void finishDocflow(Docflow docflow) throws Exception {
-        Thread.sleep(0xDEAD / 0x601 * 100);
+
+        int budget = 60 * 5_000;
+        Docflow updated = null;
+        while (budget > 0) {
+            QueryContext<Docflow> ctx = engine.getDocflowService().lookupDocflowAsync(docflow.getId()).join();
+            if (ctx.isSuccess()) {
+                updated = ctx.get();
+                break;
+            }
+            Thread.sleep(1000);
+            budget -= 1000;
+        }
+
+        docflow = updated;
+
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
