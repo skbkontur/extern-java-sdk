@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.httpclient.api;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -56,4 +57,6 @@ public interface AccountsApi {
     @POST("v1")
     CompletableFuture<ApiResponse<Account>> create(@Body CreateAccountRequest createAccountRequest);
 
+    @DELETE("v1/{accountId}")
+    CompletableFuture<ApiResponse<Void>> delete(@Path("accountId") UUID accountId);
 }

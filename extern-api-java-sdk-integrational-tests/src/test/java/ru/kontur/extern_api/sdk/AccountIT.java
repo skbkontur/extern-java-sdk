@@ -30,10 +30,12 @@ package ru.kontur.extern_api.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
@@ -116,6 +118,35 @@ class AccountIT {
 
         checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());
     }
+
+    @Test
+    void deleteAccount() {
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest()
+                .inn(INN)
+                .kpp(KPP)
+                .organizationName(ORG_NAME);
+
+
+        QueryContext<Account> createCxt = accountService
+                .createAccountAsync(createAccountRequest)
+                .join()
+                .ensureSuccess();
+
+        QueryContext deleteCxt = accountService
+                .deleteAccountAsync(createCxt.get().getId())
+                .join()
+                .ensureSuccess();
+
+        assertNull(deleteCxt.getServiceError());
+
+        ApiException apiException = Assertions.assertThrows(ApiException.class,
+                () -> accountService.getAccountAsync(createCxt.get().getId()).get().getOrThrow()
+        );
+
+        Assertions.assertEquals(404, apiException.getCode());
+    }
+
 
     private void checkFields(Account account, String inn, String kpp, String orgName) {
 

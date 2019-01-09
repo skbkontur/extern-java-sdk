@@ -126,4 +126,12 @@ public interface AccountService {
      */
     @Deprecated
     QueryContext<Account> getAccount(QueryContext<?> cxt);
+
+    /**
+     * <p>GET /v1/{accountId}</p>
+     * Асинхронный метод предназначен для удаления учетной записи
+     *
+     * @param accountId идентификатор учетной записи
+     */
+    CompletableFuture<QueryContext> deleteAccountAsync(UUID accountId);
 }
