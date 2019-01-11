@@ -109,7 +109,7 @@ public class DraftMeta {
                         sender.getIpaddress()
                 ),
                 getRecipient(),
-                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp())
+                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName())
         );
 
 

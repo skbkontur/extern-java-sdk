@@ -107,14 +107,14 @@ class BankCloudTestScenario {
                 workingCert.getKpp()
         );
 
-        Docflow docflow = sendDraftWithUsn(account);
+        Docflow docflow = sendDraftWithUsn(account, workingCert);
 
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
         finishDocflow(docflow);
     }
 
-    private Docflow sendDraftWithUsn(Account senderAcc)
+    private Docflow sendDraftWithUsn(Account senderAcc, Certificate certificate)
             throws Exception {
 
         SenderRequest sender = new SenderRequest(
@@ -126,7 +126,7 @@ class BankCloudTestScenario {
 
         Recipient recipient = new FnsRecipient("0087");
 
-        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp());
+        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp(), senderAcc.getOrganizationName());
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)
@@ -135,7 +135,7 @@ class BankCloudTestScenario {
 
         System.out.println("Draft created");
 
-        UsnServiceContractInfo usn = PreparedTestData.usnV2();
+        UsnServiceContractInfo usn = PreparedTestData.usnV2(certificate,oPayer);
 
         DraftDocument document = engine.getDraftService()
                 .createAndBuildDeclarationAsync(draftId, 2, usn)

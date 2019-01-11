@@ -53,7 +53,7 @@ public class TestUtils {
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp()));
+        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), "Ромашка"));
 
         ClientInfo.Recipient recipient = clientInfo.getRecipient();
 

@@ -32,9 +32,9 @@ public class OrganizationRequest {
     private final String inn;
     private final OrganizationInfo organization;
 
-    public OrganizationRequest(String inn, String kpp) {
+    public OrganizationRequest(String inn, String kpp, String orgName) {
         this.inn = inn;
-        this.organization = new OrganizationInfo(kpp);
+        this.organization = new OrganizationInfo(kpp, orgName);
     }
 
     /**
@@ -51,16 +51,23 @@ public class OrganizationRequest {
         return organization.getKpp();
     }
 
+    public String getOrgName() {
+        return organization.getOrgName();
+    }
 
     public static class OrganizationInfo {
         private final String kpp;
-        
-        public OrganizationInfo(String kpp) {
-            this.kpp = kpp;
+        private final String orgName;
+
+        public OrganizationInfo(String kpp, String orgName) {
+            this.kpp = kpp; this.orgName = orgName;
         }
         
         public String getKpp() {
             return kpp;
+        }
+        public String getOrgName() {
+            return orgName;
         }
     }
 }

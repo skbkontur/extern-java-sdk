@@ -36,7 +36,7 @@ import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
-@DisplayName("portal services tests")
+@DisplayName("Portal services tests")
 class PortalPackageIT {
 
     private static Configuration configuration;
