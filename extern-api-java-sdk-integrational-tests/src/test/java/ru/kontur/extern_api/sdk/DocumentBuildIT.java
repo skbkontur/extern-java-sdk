@@ -29,7 +29,10 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -41,10 +44,13 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.crypt.X509CertificateFactory;
+import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
@@ -64,6 +70,7 @@ class DocumentBuildIT {
     private static DraftMetaRequest draftMeta;
     private static Configuration config;
     private static ExternEngine ee;
+    private static Certificate workCert;
 
     private static IonRequestContractV1 loadIon(String path) {
         return Resources.loadFromJson(path, IonRequestContractV1.class);
@@ -74,7 +81,7 @@ class DocumentBuildIT {
     }
 
     @BeforeAll
-    static void init() {
+    static void init() throws Exception {
         config = TestConfig.LoadConfigFromEnvironment();
         ee = ExternEngineBuilder
                 .createExternEngine(config.getServiceBaseUri())
@@ -95,6 +102,16 @@ class DocumentBuildIT {
                 .map(TestUtils::toDraftMetaRequest)
                 .orElseThrow(() -> new RuntimeException("no suitable data for usn tests"));
 
+        workCert = ee
+                .getCertificateService()
+                .getCertificates(0, 100)
+                .join()
+                .getOrThrow()
+                .getCertificates()
+                .stream()
+                .filter(certificate -> Objects.equals(certificate.getContent(), cert))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find certificate"));
     }
 
     private static byte[] sign(byte[] bytes) {
@@ -106,10 +123,12 @@ class DocumentBuildIT {
     @DisplayName("allow to create a valid usn")
     Stream<DynamicTest> createUsnTests() {
         return Stream.of(
-                dynamicTest("V1 from file", () -> checkUsn(1, loadUsn("/docs/USN/usn.json"))),
+                dynamicTest("V1 from file", () -> checkUsn(1, loadUsn(
+                        "/docs/USN/usnV1ForSelf.json"))),
                 dynamicTest("V1 from dto NOT_SUPPORTED", System.out::println),
-                dynamicTest("V2 from file", () -> checkUsn(2, loadUsn("/docs/USN/usnV2.json"))),
-                dynamicTest("V2 from dto", () -> checkUsn(2, PreparedTestData.usnV2()))
+                dynamicTest("V2 from file", () -> checkUsn(2, loadUsn(
+                        "/docs/USN/usnV2ForSelf.json"))),
+                dynamicTest("V2 from dto", () -> checkUsn(2, PreparedTestData.usnV2(workCert, new OrganizationRequest("111", "111", "111"))))
         );
     }
 
@@ -170,7 +189,7 @@ class DocumentBuildIT {
     }
 
     private void sendCheckedUsn() {
-        UsnServiceContractInfo usn = loadUsn("/docs/USN/usnV2.json");
+        UsnServiceContractInfo usn = loadUsn("/docs/USN/usnV2ForSelf.json");
         sendDraftTest(draftId -> draftService
                 .createAndBuildDeclarationAsync(draftId, 2, usn)
                 .thenApply(QueryContext::getOrThrow)

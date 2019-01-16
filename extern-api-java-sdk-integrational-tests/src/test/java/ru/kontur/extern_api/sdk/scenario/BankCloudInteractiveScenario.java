@@ -161,7 +161,9 @@ class BankCloudInteractiveScenario {
 
         Recipient recipient = new FnsRecipient("0087");
 
-        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp());
+        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp(), senderAcc.getOrganizationName());
+
+        Certificate workingCert = findWorkingCerts().get(0);
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)
@@ -170,7 +172,7 @@ class BankCloudInteractiveScenario {
 
         System.out.println("Draft created");
 
-        UsnServiceContractInfo usn = PreparedTestData.usnV2();
+        UsnServiceContractInfo usn = PreparedTestData.usnV2(workingCert, oPayer);
 
         DraftDocument document = engine.getDraftService()
                 .createAndBuildDeclarationAsync(draftId, 2, usn)

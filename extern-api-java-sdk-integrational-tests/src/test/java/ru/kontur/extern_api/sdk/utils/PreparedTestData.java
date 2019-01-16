@@ -25,11 +25,15 @@ package ru.kontur.extern_api.sdk.utils;
 
 import java.util.Date;
 import ru.kontur.extern_api.sdk.model.AdditionalClientInfo;
+import ru.kontur.extern_api.sdk.model.AdditionalClientInfo.SignerTypeEnum;
+import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.DocumentSender;
 import ru.kontur.extern_api.sdk.model.MerchantTax;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.PassportInfo;
 import ru.kontur.extern_api.sdk.model.PeriodIndicators;
 import ru.kontur.extern_api.sdk.model.Representative;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.TaxPeriodIndicators;
 import ru.kontur.extern_api.sdk.model.Taxpayer;
 import ru.kontur.extern_api.sdk.model.UsnDataV2;
@@ -38,13 +42,13 @@ import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 
 public class PreparedTestData {
 
-    public static UsnServiceContractInfo usnV2() {
+    public static UsnServiceContractInfo usnV2(Certificate certificate, OrganizationRequest org) {
 
         UsnFormatPeriod period = new UsnFormatPeriod();
         period.setYear(2017);
 
         UsnServiceContractInfo usn = new UsnServiceContractInfo();
-        usn.setAdditionalOrgInfo(createAdditionalClientInfo());
+        usn.setAdditionalOrgInfo(createAdditionalClientInfo(certificate.getFio(), org.getOrgName(), true));
         usn.setData(getUsnV2Data());
         usn.setPeriod(period);
         usn.setVersion(2);
@@ -52,31 +56,35 @@ public class PreparedTestData {
         return usn;
     }
 
-    private static AdditionalClientInfo createAdditionalClientInfo() {
-
-        PassportInfo passport = new PassportInfo();
-        passport.setCode("21");
-        passport.setSeriesNumber("1111 441144");
-        passport.setIssuedBy("string");
-        passport.setIssuedDate(new Date());
-
-        Representative representative = new Representative();
-        representative.setPassport(passport);
-        representative.setRepresentativeDocument("1");
+    private static AdditionalClientInfo createAdditionalClientInfo(String fio, String orgName, boolean isChief) {
+        SignerTypeEnum signerType = isChief ? SignerTypeEnum.CHIEF : SignerTypeEnum.REPRESENTATIVE;
 
         Taxpayer payer = new Taxpayer();
-        payer.setRepresentative(representative);
-        payer.setTaxpayerChiefFio("Иванов Иван Иванович");
-        payer.setTaxpayerFullName("Иванов Иван Иванович");
+        payer.setTaxpayerChiefFio(fio);
+        payer.setTaxpayerFullName(orgName);
         payer.setTaxpayerOkved("47");
         payer.setTaxpayerPhone("777777");
 
+        if (!isChief){
+            PassportInfo passport = new PassportInfo();
+            passport.setCode("21");
+            passport.setSeriesNumber("1111 441144");
+            passport.setIssuedBy("string");
+            passport.setIssuedDate(new Date());
+
+            Representative representative = new Representative();
+            representative.setPassport(passport);
+            representative.setRepresentativeDocument("1");
+
+            payer.setRepresentative(representative);
+        }
+
         DocumentSender documentSender = new DocumentSender();
-        documentSender.setSenderFullName("Иванов Иван Иванович");
+        documentSender.setSenderFullName(fio);
 
         AdditionalClientInfo aci = new AdditionalClientInfo();
         aci.setDocumentSender(documentSender);
-        aci.setSignerType(AdditionalClientInfo.SignerTypeEnum.REPRESENTATIVE);
+        aci.setSignerType(signerType);
         aci.setTaxpayer(payer);
 
         return aci;
