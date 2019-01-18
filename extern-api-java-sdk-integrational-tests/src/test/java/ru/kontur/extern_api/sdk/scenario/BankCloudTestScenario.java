@@ -33,23 +33,8 @@ import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.OrganizationRequest;
-import ru.kontur.extern_api.sdk.model.SenderRequest;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -61,10 +46,11 @@ class BankCloudTestScenario {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
+    private static TestSuite test;
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.LoadManually((cfg, builder) -> builder
+        test = TestSuite.LoadManually((cfg, builder) -> builder
                 .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
                         .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
                         .configureEncryption(
@@ -76,7 +62,8 @@ class BankCloudTestScenario {
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
                 .build(Level.NONE)
-        ).engine;
+        );
+        engine = test.engine;
 
     }
 
@@ -84,7 +71,7 @@ class BankCloudTestScenario {
     void main() throws Exception {
 
         List<Account> accounts = engine.getAccountService()
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .get()
                 .getOrThrow()
                 .getAccounts();
@@ -93,15 +80,18 @@ class BankCloudTestScenario {
         engine.setAccountProvider(account::getId);
 
         System.out.printf("Found %s accounts\n", accounts.size());
-        System.out.printf("Using account: %s inn=%s kpp=%s\n",
+        System.out.printf(
+                "Using account: %s inn=%s kpp=%s\n",
                 account.getOrganizationName(),
                 account.getInn(),
-                account.getKpp());
+                account.getKpp()
+        );
 
         Certificate workingCert = findWorkingCerts().get(0);
         senderCertificate = workingCert;
 
-        System.out.printf("Using certificate: %s %s %s\n",
+        System.out.printf(
+                "Using certificate: %s %s %s\n",
                 workingCert.getFio(),
                 workingCert.getInn(),
                 workingCert.getKpp()
@@ -126,7 +116,11 @@ class BankCloudTestScenario {
 
         Recipient recipient = new FnsRecipient("0087");
 
-        OrganizationRequest oPayer = new OrganizationRequest(senderAcc.getInn(), senderAcc.getKpp(), senderAcc.getOrganizationName());
+        OrganizationRequest oPayer = new OrganizationRequest(
+                senderAcc.getInn(),
+                senderAcc.getKpp(),
+                senderAcc.getOrganizationName()
+        );
 
         UUID draftId = engine.getDraftService()
                 .createAsync(sender, recipient, oPayer)
@@ -135,7 +129,7 @@ class BankCloudTestScenario {
 
         System.out.println("Draft created");
 
-        UsnServiceContractInfo usn = PreparedTestData.usnV2(certificate,oPayer);
+        UsnServiceContractInfo usn = PreparedTestData.usnV2(certificate, oPayer);
 
         DraftDocument document = engine.getDraftService()
                 .createAndBuildDeclarationAsync(draftId, 2, usn)
@@ -145,14 +139,14 @@ class BankCloudTestScenario {
         System.out.println("Usn document built and added to draft");
 
         openDraftDocumentAsPdf(draftId, document.getId());
-        Assertions.assertTrue(cloudSignDraft(draftId));
+        cloudSignDraft(draftId);
 
         CheckResultData checkResult = engine.getDraftService()
                 .checkAsync(draftId)
                 .get()
                 .getOrThrow();
 
-        Assertions.assertTrue(checkResult.hasNoErrors());
+        Assertions.assertTrue(checkResult.hasNoErrors(), test.serialize(checkResult));
         System.out.println("Usn document has no errors");
 
         PrepareResult result = engine.getDraftService()
@@ -160,8 +154,10 @@ class BankCloudTestScenario {
                 .get()
                 .getOrThrow();
 
-        Assertions.assertTrue(result.getStatus() == Status.OK ||
-                result.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS
+        Assertions.assertTrue(
+                result.getStatus() == Status.OK ||
+                        result.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS,
+                test.serialize(result)
         );
 
         System.out.printf("Draft prepared to send: %s\n", result.getStatus());
@@ -188,6 +184,7 @@ class BankCloudTestScenario {
         }
 
         docflow = updated;
+        Assertions.assertNotNull(docflow, "Cannot get docflow in 5 minutes");
 
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
@@ -295,7 +292,7 @@ class BankCloudTestScenario {
         return cloudDecryptDocument(docflowId, documentId);
     }
 
-    private boolean cloudSignDraft(UUID draftId) throws Exception {
+    private void cloudSignDraft(UUID draftId) throws Exception {
 
         ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
 
@@ -304,11 +301,10 @@ class BankCloudTestScenario {
                 .get()
                 .getOrThrow();
 
-        System.out.printf("Draft signed in cloud, %s document(s) signed\n",
+        System.out.printf(
+                "Draft signed in cloud, %s document(s) signed\n",
                 signedDraft.getSignedDocuments().size()
         );
-
-        return true;
     }
 
     private void cloudSignReplyDocument(String docflowId, String documentId, ReplyDocument reply)
