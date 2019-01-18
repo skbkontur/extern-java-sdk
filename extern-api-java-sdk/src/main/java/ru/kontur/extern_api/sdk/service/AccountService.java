@@ -133,5 +133,5 @@ public interface AccountService {
      *
      * @param accountId идентификатор учетной записи
      */
-    CompletableFuture<QueryContext> deleteAccountAsync(UUID accountId);
+    CompletableFuture<QueryContext<Void>> deleteAccountAsync(UUID accountId);
 }

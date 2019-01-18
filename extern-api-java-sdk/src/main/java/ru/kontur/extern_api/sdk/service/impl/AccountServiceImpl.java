@@ -89,8 +89,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CompletableFuture<QueryContext> deleteAccountAsync(UUID accountId) {
+    public CompletableFuture<QueryContext<Void>> deleteAccountAsync(UUID accountId) {
         return api.delete(accountId)
-                .thenApply(contextAdaptor(QueryContext.ACCOUNT));
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
 }
