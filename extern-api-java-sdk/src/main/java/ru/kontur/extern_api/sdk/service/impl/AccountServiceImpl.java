@@ -87,4 +87,10 @@ public class AccountServiceImpl implements AccountService {
     public QueryContext<Account> getAccount(QueryContext<?> parent) {
         return join(getAccountAsync(parent.<UUID>require(QueryContext.ACCOUNT_ID)));
     }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> deleteAccountAsync(UUID accountId) {
+        return api.delete(accountId)
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
+    }
 }
