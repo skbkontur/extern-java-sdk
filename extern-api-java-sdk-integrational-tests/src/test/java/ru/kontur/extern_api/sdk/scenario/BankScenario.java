@@ -25,25 +25,22 @@ package ru.kontur.extern_api.sdk.scenario;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CertificateWrapper;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
+import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.model.OrgFilter;
+import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 
 
-@Disabled
 class BankScenario {
 
     private static ExternEngine engine;
@@ -75,8 +72,7 @@ class BankScenario {
                 .getOrThrow()
                 .getAccounts();
 
-        Account account = accounts
-                .get(0);
+        Account account = accounts.get(0);
 
         engine.setAccountProvider(account::getId);
 
@@ -104,7 +100,7 @@ class BankScenario {
 
         System.out.printf("Found %s organizations\n", companies.size());
 
-        Company org = companies.get(1);
+        Company org = companies.get(0);
         CompanyGeneral general = org.getGeneral();
 
         System.out.printf("Using organization: %s inn=%s kpp=%s\n",
@@ -113,9 +109,149 @@ class BankScenario {
                 general.getKpp()
         );
 
-        // todo hz
+        Docflow docflow = sendDraftWithUsn(account, workingCert);
+
+        finishDocflow(docflow);
     }
 
+    private Docflow sendDraftWithUsn(Account senderAcc, CertificateWrapper certificate)
+            throws Exception {
+
+        SenderRequest sender = new SenderRequest(
+                senderAcc.getInn(),
+                senderAcc.getKpp(),
+                certificate.g,
+                "8.8.8.8"
+        );
+
+        Recipient recipient = new FnsRecipient("0087");
+
+        OrganizationRequest oPayer = new OrganizationRequest(
+                senderAcc.getInn(),
+                senderAcc.getKpp(),
+                senderAcc.getOrganizationName()
+        );
+
+        UUID draftId = engine.getDraftService()
+                .createAsync(sender, recipient, oPayer)
+                .get()
+                .getOrThrow();
+
+        System.out.println("Draft created");
+
+        UsnServiceContractInfo usn = PreparedTestData.usnV2(certificate, oPayer);
+
+        DraftDocument document = engine.getDraftService()
+                .createAndBuildDeclarationAsync(draftId, 2, usn)
+                .get()
+                .getOrThrow();
+
+        System.out.println("Usn document built and added to draft");
+
+        openDraftDocumentAsPdf(draftId, document.getId());
+        cloudSignDraft(draftId);
+
+        CheckResultData checkResult = engine.getDraftService()
+                .checkAsync(draftId)
+                .get()
+                .getOrThrow();
+
+        Assertions.assertTrue(checkResult.hasNoErrors(), test.serialize(checkResult));
+        System.out.println("Usn document has no errors");
+
+        PrepareResult result = engine.getDraftService()
+                .prepareAsync(draftId)
+                .get()
+                .getOrThrow();
+
+        Assertions.assertTrue(
+                result.getStatus() == PrepareResult.Status.OK ||
+                        result.getStatus() == PrepareResult.Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS,
+                test.serialize(result)
+        );
+
+        System.out.printf("Draft prepared to send: %s\n", result.getStatus());
+
+        return engine.getDraftService()
+                .sendAsync(draftId)
+                .get()
+                .getOrThrow();
+    }
+
+    /** Создаёт и отправляет ответные документы до завершения ДО. */
+    private void finishDocflow(Docflow docflow) throws Exception {
+
+        int budget = 60 * 5_000;
+        Docflow updated = null;
+        while (budget > 0) {
+            QueryContext<Docflow> ctx = engine.getDocflowService().lookupDocflowAsync(docflow.getId()).join();
+            if (ctx.isSuccess()) {
+                updated = ctx.get();
+                break;
+            }
+            Thread.sleep(1000);
+            budget -= 1000;
+        }
+
+        docflow = updated;
+        Assertions.assertNotNull(docflow, "Cannot get docflow in 5 minutes");
+
+        while (true) {
+            System.out.println("Docflow status: " + docflow.getStatus());
+
+            if (docflow.getStatus() == DocflowStatus.FINISHED) {
+                break;
+            }
+
+            Document document = docflow.getDocuments().stream()
+                    .filter(Document::isNeedToReply)
+                    .findFirst()
+                    .orElse(null);
+
+            if (document == null) {
+
+                int timeout = 20;
+                System.out.println("No reply available yet. Waiting " + timeout + " seconds");
+                UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
+                continue;
+            }
+
+            String type = document.getReplyOptions()[0];
+            System.out.println("Reply with " + type);
+            docflow = sendReply(docflow.getId().toString(), document, type);
+        }
+
+    }
+
+    private Docflow sendReply(String docflowId, Document document, String type, String certificateContent )
+            throws Exception {
+
+        String documentId = document.getId().toString();
+        ReplyDocument replyDocument = engine.getDocflowService()
+                .generateReplyAsync(docflowId, documentId, type, certificateContent)
+                .get()
+                .getOrThrow();
+
+        System.out.println("Reply generated");
+
+        byte[] signature = engine.;
+        replyDocument = engine.getDocflowService()
+                .uploadReplyDocumentSignatureAsync(docflowId, documentId, replyDocument.getId(), signature)
+                .get()
+                .getOrThrow();
+
+        Docflow docflow = engine.getDocflowService()
+                .sendReplyAsync(docflowId, documentId, replyDocument.getId())
+                .get()
+                .getOrThrow();
+
+        System.out.println("Reply sent!");
+        return docflow;
+    }
 
     private List<CertificateWrapper> findWorkingCerts() throws Exception {
 

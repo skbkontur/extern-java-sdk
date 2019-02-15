@@ -61,7 +61,7 @@ class BankCloudTestScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build(Level.NONE)
+                .build(Level.BASIC)
         );
         engine = test.engine;
 
