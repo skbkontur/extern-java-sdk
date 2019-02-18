@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.scenario;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -61,7 +62,7 @@ class BankCloudTestScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build(Level.NONE)
+                .build(Level.BASIC)
         );
         engine = test.engine;
 
@@ -69,23 +70,15 @@ class BankCloudTestScenario {
 
     @Test
     void main() throws Exception {
+        try {
+            scenario();
+        } catch (ApiException e) {
+            System.err.println(e.prettyPrint());
+            throw e;
+        }
+    }
 
-        List<Account> accounts = engine.getAccountService()
-                .getAccountsAsync(0, 100)
-                .get()
-                .getOrThrow()
-                .getAccounts();
-
-        Account account = accounts.get(0);
-        engine.setAccountProvider(account::getId);
-
-        System.out.printf("Found %s accounts\n", accounts.size());
-        System.out.printf(
-                "Using account: %s inn=%s kpp=%s\n",
-                account.getOrganizationName(),
-                account.getInn(),
-                account.getKpp()
-        );
+    void scenario() throws Exception {
 
         Certificate workingCert = findWorkingCerts().get(0);
         senderCertificate = workingCert;
@@ -95,6 +88,29 @@ class BankCloudTestScenario {
                 workingCert.getFio(),
                 workingCert.getInn(),
                 workingCert.getKpp()
+        );
+
+        List<Account> accounts = engine.getAccountService()
+                .getAccountsAsync(0, 100)
+                .get()
+                .getOrThrow()
+                .getAccounts();
+
+        Account account = accounts.stream()
+                .filter(
+                        acc -> acc.getInn().equals(senderCertificate.getInn())
+                                && acc.getKpp().equals(senderCertificate.getKpp()))
+                .collect(Collectors.toList())
+                .get(0);
+
+        engine.setAccountProvider(account::getId);
+
+        System.out.printf("Found %s accounts\n", accounts.size());
+        System.out.printf(
+                "Using account: %s inn=%s kpp=%s\n",
+                account.getOrganizationName(),
+                account.getInn(),
+                account.getKpp()
         );
 
         Docflow docflow = sendDraftWithUsn(account, workingCert);
@@ -168,7 +184,9 @@ class BankCloudTestScenario {
                 .getOrThrow();
     }
 
-    /** Создаёт и отправляет ответные документы до завершения ДО. */
+    /**
+     * Создаёт и отправляет ответные документы до завершения ДО.
+     */
     private void finishDocflow(Docflow docflow) throws Exception {
 
         int budget = 60 * 5_000;
@@ -352,7 +370,7 @@ class BankCloudTestScenario {
 
         List<Certificate> remotes = engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
                 .getCertificates();
