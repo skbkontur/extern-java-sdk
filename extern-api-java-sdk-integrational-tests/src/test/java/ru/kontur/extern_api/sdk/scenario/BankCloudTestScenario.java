@@ -62,7 +62,7 @@ class BankCloudTestScenario {
                 )
                 .doNotUseCryptoProvider()
                 .doNotSetupAccount()
-                .build(Level.NONE)
+                .build(Level.BASIC)
         );
         engine = test.engine;
 
@@ -70,6 +70,15 @@ class BankCloudTestScenario {
 
     @Test
     void main() throws Exception {
+        try {
+            scenario();
+        } catch (ApiException e) {
+            System.err.println(e.prettyPrint());
+            throw e;
+        }
+    }
+
+    void scenario() throws Exception {
 
         Certificate workingCert = findWorkingCerts().get(0);
         senderCertificate = workingCert;
@@ -361,7 +370,7 @@ class BankCloudTestScenario {
 
         List<Certificate> remotes = engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
                 .getCertificates();
