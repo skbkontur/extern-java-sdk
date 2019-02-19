@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ru.argosgrp.cryptoservice</groupId>
+	<artifactId>cryptoservice</artifactId>
+	<version>5.0.21</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<nativeDir>${project.basedir}/../Native</nativeDir>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<SpecificationVersion>${project.version}</SpecificationVersion>
+		<ImplementationVersion>${version}</ImplementationVersion>
+		<SpecificationVendor>Argos Group LLC.</SpecificationVendor>
+		<SpecificationTitle>Argos Group LLC.</SpecificationTitle>
+		<ImplementationTitle>com.argos</ImplementationTitle>
+		<ImplementationVendor>Argos Group LLC.</ImplementationVendor>
+		<log4j.log4j.version>1.2.17</log4j.log4j.version>
+		<log4j.version>1.2.15</log4j.version>
+		<code.sign.jks>D:\Aleksey\Projects\ARGOS-CODE-KEY\argos.jks</code.sign.jks>
+		<code.sign.alias>argos</code.sign.alias>
+		<code.sign.storepass>123456</code.sign.storepass>
+		<code.sign.keypass>123456</code.sign.keypass>
+		<sign.tsa>http://timestamp.globalsign.com/scripts/timestamp.dll</sign.tsa>
+		<java.target>1.8</java.target>
+	</properties>
+
+
+	<modules>
+		<module>asn1</module>
+		<module>pkcs</module>
+		<module>cs</module>
+		<module>cs-util</module>
+		<module>cs-openssl</module>
+		<module>cs-mscapi</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<!--version>3.6.2</version-->
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<source>1.7</source>
+						<target>${java.target}</target>
+						<encoding>UTF-8</encoding>
+						<showDeprecation>false</showDeprecation>
+						<showWarnings>false</showWarnings>
+						<verbose>false</verbose>
+						<!-- release>9</release-->
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+							<compress>true</compress>
+							<index>false</index>
+							<manifest>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							</manifest>
+							<manifestEntries>
+								<Specification-Title>${SpecificationTitle}</Specification-Title>
+								<Specification-Version>${SpecificationVersion}</Specification-Version>
+								<Specification-Vendor>${SpecificationVendor}</Specification-Vendor>
+								<Implementation-Title>${ImplementationTitle}</Implementation-Title>
+								<Implementation-Version>${ImplementationVersion}</Implementation-Version>
+								<Implementation-Vendor>${ImplementationVendor}</Implementation-Vendor>
+							</manifestEntries>
+						</archive>
+						<finalName>${project.artifactId}</finalName>
+						<!--finalName>${project.artifactId}</finalName-->
+						<!--outputDirectory>${project.basedir}/dist</outputDirectory -->
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.0.0</version>
+					<executions>
+						<execution>
+							<id>javadoc-jar</id>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+							<configuration>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

@@ -3,10 +3,10 @@
   <groupId>ru.argosgrp.cryptoservice</groupId>
   <artifactId>cs-openssl</artifactId>
   <versioning>
-    <release>5.0.19</release>
+    <release>5.0.21</release>
     <versions>
-      <version>5.0.19</version>
+      <version>5.0.21</version>
     </versions>
-    <lastUpdated>20180328065120</lastUpdated>
+    <lastUpdated>20190218101546</lastUpdated>
   </versioning>
 </metadata>
