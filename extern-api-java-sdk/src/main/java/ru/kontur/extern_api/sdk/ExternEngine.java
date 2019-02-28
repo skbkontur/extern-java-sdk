@@ -37,6 +37,7 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
+import ru.kontur.extern_api.sdk.service.TaskService;
 
 
 /**
@@ -85,6 +86,14 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      */
     public DocflowService getDocflowService() {
         return servicesFactory.getDocflowService();
+    }
+
+    /**
+     * @return TaskService сервис предназначен для работы с длительными операциями в черновиках и драфт билдерах
+     * @see TaskService
+     */
+    public TaskService getTaskService() {
+        return servicesFactory.getTaskService();
     }
 
     /**

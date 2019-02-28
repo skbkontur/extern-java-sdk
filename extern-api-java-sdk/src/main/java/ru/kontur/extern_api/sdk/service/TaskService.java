@@ -1,0 +1,70 @@
+package ru.kontur.extern_api.sdk.service;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
+
+public interface TaskService {
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/send?deferred=true</p>
+     * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
+     *
+     * @param draftId идентификатор черновика
+     * @return список документооборотов
+     * @see Docflow
+     */
+    CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(UUID draftId);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/send?deferred=true</p>
+     * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
+     *
+     * @param draftId идентификатор черновика
+     * @return список документооборотов
+     * @see Docflow
+     */
+    CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(String draftId);
+
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/check?deferred=true</p>
+     * Асинхронный метод запускающий процес проверки черновика
+     *
+     * @param draftId идентификатор черновика
+     * @return результат проверки
+     */
+    CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(UUID draftId);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/check?deferred=true</p>
+     * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
+     *
+     * @param draftId идентификатор черновика
+     * @return результат проверки
+     */
+    CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(String draftId);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
+     * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
+     *
+     * @param draftId идентификатор черновика
+     * @return результат подготовки
+     */
+    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepeareAsync(UUID draftId);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
+     * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
+     *
+     * @param draftId идентификатор черновика
+     * @return результат подготовки
+     */
+    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepeareAsync(String draftId);
+
+}
