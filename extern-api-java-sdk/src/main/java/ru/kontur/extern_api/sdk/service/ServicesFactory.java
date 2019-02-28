@@ -42,4 +42,6 @@ public interface ServicesFactory {
 
     HttpClient getHttpClient();
 
+    TaskService getTaskService();
+
 }

@@ -137,14 +137,27 @@ public interface DraftsApi {
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
-     * @param deferred if set then server perform async operation
      * @param force force send
      */
-    @POST("v1/{accountId}/drafts/{draftId}/send")
+    @POST("v1/{accountId}/drafts/{draftId}/send?deferred=false")
     CompletableFuture<ApiResponse<Docflow>> send(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Query("deferred") boolean deferred,
+            @Query("force") boolean force
+    );
+
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param force force send
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/send?deferred=true")
+    CompletableFuture<ApiResponse<TaskInfo<Docflow>>> startSend(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
             @Query("force") boolean force
     );
 

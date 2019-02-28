@@ -179,7 +179,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public CompletableFuture<QueryContext<Docflow>> sendAsync(UUID draftId) {
-        return api.send(acc.accountId(), draftId, false, false)
+        return api.send(acc.accountId(), draftId,  false)
                 .thenApply(contextAdaptor(QueryContext.DOCFLOW));
 
     }
