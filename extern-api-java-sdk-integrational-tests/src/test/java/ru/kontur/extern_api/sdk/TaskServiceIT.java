@@ -33,6 +33,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -85,12 +86,48 @@ class TaskServiceIT {
     @DisplayName("command \"StartSend\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartSend(Draft draft) {
-
         QueryContext<TaskInfo<Docflow>> startSend = engine.getTaskService()
                 .startSendAsync(draft.getId())
                 .join();
 
         assertNull(startSend.getServiceError());
         assertEquals(startSend.get().getTaskState(), TaskState.RUNNING);
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("command \"GetSendResult\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testGetSendResult(Draft draft) throws InterruptedException, ExecutionException {
+        QueryContext<TaskInfo<Docflow>> startSend = engine.getTaskService()
+                .startSendAsync(draft.getId())
+                .join();
+
+        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend.get());
+
+    }
+
+    @ParameterizedTest
+    @DisplayName("command \"StartPrepare\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testStartPrepare(Draft draft) {
+        QueryContext<TaskInfo<PrepareResult>> startPrepare = engine.getTaskService()
+                .startPrepareAsync(draft.getId())
+                .join();
+
+        assertNull(startPrepare.getServiceError());
+        assertEquals(startPrepare.get().getTaskState(), TaskState.RUNNING);
+    }
+
+    @ParameterizedTest
+    @DisplayName("command \"StartCheck\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testStartCheck(Draft draft) {
+        QueryContext<TaskInfo<CheckResultData>> startCheck = engine.getTaskService()
+                .startCheckAsync(draft.getId())
+                .join();
+
+        assertNull(startCheck.getServiceError());
+        assertEquals(startCheck.get().getTaskState(), TaskState.RUNNING);
     }
 }

@@ -2,6 +2,7 @@ package ru.kontur.extern_api.sdk.service;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -56,7 +57,7 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат подготовки
      */
-    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepeareAsync(UUID draftId);
+    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(UUID draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
@@ -65,6 +66,37 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат подготовки
      */
-    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepeareAsync(String draftId);
+    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(String draftId);
 
+
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
+     * Асинхронный метод получающий результат проверки черновика в контролиоующий орган
+     *
+     * @param checkTaskInfo задача отправки черновика
+     * @return результат проверки
+     * @see CheckResultData
+     */
+    CompletableFuture<QueryContext<CheckResultData>> getCheckResult(UUID draftId, TaskInfo<Docflow> checkTaskInfo);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
+     * Асинхронный метод получающий результат подготовки черновика в контролиоующий орган
+     *
+     * @param prepareTaskInfo задача отправки черновика
+     * @return результат подготовки
+     * @see PrepareResult
+     */
+    CompletableFuture<QueryContext<PrepareResult>> getPrepareResult(UUID draftId, TaskInfo<Docflow> prepareTaskInfo);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
+     * Асинхронный метод получающий результат отправки черновика в контролиоующий орган
+     *
+     * @param sendTaskInfo задача отправки черновика
+     * @return документооборот
+     * @see Docflow
+     */
+    Docflow getSendResult(UUID draftId, TaskInfo<Docflow> sendTaskInfo)  throws InterruptedException, ExecutionException;
 }
