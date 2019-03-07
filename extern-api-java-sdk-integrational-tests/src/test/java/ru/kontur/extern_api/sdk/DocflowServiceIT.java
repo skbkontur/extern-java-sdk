@@ -240,7 +240,8 @@ class DocflowServiceIT {
                 decrypt = Zip.unzip(decrypt);
             }
 
-            Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypt, 0, 5));
+            byte[] first5letters = Arrays.copyOfRange(decrypt, 0, 5);
+            Assertions.assertArrayEquals("<?xml".getBytes(), first5letters);
         }
     }
 

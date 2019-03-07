@@ -25,9 +25,11 @@ package ru.kontur.extern_api.sdk.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.zip.ZipInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 
 public class Zip {
+
+    private static final int BUFFER_SIZE = 4096;
 
     /**
      * Unzip single file from zip archive
@@ -40,10 +42,10 @@ public class Zip {
             return null;
         }
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[BUFFER_SIZE];
 
         try (ByteArrayInputStream byteIn = new ByteArrayInputStream(compressed);
-                ZipInputStream compressInput = new ZipInputStream(byteIn);
+                ZipArchiveInputStream compressInput = new ZipArchiveInputStream(byteIn);
                 ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
 
             int len;
