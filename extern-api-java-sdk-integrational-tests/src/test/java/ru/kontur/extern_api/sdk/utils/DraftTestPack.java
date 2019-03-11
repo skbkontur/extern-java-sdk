@@ -96,11 +96,8 @@ public class DraftTestPack {
                 .join()
                 .getOrThrow();
 
-        try {
+        if (Zip.isZip(docContent))
             docContent =Zip.unzip(docContent);
-        } catch (RuntimeException ignored) {
-            // cause we don't have isCompressed for draft documents
-        }
 
         byte[] signature = cryptoUtils
                 .sign(engine.getConfiguration().getThumbprint(), docContent);

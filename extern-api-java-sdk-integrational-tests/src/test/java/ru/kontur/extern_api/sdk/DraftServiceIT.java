@@ -377,8 +377,12 @@ class DraftServiceIT {
                 .join()
                 .getOrThrow();
 
+
+        if (Zip.isZip(docContent))
+            docContent = Zip.unzip(docContent);
+
         byte[] signature = cryptoUtils
-                .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
+                .sign(engine.getConfiguration().getThumbprint(), docContent);
 
         QueryContext update = engine.getDraftService()
                 .updateSignatureAsync(
