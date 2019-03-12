@@ -30,6 +30,7 @@ package ru.kontur.extern_api.sdk;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DraftTestPack;
@@ -98,13 +100,13 @@ class TaskServiceIT {
     @ParameterizedTest
     @DisplayName("command \"GetSendResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
-    void testGetSendResult(Draft draft) throws InterruptedException, ExecutionException {
+    void testGetSendResult(Draft draft) {
         QueryContext<TaskInfo<Docflow>> startSend = engine.getTaskService()
                 .startSendAsync(draft.getId())
                 .join();
 
-        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend.get());
-
+        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend.get()).join();
+        assertEquals(docflow.getStatus().getName(), "sent");
     }
 
     @ParameterizedTest
@@ -120,6 +122,21 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
+    @DisplayName("command \"GetPrepareResult\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testGetPrepareResult(Draft draft) {
+        QueryContext<TaskInfo<PrepareResult>> startPrepare = engine.getTaskService()
+                .startPrepareAsync(draft.getId())
+                .join();
+
+        PrepareResult prepareResult = engine.getTaskService().getPrepareResult(draft.getId(), startPrepare.get())
+                .join();
+
+        Status status = prepareResult.getStatus();
+        assertTrue(status == Status.OK || status == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
+    }
+
+    @ParameterizedTest
     @DisplayName("command \"StartCheck\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartCheck(Draft draft) {
@@ -129,5 +146,19 @@ class TaskServiceIT {
 
         assertNull(startCheck.getServiceError());
         assertEquals(startCheck.get().getTaskState(), TaskState.RUNNING);
+    }
+
+    @ParameterizedTest
+    @DisplayName("command \"GetPrepareResult\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testGetCheckResult(Draft draft) {
+        QueryContext<TaskInfo<CheckResultData>> startCheck = engine.getTaskService()
+                .startCheckAsync(draft.getId())
+                .join();
+
+        CheckResultData checkResult = engine.getTaskService().getCheckResult(draft.getId(), startCheck.get())
+                .join();
+
+        assertTrue(checkResult.hasNoErrors());
     }
 }
