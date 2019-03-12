@@ -1,19 +1,13 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-
-import java.net.ConnectException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.TaskInfo;
@@ -70,10 +64,8 @@ public class TaskServiceImpl implements TaskService {
             TaskInfo<CheckResultData> checkTaskInfo) {
         ensureCorrectType(checkTaskInfo, TaskType.CHECK);
 
-        return WaitForCompletion(
-                () -> api.getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId()),
-                this::checkStateRunning)
-                .thenApply(DataWrapper::getData);
+        return waitWhileRunning(() -> api.getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId()))
+                .thenApply(result->result.getData());
     }
 
     @Override
@@ -81,17 +73,15 @@ public class TaskServiceImpl implements TaskService {
             TaskInfo<PrepareResult> prepareTaskInfo) {
         ensureCorrectType(prepareTaskInfo, TaskType.PREPARE);
 
-        return WaitForCompletion(
-                () -> api.getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId()),
-                this::checkStateRunning);
+        return waitWhileRunning(
+                () -> api.getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId()));
     }
 
     @Override
     public CompletableFuture<Docflow> getSendResult(UUID draftId, TaskInfo<Docflow> sendTaskInfo) {
         ensureCorrectType(sendTaskInfo, TaskType.SEND);
-        return WaitForCompletion(
-                () -> api.getSendResult(acc.accountId(), draftId, sendTaskInfo.getId()),
-                this::checkStateRunning);
+        return waitWhileRunning(
+                () -> api.getSendResult(acc.accountId(), draftId, sendTaskInfo.getId()));
     }
 
     private <T> boolean checkStateRunning(ApiResponse<TaskInfo<T>> callResult){
@@ -104,8 +94,12 @@ public class TaskServiceImpl implements TaskService {
             //TODO throw error here
         }
     }
+    private <T> CompletableFuture<T> waitWhileRunning(Supplier<CompletableFuture<ApiResponse<TaskInfo<T>>>> supplier)
+    {
+        return waitForCondition(supplier, this::checkStateRunning);
+    }
 
-    private <T> CompletableFuture<T> WaitForCompletion(Supplier<CompletableFuture<ApiResponse<TaskInfo<T>>>> supplier,
+    private <T> CompletableFuture<T> waitForCondition(Supplier<CompletableFuture<ApiResponse<TaskInfo<T>>>> supplier,
             Predicate<ApiResponse<TaskInfo<T>>> predicate) {
         return supplier.get().thenCompose(result -> {
             if (predicate.test(result)) {
@@ -116,24 +110,7 @@ public class TaskServiceImpl implements TaskService {
             } catch (InterruptedException ex) {
 
             }
-            return WaitForCompletion(supplier, predicate);
+            return waitForCondition(supplier, predicate);
         });
     }
-
-//
-//    private Docflow WaitForSendComplete(UUID draftId, TaskInfo<Docflow> taskInfo) {
-//        while (taskInfo.getTaskState() == TaskState.RUNNING) {
-//            Thread.sleep(2000);
-//            taskInfo = api
-//                    .getSendResult(acc.accountId(), draftId, taskInfo.getId()).get().getData();
-//            switch (taskInfo.getTaskState()) {
-//                case RUNNING:
-//                    continue;
-//                case SUCCEED:
-//                    return taskInfo.getTaskResult();
-//                case FAILED:
-//                    break;
-//            }
-//        }
-//    }
 }
