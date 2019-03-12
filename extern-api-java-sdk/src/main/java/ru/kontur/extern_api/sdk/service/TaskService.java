@@ -19,7 +19,7 @@ public interface TaskService {
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(UUID draftId);
+    CompletableFuture<TaskInfo<Docflow>> startSendAsync(UUID draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/send?deferred=true</p>
@@ -29,7 +29,7 @@ public interface TaskService {
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(String draftId);
+    CompletableFuture<TaskInfo<Docflow>> startSendAsync(String draftId);
 
 
     /**
@@ -39,7 +39,7 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат проверки
      */
-    CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(UUID draftId);
+    CompletableFuture<TaskInfo<CheckResultData>> startCheckAsync(UUID draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/check?deferred=true</p>
@@ -48,7 +48,7 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат проверки
      */
-    CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(String draftId);
+    CompletableFuture<TaskInfo<CheckResultData>> startCheckAsync(String draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
@@ -57,7 +57,7 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат подготовки
      */
-    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(UUID draftId);
+    CompletableFuture<TaskInfo<PrepareResult>> startPrepareAsync(UUID draftId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
@@ -66,7 +66,7 @@ public interface TaskService {
      * @param draftId идентификатор черновика
      * @return результат подготовки
      */
-    CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(String draftId);
+    CompletableFuture<TaskInfo<PrepareResult>> startPrepareAsync(String draftId);
 
 
 

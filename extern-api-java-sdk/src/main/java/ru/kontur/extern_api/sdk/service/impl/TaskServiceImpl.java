@@ -13,6 +13,7 @@ import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.DataWrapper;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.TaskInfo;
@@ -32,78 +33,76 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(UUID draftId) {
+    public CompletableFuture<TaskInfo<Docflow>> startSendAsync(UUID draftId) {
         return api.startSend(acc.accountId(), draftId, false)
-                .thenApply(contextAdaptor(QueryContext.TASK_INFO_DOCFLOW));
+                .thenApply(ApiResponse::getData);
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<Docflow>>> startSendAsync(String draftId) {
+    public CompletableFuture<TaskInfo<Docflow>> startSendAsync(String draftId) {
         return startSendAsync(UUID.fromString(draftId));
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(UUID draftId) {
+    public CompletableFuture<TaskInfo<CheckResultData>> startCheckAsync(UUID draftId) {
         return api.startCheck(acc.accountId(), draftId)
-                .thenApply(contextAdaptor(QueryContext.TASK_INFO_CHECK_RESULT_DATA));
+                .thenApply(ApiResponse::getData);
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<CheckResultData>>> startCheckAsync(String draftId) {
+    public CompletableFuture<TaskInfo<CheckResultData>> startCheckAsync(String draftId) {
         return startCheckAsync(UUID.fromString(draftId));
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(UUID draftId) {
+    public CompletableFuture<TaskInfo<PrepareResult>> startPrepareAsync(UUID draftId) {
         return api.startPrepare(acc.accountId(), draftId)
-                .thenApply(contextAdaptor(QueryContext.TASK_INFO_PREPARE_RESULT));
+                .thenApply(ApiResponse::getData);
     }
 
     @Override
-    public CompletableFuture<QueryContext<TaskInfo<PrepareResult>>> startPrepareAsync(String draftId) {
+    public CompletableFuture<TaskInfo<PrepareResult>> startPrepareAsync(String draftId) {
         return startPrepareAsync(UUID.fromString(draftId));
     }
 
     @Override
     public CompletableFuture<CheckResultData> getCheckResult(UUID draftId,
             TaskInfo<CheckResultData> checkTaskInfo) {
-        if (checkTaskInfo.getTaskType() != TaskType.CHECK)
-        //TODO throw error here
-        {
-            return CompletableFuture.completedFuture(null);
-        }
+        ensureCorrectType(checkTaskInfo, TaskType.CHECK);
 
         return WaitForCompletion(
                 () -> api.getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId()),
-                response -> response.getData().getTaskState() != TaskState.RUNNING)
-                .thenApply(wrappedTaskInfo-> wrappedTaskInfo.getData());
+                this::checkStateRunning)
+                .thenApply(DataWrapper::getData);
     }
 
     @Override
     public CompletableFuture<PrepareResult> getPrepareResult(UUID draftId,
             TaskInfo<PrepareResult> prepareTaskInfo) {
-        if (prepareTaskInfo.getTaskType() != TaskType.PREPARE)
-        //TODO throw error here
-        {
-            return CompletableFuture.completedFuture(null);
-        }
+        ensureCorrectType(prepareTaskInfo, TaskType.PREPARE);
 
         return WaitForCompletion(
                 () -> api.getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId()),
-                response -> response.getData().getTaskState() != TaskState.RUNNING);
+                this::checkStateRunning);
     }
 
     @Override
     public CompletableFuture<Docflow> getSendResult(UUID draftId, TaskInfo<Docflow> sendTaskInfo) {
-        if (sendTaskInfo.getTaskType() != TaskType.SEND)
-        //TODO throw error here
-        {
-            return CompletableFuture.completedFuture(null);
-        }
-
+        ensureCorrectType(sendTaskInfo, TaskType.SEND);
         return WaitForCompletion(
                 () -> api.getSendResult(acc.accountId(), draftId, sendTaskInfo.getId()),
-                response -> response.getData().getTaskState() != TaskState.RUNNING);
+                this::checkStateRunning);
+    }
+
+    private <T> boolean checkStateRunning(ApiResponse<TaskInfo<T>> callResult){
+        return callResult.getData().getTaskState() != TaskState.RUNNING;
+    }
+
+    private <T> void ensureCorrectType(TaskInfo<T> taskInfo, TaskType requiredType){
+        if (taskInfo.getTaskType() != requiredType)
+        {
+            //TODO throw error here
+        }
     }
 
     private <T> CompletableFuture<T> WaitForCompletion(Supplier<CompletableFuture<ApiResponse<TaskInfo<T>>>> supplier,
