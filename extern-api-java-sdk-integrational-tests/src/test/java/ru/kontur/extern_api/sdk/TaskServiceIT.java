@@ -29,12 +29,10 @@
 package ru.kontur.extern_api.sdk;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,7 +40,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
@@ -88,12 +85,12 @@ class TaskServiceIT {
     @DisplayName("command \"StartSend\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartSend(Draft draft) {
-        QueryContext<TaskInfo<Docflow>> startSend = engine.getTaskService()
+        TaskInfo<Docflow> startSend = engine.getTaskService()
                 .startSendAsync(draft.getId())
                 .join();
 
-        assertNull(startSend.getServiceError());
-        assertEquals(startSend.get().getTaskState(), TaskState.RUNNING);
+       // assertNull(startSend.getServiceError());
+        assertEquals(startSend.getTaskState(), TaskState.RUNNING);
     }
 
 
@@ -101,11 +98,11 @@ class TaskServiceIT {
     @DisplayName("command \"GetSendResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetSendResult(Draft draft) {
-        QueryContext<TaskInfo<Docflow>> startSend = engine.getTaskService()
+        TaskInfo<Docflow> startSend = engine.getTaskService()
                 .startSendAsync(draft.getId())
                 .join();
 
-        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend.get()).join();
+        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend).join();
         assertEquals(docflow.getStatus().getName(), "sent");
     }
 
@@ -113,23 +110,23 @@ class TaskServiceIT {
     @DisplayName("command \"StartPrepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartPrepare(Draft draft) {
-        QueryContext<TaskInfo<PrepareResult>> startPrepare = engine.getTaskService()
+        TaskInfo<PrepareResult>startPrepare = engine.getTaskService()
                 .startPrepareAsync(draft.getId())
                 .join();
 
-        assertNull(startPrepare.getServiceError());
-        assertEquals(startPrepare.get().getTaskState(), TaskState.RUNNING);
+        //assertNull(startPrepare.getServiceError());
+        assertEquals(startPrepare.getTaskState(), TaskState.RUNNING);
     }
 
     @ParameterizedTest
     @DisplayName("command \"GetPrepareResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetPrepareResult(Draft draft) {
-        QueryContext<TaskInfo<PrepareResult>> startPrepare = engine.getTaskService()
+        TaskInfo<PrepareResult> startPrepare = engine.getTaskService()
                 .startPrepareAsync(draft.getId())
                 .join();
 
-        PrepareResult prepareResult = engine.getTaskService().getPrepareResult(draft.getId(), startPrepare.get())
+        PrepareResult prepareResult = engine.getTaskService().getPrepareResult(draft.getId(), startPrepare)
                 .join();
 
         Status status = prepareResult.getStatus();
@@ -140,23 +137,23 @@ class TaskServiceIT {
     @DisplayName("command \"StartCheck\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartCheck(Draft draft) {
-        QueryContext<TaskInfo<CheckResultData>> startCheck = engine.getTaskService()
+        TaskInfo<CheckResultData>startCheck = engine.getTaskService()
                 .startCheckAsync(draft.getId())
                 .join();
 
-        assertNull(startCheck.getServiceError());
-        assertEquals(startCheck.get().getTaskState(), TaskState.RUNNING);
+       // assertNull(startCheck.getServiceError());
+        assertEquals(startCheck.getTaskState(), TaskState.RUNNING);
     }
 
     @ParameterizedTest
     @DisplayName("command \"GetPrepareResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetCheckResult(Draft draft) {
-        QueryContext<TaskInfo<CheckResultData>> startCheck = engine.getTaskService()
+        TaskInfo<CheckResultData> startCheck = engine.getTaskService()
                 .startCheckAsync(draft.getId())
                 .join();
 
-        CheckResultData checkResult = engine.getTaskService().getCheckResult(draft.getId(), startCheck.get())
+        CheckResultData checkResult = engine.getTaskService().getCheckResult(draft.getId(), startCheck)
                 .join();
 
         assertTrue(checkResult.hasNoErrors());
