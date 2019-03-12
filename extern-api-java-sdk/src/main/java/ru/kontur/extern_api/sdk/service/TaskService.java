@@ -78,7 +78,7 @@ public interface TaskService {
      * @return результат проверки
      * @see CheckResultData
      */
-    CompletableFuture<QueryContext<CheckResultData>> getCheckResult(UUID draftId, TaskInfo<Docflow> checkTaskInfo);
+    CompletableFuture<CheckResultData> getCheckResult(UUID draftId, TaskInfo<CheckResultData> checkTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -88,7 +88,7 @@ public interface TaskService {
      * @return результат подготовки
      * @see PrepareResult
      */
-    CompletableFuture<QueryContext<PrepareResult>> getPrepareResult(UUID draftId, TaskInfo<Docflow> prepareTaskInfo);
+    CompletableFuture<PrepareResult> getPrepareResult(UUID draftId, TaskInfo<PrepareResult> prepareTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -98,5 +98,5 @@ public interface TaskService {
      * @return документооборот
      * @see Docflow
      */
-    Docflow getSendResult(UUID draftId, TaskInfo<Docflow> sendTaskInfo)  throws InterruptedException, ExecutionException;
+    CompletableFuture<Docflow> getSendResult(UUID draftId, TaskInfo<Docflow> sendTaskInfo);
 }

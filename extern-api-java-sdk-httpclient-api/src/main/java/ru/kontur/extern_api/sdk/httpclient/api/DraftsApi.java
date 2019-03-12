@@ -168,7 +168,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param taskId send task identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
     CompletableFuture<ApiResponse<TaskInfo<Docflow>>> getSendResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -182,7 +182,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param taskId send task identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
     CompletableFuture<ApiResponse<TaskInfo<PrepareResult>>> getPrepareResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
@@ -196,8 +196,8 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param taskId send task identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
-    CompletableFuture<ApiResponse<TaskInfo<CheckResultData>>> getCheckResult(
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<ApiResponse<TaskInfo<DataWrapper<CheckResultData>>>> getCheckResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
