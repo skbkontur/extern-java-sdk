@@ -23,6 +23,8 @@
 
 package ru.kontur.extern_api.sdk;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,8 +40,16 @@ class CryptcpIT {
     @BeforeAll
     static void setUp() {
         thumbprint = TestConfig.LoadConfigFromEnvironment().getThumbprint();
-        cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
-        cryptcpProvider = new CryptcpCryptoprovider("cryptcp.x64.exe");
+
+        String executablePath = "cryptcp.x64.exe";
+
+        if (!Files.isExecutable(Paths.get(executablePath))) {
+            String s = "Cannot find \"cryptcp.x64.exe\" in current folder (%s)";
+            Assertions.fail(String.format(s, Paths.get(".").toAbsolutePath()));
+        }
+
+        cryptcpApi = new CryptcpApi(executablePath);
+        cryptcpProvider = new CryptcpCryptoprovider(executablePath);
     }
 
     @Test
