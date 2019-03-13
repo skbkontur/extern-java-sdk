@@ -43,6 +43,8 @@ import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
 
+import java.util.UUID;
+
 
 public class DefaultServicesFactory implements ServicesFactory {
 
@@ -104,10 +106,11 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public TaskService getTaskService() {
+    public TaskService getTaskService(UUID draftId) {
         return new TaskServiceImpl(
                 providerHolder.getAccountProvider(),
-                createApi(DraftsApi.class)
+                createApi(DraftsApi.class),
+                draftId
         );
     }
 

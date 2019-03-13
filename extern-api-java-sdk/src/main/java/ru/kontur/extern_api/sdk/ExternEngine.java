@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk;
 
 import java.util.Optional;
+import java.util.UUID;
+
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
@@ -92,8 +94,8 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      * @return TaskService сервис предназначен для работы с длительными операциями в черновиках и драфт билдерах
      * @see TaskService
      */
-    public TaskService getTaskService() {
-        return servicesFactory.getTaskService();
+    public TaskService getTaskService(UUID id) {
+        return servicesFactory.getTaskService(id);
     }
 
     /**
