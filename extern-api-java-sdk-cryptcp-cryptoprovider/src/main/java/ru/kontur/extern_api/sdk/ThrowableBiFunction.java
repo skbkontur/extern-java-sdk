@@ -21,7 +21,7 @@
  *
  */
 
-@FunctionalInterface
+package ru.kontur.extern_api.sdk;@FunctionalInterface
 public interface ThrowableBiFunction<In1, In2, Out, Ex extends Throwable> {
     Out apply(In1 in1, In2 in2) throws Ex;
 }

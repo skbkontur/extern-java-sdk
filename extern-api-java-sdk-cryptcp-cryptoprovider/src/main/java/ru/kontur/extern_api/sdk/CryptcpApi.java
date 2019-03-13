@@ -20,6 +20,7 @@
  * SOFTWARE.
  *
  */
+package ru.kontur.extern_api.sdk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,37 +37,46 @@ class CryptcpApi {
         this.executablePath = executablePath;
     }
 
-    public byte[] decrypt(String thumbprint, byte[] content) throws IOException {
-        return doWithIOTempFiles((in, out) -> {
-            Files.write(in, content, StandardOpenOption.CREATE);
-
-            run(String.format("-decr -thumbprint %s %s %s", thumbprint, in, out));
-            return Files.readAllBytes(out);
-        });
+    byte[] encrypt(String thumbprint, byte[] content) throws IOException {
+        return twoFilesCommand("encr", thumbprint, content);
     }
 
-    public byte[] sign(String thumbprint, byte[] signData) throws IOException {
-        return doWithIOTempFiles((in, out) -> {
-            Files.write(in, signData, StandardOpenOption.CREATE);
-            run(String.format("-sign -thumbprint %s %s %s", thumbprint, in, out));
-            return Files.readAllBytes(out);
-        })
+    byte[] decrypt(String thumbprint, byte[] content) throws IOException {
+        return twoFilesCommand("decr", thumbprint, content);
     }
 
-    private <T> T doWithIOTempFiles(ThrowableBiFunction<Path, Path, T, IOException> function)
+    byte[] sign(String thumbprint, byte[] signData) throws IOException {
+        return twoFilesCommand("sign", thumbprint, signData);
+    }
+
+    byte[] verify(String thumbprint, byte[] signedData) throws IOException {
+        return twoFilesCommand("verify", thumbprint, signedData);
+    }
+
+    /**
+     * Create two temp files: write input in first, executes command, read output from second
+     *
+     * @param command -decr -encr -sign and other commands with two (in and out files)
+     * @param thumbprint -thumbprint used as Search Certificate Criteria (КПС)
+     * @param data input data (file, encrypted file, signature...)
+     */
+    private byte[] twoFilesCommand(String command, String thumbprint, byte[] data)
             throws IOException {
-        Path in = Files.createTempFile("CryptcpApi", ".in");
-        Path out = Files.createTempFile("CryptcpApi", ".out");
+
+        Path in = Files.createTempFile(this.getClass().getSimpleName(), ".in");
+        Path out = Files.createTempFile(this.getClass().getSimpleName(), ".out");
 
         try {
-            return function.apply(in, out);
+            Files.write(in, data, StandardOpenOption.CREATE);
+            run(String.format("-%s -thumbprint %s %s %s", command, thumbprint, in, out));
+            return Files.readAllBytes(out);
         } finally {
             Files.delete(in);
             Files.delete(out);
         }
     }
 
-    private int run(String arguments) throws IOException {
+    private void run(String arguments) throws IOException {
         Process exec = Runtime.getRuntime().exec(executablePath + " " + arguments);
         try {
             exec.waitFor();
@@ -74,7 +84,6 @@ class CryptcpApi {
                 String result = readAll(exec.getInputStream());
                 throw new IOException(result);
             }
-            return exec.exitValue();
         } catch (InterruptedException e) {
             throw new IOException(e);
         } finally {
@@ -89,7 +98,7 @@ class CryptcpApi {
             while ((length = inputStream.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-            return result.toString("UTF-8");
+            return result.toString("CP866");
         }
     }
 }

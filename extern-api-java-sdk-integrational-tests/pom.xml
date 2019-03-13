@@ -42,6 +42,11 @@
             <groupId>ru.kontur.extern-api</groupId>
             <artifactId>extern-api-java-sdk</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.kontur.extern-api</groupId>
+            <artifactId>extern-api-java-sdk-cryptcp-cryptoprovider</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.vintage</groupId>

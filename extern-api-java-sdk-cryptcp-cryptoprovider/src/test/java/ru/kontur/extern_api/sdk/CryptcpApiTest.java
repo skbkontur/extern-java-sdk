@@ -20,26 +20,43 @@
  * SOFTWARE.
  *
  */
+package ru.kontur.extern_api.sdk;
 
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
 class CryptcpApiTest {
 
-    @Test
-    void name() throws Exception {
-        String thumbprint = "80a525f581901c9777db4abdd1dabe3bbfcd8673";
+    private static final String THUMBPRINT = "fd3e438933387026ee46c03691f20743d7d34766";
 
-        byte[] c = Files.readAllBytes(Paths.get("C:\\Users\\ostanin.igor\\Desktop\\crypted"));
+    @Test
+    void encryptDecryptTest() throws Exception {
+        String thumbprint = THUMBPRINT;
+
+        String message = "Hello, World!";
+        byte[] c = message.getBytes();
 
         CryptcpApi cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
 
-        byte[] decrypt = cryptcpApi.decrypt(thumbprint, c);
+        byte[] encrypt = cryptcpApi.encrypt(thumbprint, c);
+        byte[] decrypt = cryptcpApi.decrypt(thumbprint, encrypt);
 
-        Assertions.assertEquals("PK", new String(Arrays.copyOfRange(decrypt, 0, 2)));
+        Assertions.assertEquals(message, new String(decrypt));
+    }
+
+    @Test
+    void signVerifyTest() throws Exception {
+        String thumbprint = THUMBPRINT;
+
+        String message = "Hello, World!";
+        byte[] c = message.getBytes();
+
+        CryptcpApi cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
+
+        byte[] signature = cryptcpApi.sign(thumbprint, c);
+        byte[] verified = cryptcpApi.verify(thumbprint, signature);
+
+        Assertions.assertEquals(message, new String(verified));
     }
 }

@@ -479,6 +479,11 @@
                 <artifactId>extern-api-java-sdk-httpclient-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ru.kontur.extern-api</groupId>
+                <artifactId>extern-api-java-sdk-cryptcp-cryptoprovider</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Retrofit -->
             <dependency>

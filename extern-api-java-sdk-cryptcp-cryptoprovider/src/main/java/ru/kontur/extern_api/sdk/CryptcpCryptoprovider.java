@@ -21,7 +21,7 @@
  *
  */
 
-import java.util.concurrent.CompletableFuture;
+package ru.kontur.extern_api.sdk;import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
 
