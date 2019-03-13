@@ -155,7 +155,7 @@ public interface DraftsApi {
      * @param force force send
      */
     @POST("v1/{accountId}/drafts/{draftId}/send?deferred=true")
-    CompletableFuture<ApiResponse<TaskInfo<Docflow>>> startSend(
+    CompletableFuture<DocflowTaskInfo> startSend(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Query("force") boolean force
@@ -169,7 +169,7 @@ public interface DraftsApi {
      * @param taskId send task identifier
      */
     @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
-    CompletableFuture<ApiResponse<TaskInfo<Docflow>>> getSendResult(
+    CompletableFuture<DocflowTaskInfo> getSendResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
@@ -183,7 +183,7 @@ public interface DraftsApi {
      * @param taskId send task identifier
      */
     @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
-    CompletableFuture<ApiResponse<TaskInfo<PrepareResult>>> getPrepareResult(
+    CompletableFuture<PrepareResultTaskInfo> getPrepareResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
@@ -197,7 +197,7 @@ public interface DraftsApi {
      * @param taskId send task identifier
      */
     @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
-    CompletableFuture<ApiResponse<TaskInfo<DataWrapper<CheckResultData>>>> getCheckResult(
+    CompletableFuture<WrappedCheckResultDataTaskInfo> getCheckResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
@@ -209,7 +209,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      */
     @POST("v1/{accountId}/drafts/{draftId}/check?deferred=true")
-    CompletableFuture<ApiResponse<TaskInfo<CheckResultData>>> startCheck(
+    CompletableFuture<WrappedCheckResultDataTaskInfo> startCheck(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
     );
@@ -221,7 +221,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      */
     @POST("v1/{accountId}/drafts/{draftId}/prepare?deferred=true")
-    CompletableFuture<ApiResponse<TaskInfo<PrepareResult>>> startPrepare(
+    CompletableFuture<PrepareResultTaskInfo> startPrepare(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
     );
