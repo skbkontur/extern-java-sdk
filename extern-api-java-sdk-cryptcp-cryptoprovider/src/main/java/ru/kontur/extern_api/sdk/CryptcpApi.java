@@ -28,13 +28,24 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 
 class CryptcpApi {
 
     private final String executablePath;
+    private final String outputEncoding;
 
     CryptcpApi(String executablePath) {
+        this(executablePath, /* the default encoding of windows distributive */"CP866");
+    }
+
+    /**
+     * @param outputEncoding charset name used to decode cryptcp output.
+     *         A.k.a. the name of a supported {@link java.nio.charset.Charset charset}
+     */
+    CryptcpApi(String executablePath, String outputEncoding) {
         this.executablePath = executablePath;
+        this.outputEncoding = outputEncoding;
     }
 
     byte[] encrypt(String thumbprint, byte[] content) throws IOException {
@@ -51,6 +62,16 @@ class CryptcpApi {
 
     byte[] verify(String thumbprint, byte[] signedData) throws IOException {
         return twoFilesCommand("verify", thumbprint, signedData);
+    }
+
+    byte[] getCertificate(String thumbprint) throws IOException {
+        Path out = Files.createTempFile(this.getClass().getSimpleName(), ".cer");
+        try {
+            run(String.format("-copycert -thumbprint %s -df %s -der", thumbprint, out));
+            return Files.readAllBytes(out);
+        } finally {
+            Files.delete(out);
+        }
     }
 
     /**
@@ -79,13 +100,12 @@ class CryptcpApi {
     private void run(String arguments) throws IOException {
         Process exec = Runtime.getRuntime().exec(executablePath + " " + arguments);
         try {
-            exec.waitFor();
-            if (exec.exitValue() != 0) {
+            if (exec.waitFor() != 0) {
                 String result = readAll(exec.getInputStream());
-                throw new IOException(result);
+                throw new ApiException(result);
             }
         } catch (InterruptedException e) {
-            throw new IOException(e);
+            throw new ApiException(e);
         } finally {
             exec.destroy();
         }
@@ -98,7 +118,7 @@ class CryptcpApi {
             while ((length = inputStream.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-            return result.toString("CP866");
+            return result.toString(outputEncoding);
         }
     }
 }

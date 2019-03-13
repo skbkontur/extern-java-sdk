@@ -26,16 +26,20 @@ package ru.kontur.extern_api.sdk;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.kontur.extern_api.sdk.crypt.X509CertificateFactory;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 
 class CryptcpIT {
 
     private static String thumbprint;
+    private static CryptcpApi cryptcpApi;
+    private static CryptcpCryptoprovider cryptcpProvider;
 
     @BeforeAll
     static void setUp() {
-        // поменять, когда разберусь с тем, почему серты не установились
-        thumbprint = "c0c3fe4ee765f0cfede984d80daa8b4dcff883bd";
-            //TestConfig.LoadConfigFromEnvironment().getThumbprint();
+        thumbprint = TestConfig.LoadConfigFromEnvironment().getThumbprint();
+        cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
+        cryptcpProvider = new CryptcpCryptoprovider("cryptcp.x64.exe");
     }
 
     @Test
@@ -43,8 +47,6 @@ class CryptcpIT {
 
         String message = "Hello, World!";
         byte[] c = message.getBytes();
-
-        CryptcpApi cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
 
         byte[] encrypt = cryptcpApi.encrypt(thumbprint, c);
         byte[] decrypt = cryptcpApi.decrypt(thumbprint, encrypt);
@@ -57,11 +59,45 @@ class CryptcpIT {
         String message = "Hello, World!";
         byte[] c = message.getBytes();
 
-        CryptcpApi cryptcpApi = new CryptcpApi("cryptcp.x64.exe");
-
         byte[] signature = cryptcpApi.sign(thumbprint, c);
         byte[] verified = cryptcpApi.verify(thumbprint, signature);
 
         Assertions.assertEquals(message, new String(verified));
+    }
+
+    @Test
+    void apiGetCertificateTest() throws Exception {
+        byte[] certificate = cryptcpApi.getCertificate(thumbprint);
+        new X509CertificateFactory().create(certificate).getCert().checkValidity();
+    }
+
+
+    @Test
+    void providerEncryptDecryptTest() throws Exception {
+
+        String message = "Hello, World!";
+        byte[] c = message.getBytes();
+
+        byte[] encrypt = cryptcpApi.encrypt(thumbprint, c);
+        byte[] decrypt = cryptcpProvider.decryptAsync(thumbprint, encrypt).join().getOrThrow();
+
+        Assertions.assertEquals(message, new String(decrypt));
+    }
+
+    @Test
+    void providerSignVerifyTest() throws Exception {
+        String message = "Hello, World!";
+        byte[] c = message.getBytes();
+
+        byte[] signature = cryptcpProvider.signAsync(thumbprint, c).join().getOrThrow();
+        byte[] verified = cryptcpApi.verify(thumbprint, signature);
+
+        Assertions.assertEquals(message, new String(verified));
+    }
+
+    @Test
+    void providerGetCertificateTest() throws Exception {
+        byte[] certificate = cryptcpProvider.getSignerCertificateAsync(thumbprint).join().getOrThrow();
+        new X509CertificateFactory().create(certificate).getCert().checkValidity();
     }
 }

@@ -21,27 +21,72 @@
  *
  */
 
-package ru.kontur.extern_api.sdk;import java.util.concurrent.CompletableFuture;
+package ru.kontur.extern_api.sdk;
+
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
+import ru.kontur.extern_api.sdk.utils.ThrowableSupplier;
+
 
 public class CryptcpCryptoprovider implements CryptoProvider {
 
+    private CryptcpApi cryptcpApi;
+
+    /**
+     * Creates cryptoprovider that uses <a href='https://www.cryptopro.ru/products/other/cryptcp'>cryptocp</a>
+     * to run basic crypto operations.
+     *
+     * Use {@link CryptcpCryptoprovider#CryptcpCryptoprovider(String, String)} if error output corrupted
+     *
+     * @param executable the name of the executable (cryptocp.exe or cryptocp.x64.exe)
+     *         or full path to executable (C:\\users\\user\\desktop\\cryptcp...)
+     *         if one cannot be found via PATH variable
+     */
+    public CryptcpCryptoprovider(String executable) {
+        this(executable, "CP866");
+    }
+
+    /**
+     * Creates cryptoprovider that uses <a href='https://www.cryptopro.ru/products/other/cryptcp'>cryptocp</a>
+     * to run basic crypto operations.
+     *
+     * @param executable the name of the executable (cryptocp.exe or cryptocp.x64.exe)
+     *         or full path to executable (C:\\users\\user\\desktop\\cryptcp...)
+     *         if one cannot be found via PATH variable
+     * @param outputEncoding charset name used to decode cryptcp output.
+     *         A.k.a. the name of a supported {@link java.nio.charset.Charset charset}
+     */
+    public CryptcpCryptoprovider(String executable, String outputEncoding) {
+        this.cryptcpApi = new CryptcpApi(executable, outputEncoding);
+    }
+
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
-        return null;
+        return launch(() -> cryptcpApi.sign(thumbprint, content));
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
-        return null;
+        return  launch(() -> cryptcpApi.getCertificate(thumbprint));
     }
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content) {
-        return null;
+        return  launch(() -> cryptcpApi.decrypt(thumbprint, content));
     }
 
+    private CompletableFuture<QueryContext<byte[]>> launch(
+            ThrowableSupplier<byte[], Exception> contentSupplier
+    ) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new QueryContext<>(QueryContext.CONTENT, contentSupplier.get());
+            } catch (Exception e) {
+                return QueryContext.error(e);
+            }
+        });
+    }
 
     @Override
     public QueryContext<byte[]> getSignerCertificate(QueryContext<byte[]> cxt) {
