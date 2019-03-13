@@ -85,8 +85,8 @@ class TaskServiceIT {
     @DisplayName("command \"StartSend\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartSend(Draft draft) {
-        DocflowTaskInfo startSend = engine.getTaskService()
-                .startSendAsync(draft.getId())
+        DocflowTaskInfo startSend = engine.getTaskService(draft.getId())
+                .startSendAsync()
                 .join();
 
         assertEquals(startSend.getTaskState(), TaskState.RUNNING);
@@ -98,11 +98,11 @@ class TaskServiceIT {
     @DisplayName("command \"GetSendResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetSendResult(Draft draft) {
-        DocflowTaskInfo startSend = engine.getTaskService()
-                .startSendAsync(draft.getId())
+        DocflowTaskInfo startSend = engine.getTaskService(draft.getId())
+                .startSendAsync()
                 .join();
 
-        Docflow docflow = engine.getTaskService().getSendResult(draft.getId(), startSend).join();
+        Docflow docflow = engine.getTaskService(draft.getId()).getSendResult(startSend).join();
         assertEquals(docflow.getStatus(), DocflowStatus.SENT);
     }
 
@@ -110,8 +110,8 @@ class TaskServiceIT {
     @DisplayName("command \"StartPrepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartPrepare(Draft draft) {
-        PrepareResultTaskInfo startPrepare = engine.getTaskService()
-                .startPrepareAsync(draft.getId())
+        PrepareResultTaskInfo startPrepare = engine.getTaskService(draft.getId())
+                .startPrepareAsync()
                 .join();
 
         assertEquals(startPrepare.getTaskState(), TaskState.RUNNING);
@@ -123,11 +123,11 @@ class TaskServiceIT {
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetPrepareResult(Draft draft) {
 
-        PrepareResultTaskInfo startPrepare = engine.getTaskService()
-                .startPrepareAsync(draft.getId())
+        PrepareResultTaskInfo startPrepare = engine.getTaskService(draft.getId())
+                .startPrepareAsync()
                 .join();
 
-        PrepareResult prepareResult = engine.getTaskService().getPrepareResult(draft.getId(), startPrepare)
+        PrepareResult prepareResult = engine.getTaskService(draft.getId()).getPrepareResult(startPrepare)
                 .join();
 
         Status status = prepareResult.getStatus();
@@ -138,8 +138,8 @@ class TaskServiceIT {
     @DisplayName("command \"StartCheck\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartCheck(Draft draft) {
-        CheckResultDataTaskInfo startCheck = engine.getTaskService()
-                .startCheckAsync(draft.getId())
+        CheckResultDataTaskInfo startCheck = engine.getTaskService(draft.getId())
+                .startCheckAsync()
                 .join();
 
         assertEquals(startCheck.getTaskState(), TaskState.RUNNING);
@@ -150,11 +150,11 @@ class TaskServiceIT {
     @DisplayName("command \"GetCheckResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetCheckResult(Draft draft) {
-        CheckResultDataTaskInfo startCheck = engine.getTaskService()
-                .startCheckAsync(draft.getId())
+        CheckResultDataTaskInfo startCheck = engine.getTaskService(draft.getId())
+                .startCheckAsync()
                 .join();
 
-        CheckResultData checkResult = engine.getTaskService().getCheckResult(draft.getId(), startCheck)
+        CheckResultData checkResult = engine.getTaskService(draft.getId()).getCheckResult(startCheck)
                 .join();
 
         assertTrue(checkResult.hasNoErrors());

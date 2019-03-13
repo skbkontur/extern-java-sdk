@@ -16,32 +16,33 @@ public class TaskServiceImpl implements TaskService {
     private final AccountProvider acc;
     private final DraftsApi api;
     private final static int delayTimeOut = 2000;
+    private final UUID draftId;
 
-    TaskServiceImpl(AccountProvider accountProvider, DraftsApi api) {
+    TaskServiceImpl(AccountProvider accountProvider, DraftsApi api, UUID draftId) {
         this.acc = accountProvider;
         this.api = api;
+        this.draftId = draftId;
     }
 
     @Override
-    public CompletableFuture<DocflowTaskInfo> startSendAsync(UUID draftId) {
+    public CompletableFuture<DocflowTaskInfo> startSendAsync() {
         return api.startSend(acc.accountId(), draftId, false);
     }
 
     @Override
-    public CompletableFuture<CheckResultDataTaskInfo> startCheckAsync(UUID draftId) {
+    public CompletableFuture<CheckResultDataTaskInfo> startCheckAsync() {
         return api.startCheck(acc.accountId(), draftId)
                 .thenApply(WrappedCheckResultDataTaskInfo::unwrap);
     }
 
     @Override
-    public CompletableFuture<PrepareResultTaskInfo> startPrepareAsync(UUID draftId) {
+    public CompletableFuture<PrepareResultTaskInfo> startPrepareAsync() {
         return api.startPrepare(acc.accountId(), draftId);
     }
 
 
     @Override
-    public CompletableFuture<CheckResultData> getCheckResult(UUID draftId,
-                                                             CheckResultDataTaskInfo checkTaskInfo) {
+    public CompletableFuture<CheckResultData> getCheckResult(CheckResultDataTaskInfo checkTaskInfo) {
 
         return waitWhileRunning(() -> api.getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId())
                 .thenApply(result -> (TaskInfo<DataWrapper<CheckResultData>>) result))
@@ -49,8 +50,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public CompletableFuture<PrepareResult> getPrepareResult(UUID draftId,
-                                                             PrepareResultTaskInfo prepareTaskInfo) {
+    public CompletableFuture<PrepareResult> getPrepareResult(PrepareResultTaskInfo prepareTaskInfo) {
 
         return waitWhileRunning(
                 () -> api.getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId())
@@ -58,7 +58,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public CompletableFuture<Docflow> getSendResult(UUID draftId, DocflowTaskInfo sendTaskInfo) {
+    public CompletableFuture<Docflow> getSendResult(DocflowTaskInfo sendTaskInfo) {
         return waitWhileRunning(
                 () -> api.getSendResult(acc.accountId(), draftId, sendTaskInfo.getId())
                         .thenApply(result -> (TaskInfo<Docflow>) result));

@@ -13,29 +13,26 @@ public interface TaskService {
      * <p>POST /v1/{accountId}/drafts/{draftId}/send?deferred=true</p>
      * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
      *
-     * @param draftId идентификатор черновика
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<DocflowTaskInfo> startSendAsync(UUID draftId);
+    CompletableFuture<DocflowTaskInfo> startSendAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/check?deferred=true</p>
      * Асинхронный метод запускающий процес проверки черновика
      *
-     * @param draftId идентификатор черновика
      * @return результат проверки
      */
-    CompletableFuture<CheckResultDataTaskInfo> startCheckAsync(UUID draftId);
+    CompletableFuture<CheckResultDataTaskInfo> startCheckAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
      * Асинхронный метод запускающий процес отправки черновика в контролиоующий орган
      *
-     * @param draftId идентификатор черновика
      * @return результат подготовки
      */
-    CompletableFuture<PrepareResultTaskInfo> startPrepareAsync(UUID draftId);
+    CompletableFuture<PrepareResultTaskInfo> startPrepareAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -45,7 +42,7 @@ public interface TaskService {
      * @return результат проверки
      * @see CheckResultData
      */
-    CompletableFuture<CheckResultData> getCheckResult(UUID draftId, CheckResultDataTaskInfo checkTaskInfo);
+    CompletableFuture<CheckResultData> getCheckResult(CheckResultDataTaskInfo checkTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -55,7 +52,7 @@ public interface TaskService {
      * @return результат подготовки
      * @see PrepareResult
      */
-    CompletableFuture<PrepareResult> getPrepareResult(UUID draftId, PrepareResultTaskInfo prepareTaskInfo);
+    CompletableFuture<PrepareResult> getPrepareResult(PrepareResultTaskInfo prepareTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -65,5 +62,5 @@ public interface TaskService {
      * @return документооборот
      * @see Docflow
      */
-    CompletableFuture<Docflow> getSendResult(UUID draftId, DocflowTaskInfo sendTaskInfo);
+    CompletableFuture<Docflow> getSendResult(DocflowTaskInfo sendTaskInfo);
 }
