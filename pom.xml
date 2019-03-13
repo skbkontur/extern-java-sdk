@@ -134,6 +134,7 @@
         <module>extern-api-java-sdk-common</module>
         <module>extern-api-java-sdk-httpclient-api</module>
         <module>extern-api-java-sdk-integrational-tests</module>
+        <module>extern-api-java-sdk-cryptcp-cryptoprovider</module>
     </modules>
 
     <build>
