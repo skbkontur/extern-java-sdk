@@ -22,23 +22,15 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class WrappedCheckResultDataTaskInfo extends TaskInfo<DataWrapper<CheckResultData>> {
+public class WrappedCheckDataTaskInfo extends TaskInfo<DataWrapper<CheckResultData>> {
 
     /**
      * Unwrap wrapper internal data
      *
-     * @return @see CheckResultDataTaskInfo
+     * @return {@link CheckTaskInfo}
      */
-    public CheckResultDataTaskInfo unwrap() {
-        CheckResultDataTaskInfo taskInfo = new CheckResultDataTaskInfo();
-        taskInfo.setId(getId());
-        taskInfo.setTaskState(this.getTaskState());
-        taskInfo.setTaskType(this.getTaskType());
-        if (this.isSuccessful() && this.getTaskResult() != null) {
-            taskInfo.setTaskResult(this.getTaskResult().getData());
-        }
-        taskInfo.setError(getError());
-        return taskInfo;
+    public CheckTaskInfo unwrap() {
+        return map(CheckTaskInfo::new, DataWrapper::getData);
     }
 
 }

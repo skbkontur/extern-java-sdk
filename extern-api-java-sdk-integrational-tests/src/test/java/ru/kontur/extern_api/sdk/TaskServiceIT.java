@@ -85,7 +85,7 @@ class TaskServiceIT {
     @DisplayName("command \"StartSend\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartSend(Draft draft) {
-        DocflowTaskInfo startSend = engine.getTaskService(draft.getId())
+        SendTaskInfo startSend = engine.getTaskService(draft.getId())
                 .startSendAsync()
                 .join();
 
@@ -98,7 +98,7 @@ class TaskServiceIT {
     @DisplayName("command \"GetSendResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetSendResult(Draft draft) {
-        DocflowTaskInfo startSend = engine.getTaskService(draft.getId())
+        SendTaskInfo startSend = engine.getTaskService(draft.getId())
                 .startSendAsync()
                 .join();
 
@@ -110,7 +110,7 @@ class TaskServiceIT {
     @DisplayName("command \"StartPrepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartPrepare(Draft draft) {
-        PrepareResultTaskInfo startPrepare = engine.getTaskService(draft.getId())
+        PrepareTaskInfo startPrepare = engine.getTaskService(draft.getId())
                 .startPrepareAsync()
                 .join();
 
@@ -122,8 +122,7 @@ class TaskServiceIT {
     @DisplayName("command \"GetPrepareResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetPrepareResult(Draft draft) {
-
-        PrepareResultTaskInfo startPrepare = engine.getTaskService(draft.getId())
+        PrepareTaskInfo startPrepare = engine.getTaskService(draft.getId())
                 .startPrepareAsync()
                 .join();
 
@@ -138,7 +137,7 @@ class TaskServiceIT {
     @DisplayName("command \"StartCheck\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartCheck(Draft draft) {
-        CheckResultDataTaskInfo startCheck = engine.getTaskService(draft.getId())
+        CheckTaskInfo startCheck = engine.getTaskService(draft.getId())
                 .startCheckAsync()
                 .join();
 
@@ -150,7 +149,7 @@ class TaskServiceIT {
     @DisplayName("command \"GetCheckResult\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetCheckResult(Draft draft) {
-        CheckResultDataTaskInfo startCheck = engine.getTaskService(draft.getId())
+        CheckTaskInfo startCheck = engine.getTaskService(draft.getId())
                 .startCheckAsync()
                 .join();
 
