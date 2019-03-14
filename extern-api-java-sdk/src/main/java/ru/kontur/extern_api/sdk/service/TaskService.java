@@ -1,10 +1,6 @@
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 
 public interface TaskService {
@@ -16,7 +12,7 @@ public interface TaskService {
      * @return список документооборотов
      * @see Docflow
      */
-    CompletableFuture<DocflowTaskInfo> startSendAsync();
+    CompletableFuture<SendTaskInfo> startSendAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/check?deferred=true</p>
@@ -24,7 +20,7 @@ public interface TaskService {
      *
      * @return результат проверки
      */
-    CompletableFuture<CheckResultDataTaskInfo> startCheckAsync();
+    CompletableFuture<CheckTaskInfo> startCheckAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/prepare?deferred=true</p>
@@ -32,7 +28,7 @@ public interface TaskService {
      *
      * @return результат подготовки
      */
-    CompletableFuture<PrepareResultTaskInfo> startPrepareAsync();
+    CompletableFuture<PrepareTaskInfo> startPrepareAsync();
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -42,7 +38,7 @@ public interface TaskService {
      * @return результат проверки
      * @see CheckResultData
      */
-    CompletableFuture<CheckResultData> getCheckResult(CheckResultDataTaskInfo checkTaskInfo);
+    CompletableFuture<CheckResultData> getCheckResult(CheckTaskInfo checkTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -52,7 +48,7 @@ public interface TaskService {
      * @return результат подготовки
      * @see PrepareResult
      */
-    CompletableFuture<PrepareResult> getPrepareResult(PrepareResultTaskInfo prepareTaskInfo);
+    CompletableFuture<PrepareResult> getPrepareResult(PrepareTaskInfo prepareTaskInfo);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
@@ -62,5 +58,5 @@ public interface TaskService {
      * @return документооборот
      * @see Docflow
      */
-    CompletableFuture<Docflow> getSendResult(DocflowTaskInfo sendTaskInfo);
+    CompletableFuture<Docflow> getSendResult(SendTaskInfo sendTaskInfo);
 }

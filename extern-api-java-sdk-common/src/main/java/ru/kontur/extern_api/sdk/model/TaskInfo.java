@@ -1,17 +1,19 @@
 package ru.kontur.extern_api.sdk.model;
 
+import java.net.HttpURLConnection;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import org.jetbrains.annotations.Contract;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.ErrorInfo;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
  * Класс предоставляет информацию о выполняемой на сервере задаче.
- * Используется в сервисах: {@code DraftService} и {@code DraftBuilderService}.
+ * Используется в сервисах: {@code TaskService} и {@code DraftBuilderTaskService}.
  *
  * @author Anton Kufko
  */
@@ -38,7 +40,6 @@ public class TaskInfo<TResult> {
      *
      * @param id идентификатор ДО
      */
-    @SuppressWarnings("unused")
     public void setId(UUID id) {
         this.id = id;
     }
@@ -48,42 +49,20 @@ public class TaskInfo<TResult> {
      * Возвращает тип задачи:
      * {@link TaskType}
      *
-     * @return TaskType тип задачи
+     * @return {@link TaskType} тип задачи
      */
     public TaskType getTaskType() {
         return taskType;
     }
 
     /**
-     * Устанавливает тип задачи
-     *
-     * @param taskType тип задачи:
-     * {@link TaskType}
-     */
-    @SuppressWarnings("unused")
-    void setTaskType(TaskType taskType) {
-        this.taskType = taskType;
-    }
-
-    /**
      * Возвращает статус задачи:
      * {@link TaskState}
      *
-     * @return TaskState статус задачи
+     * @return {@link TaskState} статус задачи
      */
     public TaskState getTaskState() {
         return taskState;
-    }
-
-    /**
-     * Устанавливает статус задачи
-     *
-     * @param taskState статус задачи:
-     *                  {@link TaskState}
-     */
-    @SuppressWarnings("unused")
-    void setTaskState(TaskState taskState) {
-        this.taskState = taskState;
     }
 
     /**
@@ -96,19 +75,9 @@ public class TaskInfo<TResult> {
     }
 
     /**
-     * Устанавливает результат выполнения задачи
-     *
-     * @param taskResult результат выполнения задачи:
-     */
-    @SuppressWarnings("unused")
-    void setTaskResult(TResult taskResult) {
-        this.taskResult = taskResult;
-    }
-
-    /**
      * Возвращает ошибку возникшую при выполнении задачи
      *
-     * @return Error
+     * @return {@link ErrorInfo}
      */
     public ErrorInfo getError() {
         return error;
@@ -117,13 +86,11 @@ public class TaskInfo<TResult> {
     /**
      * Устанавливает ошибку возникшую при выполнении задачи
      *
-     * @param error ошибка
+     * @param error {@link ErrorInfo} ошибка
      */
-    @SuppressWarnings("unused")
     void setError(ErrorInfo error) {
         this.error = error;
     }
-
 
     /**
      * @return ApiException with info from {@link ApiResponse#getErrorInfo()} or null if {@link
@@ -131,27 +98,46 @@ public class TaskInfo<TResult> {
      */
     public ApiException asApiException() {
 
-        if (isSuccessful()) {
-            return null;
+        if (isNotFailed()) {
+            throw new IllegalStateException("Task was not in failed state.");
         }
 
-        ErrorInfo e = error;
-
-        if (e == null) {
-            return new ApiException(error.getStatusCode(), "no-error-info");
+        if (error == null) {
+            return new ApiException(HttpURLConnection.HTTP_OK, "no-error-info");
         }
 
         return new ApiException(
                 error.getStatusCode(),
-                e.getId(),
-                e.getMessage(),
+                error.getId(),
+                error.getMessage(),
                 Collections.emptyMap(),
                 null
         );
     }
 
-    protected boolean isSuccessful() {
-        return taskState == TaskState.RUNNING || taskState == TaskState.SUCCEED;
+    public <TOut> TaskInfo<TOut> map(Function<TResult, TOut> mapper) {
+        return map(TaskInfo::new, mapper);
+    }
+
+    public <TOut, TaskOut extends TaskInfo<TOut>> TaskOut map(
+            Supplier<TaskOut> constructor,
+            Function<TResult, TOut> mapper
+    ) {
+        TaskOut task = constructor.get();
+        TaskInfo<TOut> taskOut = task;
+        taskOut.error = error;
+        taskOut.id = id;
+        taskOut.taskState = taskState;
+        taskOut.taskType = taskType;
+        if (isNotFailed() && taskResult != null) {
+            taskOut.taskResult = mapper.apply(taskResult);
+        }
+        return task;
+    }
+
+    @Contract(pure = true)
+    private boolean isNotFailed() {
+        return taskState != TaskState.FAILED;
     }
 }
 
