@@ -26,13 +26,13 @@ package ru.kontur.extern_api.sdk.model;
 
 
 /**
- *  Класс содержит информацию для создания черновике
+ *  Класс содержит информацию для создания черновика
  */
 public class DraftMetaRequest {
-
     private SenderRequest sender;
     private Recipient recipient;
     private OrganizationRequest payer;
+    private RelatedDocumentRequest relatedDocument;
 
     public DraftMetaRequest() {
     }
@@ -81,4 +81,16 @@ public class DraftMetaRequest {
     public void setPayer(OrganizationRequest payer) {
         this.payer = payer;
     }
+
+    /**
+     * Возвращает связный ДО
+     * @return связный ДО
+     */
+    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
+
+    /**
+     * Устанавливает связный ДО
+     * @param relatedDocument связный ДО
+     */
+    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
 }

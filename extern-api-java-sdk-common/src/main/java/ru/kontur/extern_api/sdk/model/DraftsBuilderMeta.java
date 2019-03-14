@@ -26,23 +26,25 @@ package ru.kontur.extern_api.sdk.model;
 
 /**
  * <p>
- *     Класс содержит информацию о черновике
+ *     Класс содержит информацию о билдере черновиков
  * </p>
- * @author Aleksey Sukhorukov
  */
-public class DraftMeta {
+public class DraftsBuilderMeta {
     private Sender sender;
     private Recipient recipient;
     private Organization payer;
-    private RelatedDocument relatedDocument;
+    private String builderType;
+    private DraftsBuilderData builderData;
 
-    public DraftMeta() {
+    public DraftsBuilderMeta() {
     }
 
-    public DraftMeta(Sender sender, Recipient recipient, Organization payer) {
+    public DraftsBuilderMeta(Sender sender, Recipient recipient, Organization payer, String builderType, DraftsBuilderData builderData) {
         this.sender = sender;
         this.recipient = recipient;
         this.payer = payer;
+        this.builderType = builderType;
+        this.builderData = builderData;
     }
 
     /**
@@ -95,35 +97,53 @@ public class DraftMeta {
      * @param payer объект {@link Organization}, описывающий организацию, за которую производится сдача документа
      * @see Organization
      */
-    public void setPayer(Organization payer) {
-        this.payer = payer;
-    }
+    public void setPayer(Organization payer) { this.payer = payer; }
 
     /**
-     * Возвращает связный ДО
-     * @return связный ДО
+     * Возвращает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
+     * <ul>
+     *   <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     * </ul>
+     * @return тип билдера черновиков
      */
-    public RelatedDocument getRelatedDocument() { return relatedDocument; }
+    public String getBuilderType() { return builderType; }
 
     /**
-     * Устанавливает связный ДО
-     * @param relatedDocument связный ДО
+     * Устанавливает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
+     * @param type тип билдера черновиков
+     * <ul>
+     *   <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     * </ul>
      */
-    public void setRelatedDocument(RelatedDocument relatedDocument) { this.relatedDocument = relatedDocument; }
+    public void setBuilderType(String type) { this.builderType = type; }
 
-    public DraftMetaRequest asRequest() {
+    /**
+     * Возвращает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
+     * @see DraftsBuilderData
+     */
+    public DraftsBuilderData getBuilderData() { return builderData; }
+
+    /**
+     * Устанавливает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * @param builderData объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * @see DraftsBuilderData
+     */
+    public void setBuilderData(DraftsBuilderData builderData) { this.builderData = builderData; }
+
+    public DraftsBuilderMetaRequest asRequest() {
         Sender sender = this.getSender();
-        return new DraftMetaRequest(
-                new SenderRequest(
-                        sender.getInn(),
-                        sender.getKpp(),
-                        sender.getCertificate(),
-                        sender.getIpaddress()
-                ),
-                getRecipient(),
-                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName())
+        return new DraftsBuilderMetaRequest(
+            new SenderRequest(
+                    sender.getInn(),
+                    sender.getKpp(),
+                    sender.getCertificate(),
+                    sender.getIpaddress()
+            ),
+            getRecipient(),
+            new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName()),
+            getBuilderType(),
+            getBuilderData()
         );
-
-
     }
 }
