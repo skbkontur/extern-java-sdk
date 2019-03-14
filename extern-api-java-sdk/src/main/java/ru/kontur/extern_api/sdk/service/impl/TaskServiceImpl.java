@@ -8,7 +8,7 @@ import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.TaskService;
-import ru.kontur.extern_api.sdk.utils.ConditionAwaiter;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
 
 public class TaskServiceImpl implements TaskService {
 
@@ -31,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public CompletableFuture<CheckTaskInfo> startCheckAsync() {
         return api.startCheck(acc.accountId(), draftId)
-                .thenApply(WrappedCheckDataTaskInfo::unwrap);
+                .thenApply(WrappedCheckTaskInfo::unwrap);
     }
 
     @Override
@@ -39,46 +39,41 @@ public class TaskServiceImpl implements TaskService {
         return api.startPrepare(acc.accountId(), draftId);
     }
 
-
     @Override
     public CompletableFuture<CheckResultData> getCheckResult(CheckTaskInfo checkTaskInfo) {
-
-        return waitWhileRunning(() -> api.getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId())
-                .thenApply(result -> (TaskInfo<DataWrapper<CheckResultData>>) result))
-                .thenApply(DataWrapper::getData);
+        return waitWhileRunning(() -> api
+                .getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId())
+                .thenApply(WrappedCheckTaskInfo::unwrap)
+        );
     }
 
     @Override
     public CompletableFuture<PrepareResult> getPrepareResult(PrepareTaskInfo prepareTaskInfo) {
-
-        return waitWhileRunning(
-                () -> api.getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId())
-                        .thenApply(result -> (TaskInfo<PrepareResult>) result));
+        return waitWhileRunning(() -> api
+                .getPrepareResult(acc.accountId(), draftId, prepareTaskInfo.getId())
+        );
     }
 
     @Override
     public CompletableFuture<Docflow> getSendResult(SendTaskInfo sendTaskInfo) {
-        return waitWhileRunning(
-                () -> api.getSendResult(acc.accountId(), draftId, sendTaskInfo.getId())
-                        .thenApply(result -> (TaskInfo<Docflow>) result));
+        return waitWhileRunning(() -> api
+                .getSendResult(acc.accountId(), draftId, sendTaskInfo.getId())
+        );
     }
 
-    private <T> boolean checkStateRunning(TaskInfo<T> callResult) {
+    private <T extends TaskInfo<?>> boolean checkStateRunning(T callResult) {
         return callResult.getTaskState() != TaskState.RUNNING;
     }
 
-    private <T> CompletableFuture<T> waitWhileRunning(Supplier<CompletableFuture<TaskInfo<T>>> supplier) {
-        return ConditionAwaiter.waitForCondition(supplier, this::checkStateRunning, DELAY_TIMEOUT)
-                .thenCompose(result -> {
-                            CompletableFuture<T> future = new CompletableFuture<>();
-                            if (result.getError() != null) {
-                                future.completeExceptionally(result.asApiException());
-                            } else {
-                                future.complete(result.getTaskResult());
-                            }
-                            return future;
-                        }
-                );
+    private <T, Task extends TaskInfo<T>> CompletableFuture<T> waitWhileRunning(
+            Supplier<CompletableFuture<Task>> supplier
+    ) {
+        return Awaiter.waitForCondition(supplier, this::checkStateRunning, DELAY_TIMEOUT)
+                .thenApply(result -> {
+                    if (result.isFailed()) {
+                        throw result.asApiException();
+                    }
+                    return result.getTaskResult();
+                });
     }
-
 }

@@ -197,7 +197,7 @@ public interface DraftsApi {
      * @param taskId send task identifier
      */
     @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
-    CompletableFuture<WrappedCheckDataTaskInfo> getCheckResult(
+    CompletableFuture<WrappedCheckTaskInfo> getCheckResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
@@ -209,7 +209,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      */
     @POST("v1/{accountId}/drafts/{draftId}/check?deferred=true")
-    CompletableFuture<WrappedCheckDataTaskInfo> startCheck(
+    CompletableFuture<WrappedCheckTaskInfo> startCheck(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
     );
