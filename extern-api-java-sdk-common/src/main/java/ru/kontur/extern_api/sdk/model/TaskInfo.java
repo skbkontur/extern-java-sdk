@@ -135,9 +135,14 @@ public class TaskInfo<TResult> {
         return task;
     }
 
+
     @Contract(pure = true)
     private boolean isNotFailed() {
         return taskState != TaskState.FAILED;
+    }
+
+    public boolean isFailed() {
+        return taskState == TaskState.FAILED;
     }
 }
 

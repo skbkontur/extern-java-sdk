@@ -22,7 +22,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-public class WrappedCheckDataTaskInfo extends TaskInfo<DataWrapper<CheckResultData>> {
+public class WrappedCheckTaskInfo extends TaskInfo<DataWrapper<CheckResultData>> {
 
     /**
      * Unwrap wrapper internal data
