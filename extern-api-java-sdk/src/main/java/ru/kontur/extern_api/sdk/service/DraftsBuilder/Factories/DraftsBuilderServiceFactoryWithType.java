@@ -20,7 +20,10 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories;
 
-public class SubmissionDraftsBuilderDocumentFileData extends DraftsBuilderDocumentFileData {
+import ru.kontur.extern_api.sdk.service.DraftsBuilder.Submission.SubmissionDraftsBuilderService;
+
+public interface DraftsBuilderServiceFactoryWithType extends AnyDraftsBuilderServiceFactoryWithType<SubmissionDraftsBuilderService> {
+    SubmissionDraftsBuilderService forSubmission();
 }

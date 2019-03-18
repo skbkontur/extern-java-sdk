@@ -20,7 +20,9 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission;
 
-public abstract class DraftsBuilderDocumentFileData {
+import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocumentFileMeta;
+
+public class SubmissionDraftsBuilderDocumentFileMeta extends DraftsBuilderDocumentFileMeta<SubmissionDraftsBuilderDocumentFileData> {
 }

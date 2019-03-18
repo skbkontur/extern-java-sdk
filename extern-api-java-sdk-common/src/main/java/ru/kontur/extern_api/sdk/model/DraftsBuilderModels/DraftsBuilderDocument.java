@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 import java.util.UUID;
 
-public class DraftsBuilderDocument {
+public abstract class DraftsBuilderDocument<TMeta extends DraftsBuilderDocumentMeta> {
     public UUID id;
     public UUID draftsBuilderId;
-    public DraftsBuilderDocumentMeta meta;
+    public TMeta meta;
 
     /**
      * Возвращает идентификатор документа билдера черновиков
@@ -56,12 +56,12 @@ public class DraftsBuilderDocument {
      * Возвращает мета-данные документа билдера черновиков
      * @return мета-данные документа билдера черновиков
      */
-    public DraftsBuilderDocumentMeta getMeta() { return meta; }
+    public TMeta getMeta() { return meta; }
 
     /**
      * Устанавливает мета-данные документа билдера черновиков
      * @param meta мета-данные документа билдера черновиков
      */
-    public void setMeta(DraftsBuilderDocumentMeta meta) { this.meta = meta; }
+    public void setMeta(TMeta meta) { this.meta = meta; }
 
 }

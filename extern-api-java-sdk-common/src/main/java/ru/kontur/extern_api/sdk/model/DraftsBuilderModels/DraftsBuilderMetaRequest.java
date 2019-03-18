@@ -1,7 +1,5 @@
 /*
- * MIT License
- *
- * Copyright (c) 2018 SKB Kontur
+ * Copyright (c) 2019 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +20,40 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
+
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
 
 /**
  * <p>
- *     Класс содержит информацию о билдере черновиков
+ *     Класс содержит информацию для создания билдера черновиков
  * </p>
  */
-public class DraftsBuilderMeta {
-    private Sender sender;
+public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilderData> {
+    private SenderRequest sender;
     private Recipient recipient;
-    private Organization payer;
+    private OrganizationRequest payer;
     private String builderType;
-    private DraftsBuilderData builderData;
-
-    public DraftsBuilderMeta() {
-    }
-
-    public DraftsBuilderMeta(Sender sender, Recipient recipient, Organization payer, String builderType, DraftsBuilderData builderData) {
-        this.sender = sender;
-        this.recipient = recipient;
-        this.payer = payer;
-        this.builderType = builderType;
-        this.builderData = builderData;
-    }
+    private TBuilderData builderData;
 
     /**
-     * Возвращает объект {@link Sender}, описывающий отправителя документа
+     * Возвращает объект {@link SenderRequest}, описывающий отправителя документа
      * @return объект, описывающий отправителя документа
-     * @see Sender
+     * @see SenderRequest
      */
-    public Sender getSender() {
+    public SenderRequest getSender() {
         return sender;
     }
 
     /**
-     * Устанавливает объект {@link Sender}, описывающий отправителя документа
+     * Устанавливает объект {@link SenderRequest}, описывающий отправителя документа
      * @param sender объект, описывающий отправителя документа
-     * @see Sender
+     * @see SenderRequest
      */
-    public void setSender(Sender sender) {
+    public void setSender(SenderRequest sender) {
         this.sender = sender;
     }
 
@@ -84,20 +76,20 @@ public class DraftsBuilderMeta {
     }
 
     /**
-     * Возвращает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * Возвращает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
      * @return объект, описывающий организацию, за которую производится сдача документа
-     * @see Organization
+     * @see OrganizationRequest
      */
-    public Organization getPayer() {
+    public OrganizationRequest getPayer() {
         return payer;
     }
 
     /**
-     * Устанавливает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
-     * @param payer объект {@link Organization}, описывающий организацию, за которую производится сдача документа
-     * @see Organization
+     * Устанавливает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
+     * @param payer объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
+     * @see OrganizationRequest
      */
-    public void setPayer(Organization payer) { this.payer = payer; }
+    public void setPayer(OrganizationRequest payer) { this.payer = payer; }
 
     /**
      * Возвращает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
@@ -122,28 +114,12 @@ public class DraftsBuilderMeta {
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public DraftsBuilderData getBuilderData() { return builderData; }
+    public TBuilderData getBuilderData() { return builderData; }
 
     /**
      * Устанавливает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
-     * @param builderData объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * @param data объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public void setBuilderData(DraftsBuilderData builderData) { this.builderData = builderData; }
-
-    public DraftsBuilderMetaRequest asRequest() {
-        Sender sender = this.getSender();
-        return new DraftsBuilderMetaRequest(
-            new SenderRequest(
-                    sender.getInn(),
-                    sender.getKpp(),
-                    sender.getCertificate(),
-                    sender.getIpaddress()
-            ),
-            getRecipient(),
-            new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName()),
-            getBuilderType(),
-            getBuilderData()
-        );
-    }
+    public void setBuilderData(TBuilderData data) { this.builderData = data; }
 }

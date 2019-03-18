@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
-public class DraftsBuilderDocumentFileMeta {
+public abstract class DraftsBuilderDocumentFileMeta<TBuilderData extends DraftsBuilderDocumentFileData> {
     private String fileName;
     private String builderType;
-    private DraftsBuilderDocumentFileData builderData;
+    private TBuilderData builderData;
 
     /**
      * Возвращает имя файла
@@ -56,12 +56,12 @@ public class DraftsBuilderDocumentFileMeta {
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentFileData
      */
-    public DraftsBuilderDocumentFileData getBuilderData() { return builderData; }
+    public TBuilderData getBuilderData() { return builderData; }
 
     /**
      * Устанавливает объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для указанного типа билдера черновиков
      * @param builderData объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentFileData
      */
-    public void setBuilderData(DraftsBuilderDocumentFileData builderData) { this.builderData = builderData; }
+    public void setBuilderData(TBuilderData builderData) { this.builderData = builderData; }
 }

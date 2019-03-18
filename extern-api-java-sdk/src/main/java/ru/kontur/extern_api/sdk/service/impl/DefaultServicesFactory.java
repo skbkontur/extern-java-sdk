@@ -38,12 +38,14 @@ import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories.DraftsBuilderServicesFactory;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
 
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.service.impl.DraftsBuilder.DraftsBuilderServicesFactoryImpl;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
@@ -111,6 +113,14 @@ public class DefaultServicesFactory implements ServicesFactory {
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class),
                 draftId
+        );
+    }
+
+    @Override
+    public DraftsBuilderServicesFactory getDraftsBuilderServicesFactory() {
+        return new DraftsBuilderServicesFactoryImpl(
+                providerHolder.getAccountProvider(),
+                createApi(DraftsApi.class)
         );
     }
 

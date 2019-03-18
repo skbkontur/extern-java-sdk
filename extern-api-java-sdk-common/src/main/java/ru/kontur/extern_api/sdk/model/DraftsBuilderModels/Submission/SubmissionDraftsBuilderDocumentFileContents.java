@@ -20,33 +20,9 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission;
 
-public class SubmissionDraftsBuilderData extends DraftsBuilderData {
-    private String claimItemNumber;
-    private RelatedDocumentRequest relatedDocument;
+import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocumentFileContents;
 
-    /**
-     * Возвращает пункт требования
-     * @return пункт требования
-     */
-    public String getClaimItemNumber() { return claimItemNumber; }
-
-    /**
-     * Устанавливает пункт требования
-     * @param claimItemNumber пункт требования
-     */
-    public void setClaimItemNumber(String claimItemNumber) { this.claimItemNumber = claimItemNumber; }
-
-    /**
-     * Возвращает связный ДО
-     * @return связный ДО
-     */
-    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
-
-    /**
-     * Устанавливает связный ДО
-     * @param relatedDocument связный ДО
-     */
-    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
+public abstract class SubmissionDraftsBuilderDocumentFileContents extends DraftsBuilderDocumentFileContents<SubmissionDraftsBuilderDocumentFileMetaRequest> {
 }

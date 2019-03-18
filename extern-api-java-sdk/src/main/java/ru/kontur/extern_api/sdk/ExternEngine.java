@@ -36,6 +36,7 @@ import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories.DraftsBuilderServicesFactory;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
@@ -121,6 +122,12 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     public OrganizationService getOrganizationService() {
         return servicesFactory.getOrganizationService();
     }
+
+    /**
+     * @return DraftsBuilderFactory сервис предназначен для работы с билдерном черновиков
+     * @see DraftsBuilderServicesFactory
+     */
+    public DraftsBuilderServicesFactory getDraftsBuilderServicesFactory() { return servicesFactory.getDraftsBuilderServicesFactory(); }
 
     @Override
     public ProviderHolder getChildProviderHolder() {

@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 
 import java.util.UUID;
+import ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories.DraftsBuilderServicesFactory;
 
 
 public interface ServicesFactory {
@@ -45,5 +46,7 @@ public interface ServicesFactory {
     HttpClient getHttpClient();
 
     TaskService getTaskService(UUID id);
+
+    DraftsBuilderServicesFactory getDraftsBuilderServicesFactory();
 
 }
