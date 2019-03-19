@@ -55,7 +55,7 @@ public class CryptoApi {
     public CryptoApi() throws CertificateException {
         CryptoService cryptoService = null;
         try {
-            cryptoService = new MSCapi();
+            cryptoService = new MSCapi(true, CryptoService.GOST_2012_256_ALG_ID);
         } catch (Exception e) {
             log.warning(e.getMessage());
         }

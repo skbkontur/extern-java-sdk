@@ -89,16 +89,18 @@ public class DraftTestPack {
 
     private void signDocument(UUID documentId) {
 
-        byte[] docContent = UncheckedSupplier.get(() -> engine.getDraftService()
+        byte[] docContent = engine.getDraftService()
                 .getDecryptedDocumentContentAsync(
                         defaultDraftCxt.get(),
                         documentId)
-                .get()
-                .ensureSuccess()
-                .get());
+                .join()
+                .getOrThrow();
+
+        if (Zip.isZip(docContent))
+            docContent =Zip.unzip(docContent);
 
         byte[] signature = cryptoUtils
-                .sign(engine.getConfiguration().getThumbprint(), Zip.unzip(docContent));
+                .sign(engine.getConfiguration().getThumbprint(), docContent);
 
         UncheckedSupplier.get(() -> engine.getDraftService()
                 .updateSignatureAsync(
