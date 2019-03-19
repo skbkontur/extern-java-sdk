@@ -32,15 +32,7 @@ import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
-import ru.kontur.extern_api.sdk.service.AccountService;
-import ru.kontur.extern_api.sdk.service.CertificateService;
-import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
-import ru.kontur.extern_api.sdk.service.EventService;
-import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.TaskService;
+import ru.kontur.extern_api.sdk.service.*;
 
 
 /**
@@ -97,6 +89,15 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      */
     public TaskService getTaskService(UUID id) {
         return servicesFactory.getTaskService(id);
+    }
+
+
+    /**
+     * @return TaskService сервис предназначен для работы с длительными операциями в черновиках и драфт билдерах
+     * @see TaskService
+     */
+    public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
+        return servicesFactory.getRelatedDocumentsService(relatedDocflowId, relatedDocumentId);
     }
 
     /**

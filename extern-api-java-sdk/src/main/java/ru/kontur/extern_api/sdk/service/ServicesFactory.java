@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk.service;
 
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.Document;
 
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
@@ -49,4 +51,6 @@ public interface ServicesFactory {
 
     DraftsBuilderServiceFactory getDraftsBuilderService();
 
+    RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId);
+    RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocumentId);
 }
