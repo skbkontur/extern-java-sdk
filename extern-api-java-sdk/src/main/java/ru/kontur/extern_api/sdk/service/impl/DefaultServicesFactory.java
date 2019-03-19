@@ -27,21 +27,11 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
-import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.*;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.AccountService;
-import ru.kontur.extern_api.sdk.service.CertificateService;
-import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.EventService;
-import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.TaskService;
+import ru.kontur.extern_api.sdk.service.*;
 
 import java.util.UUID;
 
@@ -111,6 +101,26 @@ public class DefaultServicesFactory implements ServicesFactory {
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class),
                 draftId
+        );
+    }
+
+    @Override
+    public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
+        return new RelatedDocumentsServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(InventoryApi.class),
+                relatedDocflowId,
+                relatedDocumentId
+        );
+    }
+
+    @Override
+    public RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocumentId) {
+        return new RelatedDocumentsServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(InventoryApi.class),
+                relatedDocflow.getId(),
+                relatedDocumentId.getId()
         );
     }
 
