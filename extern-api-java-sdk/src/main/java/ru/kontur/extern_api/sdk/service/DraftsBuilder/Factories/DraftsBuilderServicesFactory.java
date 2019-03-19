@@ -22,8 +22,23 @@
 
 package ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories;
 
+/**
+ * <p>Группа методов предоставляет доступ к операциям для работы с билдерами черновиков</p>
+ */
 public interface DraftsBuilderServicesFactory {
+
+    /**
+     * <p>Работа с билдерами черновиков</p>
+     */
     DraftsBuilderServiceFactoryWithType getDraftsBuilderServiceFactory();
+
+    /**
+     * <p>Работа с документами билдера черновиков</p>
+     */
     DraftsBuilderDocumentServiceFactoryWithType getDraftsBuilderDocumentServiceFactory();
+
+    /**
+     * <p>Работа с файлами документа билдера черновиков</p>
+     */
     DraftsBuilderDocumentFileServiceFactoryWithType getDraftsBuilderDocumentFileServiceFactory();
 }

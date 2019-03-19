@@ -24,18 +24,15 @@ package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 import java.util.UUID;
 
-/**
- * <p>
- * Класс содержит описания билдера черновиков.
- * </p>
- */
 public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
+
     private UUID id;
     private TMeta meta;
     private DraftsBuilderStatus status;
 
     /**
      * Возвращает идентификатор билдера черновиков
+     *
      * @return идентификатор билдера черновиков
      */
     public UUID getId() {
@@ -44,6 +41,7 @@ public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
 
     /**
      * Устанавливает идентификатор билдера черновиков
+     *
      * @param id идентификатор билдера черновиков
      */
     public void setId(UUID id) {
@@ -52,6 +50,7 @@ public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
 
     /**
      * Возвращает мета-данные билдера черновиков
+     *
      * @return мета-данные билдера черновиков
      * @see DraftsBuilderMeta
      */
@@ -61,6 +60,7 @@ public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
 
     /**
      * Устанавливает мета-данные билдера черновиков
+     *
      * @param draftsBuilderMeta мета-данные билдера черновиков
      */
     public void setMeta(TMeta draftsBuilderMeta) {
@@ -69,6 +69,7 @@ public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
 
     /**
      * Возвращает статус билдера черновиков
+     *
      * @return статус билдера черновиков
      * @see DraftsBuilderStatus
      */
@@ -78,6 +79,7 @@ public abstract class DraftsBuilder<TMeta extends DraftsBuilderMeta> {
 
     /**
      * Устанавливает статус билдера черновиков
+     *
      * @param draftsBuilderStatus статус билдера черновиков
      */
     public void setStatus(DraftsBuilderStatus draftsBuilderStatus) {

@@ -32,6 +32,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface DraftsBuilderApi<TDraftsBuilder, TDraftsBuilderMeta, TDraftsBuilderMetaRequest> {
+
     /**
      * Create new a drafts builder
      *

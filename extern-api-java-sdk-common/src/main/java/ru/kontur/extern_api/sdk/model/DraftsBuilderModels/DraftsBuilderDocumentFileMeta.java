@@ -23,45 +23,67 @@
 package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 public abstract class DraftsBuilderDocumentFileMeta<TBuilderData extends DraftsBuilderDocumentFileData> {
+
     private String fileName;
     private String builderType;
     private TBuilderData builderData;
 
     /**
      * Возвращает имя файла
+     *
      * @return имя файла
      */
-    public String getFileName() { return fileName; }
+    public String getFileName() {
+        return fileName;
+    }
 
     /**
      * Устанавливает имя файла
+     *
      * @param fileName имя файла
      */
-    public void setFileName(String fileName) { this.fileName = fileName; }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     /**
      * Возвращает тип билдера черновиков
+     *
      * @return тип билдера черновиков
      */
-    public String getBuilderType() { return builderType; }
+    public String getBuilderType() {
+        return builderType;
+    }
 
     /**
      * Устанавливает тип билдера черновиков
+     *
      * @param builderType тип билдера черновиков
      */
-    public void setBuilderType(String builderType) { this.builderType = builderType; }
+    public void setBuilderType(String builderType) {
+        this.builderType = builderType;
+    }
 
     /**
-     * Возвращает объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Возвращает объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для
+     * указанного типа билдера черновиков
+     *
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentFileData
      */
-    public TBuilderData getBuilderData() { return builderData; }
+    public TBuilderData getBuilderData() {
+        return builderData;
+    }
 
     /**
-     * Устанавливает объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для указанного типа билдера черновиков
-     * @param builderData объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Устанавливает объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные данные для
+     * указанного типа билдера черновиков
+     *
+     * @param builderData объект {@link DraftsBuilderDocumentFileData}, содержащий дополнительные
+     *         данные для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentFileData
      */
-    public void setBuilderData(TBuilderData builderData) { this.builderData = builderData; }
+    public void setBuilderData(TBuilderData builderData) {
+        this.builderData = builderData;
+    }
 }

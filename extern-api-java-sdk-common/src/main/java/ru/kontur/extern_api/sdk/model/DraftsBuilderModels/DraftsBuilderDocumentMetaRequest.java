@@ -23,19 +23,29 @@
 package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 public abstract class DraftsBuilderDocumentMetaRequest<TBuilderData extends DraftsBuilderDocumentData> {
+
     public TBuilderData builderData;
 
     /**
-     * Возвращает объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Возвращает объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные для указанного
+     * типа билдера черновиков
+     *
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentData
      */
-    public TBuilderData getBuilderData() { return builderData; }
+    public TBuilderData getBuilderData() {
+        return builderData;
+    }
 
     /**
-     * Устанавливает объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные для указанного типа билдера черновиков
-     * @param builderData объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Устанавливает объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные для указанного
+     * типа билдера черновиков
+     *
+     * @param builderData объект {@link DraftsBuilderDocumentData}, содержащий дополнительные данные
+     *         для указанного типа билдера черновиков
      * @see DraftsBuilderDocumentData
      */
-    public void setBuilderData(TBuilderData builderData) { this.builderData = builderData; }
+    public void setBuilderData(TBuilderData builderData) {
+        this.builderData = builderData;
+    }
 }

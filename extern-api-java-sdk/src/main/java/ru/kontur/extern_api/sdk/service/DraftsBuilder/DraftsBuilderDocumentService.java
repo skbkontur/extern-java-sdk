@@ -28,10 +28,14 @@ import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocumentMetaRequest;
 
+/**
+ * <p>Группа методов предоставляет доступ к операциям для работы с документами билдера черновиков</p>
+ */
 public interface DraftsBuilderDocumentService<
         TDraftsBuilderDocument extends DraftsBuilderDocument,
         TDraftsBuilderDocumentMeta extends DraftsBuilderDocumentMeta,
         TDraftsBuilderDocumentMetaRequest extends DraftsBuilderDocumentMetaRequest> {
+
     /**
      * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents</p>
      * Асинхронный метод создания документа билдера черновиков
@@ -40,7 +44,10 @@ public interface DraftsBuilderDocumentService<
      * @param meta мета-данные документа билдера черновиков
      * @return документ билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument> createAsync(UUID draftsBuilderId, TDraftsBuilderDocumentMetaRequest meta);
+    CompletableFuture<TDraftsBuilderDocument> createAsync(
+            UUID draftsBuilderId,
+            TDraftsBuilderDocumentMetaRequest meta
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents</p>
@@ -49,7 +56,9 @@ public interface DraftsBuilderDocumentService<
      * @param draftsBuilderId идентификатор билдера черновиков
      * @return документы билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument[]> getAllAsync(UUID draftsBuilderId);
+    CompletableFuture<TDraftsBuilderDocument[]> getAllAsync(
+            UUID draftsBuilderId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
@@ -59,7 +68,10 @@ public interface DraftsBuilderDocumentService<
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return документ билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument> getAsync(UUID draftsBuilderId, UUID draftsBuilderDocumentId);
+    CompletableFuture<TDraftsBuilderDocument> getAsync(
+            UUID draftsBuilderId,
+            UUID draftsBuilderDocumentId
+    );
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
@@ -69,7 +81,10 @@ public interface DraftsBuilderDocumentService<
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(UUID draftsBuilderId, UUID draftsBuilderDocumentId);
+    CompletableFuture deleteAsync(
+            UUID draftsBuilderId,
+            UUID draftsBuilderDocumentId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta</p>
@@ -79,7 +94,10 @@ public interface DraftsBuilderDocumentService<
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return мета-данные документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentMeta> getMetaAsync(UUID draftsBuilderId, UUID draftsBuilderDocumentId);
+    CompletableFuture<TDraftsBuilderDocumentMeta> getMetaAsync(
+            UUID draftsBuilderId,
+            UUID draftsBuilderDocumentId
+    );
 
     /**
      * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta</p>
@@ -90,5 +108,9 @@ public interface DraftsBuilderDocumentService<
      * @param newMeta мета-данные документа билдера черновиков
      * @return мета-данные документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentMeta> updateMetaAsync(UUID draftsBuilderId, UUID draftsBuilderDocumentId, TDraftsBuilderDocumentMetaRequest newMeta);
+    CompletableFuture<TDraftsBuilderDocumentMeta> updateMetaAsync(
+            UUID draftsBuilderId,
+            UUID draftsBuilderDocumentId,
+            TDraftsBuilderDocumentMetaRequest newMeta
+    );
 }

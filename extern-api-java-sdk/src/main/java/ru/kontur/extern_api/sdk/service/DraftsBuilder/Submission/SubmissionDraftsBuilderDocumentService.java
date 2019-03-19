@@ -27,5 +27,10 @@ import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission.SubmissionD
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission.SubmissionDraftsBuilderDocumentMetaRequest;
 import ru.kontur.extern_api.sdk.service.DraftsBuilder.DraftsBuilderDocumentService;
 
-public interface SubmissionDraftsBuilderDocumentService extends DraftsBuilderDocumentService<SubmissionDraftsBuilderDocument, SubmissionDraftsBuilderDocumentMeta, SubmissionDraftsBuilderDocumentMetaRequest> {
+public interface SubmissionDraftsBuilderDocumentService extends
+        DraftsBuilderDocumentService<
+                SubmissionDraftsBuilderDocument,
+                SubmissionDraftsBuilderDocumentMeta,
+                SubmissionDraftsBuilderDocumentMetaRequest> {
+
 }

@@ -26,30 +26,43 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DraftsBuilderBuildResult {
+
     private UUID[] draftIds;
     private Map<UUID, String> errorDraftsBuilderDocuments;
 
     /**
      * Возвращает идентификаторы созданных черновиков
+     *
      * @return идентификаторы созданных черновиков
      */
-    public UUID[] getDraftIds() { return draftIds; }
+    public UUID[] getDraftIds() {
+        return draftIds;
+    }
 
     /**
      * Устанавливает идентификаторы созданных черновиков
+     *
      * @param draftIds идентификаторы созданных черновиков
      */
-    public void setDraftIds(UUID[] draftIds) { this.draftIds = draftIds; }
+    public void setDraftIds(UUID[] draftIds) {
+        this.draftIds = draftIds;
+    }
 
     /**
      * Возвращает список ошибок по документам
+     *
      * @return список ошибок по документам
      */
-    public Map<UUID, String> getErrorDraftsBuilderDocuments() { return errorDraftsBuilderDocuments; }
+    public Map<UUID, String> getErrorDraftsBuilderDocuments() {
+        return errorDraftsBuilderDocuments;
+    }
 
     /**
      * Устанавливает список ошибок по документам
+     *
      * @param errorDraftsBuilderDocuments список ошибок по документам
      */
-    public void setErrorDraftsBuilderDocuments(Map<UUID, String> errorDraftsBuilderDocuments) { this.errorDraftsBuilderDocuments = errorDraftsBuilderDocuments; }
+    public void setErrorDraftsBuilderDocuments(Map<UUID, String> errorDraftsBuilderDocuments) {
+        this.errorDraftsBuilderDocuments = errorDraftsBuilderDocuments;
+    }
 }

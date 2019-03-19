@@ -22,6 +22,10 @@
 
 package ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories;
 
-public interface AnyDraftsBuilderServiceFactoryWithType<TDraftsBuilderService> {
-    TDraftsBuilderService forSubmission();
+/**
+ * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
+ */
+public interface AnyDraftsBuilderServiceFactoryWithType<TSubmissionDraftsBuilderService> {
+
+    TSubmissionDraftsBuilderService forSubmission();
 }

@@ -23,19 +23,62 @@
 package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 public abstract class DraftsBuilderDocumentFileContents<TDraftsBuilderDocumentFileMetaRequest extends DraftsBuilderDocumentFileMetaRequest> {
+
     private String base64Content;
     private String base64SignatureContent;
     private TDraftsBuilderDocumentFileMetaRequest meta;
 
-    public String getBase64Content() { return base64Content; }
+    /**
+     * Возвращает контент файла
+     *
+     * @return контент файла
+     */
+    public String getBase64Content() {
+        return base64Content;
+    }
 
-    public void setBase64Content(String base64Content) { this.base64Content = base64Content; }
+    /**
+     * Устанавливает контент файла
+     *
+     * @param base64Content контент файла
+     */
+    public void setBase64Content(String base64Content) {
+        this.base64Content = base64Content;
+    }
 
-    public String getBase64SignatureContent() { return base64SignatureContent; }
+    /**
+     * Возвращает контент подписи файла
+     *
+     * @return контент подписи файла
+     */
+    public String getBase64SignatureContent() {
+        return base64SignatureContent;
+    }
 
-    public void setBase64SignatureContent(String base64SignatureContent) { this.base64SignatureContent = base64SignatureContent; }
+    /**
+     * Устанавливает контент подписи файла
+     *
+     * @param base64SignatureContent контент подписи файла
+     */
+    public void setBase64SignatureContent(String base64SignatureContent) {
+        this.base64SignatureContent = base64SignatureContent;
+    }
 
-    public TDraftsBuilderDocumentFileMetaRequest getMeta() { return meta; }
+    /**
+     * Возвращает мета-данные файла
+     *
+     * @return мета-данные файла
+     */
+    public TDraftsBuilderDocumentFileMetaRequest getMeta() {
+        return meta;
+    }
 
-    public void setMeta(TDraftsBuilderDocumentFileMetaRequest meta) { this.meta = meta; }
+    /**
+     * Устанавливает мета-данные файла
+     *
+     * @param meta мета-данные файла
+     */
+    public void setMeta(TDraftsBuilderDocumentFileMetaRequest meta) {
+        this.meta = meta;
+    }
 }

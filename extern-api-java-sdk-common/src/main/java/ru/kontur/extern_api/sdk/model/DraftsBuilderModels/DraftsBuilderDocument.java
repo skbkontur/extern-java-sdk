@@ -25,43 +25,63 @@ package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 import java.util.UUID;
 
 public abstract class DraftsBuilderDocument<TMeta extends DraftsBuilderDocumentMeta> {
+
     public UUID id;
     public UUID draftsBuilderId;
     public TMeta meta;
 
     /**
      * Возвращает идентификатор документа билдера черновиков
+     *
      * @return идентификатор документа билдера черновиков
      */
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id;
+    }
 
     /**
      * Устанавливает идентификатор файла документа билдера черновиков
+     *
      * @param id идентификатор файла документа билдера черновиков
      */
-    public void setId(UUID id) { this.id = id; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     /**
      * Возвращает идентификатор билдера черновиков
+     *
      * @return идентификатор билдера черновиков
      */
-    public UUID getDraftsBuilderId() { return draftsBuilderId; }
+    public UUID getDraftsBuilderId() {
+        return draftsBuilderId;
+    }
 
     /**
      * Устанавливает идентификатор билдера черновиков
+     *
      * @param draftsBuilderId идентификатор билдера черновиков
      */
-    public void setDraftsBuilderId(UUID draftsBuilderId) { this.draftsBuilderId = draftsBuilderId; }
+    public void setDraftsBuilderId(UUID draftsBuilderId) {
+        this.draftsBuilderId = draftsBuilderId;
+    }
+
     /**
      * Возвращает мета-данные документа билдера черновиков
+     *
      * @return мета-данные документа билдера черновиков
      */
-    public TMeta getMeta() { return meta; }
+    public TMeta getMeta() {
+        return meta;
+    }
 
     /**
      * Устанавливает мета-данные документа билдера черновиков
+     *
      * @param meta мета-данные документа билдера черновиков
      */
-    public void setMeta(TMeta meta) { this.meta = meta; }
+    public void setMeta(TMeta meta) {
+        this.meta = meta;
+    }
 
 }

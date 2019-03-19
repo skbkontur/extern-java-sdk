@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.service.DraftsBuilder.Factories;
 
 import ru.kontur.extern_api.sdk.service.DraftsBuilder.Submission.SubmissionDraftsBuilderDocumentService;
 
-public interface DraftsBuilderDocumentServiceFactoryWithType extends AnyDraftsBuilderServiceFactoryWithType<SubmissionDraftsBuilderDocumentService> {
-    SubmissionDraftsBuilderDocumentService forSubmission();
+public interface DraftsBuilderDocumentServiceFactoryWithType extends
+        AnyDraftsBuilderServiceFactoryWithType<SubmissionDraftsBuilderDocumentService> {
+
 }

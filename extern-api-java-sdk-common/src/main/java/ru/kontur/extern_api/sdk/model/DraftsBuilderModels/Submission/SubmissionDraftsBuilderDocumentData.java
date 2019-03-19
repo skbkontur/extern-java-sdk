@@ -24,5 +24,7 @@ package ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission;
 
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderDocumentData;
 
-public class SubmissionDraftsBuilderDocumentData extends DraftsBuilderDocumentData {
+public class SubmissionDraftsBuilderDocumentData extends
+        DraftsBuilderDocumentData {
+
 }

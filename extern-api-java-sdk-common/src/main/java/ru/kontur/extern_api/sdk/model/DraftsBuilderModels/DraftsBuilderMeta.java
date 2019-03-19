@@ -24,17 +24,11 @@ package ru.kontur.extern_api.sdk.model.DraftsBuilderModels;
 
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.Organization;
-import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
-import ru.kontur.extern_api.sdk.model.SenderRequest;
 
-/**
- * <p>
- *     Класс содержит информацию о билдере черновиков
- * </p>
- */
 public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> {
+
     private Sender sender;
     private Recipient recipient;
     private Organization payer;
@@ -43,6 +37,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
 
     /**
      * Возвращает объект {@link Sender}, описывающий отправителя документа
+     *
      * @return объект, описывающий отправителя документа
      * @see Sender
      */
@@ -52,6 +47,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
 
     /**
      * Устанавливает объект {@link Sender}, описывающий отправителя документа
+     *
      * @param sender объект, описывающий отправителя документа
      * @see Sender
      */
@@ -61,6 +57,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
 
     /**
      * Возвращает объект {@link FnsRecipient}, описывающий получателя документа
+     *
      * @return объект {@link FnsRecipient}, описывающий получателя документа
      * @see FnsRecipient
      */
@@ -70,6 +67,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
 
     /**
      * Устанавливает объект {@link FnsRecipient}, описывающий получателя документа
+     *
      * @param recipient объект {@link FnsRecipient}, описывающий получателя документа
      * @see FnsRecipient
      */
@@ -78,7 +76,9 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
     }
 
     /**
-     * Возвращает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * Возвращает объект {@link Organization}, описывающий организацию, за которую производится сдача
+     * документа
+     *
      * @return объект, описывающий организацию, за которую производится сдача документа
      * @see Organization
      */
@@ -87,41 +87,61 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
     }
 
     /**
-     * Устанавливает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
-     * @param payer объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     * Устанавливает объект {@link Organization}, описывающий организацию, за которую производится сдача
+     * документа
+     *
+     * @param payer объект {@link Organization}, описывающий организацию, за которую производится
+     *         сдача документа
      * @see Organization
      */
-    public void setPayer(Organization payer) { this.payer = payer; }
+    public void setPayer(Organization payer) {
+        this.payer = payer;
+    }
 
     /**
      * Возвращает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
      * <ul>
-     *   <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     * <li>urn:ke.api.public:fns:submission - представление ФНС</li>
      * </ul>
+     *
      * @return тип билдера черновиков
      */
-    public String getBuilderType() { return builderType; }
+    public String getBuilderType() {
+        return builderType;
+    }
 
     /**
      * Устанавливает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
+     *
      * @param type тип билдера черновиков
-     * <ul>
-     *   <li>urn:ke.api.public:fns:submission - представление ФНС</li>
-     * </ul>
+     *         <ul>
+     *         <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     *         </ul>
      */
-    public void setBuilderType(String type) { this.builderType = type; }
+    public void setBuilderType(String type) {
+        this.builderType = type;
+    }
 
     /**
-     * Возвращает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Возвращает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа
+     * билдера черновиков
+     *
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public TBuilderData getBuilderData() { return builderData; }
+    public TBuilderData getBuilderData() {
+        return builderData;
+    }
 
     /**
-     * Устанавливает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
-     * @param builderData объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа билдера черновиков
+     * Устанавливает объект {@link DraftsBuilderData}, содержащий дополнительные данные для указанного типа
+     * билдера черновиков
+     *
+     * @param builderData объект {@link DraftsBuilderData}, содержащий дополнительные данные для
+     *         указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public void setBuilderData(TBuilderData builderData) { this.builderData = builderData; }
+    public void setBuilderData(TBuilderData builderData) {
+        this.builderData = builderData;
+    }
 }

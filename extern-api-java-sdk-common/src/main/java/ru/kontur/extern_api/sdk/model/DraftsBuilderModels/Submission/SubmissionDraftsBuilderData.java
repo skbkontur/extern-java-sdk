@@ -25,31 +25,45 @@ package ru.kontur.extern_api.sdk.model.DraftsBuilderModels.Submission;
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 
-public class SubmissionDraftsBuilderData extends DraftsBuilderData {
+public class SubmissionDraftsBuilderData extends
+        DraftsBuilderData {
+
     private String claimItemNumber;
     private RelatedDocumentRequest relatedDocument;
 
     /**
      * Возвращает пункт требования
+     *
      * @return пункт требования
      */
-    public String getClaimItemNumber() { return claimItemNumber; }
+    public String getClaimItemNumber() {
+        return claimItemNumber;
+    }
 
     /**
      * Устанавливает пункт требования
+     *
      * @param claimItemNumber пункт требования
      */
-    public void setClaimItemNumber(String claimItemNumber) { this.claimItemNumber = claimItemNumber; }
+    public void setClaimItemNumber(String claimItemNumber) {
+        this.claimItemNumber = claimItemNumber;
+    }
 
     /**
      * Возвращает связный ДО
+     *
      * @return связный ДО
      */
-    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
+    public RelatedDocumentRequest getRelatedDocument() {
+        return relatedDocument;
+    }
 
     /**
      * Устанавливает связный ДО
+     *
      * @param relatedDocument связный ДО
      */
-    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
+    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) {
+        this.relatedDocument = relatedDocument;
+    }
 }

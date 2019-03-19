@@ -28,10 +28,14 @@ import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.DraftsBuilderModels.DraftsBuilderMetaRequest;
 
+/**
+ * <p>Группа методов предоставляет доступ к операциям для работы с билдерами черновиков</p>
+ */
 public interface DraftsBuilderService<
         TDraftsBuilder extends DraftsBuilder,
         TDraftsBuilderMeta extends DraftsBuilderMeta,
         TDraftsBuilderMetaRequest extends DraftsBuilderMetaRequest> {
+
     /**
      * <p>POST /v1/{accountId}/drafts/builders</p>
      * Асинхронный метод создания билдера черновиков
@@ -39,7 +43,9 @@ public interface DraftsBuilderService<
      * @param meta мета-данные билдера черновиков
      * @return билдер черновиков
      */
-    CompletableFuture<TDraftsBuilder> createAsync(TDraftsBuilderMetaRequest meta);
+    CompletableFuture<TDraftsBuilder> createAsync(
+            TDraftsBuilderMetaRequest meta
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}</p>
@@ -48,7 +54,9 @@ public interface DraftsBuilderService<
      * @param draftsBuilderId идентификатор билдера черновиков
      * @return билдер черновиков
      */
-    CompletableFuture<TDraftsBuilder> getAsync(UUID draftsBuilderId);
+    CompletableFuture<TDraftsBuilder> getAsync(
+            UUID draftsBuilderId
+    );
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}</p>
@@ -57,7 +65,9 @@ public interface DraftsBuilderService<
      * @param draftsBuilderId идентификатор билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(UUID draftsBuilderId);
+    CompletableFuture deleteAsync(
+            UUID draftsBuilderId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/meta</p>
@@ -66,7 +76,9 @@ public interface DraftsBuilderService<
      * @param draftsBuilderId идентификатор билдера черновиков
      * @return мета-данные билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderMeta> getMetaAsync(UUID draftsBuilderId);
+    CompletableFuture<TDraftsBuilderMeta> getMetaAsync(
+            UUID draftsBuilderId
+    );
 
     /**
      * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/meta</p>
@@ -76,5 +88,8 @@ public interface DraftsBuilderService<
      * @param newMeta мета-данные билдера черновиков
      * @return мета-данные билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderMeta> updateMetaAsync(UUID draftsBuilderId, TDraftsBuilderMetaRequest newMeta);
+    CompletableFuture<TDraftsBuilderMeta> updateMetaAsync(
+            UUID draftsBuilderId,
+            TDraftsBuilderMetaRequest newMeta
+    );
 }

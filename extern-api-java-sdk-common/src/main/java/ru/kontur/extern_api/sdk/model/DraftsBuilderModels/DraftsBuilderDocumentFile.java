@@ -26,6 +26,7 @@ import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Link;
 
 public abstract class DraftsBuilderDocumentFile<TMeta extends DraftsBuilderDocumentFileMeta> {
+
     private UUID id;
     private UUID draftsBuilderId;
     private UUID draftsBuilderDocumentId;
@@ -35,73 +36,109 @@ public abstract class DraftsBuilderDocumentFile<TMeta extends DraftsBuilderDocum
 
     /**
      * Возвращает идентификатор файла документа билдера черновиков
+     *
      * @return идентификатор файла документа билдера черновиков
      */
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id;
+    }
 
     /**
      * Устанавливает идентификатор файла документа билдера черновиков
+     *
      * @param id идентификатор файла документа билдера черновиков
      */
-    public void setId(UUID id) { this.id = id; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     /**
      * Возвращает идентификатор билдера черновиков
+     *
      * @return идентификатор билдера черновиков
      */
-    public UUID getDraftsBuilderId() { return draftsBuilderId; }
+    public UUID getDraftsBuilderId() {
+        return draftsBuilderId;
+    }
 
     /**
      * Устанавливает идентификатор билдера черновиков
+     *
      * @param draftsBuilderId идентификатор билдера черновиков
      */
-    public void setDraftsBuilderId(UUID draftsBuilderId) { this.draftsBuilderId = draftsBuilderId; }
+    public void setDraftsBuilderId(UUID draftsBuilderId) {
+        this.draftsBuilderId = draftsBuilderId;
+    }
 
     /**
      * Возвращает идентификатор документа билдера черновиков
+     *
      * @return идентификатор документа билдера черновиков
      */
-    public UUID getDraftsBuilderDocumentId() { return draftsBuilderDocumentId; }
+    public UUID getDraftsBuilderDocumentId() {
+        return draftsBuilderDocumentId;
+    }
 
     /**
      * Устанавливает идентификатор документа билдера черновиков
+     *
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      */
-    public void setDraftsBuilderDocumentId(UUID draftsBuilderDocumentId) { this.draftsBuilderDocumentId = draftsBuilderDocumentId; }
+    public void setDraftsBuilderDocumentId(UUID draftsBuilderDocumentId) {
+        this.draftsBuilderDocumentId = draftsBuilderDocumentId;
+    }
 
     /**
      * Возвращает ссылку на контент файла
+     *
      * @return ссылку на контент файла
      */
-    public Link getContentLink() { return contentLink; }
+    public Link getContentLink() {
+        return contentLink;
+    }
 
     /**
      * Устанавливает ссылку на контент файла
+     *
      * @param contentLink ссылку на контент файла
      */
-    public void setContentLink(Link contentLink) { this.contentLink = contentLink; }
+    public void setContentLink(Link contentLink) {
+        this.contentLink = contentLink;
+    }
 
     /**
      * Возвращает ссылку на контент подписи файла
+     *
      * @return ссылку на контент подписи файла
      */
-    public Link getSignatureContentLink() { return signatureContentLink; }
+    public Link getSignatureContentLink() {
+        return signatureContentLink;
+    }
 
     /**
      * Устанавливает ссылку на контент подписи файла
+     *
      * @param signatureContentLink ссылку на контент подписи файла
      */
-    public void setSignatureContentLink(Link signatureContentLink) { this.signatureContentLink = signatureContentLink; }
+    public void setSignatureContentLink(Link signatureContentLink) {
+        this.signatureContentLink = signatureContentLink;
+    }
 
     /**
      * Возвращает мета-данные файла документа билдера черновиков
+     *
      * @return мета-данные файла документа билдера черновиков
      */
-    public TMeta getMeta() { return meta; }
+    public TMeta getMeta() {
+        return meta;
+    }
 
     /**
      * Устанавливает мета-данные файла документа билдера черновиков
+     *
      * @param meta мета-данные файла документа билдера черновиков
      */
-    public void setMeta(TMeta meta) { this.meta = meta; }
+    public void setMeta(TMeta meta) {
+        this.meta = meta;
+    }
 }
