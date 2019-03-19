@@ -47,6 +47,15 @@ public class TestUtils {
         return data;
     }
 
+    public static TestData[] getTestDemand(String x509b64) {
+        DcDemandData demandData =  DemandDataProvider.getDefaultFufData();
+        TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
+        for (TestData td : data) {
+            td.getClientInfo().getSender().setCertificate(x509b64);
+        }
+        return data;
+    }
+
     public static DraftMetaRequest toDraftMetaRequest(TestData td) {
         String senderIp = td.getClientInfo().getSender().getIpAddress();
         DraftMetaRequest dm = new DraftMetaRequest();
