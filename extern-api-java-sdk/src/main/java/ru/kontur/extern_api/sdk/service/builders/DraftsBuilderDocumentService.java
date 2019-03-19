@@ -34,83 +34,68 @@ import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMetaRequest;
 public interface DraftsBuilderDocumentService<
         TDraftsBuilderDocument extends DraftsBuilderDocument,
         TDraftsBuilderDocumentMeta extends DraftsBuilderDocumentMeta,
-        TDraftsBuilderDocumentMetaRequest extends DraftsBuilderDocumentMetaRequest> {
+        TDraftsBuilderDocumentMetaRequest extends DraftsBuilderDocumentMetaRequest,
+        TDraftsBuilderDocumentFileService extends DraftsBuilderDocumentFileService> {
+
+    /**
+     * Получить сервис для работы с файлами документа билдера черновиков
+     *
+     * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
+     * @return сервис для работы с файлами документа билдера черновиков
+     */
+    TDraftsBuilderDocumentFileService getFileService(UUID draftsBuilderDocumentId);
 
     /**
      * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents</p>
      * Асинхронный метод создания документа билдера черновиков
      *
-     * @param draftsBuilderId идентификатор билдера черновиков
      * @param meta мета-данные документа билдера черновиков
      * @return документ билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument> createAsync(
-            UUID draftsBuilderId,
-            TDraftsBuilderDocumentMetaRequest meta
-    );
+    CompletableFuture<TDraftsBuilderDocument> createAsync(TDraftsBuilderDocumentMetaRequest meta);
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents</p>
      * Асинхронный метод поиска документов билдера черновиков
      *
-     * @param draftsBuilderId идентификатор билдера черновиков
      * @return документы билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument[]> getAllAsync(
-            UUID draftsBuilderId
-    );
+    CompletableFuture<TDraftsBuilderDocument[]> getAllAsync();
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
      * Асинхронный метод поиска документа билдера черновиков по идентификатору
      *
-     * @param draftsBuilderId идентификатор билдера черновиков
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return документ билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocument> getAsync(
-            UUID draftsBuilderId,
-            UUID draftsBuilderDocumentId
-    );
+    CompletableFuture<TDraftsBuilderDocument> getAsync(UUID draftsBuilderDocumentId);
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
      * Асинхронный метод удаления документа билдера черновиков
      *
-     * @param draftsBuilderId идентификатор документа билдера черновиков
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(
-            UUID draftsBuilderId,
-            UUID draftsBuilderDocumentId
-    );
+    CompletableFuture deleteAsync(UUID draftsBuilderDocumentId);
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta</p>
      * Асинхронный метод поиска мета-данных документа билдера черновиков
      *
-     * @param draftsBuilderId идентификатор документа билдера черновиков
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return мета-данные документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentMeta> getMetaAsync(
-            UUID draftsBuilderId,
-            UUID draftsBuilderDocumentId
-    );
+    CompletableFuture<TDraftsBuilderDocumentMeta> getMetaAsync(UUID draftsBuilderDocumentId);
 
     /**
      * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta</p>
      * Асинхронный метод обновления мета-данных документа билдера черновиков
      *
-     * @param draftsBuilderId идентификатор документа билдера черновиков
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @param newMeta мета-данные документа билдера черновиков
      * @return мета-данные документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentMeta> updateMetaAsync(
-            UUID draftsBuilderId,
-            UUID draftsBuilderDocumentId,
-            TDraftsBuilderDocumentMetaRequest newMeta
-    );
+    CompletableFuture<TDraftsBuilderDocumentMeta> updateMetaAsync(UUID draftsBuilderDocumentId, TDraftsBuilderDocumentMetaRequest newMeta);
 }

@@ -20,12 +20,14 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders.factories;
+package ru.kontur.extern_api.sdk.service.builders;
+
+import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
 
 /**
  * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
  */
-public interface AnyDraftsBuilderServiceFactoryWithType<TSubmissionDraftsBuilderService> {
+public interface DraftsBuilderServiceFactory {
 
-    TSubmissionDraftsBuilderService forSubmission();
+    SubmissionDraftsBuilderService forSubmission();
 }

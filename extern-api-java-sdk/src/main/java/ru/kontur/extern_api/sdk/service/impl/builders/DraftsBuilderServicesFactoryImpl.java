@@ -24,28 +24,16 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.builders.factories.DraftsBuilderDocumentFileServiceFactoryWithType;
-import ru.kontur.extern_api.sdk.service.builders.factories.DraftsBuilderDocumentServiceFactoryWithType;
-import ru.kontur.extern_api.sdk.service.builders.factories.DraftsBuilderServiceFactoryWithType;
-import ru.kontur.extern_api.sdk.service.builders.factories.DraftsBuilderServicesFactory;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
 
-public class DraftsBuilderServicesFactoryImpl implements DraftsBuilderServicesFactory {
+public class DraftsBuilderServicesFactoryImpl implements DraftsBuilderServiceFactory {
 
     public DraftsBuilderServicesFactoryImpl(AccountProvider accountProvider, DraftsApi api) {
     }
 
     @Override
-    public DraftsBuilderServiceFactoryWithType getDraftsBuilderServiceFactory() {
-        return null;
-    }
-
-    @Override
-    public DraftsBuilderDocumentServiceFactoryWithType getDraftsBuilderDocumentServiceFactory() {
-        return null;
-    }
-
-    @Override
-    public DraftsBuilderDocumentFileServiceFactoryWithType getDraftsBuilderDocumentFileServiceFactory() {
+    public SubmissionDraftsBuilderService forSubmission() {
         return null;
     }
 }

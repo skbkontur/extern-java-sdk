@@ -31,6 +31,7 @@ public interface SubmissionDraftsBuilderService extends
         DraftsBuilderService<
                 SubmissionDraftsBuilder,
                 SubmissionDraftsBuilderMeta,
-                SubmissionDraftsBuilderMetaRequest> {
+                SubmissionDraftsBuilderMetaRequest,
+                SubmissionDraftsBuilderDocumentService> {
 
 }

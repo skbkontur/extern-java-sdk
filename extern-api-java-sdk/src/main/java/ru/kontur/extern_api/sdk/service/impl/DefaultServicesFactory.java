@@ -38,7 +38,7 @@ import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.builders.factories.DraftsBuilderServicesFactory;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
@@ -117,7 +117,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public DraftsBuilderServicesFactory getDraftsBuilderServicesFactory() {
+    public DraftsBuilderServiceFactory getDraftsBuilderService() {
         return new DraftsBuilderServicesFactoryImpl(
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class)
