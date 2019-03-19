@@ -30,8 +30,17 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
-public interface DraftsBuilderApi<TDraftsBuilder, TDraftsBuilderMeta, TDraftsBuilderMetaRequest> {
+@JsonSerialization(GsonProvider.LIBAPI)
+@ApiResponseConverter(LibapiResponseConverter.class)
+public interface DraftsBuilderApi<
+        TDraftsBuilder,
+        TDraftsBuilderMeta,
+        TDraftsBuilderMetaRequest> {
 
     /**
      * Create new a drafts builder
