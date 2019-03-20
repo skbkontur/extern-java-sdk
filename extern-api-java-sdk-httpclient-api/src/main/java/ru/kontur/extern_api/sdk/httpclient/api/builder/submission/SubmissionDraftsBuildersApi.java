@@ -20,20 +20,23 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders.submission;
+package ru.kontur.extern_api.sdk.httpclient.api.builder.submission;
 
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMeta;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMetaRequest;
-import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentFileService;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
 
-public interface SubmissionDraftsBuilderDocumentFileService extends
-        DraftsBuilderDocumentFileService<
-                SubmissionDraftsBuilderDocumentFile,
-                SubmissionDraftsBuilderDocumentFileContents,
-                SubmissionDraftsBuilderDocumentFileMeta,
-                SubmissionDraftsBuilderDocumentFileMetaRequest,
-                SubmissionDraftsBuilderDocumentService> {
+@JsonSerialization(GsonProvider.LIBAPI)
+@ApiResponseConverter(LibapiResponseConverter.class)
+public interface SubmissionDraftsBuildersApi extends
+        DraftsBuildersApi<
+                SubmissionDraftsBuilder,
+                SubmissionDraftsBuilderMeta,
+                SubmissionDraftsBuilderMetaRequest> {
 
 }

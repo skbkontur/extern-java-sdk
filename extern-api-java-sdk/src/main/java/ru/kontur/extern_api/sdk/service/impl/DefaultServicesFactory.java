@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.UUID;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
@@ -31,21 +32,35 @@ import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMeta;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMeta;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
-
-import java.util.UUID;
-import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServicesFactoryImpl;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
@@ -118,9 +133,20 @@ public class DefaultServicesFactory implements ServicesFactory {
 
     @Override
     public DraftsBuilderServiceFactory getDraftsBuilderService() {
-        return new DraftsBuilderServicesFactoryImpl(
+        KonturConfiguredClient client = postConfigure(configuredClient);
+
+        SubmissionDraftsBuildersApi submissionDraftApi =
+                client.createApi(SubmissionDraftsBuildersApi.class);
+        SubmissionDraftsBuilderDocumentsApi submissionDocumentApi =
+                client.createApi(SubmissionDraftsBuilderDocumentsApi.class);
+        SubmissionDraftsBuilderDocumentFilesApi submissionFileApi =
+                client.createApi(SubmissionDraftsBuilderDocumentFilesApi.class);
+
+        return new DraftsBuilderServiceFactoryImpl(
                 providerHolder.getAccountProvider(),
-                createApi(DraftsApi.class)
+                submissionDraftApi,
+                submissionDocumentApi,
+                submissionFileApi
         );
     }
 

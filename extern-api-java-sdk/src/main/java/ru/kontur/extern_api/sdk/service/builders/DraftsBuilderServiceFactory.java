@@ -29,5 +29,5 @@ import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuil
  */
 public interface DraftsBuilderServiceFactory {
 
-    SubmissionDraftsBuilderService forSubmission();
+    SubmissionDraftsBuilderService submission();
 }

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.httpclient.api.builder;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
-public interface DraftsBuilderDocumentFileApi<
+public interface DraftsBuilderDocumentFilesApi<
         TDraftsBuilderDocumentFile,
         TDraftsBuilderDocumentFileContents,
         TDraftsBuilderDocumentFileMeta,
@@ -67,7 +67,7 @@ public interface DraftsBuilderDocumentFileApi<
      * @param draftsBuilderDocumentId drafts builder document identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files")
-    CompletableFuture<TDraftsBuilderDocumentFile> getAll(
+    CompletableFuture<TDraftsBuilderDocumentFile[]> getAll(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId

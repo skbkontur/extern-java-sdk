@@ -36,7 +36,15 @@ public interface DraftsBuilderDocumentFileService<
         TDraftsBuilderDocumentFile extends DraftsBuilderDocumentFile,
         TDraftsBuilderDocumentFileContents extends DraftsBuilderDocumentFileContents,
         TDraftsBuilderDocumentFileMeta extends DraftsBuilderDocumentFileMeta,
-        TDraftsBuilderDocumentFileMetaRequest extends DraftsBuilderDocumentFileMetaRequest> {
+        TDraftsBuilderDocumentFileMetaRequest extends DraftsBuilderDocumentFileMetaRequest,
+        TDraftsBuilderDocumentService extends DraftsBuilderDocumentService> {
+
+    /**
+     * Получить сервис для работы с документами билдера черновиков
+     *
+     * @return сервис для работы с документами билдера черновиков
+     */
+    TDraftsBuilderDocumentService getDocumentService();
 
     /**
      * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files</p>
@@ -45,7 +53,9 @@ public interface DraftsBuilderDocumentFileService<
      * @param contents данные документа билдера черновиков
      * @return файл документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentFile> createAsync(TDraftsBuilderDocumentFileContents contents);
+    CompletableFuture<TDraftsBuilderDocumentFile> createAsync(
+            TDraftsBuilderDocumentFileContents contents
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files</p>
@@ -62,7 +72,9 @@ public interface DraftsBuilderDocumentFileService<
      * @param draftsBuilderDocumentFileId идентификатор файла документа билдера черновиков
      * @return файл документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentFile> getAsync(UUID draftsBuilderDocumentFileId);
+    CompletableFuture<TDraftsBuilderDocumentFile> getAsync(
+            UUID draftsBuilderDocumentFileId
+    );
 
     /**
      * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}</p>
@@ -72,7 +84,10 @@ public interface DraftsBuilderDocumentFileService<
      * @param newContents данные документа билдера черновиков
      * @return файл документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentFile> updateAsync(UUID draftsBuilderDocumentFileId, TDraftsBuilderDocumentFileContents newContents);
+    CompletableFuture<TDraftsBuilderDocumentFile> updateAsync(
+            UUID draftsBuilderDocumentFileId,
+            TDraftsBuilderDocumentFileContents newContents
+    );
 
     /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}</p>
@@ -81,7 +96,9 @@ public interface DraftsBuilderDocumentFileService<
      * @param draftsBuilderDocumentFileId идентификатор файла документа билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(UUID draftsBuilderDocumentFileId);
+    CompletableFuture deleteAsync(
+            UUID draftsBuilderDocumentFileId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/content</p>
@@ -89,7 +106,9 @@ public interface DraftsBuilderDocumentFileService<
      *
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
      */
-    CompletableFuture<byte[]> getContentAsync(UUID draftsBuilderDocumentFileId);
+    CompletableFuture<byte[]> getContentAsync(
+            UUID draftsBuilderDocumentFileId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/signature</p>
@@ -97,7 +116,9 @@ public interface DraftsBuilderDocumentFileService<
      *
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
      */
-    CompletableFuture<byte[]> getSignatureAsync(UUID draftsBuilderDocumentFileId);
+    CompletableFuture<byte[]> getSignatureAsync(
+            UUID draftsBuilderDocumentFileId
+    );
 
     /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/meta</p>
@@ -106,7 +127,9 @@ public interface DraftsBuilderDocumentFileService<
      * @param draftsBuilderDocumentFileId идентификатор файла документа билдера черновиков
      * @return мета-данные файла документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentFileMeta> getMetaAsync(UUID draftsBuilderDocumentFileId);
+    CompletableFuture<TDraftsBuilderDocumentFileMeta> getMetaAsync(
+            UUID draftsBuilderDocumentFileId
+    );
 
     /**
      * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/meta</p>
@@ -116,5 +139,8 @@ public interface DraftsBuilderDocumentFileService<
      * @param newMeta мета-данные файла документа билдера черновиков
      * @return мета-данные файла документа билдера черновиков
      */
-    CompletableFuture<TDraftsBuilderDocumentFileMeta> updateMetaAsync(UUID draftsBuilderDocumentFileId, TDraftsBuilderDocumentFileMetaRequest newMeta);
+    CompletableFuture<TDraftsBuilderDocumentFileMeta> updateMetaAsync(
+            UUID draftsBuilderDocumentFileId,
+            TDraftsBuilderDocumentFileMetaRequest newMeta
+    );
 }

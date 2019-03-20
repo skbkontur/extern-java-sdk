@@ -20,20 +20,23 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.impl.builders;
+package ru.kontur.extern_api.sdk.httpclient.api.builder.submission;
 
-import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
-import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMeta;
+import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMetaRequest;
 
-public class DraftsBuilderServicesFactoryImpl implements DraftsBuilderServiceFactory {
+@JsonSerialization(GsonProvider.LIBAPI)
+@ApiResponseConverter(LibapiResponseConverter.class)
+public interface SubmissionDraftsBuilderDocumentsApi extends
+        DraftsBuilderDocumentsApi<
+                SubmissionDraftsBuilderDocument,
+                SubmissionDraftsBuilderDocumentMeta,
+                SubmissionDraftsBuilderDocumentMetaRequest> {
 
-    public DraftsBuilderServicesFactoryImpl(AccountProvider accountProvider, DraftsApi api) {
-    }
-
-    @Override
-    public SubmissionDraftsBuilderService forSubmission() {
-        return null;
-    }
 }

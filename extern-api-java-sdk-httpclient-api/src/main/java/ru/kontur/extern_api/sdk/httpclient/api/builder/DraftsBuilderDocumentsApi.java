@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.httpclient.api.builder;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -37,74 +37,92 @@ import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
-public interface DraftsBuilderApi<
-        TDraftsBuilder,
-        TDraftsBuilderMeta,
-        TDraftsBuilderMetaRequest> {
+public interface DraftsBuilderDocumentsApi<
+        TDraftsBuilderDocument,
+        TDraftsBuilderDocumentMeta,
+        TDraftsBuilderDocumentMetaRequest> {
 
     /**
-     * Create new a drafts builder
-     *
-     * @param accountId private account identifier
-     * @param meta drafts builder metadata
-     */
-    @POST("v1/{accountId}/drafts/builders")
-    CompletableFuture<TDraftsBuilder> create(
-            @Path("accountId") UUID accountId,
-            @Body TDraftsBuilderMetaRequest meta
-    );
-
-    /**
-     * Get a drafts builder by an identifier
+     * Create new a drafts builder document
      *
      * @param accountId private account identifier
      * @param draftsBuilderId drafts builder identifier
+     * @param meta drafts builder document metadata
      */
-    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}")
-    CompletableFuture<TDraftsBuilder> get(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Delete a drafts builder
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}")
-    CompletableFuture delete(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Get a drafts builder meta by an identifier
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
-    CompletableFuture<TDraftsBuilderMeta> getMeta(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Update a drafts builder meta
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param newMeta drafts builder metadata
-     */
-    @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
-    CompletableFuture<TDraftsBuilderMeta> updateMeta(
+    @POST("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents")
+    CompletableFuture<TDraftsBuilderDocument> create(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Body TDraftsBuilderMetaRequest newMeta
+            @Body TDraftsBuilderDocumentMetaRequest meta
     );
 
-    //Task<DraftsBuilderBuildResult> BuildDraftsAsync(Guid draftsBuilderId);
-    //Task<ApiTaskResult<DraftsBuilderBuildResult>> StartBuildDraftsAsync(Guid draftsBuilderId);
-    //Task<ApiTaskResult<DraftsBuilderBuildResult>> GetBuildResultAsync(Guid draftsBuilderId, Guid apiTaskId);
+    /**
+     * Get all drafts builder documents inside drafts builder
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     */
+    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents")
+    CompletableFuture<TDraftsBuilderDocument[]> getAll(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId
+    );
+
+    /**
+     * Get a drafts builder document by an identifier
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param draftsBuilderDocumentId drafts builder document identifier
+     */
+    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}")
+    CompletableFuture<TDraftsBuilderDocument> get(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId
+    );
+
+    /**
+     * Delete a drafts builder document
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param draftsBuilderDocumentId drafts builder document identifier
+     */
+    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}")
+    CompletableFuture delete(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId
+    );
+
+    /**
+     * Get a drafts builder document meta by an identifier
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param draftsBuilderDocumentId drafts builder document identifier
+     */
+    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta")
+    CompletableFuture<TDraftsBuilderDocumentMeta> getMeta(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId
+    );
+
+    /**
+     * Update a drafts builder document meta
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param draftsBuilderDocumentId drafts builder document identifier
+     * @param newMeta drafts builder document metadata
+     */
+    @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/meta")
+    CompletableFuture<TDraftsBuilderDocumentMeta> updateMeta(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
+            @Body TDraftsBuilderDocumentMetaRequest newMeta
+    );
 }
