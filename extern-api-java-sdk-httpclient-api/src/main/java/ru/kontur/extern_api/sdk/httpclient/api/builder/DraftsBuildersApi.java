@@ -24,84 +24,39 @@ package ru.kontur.extern_api.sdk.httpclient.api.builder;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
 public interface DraftsBuildersApi<
-        TDraftsBuilder,
-        TDraftsBuilderMeta,
-        TDraftsBuilderMetaRequest> {
+        TDraftsBuilder extends DraftsBuilder,
+        TDraftsBuilderMeta extends DraftsBuilderMeta,
+        TDraftsBuilderMetaRequest extends DraftsBuilderMetaRequest> {
 
-    /**
-     * Create new a drafts builder
-     *
-     * @param accountId private account identifier
-     * @param meta drafts builder metadata
-     */
-    @POST("v1/{accountId}/drafts/builders")
     CompletableFuture<TDraftsBuilder> create(
-            @Path("accountId") UUID accountId,
-            @Body TDraftsBuilderMetaRequest meta
+            UUID accountId,
+            TDraftsBuilderMetaRequest meta
     );
 
-    /**
-     * Get a drafts builder by an identifier
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}")
     CompletableFuture<TDraftsBuilder> get(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
+            UUID accountId,
+            UUID draftsBuilderId
     );
 
-    /**
-     * Delete a drafts builder
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}")
     CompletableFuture delete(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
+            UUID accountId,
+            UUID draftsBuilderId
     );
 
-    /**
-     * Get a drafts builder meta by an identifier
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
     CompletableFuture<TDraftsBuilderMeta> getMeta(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
+            UUID accountId,
+            UUID draftsBuilderId
     );
 
-    /**
-     * Update a drafts builder meta
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param newMeta drafts builder metadata
-     */
-    @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
     CompletableFuture<TDraftsBuilderMeta> updateMeta(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Body TDraftsBuilderMetaRequest newMeta
+            UUID accountId,
+            UUID draftsBuilderId,
+            TDraftsBuilderMetaRequest newMeta
     );
 
     //Task<DraftsBuilderBuildResult> BuildDraftsAsync(Guid draftsBuilderId);

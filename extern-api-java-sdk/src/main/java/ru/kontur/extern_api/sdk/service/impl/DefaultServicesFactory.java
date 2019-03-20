@@ -32,24 +32,14 @@ import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.RetrofitSubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.RetrofitSubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.RetrofitSubmissionDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuildersApi;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMeta;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMetaRequest;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMeta;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMetaRequest;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -135,18 +125,18 @@ public class DefaultServicesFactory implements ServicesFactory {
     public DraftsBuilderServiceFactory getDraftsBuilderService() {
         KonturConfiguredClient client = postConfigure(configuredClient);
 
-        SubmissionDraftsBuildersApi submissionDraftApi =
-                client.createApi(SubmissionDraftsBuildersApi.class);
-        SubmissionDraftsBuilderDocumentsApi submissionDocumentApi =
-                client.createApi(SubmissionDraftsBuilderDocumentsApi.class);
-        SubmissionDraftsBuilderDocumentFilesApi submissionFileApi =
-                client.createApi(SubmissionDraftsBuilderDocumentFilesApi.class);
+        RetrofitSubmissionDraftsBuildersApi submissionDraftApi =
+                client.createApi(RetrofitSubmissionDraftsBuildersApi.class);
+        RetrofitSubmissionDraftsBuilderDocumentsApi submissionDocumentApi =
+                client.createApi(RetrofitSubmissionDraftsBuilderDocumentsApi.class);
+        RetrofitSubmissionDraftsBuilderDocumentFilesApi submissionFileApi =
+                client.createApi(RetrofitSubmissionDraftsBuilderDocumentFilesApi.class);
 
         return new DraftsBuilderServiceFactoryImpl(
                 providerHolder.getAccountProvider(),
-                submissionDraftApi,
-                submissionDocumentApi,
-                submissionFileApi
+                new SubmissionDraftsBuildersApi(submissionDraftApi),
+                new SubmissionDraftsBuilderDocumentsApi(submissionDocumentApi),
+                new SubmissionDraftsBuilderDocumentFilesApi(submissionFileApi)
         );
     }
 

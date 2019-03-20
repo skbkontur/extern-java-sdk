@@ -22,21 +22,81 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builder.submission;
 
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface SubmissionDraftsBuildersApi extends
+public class SubmissionDraftsBuildersApi implements
         DraftsBuildersApi<
                 SubmissionDraftsBuilder,
                 SubmissionDraftsBuilderMeta,
                 SubmissionDraftsBuilderMetaRequest> {
 
+    private RetrofitSubmissionDraftsBuildersApi api;
+
+    public SubmissionDraftsBuildersApi(
+            RetrofitSubmissionDraftsBuildersApi api
+    ) {
+        this.api = api;
+    }
+
+    @Override
+    public CompletableFuture<SubmissionDraftsBuilder> create(
+            UUID accountId,
+            SubmissionDraftsBuilderMetaRequest meta
+    ) {
+        return api.create(
+                accountId,
+                meta
+        );
+    }
+
+    @Override
+    public CompletableFuture<SubmissionDraftsBuilder> get(
+            UUID accountId,
+            UUID draftsBuilderId
+    ) {
+        return api.get(
+                accountId,
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture delete(
+            UUID accountId,
+            UUID draftsBuilderId
+    ) {
+        return api.delete(
+                accountId,
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<SubmissionDraftsBuilderMeta> getMeta(
+            UUID accountId,
+            UUID draftsBuilderId
+    ) {
+        return api.getMeta(
+                accountId,
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<SubmissionDraftsBuilderMeta> updateMeta(
+            UUID accountId,
+            UUID draftsBuilderId,
+            SubmissionDraftsBuilderMetaRequest newMeta
+    ) {
+        return api.updateMeta(
+                accountId,
+                draftsBuilderId,
+                newMeta
+        );
+    }
 }
