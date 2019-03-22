@@ -34,7 +34,6 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;

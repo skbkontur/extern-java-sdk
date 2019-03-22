@@ -32,8 +32,14 @@ public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilde
     private SenderRequest sender;
     private Recipient recipient;
     private OrganizationRequest payer;
-    private String builderType;
+    private final String builderType;
     private TBuilderData builderData;
+
+    public DraftsBuilderMetaRequest() {
+        builderType = provideBuilderType();
+    }
+
+    abstract protected String provideBuilderType();
 
     /**
      * Возвращает объект {@link SenderRequest}, описывающий отправителя документа
@@ -96,30 +102,6 @@ public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilde
      */
     public void setPayer(OrganizationRequest payer) {
         this.payer = payer;
-    }
-
-    /**
-     * Возвращает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
-     * <ul>
-     * <li>urn:ke.api.public:fns:submission - представление ФНС</li>
-     * </ul>
-     *
-     * @return тип билдера черновиков
-     */
-    public String getBuilderType() {
-        return builderType;
-    }
-
-    /**
-     * Устанавливает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
-     *
-     * @param type тип билдера черновиков
-     *         <ul>
-     *         <li>urn:ke.api.public:fns:submission - представление ФНС</li>
-     *         </ul>
-     */
-    public void setBuilderType(String type) {
-        this.builderType = type;
     }
 
     /**

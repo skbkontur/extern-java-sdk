@@ -27,4 +27,8 @@ import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
 public class SubmissionDraftsBuilderMetaRequest extends
         DraftsBuilderMetaRequest<SubmissionDraftsBuilderData> {
 
+    @Override
+    protected String provideBuilderType() {
+        return "urn:ke.api.public:fns:submission";
+    }
 }
