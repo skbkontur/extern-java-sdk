@@ -40,6 +40,20 @@ public interface DraftsBuilderDocumentFileService<
         TDraftsBuilderDocumentService extends DraftsBuilderDocumentService> {
 
     /**
+     * Получить идентификатор билдера черновиков, с которым работает текущий сервис
+     *
+     * @return идентификатор билдера черновиков
+     */
+    UUID getDraftsBuilderId();
+
+    /**
+     * Получить идентификатор документа билдера черновиков, с которым работает текущий сервис
+     *
+     * @return идентификатор документа билдера черновиков
+     */
+    UUID getDraftsBuilderDocumentId();
+
+    /**
      * Получить сервис для работы с документами билдера черновиков
      *
      * @return сервис для работы с документами билдера черновиков

@@ -68,7 +68,7 @@ public class SubmissionDraftsBuilderDocumentFileServiceImpl extends
                 builderApi,
                 documentApi,
                 api,
-                draftsBuilderId
+                getDraftsBuilderId()
         );
     }
 }

@@ -55,8 +55,8 @@ public abstract class DraftsBuilderDocumentFileServiceImpl<
     protected final AccountProvider acc;
     protected final TDraftsBuilderDocumentFilesApi api;
 
-    protected final UUID draftsBuilderId;
-    protected final UUID draftsBuilderDocumentId;
+    private final UUID draftsBuilderId;
+    private final UUID draftsBuilderDocumentId;
 
     protected DraftsBuilderDocumentFileServiceImpl(
             AccountProvider accountProvider,
@@ -68,6 +68,16 @@ public abstract class DraftsBuilderDocumentFileServiceImpl<
         this.api = api;
         this.draftsBuilderId = draftsBuilderId;
         this.draftsBuilderDocumentId = draftsBuilderDocumentId;
+    }
+
+    @Override
+    public UUID getDraftsBuilderId() {
+        return draftsBuilderId;
+    }
+
+    @Override
+    public UUID getDraftsBuilderDocumentId() {
+        return draftsBuilderDocumentId;
     }
 
     @Override
