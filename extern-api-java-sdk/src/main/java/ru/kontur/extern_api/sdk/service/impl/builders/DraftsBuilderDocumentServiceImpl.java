@@ -24,7 +24,7 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMetaRequest;
@@ -98,7 +98,7 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.get(
                 acc.accountId(),
                 draftsBuilderId,
-                draftsBuilderId
+                draftsBuilderDocumentId
         );
     }
 
@@ -109,7 +109,7 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.delete(
                 acc.accountId(),
                 draftsBuilderId,
-                draftsBuilderId
+                draftsBuilderDocumentId
         );
     }
 
@@ -120,7 +120,7 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.getMeta(
                 acc.accountId(),
                 draftsBuilderId,
-                draftsBuilderId
+                draftsBuilderDocumentId
         );
     }
 
@@ -132,7 +132,7 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.updateMeta(
                 acc.accountId(),
                 draftsBuilderId,
-                draftsBuilderId,
+                draftsBuilderDocumentId,
                 newMeta
         );
     }

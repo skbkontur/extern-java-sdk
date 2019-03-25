@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builder.submission;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.submission;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -34,7 +34,6 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMeta;
@@ -116,7 +115,7 @@ public interface RetrofitSubmissionDraftsBuilderDocumentFilesApi {
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
      */
     @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}")
-    CompletableFuture delete(
+    CompletableFuture<Void> delete(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,

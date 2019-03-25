@@ -27,4 +27,86 @@ import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentData;
 public class SubmissionDraftsBuilderDocumentData extends
         DraftsBuilderDocumentData {
 
+    private String claimItemNumber;
+    private String scannedDocumentDate;
+    private String scannedDocumentNumber;
+    private DraftsBuilderDocumentType type;
+
+    /**
+     * Возвращает пункт требования
+     *
+     * @return пункт требования
+     */
+    public String getClaimItemNumber() {
+        return claimItemNumber;
+    }
+
+    /**
+     * Устанавливает пункт требования
+     *
+     * @param claimItemNumber пункт требования
+     */
+    public void setClaimItemNumber(String claimItemNumber) {
+        this.claimItemNumber = claimItemNumber;
+    }
+
+    /**
+     * Возвращает дату документа
+     *
+     * @return дата документа
+     */
+    public String getScannedDocumentDate() {
+        return scannedDocumentDate;
+    }
+
+    /**
+     * Устанавливает дату документа
+     *
+     * @param scannedDocumentDate дата документа
+     */
+    public void setScannedDocumentDate(String scannedDocumentDate) {
+        this.scannedDocumentDate = scannedDocumentDate;
+    }
+
+    /**
+     * Возвращает номер документа
+     *
+     * @return номер документа
+     */
+    public String getScannedDocumentNumber() {
+        return scannedDocumentNumber;
+    }
+
+    /**
+     * Устанавливает номер документа
+     *
+     * @param scannedDocumentNumber номер документа
+     */
+    public void setScannedDocumentNumber(String scannedDocumentNumber) {
+        this.scannedDocumentNumber = scannedDocumentNumber;
+    }
+
+    /**
+     * Возвращает тип документа
+     *
+     * @return тип документа
+     */
+    public DraftsBuilderDocumentType getType() {
+        return type;
+    }
+
+    /**
+     * Устанавливает тип документа
+     *
+     * @param type тип документа
+     */
+    public void setType(DraftsBuilderDocumentType type) {
+        this.type = type;
+    }
+
+    private enum DraftsBuilderDocumentType {
+        Formalized,
+        Scanned,
+        Warrant
+    }
 }

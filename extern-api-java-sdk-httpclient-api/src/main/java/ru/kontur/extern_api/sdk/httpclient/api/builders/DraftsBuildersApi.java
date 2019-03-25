@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builder;
+package ru.kontur.extern_api.sdk.httpclient.api.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;

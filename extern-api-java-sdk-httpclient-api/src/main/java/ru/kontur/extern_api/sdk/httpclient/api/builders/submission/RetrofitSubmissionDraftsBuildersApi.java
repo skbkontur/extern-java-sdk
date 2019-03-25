@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builder.submission;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.submission;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -72,7 +72,7 @@ public interface RetrofitSubmissionDraftsBuildersApi {
      * @param draftsBuilderId drafts builder identifier
      */
     @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}")
-    CompletableFuture delete(
+    CompletableFuture<Void> delete(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId
     );

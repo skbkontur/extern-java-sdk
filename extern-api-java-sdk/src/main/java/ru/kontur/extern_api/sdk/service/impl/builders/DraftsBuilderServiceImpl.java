@@ -24,7 +24,7 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.DraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;

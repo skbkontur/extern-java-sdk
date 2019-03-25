@@ -23,9 +23,9 @@
 package ru.kontur.extern_api.sdk.service.impl.builders.submission;
 
 import java.util.UUID;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;

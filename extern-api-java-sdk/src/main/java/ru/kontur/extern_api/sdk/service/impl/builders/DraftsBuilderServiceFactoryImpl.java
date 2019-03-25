@@ -22,9 +22,9 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders;
 
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builder.submission.SubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
