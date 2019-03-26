@@ -25,12 +25,16 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
+import ru.kontur.extern_api.sdk.model.TaskState;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderService;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
 
 public abstract class DraftsBuilderServiceImpl<
         TDraftsBuilder extends DraftsBuilder,
@@ -50,6 +54,7 @@ public abstract class DraftsBuilderServiceImpl<
 
     protected final AccountProvider acc;
     protected final TDraftsBuildersApi api;
+    private final static int DELAY_TIMEOUT = 2000;
 
     protected DraftsBuilderServiceImpl(
             AccountProvider accountProvider,
@@ -109,5 +114,59 @@ public abstract class DraftsBuilderServiceImpl<
                 draftsBuilderId,
                 newMeta
         );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderResult> buildAsync(
+            UUID draftsBuilderId
+    ) {
+        return api.build(
+                acc.accountId(),
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderTaskInfo> startBuildAsync(
+            UUID draftsBuilderId
+    ) {
+        return api.startBuild(
+                acc.accountId(),
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildInfoAsync(
+            UUID draftsBuilderId,
+            UUID taskId
+    ) {
+        return api.getBuildResult(
+                acc.accountId(),
+                draftsBuilderId,
+                taskId
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderResult> waitBuildResultAsync(
+            UUID draftsBuilderId,
+            UUID taskId
+    ) {
+        return Awaiter.waitForCondition(
+                () -> api.getBuildResult(
+                        acc.accountId(),
+                        draftsBuilderId,
+                        taskId
+                ),
+                (callResult) -> callResult.getTaskState() != TaskState.RUNNING,
+                DELAY_TIMEOUT
+        )
+                .thenApply(result -> {
+                    if (result.isFailed()) {
+                        throw result.asApiException();
+                    }
+                    return result.getTaskResult();
+                });
     }
 }

@@ -25,7 +25,7 @@ package ru.kontur.extern_api.sdk.model.builders;
 import java.util.Map;
 import java.util.UUID;
 
-public class DraftsBuilderBuildResult {
+public class BuildDraftsBuilderResult {
 
     private UUID[] draftIds;
     private Map<UUID, String> errorDraftsBuilderDocuments;

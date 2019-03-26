@@ -24,6 +24,8 @@ package ru.kontur.extern_api.sdk.service.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
@@ -102,5 +104,55 @@ public interface DraftsBuilderService<
     CompletableFuture<TDraftsBuilderMeta> updateMetaAsync(
             UUID draftsBuilderId,
             TDraftsBuilderMetaRequest newMeta
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/build?deferred=false</p>
+     * Асинхронный метод билда билдера черновиков
+     *
+     * @param draftsBuilderId идентификатор билдера черновиков
+     * @return Готовые черновики и список ошибочных документов
+     * @see BuildDraftsBuilderResult
+     */
+    CompletableFuture<BuildDraftsBuilderResult> buildAsync(
+            UUID draftsBuilderId
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/build?deferred=true</p>
+     * Асинхронный метод запускающий билд билдера черновиков
+     *
+     * @param draftsBuilderId идентификатор билдера черновиков
+     * @return Информация о задаче билда билдера черновиков
+     * @see BuildDraftsBuilderTaskInfo
+     */
+    CompletableFuture<BuildDraftsBuilderTaskInfo> startBuildAsync(
+            UUID draftsBuilderId
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/tasks/{taskId}</p>
+     * Асинхронный метод получения информации о билде билдера черновиков
+     *
+     * @param draftsBuilderId идентификатор билдера черновиков
+     * @return Информация о задаче билда билдера черновиков
+     * @see BuildDraftsBuilderTaskInfo
+     */
+    CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildInfoAsync(
+            UUID draftsBuilderId,
+            UUID taskId
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/builders/{draftsBuilderId}/tasks/{taskId}</p>
+     * Асинхронный метод ожадания завершения билда билдера черновиков
+     *
+     * @param draftsBuilderId идентификатор билдера черновиков
+     * @return Готовые черновики и список ошибочных документов
+     * @see BuildDraftsBuilderResult
+     */
+    CompletableFuture<BuildDraftsBuilderResult> waitBuildResultAsync(
+            UUID draftsBuilderId,
+            UUID taskId
     );
 }

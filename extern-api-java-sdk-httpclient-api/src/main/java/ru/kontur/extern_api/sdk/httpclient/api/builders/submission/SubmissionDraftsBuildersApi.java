@@ -25,6 +25,8 @@ package ru.kontur.extern_api.sdk.httpclient.api.builders.submission;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
@@ -97,6 +99,41 @@ public class SubmissionDraftsBuildersApi implements
                 accountId,
                 draftsBuilderId,
                 newMeta
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderResult> build(
+            UUID accountId,
+            UUID draftsBuilderId
+    ) {
+        return api.build(
+                accountId,
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderTaskInfo> startBuild(
+            UUID accountId,
+            UUID draftsBuilderId
+    ) {
+        return api.startBuild(
+                accountId,
+                draftsBuilderId
+        );
+    }
+
+    @Override
+    public CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildResult(
+            UUID accountId,
+            UUID draftsBuilderId,
+            UUID taskId
+    ) {
+        return api.getBuildResult(
+                accountId,
+                draftsBuilderId,
+                taskId
         );
     }
 }

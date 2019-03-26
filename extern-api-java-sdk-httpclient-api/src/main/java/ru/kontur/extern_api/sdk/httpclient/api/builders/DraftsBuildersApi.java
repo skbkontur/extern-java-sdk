@@ -24,6 +24,8 @@ package ru.kontur.extern_api.sdk.httpclient.api.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
+import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
@@ -59,7 +61,19 @@ public interface DraftsBuildersApi<
             TDraftsBuilderMetaRequest newMeta
     );
 
-    //Task<DraftsBuilderBuildResult> BuildDraftsAsync(Guid draftsBuilderId);
-    //Task<ApiTaskResult<DraftsBuilderBuildResult>> StartBuildDraftsAsync(Guid draftsBuilderId);
-    //Task<ApiTaskResult<DraftsBuilderBuildResult>> GetBuildResultAsync(Guid draftsBuilderId, Guid apiTaskId);
+    CompletableFuture<BuildDraftsBuilderResult> build(
+            UUID accountId,
+            UUID draftsBuilderId
+    );
+
+    CompletableFuture<BuildDraftsBuilderTaskInfo> startBuild(
+            UUID accountId,
+            UUID draftsBuilderId
+    );
+
+    CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildResult(
+            UUID accountId,
+            UUID draftsBuilderId,
+            UUID taskId
+    );
 }
