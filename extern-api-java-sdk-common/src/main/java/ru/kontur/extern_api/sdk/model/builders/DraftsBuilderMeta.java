@@ -27,13 +27,13 @@ import ru.kontur.extern_api.sdk.model.Organization;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.Sender;
 
-public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> {
+public abstract class DraftsBuilderMeta<TDraftsBuilderData extends DraftsBuilderData> {
 
     private Sender sender;
     private Recipient recipient;
     private Organization payer;
-    private String builderType;
-    private TBuilderData builderData;
+    private DraftsBuilderType builderType;
+    private TDraftsBuilderData builderData;
 
     /**
      * Возвращает объект {@link Sender}, описывающий отправителя документа
@@ -106,7 +106,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
      *
      * @return тип билдера черновиков
      */
-    public String getBuilderType() {
+    public DraftsBuilderType getBuilderType() {
         return builderType;
     }
 
@@ -118,7 +118,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
      *         <li>urn:ke.api.public:fns:submission - представление ФНС</li>
      *         </ul>
      */
-    public void setBuilderType(String type) {
+    public void setBuilderType(DraftsBuilderType type) {
         this.builderType = type;
     }
 
@@ -129,7 +129,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public TBuilderData getBuilderData() {
+    public TDraftsBuilderData getBuilderData() {
         return builderData;
     }
 
@@ -141,7 +141,7 @@ public abstract class DraftsBuilderMeta<TBuilderData extends DraftsBuilderData> 
      *         указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public void setBuilderData(TBuilderData builderData) {
+    public void setBuilderData(TDraftsBuilderData builderData) {
         this.builderData = builderData;
     }
 }

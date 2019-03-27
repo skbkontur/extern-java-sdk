@@ -20,16 +20,12 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model.builders.submission;
+package ru.kontur.extern_api.sdk.model.builders;
 
-        import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
-        import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
+import com.google.gson.annotations.SerializedName;
+import ru.kontur.extern_api.sdk.model.Urn;
 
-public class SubmissionDraftsBuilderMetaRequest extends
-        DraftsBuilderMetaRequest<SubmissionDraftsBuilderData> {
-
-    @Override
-    protected DraftsBuilderType provideBuilderType() {
-        return DraftsBuilderType.FnsSubmission;
-    }
+public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
+    @SerializedName("urn:ke.api.public:fns:submission")
+    FnsSubmission
 }

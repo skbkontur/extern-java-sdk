@@ -27,19 +27,19 @@ import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.SenderRequest;
 
-public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilderData> {
+public abstract class DraftsBuilderMetaRequest<TDraftsBuilderData extends DraftsBuilderData> {
 
     private SenderRequest sender;
     private Recipient recipient;
     private OrganizationRequest payer;
-    private final String builderType;
-    private TBuilderData builderData;
+    private final DraftsBuilderType builderType;
+    private TDraftsBuilderData builderData;
 
     public DraftsBuilderMetaRequest() {
         builderType = provideBuilderType();
     }
 
-    abstract protected String provideBuilderType();
+    abstract protected DraftsBuilderType provideBuilderType();
 
     /**
      * Возвращает объект {@link SenderRequest}, описывающий отправителя документа
@@ -111,7 +111,7 @@ public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilde
      * @return объект, содержащий дополнительные данные для указанного типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public TBuilderData getBuilderData() {
+    public TDraftsBuilderData getBuilderData() {
         return builderData;
     }
 
@@ -123,7 +123,7 @@ public abstract class DraftsBuilderMetaRequest<TBuilderData extends DraftsBuilde
      *         типа билдера черновиков
      * @see DraftsBuilderData
      */
-    public void setBuilderData(TBuilderData data) {
+    public void setBuilderData(TDraftsBuilderData data) {
         this.builderData = data;
     }
 }
