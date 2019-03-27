@@ -26,6 +26,7 @@ import java.util.UUID;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMeta;
@@ -59,6 +60,11 @@ public class SubmissionDraftsBuilderDocumentFileServiceImpl extends
         super(accountProvider, api, draftsBuilderId, draftsBuilderDocumentId);
         this.builderApi = builderApi;
         this.documentApi = documentApi;
+    }
+
+    @Override
+    protected DraftsBuilderType getDraftsBuilderType() {
+        return DraftsBuilderType.FnsSubmission;
     }
 
     @Override

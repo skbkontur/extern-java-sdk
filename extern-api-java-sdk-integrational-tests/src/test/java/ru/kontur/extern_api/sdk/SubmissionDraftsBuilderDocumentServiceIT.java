@@ -44,7 +44,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 
 @DisplayName("Drafts builder document service should be able to")
-class SubmissionDraftsBuilderDocumentServiceT {
+class SubmissionDraftsBuilderDocumentServiceIT {
 
     private static ExternEngine engine;
     private static DraftsBuilderDocumentCreator draftsBuilderDocumentCreator;

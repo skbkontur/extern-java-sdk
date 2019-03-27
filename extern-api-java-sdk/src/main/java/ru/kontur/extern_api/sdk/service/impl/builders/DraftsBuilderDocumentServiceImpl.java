@@ -24,10 +24,12 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentFileService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentService;
@@ -67,6 +69,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         this.draftsBuilderId = draftsBuilderId;
     }
 
+    protected abstract DraftsBuilderType getDraftsBuilderType();
+
     @Override
     public UUID getDraftsBuilderId() {
         return draftsBuilderId;
@@ -80,7 +84,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 meta
-        );
+        ).thenCompose(document -> {
+            CheckBuilderType(document.getMeta().getBuilderType());
+            return CompletableFuture.completedFuture(document);
+        });
     }
 
     @Override
@@ -88,7 +95,12 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.getAll(
                 acc.accountId(),
                 draftsBuilderId
-        );
+        ).thenCompose(documents -> {
+            for (TDraftsBuilderDocument document : documents) {
+                CheckBuilderType(document.getMeta().getBuilderType());
+            }
+            return CompletableFuture.completedFuture(documents);
+        });
     }
 
     @Override
@@ -99,7 +111,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
-        );
+        ).thenCompose(document -> {
+            CheckBuilderType(document.getMeta().getBuilderType());
+            return CompletableFuture.completedFuture(document);
+        });
     }
 
     @Override
@@ -121,7 +136,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
-        );
+        ).thenCompose(meta -> {
+            CheckBuilderType(meta.getBuilderType());
+            return CompletableFuture.completedFuture(meta);
+        });
     }
 
     @Override
@@ -134,6 +152,20 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 draftsBuilderId,
                 draftsBuilderDocumentId,
                 newMeta
-        );
+        ).thenCompose(meta -> {
+            CheckBuilderType(meta.getBuilderType());
+            return CompletableFuture.completedFuture(meta);
+        });
+    }
+
+    private void CheckBuilderType(DraftsBuilderType type) {
+        DraftsBuilderType expectedType = getDraftsBuilderType();
+        if (type != expectedType) {
+            throw new ApiException(String.format(
+                    "Incorrect drafts builder document type: %s, expected: %s",
+                    type,
+                    expectedType
+            ));
+        }
     }
 }

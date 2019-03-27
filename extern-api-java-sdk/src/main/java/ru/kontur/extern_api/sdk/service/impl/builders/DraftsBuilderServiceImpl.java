@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.TaskState;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
@@ -31,6 +32,7 @@ import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderService;
@@ -64,6 +66,8 @@ public abstract class DraftsBuilderServiceImpl<
         this.api = api;
     }
 
+    protected abstract DraftsBuilderType getDraftsBuilderType();
+
     @Override
     public CompletableFuture<TDraftsBuilder> createAsync(
             TDraftsBuilderMetaRequest meta
@@ -71,7 +75,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.create(
                 acc.accountId(),
                 meta
-        );
+        ).thenCompose(builder -> {
+            CheckBuilderType(builder.getMeta().getBuilderType());
+            return CompletableFuture.completedFuture(builder);
+        });
     }
 
     @Override
@@ -81,7 +88,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.get(
                 acc.accountId(),
                 draftsBuilderId
-        );
+        ).thenCompose(builder -> {
+            CheckBuilderType(builder.getMeta().getBuilderType());
+            return CompletableFuture.completedFuture(builder);
+        });
     }
 
     @Override
@@ -101,7 +111,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.getMeta(
                 acc.accountId(),
                 draftsBuilderId
-        );
+        ).thenCompose(meta -> {
+            CheckBuilderType(meta.getBuilderType());
+            return CompletableFuture.completedFuture(meta);
+        });
     }
 
     @Override
@@ -113,7 +126,10 @@ public abstract class DraftsBuilderServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 newMeta
-        );
+        ).thenCompose(meta -> {
+            CheckBuilderType(meta.getBuilderType());
+            return CompletableFuture.completedFuture(meta);
+        });
     }
 
     @Override
@@ -168,5 +184,16 @@ public abstract class DraftsBuilderServiceImpl<
                     }
                     return result.getTaskResult();
                 });
+    }
+
+    private void CheckBuilderType(DraftsBuilderType type) {
+        DraftsBuilderType expectedType = getDraftsBuilderType();
+        if (type != expectedType) {
+            throw new ApiException(String.format(
+                    "Incorrect drafts builder type: %s, expected: %s",
+                    type,
+                    expectedType
+            ));
+        }
     }
 }

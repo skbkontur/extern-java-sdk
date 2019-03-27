@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 @DisplayName("Build submission drafts builder")
-class SubmissionDraftsBuilderBuildT {
+class SubmissionDraftsBuilderBuildIT {
 
     private static ExternEngine engine;
     private static CryptoUtils cryptoUtils;

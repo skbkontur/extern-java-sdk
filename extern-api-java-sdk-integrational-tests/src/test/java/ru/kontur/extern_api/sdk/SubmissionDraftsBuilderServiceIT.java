@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 
 @DisplayName("Drafts builder service should be able to")
-class SubmissionDraftsBuilderServiceT {
+class SubmissionDraftsBuilderServiceIT {
 
     private static ExternEngine engine;
     private static CryptoUtils cryptoUtils;
