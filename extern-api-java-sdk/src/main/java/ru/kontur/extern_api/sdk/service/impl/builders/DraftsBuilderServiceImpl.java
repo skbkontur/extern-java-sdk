@@ -75,9 +75,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.create(
                 acc.accountId(),
                 meta
-        ).thenCompose(builder -> {
-            CheckBuilderType(builder.getMeta().getBuilderType());
-            return CompletableFuture.completedFuture(builder);
+        ).whenComplete((builder, throwable) -> {
+            if (builder != null) {
+                CheckBuilderType(builder.getMeta().getBuilderType());
+            }
         });
     }
 
@@ -88,9 +89,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.get(
                 acc.accountId(),
                 draftsBuilderId
-        ).thenCompose(builder -> {
-            CheckBuilderType(builder.getMeta().getBuilderType());
-            return CompletableFuture.completedFuture(builder);
+        ).whenComplete((builder, throwable) -> {
+            if (builder != null) {
+                CheckBuilderType(builder.getMeta().getBuilderType());
+            }
         });
     }
 
@@ -111,9 +113,10 @@ public abstract class DraftsBuilderServiceImpl<
         return api.getMeta(
                 acc.accountId(),
                 draftsBuilderId
-        ).thenCompose(meta -> {
-            CheckBuilderType(meta.getBuilderType());
-            return CompletableFuture.completedFuture(meta);
+        ).whenComplete((meta, throwable) -> {
+            if (meta != null) {
+                CheckBuilderType(meta.getBuilderType());
+            }
         });
     }
 
@@ -126,9 +129,10 @@ public abstract class DraftsBuilderServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 newMeta
-        ).thenCompose(meta -> {
-            CheckBuilderType(meta.getBuilderType());
-            return CompletableFuture.completedFuture(meta);
+        ).whenComplete((meta, throwable) -> {
+            if (meta != null) {
+                CheckBuilderType(meta.getBuilderType());
+            }
         });
     }
 

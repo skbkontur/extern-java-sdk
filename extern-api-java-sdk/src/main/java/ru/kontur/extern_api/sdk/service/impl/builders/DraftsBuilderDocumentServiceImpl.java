@@ -84,9 +84,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 meta
-        ).thenCompose(document -> {
-            CheckBuilderType(document.getMeta().getBuilderType());
-            return CompletableFuture.completedFuture(document);
+        ).whenComplete((document, throwable) -> {
+            if (document != null) {
+                CheckBuilderType(document.getMeta().getBuilderType());
+            }
         });
     }
 
@@ -95,11 +96,12 @@ public abstract class DraftsBuilderDocumentServiceImpl<
         return api.getAll(
                 acc.accountId(),
                 draftsBuilderId
-        ).thenCompose(documents -> {
-            for (TDraftsBuilderDocument document : documents) {
-                CheckBuilderType(document.getMeta().getBuilderType());
+        ).whenComplete((documents, throwable) -> {
+            if (documents != null) {
+                for (TDraftsBuilderDocument document : documents) {
+                    CheckBuilderType(document.getMeta().getBuilderType());
+                }
             }
-            return CompletableFuture.completedFuture(documents);
         });
     }
 
@@ -111,9 +113,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
-        ).thenCompose(document -> {
-            CheckBuilderType(document.getMeta().getBuilderType());
-            return CompletableFuture.completedFuture(document);
+        ).whenComplete((document, throwable) -> {
+            if (document != null) {
+                CheckBuilderType(document.getMeta().getBuilderType());
+            }
         });
     }
 
@@ -136,9 +139,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 acc.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
-        ).thenCompose(meta -> {
-            CheckBuilderType(meta.getBuilderType());
-            return CompletableFuture.completedFuture(meta);
+        ).whenComplete((meta, throwable) -> {
+            if (meta != null) {
+                CheckBuilderType(meta.getBuilderType());
+            }
         });
     }
 
@@ -152,9 +156,10 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 draftsBuilderId,
                 draftsBuilderDocumentId,
                 newMeta
-        ).thenCompose(meta -> {
-            CheckBuilderType(meta.getBuilderType());
-            return CompletableFuture.completedFuture(meta);
+        ).whenComplete((meta, throwable) -> {
+            if (meta != null) {
+                CheckBuilderType(meta.getBuilderType());
+            }
         });
     }
 
