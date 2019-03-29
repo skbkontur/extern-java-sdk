@@ -32,6 +32,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
@@ -115,10 +116,12 @@ class AuthenticationIT{
 
         @Test
         void certAuth() throws Exception {
+            CryptoProviderMSCapi mscapi = new CryptoProviderMSCapi();
+            byte[] cert = mscapi.getSignerCertificateAsync(configuration.getThumbprint())
+                    .join()
+                    .getOrThrow();
 
-            CertificateAuthenticationProvider auth = build
-                    .certificateAuthentication(
-                            CertificateResource.read(configuration.getThumbprint()));
+            CertificateAuthenticationProvider auth = build.certificateAuthentication(cert);
 
             Assertions.assertNotNull(auth.sessionId().getOrThrow());
         }
