@@ -40,6 +40,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public CompletableFuture<TaskState> getTaskStatus(TaskInfo taskInfo) {
+        return api.getTaskInfo(acc.accountId(), draftId, taskInfo.getId())
+                .thenApply(TaskInfo::getTaskState);
+    }
+
+    @Override
     public CompletableFuture<CheckResultData> getCheckResult(CheckTaskInfo checkTaskInfo) {
         return waitWhileRunning(() -> api
                 .getCheckResult(acc.accountId(), draftId, checkTaskInfo.getId())

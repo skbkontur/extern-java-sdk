@@ -215,6 +215,20 @@ public interface DraftsApi {
     );
 
     /**
+     * Get taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId draft identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<WrappedCheckTaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+
+    /**
      * Starts Send draft process and return taskInfo object
      *
      * @param accountId private account identifier

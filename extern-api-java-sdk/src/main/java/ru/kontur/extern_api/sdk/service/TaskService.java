@@ -31,6 +31,14 @@ public interface TaskService {
     CompletableFuture<PrepareTaskInfo> startPrepareAsync();
 
     /**
+     * <p>GET /v1/{accountId}/drafts/{draftId}/task/{taskId}</p>
+     * Асинхронный метод получающий текущий статус задачи
+     *
+     * @return статус задачи
+     */
+    CompletableFuture<TaskState> getTaskStatus(TaskInfo taskInfo);
+
+    /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
      * Асинхронный метод получающий результат проверки черновика в контролиоующий орган
      *

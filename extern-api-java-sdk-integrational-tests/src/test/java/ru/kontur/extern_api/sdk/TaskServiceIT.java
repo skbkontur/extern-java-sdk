@@ -101,6 +101,18 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
+    @DisplayName("command \"GetSendResult\"")
+    @MethodSource({"newDraftWithDocumentFactory"})
+    void testGetTaskState(Draft draft) {
+        SendTaskInfo startSend = engine.getTaskService(draft.getId())
+                .startSendAsync()
+                .join();
+
+        TaskState taskState = engine.getTaskService(draft.getId()).getTaskStatus(startSend).join();
+        assertEquals(taskState, TaskState.RUNNING);
+    }
+
+    @ParameterizedTest
     @DisplayName("command \"StartPrepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartPrepare(Draft draft) {
