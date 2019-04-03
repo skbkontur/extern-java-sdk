@@ -41,6 +41,9 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
+import ru.kontur.extern_api.sdk.service.TaskService;
+
+import java.util.UUID;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
@@ -100,6 +103,15 @@ public class DefaultServicesFactory implements ServicesFactory {
     @Override
     public HttpClient getHttpClient() {
         return new KonturHttpClient(postConfigure(configuredClient).copy(), GsonProvider.LIBAPI);
+    }
+
+    @Override
+    public TaskService getTaskService(UUID draftId) {
+        return new TaskServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(DraftsApi.class),
+                draftId
+        );
     }
 
     private KonturConfiguredClient postConfigure(KonturConfiguredClient client) {

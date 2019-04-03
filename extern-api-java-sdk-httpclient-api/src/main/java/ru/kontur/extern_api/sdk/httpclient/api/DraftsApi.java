@@ -137,17 +137,108 @@ public interface DraftsApi {
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
-     * @param deferred if set then server perform async operation
      * @param force force send
      */
-    @POST("v1/{accountId}/drafts/{draftId}/send")
+    @POST("v1/{accountId}/drafts/{draftId}/send?deferred=false")
     CompletableFuture<ApiResponse<Docflow>> send(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
-            @Query("deferred") boolean deferred,
             @Query("force") boolean force
     );
 
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param force force send
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/send?deferred=true")
+    CompletableFuture<SendTaskInfo> startSend(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Query("force") boolean force
+    );
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId send task identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<SendTaskInfo> getSendResult(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId send task identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<PrepareTaskInfo> getPrepareResult(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId send task identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<WrappedCheckTaskInfo> getCheckResult(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/check?deferred=true")
+    CompletableFuture<WrappedCheckTaskInfo> startCheck(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId
+    );
+
+    /**
+     * Get taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId draft identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
+    CompletableFuture<WrappedCheckTaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+
+    /**
+     * Starts Send draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/prepare?deferred=true")
+    CompletableFuture<PrepareTaskInfo> startPrepare(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId
+    );
     /**
      * Delete a document from the draft
      *

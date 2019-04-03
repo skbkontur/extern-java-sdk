@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -94,7 +95,12 @@ class DocumentBuildIT {
                 .build(Level.BODY);
 
         draftService = ee.getDraftService();
-        String cert = CertificateResource.readBase64(config.getThumbprint());
+        String cert = ee.getCryptoProvider()
+                .getSignerCertificateAsync(config.getThumbprint())
+                .thenApply(QueryContext::getOrThrow)
+                .thenApply(Base64.getEncoder()::encodeToString)
+                .join();
+
         draftMeta = Arrays
                 .stream(TestUtils.getTestData(cert))
                 .filter(td -> td.getClientInfo().getRecipient().getIfnsCode() != null)

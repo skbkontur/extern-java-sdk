@@ -390,6 +390,10 @@ public class QueryContext<R> implements Serializable {
      */
     public static final String REPLY_DOCUMENTS = "replyDocuments";
 
+    public static final String TASK_INFO_DOCFLOW = "taskInfoDocflow";
+    public static final String TASK_INFO_CHECK_RESULT_DATA = "taskInfoCheckResultData";
+    public static final String TASK_INFO_PREPARE_RESULT = "taskInfoPrepareResult";
+
     private final Map<String, Object> params;
 
     private String result;
