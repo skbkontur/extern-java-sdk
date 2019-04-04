@@ -63,7 +63,7 @@ public interface DraftsBuilderDocumentFilesApi<
             TDraftsBuilderDocumentFileContents newContents
     );
 
-    CompletableFuture delete(
+    CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId,

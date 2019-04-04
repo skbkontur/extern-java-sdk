@@ -150,7 +150,7 @@ public abstract class DraftsBuilderDocumentFileServiceImpl<
     }
 
     @Override
-    public CompletableFuture deleteAsync(
+    public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderDocumentFileId
     ) {
         return api.delete(

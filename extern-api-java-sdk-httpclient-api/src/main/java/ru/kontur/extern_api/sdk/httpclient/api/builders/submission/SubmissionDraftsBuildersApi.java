@@ -68,7 +68,7 @@ public class SubmissionDraftsBuildersApi implements
     }
 
     @Override
-    public CompletableFuture delete(
+    public CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId
     ) {

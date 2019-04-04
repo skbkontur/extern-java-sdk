@@ -97,7 +97,7 @@ public abstract class DraftsBuilderServiceImpl<
     }
 
     @Override
-    public CompletableFuture deleteAsync(
+    public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderId
     ) {
         return api.delete(

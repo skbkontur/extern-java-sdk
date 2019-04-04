@@ -99,7 +99,7 @@ public interface DraftsBuilderDocumentService<
      * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(
+    CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderDocumentId
     );
 

@@ -104,7 +104,7 @@ public class SubmissionDraftsBuilderDocumentFilesApi implements
     }
 
     @Override
-    public CompletableFuture delete(
+    public CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId,

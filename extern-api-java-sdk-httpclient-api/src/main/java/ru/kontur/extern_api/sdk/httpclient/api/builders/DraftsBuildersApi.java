@@ -45,7 +45,7 @@ public interface DraftsBuildersApi<
             UUID draftsBuilderId
     );
 
-    CompletableFuture delete(
+    CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId
     );

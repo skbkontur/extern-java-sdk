@@ -110,7 +110,7 @@ public interface DraftsBuilderDocumentFileService<
      * @param draftsBuilderDocumentFileId идентификатор файла документа билдера черновиков
      * @return {@link Void}
      */
-    CompletableFuture deleteAsync(
+    CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderDocumentFileId
     );
 
