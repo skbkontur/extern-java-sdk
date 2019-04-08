@@ -23,6 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
+import java.util.UUID;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
@@ -33,6 +34,12 @@ import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.service.CertificateService;
@@ -42,8 +49,8 @@ import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
-
-import java.util.UUID;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
@@ -111,6 +118,25 @@ public class DefaultServicesFactory implements ServicesFactory {
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class),
                 draftId
+        );
+    }
+
+    @Override
+    public DraftsBuilderServiceFactory getDraftsBuilderService() {
+        KonturConfiguredClient client = postConfigure(configuredClient);
+
+        RetrofitSubmissionDraftsBuildersApi submissionDraftApi =
+                client.createApi(RetrofitSubmissionDraftsBuildersApi.class);
+        RetrofitSubmissionDraftsBuilderDocumentsApi submissionDocumentApi =
+                client.createApi(RetrofitSubmissionDraftsBuilderDocumentsApi.class);
+        RetrofitSubmissionDraftsBuilderDocumentFilesApi submissionFileApi =
+                client.createApi(RetrofitSubmissionDraftsBuilderDocumentFilesApi.class);
+
+        return new DraftsBuilderServiceFactoryImpl(
+                providerHolder.getAccountProvider(),
+                new SubmissionDraftsBuildersApi(submissionDraftApi),
+                new SubmissionDraftsBuilderDocumentsApi(submissionDocumentApi),
+                new SubmissionDraftsBuilderDocumentFilesApi(submissionFileApi)
         );
     }
 

@@ -27,18 +27,18 @@ public class TaskInfo<TResult> {
     private ErrorInfo error = null;
 
     /**
-     * Возвращает идентификатор ДО
+     * Возвращает идентификатор задачи
      *
-     * @return id идентификатор ДО
+     * @return id идентификатор задачи
      */
     public UUID getId() {
         return id;
     }
 
     /**
-     * Устанавливает идентификатор ДО
+     * Устанавливает идентификатор задачи
      *
-     * @param id идентификатор ДО
+     * @param id идентификатор задачи
      */
     public void setId(UUID id) {
         this.id = id;

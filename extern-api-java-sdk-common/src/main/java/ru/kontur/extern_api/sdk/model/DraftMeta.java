@@ -31,10 +31,10 @@ package ru.kontur.extern_api.sdk.model;
  * @author Aleksey Sukhorukov
  */
 public class DraftMeta {
-
     private Sender sender;
     private Recipient recipient;
     private Organization payer;
+    private RelatedDocument relatedDocument;
 
     public DraftMeta() {
     }
@@ -98,6 +98,18 @@ public class DraftMeta {
     public void setPayer(Organization payer) {
         this.payer = payer;
     }
+
+    /**
+     * Возвращает связный ДО
+     * @return связный ДО
+     */
+    public RelatedDocument getRelatedDocument() { return relatedDocument; }
+
+    /**
+     * Устанавливает связный ДО
+     * @param relatedDocument связный ДО
+     */
+    public void setRelatedDocument(RelatedDocument relatedDocument) { this.relatedDocument = relatedDocument; }
 
     public DraftMetaRequest asRequest() {
         Sender sender = this.getSender();
