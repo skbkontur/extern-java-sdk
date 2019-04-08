@@ -23,10 +23,73 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface IonRequestContract extends BuildDocumentContract {
+import java.text.SimpleDateFormat;
 
-    int getVersion();
+public class IonRequestContract implements IonRequestContractInterface {
 
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+    private int version;
+    private @Nullable IonPeriod period;
+    private ClientInfo additionalOrgInfo;
+    private IonRequestData data;
+
+    public IonRequestContract(
+            @NotNull ClientInfo additionalOrgInfo,
+            @NotNull RequestType requestType,
+            @NotNull IonRequestContract.AnswerFormat answerFormat,
+            @Nullable IonPeriod period) {
+        this.period = period;
+        this.version = 1;
+        this.additionalOrgInfo = additionalOrgInfo;
+
+        int iRequestType = requestType.ordinal() + 1;
+        int iAnswerFormat = answerFormat.ordinal() + 1;
+
+        this.data = new IonRequestData(iRequestType, iAnswerFormat);
+    }
+
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    public ClientInfo getAdditionalOrgInfo() {
+        return additionalOrgInfo;
+    }
+
+    public IonRequestData getData() {
+        return data;
+    }
+
+    public @Nullable IonPeriod getPeriod() {
+        return period;
+    }
+
+    public enum RequestType {
+        WHOLE_ORGANIZATION,
+        ALL_KPPS,
+        ONE_KPP
+    }
+
+    public enum AnswerFormat {
+        RTF,
+        XML,
+        XLS,
+        PDF
+    }
+
+    public enum ReportSelectionCondition {
+        ALL_REPORT_TYPES,
+        PRIMARY,
+        CORRECTION
+    }
+
+    public enum ReportGenerationCondition {
+        GROUP_BY_ALL_PAYMENT_TYPES,
+        NO_GROUP_BY_ALL_PAYMENT_TYPES
+    }
 }

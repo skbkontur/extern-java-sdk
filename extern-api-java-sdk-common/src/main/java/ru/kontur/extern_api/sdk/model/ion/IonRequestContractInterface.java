@@ -23,26 +23,13 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import com.google.gson.annotations.SerializedName;
+import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
 
-public class IonRequestData {
+public interface IonRequestContractInterface extends BuildDocumentContract {
 
-    @SerializedName("ВидЗапр")
-    private int requestType;
+    int getVersion();
 
-    @SerializedName("ФормОтв")
-    private int answerFormat;
+    ClientInfo getAdditionalOrgInfo();
 
-    IonRequestData(int requestType, int acceptType) {
-        this.requestType = requestType;
-        this.answerFormat = acceptType;
-    }
-
-    public int getRequestType() {
-        return requestType;
-    }
-
-    public int getAnswerFormat() {
-        return answerFormat;
-    }
+    IonRequestData getData();
 }

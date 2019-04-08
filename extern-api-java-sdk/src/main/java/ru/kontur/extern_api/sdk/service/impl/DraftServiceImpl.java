@@ -33,7 +33,7 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
@@ -575,17 +575,19 @@ public class DraftServiceImpl implements DraftService {
     public CompletableFuture<QueryContext<Void>> buildIonRequestAsync(
             UUID draftId,
             UUID documentId,
-            IonRequestContract requestContract
+            BuildDocumentType ionType,
+            IonRequestContractInterface requestContract
     ) {
-        return buildDocumentAsync(draftId, documentId, BuildDocumentType.ION1, requestContract, 1);
+        return buildDocumentAsync(draftId, documentId, ionType, requestContract, 1);
     }
 
     @Override
     public CompletableFuture<QueryContext<DraftDocument>> newIonRequestAsync(
             UUID draftId,
-            IonRequestContract requestContract
+            BuildDocumentType ionType,
+            IonRequestContractInterface requestContract
     ) {
-        return newDocumentAsync(draftId, BuildDocumentType.ION1, requestContract, 1);
+        return newDocumentAsync(draftId, ionType, requestContract, 1);
     }
 
     @Override

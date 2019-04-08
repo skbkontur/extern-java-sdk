@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
 
 
 /**
@@ -904,7 +904,7 @@ public interface DraftService {
 
     /**
      * Асинхронный метод изменения контента документа на ИОН запрос.
-     * По {@link IonRequestContract} создаётся ИОН запрос.
+     * По {@link IonRequestContractInterface} создаётся ИОН запрос.
      * Контент документа с переданным documentId будет заменён.
      *
      * @param draftId ID драфта с которым производится работа
@@ -915,12 +915,13 @@ public interface DraftService {
     CompletableFuture<QueryContext<Void>> buildIonRequestAsync(
             UUID draftId,
             UUID documentId,
-            IonRequestContract requestContract
+            BuildDocumentType ionType,
+            IonRequestContractInterface requestContract
     );
 
     /**
      * Асинхронный метод создания документа "ИОН запрос".
-     * По {@link IonRequestContract} создаётся ИОН запрос.
+     * По {@link IonRequestContractInterface} создаётся ИОН запрос.
      *
      * @param draftId ID драфта с которым производится работа
      * @param requestContract данные для создания ИОН запроса
@@ -928,7 +929,8 @@ public interface DraftService {
      */
     CompletableFuture<QueryContext<DraftDocument>> newIonRequestAsync(
             UUID draftId,
-            IonRequestContract requestContract
+            BuildDocumentType ionType,
+            IonRequestContractInterface requestContract
     );
 
 
@@ -942,7 +944,7 @@ public interface DraftService {
      * @param requestContract данные для создания документа
      * @param contractVersion версия контракта
      * @return статус успеха в QueryContext
-     * @see #newIonRequestAsync(UUID, IonRequestContract) создать ИОН
+     * @see #newIonRequestAsync(UUID, BuildDocumentType,IonRequestContractInterface) создать ИОН
      * @see #createAndBuildDeclarationAsync(UUID, int, UsnServiceContractInfo) создать USN
      */
     CompletableFuture<QueryContext<Void>> buildDocumentAsync(
@@ -961,7 +963,7 @@ public interface DraftService {
      * @param requestContract данные для создания документа
      * @param contractVersion версия контракта
      * @return созданный документ
-     * @see #newIonRequestAsync(UUID, IonRequestContract) создать ИОН
+     * @see #newIonRequestAsync(UUID, BuildDocumentType, IonRequestContractInterface) создать ИОН
      * @see #createAndBuildDeclarationAsync(UUID, int, UsnServiceContractInfo) создать USN
      */
     CompletableFuture<QueryContext<DraftDocument>> newDocumentAsync(
