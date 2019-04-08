@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.utils.builders;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -72,18 +73,17 @@ public class DraftsBuilderDocumentFileCreator {
     }
 
     public String getScannedContent() {
-        byte[] bytes = null;
-        try {
-            bytes = Files.readAllBytes(
-                    Paths.get(new File(Objects.requireNonNull(getClass()
-                                                                      .getClassLoader()
-                                                                      .getResource("docs/Scanned.pdf"))
-                                               .getFile())
-                                      .getAbsolutePath()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        URL contentUrl = DraftsBuilderDocumentFileCreator.class
+                .getClassLoader()
+                .getResource("docs/Scanned.pdf");
 
-        return Base64.getEncoder().encodeToString(bytes);
+        String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
+
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(contentPath));
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find scanned file in resources");
+        }
     }
 }

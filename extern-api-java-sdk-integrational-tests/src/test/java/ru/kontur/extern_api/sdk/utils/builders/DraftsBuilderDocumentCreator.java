@@ -34,6 +34,7 @@ public class DraftsBuilderDocumentCreator {
             ExternEngine engine,
             SubmissionDraftsBuilder draftsBuilder
     ) {
+        // Пункт требования, подходящий по формату. Он нужен ФНС для понимания того, на какую часть требования пришел документ.
         final String claimItemNumber = "1.01";
 
         SubmissionDraftsBuilderDocumentMetaRequest meta = new SubmissionDraftsBuilderDocumentMetaRequest();

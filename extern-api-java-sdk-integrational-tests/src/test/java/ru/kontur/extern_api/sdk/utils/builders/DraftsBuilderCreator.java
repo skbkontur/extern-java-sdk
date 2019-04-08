@@ -35,6 +35,9 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 public class DraftsBuilderCreator {
 
+    /**
+     * ДО на который отвечаем - требование созданное в облаке
+     */
     public SubmissionDraftsBuilder createSubmissionDraftsBuilder(
             ExternEngine engine,
             CryptoUtils cryptoUtils
