@@ -28,19 +28,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 
-public class IonRequestContract implements IonRequestContractInterface {
+public class IonRequestContract<TIonData extends IonRequestData>implements IonRequestContractInterface {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
     private int version;
     private @Nullable IonPeriod period;
     private ClientInfo additionalOrgInfo;
-    private IonRequestData data;
+    private TIonData data;
 
     public IonRequestContract(
             @NotNull ClientInfo additionalOrgInfo,
             @NotNull RequestType requestType,
-            @NotNull IonRequestContract.AnswerFormat answerFormat,
+            @NotNull AnswerFormat answerFormat,
             @Nullable IonPeriod period) {
         this.period = period;
         this.version = 1;
@@ -49,7 +49,7 @@ public class IonRequestContract implements IonRequestContractInterface {
         int iRequestType = requestType.ordinal() + 1;
         int iAnswerFormat = answerFormat.ordinal() + 1;
 
-        this.data = new IonRequestData(iRequestType, iAnswerFormat);
+        this.data = new TIonData(iRequestType, iAnswerFormat);
     }
 
     @Override
