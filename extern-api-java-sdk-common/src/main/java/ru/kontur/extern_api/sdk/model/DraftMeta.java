@@ -123,7 +123,20 @@ public class DraftMeta {
                 getRecipient(),
                 new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName())
         );
-
-
     }
+
+    /**
+     *  Возвращает сведения о связанном документо обороте
+     *
+     * @return связанный ДО
+     */
+    public RelatedDocument getRelatedDocument() {
+        return relatedDocument;
+    }
+
+    public void setRelatedDocument(RelatedDocument relatedDocument) {
+        this.relatedDocument = relatedDocument;
+    }
+
+    private RelatedDocument relatedDocument;
 }
