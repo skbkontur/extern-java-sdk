@@ -629,7 +629,7 @@ class DocflowServiceIT {
             String name = ofNullable(d.getDescription())
                     .map(DocflowDocumentDescription::getFilename)
                     .orElse("");
-            String dcName = ofNullable(dc.getDocumentDescription())
+            String dcName = ofNullable(dc.getDescription())
                     .map(DocumentDescription::getFilename)
                     .orElse("");
 
