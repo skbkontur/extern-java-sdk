@@ -126,7 +126,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
-                createApi(InventoryApi.class),
+                createApi(RelatedDocflowApi.class),
                 relatedDocflowId,
                 relatedDocumentId
         );
@@ -136,7 +136,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     public RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocumentId) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
-                createApi(InventoryApi.class),
+                createApi(RelatedDocflowApi.class),
                 relatedDocflow.getId(),
                 relatedDocumentId.getId()
         );

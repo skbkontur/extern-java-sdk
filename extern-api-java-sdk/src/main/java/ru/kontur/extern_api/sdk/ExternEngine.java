@@ -28,6 +28,8 @@ import java.util.UUID;
 
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
@@ -91,13 +93,20 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
         return servicesFactory.getTaskService(id);
     }
 
-
     /**
-     * @return TaskService сервис предназначен для работы с длительными операциями в черновиках и драфт билдерах
-     * @see TaskService
+     * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
+     * @see RelatedDocumentsService
      */
     public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
         return servicesFactory.getRelatedDocumentsService(relatedDocflowId, relatedDocumentId);
+    }
+
+    /**
+     * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
+     * @see RelatedDocumentsService
+     */
+    public RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocument) {
+        return servicesFactory.getRelatedDocumentsService(relatedDocflow, relatedDocument);
     }
 
     /**

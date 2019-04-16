@@ -24,7 +24,7 @@ package ru.kontur.extern_api.sdk.model;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RelatedDraftMetaRequest extends DraftMetaRequest {
+public class RelatedDraftMetaRequest extends ExtendedDraftMetaRequest {
     private RelatedDocument relatedDocument;
 
     public RelatedDraftMetaRequest() {
@@ -35,10 +35,17 @@ public class RelatedDraftMetaRequest extends DraftMetaRequest {
 
         this.relatedDocument = relatedDocument;
     }
+    public RelatedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer, String subject, RelatedDocument relatedDocument) {
+        super(sender, recipient, payer, subject);
+
+        this.relatedDocument = relatedDocument;
+    }
 
     public RelatedDraftMetaRequest(@NotNull DraftMetaRequest metaRequest, RelatedDocument relatedDocument) {
         super(metaRequest.getSender(), metaRequest.getRecipient(), metaRequest.getPayer());
-
+        if(metaRequest instanceof ExtendedDraftMetaRequest) {
+            setAdditionalInfo(((ExtendedDraftMetaRequest)metaRequest).getAdditionalInfo());
+        }
         this.relatedDocument = relatedDocument;
     }
 

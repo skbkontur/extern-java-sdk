@@ -13,16 +13,23 @@ import java.util.Optional;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowType;
+import ru.kontur.extern_api.sdk.model.Inventory;
 
 
-public class GsonDocflowDeserializer implements JsonDeserializer<Docflow> {
+public class GsonDocflowDeserializer implements JsonDeserializer{
 
     @Override
     public Docflow deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject obj = json.getAsJsonObject();
+        DocflowType dt = deserialize(obj, "type", DocflowType.class, context);
+
         Docflow df = new Docflow();
+
+        if(dt == DocflowType.FNS534_INVENTORY){
+            df = new Inventory();
+        }
 
         df.setType(deserialize(obj, "type", DocflowType.class, context));
 

@@ -212,6 +212,41 @@ public enum DocumentType implements Urn<DocumentType> {
     @SerializedName("urn:document:fns534-submission-receipt")
     Fns534SubmissionReceipt,
 
+
+    /** Опись */
+    @SerializedName("urn:document:fns534-inventory-message")
+    Fns534InventoryMessage,
+
+    /** Описание. */
+    @SerializedName("urn:document:fns534-inventory-description")
+    Fns534InventoryDescription,
+
+    /** Приложение. */
+    @SerializedName("urn:document:fns534-inventory-attachment")
+    Fns534InventoryAttachment,
+
+    /** Доверенность. */
+    @SerializedName("urn:document:fns534-inventory-warrant")
+    Fns534InventoryWarrant,
+
+    /** ПодтвержениеДатыОтправки. */
+    @SerializedName("urn:document:fns534-inventory-date-confirmation")
+    Fns534InventoryDateConfirmation,
+
+    /** ИзвещениеОПолучении. */
+    @SerializedName("urn:document:fns534-inventory-acceptance-result-positive")
+    Fns534InventoryAcceptanceResultPositive,
+
+    /** УведомлениОботказе. */
+    @SerializedName("urn:document:fns534-inventory-acceptance-result-negative")
+    Fns534InventoryAcceptanceResultNegative,
+
+    /** КвитанцияОприеме. */
+    @SerializedName("urn:document:fns534-inventory-receipt")
+    Fns534InventoryReceipt,
+    
+    
+
     /** Документ */
     @SerializedName("urn:document:fns534-demand")
     Fns534Demand,

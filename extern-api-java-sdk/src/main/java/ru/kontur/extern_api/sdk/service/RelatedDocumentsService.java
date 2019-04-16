@@ -28,12 +28,75 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface RelatedDocumentsService {
+    /**
+     * Возвращает опись связанную с документом по ее Id
+     * @return Опись с текущим документом {@link Inventory}
+     */
     CompletableFuture<Inventory> getInventory(UUID inventoryId);
+
+    /**
+     * Возвращает зашифрованное содержимое документа описи
+     * @param inventoryId идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @return массив байт соответствующий зашифрованному содержимому документа
+     */
     CompletableFuture<byte[]> getEncryptedContentAsync(UUID inventoryId, UUID inventoryDocumentId);
+
+    /**
+     * Возвращает расшифрованное содержимое документа (при наличии)
+     * @param inventoryId идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @return массив байт соответствующий расшифрованному содержимому документа
+     */
     CompletableFuture<byte[]> getDecryptedContentAsync(UUID inventoryId, UUID inventoryDocumentId);
+
+    /**
+     * Возвращает список подписей под документом
+     * @param inventoryId идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @return список подписей под документом
+     */
     CompletableFuture<List<Signature>> getSignatures(UUID inventoryId, UUID inventoryDocumentId);
-    CompletableFuture<Signature> getSignature(UUID inventoryId, UUID inventoryDocumentId, UUID signatureId);
-    CompletableFuture<Docflow> getLetter(UUID letterId);
+
+    /**
+     * Возвращает тело запрошенной подписи
+     * @param inventoryId идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @param signatureId идентификатор подписи
+     * @return массив байт соответствующий запрошенной подписи
+     */
+    CompletableFuture<byte[]> getSignatureContent(UUID inventoryId, UUID inventoryDocumentId, UUID signatureId);
+
+    /**
+     *  Возвращает связанные с текущим документом описи
+     *  @param filter {@link DocflowFilter}
+     *  @return список описей связанных с текущим документом {@link DocflowPage}
+     */
+    CompletableFuture<DocflowPage> getRelatedDocflows(DocflowFilter filter);
+
+    /**
+     * Возвращает первую 1000 связанных с текущим документом документо оборотов
+     * @return список описей связанных с текущим документом {@link DocflowPage}
+     */
+    CompletableFuture<DocflowPage> getRelatedDocflows();
+
+    /**
+     * Возвращает первую 1000 связанных с текущим документом описей
+     * @return список описей связанных с текущим документом {@link InventoriesPage}
+     */
     CompletableFuture<InventoriesPage> getRelatedInventories();
+
+    /**
+     *  Возвращает связанные с текущим документом описи
+     *  @param filter {@link DocflowFilter}
+     *  @return список описей связанных с текущим документом {@link InventoriesPage}
+     */
+    CompletableFuture<InventoriesPage> getRelatedInventories(DocflowFilter filter);
+
+    /**
+     *  Создает черновик ДО связанного с текущим документом
+     *  @param draftMeta {@link DraftMetaRequest}
+     *  @return список описей связанных с текущим документом {@link InventoriesPage}
+     */
     CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta);
 }

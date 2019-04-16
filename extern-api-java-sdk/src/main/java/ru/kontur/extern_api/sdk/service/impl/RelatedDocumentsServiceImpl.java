@@ -22,7 +22,7 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import ru.kontur.extern_api.sdk.httpclient.api.InventoryApi;
+import ru.kontur.extern_api.sdk.httpclient.api.RelatedDocflowApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
@@ -35,13 +35,13 @@ import java.util.concurrent.CompletableFuture;
 public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
 
     private final AccountProvider acc;
-    private final InventoryApi api;
+    private final RelatedDocflowApi api;
     private final UUID relatedDocflowId;
     private final UUID relatedDocumentId;
 
     public RelatedDocumentsServiceImpl(
             AccountProvider accountProvider,
-            InventoryApi api,
+            RelatedDocflowApi api,
             UUID docflowId,
             UUID relatedDocumentId) {
         this.acc = accountProvider;
@@ -52,7 +52,7 @@ public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
 
     public RelatedDocumentsServiceImpl(
             AccountProvider accountProvider,
-            InventoryApi api,
+            RelatedDocflowApi api,
             Docflow docflow,
             Document relatedDocument) {
         this.acc = accountProvider;
@@ -68,37 +68,59 @@ public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
 
     @Override
     public CompletableFuture<byte[]> getEncryptedContentAsync(UUID inventoryId, UUID inventoryDocumentId) {
-        return api.getInventoryDocumentEncryptedContent(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId, inventoryDocumentId);
+        return api
+                .getInventoryDocumentEncryptedContent(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId,
+                        inventoryDocumentId);
     }
 
     @Override
     public CompletableFuture<byte[]> getDecryptedContentAsync(UUID inventoryId, UUID inventoryDocumentId) {
-        return api.getInventoryDocumentDecryptedContent(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId, inventoryDocumentId);
+        return api
+                .getInventoryDocumentDecryptedContent(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId,
+                        inventoryDocumentId);
     }
 
     @Override
     public CompletableFuture<List<Signature>> getSignatures(UUID inventoryId, UUID inventoryDocumentId) {
-        return api.getInventorySignatures(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId, inventoryDocumentId);
+        return api.getInventory(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId)
+                .thenApply(inventory -> inventory.getDocuments().stream()
+                        .filter(document -> document.getId().equals(inventoryDocumentId)).findFirst().get()
+                        .getSignatures());
     }
 
     @Override
-    public CompletableFuture<Signature> getSignature(UUID inventoryId, UUID inventoryDocumentId, UUID signatureId) {
-        return api.getInventorySignature(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId, inventoryDocumentId, signatureId);
+    public CompletableFuture<byte[]> getSignatureContent(UUID inventoryId, UUID inventoryDocumentId, UUID signatureId) {
+        return api.getInventorySignatureContent(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId,
+                inventoryDocumentId, signatureId);
     }
 
     @Override
-    public CompletableFuture<Docflow> getLetter(UUID letterId) {
-        return null;
+    public CompletableFuture<DocflowPage> getRelatedDocflows() {
+        return getRelatedDocflows(DocflowFilter.page(0, 1000));
+    }
+
+    @Override
+    public CompletableFuture<DocflowPage> getRelatedDocflows(DocflowFilter filter) {
+        return api.getRelatedDocflows(acc.accountId(), relatedDocflowId, relatedDocumentId, filter.getSkip(),
+                filter.getTake(), filter.getOrder(), filter.asFilterMap());
+    }
+
+
+    @Override
+    public CompletableFuture<InventoriesPage> getRelatedInventories(DocflowFilter filter) {
+        return api.getRelatedInventories(acc.accountId(), relatedDocflowId, relatedDocumentId, filter.getSkip(),
+                filter.getTake(), filter.getOrder(), filter.asFilterMap());
     }
 
     @Override
     public CompletableFuture<InventoriesPage> getRelatedInventories() {
-        return api.getRelatedInventories(acc.accountId(), relatedDocflowId, relatedDocumentId);
+        return getRelatedInventories(DocflowFilter.page(0, 1000));
     }
 
     @Override
     public CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta) {
-        RelatedDraftMetaRequest relatedDraftMetaRequest = new RelatedDraftMetaRequest(draftMeta, new RelatedDocument(relatedDocflowId, relatedDocumentId));
+        RelatedDraftMetaRequest relatedDraftMetaRequest = new RelatedDraftMetaRequest(draftMeta,
+                new RelatedDocument(relatedDocflowId, relatedDocumentId));
         return api.create(acc.accountId(), relatedDraftMetaRequest);
     }
 }
