@@ -27,10 +27,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
@@ -38,6 +42,9 @@ import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
+
+    private final static String ORG_NAME = "Ромашка";
+    private final static String DEFAULT_KND = "1160001";//"1165013";
 
     public static TestData[] getTestData(String x509b64) {
         TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
@@ -47,13 +54,21 @@ public class TestUtils {
         return data;
     }
 
-    public static TestData[] getTestDemand(String x509b64) {
-        DcDemandData demandData =  DemandDataProvider.getDefaultFufData();
+    public static CompletableFuture<List<DemandTestData>> getTestDemand(TestSuite testSuite, String x509b64) {
         TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
-        for (TestData td : data) {
-            td.getClientInfo().getSender().setCertificate(x509b64);
-        }
-        return data;
+        return testSuite.GetEasyDocflowApi().thenApply(
+                api -> {
+                    ArrayList<CompletableFuture<DemandTestData>> list = new ArrayList<>();
+                    for (TestData td : data) {
+                        td.getClientInfo().getSender().setCertificate(x509b64);
+                        DemandRequestDto requestDto = new DemandRequestDto(
+                                testSuite.engine.getAccountProvider().accountId(), td.getClientInfo(), ORG_NAME,
+                                new String[]{DEFAULT_KND});
+                        list.add(api.getDemand(requestDto).thenApply(
+                                response -> new DemandTestData(td, UUID.fromString(response.getDocflowId()))));
+                    }
+                    return list.stream().map(CompletableFuture::join).collect(Collectors.toList());
+                });
     }
 
     public static DraftMetaRequest toDraftMetaRequest(TestData td) {
@@ -62,7 +77,7 @@ public class TestUtils {
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), "Ромашка"));
+        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), ORG_NAME));
 
         ClientInfo.Recipient recipient = clientInfo.getRecipient();
 
@@ -116,7 +131,7 @@ public class TestUtils {
 
         DocumentContents documentContents = new DocumentContents();
         documentContents.setBase64Content(Base64.getEncoder().encodeToString(os.toByteArray()));
-        documentContents.setDocumentDescription(documentDescription);
+        documentContents.setDescription(documentDescription);
 
         return documentContents;
 

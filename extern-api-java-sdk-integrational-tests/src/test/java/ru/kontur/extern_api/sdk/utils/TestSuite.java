@@ -24,8 +24,15 @@
 package ru.kontur.extern_api.sdk.utils;
 
 import static ru.kontur.extern_api.sdk.ExternEngineBuilder.createExternEngine;
+import static ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder.createFor;
 
 import com.google.gson.Gson;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -34,15 +41,30 @@ import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.api.EasyDocflowApi;
+import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.portal.AuthApi;
+import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
+import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
+import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 public class TestSuite {
 
     public final ExternEngine engine;
 
+    public Configuration getConfig() {
+        return config;
+    }
+
+    private final Configuration config;
     private final Gson gson;
 
-    private TestSuite(ExternEngine engine) {
+    private TestSuite(ExternEngine engine, Configuration config) {
+        this.config = config;
         this.engine = engine;
         this.gson = GsonProvider.getPreConfiguredGsonBuilder().setPrettyPrinting().create();
     }
@@ -69,19 +91,38 @@ public class TestSuite {
                 .build(Level.BODY);
 
         engine.getConfiguration().setThumbprint(config.getThumbprint());
-        return new TestSuite(engine);
+        return new TestSuite(engine, config);
     }
 
     public static TestSuite LoadManually(
             BiFunction<Configuration, ApiKeyOrAuth, ExternEngine> buildFunc
     ) {
         Configuration config = TestConfig.LoadConfigFromEnvironment();
-        return new TestSuite(buildFunc.apply(config, createExternEngine(config)));
+        return new TestSuite(buildFunc.apply(config, createExternEngine(config)), config);
+    }
+
+    public CompletableFuture<EasyDocflowApi> GetEasyDocflowApi() {
+        return GetEasyDocflowApi(config.getServiceBaseUri(), config.getAuthBaseUri());
+    }
+
+    public CompletableFuture<EasyDocflowApi> GetEasyDocflowApi(String baseUri) {
+        return GetEasyDocflowApi(baseUri, config.getAuthBaseUri());
+    }
+
+    public CompletableFuture<EasyDocflowApi> GetEasyDocflowApi(String baseUri, String authUri) {
+        return AuthenticationProviderBuilder.createFor(authUri, Level.BODY)
+                .withApiKey(config.getApiKey())
+                .passwordAuthentication(config.getLogin(), config.getPass()).authenticate()
+                .thenApply(sessionResponse -> new KonturConfiguredClient(Level.BODY, baseUri)
+                        .setApiKey(config.getApiKey())
+                        .setAuthSid(sessionResponse.getSid())
+                        .setConnectTimeout(600, TimeUnit.SECONDS)
+                        .setReadTimeout(600, TimeUnit.SECONDS)
+                        .createApi(EasyDocflowApi.class));
     }
 
     public static TestSuite Load() {
         return Load(c -> {
         });
     }
-
 }
