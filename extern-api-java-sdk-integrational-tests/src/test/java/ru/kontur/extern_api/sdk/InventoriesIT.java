@@ -276,7 +276,7 @@ class InventoriesIT {
                 .filter(docflowPageItem -> docflowPageItem.getId().equals(sentLetter.getId())).findFirst().get()
                 .getLinks().stream().filter(link -> link.getRel().equals("self")).findFirst().get().getHref();
 
-        Docflow checkLetter = engine.getAuthorizedHttpClient().followGetLink(inventoriesHref, Inventory.class);
+        Docflow checkLetter = engine.getAuthorizedHttpClient().followGetLink(inventoriesHref, Docflow.class);
 
         assertNotNull(checkLetter);
         assertEquals(sentLetter.getId(), checkLetter.getId());
