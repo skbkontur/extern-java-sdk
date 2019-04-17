@@ -268,8 +268,9 @@ class InventoriesIT {
                                 + testData.getDemandAttachmentId().toString()
                                 + "/related"
                         , DocflowPage.class);
+        // activate after ka-2677 released
         // .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
-        //  .getRelatedDocflows().join();
+        // .getRelatedDocflows().join();
 
         String inventoriesHref = docflowPage.getDocflowsPageItem().stream()
                 .filter(docflowPageItem -> docflowPageItem.getId().equals(sentLetter.getId())).findFirst().get()
