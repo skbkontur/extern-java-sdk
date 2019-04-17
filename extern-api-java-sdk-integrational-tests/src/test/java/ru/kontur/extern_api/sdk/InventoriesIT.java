@@ -50,7 +50,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.utils.DemandTestData;
+import ru.kontur.extern_api.sdk.utils.DemandTestDataProvider;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.DocflowType;
@@ -79,7 +79,7 @@ class InventoriesIT {
     private static final String VALID_INVENTORY_JPG_DOCUMENT = "/inventories/zapiska_valid.jpg";
     private static final String IFNS_CODE = "0087";
     private static ExternEngine engine;
-    private static List<DemandTestData> tests;
+    private static List<DemandTestDataProvider> tests;
     private static CryptoUtils cryptoUtils;
     private static int sentRelatedInventories;
     private static int sentRelatedLetters;
@@ -97,7 +97,7 @@ class InventoriesIT {
                 .stream(testData)
                 .filter(data -> data.getClientInfo().getRecipient().getIfnsCode() != null && !data
                         .getClientInfo().getRecipient().getIfnsCode().contentEquals(""))
-                .map((TestData data) -> DemandTestData.getTestDemand(data, testSuite))
+                .map((TestData data) -> DemandTestDataProvider.getTestDemand(data, testSuite))
                 .collect(Collectors.toList())
                 .stream()
                 .map(CompletableFuture::join)
@@ -115,14 +115,14 @@ class InventoriesIT {
     }
 
     @Contract(pure = true)
-    private static Stream<DemandTestData> demandTestDataStream() {
+    private static Stream<DemandTestDataProvider> demandTestDataStream() {
         return tests.stream();
     }
 
     @ParameterizedTest
     @DisplayName("create Inventory draft")
     @MethodSource("demandTestDataStream")
-    void testCreateInventory(DemandTestData testData) {
+    void testCreateInventory(DemandTestDataProvider testData) {
         Draft draft = engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                 .createRelatedDraft(TestUtils.toDraftMetaRequest(testData)).join();
 
@@ -133,7 +133,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("test inventories page is returned")
     @MethodSource("demandTestDataStream")
-    void testGetInventoryPage(DemandTestData testData) {
+    void testGetInventoryPage(DemandTestDataProvider testData) {
         sendRelatedInventory(testData).join();
         InventoriesPage inventoriesPage = engine
                 .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
@@ -145,7 +145,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory ought be received from api")
     @MethodSource("demandTestDataStream")
-    void testGetInventory(DemandTestData testData) {
+    void testGetInventory(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Inventory inventory = engine
                 .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
@@ -158,7 +158,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory decrypted content ought be received from api")
     @MethodSource("demandTestDataStream")
-    void testGetInventoryDecryptedContent(DemandTestData testData) {
+    void testGetInventoryDecryptedContent(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Document messageDocument = sentInventory
                 .getDocuments()
@@ -185,7 +185,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory encrypted content ought be received from api")
     @MethodSource("demandTestDataStream")
-    void testGetInventoryEncryptedContent(DemandTestData testData) {
+    void testGetInventoryEncryptedContent(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Document messageDocument =
                 sentInventory.getDocuments().stream().filter(document -> document.getDescription().getType()
@@ -202,7 +202,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory signatures ought be received from api")
     @MethodSource("demandTestDataStream")
-    void testGetInventorySignatures(DemandTestData testData) {
+    void testGetInventorySignatures(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Document messageDocument =
                 sentInventory.getDocuments().stream().filter(document -> document.getDescription().getType()
@@ -218,7 +218,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory signature ought be received from api")
     @MethodSource("demandTestDataStream")
-    void testGetInventorySignature(DemandTestData testData) {
+    void testGetInventorySignature(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Document messageDocument =
                 sentInventory.getDocuments().stream().filter(document -> document.getDescription().getType()
@@ -238,7 +238,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("inventory ought be received from api by link in related document")
     @MethodSource("demandTestDataStream")
-    void testGetInventoryByLink(DemandTestData testData) {
+    void testGetInventoryByLink(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         InventoriesPage inventoriesPage = engine
                 .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
@@ -256,7 +256,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("letter ought be received from api by link in related document")
     @MethodSource("demandTestDataStream")
-    void testGetLetterByLink(DemandTestData testData) {
+    void testGetLetterByLink(DemandTestDataProvider testData) {
         Docflow sentLetter = sendRelatedLetter(testData).join();
 
         DocflowPage docflowPage = engine.getAuthorizedHttpClient()
@@ -286,7 +286,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("letter and inventories must be on related page")
     @MethodSource("demandTestDataStream")
-    void testGetRelated(DemandTestData testData) {
+    void testGetRelated(DemandTestDataProvider testData) {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Docflow sentLetter = sendRelatedLetter(testData).join();
 
@@ -303,7 +303,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("total count on DocflowPage ought be equal to acctual count")
     @MethodSource("demandTestDataStream")
-    void testRelatedCountOnPage(DemandTestData testData) {
+    void testRelatedCountOnPage(DemandTestDataProvider testData) {
         sendRelatedInventory(testData).join();
         sendRelatedLetter(testData).join();
 
@@ -317,7 +317,7 @@ class InventoriesIT {
     @ParameterizedTest
     @DisplayName("related count in origin document ought be same as actually sent related documents count")
     @MethodSource("demandTestDataStream")
-    void testRelatedCountEqualsActual(DemandTestData testData) {
+    void testRelatedCountEqualsActual(DemandTestDataProvider testData) {
         sendRelatedInventory(testData).join();
         sendRelatedLetter(testData).join();
 
@@ -332,7 +332,7 @@ class InventoriesIT {
     }
 
 
-    private CompletableFuture<Docflow> sendRelatedLetter(DemandTestData testData) {
+    private CompletableFuture<Docflow> sendRelatedLetter(DemandTestDataProvider testData) {
         sentRelatedLetters++;
         return engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                 .createRelatedDraft(new ExtendedDraftMetaRequest(TestUtils.toDraftMetaRequest(testData), "Письмо"))
@@ -341,12 +341,12 @@ class InventoriesIT {
                 .thenCompose(docflow -> waitForDocflow(docflow.getId()));
     }
 
-    CompletionStage<Draft> addLetterDocument(Draft draft, DemandTestData testData) {
+    CompletionStage<Draft> addLetterDocument(Draft draft, DemandTestDataProvider testData) {
         byte[] docContent = getContentBytes(getLetterData(testData));
         return addAnyDocument(docContent, new DocumentDescription(), draft);
     }
 
-    CompletableFuture<Inventory> sendRelatedInventory(DemandTestData testData) {
+    CompletableFuture<Inventory> sendRelatedInventory(DemandTestDataProvider testData) {
         UUID childFileId = UUID.randomUUID();
         UUID baseFileId = UUID.randomUUID();
         sentRelatedInventories++;
@@ -365,14 +365,14 @@ class InventoriesIT {
                 Objects::nonNull, 2000);
     }
 
-    private static CompletableFuture<Inventory> waitForInventory(UUID id, DemandTestData testData) {
+    private static CompletableFuture<Inventory> waitForInventory(UUID id, DemandTestDataProvider testData) {
         return Awaiter.waitForCondition(
                 () -> engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                         .getInventory(id),
                 Objects::nonNull, 2000);
     }
 
-    String getAttachmentFileName(DemandTestData testData, UUID baseFileId, UUID childFileId) {
+    String getAttachmentFileName(DemandTestDataProvider testData, UUID baseFileId, UUID childFileId) {
         return "0510041_"
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getKpp()
@@ -385,7 +385,7 @@ class InventoriesIT {
                 + ".jpg";
     }
 
-    CompletableFuture<Draft> addInventoriesDocument(Draft draft, DemandTestData testData, UUID baseFileId,
+    CompletableFuture<Draft> addInventoriesDocument(Draft draft, DemandTestDataProvider testData, UUID baseFileId,
             UUID childFileId) {
         byte[] docContent = getFromResource(VALID_INVENTORY_JPG_DOCUMENT);
         DocumentDescription description = new DocumentDescription();
@@ -394,7 +394,7 @@ class InventoriesIT {
         return addAnyDocument(docContent, description, draft);
     }
 
-    CompletableFuture<Draft> addInventoriesSubmission(Draft draft, DemandTestData testData, UUID baseFileId,
+    CompletableFuture<Draft> addInventoriesSubmission(Draft draft, DemandTestDataProvider testData, UUID baseFileId,
             UUID childFileId) {
         byte[] docContent = getContentBytes(getSubmissionData(testData, baseFileId, childFileId));
         DocumentDescription description = new DocumentDescription();
@@ -441,7 +441,7 @@ class InventoriesIT {
     }
 
 
-    String getSubmissionData(DemandTestData testData, UUID baseFileId, UUID childFileId) {
+    String getSubmissionData(DemandTestDataProvider testData, UUID baseFileId, UUID childFileId) {
         return "<?xml version=\"1.0\" encoding=\"windows-1251\"?>"
                 + "<Файл ИдФайл=\"ON_DOCNPNO_" + IFNS_CODE + "_" + IFNS_CODE + "_"
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
@@ -496,7 +496,7 @@ class InventoriesIT {
     }
 
 
-    String getLetterData(DemandTestData testData) {
+    String getLetterData(DemandTestDataProvider testData) {
         return "<?xml version=\"1.0\" encoding=\"windows-1251\"?>"
                 + "<Файл ИдФайл=\"IU_OBRNP_"
                 + IFNS_CODE
