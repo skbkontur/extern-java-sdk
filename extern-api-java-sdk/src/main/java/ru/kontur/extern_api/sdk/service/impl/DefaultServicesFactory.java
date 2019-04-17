@@ -29,10 +29,18 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
 import ru.kontur.extern_api.sdk.httpclient.api.*;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.service.*;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
 
 
 public class DefaultServicesFactory implements ServicesFactory {

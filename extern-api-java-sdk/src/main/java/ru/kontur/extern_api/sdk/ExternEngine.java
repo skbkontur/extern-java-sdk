@@ -35,6 +35,7 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.service.*;
+import ru.kontur.extern_api.sdk.service.builders.*;
 
 
 /**

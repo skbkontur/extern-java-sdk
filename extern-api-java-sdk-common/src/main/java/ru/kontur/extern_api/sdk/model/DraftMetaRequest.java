@@ -25,10 +25,13 @@
 package ru.kontur.extern_api.sdk.model;
 
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- *  Класс содержит информацию для создания черновика
+ * Класс содержит информацию для создания черновика
  */
 public class DraftMetaRequest {
+
     private SenderRequest sender;
     private Recipient recipient;
     private OrganizationRequest payer;
@@ -43,13 +46,31 @@ public class DraftMetaRequest {
         this.payer = payer;
     }
 
+    public DraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer,
+            RelatedDocumentRequest relatedDocument) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.payer = payer;
+        this.relatedDocument = relatedDocument;
+    }
+
+    public DraftMetaRequest(@NotNull DraftMetaRequest metaRequest, RelatedDocumentRequest relatedDocument) {
+        this.sender = metaRequest.getSender();
+        this.recipient = metaRequest.getRecipient();
+        this.payer = metaRequest.getPayer();
+        this.relatedDocument = relatedDocument;
+    }
+
     /**
      * @return объект {@link SenderRequest}, описывающий отправителя документа
      */
-    public SenderRequest getSender() { return sender; }
+    public SenderRequest getSender() {
+        return sender;
+    }
 
     /**
      * Устанавливает объект {@link SenderRequest}, описывающий отправителя документа
+     *
      * @param sender объект, описывающий отправителя документа
      */
     public void setSender(SenderRequest sender) {
@@ -59,10 +80,13 @@ public class DraftMetaRequest {
     /**
      * @return объект {@link FnsRecipient}, описывающий получателя документа
      */
-    public Recipient getRecipient() { return recipient; }
+    public Recipient getRecipient() {
+        return recipient;
+    }
 
     /**
      * Устанавливает объект {@link FnsRecipient}, описывающий получателя документа
+     *
      * @param recipient объект {@link FnsRecipient}, описывающий получателя документа
      */
     public void setRecipient(Recipient recipient) {
@@ -72,11 +96,16 @@ public class DraftMetaRequest {
     /**
      * @return объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
      */
-    public OrganizationRequest getPayer() { return payer; }
+    public OrganizationRequest getPayer() {
+        return payer;
+    }
 
     /**
-     * Устанавливает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
-     * @param payer объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача документа
+     * Устанавливает объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача
+     * документа
+     *
+     * @param payer объект {@link OrganizationRequest}, описывающий организацию, за которую производится сдача
+     *         документа
      */
     public void setPayer(OrganizationRequest payer) {
         this.payer = payer;
@@ -84,13 +113,19 @@ public class DraftMetaRequest {
 
     /**
      * Возвращает связный ДО
+     *
      * @return связный ДО
      */
-    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
+    public RelatedDocumentRequest getRelatedDocument() {
+        return relatedDocument;
+    }
 
     /**
      * Устанавливает связный ДО
+     *
      * @param relatedDocument связный ДО
      */
-    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
+    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) {
+        this.relatedDocument = relatedDocument;
+    }
 }

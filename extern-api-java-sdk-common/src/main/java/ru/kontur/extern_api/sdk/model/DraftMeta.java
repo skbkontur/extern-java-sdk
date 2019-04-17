@@ -34,7 +34,7 @@ public class DraftMeta {
     private Sender sender;
     private Recipient recipient;
     private Organization payer;
-    private RelatedDocument relatedDocument;
+    private RelatedDocumentRequest relatedDocument;
 
     public DraftMeta() {
     }
@@ -103,13 +103,13 @@ public class DraftMeta {
      * Возвращает связный ДО
      * @return связный ДО
      */
-    public RelatedDocument getRelatedDocument() { return relatedDocument; }
+    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
 
     /**
      * Устанавливает связный ДО
      * @param relatedDocument связный ДО
      */
-    public void setRelatedDocument(RelatedDocument relatedDocument) { this.relatedDocument = relatedDocument; }
+    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
 
     public DraftMetaRequest asRequest() {
         Sender sender = this.getSender();
@@ -121,22 +121,8 @@ public class DraftMeta {
                         sender.getIpaddress()
                 ),
                 getRecipient(),
-                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName())
+                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName()),
+                relatedDocument
         );
     }
-
-    /**
-     *  Возвращает сведения о связанном документо обороте
-     *
-     * @return связанный ДО
-     */
-    public RelatedDocument getRelatedDocument() {
-        return relatedDocument;
-    }
-
-    public void setRelatedDocument(RelatedDocument relatedDocument) {
-        this.relatedDocument = relatedDocument;
-    }
-
-    private RelatedDocument relatedDocument;
 }

@@ -1,27 +1,36 @@
 package ru.kontur.extern_api.sdk.model;
 
 public class ExtendedDraftMetaRequest extends DraftMetaRequest {
+
     private AdditionalInfoRequest additionalInfo;
 
-    public ExtendedDraftMetaRequest(){
+    public ExtendedDraftMetaRequest() {
 
     }
 
-    public ExtendedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer){
+    public ExtendedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer) {
         super(sender, recipient, payer);
         additionalInfo = new AdditionalInfoRequest();
     }
 
-    public ExtendedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer, String subject){
+    public ExtendedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer,
+            String subject) {
         super(sender, recipient, payer);
         additionalInfo = new AdditionalInfoRequest(subject);
     }
 
-    public ExtendedDraftMetaRequest(DraftMetaRequest draftMeta, String subject){
+    public ExtendedDraftMetaRequest(DraftMetaRequest draftMeta, String subject) {
         setPayer(draftMeta.getPayer());
         setRecipient(draftMeta.getRecipient());
         setSender(draftMeta.getSender());
+        setRelatedDocument(draftMeta.getRelatedDocument());
         additionalInfo = new AdditionalInfoRequest(subject);
+    }
+
+    public ExtendedDraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer,
+            RelatedDocumentRequest relatedDocument, String subject) {
+        super(sender, recipient, payer, relatedDocument);
+        this.additionalInfo = new AdditionalInfoRequest(subject);
     }
 
     public AdditionalInfoRequest getAdditionalInfo() {

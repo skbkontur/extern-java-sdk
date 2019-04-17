@@ -52,7 +52,7 @@ public interface RelatedDocflowApi {
     @POST("v1/{accountId}/drafts")
     CompletableFuture<Draft> create(
             @Path("accountId") UUID accountId,
-            @Body RelatedDraftMetaRequest clientInfo
+            @Body DraftMetaRequest clientInfo
     );
 
     /**

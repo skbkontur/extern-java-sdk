@@ -241,9 +241,19 @@ class InventoriesIT {
     @MethodSource("demandTestDataStream")
     void testGetLetterByLink(DemandTestData testData) {
         Docflow sentLetter = sendRelatedLetter(testData).join();
-        DocflowPage docflowPage = engine
-                .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
-                .getRelatedDocflows().join();
+
+        DocflowPage docflowPage = engine.getAuthorizedHttpClient()
+                .followGetLink("https://extern-api.staging2.testkontur.ru/v1/"
+                                + engine.getAccountProvider().accountId().toString()
+                                + "/docflows/"
+                                + testData.getDemandId().toString()
+                                + "/documents/"
+                                + testData.getDemandAttachmentId().toString()
+                                + "/related"
+                        , DocflowPage.class);
+        // .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
+        //  .getRelatedDocflows().join();
+
         String inventoriesHref = docflowPage.getDocflowsPageItem().stream()
                 .filter(docflowPageItem -> docflowPageItem.getId().equals(sentLetter.getId())).findFirst().get()
                 .getLinks().stream().filter(link -> link.getRel().equals("self")).findFirst().get().getHref();
