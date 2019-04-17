@@ -1,10 +1,8 @@
-package ru.kontur.extern_api.sdk.utils;
+package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.model.ClientInfo;
-import ru.kontur.extern_api.sdk.model.ClientInfo.Sender;
 import ru.kontur.extern_api.sdk.model.Sender.Certificate;
 
-class DemandRequestSender {
+public class DemandRequestSender {
 
     private String inn;
     private String kpp;
@@ -44,13 +42,4 @@ class DemandRequestSender {
 
     private Certificate certificate;
 
-    static DemandRequestSender fromClientInfo(ClientInfo clientInfo, String ogrName){
-        DemandRequestSender demandRequestSender =  new DemandRequestSender();
-        Sender sender = clientInfo.getSender();
-        demandRequestSender.setInn(sender.getInn());
-        demandRequestSender.setKpp(sender.getKpp());
-        demandRequestSender.setName(ogrName);
-        demandRequestSender.setCertificate(new Certificate(sender.getCertificate()));
-        return demandRequestSender;
-    }
 }

@@ -22,15 +22,25 @@
 
 package ru.kontur.extern_api.sdk;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.concurrent.CompletionStage;
-import org.apache.commons.io.IOUtils;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,20 +50,27 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.utils.DemandTestData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.DocflowType;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentType;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.ExtendedDraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.InventoriesPage;
+import ru.kontur.extern_api.sdk.model.Inventory;
+import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.utils.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
+import ru.kontur.extern_api.sdk.utils.Resources;
+import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Inventories service should be able to")
 class InventoriesIT {

@@ -1,11 +1,12 @@
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.utils;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
-import ru.kontur.extern_api.sdk.utils.DemandRequestDto;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.model.DemandRequestDto;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentType;
+import ru.kontur.extern_api.sdk.model.TestData;
 
 public class DemandTestData extends TestData {
 
@@ -52,7 +53,7 @@ public class DemandTestData extends TestData {
         return testSuite.GetEasyDocflowApi(serviceBaseUri, serviceAuthUri)
                 .thenCompose(
                         api -> {
-                            DemandRequestDto requestDto = new DemandRequestDto(
+                            DemandRequestDto requestDto = DemandRequestDtoProvider.getDemandRequest(
                                     testSuite.engine.getAccountProvider().accountId(),
                                     testData.getClientInfo(), ORG_NAME,
                                     new String[]{DEFAULT_KND});

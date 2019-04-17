@@ -24,32 +24,21 @@
 package ru.kontur.extern_api.sdk.utils;
 
 import static ru.kontur.extern_api.sdk.ExternEngineBuilder.createExternEngine;
-import static ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder.createFor;
 
 import com.google.gson.Gson;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import ru.kontur.extern_api.sdk.Configuration;
+import ru.kontur.extern_api.sdk.EasyDocflowApi;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.api.EasyDocflowApi;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
-import ru.kontur.extern_api.sdk.portal.AuthApi;
-import ru.kontur.extern_api.sdk.portal.model.SessionResponse;
-import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
-import ru.kontur.extern_api.sdk.provider.LoginAndPasswordProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
-import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
 public class TestSuite {

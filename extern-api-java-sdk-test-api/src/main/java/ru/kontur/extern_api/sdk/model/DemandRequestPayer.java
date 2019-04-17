@@ -1,8 +1,7 @@
-package ru.kontur.extern_api.sdk.utils;
+package ru.kontur.extern_api.sdk.model;
 
-import ru.kontur.extern_api.sdk.model.ClientInfo;
+public class DemandRequestPayer {
 
-class DemandRequestPayer {
     private String inn;
     private String name;
     private DemandRequestOrganisationInfo organization;
@@ -31,11 +30,4 @@ class DemandRequestPayer {
         this.organization = organisationInfo;
     }
 
-    static DemandRequestPayer fromClientInfo(ClientInfo clientInfo, String orgName){
-        DemandRequestPayer demandRequestPayer = new DemandRequestPayer();
-        demandRequestPayer.setInn(clientInfo.getOrganization().getInn());
-        demandRequestPayer.setOrganisationInfo(new DemandRequestOrganisationInfo(clientInfo.getOrganization().getKpp()));
-        demandRequestPayer.setName(orgName);
-        return demandRequestPayer;
-    }
 }

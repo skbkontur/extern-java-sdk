@@ -1,13 +1,16 @@
-package ru.kontur.extern_api.sdk.utils;
+package ru.kontur.extern_api.sdk.model;
+
 import java.util.UUID;
-import ru.kontur.extern_api.sdk.model.ClientInfo;
 
 public class DemandRequestDto {
 
-    public DemandRequestDto(UUID accountId, ClientInfo clientInfo, String orgName, String[] knds) {
+    public DemandRequestDto(UUID accountId,
+            DemandRequestSender sender,
+            DemandRequestPayer payer,
+            String[] knds) {
         this.accountId = accountId;
-        this.sender = DemandRequestSender.fromClientInfo(clientInfo, orgName);
-        this.payer = DemandRequestPayer.fromClientInfo(clientInfo, orgName);
+        this.sender = sender;
+        this.payer = payer;
         this.knds = knds;
     }
 

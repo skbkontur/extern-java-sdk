@@ -27,18 +27,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.ClientInfo;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
+import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.model.TogsRecipient;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
@@ -52,23 +56,6 @@ public class TestUtils {
             td.getClientInfo().getSender().setCertificate(x509b64);
         }
         return data;
-    }
-
-    public static CompletableFuture<List<DemandTestData>> getTestDemand(TestSuite testSuite, String x509b64) {
-        TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
-        return testSuite.GetEasyDocflowApi().thenApply(
-                api -> {
-                    ArrayList<CompletableFuture<DemandTestData>> list = new ArrayList<>();
-                    for (TestData td : data) {
-                        td.getClientInfo().getSender().setCertificate(x509b64);
-                        DemandRequestDto requestDto = new DemandRequestDto(
-                                testSuite.engine.getAccountProvider().accountId(), td.getClientInfo(), ORG_NAME,
-                                new String[]{DEFAULT_KND});
-                        list.add(api.getDemand(requestDto).thenApply(
-                                response -> new DemandTestData(td, UUID.fromString(response.getDocflowId()))));
-                    }
-                    return list.stream().map(CompletableFuture::join).collect(Collectors.toList());
-                });
     }
 
     public static DraftMetaRequest toDraftMetaRequest(TestData td) {
