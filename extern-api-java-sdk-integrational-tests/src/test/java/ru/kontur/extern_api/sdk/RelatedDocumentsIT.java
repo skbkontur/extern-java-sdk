@@ -32,6 +32,7 @@ import static ru.kontur.extern_api.sdk.utils.TestUtils.fromWin1251Bytes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.Contract;
@@ -157,20 +158,20 @@ class RelatedDocumentsIT {
                 .filter(document -> document.getDescription().getType().equals(DocumentType.Fns534InventoryMessage))
                 .findFirst()
                 .get();
-        try {
-            engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
-                    .getDecryptedContentAsync(sentInventory.getId(), messageDocument.getId())
-                    .whenComplete((bytes, throwable) -> {
-                        if (!(throwable instanceof ApiException)) {
-                            fail();
-                        }
-                        assertEquals(404, ((ApiException) throwable).getCode());
-                        assertEquals("urn:error:externapi:emptyContent", ((ApiException) throwable).getErrorId());
-                    })
-                    .join();
-        } catch (Throwable throwable) {
 
-        }
+        AtomicBoolean exceptionHappens = new AtomicBoolean(false);
+        engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
+                .getDecryptedContentAsync(sentInventory.getId(), messageDocument.getId())
+                .handle((result, throwable) -> {
+                    if (!(throwable instanceof ApiException)) {
+                        fail();
+                    }
+                    assertEquals(404, ((ApiException) throwable).getCode());
+                    assertEquals("urn:error:externapi:emptyContent", ((ApiException) throwable).getErrorId());
+                    exceptionHappens.set(true);
+                    return null;
+                }).join();
+        assertTrue(exceptionHappens.get());
     }
 
     @ParameterizedTest
