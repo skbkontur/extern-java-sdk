@@ -40,21 +40,29 @@ public class DraftMetaRequest {
     public DraftMetaRequest() {
     }
 
-    public DraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer) {
+    public DraftMetaRequest(
+            @NotNull SenderRequest sender,
+            @NotNull Recipient recipient,
+            @NotNull OrganizationRequest payer) {
         this.sender = sender;
         this.recipient = recipient;
         this.payer = payer;
     }
 
-    public DraftMetaRequest(SenderRequest sender, Recipient recipient, OrganizationRequest payer,
-            RelatedDocumentRequest relatedDocument) {
+    public DraftMetaRequest(
+            @NotNull SenderRequest sender,
+            @NotNull Recipient recipient,
+            @NotNull OrganizationRequest payer,
+            @NotNull RelatedDocumentRequest relatedDocument) {
         this.sender = sender;
         this.recipient = recipient;
         this.payer = payer;
         this.relatedDocument = relatedDocument;
     }
 
-    public DraftMetaRequest(@NotNull DraftMetaRequest metaRequest, RelatedDocumentRequest relatedDocument) {
+    public DraftMetaRequest(
+            @NotNull DraftMetaRequest metaRequest,
+            @NotNull RelatedDocumentRequest relatedDocument) {
         this.sender = metaRequest.getSender();
         this.recipient = metaRequest.getRecipient();
         this.payer = metaRequest.getPayer();

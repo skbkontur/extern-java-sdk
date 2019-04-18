@@ -27,14 +27,13 @@ public class DemandTestDataProvider extends TestData {
     public static CompletableFuture<DemandTestData> getTestDemand(TestData testData, @NotNull TestSuite testSuite,
             String serviceBaseUri, String serviceAuthUri) {
         return testSuite.GetEasyDocflowApi(serviceBaseUri, serviceAuthUri)
-                .thenCompose(
-                        api -> {
-                            DemandRequestDto requestDto = DemandRequestDtoProvider.getDemandRequest(
-                                    testSuite.engine.getAccountProvider().accountId(),
-                                    testData.getClientInfo(), ORG_NAME,
-                                    new String[]{DEFAULT_KND});
-                            return api.getDemand(requestDto);
-                        })
+                .thenCompose(api -> {
+                    DemandRequestDto requestDto = DemandRequestDtoProvider.getDemandRequest(
+                            testSuite.engine.getAccountProvider().accountId(),
+                            testData.getClientInfo(), ORG_NAME,
+                            new String[]{DEFAULT_KND});
+                    return api.getDemand(requestDto);
+                })
                 .thenApply(responseDto -> new DemandTestData(testData, UUID.fromString(responseDto.getDocflowId())))
                 .thenCompose(result -> waitForApi(result, testSuite));
     }

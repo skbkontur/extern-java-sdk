@@ -2,6 +2,12 @@ package ru.kontur.extern_api.sdk.model;
 
 public class AdditionalInfoRequest {
 
+    private String subject;
+
+    public AdditionalInfoRequest() {
+
+    }
+
     public String getSubject() {
         return subject;
     }
@@ -14,8 +20,4 @@ public class AdditionalInfoRequest {
         this.subject = subject;
     }
 
-    public AdditionalInfoRequest() {
-    }
-
-    private String subject;
 }
