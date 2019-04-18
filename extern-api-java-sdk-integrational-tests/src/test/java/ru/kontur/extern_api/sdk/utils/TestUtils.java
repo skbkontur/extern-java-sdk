@@ -111,7 +111,7 @@ public class TestUtils {
 
             documentDescription.setContentType("application/xml");
             documentDescription.setType(null);
-            documentDescription.setFilename(fileId + ".xml");
+            documentDescription.setFilename(newFileId + ".xml");
         }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
