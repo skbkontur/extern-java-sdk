@@ -65,11 +65,10 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 @DisplayName("RelatedDocuments service should be able to")
 class RelatedDocumentsIT {
 
-
     private static final String IFNS_CODE = "0087";
+
     private static ExternEngine engine;
     private static List<DemandTestData> tests;
-    private static CryptoUtils cryptoUtils;
     private static int sentRelatedInventories;
     private static int sentRelatedLetters;
     private static RelatedDocflowProvider relatedDocflowProvider;
@@ -80,6 +79,7 @@ class RelatedDocumentsIT {
         engine = testSuite.engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         relatedDocflowProvider = new RelatedDocflowProvider(engine, IFNS_CODE);
+        CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
 
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
         TestData[] testData = TestUtils.getTestData(certificate);
