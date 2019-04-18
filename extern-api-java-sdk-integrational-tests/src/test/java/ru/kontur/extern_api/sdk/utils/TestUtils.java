@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +49,7 @@ import ru.kontur.extern_api.sdk.service.SDKException;
 public class TestUtils {
 
     private final static String ORG_NAME = "Ромашка";
-    private final static String DEFAULT_KND = "1160001";//"1165013";
+    private static final String WINDOWS_1251 = "windows-1251";
 
     public static TestData[] getTestData(String x509b64) {
         TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
@@ -145,5 +146,15 @@ public class TestUtils {
         return loadDocument(getUpdatedDocumentPath(path));
     }
 
+    public static String fromWin1251Bytes(byte[] content) {
+        try {
+            return new String(content, WINDOWS_1251);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Win-1251 no supported");
+        }
+    }
 
+    public static String toBase64(byte[] docContent) {
+        return new String(Base64.getEncoder().encode(docContent));
+    }
 }
