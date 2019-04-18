@@ -159,7 +159,6 @@ class RelatedDocumentsIT {
                 .findFirst()
                 .get();
 
-        AtomicBoolean exceptionHappens = new AtomicBoolean(false);
         engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                 .getDecryptedContentAsync(sentInventory.getId(), messageDocument.getId())
                 .handle((result, throwable) -> {
@@ -168,10 +167,8 @@ class RelatedDocumentsIT {
                     }
                     assertEquals(404, ((ApiException) throwable).getCode());
                     assertEquals("urn:error:externapi:emptyContent", ((ApiException) throwable).getErrorId());
-                    exceptionHappens.set(true);
                     return null;
                 }).join();
-        assertTrue(exceptionHappens.get());
     }
 
     @ParameterizedTest
