@@ -1,6 +1,8 @@
 package ru.kontur.extern_api.sdk.model;
 
 
+import java.util.Optional;
+
 /**
  * <p>
  * Класс содержит данные, описывающие документ, после отправки.
@@ -14,6 +16,16 @@ public class DocflowDocumentDescription {
     private String filename = null;
     private String contentType = null;
     private Boolean compressed = null;
+
+    public long getRelatedDocflowsCount() {
+        return relatedDocflowsCount;
+    }
+
+    public void setRelatedDocflowsCount(long relatedDocflowsCount) {
+        this.relatedDocflowsCount = relatedDocflowsCount;
+    }
+
+    private long relatedDocflowsCount = -1;
 
     public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;

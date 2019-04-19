@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Application;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534CuLetter;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Demand;
+import ru.kontur.extern_api.sdk.model.descriptions.Fns534Inventory;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Ion;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Letter;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Report;
@@ -56,6 +57,12 @@ public enum DocflowType implements Urn<DocflowType> {
      */
     @SerializedName("urn:docflow:fns534-submission")
     FNS534_SUBMISSION(Fns534Submission.class),
+
+    /**
+     * Представление отдельных документов в налоговые органы (Опись).
+     */
+    @SerializedName("urn:docflow:fns534-inventory")
+    FNS534_INVENTORY(Fns534Inventory.class),
 
     /**
      * Требования (ФНС, 534).
@@ -164,6 +171,7 @@ public enum DocflowType implements Urn<DocflowType> {
      */
     @SerializedName("urn:docflow:pfr-ios")
     PFR_IOS(PfrIos.class),
+
 
     @SerializedName("urn:docflow:unknown")
     UNKNOWN(UnknownDescription.class);

@@ -24,8 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * <p>
  * Класс предназначен для передачи контента документа и его подписи
@@ -36,7 +34,7 @@ public class DocumentContents {
 
     private String base64Content = null;
     private String signature = null;
-    private DocumentDescription documentDescription = null;
+    private DocumentDescription description = null;
 
     /**
      * Возвращает контент незашифрованного документа в кодировке BASE64
@@ -74,15 +72,15 @@ public class DocumentContents {
      * Возвращает дескриптор документа {@link DocumentDescription}
      * @return дескриптор документа
      */
-    public DocumentDescription getDocumentDescription() {
-        return documentDescription;
+    public DocumentDescription getDescription() {
+        return description;
     }
 
     /**
      * Устанавливает дескриптор документа {@link DocumentDescription}
-     * @param documentDescription дескриптор документа
+     * @param description дескриптор документа
      */
-    public void setDocumentDescription(DocumentDescription documentDescription) {
-        this.documentDescription = documentDescription;
+    public void setDescription(DocumentDescription description) {
+        this.description = description;
     }
 }

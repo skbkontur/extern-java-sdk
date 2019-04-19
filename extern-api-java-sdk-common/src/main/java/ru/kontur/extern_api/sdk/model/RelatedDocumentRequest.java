@@ -23,32 +23,60 @@
 package ru.kontur.extern_api.sdk.model;
 
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public class RelatedDocumentRequest {
+
     private UUID relatedDocflowId;
     private UUID relatedDocumentId;
 
+    public RelatedDocumentRequest() {
+
+    }
+
+    public RelatedDocumentRequest(UUID relatedDocflowId, UUID relatedDocumentId) {
+        this.relatedDocflowId = relatedDocflowId;
+        this.relatedDocumentId = relatedDocumentId;
+    }
+
+    public RelatedDocumentRequest(@NotNull Docflow relatedDocflow, @NotNull Document relatedDocument) {
+        this.relatedDocflowId = relatedDocflow.getId();
+        this.relatedDocumentId = relatedDocument.getId();
+    }
+
     /**
      * Возвращает идентификатор связанного ДО
+     *
      * @return идентификатор связанного ДО
      */
-    public UUID getRelatedDocflowId() { return relatedDocflowId; }
+    public UUID getRelatedDocflowId() {
+        return relatedDocflowId;
+    }
 
     /**
      * Устанавливает идентификатор связанного ДО
+     *
      * @param relatedDocflowId идентификатор связанного ДО
      */
-    public void setRelatedDocflowId(UUID relatedDocflowId) { this.relatedDocflowId = relatedDocflowId; }
+    public void setRelatedDocflowId(UUID relatedDocflowId) {
+        this.relatedDocflowId = relatedDocflowId;
+    }
 
     /**
      * Возвращает идентификатор документа в ДО
+     *
      * @return идентификатор документа в ДО
      */
-    public UUID getRelatedDocumentId() { return relatedDocumentId; }
+    public UUID getRelatedDocumentId() {
+        return relatedDocumentId;
+    }
 
     /**
      * Устанавливает идентификатор документа в ДО
+     *
      * @param relatedDocumentId идентификатор документа в ДО
      */
-    public void setRelatedDocumentId(UUID relatedDocumentId) { this.relatedDocumentId = relatedDocumentId; }
+    public void setRelatedDocumentId(UUID relatedDocumentId) {
+        this.relatedDocumentId = relatedDocumentId;
+    }
 }

@@ -40,7 +40,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -263,7 +262,7 @@ class DraftServiceIT {
     void testUpdateDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DocumentContents newContents = new DocumentContents();
-        newContents.setDocumentDescription(new DocumentDescription().filename("my favorite file"));
+        newContents.setDescription(new DocumentDescription().filename("my favorite file"));
 
         QueryContext updateDocument = engine.getDraftService()
                 .updateDocumentAsync(
