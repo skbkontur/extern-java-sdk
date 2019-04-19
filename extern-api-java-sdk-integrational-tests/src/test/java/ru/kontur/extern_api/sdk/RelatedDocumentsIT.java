@@ -32,7 +32,6 @@ import static ru.kontur.extern_api.sdk.utils.TestUtils.fromWin1251Bytes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.Contract;
@@ -242,36 +241,37 @@ class RelatedDocumentsIT {
         assertEquals(sentInventory.getType(), checkInventory.getType());
     }
 
-    @ParameterizedTest
-    @DisplayName("letter ought be received from api by link in related document")
-    @MethodSource("demandTestDataStream")
-    void testGetLetterByLink(DemandTestData testData) {
-        Docflow sentLetter = sendRelatedLetter(testData).join();
-
-        DocflowPage docflowPage = engine.getAuthorizedHttpClient()
-                .followGetLink("https://extern-api.staging2.testkontur.ru/v1/"
-                                + engine.getAccountProvider().accountId().toString()
-                                + "/docflows/"
-                                + testData.getDemandId().toString()
-                                + "/documents/"
-                                + testData.getDemandAttachmentId().toString()
-                                + "/related"
-                        , DocflowPage.class);
-        // activate after ka-2677 released
-        // .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
-        // .getRelatedDocflows().join();
-
-        String inventoriesHref = docflowPage.getDocflowsPageItem().stream()
-                .filter(docflowPageItem -> docflowPageItem.getId().equals(sentLetter.getId())).findFirst().get()
-                .getLinks().stream().filter(link -> link.getRel().equals("self")).findFirst().get().getHref();
-
-        Docflow checkLetter = engine.getAuthorizedHttpClient().followGetLink(inventoriesHref, Docflow.class);
-
-        assertNotNull(checkLetter);
-        assertEquals(sentLetter.getId(), checkLetter.getId());
-        assertEquals(sentLetter.getType(), checkLetter.getType());
-    }
-
+//    activate after ka-2677 released
+//    @ParameterizedTest
+//    @DisplayName("letter ought be received from api by link in related document")
+//    @MethodSource("demandTestDataStream")
+//    void testGetLetterByLink(DemandTestData testData) {
+//        Docflow sentLetter = sendRelatedLetter(testData).join();
+//
+//////      temporary code to check test on staging with ka-2677
+////        DocflowPage docflowPage = engine.getAuthorizedHttpClient()
+////                .followGetLink("https://extern-api.staging2.testkontur.ru/v1/"
+////                                + engine.getAccountProvider().accountId().toString()
+////                                + "/docflows/"
+////                                + testData.getDemandId().toString()
+////                                + "/documents/"
+////                                + testData.getDemandAttachmentId().toString()
+////                                + "/related"
+////                        , DocflowPage.class);
+//
+//        DocflowPage docflowPage = engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
+//         .getRelatedDocflows().join();
+//
+//        String inventoriesHref = docflowPage.getDocflowsPageItem().stream()
+//                .filter(docflowPageItem -> docflowPageItem.getId().equals(sentLetter.getId())).findFirst().get()
+//                .getLinks().stream().filter(link -> link.getRel().equals("self")).findFirst().get().getHref();
+//
+//        Docflow checkLetter = engine.getAuthorizedHttpClient().followGetLink(inventoriesHref, Docflow.class);
+//
+//        assertNotNull(checkLetter);
+//        assertEquals(sentLetter.getId(), checkLetter.getId());
+//        assertEquals(sentLetter.getType(), checkLetter.getType());
+//    }
 
     @ParameterizedTest
     @DisplayName("letter and inventories must be on related page")
