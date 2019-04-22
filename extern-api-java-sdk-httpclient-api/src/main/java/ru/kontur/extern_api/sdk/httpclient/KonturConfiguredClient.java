@@ -25,8 +25,8 @@ package ru.kontur.extern_api.sdk.httpclient;
 
 import com.google.gson.Gson;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -37,13 +37,29 @@ import retrofit2.Retrofit;
 
 public class KonturConfiguredClient {
 
-    private static final String SID_PREFIX = "auth.sid ";
+    private static final String PRIMARY_AUTH_SCHEME = "auth.sid ";
 
-    private final TokenInterceptor timeoutToken = new TokenInterceptor(TokenLocation.HEADER,
-            "X-Kontur-Request-Timeout");
-    private final TokenInterceptor apiKeyToken = new TokenInterceptor(TokenLocation.HEADER, "X-Kontur-Apikey");
-    private final TokenInterceptor authSidToken = new TokenInterceptor(TokenLocation.HEADER, "Authorization");
-    private final TokenInterceptor userAgentToken = new TokenInterceptor(TokenLocation.HEADER, "User-Agent");
+    // default interceptors
+
+    private final TokenInterceptor timeoutToken = new TokenInterceptor(
+            TokenLocation.HEADER,
+            "X-Kontur-Request-Timeout"
+    );
+    private final TokenInterceptor apiKeyToken = new TokenInterceptor(
+            TokenLocation.HEADER,
+            "X-Kontur-Apikey"
+    );
+
+    private final TokenInterceptor authenticationToken = new TokenInterceptor(
+            TokenLocation.HEADER,
+            "Authorization"
+    );
+
+    private final TokenInterceptor userAgentToken = new TokenInterceptor(
+            TokenLocation.HEADER,
+            "User-Agent"
+    );
+
 
     private final OkHttpClient.Builder okBuilder;
     private final Level loggingLevel;
@@ -69,7 +85,7 @@ public class KonturConfiguredClient {
                 .addInterceptor(timeoutToken)
                 .addInterceptor(new HttpLoggingInterceptor(logger).setLevel(loggingVerbosity))
                 .addInterceptor(apiKeyToken)
-                .addInterceptor(authSidToken)
+                .addInterceptor(authenticationToken)
                 .followRedirects(false)
                 .followSslRedirects(false);
     }
@@ -79,10 +95,6 @@ public class KonturConfiguredClient {
             @NotNull String baseUrl
     ) {
         this(loggingVerbosity, baseUrl, Logger.DEFAULT);
-    }
-
-    public KonturConfiguredClient(@NotNull Level logLevel) {
-        this(logLevel, "");
     }
 
     public <S> S createApi(Class<S> serviceClass) {
@@ -103,30 +115,28 @@ public class KonturConfiguredClient {
     }
 
     /**
-     * @param apiKey api key or null to disable apiKey authorization
+     * @param apiKeySupplier api key supplier or null to disable apiKey authorization
      */
-    public KonturConfiguredClient setApiKey(@Nullable String apiKey) {
-        apiKeyToken.setToken(apiKey);
+    public KonturConfiguredClient setApiKeySupplier(@Nullable Supplier<String> apiKeySupplier) {
+        apiKeyToken.supplyTokenBy(apiKeySupplier);
         return this;
     }
 
     /**
-     * @param authSid auth sid or null to disable auth sid authorization
+     * @param authSidSupplier auth sid supplier or null to disable auth sid authorization
      */
-    public KonturConfiguredClient setAuthSid(@Nullable String authSid) {
-        authSidToken.setToken(Optional
-                .ofNullable(authSid)
-                .map(sid -> sid.startsWith(SID_PREFIX) ? sid : SID_PREFIX + sid)
-                .orElse(null)
-        );
+    public KonturConfiguredClient setAuthSidSupplier(@Nullable Supplier<String> authSidSupplier) {
+        if (authSidSupplier != null) {
+            authenticationToken.supplyTokenBy(() -> PRIMARY_AUTH_SCHEME + authSidSupplier.get());
+        }
         return this;
     }
 
     /**
-     * @param userAgent User agent string or null to disable user agent supply
+     * @param userAgentSupplier User agent supplier string or null to disable user agent tracking
      */
-    public KonturConfiguredClient setUserAgent(@Nullable String userAgent) {
-        userAgentToken.setToken(userAgent);
+    public KonturConfiguredClient setUserAgentSupplier(@Nullable Supplier<String> userAgentSupplier) {
+        userAgentToken.supplyTokenBy(userAgentSupplier);
         return this;
     }
 
@@ -149,7 +159,7 @@ public class KonturConfiguredClient {
         readTimeout = timeout;
         readTimeoutUnit = unit;
         okBuilder.readTimeout(timeout, unit);
-        timeoutToken.setToken(String.valueOf(unit.toMicros(timeout) * 10));
+        timeoutToken.supplyTokenBy(() -> String.valueOf(unit.toMicros(timeout) * 10));
         return this;
     }
 
@@ -166,9 +176,9 @@ public class KonturConfiguredClient {
 
     public KonturConfiguredClient copy() {
         return new KonturConfiguredClient(loggingLevel, getBaseUrl())
-                .setApiKey(apiKeyToken.getToken())
-                .setAuthSid(authSidToken.getToken())
-                .setUserAgent(userAgentToken.getToken())
+                .setApiKeySupplier(apiKeyToken.getTokenSupplier())
+                .setAuthSidSupplier(authenticationToken.getTokenSupplier())
+                .setUserAgentSupplier(userAgentToken.getTokenSupplier())
                 .setConnectTimeout(connectTimeout, connectTimeoutUnit)
                 .setReadTimeout(readTimeout, readTimeoutUnit);
     }
