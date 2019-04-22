@@ -44,6 +44,7 @@ import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.DocflowFilter;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.RecognizedMeta;
 import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SenderIp;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
@@ -137,6 +138,15 @@ public class DocflowServiceImpl implements DocflowService {
             String docflowId,
             String documentId) {
         return lookupDescriptionAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent
+    ) {
+        return this.api.recognize(acc.accountId(), docflowId, documentId, new ByteContent (documentContent)).thenApply(contextAdaptor(QueryContext.RECOGNITION_META));
     }
 
     @Override

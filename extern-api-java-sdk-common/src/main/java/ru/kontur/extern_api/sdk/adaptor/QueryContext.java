@@ -209,6 +209,7 @@ public class QueryContext<R> implements Serializable {
      * Объект "Дескриптор документа" {@link DocumentDescription}
      */
     public static final String DOCUMENT_DESCRIPTION = "documentDescription";
+    public static final String RECOGNITION_META = "recognizedMeta";
     /**
      * Идентификатор подписи
      */

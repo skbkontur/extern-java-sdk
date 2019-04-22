@@ -54,7 +54,7 @@ import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.SortOrder;
-
+import ru.kontur.extern_api.sdk.model.RecognizedMeta;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -214,6 +214,14 @@ public interface DocflowsApi {
      */
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/print")
     CompletableFuture<ApiResponse<byte[]>> print(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Body ByteContent request
+    );
+
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/recognize")
+    CompletableFuture<ApiResponse<RecognizedMeta>> recognize(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
