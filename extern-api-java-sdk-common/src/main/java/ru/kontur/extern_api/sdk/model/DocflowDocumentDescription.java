@@ -18,6 +18,8 @@ public class DocflowDocumentDescription {
     private Boolean compressed = null;
     private Boolean supportRecognition = null;
     private DocflowDocumentRequisitesBase requisites = null;
+    private Long relatedDocflowsCount = null;
+
     /**
      * Возвращает реквизиты документа
      * @return
@@ -49,15 +51,13 @@ public class DocflowDocumentDescription {
         this.supportRecognition = supportRecognition;
     }
 
-    public long getRelatedDocflowsCount() {
+    public Long getRelatedDocflowsCount() {
         return relatedDocflowsCount;
     }
 
-    public void setRelatedDocflowsCount(long relatedDocflowsCount) {
+    public void setRelatedDocflowsCount(Long relatedDocflowsCount) {
         this.relatedDocflowsCount = relatedDocflowsCount;
     }
-
-    private long relatedDocflowsCount = -1;
 
     public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;

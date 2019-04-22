@@ -11,57 +11,52 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.Optional;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.model.DemandAttachmentRequisites;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentRequisites;
 import ru.kontur.extern_api.sdk.model.DocflowType;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentType;
 import ru.kontur.extern_api.sdk.model.Inventory;
 
-
-public class GsonDocflowDeserializer implements JsonDeserializer{
+public class GsonDocflowDocumentDescriptionDeserializer implements JsonDeserializer {
 
     @Override
-    public Docflow deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public DocflowDocumentDescription deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject obj = json.getAsJsonObject();
-        DocflowType dt = deserialize(obj, "type", DocflowType.class, context);
+        DocumentType documentType = deserialize(obj, "type", DocumentType.class, context);
 
-        Docflow docflow = new Docflow();
-
-        if(dt == DocflowType.FNS534_INVENTORY){
-            docflow = new Inventory();
-        }
-
-        docflow.setType(deserialize(obj, "type", DocflowType.class, context));
-
-        if (docflow.getType() == null) {
-            docflow.setType(DocflowType.UNKNOWN);
-        }
-
-        Optional.ofNullable(docflow.getType())
-                .map(DocflowType::getDescriptionType)
-                .map(type -> deserialize(obj, "description", type, context))
-                .ifPresent(docflow::setDescription);
+        DocflowDocumentDescription result = new DocflowDocumentDescription();
 
         FieldNamingPolicy namingPolicy = GsonProvider.getFieldNamingPolicy();
 
-        for (Field field : Docflow.class.getDeclaredFields()) {
+        for (Field field : DocflowDocumentDescription.class.getDeclaredFields()) {
             String fieldName = namingPolicy.translateName(field);
-            if (Objects.equals(fieldName, "type") || Objects.equals(fieldName, "description")) {
+            if (Objects.equals(fieldName, "requisites")) {
                 continue;
             }
 
             field.setAccessible(true);
             try {
                 Object deserialized = deserialize(obj, fieldName, field.getGenericType(), context);
-                field.set(docflow, deserialized);
+                field.set(result, deserialized);
             } catch (IllegalAccessException ignored) {
-                // field.setAccessible(true) should work
+
             } finally {
                 field.setAccessible(false);
             }
         }
 
-        return docflow;
+        if(documentType == DocumentType.Fns534DemandAttachment){
+            result.setRequisites(deserialize(obj, "requisites", DemandAttachmentRequisites.class, context));
+        }else {
+            result.setRequisites(deserialize(obj, "requisites", DocflowDocumentRequisites.class, context));
+        }
+
+        return result;
     }
 
     private static <T> T deserialize(
@@ -81,4 +76,3 @@ public class GsonDocflowDeserializer implements JsonDeserializer{
     }
 
 }
-

@@ -206,6 +206,7 @@ class DocflowServiceIT {
             assertEquals(expected.getType(), actual.getType());
             assertEquals(expected.getFilename(), actual.getFilename());
             assertEquals(expected.getContentType(), actual.getContentType());
+            assertEquals(expected.getRequisites(), actual.getRequisites());
         }
     }
 

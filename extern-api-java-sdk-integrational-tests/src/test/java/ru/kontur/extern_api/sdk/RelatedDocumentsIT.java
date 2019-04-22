@@ -318,7 +318,7 @@ class RelatedDocumentsIT {
                 .join();
 
         assertEquals(sentRelatedInventories + sentRelatedLetters,
-                demandAttachment.getDescription().getRelatedDocflowsCount());
+                demandAttachment.getDescription().getRelatedDocflowsCount().longValue());
     }
 
     private CompletableFuture<Docflow> sendRelatedLetter(DemandTestData testData) {
