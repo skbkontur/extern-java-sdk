@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.Inventory;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonByteArrayAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
@@ -30,6 +31,13 @@ public enum GsonProvider implements SerializationProvider {
         @Override public Gson getGson() {
             return GsonProvider.getPortalCompatibleGson();
         }
+    },
+
+    /**
+     * Identity compatible means that {@link FieldNamingPolicy#IDENTITY} will be used.
+     */
+    IDENTITY() {
+        @Override public Gson getGson() { return GsonProvider.getIdentityCompatibleGson(); }
     };
 
     @NotNull
@@ -47,7 +55,8 @@ public enum GsonProvider implements SerializationProvider {
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
                 .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
-                .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer());
+                .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer())
+                .registerTypeAdapter(Inventory.class, new GsonDocflowDeserializer());
     }
 
     @NotNull
@@ -55,9 +64,17 @@ public enum GsonProvider implements SerializationProvider {
         return FieldNamingPolicy.LOWER_CASE_WITH_DASHES;
     }
 
+    @NotNull
     public static Gson getPortalCompatibleGson() {
         return getPreConfiguredGsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .create();
+    }
+
+    @NotNull
+    public static Gson getIdentityCompatibleGson() {
+        return getPreConfiguredGsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
                 .create();
     }
 

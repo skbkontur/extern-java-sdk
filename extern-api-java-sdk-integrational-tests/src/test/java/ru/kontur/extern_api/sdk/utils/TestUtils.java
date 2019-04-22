@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,10 +35,21 @@ import java.util.UUID;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.ClientInfo;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.SenderRequest;
+import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.model.TogsRecipient;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
+
+    private final static String ORG_NAME = "Ромашка";
+    private static final String WINDOWS_1251 = "windows-1251";
 
     public static TestData[] getTestData(String x509b64) {
         TestData[] data = Resources.loadFromJson("/client-infos.json", TestData[].class);
@@ -53,7 +65,7 @@ public class TestUtils {
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), "Ромашка"));
+        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), ORG_NAME));
 
         ClientInfo.Recipient recipient = clientInfo.getRecipient();
 
@@ -99,7 +111,7 @@ public class TestUtils {
 
             documentDescription.setContentType("application/xml");
             documentDescription.setType(null);
-            documentDescription.setFilename(fileId + ".xml");
+            documentDescription.setFilename(newFileId + ".xml");
         }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -107,7 +119,7 @@ public class TestUtils {
 
         DocumentContents documentContents = new DocumentContents();
         documentContents.setBase64Content(Base64.getEncoder().encodeToString(os.toByteArray()));
-        documentContents.setDocumentDescription(documentDescription);
+        documentContents.setDescription(documentDescription);
 
         return documentContents;
 
@@ -134,5 +146,15 @@ public class TestUtils {
         return loadDocument(getUpdatedDocumentPath(path));
     }
 
+    public static String fromWin1251Bytes(byte[] content) {
+        try {
+            return new String(content, WINDOWS_1251);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Win-1251 no supported");
+        }
+    }
 
+    public static String toBase64(byte[] docContent) {
+        return new String(Base64.getEncoder().encode(docContent));
+    }
 }
