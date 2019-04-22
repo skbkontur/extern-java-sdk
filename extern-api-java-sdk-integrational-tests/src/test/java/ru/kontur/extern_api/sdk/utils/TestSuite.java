@@ -30,7 +30,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.EasyDocflowApi;
 import ru.kontur.extern_api.sdk.EngineBuilder.ApiKeyOrAuth;
@@ -38,6 +40,7 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
+import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 
@@ -99,15 +102,22 @@ public class TestSuite {
     }
 
     public CompletableFuture<EasyDocflowApi> GetEasyDocflowApi(String baseUri, String authUri) {
-        return AuthenticationProviderBuilder.createFor(authUri, Level.BODY)
+        AuthenticationProvider authenticationProvider = AuthenticationProviderBuilder
+                .createFor(authUri, Level.BODY)
                 .withApiKey(config.getApiKey())
-                .passwordAuthentication(config.getLogin(), config.getPass()).authenticate()
-                .thenApply(sessionResponse -> new KonturConfiguredClient(Level.BODY, baseUri)
-                        .setApiKey(config.getApiKey())
-                        .setAuthSid(sessionResponse.getSid())
-                        .setConnectTimeout(600, TimeUnit.SECONDS)
-                        .setReadTimeout(600, TimeUnit.SECONDS)
-                        .createApi(EasyDocflowApi.class));
+                .passwordAuthentication(config.getLogin(), config.getPass());
+
+        return authenticationProvider.authenticateAsync().thenApply(getEasyDocflowApi(baseUri));
+    }
+
+    @NotNull
+    private Function<String, EasyDocflowApi> getEasyDocflowApi(String baseUri) {
+        return sessionId -> new KonturConfiguredClient(Level.BODY, baseUri)
+                .setApiKeySupplier(config::getApiKey)
+                .setAuthSidSupplier(() -> sessionId)
+                .setConnectTimeout(600, TimeUnit.SECONDS)
+                .setReadTimeout(600, TimeUnit.SECONDS)
+                .createApi(EasyDocflowApi.class);
     }
 
     public static TestSuite Load() {

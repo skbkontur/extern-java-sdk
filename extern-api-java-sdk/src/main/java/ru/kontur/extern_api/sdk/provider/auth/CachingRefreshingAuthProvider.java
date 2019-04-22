@@ -81,6 +81,11 @@ public abstract class CachingRefreshingAuthProvider implements AuthenticationPro
     protected abstract CompletableFuture<SessionResponse> authenticate();
 
     @Override
+    public CompletableFuture<String> authenticateAsync() {
+        return authenticate().thenApply(SessionResponse::getSid);
+    }
+
+    @Override
     public final QueryContext<String> sessionId() {
         return QueryContextUtils.join(
                 getOrRefresh()

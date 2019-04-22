@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -32,6 +33,11 @@ public class AuthenticationProviderAdaptor implements AuthenticationProvider {
     @Override
     public QueryContext<String> sessionId() {
         return new QueryContext<String>().setResult("1", QueryContext.SESSION_ID);
+    }
+
+    @Override
+    public CompletableFuture<String> authenticateAsync() {
+        return CompletableFuture.completedFuture("1");
     }
 
     @Override

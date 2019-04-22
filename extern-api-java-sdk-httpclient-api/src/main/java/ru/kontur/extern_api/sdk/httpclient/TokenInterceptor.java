@@ -24,6 +24,7 @@
 package ru.kontur.extern_api.sdk.httpclient;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -35,7 +36,7 @@ class TokenInterceptor implements Interceptor {
     private final TokenLocation location;
     private final String paramName;
 
-    private String token;
+    private Supplier<String> tokenSupplier;
 
     public TokenInterceptor(TokenLocation location, String paramName) {
         this.location = location;
@@ -50,28 +51,30 @@ class TokenInterceptor implements Interceptor {
         return paramName;
     }
 
-    public String getToken() {
-        return token;
+    public Supplier<String> getTokenSupplier() {
+        return tokenSupplier;
     }
 
     /**
-     * @param token token or null to disable authorization
+     * @param tokenSupplier token supplier function or null to disable authorization
      */
-    public void setToken(@Nullable String token) {
-        this.token = token;
+    public void supplyTokenBy(@Nullable Supplier<String> tokenSupplier) {
+        this.tokenSupplier = tokenSupplier;
     }
 
     public boolean isDisabled() {
-        return token == null;
+        return tokenSupplier == null;
     }
 
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
         Request request = chain.request();
 
-        if (token == null) {
+        if (tokenSupplier == null) {
             return chain.proceed(request);
         }
+
+        String token = tokenSupplier.get();
 
         switch (location) {
 

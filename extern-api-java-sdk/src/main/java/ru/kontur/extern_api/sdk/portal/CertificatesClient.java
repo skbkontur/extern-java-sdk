@@ -26,7 +26,7 @@ public class CertificatesClient {
         KonturConfiguredClient client = new KonturConfiguredClient(
                 logLevel,
                 serviceBaseUrl.getUri()
-        ).setApiKey(apiKey.getApiKey());
+        ).setApiKeySupplier(apiKey::getApiKey);
 
         api = client.createApi(CertificatesApi.class);
 

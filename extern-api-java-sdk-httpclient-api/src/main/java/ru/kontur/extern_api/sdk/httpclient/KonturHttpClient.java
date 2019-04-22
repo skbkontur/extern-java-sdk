@@ -88,13 +88,13 @@ public class KonturHttpClient implements HttpClient {
 
     @Override
     public HttpClient acceptAccessToken(String sessionId) {
-        client.setAuthSid(sessionId);
+        client.setAuthSidSupplier(() -> sessionId);
         return this;
     }
 
     @Override
     public HttpClient acceptApiKey(String apiKey) {
-        client.setApiKey(apiKey);
+        client.setApiKeySupplier(() -> apiKey);
         return this;
     }
 
@@ -137,7 +137,7 @@ public class KonturHttpClient implements HttpClient {
             headerParams = Collections.emptyMap();
         }
 
-        client.setUserAgent(Optional
+        client.setUserAgentSupplier(() -> Optional
                 .ofNullable(userAgentProvider)
                 .map(UserAgentProvider::getUserAgent)
                 .orElse(null)
