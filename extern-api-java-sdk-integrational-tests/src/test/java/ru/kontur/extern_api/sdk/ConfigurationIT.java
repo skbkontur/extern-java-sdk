@@ -29,9 +29,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.service.AccountService;
 
 @DisplayName("Configuration tokens should")
 class ConfigurationIT {
@@ -56,15 +56,22 @@ class ConfigurationIT {
         ExternEngine engine = newEngine();
 
         AccountService accountService = engine.getAccountService();
-        accountService.acquireAccountsAsync().join().getOrThrow();
-
-        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
-        accountService.acquireAccountsAsync().join().getOrThrow();
-
-        ApiException apiException = Assertions.assertThrows(ApiException.class,
-                () -> engine.getAccountService().acquireAccountsAsync().get().getOrThrow()
+        Assertions.assertDoesNotThrow(
+                () -> accountService.getAccountsAsync(0, 100).join().getOrThrow()
         );
 
+        engine.setAuthenticationProvider(new AuthenticationProviderAdaptor());
+
+        ApiException apiException = Assertions.assertThrows(
+                ApiException.class,
+                () -> accountService.getAccountsAsync(0, 100).get().getOrThrow()
+        );
+        Assertions.assertEquals(401, apiException.getCode());
+
+        apiException = Assertions.assertThrows(
+                ApiException.class,
+                () -> engine.getAccountService().getAccountsAsync(0, 100).get().getOrThrow()
+        );
         Assertions.assertEquals(401, apiException.getCode());
     }
 }

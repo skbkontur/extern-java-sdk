@@ -65,7 +65,8 @@ public final class AuthenticationProviderBuilder {
 
 
     public AuthenticationProviderBuilder withApiKey(@NotNull String apiKey) {
-        configuredClient.setApiKeySupplier(() -> this.apiKey = apiKey);
+        this.apiKey = apiKey;
+        configuredClient.setApiKeySupplier(() -> this.apiKey);
         return this;
     }
 

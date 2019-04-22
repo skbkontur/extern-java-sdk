@@ -26,7 +26,6 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 /**
  * @author Aleksey Sukhorukov
@@ -43,14 +42,6 @@ public interface HttpClient {
     HttpClient acceptAccessToken(String sessionId);
 
     HttpClient acceptApiKey(String apiKey);
-
-    void setConnectWaiting(int millisecond);
-
-    void setReadTimeout(int millisecond);
-
-    HttpClient setUserAgentProvider(UserAgentProvider userAgentProvider);
-
-    UserAgentProvider getUserAgentProvider();
 
     <T> ApiResponse<T> submitHttpRequest(
             String httpRequestUri,
