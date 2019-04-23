@@ -33,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
 import ru.kontur.extern_api.sdk.model.Account;
@@ -574,6 +575,7 @@ public class QueryContext<R> implements Serializable {
      *
      * @return результат операции
      */
+    @Nullable
     public R get() {
         if (result == null || result == NOTHING) {
             return null;
