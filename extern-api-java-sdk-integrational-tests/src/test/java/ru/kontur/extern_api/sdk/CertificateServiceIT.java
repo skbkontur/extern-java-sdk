@@ -29,19 +29,15 @@
 package ru.kontur.extern_api.sdk;
 
 import java.util.List;
-import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
-import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-class CertificateServiceIT{
+class CertificateServiceIT {
 
     private static CertificateService certificateService;
 
@@ -54,16 +50,16 @@ class CertificateServiceIT{
     void getCertificatesTest() {
 
         CertificateList certificateList = certificateService
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .join()
                 .ensureSuccess()
                 .get();
 
-        Assert.assertNotNull(certificateList);
+        Assertions.assertNotNull(certificateList);
 
         certificateList.getCertificates().forEach(certificate -> {
-            Assert.assertNotNull(certificate.getInn());
-            Assert.assertNotNull(certificate.getKpp());
+            Assertions.assertNotNull(certificate.getInn());
+            Assertions.assertNotNull(certificate.getKpp());
         });
 
     }

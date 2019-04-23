@@ -22,8 +22,8 @@
 
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.concurrent.CompletionException;
 import org.junit.jupiter.api.Assertions;
