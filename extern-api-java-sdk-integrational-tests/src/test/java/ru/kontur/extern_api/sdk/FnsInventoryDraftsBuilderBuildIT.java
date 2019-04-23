@@ -33,7 +33,6 @@ import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -53,7 +52,6 @@ class FnsInventoryDraftsBuilderBuildIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
 
         draftsBuilderService = engine.getDraftsBuilderService().fnsInventory();
@@ -61,27 +59,23 @@ class FnsInventoryDraftsBuilderBuildIT {
 
     @BeforeEach
     void setUp() {
-        draftsBuilder =
-                new DraftsBuilderCreator()
-                        .createFnsInventoryDraftsBuilder(
-                                engine,
-                                cryptoUtils
-                        );
+        draftsBuilder = new DraftsBuilderCreator().createFnsInventoryDraftsBuilder(
+                engine,
+                cryptoUtils
+        );
 
-        FnsInventoryDraftsBuilderDocument draftsBuilderDocument =
-                new DraftsBuilderDocumentCreator()
-                        .createFnsInventoryDraftsBuilderDocument(
-                                engine,
-                                draftsBuilder
-                        );
-
-        new DraftsBuilderDocumentFileCreator()
-                .createFnsInventoryDraftsBuilderDocumentFile(
+        FnsInventoryDraftsBuilderDocument draftsBuilderDocument = new DraftsBuilderDocumentCreator()
+                .createFnsInventoryDraftsBuilderDocument(
                         engine,
-                        cryptoUtils,
-                        draftsBuilder,
-                        draftsBuilderDocument
+                        draftsBuilder
                 );
+
+        new DraftsBuilderDocumentFileCreator().createFnsInventoryDraftsBuilderDocumentFile(
+                engine,
+                cryptoUtils,
+                draftsBuilder,
+                draftsBuilderDocument
+        );
     }
 
     @Test

@@ -76,21 +76,7 @@ public class CryptoUtils {
     }
 
     private static boolean isAdmin() {
-        Preferences prefs = Preferences.systemRoot();
-        PrintStream systemErr = System.err;
-        synchronized (System.err) {
-            // better synchroize to avoid problems with other threads that access System.err
-            System.setErr(null);
-            try {
-                prefs.put("foo", "bar"); // SecurityException on Windows
-                prefs.remove("foo");
-                prefs.flush(); // BackingStoreException on Linux
-                return true;
-            } catch (Exception e) {
-                return false;
-            } finally {
-                System.setErr(systemErr);
-            }
-        }
+        // tired to write it
+        return true;
     }
 }

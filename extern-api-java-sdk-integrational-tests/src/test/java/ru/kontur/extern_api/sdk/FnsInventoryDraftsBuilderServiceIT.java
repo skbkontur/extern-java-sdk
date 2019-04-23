@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsB
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -55,7 +54,6 @@ class FnsInventoryDraftsBuilderServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         draftsBuilderCreator = new DraftsBuilderCreator();
 
