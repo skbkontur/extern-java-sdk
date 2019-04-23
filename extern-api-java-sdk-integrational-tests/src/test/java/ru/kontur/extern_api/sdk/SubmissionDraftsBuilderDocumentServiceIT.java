@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilde
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentData;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentMetaRequest;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -56,7 +55,6 @@ class SubmissionDraftsBuilderDocumentServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         draftsBuilderDocumentCreator = new DraftsBuilderDocumentCreator();
 
@@ -82,18 +80,6 @@ class SubmissionDraftsBuilderDocumentServiceIT {
     @DisplayName("get drafts builder document")
     void create() {
         assertNotNull(draftsBuilderDocument);
-    }
-
-    @Test
-    @DisplayName("get all drafts builder documents")
-    void getAll() {
-        SubmissionDraftsBuilderDocument[] draftsBuilderDocuments =
-                draftsBuilderDocumentService
-                        .getAllAsync()
-                        .join();
-
-        assertEquals(1, draftsBuilderDocuments.length);
-        assertEquals(draftsBuilderDocument.getId(), draftsBuilderDocuments[0].getId());
     }
 
     @Test

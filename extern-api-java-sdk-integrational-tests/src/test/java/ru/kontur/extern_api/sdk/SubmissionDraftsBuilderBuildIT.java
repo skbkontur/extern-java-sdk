@@ -33,7 +33,6 @@ import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -53,7 +52,6 @@ class SubmissionDraftsBuilderBuildIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
 
         draftsBuilderService = engine.getDraftsBuilderService().submission();
@@ -61,27 +59,23 @@ class SubmissionDraftsBuilderBuildIT {
 
     @BeforeEach
     void setUp() {
-        draftsBuilder =
-                new DraftsBuilderCreator()
-                        .createSubmissionDraftsBuilder(
-                                engine,
-                                cryptoUtils
-                        );
+        draftsBuilder = new DraftsBuilderCreator().createSubmissionDraftsBuilder(
+                engine,
+                cryptoUtils
+        );
 
-        SubmissionDraftsBuilderDocument draftsBuilderDocument =
-                new DraftsBuilderDocumentCreator()
-                        .createSubmissionDraftsBuilderDocument(
-                                engine,
-                                draftsBuilder
-                        );
-
-        new DraftsBuilderDocumentFileCreator()
-                .createSubmissionDraftsBuilderDocumentFile(
+        SubmissionDraftsBuilderDocument draftsBuilderDocument = new DraftsBuilderDocumentCreator()
+                .createSubmissionDraftsBuilderDocument(
                         engine,
-                        cryptoUtils,
-                        draftsBuilder,
-                        draftsBuilderDocument
+                        draftsBuilder
                 );
+
+        new DraftsBuilderDocumentFileCreator().createSubmissionDraftsBuilderDocumentFile(
+                engine,
+                cryptoUtils,
+                draftsBuilder,
+                draftsBuilderDocument
+        );
     }
 
     @Test

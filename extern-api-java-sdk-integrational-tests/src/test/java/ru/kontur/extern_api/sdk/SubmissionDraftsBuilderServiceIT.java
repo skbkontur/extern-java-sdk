@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilde
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.submission.SubmissionDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -55,7 +54,6 @@ class SubmissionDraftsBuilderServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         draftsBuilderCreator = new DraftsBuilderCreator();
 

@@ -89,7 +89,7 @@ class DocflowServiceIT {
     private static Lazy<ApproveCodeProvider> codeProvider = Lazy
             .of(() -> new ApproveCodeProvider(engine));
 
-    private DocflowService docflowService;
+    private static DocflowService docflowService;
 
     private static TestPack getTestPack(ExternEngine ee) {
         String cert = engineUtils.crypto.loadX509(ee.getConfiguration().getThumbprint());
@@ -111,18 +111,7 @@ class DocflowServiceIT {
         engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
-    }
-
-    @BeforeEach
-    void setUp() {
         docflowService = engine.getDocflowService();
-
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
     }
 
     @ParameterizedTest
