@@ -140,7 +140,7 @@ public interface RetrofitFnsInventoryDraftsBuildersApi {
      * @param draftsBuilderId drafts builder identifier
      * @param taskId send task identifier
      */
-    @POST("v1/{accountId}/drafts/builders/{draftsBuilderId}/tasks/{taskId}")
+    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/tasks/{taskId}")
     CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildResult(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
