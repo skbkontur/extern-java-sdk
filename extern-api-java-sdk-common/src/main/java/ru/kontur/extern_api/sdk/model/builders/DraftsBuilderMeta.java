@@ -101,7 +101,7 @@ public abstract class DraftsBuilderMeta<TDraftsBuilderData extends DraftsBuilder
     /**
      * Возвращает тип билдера черновиков. Могут быть следующие типы билдера черновиков:
      * <ul>
-     * <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     * <li>urn:externapi:fns534-inventory - представление ФНС</li>
      * </ul>
      *
      * @return тип билдера черновиков
@@ -115,7 +115,7 @@ public abstract class DraftsBuilderMeta<TDraftsBuilderData extends DraftsBuilder
      *
      * @param type тип билдера черновиков
      *         <ul>
-     *         <li>urn:ke.api.public:fns:submission - представление ФНС</li>
+     *         <li>urn:externapi:fns534-inventory - представление ФНС</li>
      *         </ul>
      */
     public void setBuilderType(DraftsBuilderType type) {

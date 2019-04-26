@@ -20,33 +20,19 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.utils.builders;
+package ru.kontur.extern_api.sdk.service.builders.fns.inventory;
 
-import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentData;
+import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentService;
 
-public class DraftsBuilderDocumentCreator {
+public interface FnsInventoryDraftsBuilderDocumentService extends
+        DraftsBuilderDocumentService<
+                FnsInventoryDraftsBuilderDocument,
+                FnsInventoryDraftsBuilderDocumentMeta,
+                FnsInventoryDraftsBuilderDocumentMetaRequest,
+                FnsInventoryDraftsBuilderService,
+                FnsInventoryDraftsBuilderDocumentFileService> {
 
-    public FnsInventoryDraftsBuilderDocument createFnsInventoryDraftsBuilderDocument(
-            ExternEngine engine,
-            FnsInventoryDraftsBuilder draftsBuilder
-    ) {
-        // Пункт требования, подходящий по формату. Он нужен ФНС для понимания того, на какую часть требования пришел документ.
-        final String claimItemNumber = "1.01";
-
-        FnsInventoryDraftsBuilderDocumentMetaRequest meta = new FnsInventoryDraftsBuilderDocumentMetaRequest();
-        FnsInventoryDraftsBuilderDocumentData data = new FnsInventoryDraftsBuilderDocumentData();
-        data.setClaimItemNumber(claimItemNumber);
-        meta.setBuilderData(data);
-
-        return engine
-                .getDraftsBuilderService()
-                .fnsInventory()
-                .getDocumentService(draftsBuilder.getId())
-                .createAsync(meta)
-                .join();
-    }
 }

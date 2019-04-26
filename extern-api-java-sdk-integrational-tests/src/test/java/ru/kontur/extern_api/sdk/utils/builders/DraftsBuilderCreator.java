@@ -27,9 +27,9 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderData;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderData;
+import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
@@ -38,7 +38,7 @@ public class DraftsBuilderCreator {
     /**
      * ДО на который отвечаем - требование созданное в облаке
      */
-    public SubmissionDraftsBuilder createSubmissionDraftsBuilder(
+    public FnsInventoryDraftsBuilder createFnsInventoryDraftsBuilder(
             ExternEngine engine,
             CryptoUtils cryptoUtils
     ) {
@@ -46,7 +46,7 @@ public class DraftsBuilderCreator {
         TestData[] testData = TestUtils.getTestData(certificate);
 
         DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[0]);
-        SubmissionDraftsBuilderMetaRequest meta = new SubmissionDraftsBuilderMetaRequest();
+        FnsInventoryDraftsBuilderMetaRequest meta = new FnsInventoryDraftsBuilderMetaRequest();
         meta.setPayer(draftMeta.getPayer());
         meta.setSender(draftMeta.getSender());
         meta.setRecipient(draftMeta.getRecipient());
@@ -55,13 +55,13 @@ public class DraftsBuilderCreator {
         relatedDocument.setRelatedDocflowId(UUID.fromString("06be6410-c694-446e-8add-8787460e400b"));
         relatedDocument.setRelatedDocumentId(UUID.fromString("88543b8d-41e5-48b8-894f-9f7bed8d565b"));
 
-        SubmissionDraftsBuilderData data = new SubmissionDraftsBuilderData();
+        FnsInventoryDraftsBuilderData data = new FnsInventoryDraftsBuilderData();
         data.setRelatedDocument(relatedDocument);
         meta.setBuilderData(data);
 
         return engine
                 .getDraftsBuilderService()
-                .submission()
+                .fnsInventory()
                 .createAsync(meta)
                 .join();
     }

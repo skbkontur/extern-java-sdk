@@ -26,6 +26,6 @@ import com.google.gson.annotations.SerializedName;
 import ru.kontur.extern_api.sdk.model.Urn;
 
 public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
-    @SerializedName("urn:ke.api.public:fns:submission")
-    FnsSubmission
+    @SerializedName("urn:externapi:fns534-inventory")
+    FnsInventory
 }
