@@ -22,7 +22,7 @@
 
 package ru.kontur.extern_api.sdk.service.builders;
 
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 
 /**
  * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>

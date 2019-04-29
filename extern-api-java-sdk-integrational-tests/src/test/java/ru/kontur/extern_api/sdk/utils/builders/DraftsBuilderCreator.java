@@ -27,9 +27,9 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderData;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderData;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 

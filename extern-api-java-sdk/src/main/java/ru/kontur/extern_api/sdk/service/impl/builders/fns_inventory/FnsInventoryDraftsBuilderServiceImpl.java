@@ -20,19 +20,19 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.impl.builders.fns.inventory;
+package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
 
 import java.util.UUID;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderMeta;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentService;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceImpl;
 
 public class FnsInventoryDraftsBuilderServiceImpl extends

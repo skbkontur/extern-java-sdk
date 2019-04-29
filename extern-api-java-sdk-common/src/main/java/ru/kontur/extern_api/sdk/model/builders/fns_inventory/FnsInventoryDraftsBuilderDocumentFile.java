@@ -20,16 +20,11 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model.builders.fns.inventory;
+package ru.kontur.extern_api.sdk.model.builders.fns_inventory;
 
-        import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
-        import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentFile;
 
-public class FnsInventoryDraftsBuilderMetaRequest extends
-        DraftsBuilderMetaRequest<FnsInventoryDraftsBuilderData> {
+public class FnsInventoryDraftsBuilderDocumentFile extends
+        DraftsBuilderDocumentFile<FnsInventoryDraftsBuilderDocumentFileMeta> {
 
-    @Override
-    protected DraftsBuilderType provideBuilderType() {
-        return DraftsBuilderType.FnsInventory;
-    }
 }

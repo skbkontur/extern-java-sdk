@@ -20,20 +20,20 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.impl.builders.fns.inventory;
+package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
 
 import java.util.UUID;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentMeta;
-import ru.kontur.extern_api.sdk.model.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMeta;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentFileService;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentService;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderDocumentServiceImpl;
 
 public class FnsInventoryDraftsBuilderDocumentServiceImpl extends

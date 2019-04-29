@@ -22,13 +22,13 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders;
 
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns.inventory.FnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
-import ru.kontur.extern_api.sdk.service.builders.fns.inventory.FnsInventoryDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.impl.builders.fns.inventory.FnsInventoryDraftsBuilderServiceImpl;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuilderServiceImpl;
 
 public class DraftsBuilderServiceFactoryImpl implements DraftsBuilderServiceFactory {
 
