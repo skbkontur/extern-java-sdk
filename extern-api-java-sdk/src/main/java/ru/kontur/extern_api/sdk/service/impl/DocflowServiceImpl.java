@@ -146,7 +146,7 @@ public class DocflowServiceImpl implements DocflowService {
             UUID documentId,
             byte[] documentContent
     ) {
-        return this.api.recognize(acc.accountId(), docflowId, documentId, new ByteContent (documentContent)).thenApply(contextAdaptor(QueryContext.RECOGNITION_META));
+        return this.api.recognize(acc.accountId(), docflowId, documentId,  documentContent).thenApply(contextAdaptor(QueryContext.RECOGNITION_META));
     }
 
     @Override
