@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -54,7 +55,7 @@ import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
 import ru.kontur.extern_api.sdk.model.SortOrder;
-
+import ru.kontur.extern_api.sdk.model.RecognizedMeta;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -218,6 +219,14 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Body ByteContent request
+    );
+
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/recognize")
+    CompletableFuture<ApiResponse<RecognizedMeta>> recognize(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Body @Raw byte[] content
     );
 
     /**

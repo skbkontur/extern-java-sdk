@@ -39,5 +39,4 @@ public interface UncheckedFunction<T, S> {
             }
         };
     }
-
 }

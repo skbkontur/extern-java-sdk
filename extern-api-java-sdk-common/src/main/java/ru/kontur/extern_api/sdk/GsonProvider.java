@@ -6,11 +6,13 @@ import com.google.gson.GsonBuilder;
 import java.util.Date;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
 import ru.kontur.extern_api.sdk.model.Inventory;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonByteArrayAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDateAdaptor;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDeserializer;
+import ru.kontur.extern_api.sdk.typeadaptors.GsonDocflowDocumentDescriptionDeserializer;
 import ru.kontur.extern_api.sdk.typeadaptors.GsonRecipientAdaptor;
 
 public enum GsonProvider implements SerializationProvider {
@@ -56,7 +58,8 @@ public enum GsonProvider implements SerializationProvider {
                 .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
                 .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer())
-                .registerTypeAdapter(Inventory.class, new GsonDocflowDeserializer());
+                .registerTypeAdapter(Inventory.class, new GsonDocflowDeserializer())
+                .registerTypeAdapter(DocflowDocumentDescription.class, new GsonDocflowDocumentDescriptionDeserializer());
     }
 
     @NotNull

@@ -24,9 +24,12 @@
 package ru.kontur.extern_api.sdk;
 
 import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
@@ -34,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,6 +55,8 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.utils.DemandTestData;
+import ru.kontur.extern_api.sdk.utils.DemandTestDataProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
@@ -60,6 +66,7 @@ import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.Lazy;
+import ru.kontur.extern_api.sdk.utils.UncheckedFunction;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
@@ -96,6 +103,16 @@ class DocflowServiceIT {
         TestData[] tds = TestUtils.getTestData(cert);
         List<QueryContext<Docflow>> qcs = UncheckedSupplier.get(() -> createDocflows(ee, tds));
         return new TestPack(qcs);
+    }
+
+    private static Stream<DemandTestData> demandLazyFactory()  {
+        String cert = engineUtils.crypto.loadX509(engine.getConfiguration().getThumbprint());
+        TestData[] testData = TestUtils.getTestData(cert);
+        List<DemandTestData> result=new ArrayList<>();
+
+        DemandTestData demand= UncheckedSupplier.get(()->DemandTestDataProvider.getTestDemand(testData[0], TestSuite.Load()).get());
+        result.add(demand);
+        return result.stream();
     }
 
     private static Stream<QueryContext<Docflow>> docflowLazyFactory() {
@@ -135,9 +152,9 @@ class DocflowServiceIT {
                 .join()
                 .getOrThrow();
 
-        assertEquals(docflow.getId(), returned.getId());
-        assertEquals(docflow.getType(), returned.getType());
-        assertEquals(docflow.getStatus(), returned.getStatus());
+        Assertions.assertEquals(docflow.getId(), returned.getId());
+        Assertions.assertEquals(docflow.getType(), returned.getType());
+        Assertions.assertEquals(docflow.getStatus(), returned.getStatus());
 
     }
 
@@ -155,7 +172,7 @@ class DocflowServiceIT {
 
         Assertions.assertNotEquals(0, docs.size());
         for (Document document : docs) {
-            assertNotNull(document.getDescription().getType());
+            Assertions.assertNotNull(document.getDescription().getType());
         }
 
     }
@@ -177,10 +194,10 @@ class DocflowServiceIT {
                     .join()
                     .getOrThrow();
 
-            assertNotNull(d.getSendDate());
-            assertEquals(d.getId(), actual.getId());
-            assertEquals(d.getDescription().getType(), actual.getDescription().getType());
-            assertEquals(d.getId(), actual.getId());
+            Assertions.assertNotNull(d.getSendDate());
+            Assertions.assertEquals(d.getId(), actual.getId());
+            Assertions.assertEquals(d.getDescription().getType(), actual.getDescription().getType());
+            Assertions.assertEquals(d.getId(), actual.getId());
         }
     }
 
@@ -203,9 +220,10 @@ class DocflowServiceIT {
 
             DocflowDocumentDescription expected = d.getDescription();
 
-            assertEquals(expected.getType(), actual.getType());
-            assertEquals(expected.getFilename(), actual.getFilename());
-            assertEquals(expected.getContentType(), actual.getContentType());
+            Assertions.assertEquals(expected.getType(), actual.getType());
+            Assertions.assertEquals(expected.getFilename(), actual.getFilename());
+            Assertions.assertEquals(expected.getContentType(), actual.getContentType());
+            Assertions.assertEquals(expected.getRequisites(), actual.getRequisites());
         }
     }
 
@@ -289,7 +307,7 @@ class DocflowServiceIT {
                 .join()
                 .ensureSuccess();
 
-        assertNotNull(docsCxt.get());
+        Assertions.assertNotNull(docsCxt.get());
 
         for (Document d : docsCxt.get()) {
 
@@ -328,7 +346,7 @@ class DocflowServiceIT {
                     .getOrThrow();
 
             for (Signature sign : signs) {
-                assertNotNull(sign.getTitle());
+                Assertions.assertNotNull(sign.getTitle());
             }
         }
     }
@@ -388,7 +406,7 @@ class DocflowServiceIT {
                         .join()
                         .getOrThrow();
 
-                assertNotNull(signatureContent);
+                Assertions.assertNotNull(signatureContent);
             }
         }
     }
@@ -591,18 +609,18 @@ class DocflowServiceIT {
                 .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
-                .page(0, 10)
-                .finished(true)
-                .incoming(false)
-                .innKpp(company.getInn(), company.getKpp())
-                .type(DocflowType.FNS534_REPORT)
+                                                                        .page(0, 10)
+                                                                        .finished(true)
+                                                                        .incoming(false)
+                                                                        .innKpp(company.getInn(), company.getKpp())
+                                                                        .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
         Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
 
         for (DocflowPageItem docflowPageItem : docflowPage.getDocflowsPageItem()) {
-            assertEquals(DocflowStatus.FINISHED, docflowPageItem.getStatus());
-            assertEquals(DocflowType.FNS534_REPORT, docflowPageItem.getType());
+            Assertions.assertEquals(DocflowStatus.FINISHED, docflowPageItem.getStatus());
+            Assertions.assertEquals(DocflowType.FNS534_REPORT, docflowPageItem.getType());
         }
     }
 
@@ -622,7 +640,7 @@ class DocflowServiceIT {
                 .getDocumentsAsync(docflow.getId())
                 .join();
 
-        assertNotNull(docsCxt.get());
+        Assertions.assertNotNull(docsCxt.get());
 
         for (Document d : docsCxt.get()) {
             // печатаем только исходпую декларацию
@@ -641,9 +659,41 @@ class DocflowServiceIT {
                                 base64)
                         .join();
 
-                assertNotNull(printCxt.get());
+                Assertions.assertNotNull(printCxt.get());
             }
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("demandLazyFactory")
+    @DisplayName("recognize demand attachment")
+    void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
+        DocflowService docflowService = engine.getDocflowService();
+
+        Document document = docflowService.lookupDocumentAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId())
+                                                            .join().getOrThrow();
+
+        DemandAttachmentRequisites requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
+        Assertions.assertEquals(requisites.getDemandDate(), null);
+        Assertions.assertEquals(requisites.getDemandNumber(), null);
+        Assertions.assertEquals(requisites.getDemandInnList().size(), 0);
+
+        RecognizedMeta recognizedMeta = docflowService
+                .recognizeAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId(), demandTestData.getDemandAttachmentDecryptedBytes())
+                .join()
+                .getOrThrow();
+
+        Assertions.assertNotNull(recognizedMeta);
+        Assertions.assertNotNull(recognizedMeta.getDemandDate());
+        Assertions.assertNotNull(recognizedMeta.getDemandNumber());
+        Assertions.assertNotNull(recognizedMeta.getDemandInnList());
+
+        document = docflowService.lookupDocumentAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId()).join().getOrThrow();
+        requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
+
+        Assertions.assertEquals(requisites.getDemandDate(), recognizedMeta.getDemandDate());
+        Assertions.assertEquals(requisites.getDemandNumber(), recognizedMeta.getDemandNumber());
+        Assertions.assertLinesMatch(requisites.getDemandInnList(), recognizedMeta.getDemandInnList());
     }
 
     private static List<QueryContext<Docflow>> createDocflows(

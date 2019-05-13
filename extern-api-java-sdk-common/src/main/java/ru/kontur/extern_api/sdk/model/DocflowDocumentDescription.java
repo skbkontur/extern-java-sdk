@@ -16,16 +16,48 @@ public class DocflowDocumentDescription {
     private String filename = null;
     private String contentType = null;
     private Boolean compressed = null;
+    private Boolean supportRecognition = null;
+    private DocflowDocumentRequisitesBase requisites = null;
+    private Long relatedDocflowsCount = null;
 
-    public long getRelatedDocflowsCount() {
+    /**
+     * Возвращает реквизиты документа
+     * @return
+     */
+    public DocflowDocumentRequisitesBase getRequisites() {
+        return requisites;
+    }
+
+    /**
+     * Устанавливает реквизиты документа
+     * @param requisites
+     */
+    public void setRequisites(DocflowDocumentRequisitesBase requisites) {
+        this.requisites = requisites;
+    }
+    /**
+     * Возвращает информацию поддерживаетсяли распознование документа
+     * @return
+     */
+    public Boolean getSupportRecognition() {
+        return supportRecognition;
+    }
+
+    /**
+     * Устанавливают инфорацию поддерживается ли распознование документа
+     * @param supportRecognition
+     */
+    public void setSupportRecognition(Boolean supportRecognition) {
+        this.supportRecognition = supportRecognition;
+    }
+
+    public Long getRelatedDocflowsCount() {
         return relatedDocflowsCount;
     }
 
-    public void setRelatedDocflowsCount(long relatedDocflowsCount) {
+    public void setRelatedDocflowsCount(Long relatedDocflowsCount) {
         this.relatedDocflowsCount = relatedDocflowsCount;
     }
-
-    private long relatedDocflowsCount = -1;
 
     public DocflowDocumentDescription type(DocumentType type) {
         this.type = type;

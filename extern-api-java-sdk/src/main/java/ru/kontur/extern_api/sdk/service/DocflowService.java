@@ -43,7 +43,7 @@ import ru.kontur.extern_api.sdk.model.ReplyDocument;
 import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
 import ru.kontur.extern_api.sdk.model.SignInitiation;
 import ru.kontur.extern_api.sdk.model.Signature;
-
+import ru.kontur.extern_api.sdk.model.RecognizedMeta;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
@@ -153,6 +153,12 @@ public interface DocflowService {
     CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
             String docflowId,
             String documentId
+    );
+
+    CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent
     );
 
     /**

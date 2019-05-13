@@ -7,6 +7,7 @@ public class DemandTestData extends TestData {
 
     private UUID demandId;
     private UUID demandAttachmentId;
+    private byte[] demandAttachmentDecryptedBytes;
 
     public UUID getDemandId() {
         return demandId;
@@ -30,4 +31,11 @@ public class DemandTestData extends TestData {
         this.setDocs(testData.getDocs());
     }
 
+    public byte[] getDemandAttachmentDecryptedBytes() {
+        return demandAttachmentDecryptedBytes;
+    }
+
+    public void setDemandAttachmentDecryptedBytes(byte[] demandAttachmentDecryptedBytes) {
+        this.demandAttachmentDecryptedBytes = demandAttachmentDecryptedBytes;
+    }
 }
