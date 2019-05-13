@@ -32,11 +32,14 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
+@Execution(ExecutionMode.CONCURRENT)
 class CertificateServiceIT {
 
     private static CertificateService certificateService;

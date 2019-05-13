@@ -32,12 +32,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
+
+@Execution(ExecutionMode.CONCURRENT)
 class OrganizationIT{
 
     private static final Company COMPANY = new Company();

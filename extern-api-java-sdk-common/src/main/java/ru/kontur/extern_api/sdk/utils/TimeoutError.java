@@ -18,21 +18,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
-package ru.kontur.extern_api.sdk.model.builders;
+package ru.kontur.extern_api.sdk.utils;
 
-import com.google.gson.annotations.SerializedName;
-import ru.kontur.extern_api.sdk.model.Urn;
-
-public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
-    @SerializedName("urn:externapi:fns534-inventory")
-    FnsInventory,
-
-    @SerializedName("urn:externapi:fns534-letter")
-    FnsLetter,
-
-    @SerializedName("urn:externapi:business-registration:registration")
-    IndividualBusinessRegistration
+public class TimeoutError extends RuntimeException {
 
 }

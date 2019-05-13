@@ -30,12 +30,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.portal.CertificatesClient;
 import ru.kontur.extern_api.sdk.portal.model.CertificateSearchResult;
 import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
+@Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Portal services tests")
 class PortalPackageIT {
 

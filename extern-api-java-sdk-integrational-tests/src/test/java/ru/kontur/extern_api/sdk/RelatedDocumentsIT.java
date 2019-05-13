@@ -38,6 +38,8 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.Contract;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
@@ -59,6 +61,7 @@ import ru.kontur.extern_api.sdk.utils.RelatedDocflowProvider;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("RelatedDocuments service should be able to")
 class RelatedDocumentsIT {
 

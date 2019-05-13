@@ -44,7 +44,7 @@ public class CryptoApi {
     private static final Logger log = Logger.getLogger(CryptoApi.class.getSimpleName());
 
     // Probably bad design, but significantly improves performance
-    private static List<Key> keyCache;
+    private static List<Key> keyCache = null;
     private static final Object lock = new Object();
 
     private final CryptoService cryptoService;

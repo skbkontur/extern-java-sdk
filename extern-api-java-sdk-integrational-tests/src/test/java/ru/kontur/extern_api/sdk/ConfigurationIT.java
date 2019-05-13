@@ -28,11 +28,14 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
+@Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Configuration tokens should")
 class ConfigurationIT {
 

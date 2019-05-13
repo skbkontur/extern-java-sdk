@@ -57,13 +57,12 @@ public class CryptoUtils {
 
     public String loadX509(String thumbprint) {
 
-        CompletableFuture<String> future = cryptoProvider
+        return cryptoProvider
                 .getSignerCertificateAsync(thumbprint)
                 .thenApply(QueryContext::ensureSuccess)
                 .thenApply(QueryContext::getContent)
-                .thenApply(Base64.getEncoder()::encodeToString);
-
-        return UncheckedSupplier.get(future::get);
+                .thenApply(Base64.getEncoder()::encodeToString)
+                .join();
     }
 
     @NotNull
