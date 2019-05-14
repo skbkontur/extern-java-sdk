@@ -16,8 +16,8 @@ public class Ion4RequestData extends IonRequestData {
     @Nullable
     private ArrayList<RequestingTax> requestingTax;
 
-    Ion4RequestData(int requestType, int acceptType, String onDate, String year, @Nullable ArrayList<RequestingTax> requestingTax) {
-        super(requestType, acceptType);
+    Ion4RequestData(int requestType, int answerFormat, String onDate, String year, @Nullable ArrayList<RequestingTax> requestingTax) {
+        super(requestType, answerFormat);
         this.onDate = onDate;
         this.year = year;
         this.requestingTax = requestingTax;

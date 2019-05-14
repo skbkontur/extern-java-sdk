@@ -39,20 +39,13 @@ public class IonRequestContract<TIonData extends IonRequestData>implements IonRe
 
     public IonRequestContract(
             @NotNull ClientInfo additionalOrgInfo,
-            @NotNull RequestType requestType,
-            @NotNull AnswerFormat answerFormat,
-            @Nullable IonPeriod period) {
+            @Nullable IonPeriod period, TIonData data) {
         this.period = period;
         this.version = 1;
         this.additionalOrgInfo = additionalOrgInfo;
-
-        int iRequestType = requestType.ordinal() + 1;
-        int iAnswerFormat = answerFormat.ordinal() + 1;
-
-        this.data = new TIonData(iRequestType, iAnswerFormat);
+        this.data = data;
     }
 
-    @Override
     public int getVersion() {
         return version;
     }

@@ -12,8 +12,8 @@ public class Ion3RequestData extends IonRequestData {
     @SerializedName("УслВыбОтч")
     private int reportSelectionCondition;
 
-    Ion3RequestData(int requestType, int acceptType, String beginDate, String finishDate, int reportSelectionCondition) {
-        super(requestType, acceptType);
+    Ion3RequestData(int requestType, int answerFormat, String beginDate, String finishDate, int reportSelectionCondition) {
+        super(requestType, answerFormat);
 
         this.beginDate = beginDate;
         this.finishDate = finishDate;
