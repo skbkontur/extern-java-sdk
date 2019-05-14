@@ -29,12 +29,12 @@ import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
 import ru.kontur.extern_api.sdk.httpclient.api.*;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.RetrofitSubmissionDraftsBuildersApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.submission.SubmissionDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
@@ -115,18 +115,18 @@ public class DefaultServicesFactory implements ServicesFactory {
     public DraftsBuilderServiceFactory getDraftsBuilderService() {
         KonturConfiguredClient client = postConfigure(configuredClient);
 
-        RetrofitSubmissionDraftsBuildersApi submissionDraftApi =
-                client.createApi(RetrofitSubmissionDraftsBuildersApi.class);
-        RetrofitSubmissionDraftsBuilderDocumentsApi submissionDocumentApi =
-                client.createApi(RetrofitSubmissionDraftsBuilderDocumentsApi.class);
-        RetrofitSubmissionDraftsBuilderDocumentFilesApi submissionFileApi =
-                client.createApi(RetrofitSubmissionDraftsBuilderDocumentFilesApi.class);
+        RetrofitFnsInventoryDraftsBuildersApi fnsInventoryDraftApi =
+                client.createApi(RetrofitFnsInventoryDraftsBuildersApi.class);
+        RetrofitFnsInventoryDraftsBuilderDocumentsApi fnsInventoryDocumentApi =
+                client.createApi(RetrofitFnsInventoryDraftsBuilderDocumentsApi.class);
+        RetrofitFnsInventoryDraftsBuilderDocumentFilesApi fnsInventoryFileApi =
+                client.createApi(RetrofitFnsInventoryDraftsBuilderDocumentFilesApi.class);
 
         return new DraftsBuilderServiceFactoryImpl(
                 providerHolder.getAccountProvider(),
-                new SubmissionDraftsBuildersApi(submissionDraftApi),
-                new SubmissionDraftsBuilderDocumentsApi(submissionDocumentApi),
-                new SubmissionDraftsBuilderDocumentFilesApi(submissionFileApi)
+                new FnsInventoryDraftsBuildersApi(fnsInventoryDraftApi),
+                new FnsInventoryDraftsBuilderDocumentsApi(fnsInventoryDocumentApi),
+                new FnsInventoryDraftsBuilderDocumentFilesApi(fnsInventoryFileApi)
         );
     }
 

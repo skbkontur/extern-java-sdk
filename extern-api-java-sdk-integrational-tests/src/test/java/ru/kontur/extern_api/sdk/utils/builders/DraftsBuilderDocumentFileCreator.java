@@ -30,25 +30,25 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Objects;
 import ru.kontur.extern_api.sdk.ExternEngine;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFile;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileContents;
-import ru.kontur.extern_api.sdk.model.builders.submission.SubmissionDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFile;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileContents;
+import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMetaRequest;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 
 public class DraftsBuilderDocumentFileCreator {
 
-    public SubmissionDraftsBuilderDocumentFile createSubmissionDraftsBuilderDocumentFile(
+    public FnsInventoryDraftsBuilderDocumentFile createFnsInventoryDraftsBuilderDocumentFile(
             ExternEngine engine,
             CryptoUtils cryptoUtils,
-            SubmissionDraftsBuilder draftsBuilder,
-            SubmissionDraftsBuilderDocument draftsBuilderDocument
+            FnsInventoryDraftsBuilder draftsBuilder,
+            FnsInventoryDraftsBuilderDocument draftsBuilderDocument
     ) {
         final String fileName = "AnyFileName.pdf";
 
-        SubmissionDraftsBuilderDocumentFileContents contents = new SubmissionDraftsBuilderDocumentFileContents();
-        SubmissionDraftsBuilderDocumentFileMetaRequest meta = new SubmissionDraftsBuilderDocumentFileMetaRequest();
+        FnsInventoryDraftsBuilderDocumentFileContents contents = new FnsInventoryDraftsBuilderDocumentFileContents();
+        FnsInventoryDraftsBuilderDocumentFileMetaRequest meta = new FnsInventoryDraftsBuilderDocumentFileMetaRequest();
 
         String scannedContent = getScannedContent();
 
@@ -65,7 +65,7 @@ public class DraftsBuilderDocumentFileCreator {
 
         return engine
                 .getDraftsBuilderService()
-                .submission()
+                .fnsInventory()
                 .getDocumentService(draftsBuilder.getId())
                 .getFileService(draftsBuilderDocument.getId())
                 .createAsync(contents)
