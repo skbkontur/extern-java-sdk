@@ -18,7 +18,7 @@ public class DocflowDocumentDescription {
     private Boolean compressed = null;
     private Boolean supportRecognition = null;
     private DocflowDocumentRequisitesBase requisites = null;
-    private Long relatedDocflowsCount = null;
+    private long relatedDocflowsCount;
 
     /**
      * Возвращает реквизиты документа

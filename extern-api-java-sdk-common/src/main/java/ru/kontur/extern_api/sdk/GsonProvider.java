@@ -57,8 +57,8 @@ public enum GsonProvider implements SerializationProvider {
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
                 .registerTypeAdapter(Date.class, new GsonDateAdaptor())
                 .registerTypeAdapter(Recipient.class, new GsonRecipientAdaptor())
-                .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer())
-                .registerTypeAdapter(Inventory.class, new GsonDocflowDeserializer())
+                .registerTypeAdapter(Docflow.class, new GsonDocflowDeserializer<>(Docflow::new))
+                .registerTypeAdapter(Inventory.class, new GsonDocflowDeserializer<>(Inventory::new))
                 .registerTypeAdapter(DocflowDocumentDescription.class, new GsonDocflowDocumentDescriptionDeserializer());
     }
 

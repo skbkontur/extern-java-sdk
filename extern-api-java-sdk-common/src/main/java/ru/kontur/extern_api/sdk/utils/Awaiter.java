@@ -10,17 +10,17 @@ public class Awaiter {
 
     public static <T> CompletableFuture<T> waitForCondition(
             @NotNull Supplier<CompletableFuture<T>> supplier,
-            Predicate<T> predicate,
-            int delayTimeOutMs
+            @NotNull Predicate<T> predicate,
+            final int delayTimeOutMs
     ) {
         return waitForCondition(supplier, predicate, delayTimeOutMs, 60 * 1000);
     }
 
     public static <T> CompletableFuture<T> waitForCondition(
             @NotNull Supplier<CompletableFuture<T>> supplier,
-            Predicate<T> predicate,
-            int delayTimeOutMs,
-            int timeoutMs
+            @NotNull Predicate<T> predicate,
+            final int delayTimeOutMs,
+            final int timeoutMs
     ) {
         return supplier.get().thenCompose(result -> {
             if (timeoutMs <= 0) {

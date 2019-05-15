@@ -25,7 +25,7 @@ package ru.kontur.extern_api.sdk;
 
 import java.util.Optional;
 import java.util.UUID;
-
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -34,12 +34,20 @@ import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
-import ru.kontur.extern_api.sdk.service.*;
-import ru.kontur.extern_api.sdk.service.builders.*;
+import ru.kontur.extern_api.sdk.service.AccountService;
+import ru.kontur.extern_api.sdk.service.CertificateService;
+import ru.kontur.extern_api.sdk.service.DocflowService;
+import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.service.EventService;
+import ru.kontur.extern_api.sdk.service.OrganizationService;
+import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
+import ru.kontur.extern_api.sdk.service.TaskService;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 
 
 /**
- * @see ExternEngineBuilder#createExternEngine()
+ * @see ExternEngineBuilder#createExternEngine(String)
  */
 public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
 
@@ -47,10 +55,14 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     private final ProviderHolder providerHolder;
     private final Configuration configuration;
 
+    /**
+     * @see ExternEngineBuilder#createExternEngine(String)
+     */
     public ExternEngine(
             Configuration configuration,
             ProviderHolder providerHolder,
-            ServicesFactory servicesFactory) {
+            ServicesFactory servicesFactory
+    ) {
         this.servicesFactory = servicesFactory;
         this.providerHolder = providerHolder;
         this.configuration = configuration;
@@ -87,18 +99,21 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     /**
-     * @return TaskService сервис предназначен для работы с длительными операциями в черновиках и драфт билдерах
+     * @return TaskService сервис предназначен для работы с длительными операциями в черновиках
      * @see TaskService
      */
-    public TaskService getTaskService(UUID id) {
-        return servicesFactory.getTaskService(id);
+    public TaskService getTaskService(@NotNull UUID draftId) {
+        return servicesFactory.getTaskService(draftId);
     }
 
     /**
      * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
      * @see RelatedDocumentsService
      */
-    public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
+    public RelatedDocumentsService getRelatedDocumentsService(
+            @NotNull UUID relatedDocflowId,
+            @NotNull UUID relatedDocumentId
+    ) {
         return servicesFactory.getRelatedDocumentsService(relatedDocflowId, relatedDocumentId);
     }
 
@@ -106,7 +121,10 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
      * @see RelatedDocumentsService
      */
-    public RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocument) {
+    public RelatedDocumentsService getRelatedDocumentsService(
+            @NotNull Docflow relatedDocflow,
+            @NotNull Document relatedDocument
+    ) {
         return servicesFactory.getRelatedDocumentsService(relatedDocflow, relatedDocument);
     }
 
@@ -138,7 +156,9 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      * @return DraftsBuilderFactory сервис предназначен для работы с билдерном черновиков
      * @see DraftsBuilderServiceFactory
      */
-    public DraftsBuilderServiceFactory getDraftsBuilderService() { return servicesFactory.getDraftsBuilderService(); }
+    public DraftsBuilderServiceFactory getDraftsBuilderService() {
+        return servicesFactory.getDraftsBuilderService();
+    }
 
     @Override
     public ProviderHolder getChildProviderHolder() {

@@ -33,6 +33,7 @@ import static ru.kontur.extern_api.sdk.utils.TestUtils.fromWin1251Bytes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.Contract;
@@ -61,7 +62,7 @@ import ru.kontur.extern_api.sdk.utils.RelatedDocflowProvider;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 @DisplayName("RelatedDocuments service should be able to")
 class RelatedDocumentsIT {
 
@@ -69,9 +70,10 @@ class RelatedDocumentsIT {
 
     private static ExternEngine engine;
     private static List<DemandTestData> tests;
-    private static int sentRelatedInventories;
-    private static int sentRelatedLetters;
     private static RelatedDocflowProvider relatedDocflowProvider;
+
+    private static AtomicInteger sentRelatedInventories = new AtomicInteger();
+    private static AtomicInteger sentRelatedLetters = new AtomicInteger();
 
     @BeforeAll
     static void setUpClass() {
@@ -125,7 +127,7 @@ class RelatedDocumentsIT {
                 .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                 .getRelatedInventories().join();
 
-        assertEquals(sentRelatedInventories, (long) inventoriesPage.getTotalCount());
+        assertEquals(sentRelatedInventories.get(), inventoriesPage.getTotalCount());
     }
 
     @ParameterizedTest
@@ -304,7 +306,10 @@ class RelatedDocumentsIT {
                 .getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
                 .getRelatedDocflows().join();
 
-        assertEquals(sentRelatedInventories + sentRelatedLetters, (long) docflowPage.getTotalCount());
+        assertEquals(
+                sentRelatedInventories.get() + sentRelatedLetters.get(),
+                (long) docflowPage.getTotalCount()
+        );
     }
 
     @ParameterizedTest
@@ -320,14 +325,16 @@ class RelatedDocumentsIT {
                 .thenApply(QueryContext::getDocument)
                 .join();
 
-        assertEquals(sentRelatedInventories + sentRelatedLetters,
-                demandAttachment.getDescription().getRelatedDocflowsCount().longValue());
+        assertEquals(
+                sentRelatedInventories.get() + sentRelatedLetters.get(),
+                demandAttachment.getDescription().getRelatedDocflowsCount().longValue()
+        );
     }
 
     private CompletableFuture<Docflow> sendRelatedLetter(DemandTestData testData) {
         return relatedDocflowProvider.sendRelatedLetter(testData)
                 .thenApply(docflow -> {
-                    sentRelatedLetters++;
+                    sentRelatedLetters.incrementAndGet();
                     return docflow;
                 });
     }
@@ -335,7 +342,7 @@ class RelatedDocumentsIT {
     private CompletableFuture<Inventory> sendRelatedInventory(DemandTestData testData) {
         return relatedDocflowProvider.sendRelatedInventory(testData)
                 .thenApply(inventory -> {
-                    sentRelatedInventories++;
+                    sentRelatedInventories.incrementAndGet();
                     return inventory;
                 });
     }

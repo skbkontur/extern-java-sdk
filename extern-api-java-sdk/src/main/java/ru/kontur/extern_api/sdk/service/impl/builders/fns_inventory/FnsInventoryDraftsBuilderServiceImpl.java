@@ -23,6 +23,7 @@
 package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
 
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
@@ -34,6 +35,7 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceImpl;
+import ru.kontur.extern_api.sdk.service.impl.builders.submission.SubmissionDraftsBuilderDocumentServiceImpl;
 
 public class FnsInventoryDraftsBuilderServiceImpl extends
         DraftsBuilderServiceImpl<
@@ -65,7 +67,7 @@ public class FnsInventoryDraftsBuilderServiceImpl extends
 
     @Override
     public FnsInventoryDraftsBuilderDocumentService getDocumentService(
-            UUID draftsBuilderId
+            @NotNull UUID draftsBuilderId
     ) {
         return new FnsInventoryDraftsBuilderDocumentServiceImpl(
                 acc,

@@ -22,6 +22,7 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.httpclient.api.RelatedDocflowApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
@@ -42,8 +43,8 @@ public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
     public RelatedDocumentsServiceImpl(
             AccountProvider accountProvider,
             RelatedDocflowApi api,
-            UUID docflowId,
-            UUID relatedDocumentId) {
+            @NotNull UUID docflowId,
+            @NotNull UUID relatedDocumentId) {
         this.acc = accountProvider;
         this.api = api;
         this.relatedDocflowId = docflowId;
@@ -53,8 +54,8 @@ public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
     public RelatedDocumentsServiceImpl(
             AccountProvider accountProvider,
             RelatedDocflowApi api,
-            Docflow docflow,
-            Document relatedDocument) {
+            @NotNull Docflow docflow,
+            @NotNull Document relatedDocument) {
         this.acc = accountProvider;
         this.api = api;
         this.relatedDocflowId = docflow.getId();
