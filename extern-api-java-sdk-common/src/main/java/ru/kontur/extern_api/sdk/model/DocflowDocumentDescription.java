@@ -51,11 +51,11 @@ public class DocflowDocumentDescription {
         this.supportRecognition = supportRecognition;
     }
 
-    public Long getRelatedDocflowsCount() {
+    public long getRelatedDocflowsCount() {
         return relatedDocflowsCount;
     }
 
-    public void setRelatedDocflowsCount(Long relatedDocflowsCount) {
+    public void setRelatedDocflowsCount(long relatedDocflowsCount) {
         this.relatedDocflowsCount = relatedDocflowsCount;
     }
 

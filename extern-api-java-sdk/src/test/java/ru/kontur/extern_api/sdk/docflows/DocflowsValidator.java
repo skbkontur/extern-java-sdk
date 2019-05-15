@@ -27,8 +27,10 @@ package ru.kontur.extern_api.sdk.docflows;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 import static ru.kontur.extern_api.sdk.common.StandardObjectsValidator.validateId;
 
+import org.junit.jupiter.api.Assertions;
 import ru.kontur.extern_api.sdk.common.StandardObjectsValidator;
 import ru.kontur.extern_api.sdk.common.StandardValues;
 import ru.kontur.extern_api.sdk.model.Content;
@@ -96,14 +98,15 @@ public class DocflowsValidator {
             StandardObjectsValidator.validateNotEmptyList(docflow.getDocuments(), "Documents");
             validateDocument(docflow.getDocuments().get(0), false, false, false, false);
         } else {
-            assertNull("Documents must be null!", docflow.getDocuments());
+
+            assertTrue("Documents must be empty!", docflow.getDocuments().isEmpty());
         }
 
         if (withLinks) {
             StandardObjectsValidator.validateNotEmptyList(docflow.getLinks(), "Links");
             StandardObjectsValidator.validateLink(docflow.getLinks().get(0));
         } else {
-            assertNull("Links must be null!", docflow.getLinks());
+            assertTrue("Links must be empty!", docflow.getLinks().isEmpty());
         }
 
     }

@@ -142,7 +142,6 @@ class DocflowServiceIT {
 
         Assertions.assertEquals(docflow.getId(), returned.getId());
         Assertions.assertEquals(docflow.getType(), returned.getType());
-        Assertions.assertEquals(docflow.getStatus(), returned.getStatus());
 
     }
 
