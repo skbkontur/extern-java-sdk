@@ -15,7 +15,7 @@ public class RequestingTax {
     @SerializedName("ОКАТО")
     private String okato;
 
-    RequestingTax(@Nullable String taxName, String kbk, String okato) {
+    public RequestingTax(@Nullable String taxName, String kbk, String okato) {
 
         this.taxName = taxName;
         this.kbk = kbk;

@@ -33,7 +33,7 @@ public class IonRequestData {
     @SerializedName("ФормОтв")
     private int answerFormat;
 
-    IonRequestData(int requestType, int answerFormat) {
+    public IonRequestData(int requestType, int answerFormat) {
         this.requestType = requestType;
         this.answerFormat = answerFormat;
     }

@@ -6,7 +6,7 @@ public class Ion1RequestData extends IonRequestData {
     @SerializedName("НаДату")
     private String onDate;
 
-    Ion1RequestData(int requestType, int answerFormat, String onDate) {
+    public Ion1RequestData(int requestType, int answerFormat, String onDate) {
         super(requestType, answerFormat);
         this.onDate = onDate;
     }
