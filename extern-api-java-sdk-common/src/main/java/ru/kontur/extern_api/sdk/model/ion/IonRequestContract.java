@@ -25,7 +25,6 @@ package ru.kontur.extern_api.sdk.model.ion;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.kontur.extern_api.sdk.model.BuildDocumentType;
 
 import java.text.SimpleDateFormat;
 
@@ -65,26 +64,66 @@ public class IonRequestContract<TIonData extends IonRequestData> implements IonR
     }
 
     public enum RequestType {
-        WHOLE_ORGANIZATION,
-        ALL_KPPS,
-        ONE_KPP
+        WHOLE_ORGANIZATION(1),
+        ALL_KPPS(2),
+        ONE_KPP(3);
+
+        private final int index;
+
+        RequestType(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
     }
 
     public enum AnswerFormat {
-        RTF,
-        XML,
-        XLS,
-        PDF
+        RTF(1),
+        XML(2),
+        XLS(3),
+        PDF(4);
+
+        private final int index;
+
+        AnswerFormat(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
     }
 
     public enum ReportSelectionCondition {
-        ALL_REPORT_TYPES,
-        PRIMARY,
-        CORRECTION
+        ALL_REPORT_TYPES(1),
+        PRIMARY(2),
+        CORRECTION(3);
+
+        private final int index;
+
+        ReportSelectionCondition(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
     }
 
     public enum ReportGenerationCondition {
-        GROUP_BY_ALL_PAYMENT_TYPES,
-        NO_GROUP_BY_ALL_PAYMENT_TYPES
+        GROUP_BY_ALL_PAYMENT_TYPES(1),
+        NO_GROUP_BY_ALL_PAYMENT_TYPES(2);
+
+        private final int index;
+
+        ReportGenerationCondition(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
     }
 }
