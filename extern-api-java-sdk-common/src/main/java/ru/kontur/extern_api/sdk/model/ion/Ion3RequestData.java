@@ -6,7 +6,7 @@ public class Ion3RequestData extends IonRequestData {
     @SerializedName("ДатаНач")
     private String beginDate;
 
-    @SerializedName("ДатаНач")
+    @SerializedName("ДатаКон")
     private String finishDate;
 
     @SerializedName("УслВыбОтч")

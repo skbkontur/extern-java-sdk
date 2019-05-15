@@ -35,11 +35,9 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.*;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
@@ -69,6 +67,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.junit.jupiter.api.DynamicTest.stream;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
@@ -79,9 +78,31 @@ class DocumentBuildIT {
     private static Configuration config;
     private static ExternEngine ee;
     private static Certificate workCert;
+    private Map<BuildDocumentType, String> IonTypeToTestFolder = new HashMap<BuildDocumentType, String>() {
+        {
+            put(BuildDocumentType.ION1, "/docs/ion1/");
+            put(BuildDocumentType.ION2, "/docs/ion2/");
+            put(BuildDocumentType.ION3, "/docs/ion3/");
+            put(BuildDocumentType.ION4, "/docs/ion4/");
+            put(BuildDocumentType.ION5, "/docs/ion5/");
+        }
+    };
 
-    private static IonRequestContract loadIon(String path) {
-        return Resources.loadFromJson(path, IonRequestContract.class);
+    private static IonRequestContract loadIon(String path, BuildDocumentType type) {
+        switch (type) {
+            case ION1:
+                return Resources.loadFromJson(path, Ion1RequestContract.class);
+            case ION2:
+                return Resources.loadFromJson(path, Ion2RequestContract.class);
+            case ION3:
+                return Resources.loadFromJson(path, Ion3RequestContract.class);
+            case ION4:
+                return Resources.loadFromJson(path, Ion4RequestContract.class);
+            case ION5:
+                return Resources.loadFromJson(path, Ion5RequestContract.class);
+            default:
+                return Resources.loadFromJson(path, IonRequestContract.class);
+        }
     }
 
     private static UsnServiceContractInfo loadUsn(String path) {
@@ -131,7 +152,6 @@ class DocumentBuildIT {
         return CryptoUtils.with(ee.getCryptoProvider()).sign(config.getThumbprint(), bytes);
     }
 
-
     @TestFactory
     @DisplayName("allow to create a valid usn")
     Stream<DynamicTest> createUsnTests() {
@@ -153,9 +173,26 @@ class DocumentBuildIT {
     @TestFactory
     @DisplayName("allow to create a ion from file")
     Stream<DynamicTest> createIonTests() throws IOException {
-        String prefix = "/docs/ion1/";
-        return Resources.walk(prefix)
-                .map(file -> dynamicTest(file, () -> checkIon(BuildDocumentType.ION1, loadIon(prefix + file), file)));
+
+        ArrayList<DynamicTest> result = new ArrayList<DynamicTest>();
+
+        for (Map.Entry<BuildDocumentType, String> entry : IonTypeToTestFolder.entrySet()) {
+            BuildDocumentType type = entry.getKey();
+            String prefix = entry.getValue();
+
+            result.addAll(Resources.walk(prefix)
+                    .map(file ->
+                            dynamicTest(
+                                    file, () ->
+                                            checkIon(
+                                                    type,
+                                                    loadIon(prefix + file, type),
+                                                    file)
+                            )
+                    ).collect(Collectors.toList()));
+        }
+
+        return result.stream();
     }
 
     private void checkIon(BuildDocumentType ionType, IonRequestContract ion, String name) {
@@ -217,7 +254,7 @@ class DocumentBuildIT {
 
     private void sendCheckedIon() {
         sendDraftTest(draftId -> draftService
-                .newIonRequestAsync(draftId, BuildDocumentType.ION1, loadIon("/docs/ion.json"))
+                .newIonRequestAsync(draftId, BuildDocumentType.ION1, loadIon("/docs/ion.json", BuildDocumentType.ION1))
                 .thenApply(QueryContext::getOrThrow)
                 .join()
                 .getId()

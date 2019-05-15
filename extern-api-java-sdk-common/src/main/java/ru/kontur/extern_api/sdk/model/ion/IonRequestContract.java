@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.model.ion;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.kontur.extern_api.sdk.model.BuildDocumentType;
 
 import java.text.SimpleDateFormat;
 
@@ -35,7 +36,7 @@ public class IonRequestContract<TIonData extends IonRequestData> implements IonR
     private int version;
     private @Nullable IonPeriod period;
     private ClientInfo additionalOrgInfo;
-    private IonRequestData data;
+    private TIonData data;
 
     public IonRequestContract(
             @NotNull ClientInfo additionalOrgInfo,
