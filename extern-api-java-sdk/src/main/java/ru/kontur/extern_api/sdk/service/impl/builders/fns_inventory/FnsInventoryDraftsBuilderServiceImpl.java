@@ -35,7 +35,7 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceImpl;
-import ru.kontur.extern_api.sdk.service.impl.builders.submission.SubmissionDraftsBuilderDocumentServiceImpl;
+
 
 public class FnsInventoryDraftsBuilderServiceImpl extends
         DraftsBuilderServiceImpl<

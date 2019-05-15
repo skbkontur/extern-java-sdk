@@ -244,18 +244,20 @@ class DraftServiceIT {
                         draftDocument.getId())
                 .join();
 
-        assertEquals(draftDocument.getId(), getDocument.get().getId());
+        DraftDocument document = getDocument.getOrThrow();
+
+        assertEquals(draftDocument.getId(), document.getId());
         assertEquals(draftDocument.getDecryptedContentLink(),
-                getDocument.get().getDecryptedContentLink());
+                document.getDecryptedContentLink());
 
         assertEquals(draftDocument.getEncryptedContentLink(),
-                getDocument.get().getEncryptedContentLink());
+                document.getEncryptedContentLink());
 
         assertEquals(draftDocument.getSignatureContentLink(),
-                getDocument.get().getSignatureContentLink());
+                document.getSignatureContentLink());
 
         assertEquals(draftDocument.getDescription().getType(),
-                getDocument.get().getDescription().getType());
+                document.getDescription().getType());
 
         assertNull(getDocument.getServiceError());
     }
@@ -399,7 +401,7 @@ class DraftServiceIT {
                 .checkAsync(draft.getId())
                 .join();
 
-        assertTrue(checkResult.get().hasNoErrors());
+        assertTrue(checkResult.getOrThrow().hasNoErrors());
     }
 
     @ParameterizedTest
@@ -428,6 +430,6 @@ class DraftServiceIT {
                 .join();
 
         assertNull(send.getServiceError());
-        assertEquals(send.get().getStatus().getName(), "sent");
+        assertEquals(send.getOrThrow().getStatus().getName(), "sent");
     }
 }
