@@ -23,22 +23,14 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import java.util.Date;
-import ru.kontur.extern_api.sdk.model.AdditionalClientInfo;
-import ru.kontur.extern_api.sdk.model.AdditionalClientInfo.SignerTypeEnum;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.DocumentSender;
-import ru.kontur.extern_api.sdk.model.MerchantTax;
-import ru.kontur.extern_api.sdk.model.OrganizationRequest;
-import ru.kontur.extern_api.sdk.model.PassportInfo;
-import ru.kontur.extern_api.sdk.model.PeriodIndicators;
-import ru.kontur.extern_api.sdk.model.Representative;
-import ru.kontur.extern_api.sdk.model.SenderRequest;
-import ru.kontur.extern_api.sdk.model.TaxPeriodIndicators;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.Taxpayer;
-import ru.kontur.extern_api.sdk.model.UsnDataV2;
-import ru.kontur.extern_api.sdk.model.UsnFormatPeriod;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.AdditionalClientInfo.SignerTypeEnum;
+import ru.kontur.extern_api.sdk.model.ion.ClientInfo;
+import ru.kontur.extern_api.sdk.model.ion.*;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class PreparedTestData {
 
@@ -65,7 +57,7 @@ public class PreparedTestData {
         payer.setTaxpayerOkved("47");
         payer.setTaxpayerPhone("777777");
 
-        if (!isChief){
+        if (!isChief) {
             PassportInfo passport = new PassportInfo();
             passport.setCode("21");
             passport.setSeriesNumber("1111 441144");
@@ -90,6 +82,81 @@ public class PreparedTestData {
         return aci;
     }
 
+    private static ClientInfo createIonClientInfo(String fio, String orgName, boolean isChief) {
+        SignerType signerType = isChief ? SignerType.CHIEF : SignerType.REPRESENTATIVE;
+
+        ru.kontur.extern_api.sdk.model.ion.Taxpayer payer = new ru.kontur.extern_api.sdk.model.ion.Taxpayer();
+        payer.setTaxpayerChiefFio(fio);
+        payer.setTaxpayerFullName(orgName);
+        payer.setTaxpayerOkved("47");
+        payer.setTaxpayerPhone("777777");
+        payer.setAddress(new Address());
+
+        if (!isChief) {
+            PassportInfo passport = new PassportInfo();
+            passport.setCode("21");
+            passport.setSeriesNumber("1111 441144");
+            passport.setIssuedBy("string");
+            passport.setIssuedDate(new Date());
+
+            Representative representative = new Representative();
+            representative.setPassport(passport);
+            representative.setRepresentativeDocument("1");
+
+            payer.setRepresentative(representative);
+        }
+
+        return new ClientInfo(fio, signerType, payer);
+    }
+
+    public static IonRequestContract buildIon(BuildDocumentType ionType, Certificate certificate, OrganizationRequest org) {
+        return IonBuilder.Create()
+                .setClientInfo(createIonClientInfo(certificate.getFio(), org.getOrgName(), true))
+                .setIonData(getIonRequestData(ionType))
+                .setIonPeriod(new IonPeriod(2018))
+                .build();
+    }
+
+    private static IonRequestData getIonRequestData(BuildDocumentType ionType) {
+        switch (ionType) {
+            case ION1:
+                return new Ion1RequestData(
+                        IonRequestContract.RequestType.ALL_KPPS.index(),
+                        IonRequestContract.AnswerFormat.XML.index(),
+                        "01.11.2018");
+            case ION2:
+                return new Ion2RequestData(
+                        IonRequestContract.RequestType.ALL_KPPS.index(),
+                        IonRequestContract.AnswerFormat.XML.index(),
+                        IonRequestContract.ReportGenerationCondition.GROUP_BY_ALL_PAYMENT_TYPES.index(),
+                        "2018",
+                        null);
+            case ION3:
+                return new Ion3RequestData(
+                        IonRequestContract.RequestType.ALL_KPPS.index(),
+                        IonRequestContract.AnswerFormat.XML.index(),
+                        "01.01.2018",
+                        "31.12.2019",
+                        IonRequestContract.ReportSelectionCondition.ALL_REPORT_TYPES.index());
+            case ION4:
+                return new Ion4RequestData(
+                        IonRequestContract.RequestType.ALL_KPPS.index(),
+                        IonRequestContract.AnswerFormat.XML.index(),
+                        "01.11.2018",
+                        "2018",
+                        new ArrayList<RequestingTax>() {{
+                            add(new RequestingTax("Налог на прибыль", "18210102010012100110", "45305000"));
+                        }}
+                );
+            case ION5:
+                return new Ion5RequestData(
+                        IonRequestContract.RequestType.ALL_KPPS.index(),
+                        IonRequestContract.AnswerFormat.XML.index(),
+                        "01.11.2018");
+            default:
+                return new IonRequestData(IonRequestContract.RequestType.ALL_KPPS.index(), IonRequestContract.AnswerFormat.XML.index());
+        }
+    }
 
     private static UsnDataV2 getUsnV2Data() {
         UsnDataV2 data = new UsnDataV2();

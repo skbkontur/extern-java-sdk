@@ -67,7 +67,6 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-import static org.junit.jupiter.api.DynamicTest.stream;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
@@ -171,8 +170,23 @@ class DocumentBuildIT {
     }
 
     @TestFactory
+    @DisplayName("allow to create a valid ion")
+    Stream<DynamicTest> createIonTests() {
+
+        OrganizationRequest org = new OrganizationRequest("111", "111", "111");
+
+        return Stream.of(
+                dynamicTest("Good Ion1 from dto", () -> checkIon(BuildDocumentType.ION1, PreparedTestData.buildIon(BuildDocumentType.ION1,workCert, org), true)),
+                dynamicTest("Good Ion2 from dto", () -> checkIon(BuildDocumentType.ION2, PreparedTestData.buildIon(BuildDocumentType.ION2,workCert, org), true)),
+                dynamicTest("Good Ion3 from dto", () -> checkIon(BuildDocumentType.ION3, PreparedTestData.buildIon(BuildDocumentType.ION3,workCert, org), true)),
+                dynamicTest("Good Ion4 from dto", () -> checkIon(BuildDocumentType.ION4, PreparedTestData.buildIon(BuildDocumentType.ION4,workCert, org), true)),
+                dynamicTest("Good Ion5 from dto", () -> checkIon(BuildDocumentType.ION5, PreparedTestData.buildIon(BuildDocumentType.ION5,workCert, org), true))
+        );
+    }
+
+    @TestFactory
     @DisplayName("allow to create a ion from file")
-    Stream<DynamicTest> createIonTests() throws IOException {
+    Stream<DynamicTest> createIonFromFileTests() throws IOException {
 
         ArrayList<DynamicTest> result = new ArrayList<DynamicTest>();
 
@@ -187,7 +201,7 @@ class DocumentBuildIT {
                                             checkIon(
                                                     type,
                                                     loadIon(prefix + file, type),
-                                                    file)
+                                                    file.startsWith("+"))
                             )
                     ).collect(Collectors.toList()));
         }
@@ -195,7 +209,7 @@ class DocumentBuildIT {
         return result.stream();
     }
 
-    private void checkIon(BuildDocumentType ionType, IonRequestContract ion, String name) {
+    private void checkIon(BuildDocumentType ionType, IonRequestContract ion, boolean isPositive) {
         UUID draftId = draftService
                 .createAsync(draftMeta)
                 .join()
@@ -207,8 +221,6 @@ class DocumentBuildIT {
                 .join();
 
         CheckResultData result = draftService.checkAsync(draftId).join().getOrThrow();
-
-        boolean isPositive = name.startsWith("+");
 
         if (isPositive) {
             assertTrue(result.hasNoErrors());
