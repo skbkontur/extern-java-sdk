@@ -175,31 +175,6 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
     }
 
     @Test
-    @DisplayName("delete drafts builder document file")
-    void delete() {
-        FnsInventoryDraftsBuilderDocumentFile newDraftsBuilderDocumentFile =
-                draftsBuilderDocumentFileCreator
-                        .createFnsInventoryDraftsBuilderDocumentFile(
-                                engine,
-                                cryptoUtils,
-                                draftsBuilder,
-                                draftsBuilderDocument
-                        );
-
-        draftsBuilderDocumentFileService
-                .deleteAsync(newDraftsBuilderDocumentFile.getId())
-                .join();
-
-        CompletionException exception = Assertions.assertThrows(
-                CompletionException.class,
-                () -> draftsBuilderDocumentFileService.getAsync(newDraftsBuilderDocumentFile.getId()).join()
-        );
-
-        ApiException apiException = (ApiException) exception.getCause();
-        assertEquals(404, apiException.getCode());
-    }
-
-    @Test
     @DisplayName("get content drafts builder document file")
     void getContent() {
         byte[] content = draftsBuilderDocumentFileService
