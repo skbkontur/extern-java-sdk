@@ -23,6 +23,8 @@
 package ru.kontur.extern_api.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -107,7 +109,7 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
                         .getAllAsync()
                         .join();
 
-        assertEquals(1, draftsBuilderDocumentFiles.length);
+        assertNotEquals(0, draftsBuilderDocumentFiles.length);
         assertEquals(draftsBuilderDocumentFile.getId(), draftsBuilderDocumentFiles[0].getId());
     }
 

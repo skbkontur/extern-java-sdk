@@ -69,9 +69,6 @@ class OrganizationIT{
     @AfterEach
     void tearDown() throws Exception {
         engine.getOrganizationService().deleteAsync(companyId).get();
-        // please don't hurt me .^.
-        //                       -
-        Thread.sleep(5000);
     }
 
     @Test
