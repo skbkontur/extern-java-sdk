@@ -70,7 +70,7 @@ class BankScenario {
         SystemProperty.pop("httpclient.debug");
 
         List<Account> accounts = engine.getAccountService()
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .get()
                 .getOrThrow()
                 .getAccounts();
@@ -123,7 +123,7 @@ class BankScenario {
 
         List<Certificate> remotes = engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
                 .getCertificates();

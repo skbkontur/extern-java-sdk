@@ -222,7 +222,7 @@ class DraftServiceIT {
     void testDeleteDocument(
             Pair<Draft, DraftDocument> addDocumentPack) {
 
-        QueryContext deleteDocument = engine.getDraftService()
+        QueryContext<Void> deleteDocument = engine.getDraftService()
                 .deleteDocumentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId())
@@ -270,7 +270,7 @@ class DraftServiceIT {
         DocumentContents newContents = new DocumentContents();
         newContents.setDescription(new DocumentDescription().filename("my favorite file"));
 
-        QueryContext updateDocument = engine.getDraftService()
+        QueryContext<DraftDocument> updateDocument = engine.getDraftService()
                 .updateDocumentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),
@@ -316,7 +316,7 @@ class DraftServiceIT {
     @MethodSource({"draftWithNewNonFnsDocumentFactory"})
     void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
-        QueryContext update = engine.getDraftService()
+        QueryContext<Void> update = engine.getDraftService()
                 .updateDecryptedDocumentContentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),
@@ -381,7 +381,7 @@ class DraftServiceIT {
         byte[] signature = cryptoUtils
                 .sign(engine.getConfiguration().getThumbprint(), docContent);
 
-        QueryContext update = engine.getDraftService()
+        QueryContext<Void> update = engine.getDraftService()
                 .updateSignatureAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),

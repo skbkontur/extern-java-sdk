@@ -62,7 +62,7 @@ class AccountIT {
     @Test
     void acquireAccounts() {
         QueryContext<AccountList> cxt = accountService
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .join()
                 .ensureSuccess();
 
@@ -105,7 +105,7 @@ class AccountIT {
     @Test
     void acquireAccount(){
         QueryContext<AccountList> cxt = accountService
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .join()
                 .ensureSuccess();
 
@@ -135,8 +135,8 @@ class AccountIT {
                 .join()
                 .ensureSuccess();
 
-        QueryContext deleteCxt = accountService
-                .deleteAccountAsync(createCxt.get().getId())
+        QueryContext<?> deleteCxt = accountService
+                .deleteAccountAsync(createCxt.getAccount().getId())
                 .join()
                 .ensureSuccess();
 

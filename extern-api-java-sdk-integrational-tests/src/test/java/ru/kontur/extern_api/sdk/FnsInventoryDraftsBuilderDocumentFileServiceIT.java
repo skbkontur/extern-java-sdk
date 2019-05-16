@@ -23,8 +23,6 @@
 package ru.kontur.extern_api.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -42,6 +40,7 @@ import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsB
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMeta;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -49,7 +48,8 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-@Execution(ExecutionMode.CONCURRENT)
+
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Drafts builder document file service should be able to")
 class FnsInventoryDraftsBuilderDocumentFileServiceIT {
 
@@ -65,6 +65,7 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
+        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         draftsBuilderDocumentFileCreator = new DraftsBuilderDocumentFileCreator();
 
@@ -109,7 +110,7 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
                         .getAllAsync()
                         .join();
 
-        assertNotEquals(0, draftsBuilderDocumentFiles.length);
+        assertEquals(1, draftsBuilderDocumentFiles.length);
         assertEquals(draftsBuilderDocumentFile.getId(), draftsBuilderDocumentFiles[0].getId());
     }
 
@@ -172,6 +173,31 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
         );
 
         assertNull(updatedFile.getSignatureContentLink());
+    }
+
+    @Test
+    @DisplayName("delete drafts builder document file")
+    void delete() {
+        FnsInventoryDraftsBuilderDocumentFile newDraftsBuilderDocumentFile =
+                draftsBuilderDocumentFileCreator
+                        .createFnsInventoryDraftsBuilderDocumentFile(
+                                engine,
+                                cryptoUtils,
+                                draftsBuilder,
+                                draftsBuilderDocument
+                        );
+
+        draftsBuilderDocumentFileService
+                .deleteAsync(newDraftsBuilderDocumentFile.getId())
+                .join();
+
+        CompletionException exception = Assertions.assertThrows(
+                CompletionException.class,
+                () -> draftsBuilderDocumentFileService.getAsync(newDraftsBuilderDocumentFile.getId()).join()
+        );
+
+        ApiException apiException = (ApiException) exception.getCause();
+        assertEquals(404, apiException.getCode());
     }
 
     @Test
