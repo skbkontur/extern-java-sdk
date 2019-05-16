@@ -33,9 +33,9 @@ public class IonRequestData {
     @SerializedName("ФормОтв")
     private int answerFormat;
 
-    public IonRequestData(int requestType, int answerFormat) {
-        this.requestType = requestType;
-        this.answerFormat = answerFormat;
+    public IonRequestData(IonRequestContract.RequestType requestType, IonRequestContract.AnswerFormat answerFormat) {
+        this.requestType = requestType.index();
+        this.answerFormat = answerFormat.index();
     }
 
     public int getRequestType() {

@@ -132,27 +132,27 @@ public class PreparedTestData {
         switch (ionType) {
             case ION1:
                 return new Ion1RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS.index(),
-                        IonRequestContract.AnswerFormat.XML.index(),
+                        IonRequestContract.RequestType.ALL_KPPS,
+                        IonRequestContract.AnswerFormat.XML,
                         "01.11.2018");
             case ION2:
                 return new Ion2RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS.index(),
-                        IonRequestContract.AnswerFormat.XML.index(),
-                        IonRequestContract.ReportGenerationCondition.GROUP_BY_ALL_PAYMENT_TYPES.index(),
+                        IonRequestContract.RequestType.ALL_KPPS,
+                        IonRequestContract.AnswerFormat.XML,
+                        IonRequestContract.ReportGenerationCondition.GROUP_BY_ALL_PAYMENT_TYPES,
                         "2018",
                         null);
             case ION3:
                 return new Ion3RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS.index(),
-                        IonRequestContract.AnswerFormat.XML.index(),
+                        IonRequestContract.RequestType.ALL_KPPS,
+                        IonRequestContract.AnswerFormat.XML,
                         "01.01.2018",
                         "31.12.2018",
-                        IonRequestContract.ReportSelectionCondition.ALL_REPORT_TYPES.index());
+                        IonRequestContract.ReportSelectionCondition.ALL_REPORT_TYPES);
             case ION4:
                 return new Ion4RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS.index(),
-                        IonRequestContract.AnswerFormat.XML.index(),
+                        IonRequestContract.RequestType.ALL_KPPS,
+                        IonRequestContract.AnswerFormat.XML,
                         "01.11.2018",
                         "2018",
                         new ArrayList<RequestingTax>() {{
@@ -161,11 +161,11 @@ public class PreparedTestData {
                 );
             case ION5:
                 return new Ion5RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS.index(),
-                        IonRequestContract.AnswerFormat.XML.index(),
+                        IonRequestContract.RequestType.ALL_KPPS,
+                        IonRequestContract.AnswerFormat.XML,
                         "01.11.2018");
             default:
-                return new IonRequestData(IonRequestContract.RequestType.ALL_KPPS.index(), IonRequestContract.AnswerFormat.XML.index());
+                return new IonRequestData(IonRequestContract.RequestType.ALL_KPPS, IonRequestContract.AnswerFormat.XML);
         }
     }
 

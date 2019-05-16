@@ -6,7 +6,9 @@ public class Ion5RequestData extends IonRequestData {
     @SerializedName("НаДату")
     private String onDate;
 
-    public Ion5RequestData(int requestType, int answerFormat, String onDate) {
+    public Ion5RequestData(
+            IonRequestContract.RequestType requestType,
+            IonRequestContract.AnswerFormat answerFormat, String onDate) {
         super(requestType, answerFormat);
         this.onDate = onDate;
     }

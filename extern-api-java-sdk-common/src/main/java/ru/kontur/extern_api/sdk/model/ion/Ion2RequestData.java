@@ -18,14 +18,14 @@ public class Ion2RequestData extends IonRequestData {
     private ArrayList<RequestingTax> requestingTax;
 
     public Ion2RequestData(
-            int requestType,
-            int answerFormat,
-            int reportGenerationCondition,
+            IonRequestContract.RequestType requestType,
+            IonRequestContract.AnswerFormat answerFormat,
+            IonRequestContract.ReportGenerationCondition reportGenerationCondition,
             String year,
             @Nullable ArrayList<RequestingTax> requestingTax) {
         super(requestType, answerFormat);
 
-        this.reportGenerationCondition = reportGenerationCondition;
+        this.reportGenerationCondition = reportGenerationCondition.index();
         this.year = year;
         this.requestingTax = requestingTax;
     }
