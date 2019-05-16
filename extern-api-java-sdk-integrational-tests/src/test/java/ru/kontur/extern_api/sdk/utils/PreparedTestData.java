@@ -85,12 +85,23 @@ public class PreparedTestData {
     private static ClientInfo createIonClientInfo(String fio, String orgName, boolean isChief) {
         SignerType signerType = isChief ? SignerType.CHIEF : SignerType.REPRESENTATIVE;
 
+        Address address = new Address();
+        address.setIndex("620036");
+        address.setRegion("66");
+        address.setDistrict("Верх-Исетский");
+        address.setCity("Екатеринбург");
+        address.setSettlement("Медный пос.");
+        address.setStreet("Луговая");
+        address.setHouse("8");
+        address.setBuilding("1A");
+        address.setFlat("5");
+
         ru.kontur.extern_api.sdk.model.ion.Taxpayer payer = new ru.kontur.extern_api.sdk.model.ion.Taxpayer();
         payer.setTaxpayerChiefFio(fio);
         payer.setTaxpayerFullName(orgName);
         payer.setTaxpayerOkved("47");
         payer.setTaxpayerPhone("777777");
-        payer.setAddress(new Address());
+        payer.setAddress(address);
 
         if (!isChief) {
             PassportInfo passport = new PassportInfo();
@@ -136,7 +147,7 @@ public class PreparedTestData {
                         IonRequestContract.RequestType.ALL_KPPS.index(),
                         IonRequestContract.AnswerFormat.XML.index(),
                         "01.01.2018",
-                        "31.12.2019",
+                        "31.12.2018",
                         IonRequestContract.ReportSelectionCondition.ALL_REPORT_TYPES.index());
             case ION4:
                 return new Ion4RequestData(
