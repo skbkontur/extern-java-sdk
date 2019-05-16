@@ -35,6 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
@@ -43,7 +45,7 @@ import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-
+@Execution(ExecutionMode.CONCURRENT)
 class AccountIT {
 
     private static AccountService accountService;
@@ -60,7 +62,7 @@ class AccountIT {
     @Test
     void acquireAccounts() {
         QueryContext<AccountList> cxt = accountService
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .join()
                 .ensureSuccess();
 
@@ -103,7 +105,7 @@ class AccountIT {
     @Test
     void acquireAccount(){
         QueryContext<AccountList> cxt = accountService
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .join()
                 .ensureSuccess();
 
@@ -133,8 +135,8 @@ class AccountIT {
                 .join()
                 .ensureSuccess();
 
-        QueryContext deleteCxt = accountService
-                .deleteAccountAsync(createCxt.get().getId())
+        QueryContext<?> deleteCxt = accountService
+                .deleteAccountAsync(createCxt.getAccount().getId())
                 .join()
                 .ensureSuccess();
 

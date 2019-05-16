@@ -32,12 +32,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.utils.EventId;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.ApiEvent;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 
 
+@Execution(ExecutionMode.CONCURRENT)
 class EventIT {
 
     private static ExternEngine engine;

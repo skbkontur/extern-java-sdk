@@ -18,7 +18,7 @@ public class DocflowDocumentDescription {
     private Boolean compressed = null;
     private Boolean supportRecognition = null;
     private DocflowDocumentRequisitesBase requisites = null;
-    private Long relatedDocflowsCount = null;
+    private long relatedDocflowsCount;
 
     /**
      * Возвращает реквизиты документа
@@ -51,11 +51,11 @@ public class DocflowDocumentDescription {
         this.supportRecognition = supportRecognition;
     }
 
-    public Long getRelatedDocflowsCount() {
+    public long getRelatedDocflowsCount() {
         return relatedDocflowsCount;
     }
 
-    public void setRelatedDocflowsCount(Long relatedDocflowsCount) {
+    public void setRelatedDocflowsCount(long relatedDocflowsCount) {
         this.relatedDocflowsCount = relatedDocflowsCount;
     }
 

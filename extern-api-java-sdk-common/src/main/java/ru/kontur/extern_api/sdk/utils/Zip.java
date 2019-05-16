@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.jetbrains.annotations.Contract;
 
 public class Zip {
 
@@ -37,6 +38,7 @@ public class Zip {
      * @param compressed single zipped file
      * @return unzipped file bytes
      */
+    @Contract("null -> null; !null -> !null")
     public static byte[] unzip(byte[] compressed) {
         if (compressed == null) {
             return null;

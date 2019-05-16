@@ -206,4 +206,11 @@ public class Document {
     public int hashCode() {
         return id.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "type = " + description.getType() +
+                '}';
+    }
 }

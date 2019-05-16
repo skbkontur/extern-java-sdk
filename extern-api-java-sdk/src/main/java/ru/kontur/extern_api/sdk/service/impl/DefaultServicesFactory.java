@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.UUID;
+import java.util.function.Supplier;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
@@ -103,7 +105,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public TaskService getTaskService(UUID draftId) {
+    public TaskService getTaskService(@NotNull UUID draftId) {
         return new TaskServiceImpl(
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class),
@@ -131,7 +133,10 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId) {
+    public RelatedDocumentsService getRelatedDocumentsService(
+            UUID relatedDocflowId,
+            UUID relatedDocumentId
+    ) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
                 createApi(RelatedDocflowApi.class),
@@ -141,7 +146,10 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocumentId) {
+    public RelatedDocumentsService getRelatedDocumentsService(
+            Docflow relatedDocflow,
+            Document relatedDocumentId
+    ) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
                 createApi(RelatedDocflowApi.class),
@@ -151,15 +159,15 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     private KonturConfiguredClient postConfigure(KonturConfiguredClient client) {
-        String authSid = providerHolder.getAuthenticationProvider()
+        Supplier<String> authSidProvider = () -> providerHolder.getAuthenticationProvider()
                 .sessionId()
                 .getOrThrow();
 
         return client
-                .setAuthSid(authSid)
+                .setAuthSidSupplier(authSidProvider)
                 .setServiceBaseUrl(providerHolder.getServiceBaseUriProvider().getUri())
-                .setApiKey(providerHolder.getApiKeyProvider().getApiKey())
-                .setUserAgent(providerHolder.getUserAgentProvider().getUserAgent());
+                .setApiKeySupplier(providerHolder.getApiKeyProvider()::getApiKey)
+                .setUserAgentSupplier(providerHolder.getUserAgentProvider()::getUserAgent);
     }
 
     private <T> T createApi(Class<T> apiType) {

@@ -24,6 +24,7 @@ package ru.kontur.extern_api.sdk.service.builders;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMetaRequest;
@@ -59,7 +60,7 @@ public interface DraftsBuilderDocumentService<
      * @return сервис для работы с файлами документа билдера черновиков
      */
     TDraftsBuilderDocumentFileService getFileService(
-            UUID draftsBuilderDocumentId
+            @NotNull UUID draftsBuilderDocumentId
     );
 
     /**

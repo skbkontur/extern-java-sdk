@@ -28,12 +28,14 @@ import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
 import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 import java.security.cert.CertificateException;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
+import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
@@ -123,12 +125,11 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     @NotNull
     private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
-        return cryptoApi.getInstalledKeys(false)
-                .stream()
-                .filter(w -> thumbprint.compareToIgnoreCase(cryptoApi.getThumbprint(w.getX509ctx())) == 0)
-                .findAny()
-                .orElseThrow(() -> new CryptoException(
-                        "Cannot find locally installed certificate with thumbprint " + thumbprint
-                ));
+        for (Key w : cryptoApi.getInstalledKeys(false)) {
+            if (thumbprint.compareToIgnoreCase(IOUtil.bytesToHex(w.getThumbprint())) == 0) {
+                return w;
+            }
+        }
+        throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);
     }
 }

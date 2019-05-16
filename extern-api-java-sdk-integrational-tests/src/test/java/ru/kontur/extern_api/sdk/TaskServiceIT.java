@@ -22,8 +22,8 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +32,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.model.*;
@@ -42,6 +44,8 @@ import ru.kontur.extern_api.sdk.utils.DraftTestPack;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
+
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Task service should be able to")
 class TaskServiceIT {
 
@@ -76,7 +80,7 @@ class TaskServiceIT {
 
 
     @ParameterizedTest
-    @DisplayName("command \"StartSend\"")
+    @DisplayName("StartSend")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartSend(Draft draft) {
         SendTaskInfo startSend = engine.getTaskService(draft.getId())
@@ -89,7 +93,7 @@ class TaskServiceIT {
 
 
     @ParameterizedTest
-    @DisplayName("command \"GetSendResult\"")
+    @DisplayName("GetSendResult")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetSendResult(Draft draft) {
         SendTaskInfo startSend = engine.getTaskService(draft.getId())
@@ -101,7 +105,7 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("command \"GetSendResult\"")
+    @DisplayName("GetSendResult")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetTaskState(Draft draft) {
         SendTaskInfo startSend = engine.getTaskService(draft.getId())
@@ -113,7 +117,7 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("command \"StartPrepare\"")
+    @DisplayName("StartPrepare")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartPrepare(Draft draft) {
         PrepareTaskInfo startPrepare = engine.getTaskService(draft.getId())
@@ -125,7 +129,7 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("command \"GetPrepareResult\"")
+    @DisplayName("GetPrepareResult")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetPrepareResult(Draft draft) {
         PrepareTaskInfo startPrepare = engine.getTaskService(draft.getId())
@@ -140,7 +144,7 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("command \"StartCheck\"")
+    @DisplayName("StartCheck")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testStartCheck(Draft draft) {
         CheckTaskInfo startCheck = engine.getTaskService(draft.getId())
@@ -152,7 +156,7 @@ class TaskServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("command \"GetCheckResult\"")
+    @DisplayName("GetCheckResult")
     @MethodSource({"newDraftWithDocumentFactory"})
     void testGetCheckResult(Draft draft) {
         CheckTaskInfo startCheck = engine.getTaskService(draft.getId())

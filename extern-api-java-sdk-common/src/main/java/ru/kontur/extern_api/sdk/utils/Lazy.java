@@ -25,7 +25,6 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,13 +71,11 @@ public class Lazy<T> implements Supplier<T> {
 
     @NotNull
     public static <T> Lazy<T> of(@NotNull Supplier<T> supplier) {
-        Objects.requireNonNull(supplier);
         return new Lazy<>(supplier, true);
     }
 
     @NotNull
     public static <T> Lazy<T> tryOnce(@NotNull Supplier<T> supplier) {
-        Objects.requireNonNull(supplier);
         return new Lazy<>(supplier, false);
     }
 }

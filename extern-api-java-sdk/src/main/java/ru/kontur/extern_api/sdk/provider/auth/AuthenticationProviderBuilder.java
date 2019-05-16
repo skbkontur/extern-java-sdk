@@ -30,7 +30,6 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
-import ru.argosgrp.cryptoservice.CryptoException;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.model.Credential;
@@ -66,7 +65,8 @@ public final class AuthenticationProviderBuilder {
 
 
     public AuthenticationProviderBuilder withApiKey(@NotNull String apiKey) {
-        configuredClient.setApiKey(this.apiKey = apiKey);
+        this.apiKey = apiKey;
+        configuredClient.setApiKeySupplier(() -> this.apiKey);
         return this;
     }
 
@@ -88,7 +88,7 @@ public final class AuthenticationProviderBuilder {
     public CertificateAuthenticationProvider certificateAuthentication(
             @NotNull CryptoProvider cryptoProvider,
             @NotNull byte[] certContent)
-            throws CryptoException, CertificateException {
+            throws CertificateException {
 
         CryptoApi cryptoApi = new CryptoApi();
 
@@ -102,7 +102,7 @@ public final class AuthenticationProviderBuilder {
     }
 
     public CertificateAuthenticationProvider certificateAuthentication(@NotNull byte[] certContent)
-            throws CryptoException, CertificateException {
+            throws CertificateException {
         return certificateAuthentication(new CryptoProviderMSCapi(), certContent);
     }
 

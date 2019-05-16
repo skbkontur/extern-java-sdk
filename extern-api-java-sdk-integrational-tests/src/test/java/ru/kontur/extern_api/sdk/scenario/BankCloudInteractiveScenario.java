@@ -118,7 +118,7 @@ class BankCloudInteractiveScenario {
     void main() throws Exception {
 
         List<Account> accounts = engine.getAccountService()
-                .acquireAccountsAsync()
+                .getAccountsAsync(0, 100)
                 .get()
                 .getOrThrow()
                 .getAccounts();
@@ -414,7 +414,7 @@ class BankCloudInteractiveScenario {
 
         List<Certificate> remotes = engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
                 .getCertificates();

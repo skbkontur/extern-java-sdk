@@ -31,18 +31,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.PasswordAuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.auth.TrustedAuthenticationProvider;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
 
-class AuthenticationIT{
+@Execution(ExecutionMode.CONCURRENT)
+class AuthenticationIT {
 
     private static AuthenticationProviderBuilder build;
     private static Configuration configuration;
@@ -64,8 +66,7 @@ class AuthenticationIT{
         void cachingTest() {
 
             CachingRefreshingAuthProvider auth = build
-                    .passwordAuthentication(
-                            configuration.getLogin(), configuration.getPass());
+                    .passwordAuthentication(configuration.getLogin(), configuration.getPass());
 
             String s1 = auth.sessionId().getOrThrow();
             String s2 = auth.sessionId().getOrThrow();

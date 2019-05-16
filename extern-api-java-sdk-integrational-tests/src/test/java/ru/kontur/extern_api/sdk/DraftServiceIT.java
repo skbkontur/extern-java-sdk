@@ -28,10 +28,10 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Base64;
@@ -43,6 +43,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -56,6 +58,8 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
+
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Draft service should be able to")
 class DraftServiceIT {
 
@@ -218,7 +222,7 @@ class DraftServiceIT {
     void testDeleteDocument(
             Pair<Draft, DraftDocument> addDocumentPack) {
 
-        QueryContext deleteDocument = engine.getDraftService()
+        QueryContext<Void> deleteDocument = engine.getDraftService()
                 .deleteDocumentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId())
@@ -240,18 +244,20 @@ class DraftServiceIT {
                         draftDocument.getId())
                 .join();
 
-        assertEquals(draftDocument.getId(), getDocument.get().getId());
+        DraftDocument document = getDocument.getOrThrow();
+
+        assertEquals(draftDocument.getId(), document.getId());
         assertEquals(draftDocument.getDecryptedContentLink(),
-                getDocument.get().getDecryptedContentLink());
+                document.getDecryptedContentLink());
 
         assertEquals(draftDocument.getEncryptedContentLink(),
-                getDocument.get().getEncryptedContentLink());
+                document.getEncryptedContentLink());
 
         assertEquals(draftDocument.getSignatureContentLink(),
-                getDocument.get().getSignatureContentLink());
+                document.getSignatureContentLink());
 
         assertEquals(draftDocument.getDescription().getType(),
-                getDocument.get().getDescription().getType());
+                document.getDescription().getType());
 
         assertNull(getDocument.getServiceError());
     }
@@ -264,7 +270,7 @@ class DraftServiceIT {
         DocumentContents newContents = new DocumentContents();
         newContents.setDescription(new DocumentDescription().filename("my favorite file"));
 
-        QueryContext updateDocument = engine.getDraftService()
+        QueryContext<DraftDocument> updateDocument = engine.getDraftService()
                 .updateDocumentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),
@@ -310,7 +316,7 @@ class DraftServiceIT {
     @MethodSource({"draftWithNewNonFnsDocumentFactory"})
     void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
-        QueryContext update = engine.getDraftService()
+        QueryContext<Void> update = engine.getDraftService()
                 .updateDecryptedDocumentContentAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),
@@ -375,7 +381,7 @@ class DraftServiceIT {
         byte[] signature = cryptoUtils
                 .sign(engine.getConfiguration().getThumbprint(), docContent);
 
-        QueryContext update = engine.getDraftService()
+        QueryContext<Void> update = engine.getDraftService()
                 .updateSignatureAsync(
                         addDocumentPack.first.getId(),
                         addDocumentPack.second.getId(),
@@ -395,7 +401,7 @@ class DraftServiceIT {
                 .checkAsync(draft.getId())
                 .join();
 
-        assertTrue(checkResult.get().hasNoErrors());
+        assertTrue(checkResult.getOrThrow().hasNoErrors());
     }
 
     @ParameterizedTest
@@ -424,6 +430,6 @@ class DraftServiceIT {
                 .join();
 
         assertNull(send.getServiceError());
-        assertEquals(send.get().getStatus().getName(), "sent");
+        assertEquals(send.getOrThrow().getStatus().getName(), "sent");
     }
 }

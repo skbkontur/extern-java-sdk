@@ -135,4 +135,10 @@ public class Draft {
     public List<Link> getDocuments() {
         return documents;
     }
+
+    @Override
+    public String toString() {
+        return "Draft{ from " + meta.getSender().getName() +
+                " to " + meta.getRecipient().getClass().getSimpleName() + '}';
+    }
 }

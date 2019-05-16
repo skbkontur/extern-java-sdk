@@ -3,7 +3,6 @@ package ru.kontur.extern_api.sdk.utils;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CertificateWrapper;
@@ -20,7 +19,7 @@ public class DemandTestDataProvider extends TestData {
 
     public static CompletableFuture<DemandTestData> getTestDemand(TestData testData, TestSuite testSuite) {
         return getTestDemand(testData, testSuite, testSuite.getConfig().getServiceBaseUri(),
-                             testSuite.getConfig().getAuthBaseUri()
+                testSuite.getConfig().getAuthBaseUri()
         );
     }
 
@@ -56,24 +55,34 @@ public class DemandTestDataProvider extends TestData {
             TestSuite testSuite
     ) {
         return Awaiter
-                .waitForCondition(() -> testSuite.engine.getDocflowService()
-                        .getDocumentsAsync(testData.getDemandId())
-                        .thenApply(QueryContext::get), result -> result != null && result.size() > 0, 2000)
+                .waitForCondition(
+                        () -> testSuite.engine.getDocflowService().getDocumentsAsync(testData.getDemandId()),
+                        cxt -> (cxt.isSuccess() && cxt.getOrThrow().size() > 0) ||
+                                (cxt.isFail() && cxt.getServiceError().getCode() != 404),
+                        2000
+                )
+                .thenApply(QueryContext::getOrThrow)
                 .thenApply(documents -> {
-                    UUID attachmentId = documents
-                            .stream()
+                    documents.stream()
                             .filter(document -> document.getDescription().getType()
                                     == DocumentType.Fns534DemandAttachment)
-                            .map(Document::getId).findFirst().orElse(null);
-                    testData.setDemandAttachmentId(attachmentId);
+                            .map(Document::getId)
+                            .findFirst()
+                            .ifPresent(testData::setDemandAttachmentId);
+
                     return testData;
-                }).thenCompose(demandTestData -> testSuite.engine.getDocflowService()
-                        .getEncryptedContentAsync(testData.getDemandId(), testData.getDemandAttachmentId()))
+                })
+                .thenCompose(demandTestData -> testSuite.engine
+                        .getDocflowService()
+                        .getEncryptedContentAsync(testData.getDemandId(), testData.getDemandAttachmentId())
+                )
                 .thenCompose(content -> {
                     String senderCertificate = testData.getClientInfo().getSender().getCertificate();
+
                     CertificateWrapper certificateWrapper = UncheckedSupplier
                             .get(() -> new X509CertificateFactory()
-                                    .create(Base64.getDecoder().decode(senderCertificate)));
+                                    .create(Base64.getDecoder().decode(senderCertificate))
+                            );
 
                     return testSuite.engine.getCryptoProvider().decryptAsync(
                             certificateWrapper.getThumbprint(),

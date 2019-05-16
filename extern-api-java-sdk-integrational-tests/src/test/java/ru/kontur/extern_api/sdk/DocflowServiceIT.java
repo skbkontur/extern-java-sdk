@@ -25,10 +25,6 @@ package ru.kontur.extern_api.sdk;
 
 import static java.util.Optional.ofNullable;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -37,14 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.parallel.Execution;
@@ -54,26 +47,24 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.service.DocflowService;
+import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
 import ru.kontur.extern_api.sdk.utils.DemandTestData;
 import ru.kontur.extern_api.sdk.utils.DemandTestDataProvider;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.EngineUtils;
-import ru.kontur.extern_api.sdk.utils.SystemProperty;
+import ru.kontur.extern_api.sdk.utils.Lazy;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.Lazy;
-import ru.kontur.extern_api.sdk.utils.UncheckedFunction;
-import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
 
-@DisplayName("Docflow service should be able to")
 @Execution(ExecutionMode.CONCURRENT)
+@DisplayName("Docflow service should be able to")
 class DocflowServiceIT {
 
     protected static ExternEngine engine;
@@ -91,32 +82,40 @@ class DocflowServiceIT {
     private static EngineUtils engineUtils;
 
     private static Lazy<TestPack> testPack = Lazy.of(() -> getTestPack(engine));
+    private static Lazy<TestData[]> testData = Lazy.of(() -> getTestData(engine));
+
+
     private static HttpClient client;
     private static Lazy<Certificate> cloudCert = Lazy.of(DocflowServiceIT::getCloudCertificate);
     private static Lazy<ApproveCodeProvider> codeProvider = Lazy
             .of(() -> new ApproveCodeProvider(engine));
 
-    private DocflowService docflowService;
+    private static DocflowService docflowService;
 
     private static TestPack getTestPack(ExternEngine ee) {
-        String cert = engineUtils.crypto.loadX509(ee.getConfiguration().getThumbprint());
-        TestData[] tds = TestUtils.getTestData(cert);
-        List<QueryContext<Docflow>> qcs = UncheckedSupplier.get(() -> createDocflows(ee, tds));
+        List<QueryContext<Docflow>> qcs = createDocflows(ee, testData.get());
         return new TestPack(qcs);
     }
 
-    private static Stream<DemandTestData> demandLazyFactory()  {
+    private static TestData[] getTestData(ExternEngine ee) {
+        String cert = engineUtils.crypto.loadX509(ee.getConfiguration().getThumbprint());
+        return TestUtils.getTestData(cert);
+    }
+
+    private static Stream<DemandTestData> demandLazyFactory() {
         String cert = engineUtils.crypto.loadX509(engine.getConfiguration().getThumbprint());
         TestData[] testData = TestUtils.getTestData(cert);
-        List<DemandTestData> result=new ArrayList<>();
+        List<DemandTestData> result = new ArrayList<>();
 
-        DemandTestData demand= UncheckedSupplier.get(()->DemandTestDataProvider.getTestDemand(testData[0], TestSuite.Load()).get());
+        DemandTestData demand = UncheckedSupplier.get(() -> DemandTestDataProvider
+                .getTestDemand(testData[0], TestSuite.Load()).get());
         result.add(demand);
         return result.stream();
     }
 
     private static Stream<QueryContext<Docflow>> docflowLazyFactory() {
-        return testPack.get().testDocflows.stream();
+        return docflowFactory();
+//        return testPack.get().testDocflows.stream();
     }
 
     private static Stream<QueryContext<Docflow>> docflowFactory() {
@@ -128,25 +127,14 @@ class DocflowServiceIT {
         engine = TestSuite.Load().engine;
         engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
-    }
-
-    @BeforeEach
-    void setUp() {
         docflowService = engine.getDocflowService();
-
-        SystemProperty.push("httpclient.debug");
-    }
-
-    @AfterEach
-    void tearDown() {
-        SystemProperty.pop("httpclient.debug");
     }
 
     @ParameterizedTest
     @DisplayName("get docflow by id")
     @MethodSource("docflowLazyFactory")
     void testGetDocflow(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
         Docflow returned = docflowService
                 .lookupDocflowAsync(docflow.getId())
                 .join()
@@ -154,7 +142,6 @@ class DocflowServiceIT {
 
         Assertions.assertEquals(docflow.getId(), returned.getId());
         Assertions.assertEquals(docflow.getType(), returned.getType());
-        Assertions.assertEquals(docflow.getStatus(), returned.getStatus());
 
     }
 
@@ -163,7 +150,7 @@ class DocflowServiceIT {
     @DisplayName("get docflow documents")
     @MethodSource("docflowLazyFactory")
     void testGetDocuments(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         List<Document> docs = docflowService
                 .getDocumentsAsync(docflow.getId())
@@ -181,7 +168,7 @@ class DocflowServiceIT {
     @DisplayName("lookup single document")
     @MethodSource("docflowLazyFactory")
     void testLookupDocument(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         List<Document> docs = docflowService
                 .getDocumentsAsync(docflow.getId())
@@ -205,7 +192,7 @@ class DocflowServiceIT {
     @DisplayName("lookup document description")
     @MethodSource("docflowLazyFactory")
     void testLookupDocumentDescription(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         List<Document> docs = docflowService
                 .getDocumentsAsync(docflow.getId())
@@ -231,7 +218,7 @@ class DocflowServiceIT {
     @DisplayName("get encrypted document content")
     @MethodSource("docflowLazyFactory")
     void testGetEncryptedContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         List<Document> docs = docflowService
@@ -267,7 +254,7 @@ class DocflowServiceIT {
     @DisplayName("get decrypted document content")
     @MethodSource("docflowLazyFactory")
     void testGetDecryptedContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         List<Document> docs = docflowService
@@ -299,7 +286,7 @@ class DocflowServiceIT {
     @DisplayName("decrypt document content in cloud")
     @MethodSource("docflowLazyFactory")
     void testDecryptContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
@@ -307,9 +294,7 @@ class DocflowServiceIT {
                 .join()
                 .ensureSuccess();
 
-        Assertions.assertNotNull(docsCxt.get());
-
-        for (Document d : docsCxt.get()) {
+        for (Document d : docsCxt.getOrThrow()) {
 
             if (!d.hasEncryptedContent()) {
                 continue;
@@ -331,7 +316,7 @@ class DocflowServiceIT {
     @DisplayName("get document signatures")
     @MethodSource("docflowLazyFactory")
     void testGetSignatures(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         List<Document> docs = docflowService
@@ -355,7 +340,7 @@ class DocflowServiceIT {
     @DisplayName("get document single signature")
     @MethodSource("docflowLazyFactory")
     void testGetSignature(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         List<Document> docs = docflowService
@@ -386,7 +371,7 @@ class DocflowServiceIT {
     @DisplayName("get document signature content")
     @MethodSource("docflowLazyFactory")
     void testGetSignatureContent(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         List<Document> docs = docflowService
@@ -415,7 +400,7 @@ class DocflowServiceIT {
     @DisplayName("two options for generate reply works")
     @MethodSource("docflowLazyFactory")
     void testGenerateReply(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -459,7 +444,7 @@ class DocflowServiceIT {
     @DisplayName("send reply documents by choosing its type")
     @MethodSource("docflowFactory")
     void testSendOneReply(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -484,26 +469,29 @@ class DocflowServiceIT {
         ReplyDocument reply = client.followPostLink(
                 generateLink.getHref(),
                 cert,
-                ReplyDocument.class);
+                ReplyDocument.class
+        );
 
         byte[] signature = engineUtils.crypto.sign(thumbprint, reply.getContent());
 
         client.followPutLink(
                 reply.getPutSignatureLink().getHref(),
                 signature,
-                ReplyDocument.class);
+                ReplyDocument.class
+        );
 
         client.followPostLink(
                 reply.getSendLink().getHref(),
                 new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class);
+                Docflow.class
+        );
     }
 
     @ParameterizedTest
     @DisplayName("send reply document by choosing its type with cloud cert")
     @MethodSource("docflowFactory")
     void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -526,11 +514,13 @@ class DocflowServiceIT {
         ReplyDocument reply = client.followPostLink(
                 generateLink.getHref(),
                 certificateBase64,
-                ReplyDocument.class);
+                ReplyDocument.class
+        );
 
         SignInitiation signInitiation = client.followPostLink(
                 reply.getCloudSignLink().getHref(),
-                SignInitiation.class);
+                SignInitiation.class
+        );
 
         HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("code", codeProvider.get().apply(signInitiation.getRequestId()));
@@ -540,12 +530,14 @@ class DocflowServiceIT {
                 reply.getCloudSignConfirmLink().getHref(),
                 queryParams,
                 null,
-                SignConfirmResultData.class);
+                SignConfirmResultData.class
+        );
 
         client.followPostLink(
                 reply.getSendLink().getHref(),
                 new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class);
+                Docflow.class
+        );
     }
 
 
@@ -553,7 +545,7 @@ class DocflowServiceIT {
     @DisplayName("send all replies for document by choosing type")
     @MethodSource("docflowFactory")
     void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         Document document = docflow.getDocuments()
                 .stream()
@@ -579,14 +571,16 @@ class DocflowServiceIT {
         ReplyDocument reply = client.followPostLink(
                 generateLink.getHref(),
                 certificateBase64,
-                ReplyDocument.class);
+                ReplyDocument.class
+        );
 
         SignInitiation signInitiation = client.followPostLink(
                 reply.getCloudSignLink().getHref(),
                 // включить возможность подписи без подтверждения
                 Collections.singletonMap("forceConfirmation", false),
                 null,
-                SignInitiation.class);
+                SignInitiation.class
+        );
 
         // если requestId == null -- то сервер подписал документ и не требует подтверждения
         Assertions.assertNull(signInitiation.getRequestId());
@@ -594,7 +588,8 @@ class DocflowServiceIT {
         client.followPostLink(
                 reply.getSendLink().getHref(),
                 new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class);
+                Docflow.class
+        );
     }
 
 
@@ -603,17 +598,17 @@ class DocflowServiceIT {
     @MethodSource("docflowFactory")
     void testGetDocflows(QueryContext<Docflow> df) {
         CompanyGeneral company = engine.getOrganizationService()
-                .lookupAsync(df.get().getOrganizationId())
+                .lookupAsync(df.getDocflow().getOrganizationId())
                 .join()
                 .getOrThrow()
                 .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
-                                                                        .page(0, 10)
-                                                                        .finished(true)
-                                                                        .incoming(false)
-                                                                        .innKpp(company.getInn(), company.getKpp())
-                                                                        .type(DocflowType.FNS534_REPORT)
+                .page(0, 10)
+                .finished(true)
+                .incoming(false)
+                .innKpp(company.getInn(), company.getKpp())
+                .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
         Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
@@ -633,16 +628,14 @@ class DocflowServiceIT {
 
         String base64 = dc.getBase64Content();
 
-        Docflow docflow = docflowCxt.get();
+        Docflow docflow = docflowCxt.getDocflow();
 
         // загружаем список документов
         QueryContext<List<Document>> docsCxt = docflowService
                 .getDocumentsAsync(docflow.getId())
                 .join();
 
-        Assertions.assertNotNull(docsCxt.get());
-
-        for (Document d : docsCxt.get()) {
+        for (Document d : docsCxt.getOrThrow()) {
             // печатаем только исходпую декларацию
             String name = ofNullable(d.getDescription())
                     .map(DocflowDocumentDescription::getFilename)
@@ -654,9 +647,10 @@ class DocflowServiceIT {
             if (name.equalsIgnoreCase(dcName)) {
                 QueryContext<String> printCxt = docflowService
                         .printAsync(
-                                docflowCxt.get().getId().toString(),
+                                docflowCxt.getDocflow().getId().toString(),
                                 d.getId().toString(),
-                                base64)
+                                base64
+                        )
                         .join();
 
                 Assertions.assertNotNull(printCxt.get());
@@ -670,16 +664,24 @@ class DocflowServiceIT {
     void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
         DocflowService docflowService = engine.getDocflowService();
 
-        Document document = docflowService.lookupDocumentAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId())
-                                                            .join().getOrThrow();
+        Document document = docflowService.lookupDocumentAsync(
+                demandTestData.getDemandId(),
+                demandTestData.getDemandAttachmentId()
+        )
+                .join().getOrThrow();
 
-        DemandAttachmentRequisites requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
-        Assertions.assertEquals(requisites.getDemandDate(), null);
-        Assertions.assertEquals(requisites.getDemandNumber(), null);
+        DemandAttachmentRequisites requisites = (DemandAttachmentRequisites) document.getDescription()
+                .getRequisites();
+        Assertions.assertNull(requisites.getDemandDate());
+        Assertions.assertNull(requisites.getDemandNumber());
         Assertions.assertEquals(requisites.getDemandInnList().size(), 0);
 
         RecognizedMeta recognizedMeta = docflowService
-                .recognizeAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId(), demandTestData.getDemandAttachmentDecryptedBytes())
+                .recognizeAsync(
+                        demandTestData.getDemandId(),
+                        demandTestData.getDemandAttachmentId(),
+                        demandTestData.getDemandAttachmentDecryptedBytes()
+                )
                 .join()
                 .getOrThrow();
 
@@ -688,7 +690,10 @@ class DocflowServiceIT {
         Assertions.assertNotNull(recognizedMeta.getDemandNumber());
         Assertions.assertNotNull(recognizedMeta.getDemandInnList());
 
-        document = docflowService.lookupDocumentAsync(demandTestData.getDemandId(), demandTestData.getDemandAttachmentId()).join().getOrThrow();
+        document = docflowService.lookupDocumentAsync(
+                demandTestData.getDemandId(),
+                demandTestData.getDemandAttachmentId()
+        ).join().getOrThrow();
         requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
 
         Assertions.assertEquals(requisites.getDemandDate(), recognizedMeta.getDemandDate());
@@ -698,36 +703,46 @@ class DocflowServiceIT {
 
     private static List<QueryContext<Docflow>> createDocflows(
             ExternEngine engine,
-            TestData[] testData) {
+            TestData[] testData
+    ) {
 
         DraftService draftService = engine.getDraftService();
 
-        List<QueryContext<Docflow>> testCtxs = Arrays.stream(testData).parallel().map(td -> {
-            if (td.getDocs() == null || td.getDocs().length == 0) {
-                Assertions.fail("No a test document");
-            }
+        List<CompletableFuture<QueryContext<Docflow>>> docflowCreateFutures = Arrays
+                .stream(testData)
+                .map(td -> {
+                    if (td.getDocs() == null || td.getDocs().length == 0) {
+                        Assertions.fail("missing test documents");
+                    }
 
-            DraftMetaRequest dm = TestUtils.toDraftMetaRequest(td);
-            String path = td.getDocs()[0];
-            DocType docType = DocType.getDocType(dm.getRecipient());
+                    DraftMetaRequest dm = TestUtils.toDraftMetaRequest(td);
 
-            CompletableFuture<QueryContext<Docflow>> future = draftService
-                    .createAsync(dm)
-                    .thenApply(QueryContext::getOrThrow)
-                    .thenCompose(draft -> addDocument(dm, td, draft.getId())
+                    return draftService
+                            .createAsync(dm)
                             .thenApply(QueryContext::getOrThrow)
-                            .thenApply(o -> draft)
-                    )
-                    .thenCompose(draft -> draftService.sendAsync(draft.getId()))
-                    .thenApply(QueryContext::ensureSuccess);
+                            .thenCompose(draft -> addDocument(dm, td, draft.getId())
+                                    .thenApply(QueryContext::getOrThrow)
+                                    .thenApply(o -> draft)
+                            )
+                            .thenCompose(draft -> draftService.sendAsync(draft.getId()))
+                            .thenApply(QueryContext::ensureSuccess)
+                            .whenComplete((cxt, throwable) -> {
+                                awaitDocflowIndexed(engine, cxt.getDocflow());
+                            });
 
-            return UncheckedSupplier.get(future::get);
+                }).collect(Collectors.toList());
 
-        }).collect(Collectors.toList());
+        CompletableFuture.allOf(docflowCreateFutures.toArray(new CompletableFuture[0])).join();
 
-        UncheckedRunnable.run(() -> Thread.sleep(3000));
+        return docflowCreateFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+    }
 
-        return testCtxs;
+    private static void awaitDocflowIndexed(ExternEngine engine, Docflow docflow) {
+        Awaiter.waitForCondition(
+                () -> engine.getDocflowService().lookupDocflowAsync(docflow.getId()),
+                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
+                2000
+        ).thenApply(QueryContext::getOrThrow);
     }
 
     private static CompletableFuture<QueryContext<DraftDocument>> addDocument(
@@ -749,7 +764,7 @@ class DocflowServiceIT {
     private static Certificate getCloudCertificate() {
         return UncheckedSupplier.get(() -> engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
                 .getCertificates().stream()

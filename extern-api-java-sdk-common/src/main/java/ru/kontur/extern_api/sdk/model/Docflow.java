@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -43,8 +44,8 @@ public class Docflow {
     private DocflowType type = null;
     private DocflowStatus status = null;
     private IDocflowDescription description = null;
-    private List<Document> documents = null;
-    private List<Link> links = null;
+    private List<Document> documents = new ArrayList<>();
+    private List<Link> links = new ArrayList<>();
     private Date sendDate = null;
     private Date lastChangeDate = null;
 

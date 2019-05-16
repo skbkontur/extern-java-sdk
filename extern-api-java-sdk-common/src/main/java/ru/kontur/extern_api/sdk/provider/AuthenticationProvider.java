@@ -24,6 +24,7 @@
 
 package ru.kontur.extern_api.sdk.provider;
 
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 
@@ -31,6 +32,7 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 public interface AuthenticationProvider {
 
     QueryContext<String> sessionId();
+    CompletableFuture<String> authenticateAsync();
 
     @Deprecated
     AuthenticationProvider httpClient(HttpClient httpClient);

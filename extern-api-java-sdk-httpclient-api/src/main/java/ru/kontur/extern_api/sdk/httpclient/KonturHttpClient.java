@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -51,7 +50,6 @@ import ru.kontur.extern_api.sdk.SerializationProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.provider.UserAgentProvider;
 
 public class KonturHttpClient implements HttpClient {
 
@@ -67,7 +65,6 @@ public class KonturHttpClient implements HttpClient {
     private SerializationProvider gsonProvider;
     private final LibapiResponseConverter responseConverter;
 
-    private UserAgentProvider userAgentProvider;
     private String serviceBaseUri;
 
     public KonturHttpClient(KonturConfiguredClient client, GsonProvider gsonProvider) {
@@ -88,35 +85,14 @@ public class KonturHttpClient implements HttpClient {
 
     @Override
     public HttpClient acceptAccessToken(String sessionId) {
-        client.setAuthSid(sessionId);
+        client.setAuthSidSupplier(() -> sessionId);
         return this;
     }
 
     @Override
     public HttpClient acceptApiKey(String apiKey) {
-        client.setApiKey(apiKey);
+        client.setApiKeySupplier(() -> apiKey);
         return this;
-    }
-
-    @Override
-    public void setConnectWaiting(int millisecond) {
-        client.setConnectTimeout(millisecond, TimeUnit.MILLISECONDS);
-    }
-
-    @Override
-    public void setReadTimeout(int millisecond) {
-        client.setReadTimeout(millisecond, TimeUnit.MILLISECONDS);
-    }
-
-    @Override
-    public HttpClient setUserAgentProvider(UserAgentProvider userAgentProvider) {
-        this.userAgentProvider = userAgentProvider;
-        return this;
-    }
-
-    @Override
-    public UserAgentProvider getUserAgentProvider() {
-        return userAgentProvider;
     }
 
     @Override
@@ -136,12 +112,6 @@ public class KonturHttpClient implements HttpClient {
         if (headerParams == null) {
             headerParams = Collections.emptyMap();
         }
-
-        client.setUserAgent(Optional
-                .ofNullable(userAgentProvider)
-                .map(UserAgentProvider::getUserAgent)
-                .orElse(null)
-        );
 
         String urlPath = serviceBaseUri + httpRequestUri;
         Builder queryBuilder = Optional.ofNullable(HttpUrl.parse(urlPath))

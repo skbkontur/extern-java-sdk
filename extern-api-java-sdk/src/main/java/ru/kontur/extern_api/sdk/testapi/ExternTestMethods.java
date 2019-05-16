@@ -31,9 +31,6 @@ import ru.kontur.extern_api.sdk.httpclient.api.TestApi;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 
-/**
- * Just examples.
- */
 public final class ExternTestMethods {
 
     public static TestApi build(ExternEngine ee) {
@@ -45,8 +42,8 @@ public final class ExternTestMethods {
             AuthenticationProvider authenticationProvider
     ) {
         return new KonturConfiguredClient(Level.NONE, DefaultExtern.BASE_URL)
-                .setApiKey(apiKeyProvider.getApiKey())
-                .setAuthSid(authenticationProvider.sessionId().getOrThrow())
+                .setApiKeySupplier(apiKeyProvider::getApiKey)
+                .setAuthSidSupplier(() -> authenticationProvider.sessionId().getOrThrow())
                 .createApi(TestApi.class);
     }
 }

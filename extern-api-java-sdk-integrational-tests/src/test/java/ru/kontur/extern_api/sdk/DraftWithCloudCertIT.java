@@ -58,9 +58,9 @@ class DraftWithCloudCertIT {
 
         List<Certificate> certs = engine
                 .getCertificateService()
-                .getCertificateListAsync()
+                .getCertificates(0, 100)
                 .join()
-                .get()
+                .getOrThrow()
                 .getCertificates().stream()
                 .filter(Certificate::getIsCloud)
                 .filter(Certificate::getIsQualified)

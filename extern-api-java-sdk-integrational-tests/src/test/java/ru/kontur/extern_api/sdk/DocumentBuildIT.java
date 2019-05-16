@@ -30,10 +30,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -45,7 +43,6 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.crypt.X509CertificateFactory;
 import ru.kontur.extern_api.sdk.model.Certificate;
 import ru.kontur.extern_api.sdk.model.CheckResultData;
 import ru.kontur.extern_api.sdk.model.Docflow;
@@ -56,7 +53,6 @@ import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.CertificateResource;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
@@ -134,7 +130,12 @@ class DocumentBuildIT {
                 dynamicTest("V1 from dto NOT_SUPPORTED", System.out::println),
                 dynamicTest("V2 from file", () -> checkUsn(2, loadUsn(
                         "/docs/USN/usnV2ForSelf.json"))),
-                dynamicTest("V2 from dto", () -> checkUsn(2, PreparedTestData.usnV2(workCert, new OrganizationRequest("111", "111", "111"))))
+                dynamicTest("V2 from dto",
+                        () -> checkUsn(
+                                2,
+                                PreparedTestData.usnV2(workCert, new OrganizationRequest("111", "111", "111"))
+                        )
+                )
         );
     }
 

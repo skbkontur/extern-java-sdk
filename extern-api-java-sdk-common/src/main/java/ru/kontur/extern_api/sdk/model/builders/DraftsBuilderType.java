@@ -27,5 +27,12 @@ import ru.kontur.extern_api.sdk.model.Urn;
 
 public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
     @SerializedName("urn:externapi:fns534-inventory")
-    FnsInventory
+    FnsInventory,
+
+    @SerializedName("urn:externapi:fns534-letter")
+    FnsLetter,
+
+    @SerializedName("urn:externapi:business-registration:registration")
+    IndividualBusinessRegistration
+
 }
