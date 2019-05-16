@@ -25,11 +25,13 @@ package ru.kontur.extern_api.sdk.model.ion;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+
 public class IonRequestData {
 
+    protected static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
     @SerializedName("ВидЗапр")
     private int requestType;
-
     @SerializedName("ФормОтв")
     private int answerFormat;
 

@@ -3,14 +3,16 @@ package ru.kontur.extern_api.sdk.model.ion;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Year;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Ion4RequestData extends IonRequestData {
     @SerializedName("НаДату")
     private String onDate;
 
     @SerializedName("Год")
-    private String year;
+    private int year;
 
     @SerializedName("ЗапрашиваемыйНалог")
     @Nullable
@@ -19,12 +21,12 @@ public class Ion4RequestData extends IonRequestData {
     public Ion4RequestData(
             IonRequestContract.RequestType requestType,
             IonRequestContract.AnswerFormat answerFormat,
-            String onDate,
-            String year,
+            Date onDate,
+            Year year,
             @Nullable ArrayList<RequestingTax> requestingTax) {
         super(requestType, answerFormat);
-        this.onDate = onDate;
-        this.year = year;
+        this.onDate = formatter.format(onDate);
+        this.year = year.getValue();
         this.requestingTax = requestingTax;
     }
 
@@ -32,7 +34,7 @@ public class Ion4RequestData extends IonRequestData {
         return onDate;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 

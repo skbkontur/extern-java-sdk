@@ -33,6 +33,35 @@ package ru.kontur.extern_api.sdk.model;
  */
 public class ClientInfo {
 
+    private Sender sender;
+    private Recipient recipient;
+    private Organization organization;
+    private String ipAddress;
+
+    public Sender getSender() {
+        return sender;
+    }
+
+    public void setSender(Sender sender) {
+        this.sender = sender;
+    }
+
+    public Recipient getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
     public static class Sender {
 
         private String inn;
@@ -161,35 +190,6 @@ public class ClientInfo {
         public void setKpp(String kpp) {
             this.kpp = kpp;
         }
-    }
-
-    private Sender sender;
-    private Recipient recipient;
-    private Organization organization;
-    private String ipAddress;
-
-    public Sender getSender() {
-        return sender;
-    }
-
-    public void setSender(Sender sender) {
-        this.sender = sender;
-    }
-
-    public Recipient getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(Recipient recipient) {
-        this.recipient = recipient;
-    }
-
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
     }
 
 }

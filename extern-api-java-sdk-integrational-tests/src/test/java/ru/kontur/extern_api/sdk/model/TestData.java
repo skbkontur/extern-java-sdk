@@ -29,8 +29,9 @@
 package ru.kontur.extern_api.sdk.model;
 
 
-import java.util.Optional;
 import ru.kontur.extern_api.sdk.model.ClientInfo.Recipient;
+
+import java.util.Optional;
 
 public class TestData {
 

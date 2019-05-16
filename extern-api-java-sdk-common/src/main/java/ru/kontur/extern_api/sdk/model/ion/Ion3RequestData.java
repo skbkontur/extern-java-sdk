@@ -2,6 +2,8 @@ package ru.kontur.extern_api.sdk.model.ion;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class Ion3RequestData extends IonRequestData {
     @SerializedName("ДатаНач")
     private String beginDate;
@@ -15,13 +17,13 @@ public class Ion3RequestData extends IonRequestData {
     public Ion3RequestData(
             IonRequestContract.RequestType requestType,
             IonRequestContract.AnswerFormat answerFormat,
-            String beginDate,
-            String finishDate,
+            Date beginDate,
+            Date finishDate,
             IonRequestContract.ReportSelectionCondition reportSelectionCondition) {
         super(requestType, answerFormat);
 
-        this.beginDate = beginDate;
-        this.finishDate = finishDate;
+        this.beginDate = formatter.format(beginDate);
+        this.finishDate = formatter.format(finishDate);
         this.reportSelectionCondition = reportSelectionCondition.index();
     }
 
