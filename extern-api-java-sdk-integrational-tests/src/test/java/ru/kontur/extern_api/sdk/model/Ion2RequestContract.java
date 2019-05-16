@@ -6,7 +6,7 @@ import ru.kontur.extern_api.sdk.model.ion.*;
 import ru.kontur.extern_api.sdk.model.ion.ClientInfo;
 
 public class Ion2RequestContract extends IonRequestContract<Ion2RequestData> {
-    public Ion2RequestContract(@NotNull ClientInfo additionalOrgInfo, @Nullable IonPeriod period, @NotNull Ion2RequestData data) {
+    public Ion2RequestContract(ClientInfo additionalOrgInfo, IonPeriod period, Ion2RequestData data) {
         super(additionalOrgInfo, period, data);
     }
 }

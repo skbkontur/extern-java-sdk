@@ -176,11 +176,11 @@ class DocumentBuildIT {
         OrganizationRequest org = new OrganizationRequest("111", "111", "111");
 
         return Stream.of(
-                dynamicTest("Good Ion1 from dto", () -> checkIon(BuildDocumentType.ION1, PreparedTestData.buildIon(BuildDocumentType.ION1,workCert, org), true)),
-                dynamicTest("Good Ion2 from dto", () -> checkIon(BuildDocumentType.ION2, PreparedTestData.buildIon(BuildDocumentType.ION2,workCert, org), true)),
-                dynamicTest("Good Ion3 from dto", () -> checkIon(BuildDocumentType.ION3, PreparedTestData.buildIon(BuildDocumentType.ION3,workCert, org), true)),
-                dynamicTest("Good Ion4 from dto", () -> checkIon(BuildDocumentType.ION4, PreparedTestData.buildIon(BuildDocumentType.ION4,workCert, org), true)),
-                dynamicTest("Good Ion5 from dto", () -> checkIon(BuildDocumentType.ION5, PreparedTestData.buildIon(BuildDocumentType.ION5,workCert, org), true))
+                dynamicTest("Good Ion1 from dto", () -> checkIon(BuildDocumentType.ION1, PreparedTestData.buildIon(BuildDocumentType.ION1, workCert, org), true)),
+                dynamicTest("Good Ion2 from dto", () -> checkIon(BuildDocumentType.ION2, PreparedTestData.buildIon(BuildDocumentType.ION2, workCert, org), true)),
+                dynamicTest("Good Ion3 from dto", () -> checkIon(BuildDocumentType.ION3, PreparedTestData.buildIon(BuildDocumentType.ION3, workCert, org), true)),
+                dynamicTest("Good Ion4 from dto", () -> checkIon(BuildDocumentType.ION4, PreparedTestData.buildIon(BuildDocumentType.ION4, workCert, org), true)),
+                dynamicTest("Good Ion5 from dto", () -> checkIon(BuildDocumentType.ION5, PreparedTestData.buildIon(BuildDocumentType.ION5, workCert, org), true))
         );
     }
 
@@ -194,16 +194,10 @@ class DocumentBuildIT {
             BuildDocumentType type = entry.getKey();
             String prefix = entry.getValue();
 
-            result.addAll(Resources.walk(prefix)
-                    .map(file ->
-                            dynamicTest(
-                                    file, () ->
-                                            checkIon(
-                                                    type,
-                                                    loadIon(prefix + file, type),
-                                                    file.startsWith("+"))
-                            )
-                    ).collect(Collectors.toList()));
+            result.addAll(
+                    Resources.walk(prefix)
+                            .map(file -> dynamicTest(file, () -> checkIon(type, loadIon(prefix + file, type), file.startsWith("+"))))
+                            .collect(Collectors.toList()));
         }
 
         return result.stream();

@@ -17,7 +17,12 @@ public class Ion2RequestData extends IonRequestData {
     @Nullable
     private ArrayList<RequestingTax> requestingTax;
 
-    public Ion2RequestData(int requestType, int answerFormat, int reportGenerationCondition, String year, @Nullable ArrayList<RequestingTax> requestingTax) {
+    public Ion2RequestData(
+            int requestType,
+            int answerFormat,
+            int reportGenerationCondition,
+            String year,
+            @Nullable ArrayList<RequestingTax> requestingTax) {
         super(requestType, answerFormat);
 
         this.reportGenerationCondition = reportGenerationCondition;
