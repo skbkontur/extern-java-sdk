@@ -44,7 +44,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Drafts builder service should be able to")
 class FnsInventoryDraftsBuilderServiceIT {
 
