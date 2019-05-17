@@ -35,7 +35,7 @@
     </description>
     <url>https://github.com/skbkontur/extern-java-sdk</url>
 
-    <version>1.7.5-SNAPSHOT</version>
+    <version>1.7.5</version>
 
     <packaging>pom</packaging>
 
@@ -58,7 +58,7 @@
         <url>git@github.com:skbkontur/extern-java-sdk.git</url>
         <connection>scm:git:git@github.com:skbkontur/extern-java-sdk.git</connection>
         <developerConnection>scm:git:git@github.com:skbkontur/extern-java-sdk.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>1.7.5</tag>
     </scm>
 
     <distributionManagement>
