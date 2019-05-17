@@ -23,28 +23,13 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import com.google.gson.annotations.SerializedName;
+import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
 
-import java.text.SimpleDateFormat;
+public interface IonRequestContractInterface extends BuildDocumentContract {
 
-public class IonRequestData {
+    int getVersion();
 
-    protected static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-    @SerializedName("ВидЗапр")
-    private int requestType;
-    @SerializedName("ФормОтв")
-    private int answerFormat;
+    ClientInfo getAdditionalOrgInfo();
 
-    public IonRequestData(IonRequestContract.RequestType requestType, IonRequestContract.AnswerFormat answerFormat) {
-        this.requestType = requestType.index();
-        this.answerFormat = answerFormat.index();
-    }
-
-    public int getRequestType() {
-        return requestType;
-    }
-
-    public int getAnswerFormat() {
-        return answerFormat;
-    }
+    IonRequestData getData();
 }

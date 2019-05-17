@@ -23,10 +23,107 @@
 
 package ru.kontur.extern_api.sdk.model.ion;
 
-import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface IonRequestContract extends BuildDocumentContract {
+import java.text.SimpleDateFormat;
 
-    int getVersion();
+public class IonRequestContract<TIonData extends IonRequestData> implements IonRequestContractInterface {
 
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+    private int version;
+    private @Nullable IonPeriod period;
+    private ClientInfo additionalOrgInfo;
+    private TIonData data;
+
+    public IonRequestContract(
+            @NotNull ClientInfo additionalOrgInfo,
+            @Nullable IonPeriod period,
+            @NotNull TIonData data) {
+        this.period = period;
+        this.version = 1;
+        this.additionalOrgInfo = additionalOrgInfo;
+        this.data = data;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public ClientInfo getAdditionalOrgInfo() {
+        return additionalOrgInfo;
+    }
+
+    public IonRequestData getData() {
+        return data;
+    }
+
+    public @Nullable IonPeriod getPeriod() {
+        return period;
+    }
+
+    public enum RequestType {
+        WHOLE_ORGANIZATION(1),
+        ALL_KPPS(2),
+        ONE_KPP(3);
+
+        private final int index;
+
+        RequestType(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
+    }
+
+    public enum AnswerFormat {
+        RTF(1),
+        XML(2),
+        XLS(3),
+        PDF(4);
+
+        private final int index;
+
+        AnswerFormat(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
+    }
+
+    public enum ReportSelectionCondition {
+        ALL_REPORT_TYPES(1),
+        PRIMARY(2),
+        CORRECTION(3);
+
+        private final int index;
+
+        ReportSelectionCondition(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
+    }
+
+    public enum ReportGenerationCondition {
+        GROUP_BY_ALL_PAYMENT_TYPES(1),
+        NO_GROUP_BY_ALL_PAYMENT_TYPES(2);
+
+        private final int index;
+
+        ReportGenerationCondition(int index) {
+            this.index = index;
+        }
+
+        public int index() {
+            return index;
+        }
+    }
 }

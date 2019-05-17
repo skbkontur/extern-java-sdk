@@ -23,41 +23,26 @@
 
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
-import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
-import ru.kontur.extern_api.sdk.model.OrganizationRequest;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContractV1;
+import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.CryptoUtils;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.Resources;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.*;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
@@ -68,9 +53,31 @@ class DocumentBuildIT {
     private static Configuration config;
     private static ExternEngine ee;
     private static Certificate workCert;
+    private Map<BuildDocumentType, String> IonTypeToTestFolder = new HashMap<BuildDocumentType, String>() {
+        {
+            put(BuildDocumentType.ION1, "/docs/ion1/");
+            put(BuildDocumentType.ION2, "/docs/ion2/");
+            put(BuildDocumentType.ION3, "/docs/ion3/");
+            put(BuildDocumentType.ION4, "/docs/ion4/");
+            put(BuildDocumentType.ION5, "/docs/ion5/");
+        }
+    };
 
-    private static IonRequestContractV1 loadIon(String path) {
-        return Resources.loadFromJson(path, IonRequestContractV1.class);
+    private static IonRequestContract loadIon(String path, BuildDocumentType type) {
+        switch (type) {
+            case ION1:
+                return Resources.loadFromJson(path, Ion1RequestContract.class);
+            case ION2:
+                return Resources.loadFromJson(path, Ion2RequestContract.class);
+            case ION3:
+                return Resources.loadFromJson(path, Ion3RequestContract.class);
+            case ION4:
+                return Resources.loadFromJson(path, Ion4RequestContract.class);
+            case ION5:
+                return Resources.loadFromJson(path, Ion5RequestContract.class);
+            default:
+                return Resources.loadFromJson(path, IonRequestContract.class);
+        }
     }
 
     private static UsnServiceContractInfo loadUsn(String path) {
@@ -120,7 +127,6 @@ class DocumentBuildIT {
         return CryptoUtils.with(ee.getCryptoProvider()).sign(config.getThumbprint(), bytes);
     }
 
-
     @TestFactory
     @DisplayName("allow to create a valid usn")
     Stream<DynamicTest> createUsnTests() {
@@ -140,27 +146,51 @@ class DocumentBuildIT {
     }
 
     @TestFactory
-    @DisplayName("allow to create a ion from file")
-    Stream<DynamicTest> createIonTests() throws IOException {
-        String prefix = "/Docs/ion1/";
-        return Resources.walk(prefix)
-                .map(file -> dynamicTest(file, () -> checkIon(loadIon(prefix + file), file)));
+    @DisplayName("allow to create a valid ion")
+    Stream<DynamicTest> createIonTests() {
+
+        OrganizationRequest org = new OrganizationRequest("111", "111", "111");
+
+        return Stream.of(
+                dynamicTest("Good Ion1 from dto", () -> checkIon(BuildDocumentType.ION1, PreparedTestData.buildIon(BuildDocumentType.ION1, workCert, org), true)),
+                dynamicTest("Good Ion2 from dto", () -> checkIon(BuildDocumentType.ION2, PreparedTestData.buildIon(BuildDocumentType.ION2, workCert, org), true)),
+                dynamicTest("Good Ion3 from dto", () -> checkIon(BuildDocumentType.ION3, PreparedTestData.buildIon(BuildDocumentType.ION3, workCert, org), true)),
+                dynamicTest("Good Ion4 from dto", () -> checkIon(BuildDocumentType.ION4, PreparedTestData.buildIon(BuildDocumentType.ION4, workCert, org), true)),
+                dynamicTest("Good Ion5 from dto", () -> checkIon(BuildDocumentType.ION5, PreparedTestData.buildIon(BuildDocumentType.ION5, workCert, org), true))
+        );
     }
 
-    private void checkIon(IonRequestContractV1 ion, String name) {
+    @TestFactory
+    @DisplayName("allow to create a ion from file")
+    Stream<DynamicTest> createIonFromFileTests() throws IOException {
+
+        ArrayList<DynamicTest> result = new ArrayList<DynamicTest>();
+
+        for (Map.Entry<BuildDocumentType, String> entry : IonTypeToTestFolder.entrySet()) {
+            BuildDocumentType type = entry.getKey();
+            String prefix = entry.getValue();
+
+            result.addAll(
+                    Resources.walk(prefix)
+                            .map(file -> dynamicTest(file, () -> checkIon(type, loadIon(prefix + file, type), file.startsWith("+"))))
+                            .collect(Collectors.toList()));
+        }
+
+        return result.stream();
+    }
+
+    private void checkIon(BuildDocumentType ionType, IonRequestContract ion, boolean isPositive) {
         UUID draftId = draftService
                 .createAsync(draftMeta)
                 .join()
                 .getOrThrow()
                 .getId();
 
-        draftService.newIonRequestAsync(draftId, ion)
+        draftService.newIonRequestAsync(draftId, ionType, ion)
                 .thenApply(QueryContext::getOrThrow)
                 .join();
 
         CheckResultData result = draftService.checkAsync(draftId).join().getOrThrow();
-
-        boolean isPositive = name.startsWith("+");
 
         if (isPositive) {
             assertTrue(result.hasNoErrors());
@@ -185,7 +215,6 @@ class DocumentBuildIT {
         assertTrue(result.hasNoErrors());
     }
 
-
     @TestFactory
     @DisplayName("to send created")
     Stream<DynamicTest> send() {
@@ -207,7 +236,7 @@ class DocumentBuildIT {
 
     private void sendCheckedIon() {
         sendDraftTest(draftId -> draftService
-                .newIonRequestAsync(draftId, loadIon("/docs/ion.json"))
+                .newIonRequestAsync(draftId, BuildDocumentType.ION1, loadIon("/docs/ion.json", BuildDocumentType.ION1))
                 .thenApply(QueryContext::getOrThrow)
                 .join()
                 .getId()

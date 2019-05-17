@@ -1,0 +1,32 @@
+{
+  "version": "1",
+  "period": {
+    "year": "2018"
+  },
+  "data": {
+    "ВидЗапр": 2,
+    "ФормОтв": 3,
+    "НаДату": "01.11.2018"
+  },
+  "additional-org-info": {
+    "document-sender": {
+      "sender-full-name": "НалогоплательщикПропатченный"
+    },
+    "signer-type": "chief",
+    "taxpayer": {
+      "taxpayer-chief-fio": "Орлов Сергей Юрьевич",
+      "taxpayer-full-name": "НалогоплательщикПропатченный",
+      "address": {
+        "index": "620036",
+        "region": "66",
+        "district": "Верх-Исетский",
+        "city": "Екатеринбург",
+        "settlement": "Медный пос.",
+        "street": "Луговая",
+        "house": "8",
+        "building": "1А",
+        "flat": "5"
+      }
+    }
+  }
+}
