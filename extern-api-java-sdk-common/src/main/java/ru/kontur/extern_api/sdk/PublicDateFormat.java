@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 public final class PublicDateFormat {
 
-    public static final String FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String OUTPUT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS0000'Z'";
 
     private static final List<ThreadLocal<DateFormat>> supportedFormats
             = new ArrayList<ThreadLocal<DateFormat>>() {
@@ -50,7 +50,7 @@ public final class PublicDateFormat {
         }
     };
 
-    private static final DateFormat outputFormat = new SimpleDateFormat(FORMAT);
+    private static final DateFormat outputFormat = new SimpleDateFormat(OUTPUT_FORMAT);
     private static final Logger logger = Logger.getLogger(PublicDateFormat.class.getName());
 
     /**
@@ -72,11 +72,27 @@ public final class PublicDateFormat {
             return null;
         }
 
+        // ISO8601Utils.parse() doesn't take datetime without timezone indicator
         try {
             return ISO8601Utils.parse(date, new ParsePosition(0));
         } catch (ParseException ignored) {
-            // Ok, try to use other date formatters
+            // // Ok, try to use other date formatters
+
+            // Try to add 'Z'
+            String dateZ = date + "Z";
+            try {
+                return ISO8601Utils.parse(dateZ, new ParsePosition(0));
+            } catch (ParseException ignore) {
+            }
         }
+
+        // WARNING! SimpleDateFormat has errors with ticks (nanoseconds)
+        // Example:
+        //    SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+        //    // (or SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");)
+        //    Date r1 = f.parse("2018-01-01T20:00:00.123");     // total milliseconds: 1514836800123 - it's correct
+        //    Date r2 = f.parse("2018-01-01T20:00:00.1234567"); // total milliseconds: 1514838034567 - it's wrong
+        //    So, as hot fix we will use 'Z' to be parsed by ISO8601Utils.parse
 
         for (ThreadLocal<DateFormat> supportedFormate : supportedFormats) {
             try {

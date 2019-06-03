@@ -25,10 +25,14 @@ package ru.kontur.extern_api.sdk;
 
 import static java.util.Optional.ofNullable;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -624,6 +628,51 @@ class DocflowServiceIT {
         }
     }
 
+    @ParameterizedTest
+    @DisplayName("search docflows filtered by date-time")
+    @MethodSource("docflowFactory")
+    void testGetDocflowsFilteredByDateTime(QueryContext<Docflow> df) {
+        CompanyGeneral company = engine.getOrganizationService()
+                .lookupAsync(df.getDocflow().getOrganizationId())
+                .join()
+                .getOrThrow()
+                .getGeneral();
+
+        DocflowPage docflowPage = docflowService.searchDocflows(
+                DocflowFilter
+                        .page(0, 1)
+                        .orderBy(SortOrder.ASCENDING))
+                .getOrThrow();
+
+        Assertions.assertEquals(1, docflowPage.getDocflowsPageItem().size());
+
+        DocflowPageItem oldestDocflow = docflowPage.getDocflowsPageItem().get(0);
+        Instant lastChangeDate = Instant.ofEpochMilli(oldestDocflow.getLastChangeDate().getTime());
+        Date laterDate = new Date(lastChangeDate.plusMillis(1).toEpochMilli());
+        // TODO исправить с задачей , должно учитывать более мелкие единицы, чем миллисекунды
+        //  lastChangeDate.plusNanos(~1)
+
+        docflowPage = docflowService.searchDocflows(
+                DocflowFilter
+                        .page(0, 1000)
+                        .orderBy(SortOrder.ASCENDING)
+                        .updatedTo(laterDate))
+                .getOrThrow();
+
+        // TODO исправить с задачей
+        //Assertions.assertEquals(1, docflowPage.getDocflowsPageItem().size());
+        //Assertions.assertEquals(oldestDocflow.getId(), docflowPage.getDocflowsPageItem().get(0).getId());
+
+        docflowPage = docflowService.searchDocflows(
+                DocflowFilter
+                        .page(0, 1000)
+                        .orderBy(SortOrder.ASCENDING)
+                        .updatedFrom(laterDate))
+                .getOrThrow();
+
+        Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() > 0);
+        Assertions.assertNotEquals(oldestDocflow.getId(), docflowPage.getDocflowsPageItem().get(0).getId());
+    }
 
     @Disabled("print it with decrypt")
     @ParameterizedTest
@@ -710,7 +759,6 @@ class DocflowServiceIT {
             ExternEngine engine,
             TestData[] testData
     ) {
-
         DraftService draftService = engine.getDraftService();
 
         List<CompletableFuture<QueryContext<Docflow>>> docflowCreateFutures = Arrays
