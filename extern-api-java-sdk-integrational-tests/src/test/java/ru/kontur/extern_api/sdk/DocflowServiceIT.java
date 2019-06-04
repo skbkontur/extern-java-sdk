@@ -31,6 +31,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
@@ -142,7 +143,11 @@ class DocflowServiceIT {
 
         Assertions.assertEquals(docflow.getId(), returned.getId());
         Assertions.assertEquals(docflow.getType(), returned.getType());
-
+        Optional<Link> webDocflowLink = returned.getLinks()
+                .stream()
+                .filter(l -> l.getRel().equals("web-docflow"))
+                .findAny();
+        Assertions.assertTrue(webDocflowLink.isPresent(), "Web view docflow link should exists in docflow links.");
     }
 
     @Disabled("KA-1871")
