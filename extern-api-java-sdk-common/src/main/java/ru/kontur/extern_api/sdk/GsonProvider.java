@@ -52,7 +52,7 @@ public enum GsonProvider implements SerializationProvider {
 
         return new GsonBuilder()
                 .disableHtmlEscaping()
-                .setDateFormat(PublicDateFormat.FORMAT)
+                .setDateFormat(PublicDateFormat.OUTPUT_FORMAT)
                 .setFieldNamingPolicy(getFieldNamingPolicy())
                 .registerTypeAdapter(byte[].class, new GsonByteArrayAdaptor())
                 .registerTypeAdapter(Date.class, new GsonDateAdaptor())
