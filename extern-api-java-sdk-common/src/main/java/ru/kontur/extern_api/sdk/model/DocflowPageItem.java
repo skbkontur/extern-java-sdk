@@ -24,7 +24,6 @@
 
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +39,7 @@ import java.util.UUID;
 public class DocflowPageItem {
 
     private UUID id = null;
+    private UUID organizationId = null;
     private DocflowType type = null;
     private DocflowStatus status = null;
     private List<Link> links = new ArrayList<>();
@@ -60,6 +60,22 @@ public class DocflowPageItem {
      */
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    /**
+     * Возвращает идентификатор Организации
+     * @return идентификатор Организации
+     */
+    public UUID getOrganizationId() {
+        return organizationId;
+    }
+
+    /**
+     * Устанавливает идентификатор Организации
+     * @param organizationId идентификатор Организации
+     */
+    public void setOrganizationId(UUID organizationId) {
+        this.organizationId = organizationId;
     }
 
     /**

@@ -241,10 +241,18 @@ public class Docflow {
         this.lastChangeDate = lastChangeDate;
     }
 
+    /**
+     * Возвращает идентификатор Организации
+     * @return идентификатор Организации
+     */
     public UUID getOrganizationId() {
         return organizationId;
     }
 
+    /**
+     * Устанавливает идентификатор Организации
+     * @param organizationId идентификатор Организации
+     */
     public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
