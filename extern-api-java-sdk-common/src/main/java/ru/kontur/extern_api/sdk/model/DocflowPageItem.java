@@ -42,6 +42,7 @@ public class DocflowPageItem {
     private UUID organizationId = null;
     private DocflowType type = null;
     private DocflowStatus status = null;
+    private DocflowStateTypes successState = null;
     private List<Link> links = new ArrayList<>();
     private Date sendDate = null;
     private Date lastChangeDate = null;
@@ -135,6 +136,30 @@ public class DocflowPageItem {
     public void setStatus(DocflowStatus status) {
         this.status = status;
     }
+
+    /**
+     * Возвращает состояние документооборота:
+     * <ul>
+     *   <li>urn:docflow-state:neutral - Состояние не определенно.</li>
+     *   <li>urn:docflow-state:successful - Успешно обработан.</li>
+     *   <li>urn:docflow-state:failed - Обработка завершилась ошибкой\отказом.</li>
+     *   <li>urn:docflow-state:warning - Обработка в целом завершилась успешно, но у контролирующего органа есть претензии. Возможно потребуется отправка корректировки</li>
+     * </ul>
+     * @return состояние документооборота
+     */
+    public DocflowStateTypes getSuccessState() { return successState;  }
+
+    /**
+     * Устанавливает состояние документооброта
+     * @param successState состояние документооборота:
+     * <ul>
+     *   <li>urn:docflow-state:neutral - Состояние не определенно.</li>
+     *   <li>urn:docflow-state:successful - Успешно обработан.</li>
+     *   <li>urn:docflow-state:failed - Обработка завершилась ошибкой\отказом.</li>
+     *   <li>urn:docflow-state:warning - Обработка в целом завершилась успешно, но у контролирующего органа есть претензии. Возможно потребуется отправка корректировки</li>
+     * </ul>
+     */
+    public void setSuccessState(DocflowStateTypes successState) { this.successState = successState;  }
 
     /**
      * Возвращает список ссылок на документообороты
