@@ -52,3 +52,4 @@ public enum BuildDocumentType {
     @SerializedName("ION5")
     ION5
 }
+

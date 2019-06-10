@@ -41,6 +41,8 @@ public class Account {
     private String inn = null;
     private String kpp = null;
     private String organizationName = null;
+    private String productName = null;
+    private ExternUserRole role = null;
     private List<Link> links = new ArrayList<>();
 
     /**
@@ -144,5 +146,47 @@ public class Account {
      */
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+
+    /**
+     * Получить код продукта в биллинге, примеры значений: "extern", "otchetru"
+     * @return код продукта
+     */
+    public String getProductName() {
+        return productName;
+    }
+
+    /**
+     * Установить код продукта в биллинге, примеры значений: "extern", "otchetru"
+     * @param productName код продукта
+     */
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    /**
+     * Получить роль пользователя Экстерн, возможные значения:
+     * <ul>
+     *   <li>user - Пользователь.</li>
+     *   <li>admin - Администратор.</li>
+     *   <li>director - Директор.</li>
+     * </ul>
+     * @return
+     */
+    public ExternUserRole getRole() {
+        return role;
+    }
+
+    /**
+     * Получить роль пользователя Экстерн, возможные значения:
+     * <ul>
+     *   <li>user - Пользователь.</li>
+     *   <li>admin - Администратор.</li>
+     *   <li>director - Директор.</li>
+     * </ul>
+     * @param role
+     */
+    public void setRole(ExternUserRole role) {
+        this.role = role;
     }
 }
