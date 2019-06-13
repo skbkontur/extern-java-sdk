@@ -46,7 +46,7 @@ import ru.kontur.extern_api.sdk.model.ExternUserRole;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class AccountIT {
 
     private static AccountService accountService;
