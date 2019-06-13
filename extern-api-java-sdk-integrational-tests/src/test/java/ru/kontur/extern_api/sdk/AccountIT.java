@@ -42,10 +42,11 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+import ru.kontur.extern_api.sdk.model.ExternUserRole;
 import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class AccountIT {
 
     private static AccountService accountService;
@@ -156,5 +157,7 @@ class AccountIT {
         assertEquals(account.getKpp(), kpp);
         assertEquals(account.getOrganizationName(), orgName);
         assertFalse(account.getLinks().isEmpty());
+        assertEquals(account.getProductName(), "extern");
+        assertEquals(account.getRole(), ExternUserRole.ADMIN);
     }
 }

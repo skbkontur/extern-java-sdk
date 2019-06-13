@@ -152,6 +152,9 @@ class DocflowServiceIT {
                 .filter(l -> l.getRel().equals("web-docflow"))
                 .findAny();
         Assertions.assertTrue(webDocflowLink.isPresent(), "Web view docflow link should exists in docflow links.");
+        Assertions.assertNotEquals(DocflowStateTypes.FAILED, returned.getSuccessState(), "Should be not error success state");
+        Assertions.assertNotEquals(DocflowStateTypes.WARNING, returned.getSuccessState(), "Should be not warning success state");
+        Assertions.assertNotNull(returned.getOrganizationId());
     }
 
     @Disabled("KA-1871")

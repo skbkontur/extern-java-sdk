@@ -43,6 +43,7 @@ public class Docflow {
     private UUID organizationId = null;
     private DocflowType type = null;
     private DocflowStatus status = null;
+    private DocflowStateTypes successState = null;
     private IDocflowDescription description = null;
     private List<Document> documents = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
@@ -88,7 +89,7 @@ public class Docflow {
     }
 
     /**
-     * Возвращает состояние документооборота:
+     * Возвращает статус документооборота:
      * <ul>
      *   <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
      *   <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
@@ -99,15 +100,15 @@ public class Docflow {
      *   <li>urn:docflow-common-status:processed - налогоплательщик отправил результат приема документа КО</li>
      *   <li>urn:docflow-common-status:finished - завершен полный цикл ДО, в нем есть все транзакции, предусмотренные регламентом</li>
      * </ul>
-     * @return состояние документооборота
+     * @return статус документооборота
      */
     public DocflowStatus getStatus() {
         return status;
     }
 
     /**
-     * Устанавливает состояние документооборота
-     * @param status состояние документооборота:
+     * Устанавливает статус документооборота
+     * @param status статус документооборота:
      * <ul>
      *  <li>urn:docflow-common-status:sent - документы были отправлены в контролирующий орган (КО)</li>
      *  <li>urn:docflow-common-status:delivered - от КО пришел документ, подтверждающий доставку документов до сотрудника КО</li>
@@ -122,6 +123,30 @@ public class Docflow {
     public void setStatus(DocflowStatus status) {
         this.status = status;
     }
+
+    /**
+     * Возвращает состояние документооборота:
+     * <ul>
+     *   <li>urn:docflow-state:neutral - Состояние не определенно.</li>
+     *   <li>urn:docflow-state:successful - Успешно обработан.</li>
+     *   <li>urn:docflow-state:failed - Обработка завершилась ошибкой\отказом.</li>
+     *   <li>urn:docflow-state:warning - Обработка в целом завершилась успешно, но у контролирующего органа есть претензии. Возможно потребуется отправка корректировки</li>
+     * </ul>
+     * @return состояние документооборота
+     */
+    public DocflowStateTypes getSuccessState() { return successState;  }
+
+    /**
+     * Устанавливает состояние документооброта
+     * @param successState состояние документооборота:
+     * <ul>
+     *   <li>urn:docflow-state:neutral - Состояние не определенно.</li>
+     *   <li>urn:docflow-state:successful - Успешно обработан.</li>
+     *   <li>urn:docflow-state:failed - Обработка завершилась ошибкой\отказом.</li>
+     *   <li>urn:docflow-state:warning - Обработка в целом завершилась успешно, но у контролирующего органа есть претензии. Возможно потребуется отправка корректировки</li>
+     * </ul>
+     */
+    public void setSuccessState(DocflowStateTypes successState) { this.successState = successState;  }
 
     /**
      * Возвращает дескриптор ДО {@link IDocflowDescription}
@@ -216,10 +241,18 @@ public class Docflow {
         this.lastChangeDate = lastChangeDate;
     }
 
+    /**
+     * Возвращает идентификатор Организации
+     * @return идентификатор Организации
+     */
     public UUID getOrganizationId() {
         return organizationId;
     }
 
+    /**
+     * Устанавливает идентификатор Организации
+     * @param organizationId идентификатор Организации
+     */
     public void setOrganizationId(UUID organizationId) {
         this.organizationId = organizationId;
     }
