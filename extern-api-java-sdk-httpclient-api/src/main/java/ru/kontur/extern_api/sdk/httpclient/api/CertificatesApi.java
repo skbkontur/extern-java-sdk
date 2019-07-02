@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.httpclient.api;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.jetbrains.annotations.NotNull;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -42,13 +43,14 @@ public interface CertificatesApi {
 
     @GET("v1/{accountId}/certificates")
     CompletableFuture<ApiResponse<CertificateList>> get100Certificates(
-            @Path("accountId") UUID accountId
+            @NotNull @Path("accountId") UUID accountId
     );
 
     @GET("v1/{accountId}/certificates")
     CompletableFuture<ApiResponse<CertificateList>> getCertificates(
-            @Path("accountId") UUID accountId,
+            @NotNull @Path("accountId") UUID accountId,
             @Query("skip") int skip,
-            @Query("take") int take
+            @Query("take") int take,
+            @Query("forAllUsers") boolean returnCertificatesForAllUsers
     );
 }

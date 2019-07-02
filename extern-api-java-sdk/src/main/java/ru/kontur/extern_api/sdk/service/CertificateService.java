@@ -50,6 +50,17 @@ public interface CertificateService {
     CompletableFuture<QueryContext<CertificateList>> getCertificates(int skip, int take);
 
     /**
+     * Получить сертификаты всех пользователей, которые имеют доступ к указанной учетной записи
+     * (только для администратора)
+     *
+     * @param skip начальный индекс первого возвращённого сертификата
+     * @param take требуемое количество возвращённых сертификатов (максимум - 100)
+     * @return список сертификатов
+     * @see CertificateService#getCertificates(int, int)
+     */
+    CompletableFuture<QueryContext<CertificateList>> getCertificatesForAllUsers(int skip, int take);
+
+    /**
      * Асинхронный метод возвращает список сертификатов
      *
      * @return список сертификатов

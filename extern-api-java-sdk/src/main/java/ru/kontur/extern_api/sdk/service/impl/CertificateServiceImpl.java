@@ -46,7 +46,13 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public CompletableFuture<QueryContext<CertificateList>> getCertificates(int skip, int take) {
-        return api.getCertificates(accountProvider.accountId(), skip, take)
+        return api.getCertificates(accountProvider.accountId(), skip, take, false)
+                .thenApply(contextAdaptor(QueryContext.CERTIFICATE_LIST));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<CertificateList>> getCertificatesForAllUsers(int skip, int take) {
+        return api.getCertificates(accountProvider.accountId(), skip, take, true)
                 .thenApply(contextAdaptor(QueryContext.CERTIFICATE_LIST));
     }
 
