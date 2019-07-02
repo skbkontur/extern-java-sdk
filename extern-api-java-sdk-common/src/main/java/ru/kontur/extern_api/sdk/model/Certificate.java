@@ -25,6 +25,7 @@
 package ru.kontur.extern_api.sdk.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>
@@ -186,5 +187,34 @@ public class Certificate {
      */
     public void setCertificateType(CertificateType certificateType) {
         this.certificateType = certificateType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Certificate that = (Certificate) o;
+
+        return Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return content != null ? content.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Certificate{" +
+                "fio='" + fio + '\'' +
+                ", inn='" + inn + '\'' +
+                ", kpp='" + kpp + '\'' +
+                ", isCloud=" + isCloud +
+                '}';
     }
 }
