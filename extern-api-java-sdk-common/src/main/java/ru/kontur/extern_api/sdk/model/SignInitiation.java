@@ -34,6 +34,7 @@ public class SignInitiation {
     private List<Link> links;
     private List<Link> documentsToSign;
     private String requestId;
+    private String taskId;
 
     /**
      * <p>Возвращает список ссылок на сущности</p>
@@ -72,7 +73,7 @@ public class SignInitiation {
     }
 
     /**
-     * <p>Возвращает идентификатор запроса на подпись</p>
+     * <p>Возвращает идентификатор запроса на подпись. Заполняется в случае вызова метода с Cloud сертификатом.</p>
      * @return идентификатор запроса на подпись
      */
     public String getRequestId() {
@@ -89,5 +90,21 @@ public class SignInitiation {
 
     public boolean needToConfirmSigning() {
         return requestId != null;
+    }
+
+    /**
+     * <p>Возвращает идентификатор задания на подпись. Заполняется в случае вызова метода с Dss сертификатом.</p>
+     * @return идентификатор task
+     */
+    public String getTaskId() {
+        return taskId;
+    }
+
+    /**
+     * <p>Устанавливает идентификатор задания на подпись</p>
+     * @param taskId идентификатор задания на подпись
+     */
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }
