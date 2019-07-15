@@ -28,7 +28,7 @@ import java.util.Date;
 
 /**
  * <p>
- * Класс предназначен для хронения информации сертификата см. класс {@code CertifcateService}
+ * Класс предназначен для хронения информации сертификата см. класс {@code CertificateService}
  * </p>
  * @author Aleksey Sukhorukov
  */
@@ -132,8 +132,8 @@ public class Certificate {
     }
 
     /**
-     * Устанавливает признак облочного сертификата
-     * @param isCloud признак облочного сертификата. True - облачный, иначе - не облачный
+     * Устанавливает признак облачного сертификата
+     * @param isCloud признак облачного сертификата. True - облачный, иначе - не облачный
      */
     public void setIsCloud(Boolean isCloud) {
         this.isCloud = isCloud;
