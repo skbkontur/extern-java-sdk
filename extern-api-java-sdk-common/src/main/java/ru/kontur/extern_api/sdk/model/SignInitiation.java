@@ -35,6 +35,7 @@ public class SignInitiation {
     private List<Link> documentsToSign;
     private String requestId;
     private String taskId;
+    private ConfirmType confirmType;
 
     /**
      * <p>Возвращает список ссылок на сущности</p>
@@ -106,5 +107,21 @@ public class SignInitiation {
      */
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    /**
+     * <p>Возвращает тип подтверждения операции</p>
+     * @return тип подтверждения операции
+     */
+    public ConfirmType getConfirmType() {
+        return confirmType;
+    }
+
+    /**
+     * <p>Устанавливает тип подтверждения операции</p>
+     * @param confirmType тип подтверждения операции
+     */
+    public void setConfirmType(ConfirmType confirmType) {
+        this.confirmType = confirmType;
     }
 }
