@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk.scenario;
 
 import java.security.cert.CertificateException;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -70,6 +69,8 @@ class BankCloudDssTestScenario {
                 .build(Level.BODY);
 
         cryptoApi = new CryptoApi();
+
+        test = new TestSuite(engine, configuration);
     }
 
     @Test
@@ -101,7 +102,12 @@ class BankCloudDssTestScenario {
                 account.getKpp()
         );
 
-        sendDraftWithUsn(account, senderCertificate);
+        Docflow docflow = sendDraftWithUsn(account, senderCertificate);
+
+        System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
+
+        //finishDocflow(docflow);
+
     }
 
     Account getAccount() throws ExecutionException, InterruptedException {
@@ -117,7 +123,7 @@ class BankCloudDssTestScenario {
                 .get(0);
     }
 
-    private void sendDraftWithUsn(Account senderAcc, Certificate certificate)
+    private Docflow sendDraftWithUsn(Account senderAcc, Certificate certificate)
             throws Exception {
 
         SenderRequest sender = new SenderRequest(
@@ -153,6 +159,32 @@ class BankCloudDssTestScenario {
 
         openDraftDocumentAsPdf(draftId, document.getId());
         cloudSignDraftWithDssCert(draftId);
+
+        CheckResultData checkResult = engine.getDraftService()
+                .checkAsync(draftId)
+                .get()
+                .getOrThrow();
+
+        Assertions.assertTrue(checkResult.hasNoErrors(), test.serialize(checkResult));
+        System.out.println("Usn document has no errors");
+
+        PrepareResult result = engine.getDraftService()
+                .prepareAsync(draftId)
+                .get()
+                .getOrThrow();
+
+        Assertions.assertTrue(
+                result.getStatus() == Status.OK ||
+                        result.getStatus() == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS,
+                test.serialize(result)
+        );
+
+        System.out.printf("Draft prepared to send: %s\n", result.getStatus());
+
+        return engine.getDraftService()
+                .sendAsync(draftId)
+                .get()
+                .getOrThrow();
     }
 
     private void openDraftDocumentAsPdf(UUID draftId, UUID documentId) throws Exception {
@@ -163,8 +195,6 @@ class BankCloudDssTestScenario {
     }
 
     private void cloudSignDraftWithDssCert(UUID draftId) throws Exception {
-
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
 
         SignInitiation signInitiation = engine.getDraftService()
                 .cloudSignInitAsync(draftId)
@@ -186,10 +216,10 @@ class BankCloudDssTestScenario {
         engine.getDraftService().lookupAsync(draftId).join().getOrThrow().getDocuments()
                 .stream()
                 .map(link -> engine.getHttpClient().followGetLink(link.getHref(), DraftDocument.class))
-                .map(draftDocument -> engine.getDraftService().getSignatureContentAsync(draftId,draftDocument.getId()).join().getOrThrow())
+                .map(draftDocument -> engine.getDraftService().getSignatureContentAsync(draftId, draftDocument.getId()).join().getOrThrow())
                 .forEach(signature -> Assertions.assertTrue(signature.length > 0));
-        System.out.println("Draft was successfully signed");
     }
+
 
     private Certificate getDssCert() throws Exception {
 
