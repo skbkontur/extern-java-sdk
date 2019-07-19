@@ -552,9 +552,18 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId) {
-        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, false)
+            UUID replyId,
+            boolean forceConfirmation) {
+        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, forceConfirmation)
                 .thenApply(contextAdaptor("sign-reply"));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId) {
+        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, false);
     }
 
     @Override

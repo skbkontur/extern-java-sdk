@@ -644,6 +644,13 @@ public interface DocflowService {
     CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
+            UUID replyId,
+            boolean forceConfirmation
+    );
+
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
             UUID replyId
     );
 
