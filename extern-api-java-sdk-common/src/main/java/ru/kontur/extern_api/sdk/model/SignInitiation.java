@@ -90,7 +90,7 @@ public class SignInitiation {
     }
 
     public boolean needToConfirmSigning() {
-        return requestId != null;
+        return requestId != null || taskId != null;
     }
 
     /**
