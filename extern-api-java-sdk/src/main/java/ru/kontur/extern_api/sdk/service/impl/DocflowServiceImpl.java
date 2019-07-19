@@ -676,11 +676,11 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] certBase64,
+            byte[] certificate,
             Function<QueryContext<DecryptInitiation>, String> smsCodeProvider) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
-                docflowId, documentId, certBase64
+                docflowId, documentId, certificate
         );
         return future.thenCompose(cxt -> future
                 .thenApply(smsCodeProvider)

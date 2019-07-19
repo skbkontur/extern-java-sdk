@@ -763,7 +763,7 @@ public interface DocflowService {
     CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] certBase64,
+            byte[] certificate,
             Function<QueryContext<DecryptInitiation>, String> smsCodeProvider
     );
 
