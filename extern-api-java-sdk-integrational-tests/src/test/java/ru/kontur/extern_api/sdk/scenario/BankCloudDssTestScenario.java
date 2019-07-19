@@ -24,6 +24,8 @@
 package ru.kontur.extern_api.sdk.scenario;
 
 import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -35,12 +37,17 @@ import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.adaptor.HttpClient;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
+import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
+import ru.kontur.extern_api.sdk.utils.Zip;
 
 
 class BankCloudDssTestScenario {
@@ -106,7 +113,7 @@ class BankCloudDssTestScenario {
 
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
-        //finishDocflow(docflow);
+        finishDocflow(docflow);
 
     }
 
@@ -187,11 +194,130 @@ class BankCloudDssTestScenario {
                 .getOrThrow();
     }
 
+    /**
+     * Создаёт и отправляет ответные документы до завершения ДО.
+     */
+    private void finishDocflow(Docflow docflow) throws Exception {
+
+        int budget = 60 * 5_000;
+        Docflow updated = null;
+        while (budget > 0) {
+            QueryContext<Docflow> ctx = engine.getDocflowService().lookupDocflowAsync(docflow.getId()).join();
+            if (ctx.isSuccess()) {
+                updated = ctx.get();
+                break;
+            }
+            Thread.sleep(1000);
+            budget -= 1000;
+        }
+
+        docflow = updated;
+        Assertions.assertNotNull(docflow, "Cannot get docflow in 5 minutes");
+
+        while (true) {
+            System.out.println("Docflow status: " + docflow.getStatus());
+
+            if (docflow.getStatus() == DocflowStatus.FINISHED) {
+                break;
+            }
+
+            Document document = docflow.getDocuments().stream()
+                    .filter(Document::isNeedToReply)
+                    .findFirst()
+                    .orElse(null);
+
+            if (document == null) {
+
+                int timeout = 20;
+                System.out.println("No reply available yet. Waiting " + timeout + " seconds");
+                UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
+                docflow = engine.getDocflowService()
+                        .lookupDocflowAsync(docflow.getId().toString())
+                        .get()
+                        .getOrThrow();
+                continue;
+            }
+
+            System.out.println("Reply on " + document.getDescription().getType());
+            try {
+                openDocflowDocumentAsPdf(docflow.getId(), document.getId());
+            } catch (ApiException e) {
+                System.out.println("Ok, Cannot print document. " + e.getMessage());
+            }
+
+            String type = document.getReplyOptions()[0];
+            System.out.println("Reply with " + type);
+            docflow = sendReply(docflow.getId().toString(), document, type);
+        }
+
+    }
+
+    private Docflow sendReply(String docflowId, Document document, String type)
+            throws Exception {
+
+        String documentId = document.getId().toString();
+        ReplyDocument replyDocument = engine.getDocflowService()
+                .generateReplyAsync(docflowId, documentId, type, senderCertificate.getContent())
+                .get()
+                .getOrThrow();
+
+        System.out.println("Reply generated");
+
+        cloudSignReplyDocument(docflowId, documentId, replyDocument);
+
+        Docflow docflow = engine.getDocflowService()
+                .sendReplyAsync(docflowId, documentId, replyDocument.getId())
+                .get()
+                .getOrThrow();
+
+        System.out.println("Reply sent!");
+        return docflow;
+    }
+
     private void openDraftDocumentAsPdf(UUID draftId, UUID documentId) throws Exception {
         engine.getDraftService()
                 .getDocumentAsPdfAsync(draftId, documentId)
                 .get()
                 .getOrThrow();
+    }
+
+    private void openDocflowDocumentAsPdf(UUID docflowId, UUID documentId) throws Exception {
+
+        byte[] document = downloadDocumentContent(docflowId, documentId);
+
+        if (document == null) {
+            System.out.println("Cannot show the document");
+            return;
+        }
+
+        engine.getDocflowService()
+                .getDocumentAsPdfAsync(docflowId, documentId, document)
+                .get()
+                .getOrThrow();
+    }
+
+    private byte[] downloadDocumentContent(UUID docflowId, UUID documentId) throws Exception {
+        Document document = engine.getDocflowService()
+                .lookupDocumentAsync(docflowId, documentId)
+                .get()
+                .getOrThrow();
+
+        if (document.hasDecryptedContent()) {
+            System.out.println("Document is already decrypted");
+            byte[] content = engine.getDocflowService()
+                    .getDecryptedContentAsync(docflowId, documentId)
+                    .get()
+                    .getOrThrow();
+
+            if (document.getDescription().getCompressed()) {
+                content = Zip.unzip(content);
+            }
+
+            return content;
+        }
+
+        System.out.println("Decrypting document...");
+        return cloudDecryptDocument(docflowId, documentId);
     }
 
     private void cloudSignDraftWithDssCert(UUID draftId) throws Exception {
@@ -220,6 +346,43 @@ class BankCloudDssTestScenario {
                 .forEach(signature -> Assertions.assertTrue(signature.length > 0));
     }
 
+    private void cloudSignReplyDocument(String docflowId, String documentId, ReplyDocument reply)
+            throws Exception {
+
+        SignInitiation signInitiation = engine.getDocflowService()
+                .cloudSignReplyDocumentAsync(UUID.fromString(docflowId), UUID.fromString(documentId), UUID.fromString(reply.getId()), true)
+                .get()
+                .getOrThrow();
+
+        if (!signInitiation.needToConfirmSigning()) {
+            System.out.println("Wow! You shouldn't confirm this signing!");
+        } else {
+
+            assert (signInitiation.getConfirmType() == ConfirmType.MY_DSS);
+
+            TaskState taskState;
+            do {
+                TaskInfo ti = new TaskInfo();
+                ti.setId(UUID.fromString(signInitiation.getTaskId()));
+
+                taskState = engine.getReplyTaskService(UUID.fromString(docflowId), UUID.fromString(documentId), UUID.fromString(reply.getId()))
+                        .getTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
+
+                Thread.sleep(1000);
+
+            } while (taskState == TaskState.RUNNING);
+        }
+
+        System.out.println("Reply signed in cloud");
+    }
+
+
+    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId)
+            throws Exception {
+
+        //TODO: implement cloud decryption with dss cert
+        throw new ApiException("not implemented");
+    }
 
     private Certificate getDssCert() throws Exception {
 
