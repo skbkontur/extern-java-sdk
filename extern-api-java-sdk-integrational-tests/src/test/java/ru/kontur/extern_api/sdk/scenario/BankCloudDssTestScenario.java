@@ -420,10 +420,12 @@ class BankCloudDssTestScenario {
 
         } while (taskInfo.getTaskState() == TaskState.RUNNING);
 
-        if(taskInfo.getTaskResult() == null)
-            throw new Exception("Crypt operation completed, but does not have a result. TaskId = " + taskInfo.getId());
+        if (taskInfo.getTaskResult() == null) {
+            throw new Exception(
+                    "Crypt operation completed, but does not have a result. TaskId = " + taskInfo.getId());
+        }
 
-        return (byte[]) taskInfo.getTaskResult();
+        return Base64.getDecoder().decode((String) taskInfo.getTaskResult());
     }
 
     private Certificate getDssCert() throws Exception {
