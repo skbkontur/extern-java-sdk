@@ -403,6 +403,7 @@ class BankCloudDssTestScenario {
         )
                 .get().getOrThrow();
 
+        Assertions.assertEquals(ConfirmType.MY_DSS, decryptInitiation.getConfirmType());
         TaskInfo taskInfo;
         do {
             TaskInfo ti = new TaskInfo();

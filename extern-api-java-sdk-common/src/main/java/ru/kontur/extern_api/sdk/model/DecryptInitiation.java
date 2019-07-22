@@ -31,6 +31,8 @@ public class DecryptInitiation {
 
     private String taskId;
 
+    private ConfirmType confirmType;
+
     public Link getConfirmLink() {
         return confirmLink;
     }
@@ -42,4 +44,10 @@ public class DecryptInitiation {
     public String getTaskId() {
         return taskId;
     }
+
+    public void setTaskId(String taskId) { this.taskId = taskId; }
+
+    public ConfirmType getConfirmType() { return confirmType; }
+
+    public void setConfirmType(ConfirmType confirmType) { this.confirmType = confirmType; }
 }
