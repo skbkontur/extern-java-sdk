@@ -329,7 +329,7 @@ class BankCloudDssTestScenario {
                 .get()
                 .getOrThrow();
 
-        assert (signInitiation.getConfirmType() == ConfirmType.MY_DSS);
+        Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
 
         TaskState taskState;
         do {
@@ -369,7 +369,7 @@ class BankCloudDssTestScenario {
             System.out.println("Wow! You shouldn't confirm this signing!");
         } else {
 
-            assert (signInitiation.getConfirmType() == ConfirmType.MY_DSS);
+            Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
 
             TaskState taskState;
             do {
