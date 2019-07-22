@@ -36,20 +36,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
-import ru.kontur.extern_api.sdk.model.ByteContent;
-import ru.kontur.extern_api.sdk.model.CertificateContent;
-import ru.kontur.extern_api.sdk.model.DecryptInitiation;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.RecognizedMeta;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SenderIp;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
@@ -715,6 +702,15 @@ public class DocflowServiceImpl implements DocflowService {
                 Base64.getDecoder().decode(certBase64),
                 cxt -> smsCodeProvider.apply(cxt.get())
         ));
+    }
+
+    @Override
+    public CompletableFuture<TaskInfo> getDocflowDocumentTaskInfo(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
+    ) {
+        return api.getTaskInfo(acc.accountId(), docflowId, documentId, taskId);
     }
 
 }

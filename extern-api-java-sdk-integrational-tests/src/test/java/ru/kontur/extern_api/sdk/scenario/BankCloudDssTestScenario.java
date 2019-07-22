@@ -27,6 +27,7 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -73,7 +74,7 @@ class BankCloudDssTestScenario {
                 )
                 .doNotUseCryptoProvider()
                 .accountId(configuration.getAccountId())
-                .build(Level.BODY);
+                .build(Level.BASIC);
 
         cryptoApi = new CryptoApi();
 
@@ -236,6 +237,7 @@ class BankCloudDssTestScenario {
                         .get()
                         .getOrThrow();
                 continue;
+
             }
 
             System.out.println("Reply on " + document.getDescription().getType());
@@ -335,14 +337,18 @@ class BankCloudDssTestScenario {
             ti.setId(UUID.fromString(signInitiation.getTaskId()));
 
             taskState = engine.getTaskService(draftId).getTaskStatus(ti).get();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
 
         } while (taskState == TaskState.RUNNING);
 
         engine.getDraftService().lookupAsync(draftId).join().getOrThrow().getDocuments()
                 .stream()
                 .map(link -> engine.getHttpClient().followGetLink(link.getHref(), DraftDocument.class))
-                .map(draftDocument -> engine.getDraftService().getSignatureContentAsync(draftId, draftDocument.getId()).join().getOrThrow())
+                .map(draftDocument -> engine.getDraftService().getSignatureContentAsync(
+                        draftId,
+                        draftDocument.getId()
+                ).join().getOrThrow())
                 .forEach(signature -> Assertions.assertTrue(signature.length > 0));
     }
 
@@ -350,7 +356,12 @@ class BankCloudDssTestScenario {
             throws Exception {
 
         SignInitiation signInitiation = engine.getDocflowService()
-                .cloudSignReplyDocumentAsync(UUID.fromString(docflowId), UUID.fromString(documentId), UUID.fromString(reply.getId()), true)
+                .cloudSignReplyDocumentAsync(
+                        UUID.fromString(docflowId),
+                        UUID.fromString(documentId),
+                        UUID.fromString(reply.getId()),
+                        true
+                )
                 .get()
                 .getOrThrow();
 
@@ -365,10 +376,15 @@ class BankCloudDssTestScenario {
                 TaskInfo ti = new TaskInfo();
                 ti.setId(UUID.fromString(signInitiation.getTaskId()));
 
-                taskState = engine.getReplyTaskService(UUID.fromString(docflowId), UUID.fromString(documentId), UUID.fromString(reply.getId()))
+                taskState = engine.getReplyTaskService(
+                        UUID.fromString(docflowId),
+                        UUID.fromString(documentId),
+                        UUID.fromString(reply.getId())
+                )
                         .getTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
 
-                Thread.sleep(1000);
+                Thread.sleep(2000);
+                System.out.println("Waiting for user to confirm dss operation...");
 
             } while (taskState == TaskState.RUNNING);
         }
@@ -380,8 +396,34 @@ class BankCloudDssTestScenario {
     private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId)
             throws Exception {
 
-        //TODO: implement cloud decryption with dss cert
-        throw new ApiException("not implemented");
+        DecryptInitiation decryptInitiation = engine.getDocflowService().cloudDecryptDocumentInitAsync(
+                docflowId,
+                documentId,
+                Base64.getDecoder().decode(senderCertificate.getContent())
+        )
+                .get().getOrThrow();
+
+        TaskInfo taskInfo;
+        do {
+            TaskInfo ti = new TaskInfo();
+            ti.setId(UUID.fromString(decryptInitiation.getTaskId()));
+
+            taskInfo = engine.getDocflowService().getDocflowDocumentTaskInfo(
+                    docflowId,
+                    documentId,
+                    UUID.fromString(decryptInitiation.getTaskId())
+            ).get();
+
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
+
+
+        } while (taskInfo.getTaskState() == TaskState.RUNNING);
+
+        if(taskInfo.getTaskResult() == null)
+            throw new Exception("Crypt operation completed, but does not have a result. TaskId = " + taskInfo.getId());
+
+        return (byte[]) taskInfo.getTaskResult();
     }
 
     private Certificate getDssCert() throws Exception {
