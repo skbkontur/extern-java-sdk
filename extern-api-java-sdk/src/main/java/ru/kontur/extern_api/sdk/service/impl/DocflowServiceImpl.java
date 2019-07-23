@@ -539,18 +539,16 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId,
-            boolean forceConfirmation) {
-        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, forceConfirmation)
-                .thenApply(contextAdaptor("sign-reply"));
+            UUID replyId) {
+        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, false);
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId) {
-        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, false);
+        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, true);
     }
 
     @Override
@@ -711,6 +709,15 @@ public class DocflowServiceImpl implements DocflowService {
             UUID taskId
     ) {
         return api.getTaskInfo(acc.accountId(), docflowId, documentId, taskId);
+    }
+
+    private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            boolean forceConfirmation) {
+        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, forceConfirmation)
+                .thenApply(contextAdaptor("sign-reply"));
     }
 
 }

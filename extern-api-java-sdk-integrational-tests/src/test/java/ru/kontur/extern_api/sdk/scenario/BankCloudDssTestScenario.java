@@ -356,11 +356,10 @@ class BankCloudDssTestScenario {
             throws Exception {
 
         SignInitiation signInitiation = engine.getDocflowService()
-                .cloudSignReplyDocumentAsync(
+                .cloudSignReplyDocumentForceConfirmationAsync(
                         UUID.fromString(docflowId),
                         UUID.fromString(documentId),
-                        UUID.fromString(reply.getId()),
-                        true
+                        UUID.fromString(reply.getId())
                 )
                 .get()
                 .getOrThrow();
