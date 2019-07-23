@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.ExternEngine;
@@ -81,6 +82,7 @@ class BankCloudDssTestScenario {
         test = new TestSuite(engine, configuration);
     }
 
+    @Disabled("Crypt operations must be manually confirmed")
     @Test
     void main() throws Exception {
         try {
