@@ -51,7 +51,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
-
+@Disabled("Crypt operations must be manually confirmed")
 class BankCloudDssTestScenario {
 
     private static ExternEngine engine;
@@ -82,7 +82,6 @@ class BankCloudDssTestScenario {
         test = new TestSuite(engine, configuration);
     }
 
-    @Disabled("Crypt operations must be manually confirmed")
     @Test
     void main() throws Exception {
         try {
