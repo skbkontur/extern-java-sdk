@@ -113,16 +113,31 @@ public class DraftMeta {
 
     public DraftMetaRequest asRequest() {
         Sender sender = this.getSender();
-        return new DraftMetaRequest(
-                new SenderRequest(
-                        sender.getInn(),
-                        sender.getKpp(),
-                        sender.getCertificate(),
-                        sender.getIpaddress()
-                ),
-                getRecipient(),
-                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName()),
+        SenderRequest senderRequest = new SenderRequest(
+                sender.getInn(),
+                sender.getKpp(),
+                sender.getCertificate(),
+                sender.getIpaddress()
+        );
+
+        Recipient recipient = this.getRecipient();
+
+        Organization payer = this.getPayer();
+        OrganizationRequest organizationRequest
+                = new OrganizationRequest(payer.getInn(), payer.getKpp(), payer.getName());
+
+        if (relatedDocument != null)
+            return new DraftMetaRequest(
+                senderRequest,
+                recipient,
+                organizationRequest,
                 relatedDocument
+        );
+        else
+            return new DraftMetaRequest(
+                senderRequest,
+                recipient,
+                organizationRequest
         );
     }
 }
