@@ -44,6 +44,7 @@ import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.FssRecipient;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
@@ -79,6 +80,12 @@ public class TestUtils {
                 .map(ClientInfo.Recipient::getIfnsCode)
                 .filter(s -> !s.isEmpty())
                 .map(FnsRecipient::new)
+                .ifPresent(dm::setRecipient);
+
+        Optional.of(recipient)
+                .map(ClientInfo.Recipient::getFssCode)
+                .filter(s-> !s.isEmpty())
+                .map(FssRecipient::new)
                 .ifPresent(dm::setRecipient);
 
         ClientInfo.Sender sender = clientInfo.getSender();

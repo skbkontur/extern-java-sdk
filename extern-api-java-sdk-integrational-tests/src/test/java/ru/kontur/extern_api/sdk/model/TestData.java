@@ -31,6 +31,7 @@ package ru.kontur.extern_api.sdk.model;
 
 import ru.kontur.extern_api.sdk.model.ClientInfo.Recipient;
 
+
 import java.util.Optional;
 
 public class TestData {
@@ -58,9 +59,18 @@ public class TestData {
     public String toString() {
         try {
             Recipient recipient = clientInfo.getRecipient();
-            String sRecipient = Optional.ofNullable(recipient.getIfnsCode())
+            String sRecipient =
+                    Optional.ofNullable(recipient.getIfnsCode())
                     .map(ifns -> "ifns-code " + ifns)
-                    .orElseGet(() -> "togs-code " + recipient.getTogsCode());
+                    .orElseGet( () ->
+                            Optional.ofNullable(recipient.getTogsCode())
+                            .map(togs -> "togs-code " + togs)
+                            .orElseGet( () ->
+                                    Optional.ofNullable(recipient.getFssCode())
+                                    .map(fss -> "fss-code " + fss)
+                                    .orElseThrow(() -> new UnsupportedOperationException())
+                            )
+                    );
 
             return "TestData{"
                     + " sender=" + clientInfo.getSender().getFio()

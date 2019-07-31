@@ -28,11 +28,6 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -57,6 +52,8 @@ import ru.kontur.extern_api.sdk.utils.Pair;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.utils.Zip;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -111,9 +108,9 @@ class DraftServiceIT {
         return tests.stream().map(DraftTestPack::addDocumentPack);
     }
 
-    private static Stream<Pair<Draft, DraftDocument>> draftWithNewNonFnsDocumentFactory() {
+    private static Stream<Pair<Draft, DraftDocument>> draftWithNewFnsDocumentFactory() {
         return tests.stream()
-                .map(DraftTestPack::addDocumentNoFnsPack)
+                .map(DraftTestPack::addDocumentFnsPack)
                 .filter(Objects::nonNull);
     }
 
@@ -264,7 +261,7 @@ class DraftServiceIT {
 
     @ParameterizedTest
     @DisplayName("update document")
-    @MethodSource({"draftWithNewNonFnsDocumentFactory"})
+    @MethodSource({"draftWithNewFnsDocumentFactory"})
     void testUpdateDocument(Pair<Draft, DraftDocument> addDocumentPack) {
 
         DocumentContents newContents = new DocumentContents();
@@ -313,7 +310,7 @@ class DraftServiceIT {
 
     @ParameterizedTest
     @DisplayName("update decrypted document content")
-    @MethodSource({"draftWithNewNonFnsDocumentFactory"})
+    @MethodSource({"draftWithNewFnsDocumentFactory"})
     void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         QueryContext<Void> update = engine.getDraftService()
@@ -418,7 +415,6 @@ class DraftServiceIT {
         assertTrue(status == Status.OK || status == Status.CHECK_PROTOCOL_HAS_ONLY_WARNINGS);
 
     }
-
 
     @ParameterizedTest
     @DisplayName("command \"Send\"")

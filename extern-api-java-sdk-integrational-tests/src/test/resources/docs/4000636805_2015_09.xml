@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<?F4FORM version="0.7" appname="1С"?>
+<F4REPORT xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://fz122.fss.ru" xsd:schemaLocation="http://fz122.fss.ru/doc/f4form_2015.xsd">
+	<TITLE REG_NUM="0000000012" KPS_NUM="40001" YEAR_NUM="2015" QUART_NUM="09" NumCorr="3" NAME="ООО &quot;АльфаДоор&quot;" INN="6653000832" KPP="665325934" OGRN="1142724205491" PHONE="748458317" CADDR="249091,Калужская,Малоярославецкий,Радищево,,Загородная,2,," EMAIL="info@klimatmodern.ru" TaxType="071" TaxType2="00" TaxType3="00" T1R1C2="1" T1R2C2="1" Upoln="1" CEO="Орлов Сергей Юрьевич" CRE_DATE="2015-12-08"/>
+	<F4INF1 OKVED="29.21.9" S2R1="319.00" S2R3="1914.00" Ch1="319.00" Ch2="319.00" Ch3="319.00" S2R27="638.00" S2R30="638.00" S2R26="957.00" InsDebt="957.00" S1="99000.00" S1_1="11000.00" S1_2="11000.00" S1_3="11000.00">
+		<PAYM_ORDER NUM="34" DT="2015-06-11" SUM="638.00"/>
+		<PAYM_ORDER NUM="503" DT="2015-09-10" SUM="957.00"/>
+	</F4INF1>
+	<F4INFO OKVED="29.21.9" T1R3C2="99000.00" C1="11000.00" C2="11000.00" C3="11000.00" RATE_MIS="1.2" T7R1C1="88.00" T7R3C1="792.00" T7R5C1="132.00" T7R6C1="132.00" T7R7C1="132.00" T7R27C1="176.00" T7R30C1="176.00" T7R31C1="138.97" T7R34C1="785.03" ATT_C1="1">
+		<PAYM_ORDER NUM="187" DT="2015-06-15" SUM="176.00"/>
+		<PAYM_ORDER NUM="510" DT="2015-09-11" SUM="138.97"/>
+	</F4INFO>
+</F4REPORT>
