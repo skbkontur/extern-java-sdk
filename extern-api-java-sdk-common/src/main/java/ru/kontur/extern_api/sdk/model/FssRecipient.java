@@ -34,7 +34,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class FssRecipient implements Recipient {
 
-    @SerializedName("fss-code")
     private String fssCode;
 
     public FssRecipient() {

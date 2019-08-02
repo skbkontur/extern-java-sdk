@@ -34,7 +34,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class FnsRecipient implements Recipient {
 
-    @SerializedName("ifns-code")
     private String ifnsCode;
 
     public FnsRecipient() {
