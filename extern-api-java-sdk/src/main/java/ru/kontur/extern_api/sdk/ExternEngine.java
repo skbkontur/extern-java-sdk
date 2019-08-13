@@ -41,6 +41,7 @@ import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.EventService;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
+import ru.kontur.extern_api.sdk.service.ReplyTaskService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
@@ -104,6 +105,14 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      */
     public TaskService getTaskService(@NotNull UUID draftId) {
         return servicesFactory.getTaskService(draftId);
+    }
+
+    /**
+     * @return ReplyTaskService сервис предназначен для работы с операциями с ответными документами
+     * @see ReplyTaskService
+     */
+    public ReplyTaskService getReplyTaskService(UUID docflowId, UUID documentId, UUID replyId){
+        return servicesFactory.getReplyTaskService(docflowId, documentId, replyId);
     }
 
     /**

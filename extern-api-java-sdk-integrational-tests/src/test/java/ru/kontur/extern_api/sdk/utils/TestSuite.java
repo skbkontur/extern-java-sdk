@@ -55,7 +55,7 @@ public class TestSuite {
     private final Configuration config;
     private final Gson gson;
 
-    private TestSuite(ExternEngine engine, Configuration config) {
+    public TestSuite(ExternEngine engine, Configuration config) {
         this.config = config;
         this.engine = engine;
         this.gson = GsonProvider.getPreConfiguredGsonBuilder().setPrettyPrinting().create();

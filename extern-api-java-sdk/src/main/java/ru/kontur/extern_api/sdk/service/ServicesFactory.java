@@ -53,4 +53,6 @@ public interface ServicesFactory {
 
     RelatedDocumentsService getRelatedDocumentsService(UUID relatedDocflowId, UUID relatedDocumentId);
     RelatedDocumentsService getRelatedDocumentsService(Docflow relatedDocflow, Document relatedDocumentId);
+
+    ReplyTaskService getReplyTaskService(UUID docflowId, UUID documentId, UUID replyId);
 }

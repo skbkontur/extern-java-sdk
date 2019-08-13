@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -41,21 +42,7 @@ import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.Raw;
-import ru.kontur.extern_api.sdk.model.CertificateContent;
-import ru.kontur.extern_api.sdk.model.DecryptInitiation;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.ByteContent;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SenderIp;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.model.SortOrder;
-import ru.kontur.extern_api.sdk.model.RecognizedMeta;
+import ru.kontur.extern_api.sdk.model.*;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -352,4 +339,11 @@ public interface DocflowsApi {
             @Query("unzip") boolean unzip
     );
 
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("taskId") UUID taskId
+    );
 }

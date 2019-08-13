@@ -62,6 +62,12 @@ public class TestConfig {
                 .filter(String::isEmpty)
                 .orElse(DEFAULT_CONFIG_PATH);
 
+        return LoadConfigFromEnvironment(configPath);
+    }
+
+    public static Configuration LoadConfigFromEnvironment(String configPath) {
+
+
         log.info(String.format("Configuration file: %s", configPath));
 
         URL resource = TestConfig.class.getResource(configPath);

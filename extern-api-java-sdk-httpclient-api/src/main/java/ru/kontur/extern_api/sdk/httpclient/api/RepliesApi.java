@@ -21,33 +21,32 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.httpclient.api;
 
-public class DecryptInitiation {
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
+import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.model.CertificateList;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
 
-    private Link confirmLink;
 
-    private String requestId;
+@JsonSerialization(GsonProvider.LIBAPI)
+@ApiResponseConverter(LibapiResponseConverter.class)
+public interface RepliesApi {
 
-    private String taskId;
-
-    private ConfirmType confirmType;
-
-    public Link getConfirmLink() {
-        return confirmLink;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) { this.taskId = taskId; }
-
-    public ConfirmType getConfirmType() { return confirmType; }
-
-    public void setConfirmType(ConfirmType confirmType) { this.confirmType = confirmType; }
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Path("taskId") UUID taskId
+    );
 }

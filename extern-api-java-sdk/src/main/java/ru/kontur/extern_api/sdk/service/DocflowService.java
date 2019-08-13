@@ -31,19 +31,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.DecryptInitiation;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.model.RecognizedMeta;
+import ru.kontur.extern_api.sdk.model.*;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
@@ -647,6 +635,12 @@ public interface DocflowService {
             UUID replyId
     );
 
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    );
+
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
      * Асинхронный метод инициирует облачное подписание ответного документа
@@ -763,7 +757,7 @@ public interface DocflowService {
     CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] certBase64,
+            byte[] certificate,
             Function<QueryContext<DecryptInitiation>, String> smsCodeProvider
     );
 
@@ -778,5 +772,11 @@ public interface DocflowService {
             String documentId,
             String certBase64,
             Function<DecryptInitiation, String> smsCodeProvider
+    );
+
+    CompletableFuture<TaskInfo> getDocflowDocumentTaskInfo(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
     );
 }
