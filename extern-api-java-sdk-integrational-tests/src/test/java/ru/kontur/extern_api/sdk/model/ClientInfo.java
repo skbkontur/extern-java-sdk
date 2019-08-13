@@ -153,6 +153,8 @@ public class ClientInfo {
 
         private String togsCode;
 
+        private String fssCode;
+
         public String getIfnsCode() {
             return ifnsCode;
         }
@@ -168,6 +170,10 @@ public class ClientInfo {
         public void setTogsCode(String togsCode) {
             this.togsCode = togsCode;
         }
+
+        public String getFssCode() { return fssCode; }
+
+        public void setFssCode(String fssCode) { this.fssCode = fssCode; }
     }
 
     public static class Organization {

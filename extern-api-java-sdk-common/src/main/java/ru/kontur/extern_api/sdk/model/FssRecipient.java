@@ -28,34 +28,34 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * <p>
- *     Класс содержит информацию о налоговой инспекции, в которую необходимо отправить документ
+ *     Класс содержит информацию о Фонде Социального Страхования (ФСС)
  * </p>
- * @author Aleksey Sukhorukov
+ * @author MacArt
  */
-public class FnsRecipient implements Recipient {
+public class FssRecipient implements Recipient {
 
-    private String ifnsCode;
+    private String fssCode;
 
-    public FnsRecipient() {
+    public FssRecipient() {
     }
 
-    public FnsRecipient(String ifnsCode) {
-        this.ifnsCode = ifnsCode;
-    }
-
-    /**
-     * <p>Возвращает код налоговой инспекции.</p>
-     * @return код налоговой инспекции
-     */
-    public String getIfnsCode() {
-        return ifnsCode;
+    public FssRecipient(String fssCode) {
+        this.fssCode = fssCode;
     }
 
     /**
-     * <p>Устанавливает код налоговой инспекции.</p>
-     * @param ifnsCode код налоговой инспекции
+     * <p>Возвращает код ФСС.</p>
+     * @return код ФСС
      */
-    public void setIfnsCode(String ifnsCode) {
-        this.ifnsCode = ifnsCode;
+    public String getFssCode() {
+        return fssCode;
+    }
+
+    /**
+     * <p>Устанавливает код ФСС.</p>
+     * @param fssCode код ФСС
+     */
+    public void setFssCode(String fssCode) {
+        this.fssCode = fssCode;
     }
 }

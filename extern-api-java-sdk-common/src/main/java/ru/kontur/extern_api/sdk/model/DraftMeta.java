@@ -47,6 +47,7 @@ public class DraftMeta {
 
     /**
      * Возвращает объект {@link Sender}, описывающий отправителя документа
+     *
      * @return объект, описывающий отправителя документа
      * @see Sender
      */
@@ -56,6 +57,7 @@ public class DraftMeta {
 
     /**
      * Устанавливает объект {@link Sender}, описывающий отправителя документа
+     *
      * @param sender объект, описывающий отправителя документа
      * @see Sender
      */
@@ -65,6 +67,7 @@ public class DraftMeta {
 
     /**
      * Возвращает объект {@link FnsRecipient}, описывающий получателя документа
+     *
      * @return объект {@link FnsRecipient}, описывающий получателя документа
      * @see FnsRecipient
      */
@@ -74,6 +77,7 @@ public class DraftMeta {
 
     /**
      * Устанавливает объект {@link FnsRecipient}, описывающий получателя документа
+     *
      * @param recipient объект {@link FnsRecipient}, описывающий получателя документа
      * @see FnsRecipient
      */
@@ -83,6 +87,7 @@ public class DraftMeta {
 
     /**
      * Возвращает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     *
      * @return объект, описывающий организацию, за которую производится сдача документа
      * @see Organization
      */
@@ -92,6 +97,7 @@ public class DraftMeta {
 
     /**
      * Устанавливает объект {@link Organization}, описывающий организацию, за которую производится сдача документа
+     *
      * @param payer объект {@link Organization}, описывающий организацию, за которую производится сдача документа
      * @see Organization
      */
@@ -101,28 +107,50 @@ public class DraftMeta {
 
     /**
      * Возвращает связный ДО
+     *
      * @return связный ДО
      */
-    public RelatedDocumentRequest getRelatedDocument() { return relatedDocument; }
+    public RelatedDocumentRequest getRelatedDocument() {
+        return relatedDocument;
+    }
 
     /**
      * Устанавливает связный ДО
+     *
      * @param relatedDocument связный ДО
      */
-    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) { this.relatedDocument = relatedDocument; }
+    public void setRelatedDocument(RelatedDocumentRequest relatedDocument) {
+        this.relatedDocument = relatedDocument;
+    }
 
     public DraftMetaRequest asRequest() {
         Sender sender = this.getSender();
-        return new DraftMetaRequest(
-                new SenderRequest(
-                        sender.getInn(),
-                        sender.getKpp(),
-                        sender.getCertificate(),
-                        sender.getIpaddress()
-                ),
-                getRecipient(),
-                new OrganizationRequest(getPayer().getInn(), getPayer().getKpp(), getPayer().getName()),
-                relatedDocument
+        SenderRequest senderRequest = new SenderRequest(
+                sender.getInn(),
+                sender.getKpp(),
+                sender.getCertificate(),
+                sender.getIpaddress()
         );
+
+        Recipient recipient = this.getRecipient();
+
+        Organization payer = this.getPayer();
+        OrganizationRequest organizationRequest
+                = new OrganizationRequest(payer.getInn(), payer.getKpp(), payer.getName());
+
+        if (relatedDocument != null) {
+            return new DraftMetaRequest(
+                    senderRequest,
+                    recipient,
+                    organizationRequest,
+                    relatedDocument
+            );
+        } else {
+            return new DraftMetaRequest(
+                    senderRequest,
+                    recipient,
+                    organizationRequest
+            );
+        }
     }
 }

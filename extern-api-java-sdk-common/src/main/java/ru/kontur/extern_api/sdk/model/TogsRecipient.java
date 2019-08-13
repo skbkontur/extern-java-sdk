@@ -34,7 +34,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class TogsRecipient implements Recipient {
 
-    @SerializedName("togs-code")
+
     private String togsCode;
 
     public TogsRecipient() {

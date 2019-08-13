@@ -140,12 +140,12 @@ public class DraftTestPack {
         return new Pair<>(getEmptyDraft().get(), addDocument().get());
     }
 
-    public Pair<Draft, DraftDocument> addDocumentNoFnsPack() {
-        if (!(meta.getRecipient() instanceof FnsRecipient)) {
-            return null;
+    public Pair<Draft, DraftDocument> addDocumentFnsPack() {
+        if (meta.getRecipient() instanceof FnsRecipient) {
+            return new Pair<>(getEmptyDraft().get(), addDocument().get());
         }
-
-        return new Pair<>(getEmptyDraft().get(), addDocument().get());
+        return null;
 
     }
+
 }
