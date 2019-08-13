@@ -67,24 +67,7 @@ class AccountIT {
                 .join()
                 .ensureSuccess();
 
-        assertFalse(cxt.get().getAccounts().isEmpty());
-    }
-
-    @Test
-    void getAccounts() {
-        AccountList l12 = accountService
-                .getAccountsAsync(0, 2)
-                .join().getOrThrow();
-
-        AccountList l2 = accountService
-                .getAccountsAsync(1, 1)
-                .join().getOrThrow();
-
-        Assertions.assertEquals(2, l12.getAccounts().size());
-        Assertions.assertEquals(1, l2.getAccounts().size());
-
-        Assertions.assertEquals(l2.getAccounts().get(0).getId(), l12.getAccounts().get(1).getId());
-
+        assertFalse(cxt.getOrThrow().getAccounts().isEmpty());
     }
 
     @Test
@@ -99,7 +82,7 @@ class AccountIT {
                 .join()
                 .ensureSuccess();
 
-        checkFields(cxt.get(), INN, KPP, ORG_NAME);
+        checkFields(cxt.getOrThrow(), INN, KPP, ORG_NAME);
     }
 
 
@@ -110,16 +93,16 @@ class AccountIT {
                 .join()
                 .ensureSuccess();
 
-        assertFalse(cxt.get().getAccounts().isEmpty());
+        assertFalse(cxt.getOrThrow().getAccounts().isEmpty());
 
-        Account account = cxt.get().getAccounts().get(0);
+        Account account = cxt.getOrThrow().getAccounts().get(0);
 
         QueryContext<Account> accCxt = accountService
                 .getAccountAsync(account.getId().toString())
                 .join()
                 .ensureSuccess();
 
-        checkFields(accCxt.get(), account.getInn(), account.getKpp(), account.getOrganizationName());
+        checkFields(accCxt.getOrThrow(), account.getInn(), account.getKpp(), account.getOrganizationName());
     }
 
     @Test
@@ -144,7 +127,7 @@ class AccountIT {
         assertNull(deleteCxt.getServiceError());
 
         ApiException apiException = Assertions.assertThrows(ApiException.class,
-                () -> accountService.getAccountAsync(createCxt.get().getId()).get().getOrThrow()
+                () -> accountService.getAccountAsync(createCxt.getOrThrow().getId()).get().getOrThrow()
         );
 
         Assertions.assertEquals(404, apiException.getCode());
@@ -152,7 +135,6 @@ class AccountIT {
 
 
     private void checkFields(Account account, String inn, String kpp, String orgName) {
-
         assertEquals(account.getInn(), inn);
         assertEquals(account.getKpp(), kpp);
         assertEquals(account.getOrganizationName(), orgName);
