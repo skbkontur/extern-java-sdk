@@ -28,7 +28,10 @@
  */
 package ru.kontur.extern_api.sdk;
 
+import static org.hamcrest.MatcherAssert.*;
+
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -79,5 +82,23 @@ class CertificateServiceIT {
         Assertions.assertEquals(2, l12.size());
         Assertions.assertEquals(1, l2.size());
         Assertions.assertEquals(l2.get(0).getContent(), l12.get(1).getContent());
+    }
+
+    @Test
+    void getCertificateForAllUsersTest() {
+        List<Certificate> forAllUsers = certificateService
+                .getCertificatesForAllUsers(0, 100)
+                .join()
+                .getOrThrow()
+                .getCertificates();
+
+        Certificate[] localCertificates = certificateService
+                .getCertificatesForAllUsers(0, 100)
+                .join()
+                .getOrThrow()
+                .getCertificates()
+                .toArray(new Certificate[0]);
+
+        assertThat(forAllUsers, Matchers.contains(localCertificates));
     }
 }
