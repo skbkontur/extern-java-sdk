@@ -28,7 +28,7 @@ import java.util.Date;
 
 /**
  * <p>
- * Класс предназначен для хронения информации сертификата см. класс {@code CertifcateService}
+ * Класс предназначен для хронения информации сертификата см. класс {@code CertificateService}
  * </p>
  * @author Aleksey Sukhorukov
  */
@@ -42,6 +42,7 @@ public class Certificate {
     private Boolean isQualified = null;
     private String content = null;
     private Date expiredAt = null;
+    private CertificateType certificateType = null;
 
     /**
      * Возвращает дату истечения сертификата
@@ -132,8 +133,8 @@ public class Certificate {
     }
 
     /**
-     * Устанавливает признак облочного сертификата
-     * @param isCloud признак облочного сертификата. True - облачный, иначе - не облачный
+     * Устанавливает признак облачного сертификата
+     * @param isCloud признак облачного сертификата. True - облачный, иначе - не облачный
      */
     public void setIsCloud(Boolean isCloud) {
         this.isCloud = isCloud;
@@ -169,5 +170,21 @@ public class Certificate {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * Возвращает тип сертификата
+     * @return тип сертификата. Может принимать значения DSS, Iron, Cloud
+     */
+    public CertificateType getCertificateType() {
+        return certificateType;
+    }
+
+    /**
+     * Устанавливает тип сертификата
+     * @param certificateType тип сертификата. Может принимать значения DSS, Iron, Cloud
+     */
+    public void setCertificateType(CertificateType certificateType) {
+        this.certificateType = certificateType;
     }
 }

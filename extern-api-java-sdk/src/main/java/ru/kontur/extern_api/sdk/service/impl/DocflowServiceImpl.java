@@ -36,20 +36,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
-import ru.kontur.extern_api.sdk.model.ByteContent;
-import ru.kontur.extern_api.sdk.model.CertificateContent;
-import ru.kontur.extern_api.sdk.model.DecryptInitiation;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.RecognizedMeta;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SenderIp;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
@@ -553,8 +540,15 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId) {
-        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, false)
-                .thenApply(contextAdaptor("sign-reply"));
+        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, false);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId) {
+        return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, true);
     }
 
     @Override
@@ -676,11 +670,11 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] certBase64,
+            byte[] certificate,
             Function<QueryContext<DecryptInitiation>, String> smsCodeProvider) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
-                docflowId, documentId, certBase64
+                docflowId, documentId, certificate
         );
         return future.thenCompose(cxt -> future
                 .thenApply(smsCodeProvider)
@@ -706,6 +700,24 @@ public class DocflowServiceImpl implements DocflowService {
                 Base64.getDecoder().decode(certBase64),
                 cxt -> smsCodeProvider.apply(cxt.get())
         ));
+    }
+
+    @Override
+    public CompletableFuture<TaskInfo> getDocflowDocumentTaskInfo(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
+    ) {
+        return api.getTaskInfo(acc.accountId(), docflowId, documentId, taskId);
+    }
+
+    private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            boolean forceConfirmation) {
+        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, forceConfirmation)
+                .thenApply(contextAdaptor("sign-reply"));
     }
 
 }

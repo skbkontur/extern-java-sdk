@@ -34,6 +34,8 @@ public class SignInitiation {
     private List<Link> links;
     private List<Link> documentsToSign;
     private String requestId;
+    private String taskId;
+    private ConfirmType confirmType;
 
     /**
      * <p>Возвращает список ссылок на сущности</p>
@@ -72,7 +74,7 @@ public class SignInitiation {
     }
 
     /**
-     * <p>Возвращает идентификатор запроса на подпись</p>
+     * <p>Возвращает идентификатор запроса на подпись. Заполняется в случае вызова метода с Cloud сертификатом.</p>
      * @return идентификатор запроса на подпись
      */
     public String getRequestId() {
@@ -88,6 +90,38 @@ public class SignInitiation {
     }
 
     public boolean needToConfirmSigning() {
-        return requestId != null;
+        return requestId != null || taskId != null;
+    }
+
+    /**
+     * <p>Возвращает идентификатор задания на подпись. Заполняется в случае вызова метода с Dss сертификатом.</p>
+     * @return идентификатор task
+     */
+    public String getTaskId() {
+        return taskId;
+    }
+
+    /**
+     * <p>Устанавливает идентификатор задания на подпись</p>
+     * @param taskId идентификатор задания на подпись
+     */
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    /**
+     * <p>Возвращает тип подтверждения операции</p>
+     * @return тип подтверждения операции
+     */
+    public ConfirmType getConfirmType() {
+        return confirmType;
+    }
+
+    /**
+     * <p>Устанавливает тип подтверждения операции</p>
+     * @param confirmType тип подтверждения операции
+     */
+    public void setConfirmType(ConfirmType confirmType) {
+        this.confirmType = confirmType;
     }
 }

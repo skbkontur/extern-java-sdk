@@ -158,6 +158,18 @@ public class DefaultServicesFactory implements ServicesFactory {
         );
     }
 
+    @Override
+    public ReplyTaskService getReplyTaskService(UUID docflowId, UUID documentId, UUID replyId) {
+
+        return new ReplyTaskServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(RepliesApi.class),
+                docflowId,
+                documentId,
+                replyId
+        );
+    }
+
     private KonturConfiguredClient postConfigure(KonturConfiguredClient client) {
         Supplier<String> authSidProvider = () -> providerHolder.getAuthenticationProvider()
                 .sessionId()
