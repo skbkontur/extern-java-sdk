@@ -28,7 +28,6 @@ import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
 import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 import java.security.cert.CertificateException;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
