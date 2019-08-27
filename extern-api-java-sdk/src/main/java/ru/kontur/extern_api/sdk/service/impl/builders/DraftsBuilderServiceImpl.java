@@ -56,7 +56,8 @@ public abstract class DraftsBuilderServiceImpl<
 
     protected final AccountProvider acc;
     protected final TDraftsBuildersApi api;
-    private final static int DELAY_TIMEOUT = 2000;
+    private final static int DELAY_TIMEOUT_MS = 5_000;
+    private final static int WAIT_TIMEOUT_MS = 10 * 60_000;
 
     protected DraftsBuilderServiceImpl(
             AccountProvider accountProvider,
@@ -180,7 +181,8 @@ public abstract class DraftsBuilderServiceImpl<
                         taskId
                 ),
                 (callResult) -> callResult.getTaskState() != TaskState.RUNNING,
-                DELAY_TIMEOUT
+                DELAY_TIMEOUT_MS,
+                WAIT_TIMEOUT_MS
         )
                 .thenApply(result -> {
                     if (result.isFailed()) {
