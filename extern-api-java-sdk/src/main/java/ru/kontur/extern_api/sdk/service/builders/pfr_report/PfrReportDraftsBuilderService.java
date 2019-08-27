@@ -20,17 +20,18 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders;
+package ru.kontur.extern_api.sdk.service.builders.pfr_report;
 
-import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderService;
 
-/**
- * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
- */
-public interface DraftsBuilderServiceFactory {
+public interface PfrReportDraftsBuilderService extends
+        DraftsBuilderService<
+                        PfrReportDraftsBuilder,
+                        PfrReportDraftsBuilderMeta,
+                        PfrReportDraftsBuilderMetaRequest,
+                        PfrReportDraftsBuilderDocumentService> {
 
-    FnsInventoryDraftsBuilderService fnsInventory();
-
-    PfrReportDraftsBuilderService pfrReport();
 }
