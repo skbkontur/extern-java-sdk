@@ -35,6 +35,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
+import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
@@ -47,7 +48,7 @@ public class CryptoApi {
     private static List<Key> keyCache = null;
     private static final Object lock = new Object();
 
-    private final CryptoService cryptoService;
+    private CryptoService cryptoService;
 
     private final X509CertificateFactory certificateFactory;
 
@@ -81,11 +82,15 @@ public class CryptoApi {
         return builder.build();
     }
 
-    public List<CertificateWrapper> getCertificatesInstalledLocally() throws CertificateException {
+    public List<CertificateWrapper> getCertificatesInstalledLocally()
+            throws CertificateException, CryptoException {
 
         ArrayList<CertificateWrapper> keys = new ArrayList<>();
-        for (Key key : getInstalledKeys(false)) {
-            keys.add(certificateFactory.create(key.getX509ctx()));
+        List<Key> installedKeys = getInstalledKeys(true);
+        synchronized (lock) {
+            for (Key key : installedKeys) {
+                keys.add(certificateFactory.create(key.getX509ctx()));
+            }
         }
 
         return keys;
@@ -102,7 +107,7 @@ public class CryptoApi {
         return cryptoService;
     }
 
-    public List<Key> getInstalledKeys(boolean refreshCache) {
+    public List<Key> getInstalledKeys(boolean refreshCache) throws CryptoException {
         if (keyCache == null || refreshCache) {
             synchronized (lock) {
                 if (keyCache == null || refreshCache) {
