@@ -35,6 +35,11 @@ import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsB
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFile;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMetaRequest;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 
 public class DraftsBuilderDocumentFileCreator {
@@ -76,6 +81,56 @@ public class DraftsBuilderDocumentFileCreator {
         URL contentUrl = DraftsBuilderDocumentFileCreator.class
                 .getClassLoader()
                 .getResource("docs/Scanned.pdf");
+
+        String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
+
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(contentPath));
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find scanned file in resources");
+        }
+    }
+
+    public PfrReportDraftsBuilderDocumentFile createPfrReportDraftsBuilderDocumentFile(
+            ExternEngine engine,
+            CryptoUtils cryptoUtils,
+            PfrReportDraftsBuilder draftsBuilder,
+            PfrReportDraftsBuilderDocument draftsBuilderDocument
+    ) {
+        final String fileName = "SomePfrXmlReport.xml";
+        PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
+        PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
+
+        String scannedContent = getPfrReportContent();
+
+        byte[] signature = cryptoUtils.sign(
+                engine.getConfiguration().getThumbprint(),
+                Base64.getDecoder().decode(scannedContent)
+        );
+
+        contents.setBase64Content(scannedContent);
+        contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
+
+        meta.setFileName(fileName);
+        contents.setMeta(meta);
+
+        return engine
+                .getDraftsBuilderService()
+                .pfrReport()
+                .getDocumentService(draftsBuilder.getId())
+                .getFileService(draftsBuilderDocument.getId())
+                .createAsync(contents)
+                .join();
+    }
+
+    public String getPfrReportContent() {
+        URL contentUrl = DraftsBuilderDocumentFileCreator.class
+                .getClassLoader()
+                // Почему русские пути не сработали? TODO
+                //.getResource("docs/pfr/ПФР_000-004-872962_333444_СЗВ-М_20190414_F6C22442-5774-41AC-81E6-BA30C229D5A4.xml");
+                .getResource("docs/pfr/SomePfrReport.xml");
+                //.getResource("docs/ON_DOCNPNO_6653000832665325934_6653000832665325934_0087.xml");
 
         String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
 

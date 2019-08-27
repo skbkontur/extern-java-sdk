@@ -27,6 +27,10 @@ import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsB
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentData;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMetaRequest;
 
 public class DraftsBuilderDocumentCreator {
 
@@ -45,6 +49,22 @@ public class DraftsBuilderDocumentCreator {
         return engine
                 .getDraftsBuilderService()
                 .fnsInventory()
+                .getDocumentService(draftsBuilder.getId())
+                .createAsync(meta)
+                .join();
+    }
+
+    public PfrReportDraftsBuilderDocument createPfrReportDraftsBuilderDocument(
+            ExternEngine engine,
+            PfrReportDraftsBuilder draftsBuilder
+    ) {
+        PfrReportDraftsBuilderDocumentMetaRequest meta = new PfrReportDraftsBuilderDocumentMetaRequest();
+        PfrReportDraftsBuilderDocumentData data = new PfrReportDraftsBuilderDocumentData();
+        meta.setBuilderData(data);
+
+        return engine
+                .getDraftsBuilderService()
+                .pfrReport()
                 .getDocumentService(draftsBuilder.getId())
                 .createAsync(meta)
                 .join();

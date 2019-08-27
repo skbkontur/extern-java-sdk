@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk;
+package ru.kontur.extern_api.sdk.fns_inventory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,6 +30,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.TaskState;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
