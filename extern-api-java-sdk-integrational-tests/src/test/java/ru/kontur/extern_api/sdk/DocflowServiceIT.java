@@ -974,6 +974,4 @@ class DocflowServiceIT {
                 .filter(Certificate::getIsValid)
                 .collect(Collectors.toList()).get(0));
     }
-
-
 }
