@@ -63,6 +63,8 @@ public class TestData {
             if (togsCode != null) sRecipient = "togs-code " + togsCode;
             String fssCode = recipient.getFssCode();
             if (fssCode != null) sRecipient = "fss-code " + fssCode;
+            String upfrCode = recipient.getUpfrCode();
+            if (upfrCode != null) sRecipient = "upfr-code " + upfrCode;
 
             return "TestData{"
                     + " sender=" + clientInfo.getSender().getFio()

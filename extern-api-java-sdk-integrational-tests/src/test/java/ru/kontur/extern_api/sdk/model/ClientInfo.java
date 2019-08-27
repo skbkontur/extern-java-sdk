@@ -153,6 +153,8 @@ public class ClientInfo {
 
         private String togsCode;
 
+        private String upfrCode;
+
         private String fssCode;
 
         public String getIfnsCode() {
@@ -171,15 +173,28 @@ public class ClientInfo {
             this.togsCode = togsCode;
         }
 
-        public String getFssCode() { return fssCode; }
+        public String getUpfrCode() {
+            return upfrCode;
+        }
 
-        public void setFssCode(String fssCode) { this.fssCode = fssCode; }
+        public void setUpfrCode(String upfrCode) {
+            this.upfrCode = upfrCode;
+        }
+
+        public String getFssCode() {
+            return fssCode;
+        }
+
+        public void setFssCode(String fssCode) {
+            this.fssCode = fssCode;
+        }
     }
 
     public static class Organization {
 
         private String inn;
         private String kpp;
+        private String registrationNumberPfr;
 
         public String getInn() {
             return inn;
@@ -187,6 +202,14 @@ public class ClientInfo {
 
         public void setInn(String inn) {
             this.inn = inn;
+        }
+
+        public String getRegistrationNumberPfr() {
+            return registrationNumberPfr;
+        }
+
+        public void setRegistrationNumberPfr(String registrationNumberPfr) {
+            this.registrationNumberPfr = registrationNumberPfr;
         }
 
         public String getKpp() {
