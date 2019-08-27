@@ -43,7 +43,7 @@ public interface DraftService {
      * Асинхронный метод создает черновик
      *
      * @param sender отправитель декларации {@link SenderRequest}
-     * @param recipient получатель декларации {@link FnsRecipient} | {@link TogsRecipient}
+     * @param recipient получатель декларации {@link FnsRecipient} | {@link TogsRecipient} | {@link PfrRecipient}
      * @param organization организация, на которую создана декларация {@link OrganizationRequest}
      * @return идентификатор черновика
      */
@@ -71,8 +71,8 @@ public interface DraftService {
      *         DraftMetaRequest#DraftMetaRequest(SenderRequest, Recipient, OrganizationRequest)}, где:</p>
      *         <ul>
      *         <li>sender отправитель декларации {@link SenderRequest};</li>
-     *         <li>recipient получатель декларации {@link FnsRecipient}  | {@link
-     *         TogsRecipient};</li>
+     *         <li>recipient получатель декларации {@link FnsRecipient}  | {@link TogsRecipient};
+     *         | {@link PfrRecipient}</li>
      *         <li>organization организация, на которую создана декларация {@link OrganizationRequest}.</li>
      *         </ul>
      *         <p>Для установки необходимо использовать метод {@link QueryContext#setDraftMetaRequest}.</p>

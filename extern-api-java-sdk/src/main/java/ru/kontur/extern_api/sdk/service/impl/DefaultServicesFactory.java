@@ -30,17 +30,39 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.KonturHttpClient;
-import ru.kontur.extern_api.sdk.httpclient.api.*;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.AccountsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.RelatedDocflowApi;
+import ru.kontur.extern_api.sdk.httpclient.api.RepliesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.RetrofitFnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.RetrofitPfrReportDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.RetrofitPfrReportDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.RetrofitPfrReportDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
-import ru.kontur.extern_api.sdk.service.*;
+import ru.kontur.extern_api.sdk.service.AccountService;
+import ru.kontur.extern_api.sdk.service.CertificateService;
+import ru.kontur.extern_api.sdk.service.DocflowService;
+import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.service.EventService;
+import ru.kontur.extern_api.sdk.service.OrganizationService;
+import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
+import ru.kontur.extern_api.sdk.service.ReplyTaskService;
+import ru.kontur.extern_api.sdk.service.ServicesFactory;
+import ru.kontur.extern_api.sdk.service.TaskService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
 
@@ -124,11 +146,21 @@ public class DefaultServicesFactory implements ServicesFactory {
         RetrofitFnsInventoryDraftsBuilderDocumentFilesApi fnsInventoryFileApi =
                 client.createApi(RetrofitFnsInventoryDraftsBuilderDocumentFilesApi.class);
 
+        RetrofitPfrReportDraftsBuildersApi pfrReportDraftApi =
+                client.createApi(RetrofitPfrReportDraftsBuildersApi.class);
+        RetrofitPfrReportDraftsBuilderDocumentsApi pfrReportDocumentApi =
+                client.createApi(RetrofitPfrReportDraftsBuilderDocumentsApi.class);
+        RetrofitPfrReportDraftsBuilderDocumentFilesApi pfrReportFileApi =
+                client.createApi(RetrofitPfrReportDraftsBuilderDocumentFilesApi.class);
+
         return new DraftsBuilderServiceFactoryImpl(
                 providerHolder.getAccountProvider(),
                 new FnsInventoryDraftsBuildersApi(fnsInventoryDraftApi),
                 new FnsInventoryDraftsBuilderDocumentsApi(fnsInventoryDocumentApi),
-                new FnsInventoryDraftsBuilderDocumentFilesApi(fnsInventoryFileApi)
+                new FnsInventoryDraftsBuilderDocumentFilesApi(fnsInventoryFileApi),
+                new PfrReportDraftsBuildersApi(pfrReportDraftApi),
+                new PfrReportDraftsBuilderDocumentsApi(pfrReportDocumentApi),
+                new PfrReportDraftsBuilderDocumentFilesApi(pfrReportFileApi)
         );
     }
 
