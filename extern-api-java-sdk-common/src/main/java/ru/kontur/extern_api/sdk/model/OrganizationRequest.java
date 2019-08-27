@@ -31,6 +31,7 @@ public class OrganizationRequest {
 
     private final String inn;
     private final OrganizationInfo organization;
+    private String registrationNumberPfr;
 
     public OrganizationRequest(String inn, String kpp, String orgName) {
         this.inn = inn;
@@ -53,6 +54,14 @@ public class OrganizationRequest {
 
     public String getOrgName() {
         return organization.getOrgName();
+    }
+
+    public void setRegistrationNumberPfr(String registrationNumberPfr) {
+        this.registrationNumberPfr = registrationNumberPfr;
+    }
+
+    public String getRegistrationNumberPfr() {
+        return this.registrationNumberPfr;
     }
 
     public static class OrganizationInfo {

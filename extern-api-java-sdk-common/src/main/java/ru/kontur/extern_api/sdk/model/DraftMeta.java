@@ -137,6 +137,7 @@ public class DraftMeta {
         Organization payer = this.getPayer();
         OrganizationRequest organizationRequest
                 = new OrganizationRequest(payer.getInn(), payer.getKpp(), payer.getName());
+        organizationRequest.setRegistrationNumberPfr(payer.getRegistrationNumberPfr());
 
         if (relatedDocument != null) {
             return new DraftMetaRequest(
