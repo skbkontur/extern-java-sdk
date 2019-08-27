@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
+import ru.kontur.extern_api.sdk.model.Credential;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
@@ -132,28 +133,21 @@ class AuthenticationIT {
     @DisplayName("trusted authentication")
     class TrustedAuthTest {
 
+        TrustedAuthenticationProvider auth = build
+                .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
+                .configureEncryption(
+                        configuration.getJksPass(),
+                        configuration.getRsaKeyPass(),
+                        configuration.getThumbprintRsa()
+                );
+
         @Test
         void trustedAuth() {
-            TrustedAuthenticationProvider auth = build
-                    .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
-                    .configureEncryption(
-                            configuration.getJksPass(),
-                            configuration.getRsaKeyPass(),
-                            configuration.getThumbprintRsa()
-                    );
-
             Assertions.assertNotNull(auth.sessionId().getOrThrow());
         }
 
         @Test
         void registerExternalServiceId() {
-            TrustedAuthenticationProvider auth = build
-                    .trustedAuthentication(UUID.fromString(configuration.getServiceUserId()))
-                    .configureEncryption(
-                            configuration.getJksPass(),
-                            configuration.getRsaKeyPass(),
-                            configuration.getThumbprintRsa()
-                    );
 
             final UUID serviceUserId = UUID.fromString("47024bf5-8c2c-4f1a-8a28-4b41b104a030");
             final String phone = "9500308900";

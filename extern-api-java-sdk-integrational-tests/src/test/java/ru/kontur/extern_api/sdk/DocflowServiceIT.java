@@ -24,10 +24,10 @@
 package ru.kontur.extern_api.sdk;
 
 import static java.util.Optional.ofNullable;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -151,9 +152,24 @@ class DocflowServiceIT {
                 .stream()
                 .filter(l -> l.getRel().equals("web-docflow"))
                 .findAny();
-        Assertions.assertTrue(webDocflowLink.isPresent(), "Web view docflow link should exists in docflow links.");
-        Assertions.assertNotEquals(DocflowStateTypes.FAILED, returned.getSuccessState(), "Should be not error success state");
-        Assertions.assertNotEquals(DocflowStateTypes.WARNING, returned.getSuccessState(), "Should be not warning success state");
+
+        Assumptions.assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () -> {
+            Assertions.assertTrue(
+                    webDocflowLink.isPresent(),
+                    "Web view docflow link should exists in docflow links."
+            );
+        });
+
+        Assertions.assertNotEquals(
+                DocflowStateTypes.FAILED,
+                returned.getSuccessState(),
+                "Should be not error success state"
+        );
+        Assertions.assertNotEquals(
+                DocflowStateTypes.WARNING,
+                returned.getSuccessState(),
+                "Should be not warning success state"
+        );
         Assertions.assertNotNull(returned.getOrganizationId());
     }
 
@@ -258,7 +274,9 @@ class DocflowServiceIT {
             }
 
             byte[] first5letters = Arrays.copyOfRange(decrypt, 0, 5);
-            Assertions.assertArrayEquals("<?xml".getBytes(), first5letters);
+            assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
+                    assertArrayEquals("<?xml".getBytes(), first5letters)
+            );
         }
     }
 
@@ -289,7 +307,11 @@ class DocflowServiceIT {
                 decrypted = Zip.unzip(decrypted);
             }
 
-            Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypted, 0, 5));
+            byte[] first5letters = Arrays.copyOfRange(decrypted, 0, 5);
+
+            assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
+                    assertArrayEquals("<?xml".getBytes(), first5letters)
+            );
         }
     }
 
@@ -320,7 +342,11 @@ class DocflowServiceIT {
             )
                     .getOrThrow();
 
-            Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypted, 0, 5));
+            byte[] first5letters = Arrays.copyOfRange(decrypted, 0, 5);
+
+            assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
+                    assertArrayEquals("<?xml".getBytes(), first5letters)
+            );
         }
     }
 
