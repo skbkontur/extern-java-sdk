@@ -127,10 +127,7 @@ public class DraftsBuilderDocumentFileCreator {
     public String getPfrReportContent() {
         URL contentUrl = DraftsBuilderDocumentFileCreator.class
                 .getClassLoader()
-                // Почему русские пути не сработали? TODO
-                //.getResource("docs/pfr/ПФР_000-004-872962_333444_СЗВ-М_20190414_F6C22442-5774-41AC-81E6-BA30C229D5A4.xml");
                 .getResource("docs/pfr/SomePfrReport.xml");
-                //.getResource("docs/ON_DOCNPNO_6653000832665325934_6653000832665325934_0087.xml");
 
         String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
 

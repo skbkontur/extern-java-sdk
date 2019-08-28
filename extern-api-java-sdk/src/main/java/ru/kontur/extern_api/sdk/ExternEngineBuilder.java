@@ -100,8 +100,8 @@ public final class ExternEngineBuilder implements Syntax {
     private UserAgentProvider userAgentProvider;
     private UserIPProvider userIPProvider;
 
-    private int readTimeout = 30 * 0xDEAD;
-    private int connectTimeout = 30 * 0xB01;
+    private int readTimeout = 20 * 0xDEAD;
+    private int connectTimeout = 5 * 0xB01;
     private Logger logger = Logger.DEFAULT;
 
     private ExternEngineBuilder(String externApiBaseUrl) {

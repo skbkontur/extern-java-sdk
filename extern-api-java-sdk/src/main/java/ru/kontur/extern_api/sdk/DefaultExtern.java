@@ -27,6 +27,7 @@ package ru.kontur.extern_api.sdk;
 
 public class DefaultExtern {
 
-    //public static final String BASE_URL = "https://extern-api.testkontur.ru";
-    public static final String BASE_URL = "http://localhost:10081";
+    public static final String BASE_URL = "https://extern-api.testkontur.ru";
+    // Uncomment to use local debugger.
+    // public static final String BASE_URL = "http://localhost:10081";
 }

@@ -111,7 +111,6 @@ class PfrReportDraftsBuilderDocumentServiceIT {
                 draftsBuilderDocument.getId(),
                 receivedDraftsBuilderDocument.getId()
         );
-        // Assert?
     }
 
     @Test
@@ -140,8 +139,7 @@ class PfrReportDraftsBuilderDocumentServiceIT {
                 draftsBuilderDocumentService
                         .getMetaAsync(draftsBuilderDocument.getId())
                         .join();
-
-        // Assert?
+        assertNotNull(meta);
     }
 
     @Test
@@ -153,7 +151,6 @@ class PfrReportDraftsBuilderDocumentServiceIT {
         PfrReportDraftsBuilderDocumentMetaRequest newMeta = new PfrReportDraftsBuilderDocumentMetaRequest();
 
         PfrReportDraftsBuilderDocumentData data = new PfrReportDraftsBuilderDocumentData();
-        // change some - builder document data
 
         newMeta.setBuilderData(data);
 
@@ -161,7 +158,6 @@ class PfrReportDraftsBuilderDocumentServiceIT {
                 draftsBuilderDocumentService
                         .updateMetaAsync(newDraftsBuilderDocument.getId(), newMeta)
                         .join();
-
-        // TODO - assert?
+        assertNotNull(actualMeta);
     }
 }

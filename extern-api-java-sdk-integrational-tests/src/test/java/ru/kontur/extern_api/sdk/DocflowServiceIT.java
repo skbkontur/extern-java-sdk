@@ -24,12 +24,10 @@
 package ru.kontur.extern_api.sdk;
 
 import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -833,6 +831,79 @@ class DocflowServiceIT {
             ExternEngine engine,
             DraftService draftService
     ) {
+        UUID draftId = buildPfrDraftViaBuilder(engine);
+        Draft draft = engine.getDraftService()
+                .lookupAsync(draftId)
+                .join()
+                .getOrThrow();
+
+        HttpClient httpClient = engine.getHttpClient();
+
+        draft.getDocuments()
+                .stream()
+                .map(Link::getHref)
+                .map(link -> httpClient.followGetLink(link, DraftDocument.class))
+                .map(document -> {
+                    DocumentContents contents = updateSignaturesInDraftDocument(
+                            engine,
+                            draftService,
+                            draftId,
+                            httpClient,
+                            document
+                    );
+
+                    return contents;
+                })
+                .toArray();
+
+        draftService
+                .checkAsync(draftId)
+                .join();
+
+        draftService
+                .prepareAsync(draftId)
+                .join();
+
+        return draftService
+                .sendAsync(draftId)
+                .thenApply(QueryContext::ensureSuccess)
+                .whenComplete((cxt, throwable) -> {
+                    awaitDocflowIndexed(engine, cxt.getDocflow());
+                });
+    }
+
+    @NotNull
+    private static DocumentContents updateSignaturesInDraftDocument(
+            ExternEngine engine,
+            DraftService draftService,
+            UUID draftId,
+            HttpClient httpClient,
+            DraftDocument document
+    ) {
+        Assertions.assertNotNull(document);
+
+        String contentLink = document.getDecryptedContentLink().getHref();
+        String data = httpClient.followGetLink(contentLink, String.class);
+
+        String thumbprint = engine.getConfiguration().getThumbprint();
+        byte[] decryptedContent = draftService.getDecryptedDocumentContentAsync(
+                draftId,
+                document.getId()
+        ).join().get();
+
+        byte[] signature = engineUtils.crypto.sign(thumbprint, decryptedContent);
+
+        DocumentContents contents = new DocumentContents();
+        contents.setDescription(document.getDescription());
+        contents.setBase64Content(data);
+        contents.setSignature(Base64.getEncoder().encodeToString(signature));
+
+        draftService.updateDocumentAsync(draftId, document.getId(), contents)
+                .join().get();
+        return contents;
+    }
+
+    private static UUID buildPfrDraftViaBuilder(ExternEngine engine) {
         CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         PfrReportDraftsBuilderService pfrReportDraftsBuilderService = engine
                 .getDraftsBuilderService().pfrReport();
@@ -858,64 +929,7 @@ class DocflowServiceIT {
                         .getId())
                 .join();
         assertEquals(1, draftsBuilderResult.getDraftIds().length);
-        UUID draftId = draftsBuilderResult.getDraftIds()[0];
-
-        Draft draft = engine.getDraftService()
-                .lookupAsync(draftId)
-                .join()
-                .getOrThrow();
-
-        HttpClient httpClient = engine.getHttpClient();
-
-        draft.getDocuments()
-                .stream()
-                .map(Link::getHref)
-                .map(link -> httpClient.followGetLink(link, DraftDocument.class))
-                .map(document -> {
-                    Assertions.assertNotNull(document);
-
-                    String contentLink = document.getDecryptedContentLink().getHref();
-                    String data = httpClient.followGetLink(contentLink, String.class);
-
-                    String thumbprint = engine.getConfiguration().getThumbprint();
-                    byte[] decryptedContent = draftService.getDecryptedDocumentContentAsync(
-                            draftId,
-                            document.getId()
-                    ).join().get();
-                    try {
-                        FileUtils.writeByteArrayToFile(new File("C:/tmp/" + document.getDescription().getFilename()), decryptedContent);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    byte[] signature = engineUtils.crypto.sign(thumbprint, decryptedContent);
-
-                    DocumentContents contents = new DocumentContents();
-                    contents.setDescription(document.getDescription());
-                    contents.setBase64Content(data);
-                    contents.setSignature(Base64.getEncoder().encodeToString(signature));
-
-                    draftService.updateDocumentAsync(draftId, document.getId(), contents)
-                            .join().get();
-
-                    return contents;
-                })
-                .toArray();
-
-        draftService
-                .checkAsync(draftId)
-                .join();
-
-        draftService
-                .prepareAsync(draftId)
-                .join();
-
-        return draftService
-                .sendAsync(draftId)
-                .thenApply(QueryContext::ensureSuccess)
-                .whenComplete((cxt, throwable) -> {
-                    awaitDocflowIndexed(engine, cxt.getDocflow());
-                });
+        return draftsBuilderResult.getDraftIds()[0];
     }
 
     private static CompletableFuture<QueryContext<Docflow>> createDefaultDocflow(
