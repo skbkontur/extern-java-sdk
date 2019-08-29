@@ -889,7 +889,7 @@ class DocflowServiceIT {
         byte[] decryptedContent = draftService.getDecryptedDocumentContentAsync(
                 draftId,
                 document.getId()
-        ).join().get();
+        ).join().getOrThrow();
 
         byte[] signature = engineUtils.crypto.sign(thumbprint, decryptedContent);
 
@@ -899,7 +899,7 @@ class DocflowServiceIT {
         contents.setSignature(Base64.getEncoder().encodeToString(signature));
 
         draftService.updateDocumentAsync(draftId, document.getId(), contents)
-                .join().get();
+                .join().getOrThrow();
         return contents;
     }
 

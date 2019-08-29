@@ -109,11 +109,9 @@ public class CryptoApi {
 
     public List<Key> getInstalledKeys(boolean refreshCache) throws CryptoException {
         if (keyCache == null || refreshCache) {
-            synchronized (lock) {
-                if (keyCache == null || refreshCache) {
-                    log.info("Installed keys loading...");
-                    keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
-                }
+            if (keyCache == null || refreshCache) {
+                log.info("Installed keys loading...");
+                keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
             }
         }
         log.info("Found " + keyCache.size() + " installed keys");

@@ -100,8 +100,8 @@ public final class ExternEngineBuilder implements Syntax {
     private UserAgentProvider userAgentProvider;
     private UserIPProvider userIPProvider;
 
-    private int readTimeout = 20 * 0xDEAD;
-    private int connectTimeout = 5 * 0xB01;
+    private int readTimeoutMs = 60_000;
+    private int connectTimeoutMs = 15_000;
     private Logger logger = Logger.DEFAULT;
 
     private ExternEngineBuilder(String externApiBaseUrl) {
@@ -141,8 +141,8 @@ public final class ExternEngineBuilder implements Syntax {
 
         String uri = Optional.ofNullable(configuration.getServiceBaseUri()).orElse("");
         KonturConfiguredClient konturClient = new KonturConfiguredClient(logVerbosity, uri, logger)
-                .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-                .setReadTimeout(readTimeout, TimeUnit.MILLISECONDS);
+                .setConnectTimeout(connectTimeoutMs, TimeUnit.MILLISECONDS)
+                .setReadTimeout(readTimeoutMs, TimeUnit.MILLISECONDS);
 
         DefaultServicesFactory serviceFactory = new DefaultServicesFactory(konturClient, providerSuite);
 
@@ -219,14 +219,14 @@ public final class ExternEngineBuilder implements Syntax {
     @NotNull
     @Override
     public OverrideDefaultsSyntax readTimeout(int milliseconds) {
-        readTimeout = milliseconds;
+        readTimeoutMs = milliseconds;
         return this;
     }
 
     @NotNull
     @Override
     public OverrideDefaultsSyntax connectTimeout(int milliseconds) {
-        connectTimeout = milliseconds;
+        connectTimeoutMs = milliseconds;
         return this;
     }
 
