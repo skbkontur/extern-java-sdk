@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -105,54 +104,6 @@ public interface RetrofitPfrReportDraftsBuilderDocumentFilesApi {
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
             @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId,
             @Body PfrReportDraftsBuilderDocumentFileContents newContents
-    );
-
-    /**
-     * Delete a drafts builder document file
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}")
-    CompletableFuture<Void> delete(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
-    );
-
-    /**
-     * Get a drafts builder document file content
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @GET("/v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/content")
-    CompletableFuture<byte[]> getContent(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
-    );
-
-    /**
-     * Delete a drafts builder document file signature content
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @GET("/v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/signature")
-    CompletableFuture<byte[]> getSignature(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
     );
 
     /**

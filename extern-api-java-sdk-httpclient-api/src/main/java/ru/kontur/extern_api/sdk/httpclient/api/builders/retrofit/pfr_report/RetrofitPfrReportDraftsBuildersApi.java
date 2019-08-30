@@ -20,14 +20,12 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -35,15 +33,13 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
-import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMeta;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMetaRequest;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
-public interface RetrofitFnsInventoryDraftsBuildersApi {
+public interface RetrofitPfrReportDraftsBuildersApi {
 
     /**
      * Create new a drafts builder
@@ -52,9 +48,9 @@ public interface RetrofitFnsInventoryDraftsBuildersApi {
      * @param meta drafts builder metadata
      */
     @POST("v1/{accountId}/drafts/builders")
-    CompletableFuture<FnsInventoryDraftsBuilder> create(
+    CompletableFuture<PfrReportDraftsBuilder> create(
             @Path("accountId") UUID accountId,
-            @Body FnsInventoryDraftsBuilderMetaRequest meta
+            @Body PfrReportDraftsBuilderMetaRequest meta
     );
 
     /**
@@ -64,19 +60,7 @@ public interface RetrofitFnsInventoryDraftsBuildersApi {
      * @param draftsBuilderId drafts builder identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}")
-    CompletableFuture<FnsInventoryDraftsBuilder> get(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Delete a drafts builder
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}")
-    CompletableFuture<Void> delete(
+    CompletableFuture<PfrReportDraftsBuilder> get(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId
     );
@@ -88,7 +72,7 @@ public interface RetrofitFnsInventoryDraftsBuildersApi {
      * @param draftsBuilderId drafts builder identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
-    CompletableFuture<FnsInventoryDraftsBuilderMeta> getMeta(
+    CompletableFuture<PfrReportDraftsBuilderMeta> getMeta(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId
     );
@@ -101,49 +85,9 @@ public interface RetrofitFnsInventoryDraftsBuildersApi {
      * @param newMeta drafts builder metadata
      */
     @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/meta")
-    CompletableFuture<FnsInventoryDraftsBuilderMeta> updateMeta(
+    CompletableFuture<PfrReportDraftsBuilderMeta> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Body FnsInventoryDraftsBuilderMetaRequest newMeta
-    );
-
-    /**
-     * Build the drafts builder
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @POST("v1/{accountId}/drafts/builders/{draftsBuilderId}/build?deferred=false")
-    CompletableFuture<BuildDraftsBuilderResult> build(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Starts build drafts builder process and return taskInfo object
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     */
-    @POST("v1/{accountId}/drafts/builders/{draftsBuilderId}/build?deferred=true")
-    @Headers({"CONNECT_TIMEOUT:1200000", "READ_TIMEOUT:1200000", "WRITE_TIMEOUT:1200000",
-            "X-Kontur-Request-Timeout:1200000"})
-    CompletableFuture<BuildDraftsBuilderTaskInfo> startBuild(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId
-    );
-
-    /**
-     * Get build drafts builder process taskInfo object
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param taskId send task identifier
-     */
-    @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/tasks/{taskId}")
-    CompletableFuture<BuildDraftsBuilderTaskInfo> getBuildResult(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("taskId") UUID taskId
+            @Body PfrReportDraftsBuilderMetaRequest newMeta
     );
 }

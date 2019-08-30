@@ -25,6 +25,8 @@ package ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuilderDocumentFilesApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMeta;
@@ -37,10 +39,15 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
                         PfrReportDraftsBuilderDocumentFileMeta,
                         PfrReportDraftsBuilderDocumentFileMetaRequest> {
 
-    private RetrofitPfrReportDraftsBuilderDocumentFilesApi api;
+    private RetrofitPfrReportDraftsBuilderDocumentFilesApi specificContract;
+    private RetrofitCommonDraftsBuilderDocumentFilesApi commonRetrofit;
 
-    public PfrReportDraftsBuilderDocumentFilesApi(RetrofitPfrReportDraftsBuilderDocumentFilesApi api) {
-        this.api = api;
+    public PfrReportDraftsBuilderDocumentFilesApi(
+            RetrofitPfrReportDraftsBuilderDocumentFilesApi specificContract,
+            RetrofitCommonDraftsBuilderDocumentFilesApi commonContract
+    ) {
+        this.specificContract = specificContract;
+        this.commonRetrofit = commonContract;
     }
 
     @Override
@@ -50,7 +57,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             PfrReportDraftsBuilderDocumentFileContents contents
     ) {
-        return api.create(
+        return specificContract.create(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -64,7 +71,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
-        return api.getAll(
+        return specificContract.getAll(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId
@@ -78,7 +85,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             UUID draftsBuilderDocumentFileId
     ) {
-        return api.get(
+        return specificContract.get(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -94,7 +101,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentFileId,
             PfrReportDraftsBuilderDocumentFileContents newContents
     ) {
-        return api.update(
+        return specificContract.update(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -110,7 +117,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             UUID draftsBuilderDocumentFileId
     ) {
-        return api.delete(
+        return commonRetrofit.delete(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -125,7 +132,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             UUID draftsBuilderDocumentFileId
     ) {
-        return api.getContent(
+        return commonRetrofit.getContent(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -140,7 +147,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             UUID draftsBuilderDocumentFileId
     ) {
-        return api.getSignature(
+        return commonRetrofit.getSignature(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -155,7 +162,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentId,
             UUID draftsBuilderDocumentFileId
     ) {
-        return api.getMeta(
+        return specificContract.getMeta(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
@@ -171,7 +178,7 @@ public class PfrReportDraftsBuilderDocumentFilesApi implements
             UUID draftsBuilderDocumentFileId,
             PfrReportDraftsBuilderDocumentFileMetaRequest newMeta
     ) {
-        return api.updateMeta(
+        return specificContract.updateMeta(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
