@@ -27,7 +27,7 @@ import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuilderServiceImpl;
 import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuildersApiFactory;
-import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.PfrReportDraftsBuildersApiFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuildersApiFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuilderServiceImpl;
 
 public class DraftsBuilderServiceFactoryImpl implements DraftsBuilderServiceFactory {

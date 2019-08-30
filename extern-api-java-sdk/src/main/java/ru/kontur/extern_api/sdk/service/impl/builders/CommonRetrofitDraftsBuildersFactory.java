@@ -1,4 +1,4 @@
-package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
+package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuilderDocumentFilesApi;

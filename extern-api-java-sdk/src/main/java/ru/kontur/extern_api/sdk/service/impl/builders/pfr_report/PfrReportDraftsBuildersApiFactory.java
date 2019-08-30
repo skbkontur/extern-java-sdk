@@ -21,7 +21,7 @@
  */
 
 
-package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
+package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
@@ -30,6 +30,7 @@ import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraf
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
 
 public class PfrReportDraftsBuildersApiFactory {
 

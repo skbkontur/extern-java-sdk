@@ -7,6 +7,7 @@ import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInvento
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
 
 public class FnsInventoryDraftsBuildersApiFactory {
 

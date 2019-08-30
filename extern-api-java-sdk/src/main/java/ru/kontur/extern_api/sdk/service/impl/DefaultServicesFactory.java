@@ -53,9 +53,9 @@ import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
-import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.CommonRetrofitDraftsBuildersFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuildersApiFactory;
-import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.PfrReportDraftsBuildersApiFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuildersApiFactory;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
