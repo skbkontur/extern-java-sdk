@@ -100,7 +100,7 @@ public final class ExternEngineBuilder implements Syntax {
     private UserAgentProvider userAgentProvider;
     private UserIPProvider userIPProvider;
 
-    private int readTimeoutMs = 60_000;
+    private int readTimeoutMs = 180_000;
     private int connectTimeoutMs = 15_000;
     private Logger logger = Logger.DEFAULT;
 
