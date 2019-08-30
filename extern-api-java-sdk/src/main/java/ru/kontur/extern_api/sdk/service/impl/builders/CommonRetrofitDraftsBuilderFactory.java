@@ -5,11 +5,11 @@ import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.Retrofit
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuildersApi;
 
-public class CommonRetrofitDraftsBuildersFactory {
+public class CommonRetrofitDraftsBuilderFactory {
 
     private final KonturConfiguredClient client;
 
-    public CommonRetrofitDraftsBuildersFactory(KonturConfiguredClient client) {
+    public CommonRetrofitDraftsBuilderFactory(KonturConfiguredClient client) {
         this.client = client;
     }
 

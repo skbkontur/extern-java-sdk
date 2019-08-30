@@ -25,8 +25,8 @@ package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersDocumentsApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMeta;
@@ -46,18 +46,18 @@ public class PfrReportDraftsBuilderServiceImpl extends
                         PfrReportDraftsBuildersApi>
         implements PfrReportDraftsBuilderService {
 
-    private final PfrReportDraftsBuilderDocumentsApi documentApi;
-    private final PfrReportDraftsBuilderDocumentFilesApi fileApi;
+    private final PfrReportDraftsBuildersDocumentsApi builderDocumentsApi;
+    private final PfrReportDraftsBuilderDocumentFilesApi builderDocumentFilesApi;
 
     public PfrReportDraftsBuilderServiceImpl(
             AccountProvider accountProvider,
-            PfrReportDraftsBuildersApi builderApi,
-            PfrReportDraftsBuilderDocumentsApi documentApi,
-            PfrReportDraftsBuilderDocumentFilesApi fileApi
+            PfrReportDraftsBuildersApi buildersApi,
+            PfrReportDraftsBuildersDocumentsApi builderDocumentsApi,
+            PfrReportDraftsBuilderDocumentFilesApi builderDocumentFilesApi
     ) {
-        super(accountProvider, builderApi);
-        this.documentApi = documentApi;
-        this.fileApi = fileApi;
+        super(accountProvider, buildersApi);
+        this.builderDocumentsApi = builderDocumentsApi;
+        this.builderDocumentFilesApi = builderDocumentFilesApi;
     }
 
     @Override
@@ -70,10 +70,10 @@ public class PfrReportDraftsBuilderServiceImpl extends
             @NotNull UUID draftsBuilderId
     ) {
         return new PfrReportDraftsBuilderDocumentServiceImpl(
-                acc,
-                api,
-                documentApi,
-                fileApi,
+                accountProvider,
+                specificApi,
+                builderDocumentsApi,
+                builderDocumentFilesApi,
                 draftsBuilderId
         );
     }

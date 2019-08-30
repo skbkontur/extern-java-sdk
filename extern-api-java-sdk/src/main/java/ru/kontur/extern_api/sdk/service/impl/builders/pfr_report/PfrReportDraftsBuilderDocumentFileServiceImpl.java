@@ -24,8 +24,8 @@ package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersDocumentsApi;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
@@ -46,20 +46,20 @@ public class PfrReportDraftsBuilderDocumentFileServiceImpl extends
                         PfrReportDraftsBuilderDocumentFilesApi>
         implements PfrReportDraftsBuilderDocumentFileService {
 
-    private final PfrReportDraftsBuildersApi builderApi;
-    private final PfrReportDraftsBuilderDocumentsApi documentApi;
+    private final PfrReportDraftsBuildersApi buildersApi;
+    private final PfrReportDraftsBuildersDocumentsApi builderDocumentsApi;
 
     PfrReportDraftsBuilderDocumentFileServiceImpl(
             AccountProvider accountProvider,
-            PfrReportDraftsBuildersApi builderApi,
-            PfrReportDraftsBuilderDocumentsApi documentApi,
+            PfrReportDraftsBuildersApi buildersApi,
+            PfrReportDraftsBuildersDocumentsApi builderDocumentsApi,
             PfrReportDraftsBuilderDocumentFilesApi api,
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
         super(accountProvider, api, draftsBuilderId, draftsBuilderDocumentId);
-        this.builderApi = builderApi;
-        this.documentApi = documentApi;
+        this.buildersApi = buildersApi;
+        this.builderDocumentsApi = builderDocumentsApi;
     }
 
     @Override
@@ -70,10 +70,10 @@ public class PfrReportDraftsBuilderDocumentFileServiceImpl extends
     @Override
     public PfrReportDraftsBuilderDocumentService getDocumentService() {
         return new PfrReportDraftsBuilderDocumentServiceImpl(
-                acc,
-                builderApi,
-                documentApi,
-                api,
+                accountProvider,
+                buildersApi,
+                builderDocumentsApi,
+                builderDocumentFilesApi,
                 getDraftsBuilderId()
         );
     }

@@ -52,10 +52,10 @@ import ru.kontur.extern_api.sdk.service.ReplyTaskService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
 import ru.kontur.extern_api.sdk.service.TaskService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuilderFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceFactoryImpl;
-import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
-import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuildersApiFactory;
-import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuildersApiFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuilderApiFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuilderApiFactory;
 
 
 public class DefaultServicesFactory implements ServicesFactory {
@@ -130,12 +130,12 @@ public class DefaultServicesFactory implements ServicesFactory {
     public DraftsBuilderServiceFactory getDraftsBuilderService() {
         KonturConfiguredClient client = postConfigure(configuredClient);
 
-        CommonRetrofitDraftsBuildersFactory commonFactory = new CommonRetrofitDraftsBuildersFactory(client);
-        FnsInventoryDraftsBuildersApiFactory fnsInventoryFactory = new FnsInventoryDraftsBuildersApiFactory(
+        CommonRetrofitDraftsBuilderFactory commonFactory = new CommonRetrofitDraftsBuilderFactory(client);
+        FnsInventoryDraftsBuilderApiFactory fnsInventoryFactory = new FnsInventoryDraftsBuilderApiFactory(
                 client,
                 commonFactory
         );
-        PfrReportDraftsBuildersApiFactory pfrReportFactory = new PfrReportDraftsBuildersApiFactory(
+        PfrReportDraftsBuilderApiFactory pfrReportFactory = new PfrReportDraftsBuilderApiFactory(
                 client,
                 commonFactory
         );

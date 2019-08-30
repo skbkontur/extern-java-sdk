@@ -54,17 +54,17 @@ public abstract class DraftsBuilderServiceImpl<
                 TDraftsBuilderMetaRequest,
                 TDraftsBuilderDocumentService> {
 
-    protected final AccountProvider acc;
-    protected final TDraftsBuildersApi api;
+    protected final AccountProvider accountProvider;
+    protected final TDraftsBuildersApi specificApi;
     private final static int DELAY_TIMEOUT_MS = 5_000;
     private final static int WAIT_TIMEOUT_MS = 3 * 60_000;
 
     protected DraftsBuilderServiceImpl(
             AccountProvider accountProvider,
-            TDraftsBuildersApi api
+            TDraftsBuildersApi specificApi
     ) {
-        this.acc = accountProvider;
-        this.api = api;
+        this.accountProvider = accountProvider;
+        this.specificApi = specificApi;
     }
 
     protected abstract DraftsBuilderType getDraftsBuilderType();
@@ -73,8 +73,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<TDraftsBuilder> createAsync(
             TDraftsBuilderMetaRequest meta
     ) {
-        return api.create(
-                acc.accountId(),
+        return specificApi.create(
+                accountProvider.accountId(),
                 meta
         ).whenComplete((builder, throwable) -> {
             if (builder != null) {
@@ -87,8 +87,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<TDraftsBuilder> getAsync(
             UUID draftsBuilderId
     ) {
-        return api.get(
-                acc.accountId(),
+        return specificApi.get(
+                accountProvider.accountId(),
                 draftsBuilderId
         ).whenComplete((builder, throwable) -> {
             if (builder != null) {
@@ -101,8 +101,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderId
     ) {
-        return api.delete(
-                acc.accountId(),
+        return specificApi.delete(
+                accountProvider.accountId(),
                 draftsBuilderId
         );
     }
@@ -111,8 +111,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<TDraftsBuilderMeta> getMetaAsync(
             UUID draftsBuilderId
     ) {
-        return api.getMeta(
-                acc.accountId(),
+        return specificApi.getMeta(
+                accountProvider.accountId(),
                 draftsBuilderId
         ).whenComplete((meta, throwable) -> {
             if (meta != null) {
@@ -126,8 +126,8 @@ public abstract class DraftsBuilderServiceImpl<
             UUID draftsBuilderId,
             TDraftsBuilderMetaRequest newMeta
     ) {
-        return api.updateMeta(
-                acc.accountId(),
+        return specificApi.updateMeta(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 newMeta
         ).whenComplete((meta, throwable) -> {
@@ -141,8 +141,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<BuildDraftsBuilderResult> buildAsync(
             UUID draftsBuilderId
     ) {
-        return api.build(
-                acc.accountId(),
+        return specificApi.build(
+                accountProvider.accountId(),
                 draftsBuilderId
         );
     }
@@ -151,8 +151,8 @@ public abstract class DraftsBuilderServiceImpl<
     public CompletableFuture<BuildDraftsBuilderTaskInfo> startBuildAsync(
             UUID draftsBuilderId
     ) {
-        return api.startBuild(
-                acc.accountId(),
+        return specificApi.startBuild(
+                accountProvider.accountId(),
                 draftsBuilderId
         );
     }
@@ -162,8 +162,8 @@ public abstract class DraftsBuilderServiceImpl<
             UUID draftsBuilderId,
             UUID taskId
     ) {
-        return api.getBuildResult(
-                acc.accountId(),
+        return specificApi.getBuildResult(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 taskId
         );
@@ -175,8 +175,8 @@ public abstract class DraftsBuilderServiceImpl<
             UUID taskId
     ) {
         return Awaiter.waitForCondition(
-                () -> api.getBuildResult(
-                        acc.accountId(),
+                () -> specificApi.getBuildResult(
+                        accountProvider.accountId(),
                         draftsBuilderId,
                         taskId
                 ),

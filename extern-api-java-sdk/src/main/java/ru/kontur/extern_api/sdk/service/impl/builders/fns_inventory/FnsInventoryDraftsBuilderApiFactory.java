@@ -7,16 +7,16 @@ import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInvento
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuildersApi;
-import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuilderFactory;
 
-public class FnsInventoryDraftsBuildersApiFactory {
+public class FnsInventoryDraftsBuilderApiFactory {
 
     private final KonturConfiguredClient client;
-    private final CommonRetrofitDraftsBuildersFactory commonRetrofitDraftsBuildersFactory;
+    private final CommonRetrofitDraftsBuilderFactory commonRetrofitDraftsBuildersFactory;
 
-    public FnsInventoryDraftsBuildersApiFactory(
+    public FnsInventoryDraftsBuilderApiFactory(
             KonturConfiguredClient client,
-            CommonRetrofitDraftsBuildersFactory commonRetrofitFactory
+            CommonRetrofitDraftsBuilderFactory commonRetrofitFactory
     ) {
         this.client = client;
         this.commonRetrofitDraftsBuildersFactory = commonRetrofitFactory;
@@ -43,4 +43,3 @@ public class FnsInventoryDraftsBuildersApiFactory {
         );
     }
 }
-

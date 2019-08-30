@@ -69,9 +69,9 @@ public class FnsInventoryDraftsBuilderDocumentServiceImpl extends
     @Override
     public FnsInventoryDraftsBuilderService getBuilderService() {
         return new FnsInventoryDraftsBuilderServiceImpl(
-                acc,
+                accountProvider,
                 builderApi,
-                api,
+                builderDocumentsApi,
                 fileApi
         );
     }
@@ -81,9 +81,9 @@ public class FnsInventoryDraftsBuilderDocumentServiceImpl extends
             UUID draftsBuilderDocumentId
     ) {
         return new FnsInventoryDraftsBuilderDocumentFileServiceImpl(
-                acc,
+                accountProvider,
                 builderApi,
-                api,
+                builderDocumentsApi,
                 fileApi,
                 getDraftsBuilderId(),
                 draftsBuilderDocumentId

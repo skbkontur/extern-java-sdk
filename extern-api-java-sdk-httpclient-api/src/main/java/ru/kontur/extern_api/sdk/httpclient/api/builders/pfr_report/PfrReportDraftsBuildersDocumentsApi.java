@@ -31,7 +31,7 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMetaRequest;
 
-public class PfrReportDraftsBuilderDocumentsApi implements
+public class PfrReportDraftsBuildersDocumentsApi implements
         DraftsBuilderDocumentsApi<
                 PfrReportDraftsBuilderDocument,
                 PfrReportDraftsBuilderDocumentMeta,
@@ -40,7 +40,7 @@ public class PfrReportDraftsBuilderDocumentsApi implements
     private RetrofitPfrReportDraftsBuilderDocumentsApi specificContract;
     private RetrofitCommonDraftsBuilderDocumentsApi commonContract;
 
-    public PfrReportDraftsBuilderDocumentsApi(
+    public PfrReportDraftsBuildersDocumentsApi(
             RetrofitPfrReportDraftsBuilderDocumentsApi specificContract,
             RetrofitCommonDraftsBuilderDocumentsApi commonContract
     ) {

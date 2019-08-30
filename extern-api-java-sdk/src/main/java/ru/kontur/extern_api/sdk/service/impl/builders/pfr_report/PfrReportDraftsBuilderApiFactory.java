@@ -20,26 +20,25 @@
  * SOFTWARE.
  */
 
-
 package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
-import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuildersApi;
-import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuildersFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.CommonRetrofitDraftsBuilderFactory;
 
-public class PfrReportDraftsBuildersApiFactory {
+public class PfrReportDraftsBuilderApiFactory {
 
     private final KonturConfiguredClient client;
-    private final CommonRetrofitDraftsBuildersFactory commonRetrofitDraftsBuildersFactory;
+    private final CommonRetrofitDraftsBuilderFactory commonRetrofitDraftsBuildersFactory;
 
-    public PfrReportDraftsBuildersApiFactory(
+    public PfrReportDraftsBuilderApiFactory(
             KonturConfiguredClient client,
-            CommonRetrofitDraftsBuildersFactory commonRetrofitDraftsBuildersFactory
+            CommonRetrofitDraftsBuilderFactory commonRetrofitDraftsBuildersFactory
     ) {
         this.client = client;
         this.commonRetrofitDraftsBuildersFactory = commonRetrofitDraftsBuildersFactory;
@@ -52,8 +51,8 @@ public class PfrReportDraftsBuildersApiFactory {
         );
     }
 
-    public PfrReportDraftsBuilderDocumentsApi createDraftsBuildersDocumentApi() {
-        return new PfrReportDraftsBuilderDocumentsApi(
+    public PfrReportDraftsBuildersDocumentsApi createDraftsBuildersDocumentApi() {
+        return new PfrReportDraftsBuildersDocumentsApi(
                 client.createApi(RetrofitPfrReportDraftsBuilderDocumentsApi.class),
                 commonRetrofitDraftsBuildersFactory.createDraftsBuildersDocumentApi()
         );
