@@ -33,6 +33,7 @@ import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
 import ru.kontur.extern_api.sdk.service.*;
+import ru.kontur.extern_api.sdk.service.WarrantService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 
 import java.util.Optional;
@@ -78,6 +79,14 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      */
     public CertificateService getCertificateService() {
         return servicesFactory.getCertificateService();
+    }
+
+    /**
+     * @return WarrantsService сервис предназначен для получения списка доверенностей
+     * @see WarrantService
+     */
+    public WarrantService getWarrantService() {
+        return servicesFactory.getWarrantService();
     }
 
     /**
