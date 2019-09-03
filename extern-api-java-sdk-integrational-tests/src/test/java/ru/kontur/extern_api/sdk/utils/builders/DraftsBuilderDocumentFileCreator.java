@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.utils.builders;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -102,14 +103,14 @@ public class DraftsBuilderDocumentFileCreator {
         PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
 
-        String scannedContent = getPfrReportContent();
+        String pfrReportContent = getPfrReportContent();
 
         byte[] signature = cryptoUtils.sign(
                 engine.getConfiguration().getThumbprint(),
-                Base64.getDecoder().decode(scannedContent)
+                Base64.getDecoder().decode(pfrReportContent)
         );
 
-        contents.setBase64Content(scannedContent);
+        contents.setBase64Content(pfrReportContent);
         contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
 
         meta.setFileName(fileName);
