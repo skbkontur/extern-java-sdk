@@ -111,8 +111,8 @@ public class TestUtils {
         return draftMetaRequest;
     }
 
-    public static DocumentContents loadDocumentContents(String path, DocType docType){
-        if (docType == DocType.PFR && path.contains("SomePfrAttachment.txt")){
+    public static DocumentContents loadDocumentContents(String path, DocType docType) {
+        if (docType == DocType.PFR && path.contains("SomePfrAttachment.txt")) {
             return getPfrAttachmentContents(path);
         }
 
@@ -142,11 +142,18 @@ public class TestUtils {
 
             String currentDateTimeStr = LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
-            dom.getDocumentElement().getFirstChild().getNextSibling().getChildNodes().item(0).setNodeValue(currentDateTimeStr);
+            dom.getDocumentElement().getFirstChild().getNextSibling().getChildNodes().item(0).setNodeValue(
+                    currentDateTimeStr);
         }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        UncheckedRunnable.run(() -> XMLUtil.serialize(dom, os, "Windows-1251"));
+        UncheckedRunnable.run(() -> {
+            String encoding = "Windows-1251";
+            if (docType == DocType.PFR && path.contains("SomePfrReport.xml")) {
+                encoding = "UTF-8";
+            }
+            XMLUtil.serialize(dom, os, encoding);
+        });
 
         DocumentContents documentContents = new DocumentContents();
         documentContents.setBase64Content(Base64.getEncoder().encodeToString(os.toByteArray()));
