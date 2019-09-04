@@ -26,23 +26,4 @@ import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderData;
 
 public class PfrReportDraftsBuilderData extends
         DraftsBuilderData {
-
-    private String registrationNumber;
-    private String upfrCode;
-
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
-    public String getUpfrCode() {
-        return upfrCode;
-    }
-
-    public void setUpfrCode(String upfrCode) {
-        this.upfrCode = upfrCode;
-    }
 }

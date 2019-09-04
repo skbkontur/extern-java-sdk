@@ -59,7 +59,7 @@ public class DraftTestPack {
 
         QueryContext<Draft> getDraftCxt = getDraft();
 
-        if (getDraftCxt.get().getDocuments().size() > 0) {
+        if (getDraftCxt.getOrThrow().getDocuments().size() > 0) {
             createNewEmptyDraft();
             return getDraft();
         }

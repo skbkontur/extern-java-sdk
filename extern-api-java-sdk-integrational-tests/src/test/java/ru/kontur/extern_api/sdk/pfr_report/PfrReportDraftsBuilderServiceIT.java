@@ -35,6 +35,8 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMeta;
@@ -94,12 +96,12 @@ class PfrReportDraftsBuilderServiceIT {
         );
 
         assertEquals(
-                draftsBuilder.getMeta().getBuilderData().getRegistrationNumber(),
-                receivedDraftsBuilder.getMeta().getBuilderData().getRegistrationNumber()
+                draftsBuilder.getMeta().getPayer().getRegistrationNumberPfr(),
+                receivedDraftsBuilder.getMeta().getPayer().getRegistrationNumberPfr()
         );
         assertEquals(
-                draftsBuilder.getMeta().getBuilderData().getUpfrCode(),
-                receivedDraftsBuilder.getMeta().getBuilderData().getUpfrCode()
+                ((PfrRecipient) draftsBuilder.getMeta().getRecipient()).getUpfrCode(),
+                ((PfrRecipient) receivedDraftsBuilder.getMeta().getRecipient()).getUpfrCode()
         );
     }
 
@@ -136,12 +138,12 @@ class PfrReportDraftsBuilderServiceIT {
         );
 
         assertEquals(
-                draftsBuilder.getMeta().getBuilderData().getRegistrationNumber(),
-                meta.getBuilderData().getRegistrationNumber()
+                draftsBuilder.getMeta().getPayer().getRegistrationNumberPfr(),
+                meta.getPayer().getRegistrationNumberPfr()
         );
         assertEquals(
-                draftsBuilder.getMeta().getBuilderData().getUpfrCode(),
-                meta.getBuilderData().getUpfrCode()
+                ((PfrRecipient) draftsBuilder.getMeta().getRecipient()).getUpfrCode(),
+                ((PfrRecipient) meta.getRecipient()).getUpfrCode()
         );
     }
 
@@ -157,10 +159,14 @@ class PfrReportDraftsBuilderServiceIT {
         String newUpfrCode = "777-777";
         String newRegistrationNumber = "777-777-123456";
         PfrReportDraftsBuilderData data = new PfrReportDraftsBuilderData();
-        data.setUpfrCode(newUpfrCode);
-        data.setRegistrationNumber(newRegistrationNumber);
 
         // Act
+        OrganizationRequest payer = new OrganizationRequest("6653000832", "665325934", "ООО Рожки");
+        payer.setRegistrationNumberPfr(newRegistrationNumber);
+        newMeta.setPayer(payer);
+        PfrRecipient recipient = new PfrRecipient(newUpfrCode);
+        recipient.setUpfrCode(newUpfrCode);
+        newMeta.setRecipient(recipient);
         newMeta.setBuilderData(data);
 
         // Assert
@@ -169,7 +175,7 @@ class PfrReportDraftsBuilderServiceIT {
                         .updateMetaAsync(newDraftsBuilder.getId(), newMeta)
                         .join();
 
-        assertEquals(newUpfrCode, actualMeta.getBuilderData().getUpfrCode());
-        assertEquals(newRegistrationNumber, actualMeta.getBuilderData().getRegistrationNumber());
+        assertEquals(newUpfrCode, ((PfrRecipient) actualMeta.getRecipient()).getUpfrCode());
+        assertEquals(newRegistrationNumber, actualMeta.getPayer().getRegistrationNumberPfr());
     }
 }

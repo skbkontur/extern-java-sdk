@@ -87,8 +87,6 @@ public class DraftsBuilderCreator {
         draftsBuilderMetaRequest.setRecipient(draftMeta.getRecipient());
 
         PfrReportDraftsBuilderData data = new PfrReportDraftsBuilderData();
-        data.setRegistrationNumber(payer.getRegistrationNumberPfr());
-        data.setUpfrCode("666-666");
         draftsBuilderMetaRequest.setBuilderData(data);
 
         return engine
