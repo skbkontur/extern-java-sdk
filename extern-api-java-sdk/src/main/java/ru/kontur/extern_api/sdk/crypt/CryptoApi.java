@@ -35,7 +35,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
 import ru.argosgrp.cryptoservice.mscapi.MSCapi;
@@ -46,7 +45,6 @@ public class CryptoApi {
 
     // Probably bad design, but significantly improves performance
     private static List<Key> keyCache = null;
-    private static final Object lock = new Object();
 
     private CryptoService cryptoService;
 
@@ -82,18 +80,20 @@ public class CryptoApi {
         return builder.build();
     }
 
-    public List<CertificateWrapper> getCertificatesInstalledLocally()
-            throws CertificateException, CryptoException {
+    private static ArrayList<CertificateWrapper> localCertsCache;
 
-        ArrayList<CertificateWrapper> keys = new ArrayList<>();
-        List<Key> installedKeys = getInstalledKeys(true);
-        synchronized (lock) {
+    public synchronized List<CertificateWrapper> getCertificatesInstalledLocally()
+            throws CertificateException {
+
+        if (localCertsCache == null) {
+            localCertsCache = new ArrayList<>();
+            List<Key> installedKeys = getInstalledKeys(false);
             for (Key key : installedKeys) {
-                keys.add(certificateFactory.create(key.getX509ctx()));
+                localCertsCache.add(certificateFactory.create(key.getX509ctx()));
             }
         }
 
-        return keys;
+        return localCertsCache;
     }
 
     public CertificateWrapper asX509Wrapper(Key key) throws CertificateException {
@@ -107,16 +107,17 @@ public class CryptoApi {
         return cryptoService;
     }
 
-    public List<Key> getInstalledKeys(boolean refreshCache) throws CryptoException {
+    public synchronized List<Key> getInstalledKeys(boolean refreshCache) {
         if (keyCache == null || refreshCache) {
-            if (keyCache == null || refreshCache) {
-                log.info("Installed keys loading...");
-                keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
-            }
+            log.info("Installed keys loading...");
+            CryptoService cryptoService = getCryptoService();
+            CryptoExceptionThrows<Key[]> keysResult = cryptoService::getKeys;
+            Key[] keys = catchCryptoException(keysResult);
+            keyCache = Arrays.asList(keys);
         }
         log.info("Found " + keyCache.size() + " installed keys");
 
-        return new ArrayList<>(keyCache);
+        return keyCache;
     }
 
 }

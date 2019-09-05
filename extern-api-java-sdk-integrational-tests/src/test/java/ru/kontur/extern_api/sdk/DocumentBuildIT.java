@@ -23,29 +23,54 @@
 
 package ru.kontur.extern_api.sdk;
 
-import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.*;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.BuildDocumentType;
+import ru.kontur.extern_api.sdk.model.Certificate;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
+import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.Ion1RequestContract;
+import ru.kontur.extern_api.sdk.model.Ion2RequestContract;
+import ru.kontur.extern_api.sdk.model.Ion3RequestContract;
+import ru.kontur.extern_api.sdk.model.Ion4RequestContract;
+import ru.kontur.extern_api.sdk.model.Ion5RequestContract;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.service.DraftService;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
+import ru.kontur.extern_api.sdk.utils.PreparedTestData;
+import ru.kontur.extern_api.sdk.utils.Resources;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
+import ru.kontur.extern_api.sdk.utils.TestUtils;
+
 @DisplayName("Draft service should")
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class DocumentBuildIT {
 
     private static DraftService draftService;
