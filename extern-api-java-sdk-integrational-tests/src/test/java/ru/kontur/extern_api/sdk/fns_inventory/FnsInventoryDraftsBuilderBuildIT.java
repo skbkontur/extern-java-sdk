@@ -43,7 +43,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Build fns inventory drafts builder")
 class FnsInventoryDraftsBuilderBuildIT {
 

@@ -35,7 +35,7 @@ import ru.kontur.extern_api.sdk.service.AccountService;
 import ru.kontur.extern_api.sdk.utils.AuthenticationProviderAdaptor;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Configuration tokens should")
 class ConfigurationIT {
 

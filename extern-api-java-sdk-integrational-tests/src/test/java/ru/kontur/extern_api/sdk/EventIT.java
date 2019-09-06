@@ -34,13 +34,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import ru.kontur.extern_api.sdk.utils.EventId;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.model.ApiEvent;
 import ru.kontur.extern_api.sdk.model.EventsPage;
+import ru.kontur.extern_api.sdk.utils.EventId;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class EventIT {
 
     private static ExternEngine engine;
