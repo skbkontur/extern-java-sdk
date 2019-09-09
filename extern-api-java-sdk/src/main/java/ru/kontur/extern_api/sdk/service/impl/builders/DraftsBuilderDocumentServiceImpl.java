@@ -53,18 +53,18 @@ public abstract class DraftsBuilderDocumentServiceImpl<
                 TDraftsBuilderService,
                 TDraftsBuilderDocumentFileService> {
 
-    protected final AccountProvider acc;
-    protected final TDraftsBuilderDocumentsApi api;
+    protected final AccountProvider accountProvider;
+    protected final TDraftsBuilderDocumentsApi builderDocumentsApi;
 
     private final UUID draftsBuilderId;
 
     protected DraftsBuilderDocumentServiceImpl(
             AccountProvider accountProvider,
-            TDraftsBuilderDocumentsApi api,
+            TDraftsBuilderDocumentsApi builderDocumentsApi,
             UUID draftsBuilderId
     ) {
-        this.acc = accountProvider;
-        this.api = api;
+        this.accountProvider = accountProvider;
+        this.builderDocumentsApi = builderDocumentsApi;
 
         this.draftsBuilderId = draftsBuilderId;
     }
@@ -80,8 +80,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
     public CompletableFuture<TDraftsBuilderDocument> createAsync(
             TDraftsBuilderDocumentMetaRequest meta
     ) {
-        return api.create(
-                acc.accountId(),
+        return builderDocumentsApi.create(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 meta
         ).whenComplete((document, throwable) -> {
@@ -93,8 +93,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
 
     @Override
     public CompletableFuture<TDraftsBuilderDocument[]> getAllAsync() {
-        return api.getAll(
-                acc.accountId(),
+        return builderDocumentsApi.getAll(
+                accountProvider.accountId(),
                 draftsBuilderId
         ).whenComplete((documents, throwable) -> {
             if (documents != null) {
@@ -109,8 +109,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
     public CompletableFuture<TDraftsBuilderDocument> getAsync(
             UUID draftsBuilderDocumentId
     ) {
-        return api.get(
-                acc.accountId(),
+        return builderDocumentsApi.get(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
         ).whenComplete((document, throwable) -> {
@@ -124,8 +124,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
     public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderDocumentId
     ) {
-        return api.delete(
-                acc.accountId(),
+        return builderDocumentsApi.delete(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
         );
@@ -135,8 +135,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
     public CompletableFuture<TDraftsBuilderDocumentMeta> getMetaAsync(
             UUID draftsBuilderDocumentId
     ) {
-        return api.getMeta(
-                acc.accountId(),
+        return builderDocumentsApi.getMeta(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId
         ).whenComplete((meta, throwable) -> {
@@ -151,8 +151,8 @@ public abstract class DraftsBuilderDocumentServiceImpl<
             UUID draftsBuilderDocumentId,
             TDraftsBuilderDocumentMetaRequest newMeta
     ) {
-        return api.updateMeta(
-                acc.accountId(),
+        return builderDocumentsApi.updateMeta(
+                accountProvider.accountId(),
                 draftsBuilderId,
                 draftsBuilderDocumentId,
                 newMeta

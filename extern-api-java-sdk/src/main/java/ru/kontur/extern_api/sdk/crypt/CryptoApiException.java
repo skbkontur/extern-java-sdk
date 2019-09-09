@@ -25,20 +25,20 @@ package ru.kontur.extern_api.sdk.crypt;
 
 import ru.argosgrp.cryptoservice.CryptoException;
 
-public class CryptoApiException extends RuntimeException {
+class CryptoApiException extends RuntimeException {
 
-    public CryptoApiException(String message, Throwable cause) {
+    private CryptoApiException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public static CryptoApiException repackage(CryptoException e) {
+    private static CryptoApiException repackage(CryptoException e) {
         return new CryptoApiException(e.getMessage(), e.getCause());
     }
 
     /**
      * @throws CryptoApiException instead of {@link CryptoException}
      */
-    public static <T> T catchCryptoException(CryptoExceptionThrows<T> somethingThatThrows) {
+    synchronized static <T> T catchCryptoException(CryptoExceptionThrows<T> somethingThatThrows) {
         try {
             return somethingThatThrows.get();
         } catch (CryptoException e) {

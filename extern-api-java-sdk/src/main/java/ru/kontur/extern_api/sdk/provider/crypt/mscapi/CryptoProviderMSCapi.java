@@ -28,6 +28,8 @@ import static ru.kontur.extern_api.sdk.Messages.C_CRYPTO_ERROR_INIT;
 import static ru.kontur.extern_api.sdk.adaptor.QueryContext.CONTENT;
 
 import java.security.cert.CertificateException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
@@ -45,6 +47,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     private final CryptoApi cryptoApi;
     private final CryptoService cryptoService;
+    private static HashMap<String, Key> keysCache = new HashMap<>();
 
     public CryptoProviderMSCapi() throws SDKException {
         try {
@@ -123,10 +126,16 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     }
 
     @NotNull
-    private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
-        for (Key w : cryptoApi.getInstalledKeys(false)) {
-            if (thumbprint.compareToIgnoreCase(IOUtil.bytesToHex(w.getThumbprint())) == 0) {
-                return w;
+    private synchronized Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
+        if (keysCache.containsKey(thumbprint)) {
+            System.out.printf("Certificate %s found in local cache. \n", thumbprint);
+            return keysCache.get(thumbprint);
+        }
+        List<Key> installedKeys = cryptoApi.getInstalledKeys(true);
+        for (Key key : installedKeys) {
+            if (thumbprint.compareToIgnoreCase(IOUtil.bytesToHex(key.getThumbprint())) == 0) {
+                keysCache.put(thumbprint, key);
+                return key;
             }
         }
         throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);

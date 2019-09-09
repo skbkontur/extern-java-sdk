@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -77,20 +77,6 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentsApi {
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}")
     CompletableFuture<FnsInventoryDraftsBuilderDocument> get(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId
-    );
-
-    /**
-     * Delete a drafts builder document
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}")
-    CompletableFuture<Void> delete(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId

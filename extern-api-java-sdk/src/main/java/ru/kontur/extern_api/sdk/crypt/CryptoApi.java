@@ -45,9 +45,8 @@ public class CryptoApi {
 
     // Probably bad design, but significantly improves performance
     private static List<Key> keyCache = null;
-    private static final Object lock = new Object();
 
-    private final CryptoService cryptoService;
+    private CryptoService cryptoService;
 
     private final X509CertificateFactory certificateFactory;
 
@@ -81,14 +80,20 @@ public class CryptoApi {
         return builder.build();
     }
 
-    public List<CertificateWrapper> getCertificatesInstalledLocally() throws CertificateException {
+    private static ArrayList<CertificateWrapper> localCertsCache;
 
-        ArrayList<CertificateWrapper> keys = new ArrayList<>();
-        for (Key key : getInstalledKeys(false)) {
-            keys.add(certificateFactory.create(key.getX509ctx()));
+    public synchronized List<CertificateWrapper> getCertificatesInstalledLocally()
+            throws CertificateException {
+
+        if (localCertsCache == null) {
+            localCertsCache = new ArrayList<>();
+            List<Key> installedKeys = getInstalledKeys(false);
+            for (Key key : installedKeys) {
+                localCertsCache.add(certificateFactory.create(key.getX509ctx()));
+            }
         }
 
-        return keys;
+        return localCertsCache;
     }
 
     public CertificateWrapper asX509Wrapper(Key key) throws CertificateException {
@@ -102,18 +107,17 @@ public class CryptoApi {
         return cryptoService;
     }
 
-    public List<Key> getInstalledKeys(boolean refreshCache) {
+    public synchronized List<Key> getInstalledKeys(boolean refreshCache) {
         if (keyCache == null || refreshCache) {
-            synchronized (lock) {
-                if (keyCache == null || refreshCache) {
-                    log.info("Installed keys loading...");
-                    keyCache = Arrays.asList(catchCryptoException(getCryptoService()::getKeys));
-                }
-            }
+            log.info("Installed keys loading...");
+            CryptoService cryptoService = getCryptoService();
+            CryptoExceptionThrows<Key[]> keysResult = cryptoService::getKeys;
+            Key[] keys = catchCryptoException(keysResult);
+            keyCache = Arrays.asList(keys);
         }
         log.info("Found " + keyCache.size() + " installed keys");
 
-        return new ArrayList<>(keyCache);
+        return keyCache;
     }
 
 }

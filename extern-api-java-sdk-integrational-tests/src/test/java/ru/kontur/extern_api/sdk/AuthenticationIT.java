@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
-import ru.kontur.extern_api.sdk.model.Credential;
 import ru.kontur.extern_api.sdk.provider.auth.AuthenticationProviderBuilder;
 import ru.kontur.extern_api.sdk.provider.auth.CachingRefreshingAuthProvider;
 import ru.kontur.extern_api.sdk.provider.auth.CertificateAuthenticationProvider;
@@ -44,7 +43,7 @@ import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class AuthenticationIT {
 
     private static AuthenticationProviderBuilder build;

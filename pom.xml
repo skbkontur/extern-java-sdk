@@ -247,6 +247,8 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <skipTests>${skipUTs}</skipTests>
+                        <parallel>classes</parallel>
+                        <threadCount>4</threadCount>
                     </configuration>
                 </plugin>
 

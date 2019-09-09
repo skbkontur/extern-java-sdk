@@ -33,6 +33,7 @@ public class Organization {
     private String inn;
     private String name;
     private final OrganizationInfo organization;
+    private String registrationNumberPfr;
 
     public Organization(String inn, String kpp, String name) {
         this.inn = inn;
@@ -82,6 +83,14 @@ public class Organization {
      */
     public void setKpp(String kpp) {
         this.organization.setKpp(kpp);
+    }
+
+    public String getRegistrationNumberPfr() {
+        return registrationNumberPfr;
+    }
+
+    public void setRegistrationNumberPfr(String registrationNumberPfr) {
+        this.registrationNumberPfr = registrationNumberPfr;
     }
 
     public static class OrganizationInfo {

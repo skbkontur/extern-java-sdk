@@ -24,17 +24,20 @@
 package ru.kontur.extern_api.sdk.utils;
 
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
 
 public enum DocType {
-    UNKNOWN, FNS, TOGS;
+    UNKNOWN, FNS, TOGS, PFR;
 
     public static DocType getDocType(Recipient recipient) {
         if (recipient instanceof FnsRecipient) {
             return FNS;
         } else if (recipient instanceof TogsRecipient) {
             return TOGS;
+        } else if (recipient instanceof PfrRecipient) {
+            return PFR;
         } else {
             return UNKNOWN;
         }

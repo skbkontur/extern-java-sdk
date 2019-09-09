@@ -25,11 +25,15 @@ package ru.kontur.extern_api.sdk.utils.builders;
 import java.util.UUID;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
+import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderData;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
@@ -63,6 +67,32 @@ public class DraftsBuilderCreator {
                 .getDraftsBuilderService()
                 .fnsInventory()
                 .createAsync(meta)
+                .join();
+    }
+
+    public PfrReportDraftsBuilder createPfrReportDraftsBuilder(
+            ExternEngine engine,
+            CryptoUtils cryptoUtils
+    ) {
+        String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
+        TestData[] testData = TestUtils.getTestData(certificate);
+
+        DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[3]);
+        PfrReportDraftsBuilderMetaRequest draftsBuilderMetaRequest = new PfrReportDraftsBuilderMetaRequest();
+
+        OrganizationRequest payer = draftMeta.getPayer();
+
+        draftsBuilderMetaRequest.setPayer(payer);
+        draftsBuilderMetaRequest.setSender(draftMeta.getSender());
+        draftsBuilderMetaRequest.setRecipient(draftMeta.getRecipient());
+
+        PfrReportDraftsBuilderData data = new PfrReportDraftsBuilderData();
+        draftsBuilderMetaRequest.setBuilderData(data);
+
+        return engine
+                .getDraftsBuilderService()
+                .pfrReport()
+                .createAsync(draftsBuilderMetaRequest)
                 .join();
     }
 }

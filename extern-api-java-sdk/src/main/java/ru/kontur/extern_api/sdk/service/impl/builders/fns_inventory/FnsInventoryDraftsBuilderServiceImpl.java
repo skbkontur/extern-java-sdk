@@ -36,7 +36,6 @@ import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraft
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceImpl;
 
-
 public class FnsInventoryDraftsBuilderServiceImpl extends
         DraftsBuilderServiceImpl<
                 FnsInventoryDraftsBuilder,
@@ -46,18 +45,18 @@ public class FnsInventoryDraftsBuilderServiceImpl extends
                 FnsInventoryDraftsBuildersApi>
         implements FnsInventoryDraftsBuilderService {
 
-    private final FnsInventoryDraftsBuilderDocumentsApi documentApi;
-    private final FnsInventoryDraftsBuilderDocumentFilesApi fileApi;
+    private final FnsInventoryDraftsBuilderDocumentsApi builderDocumentsApi;
+    private final FnsInventoryDraftsBuilderDocumentFilesApi builderDocumentFilesApi;
 
     public FnsInventoryDraftsBuilderServiceImpl(
             AccountProvider accountProvider,
-            FnsInventoryDraftsBuildersApi builderApi,
-            FnsInventoryDraftsBuilderDocumentsApi documentApi,
-            FnsInventoryDraftsBuilderDocumentFilesApi fileApi
+            FnsInventoryDraftsBuildersApi buildersApi,
+            FnsInventoryDraftsBuilderDocumentsApi builderDocumentsApi,
+            FnsInventoryDraftsBuilderDocumentFilesApi builderDocumentFilesApi
     ) {
-        super(accountProvider, builderApi);
-        this.documentApi = documentApi;
-        this.fileApi = fileApi;
+        super(accountProvider, buildersApi);
+        this.builderDocumentsApi = builderDocumentsApi;
+        this.builderDocumentFilesApi = builderDocumentFilesApi;
     }
 
     @Override
@@ -70,10 +69,10 @@ public class FnsInventoryDraftsBuilderServiceImpl extends
             @NotNull UUID draftsBuilderId
     ) {
         return new FnsInventoryDraftsBuilderDocumentServiceImpl(
-                acc,
-                api,
-                documentApi,
-                fileApi,
+                accountProvider,
+                specificApi,
+                builderDocumentsApi,
+                builderDocumentFilesApi,
                 draftsBuilderId
         );
     }

@@ -33,6 +33,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.FssRecipient;
+import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
 
@@ -57,6 +58,9 @@ public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDese
             else if (src instanceof FssRecipient) {
                 return context.serialize(src, FssRecipient.class);
             }
+            else if (src instanceof PfrRecipient){
+                return context.serialize(src, PfrRecipient.class);
+            }
             else {
                 return JsonNull.INSTANCE;
             }
@@ -75,6 +79,9 @@ public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDese
             }
             else if (str.matches(".*fss-code.*")) {
                 return context.deserialize(json, FssRecipient.class);
+            }
+            else if (str.matches(".*upfr-code.*")) {
+                return context.deserialize(json, PfrRecipient.class);
             }
             else {
                 return null;

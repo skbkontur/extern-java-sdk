@@ -59,7 +59,7 @@ public class DraftTestPack {
 
         QueryContext<Draft> getDraftCxt = getDraft();
 
-        if (getDraftCxt.get().getDocuments().size() > 0) {
+        if (getDraftCxt.getOrThrow().getDocuments().size() > 0) {
             createNewEmptyDraft();
             return getDraft();
         }
@@ -73,16 +73,40 @@ public class DraftTestPack {
                 .get());
     }
 
-    private QueryContext<DraftDocument> addDocument() {
+    private QueryContext<DraftDocument> addDocuments() {
 
-        String path = data.getDocs()[0];
         DocType docType = DocType.getDocType(meta.getRecipient());
-        DocumentContents documentContents = EngineUtils.with(engine)
-                .createDocumentContents(path, docType);
+        DocumentContents mainDocument = EngineUtils.with(engine)
+                .createDocumentContents(data.getDocs()[0], docType);
+
+        if (docType == DocType.PFR) {
+            DocumentContents descriptionXml = EngineUtils.with(engine)
+                    .createDocumentContents(data.getDocs()[1], docType);
+            descriptionXml.getDescription().setFilename("Описание отчетности.xml");
+            UncheckedSupplier.get(() -> engine
+                    .getDraftService()
+                    .addDecryptedDocumentAsync(defaultDraftCxt.get(), descriptionXml)
+                    .get()
+                    .ensureSuccess());
+
+            DocumentContents someAttachment = EngineUtils.with(engine)
+                    .createDocumentContents(data.getDocs()[2], docType);
+            UncheckedSupplier.get(() -> engine
+                    .getDraftService()
+                    .addDecryptedDocumentAsync(defaultDraftCxt.get(), someAttachment)
+                    .get()
+                    .ensureSuccess());
+
+            return UncheckedSupplier.get(() -> engine
+                    .getDraftService()
+                    .addDecryptedDocumentAsync(defaultDraftCxt.get(), mainDocument)
+                    .get()
+                    .ensureSuccess());
+        }
 
         return UncheckedSupplier.get(() -> engine
                 .getDraftService()
-                .addDecryptedDocumentAsync(defaultDraftCxt.get(), documentContents)
+                .addDecryptedDocumentAsync(defaultDraftCxt.get(), mainDocument)
                 .get()
                 .ensureSuccess());
     }
@@ -92,12 +116,14 @@ public class DraftTestPack {
         byte[] docContent = engine.getDraftService()
                 .getDecryptedDocumentContentAsync(
                         defaultDraftCxt.get(),
-                        documentId)
+                        documentId
+                )
                 .join()
                 .getOrThrow();
 
-        if (Zip.isZip(docContent))
-            docContent =Zip.unzip(docContent);
+        if (Zip.isZip(docContent)) {
+            docContent = Zip.unzip(docContent);
+        }
 
         byte[] signature = cryptoUtils
                 .sign(engine.getConfiguration().getThumbprint(), docContent);
@@ -106,7 +132,8 @@ public class DraftTestPack {
                 .updateSignatureAsync(
                         defaultDraftCxt.get(),
                         documentId,
-                        signature)
+                        signature
+                )
                 .get());
     }
 
@@ -119,30 +146,30 @@ public class DraftTestPack {
     }
 
     public Draft draftWithDocument() {
-        addDocument();
+        addDocuments();
         return getDraft().get();
 
     }
 
     public Draft newDraftWithDocument() {
         createNewEmptyDraft();
-        addDocument();
+        addDocuments();
         return getDraft().get();
     }
 
     public Draft draftWithSignedDocument() {
-        DraftDocument document = addDocument().get();
+        DraftDocument document = addDocuments().get();
         signDocument(document.getId());
         return getDraft().get();
     }
 
     public Pair<Draft, DraftDocument> addDocumentPack() {
-        return new Pair<>(getEmptyDraft().get(), addDocument().get());
+        return new Pair<>(getEmptyDraft().get(), addDocuments().get());
     }
 
     public Pair<Draft, DraftDocument> addDocumentFnsPack() {
         if (meta.getRecipient() instanceof FnsRecipient) {
-            return new Pair<>(getEmptyDraft().get(), addDocument().get());
+            return new Pair<>(getEmptyDraft().get(), addDocuments().get());
         }
         return null;
 

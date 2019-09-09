@@ -28,7 +28,7 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import org.hamcrest.Matchers;
@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 class CertificateServiceIT {
 
     private static CertificateService certificateService;

@@ -46,20 +46,20 @@ public class FnsInventoryDraftsBuilderDocumentFileServiceImpl extends
                 FnsInventoryDraftsBuilderDocumentFilesApi>
         implements FnsInventoryDraftsBuilderDocumentFileService {
 
-    private final FnsInventoryDraftsBuildersApi builderApi;
-    private final FnsInventoryDraftsBuilderDocumentsApi documentApi;
+    private final FnsInventoryDraftsBuildersApi buildersApi;
+    private final FnsInventoryDraftsBuilderDocumentsApi builderDocumentsApi;
 
     FnsInventoryDraftsBuilderDocumentFileServiceImpl(
             AccountProvider accountProvider,
-            FnsInventoryDraftsBuildersApi builderApi,
-            FnsInventoryDraftsBuilderDocumentsApi documentApi,
-            FnsInventoryDraftsBuilderDocumentFilesApi api,
+            FnsInventoryDraftsBuildersApi buildersApi,
+            FnsInventoryDraftsBuilderDocumentsApi builderDocumentsApi,
+            FnsInventoryDraftsBuilderDocumentFilesApi builderDocumentFilesApi,
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
-        super(accountProvider, api, draftsBuilderId, draftsBuilderDocumentId);
-        this.builderApi = builderApi;
-        this.documentApi = documentApi;
+        super(accountProvider, builderDocumentFilesApi, draftsBuilderId, draftsBuilderDocumentId);
+        this.buildersApi = buildersApi;
+        this.builderDocumentsApi = builderDocumentsApi;
     }
 
     @Override
@@ -70,10 +70,10 @@ public class FnsInventoryDraftsBuilderDocumentFileServiceImpl extends
     @Override
     public FnsInventoryDraftsBuilderDocumentService getDocumentService() {
         return new FnsInventoryDraftsBuilderDocumentServiceImpl(
-                acc,
-                builderApi,
-                documentApi,
-                api,
+                accountProvider,
+                buildersApi,
+                builderDocumentsApi,
+                builderDocumentFilesApi,
                 getDraftsBuilderId()
         );
     }

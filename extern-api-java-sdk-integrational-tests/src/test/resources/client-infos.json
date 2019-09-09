@@ -70,5 +70,32 @@
         "docs": [
             "/docs/4000636805_2015_09.xml"
         ]
+    },
+    {
+        "client-info": {
+            "sender": {
+                "inn": "6653000832",
+                "kpp": "665325934",
+                "fio": {
+                    "surname": "Орлов",
+                    "name": "Сергей",
+                    "patronymic": "Юрьевич"
+                },
+                "ip-address": "80.247.184.194"
+            },
+            "recipient": {
+                "upfr-code": "666-666"
+            },
+            "organization": {
+                "inn": "6653000832",
+                "kpp": "665325934",
+                "registration-number-pfr": "666-666-784132"
+            }
+        },
+        "docs": [
+            "/docs/pfr/SomePfrReport.xml",
+            "/docs/pfr/SomePfrReportDescription.xml",
+            "/docs/pfr/SomePfrAttachment.txt"
+        ]
     }
 ]

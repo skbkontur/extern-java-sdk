@@ -23,6 +23,7 @@
 package ru.kontur.extern_api.sdk.service.builders;
 
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 
 /**
  * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
@@ -30,4 +31,6 @@ import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraft
 public interface DraftsBuilderServiceFactory {
 
     FnsInventoryDraftsBuilderService fnsInventory();
+
+    PfrReportDraftsBuilderService pfrReport();
 }

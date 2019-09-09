@@ -63,7 +63,7 @@ import ru.kontur.extern_api.sdk.utils.RelatedDocflowProvider;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("RelatedDocuments relatedDocumentService should be able to")
 class RelatedDocumentsIT {
 

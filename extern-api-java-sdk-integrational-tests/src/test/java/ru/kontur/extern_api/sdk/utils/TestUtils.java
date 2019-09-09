@@ -28,10 +28,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.argosgrp.cryptoservice.utils.XMLUtil;
@@ -40,11 +44,12 @@ import ru.kontur.extern_api.sdk.model.DocumentContents;
 import ru.kontur.extern_api.sdk.model.DocumentDescription;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
+import ru.kontur.extern_api.sdk.model.FssRecipient;
 import ru.kontur.extern_api.sdk.model.OrganizationRequest;
+import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
-import ru.kontur.extern_api.sdk.model.FssRecipient;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {
@@ -62,11 +67,13 @@ public class TestUtils {
 
     public static DraftMetaRequest toDraftMetaRequest(TestData td) {
         String senderIp = td.getClientInfo().getSender().getIpAddress();
-        DraftMetaRequest dm = new DraftMetaRequest();
+        DraftMetaRequest draftMetaRequest = new DraftMetaRequest();
         ClientInfo clientInfo = Objects.requireNonNull(td.getClientInfo());
 
         ClientInfo.Organization org = clientInfo.getOrganization();
-        dm.setPayer(new OrganizationRequest(org.getInn(), org.getKpp(), ORG_NAME));
+        OrganizationRequest payer = new OrganizationRequest(org.getInn(), org.getKpp(), ORG_NAME);
+        payer.setRegistrationNumberPfr(org.getRegistrationNumberPfr());
+        draftMetaRequest.setPayer(payer);
 
         ClientInfo.Recipient recipient = clientInfo.getRecipient();
 
@@ -74,31 +81,41 @@ public class TestUtils {
                 .map(ClientInfo.Recipient::getTogsCode)
                 .filter(s -> !s.isEmpty())
                 .map(TogsRecipient::new)
-                .ifPresent(dm::setRecipient);
+                .ifPresent(draftMetaRequest::setRecipient);
 
         Optional.of(recipient)
                 .map(ClientInfo.Recipient::getIfnsCode)
                 .filter(s -> !s.isEmpty())
                 .map(FnsRecipient::new)
-                .ifPresent(dm::setRecipient);
+                .ifPresent(draftMetaRequest::setRecipient);
 
         Optional.of(recipient)
                 .map(ClientInfo.Recipient::getFssCode)
-                .filter(s-> !s.isEmpty())
+                .filter(s -> !s.isEmpty())
                 .map(FssRecipient::new)
-                .ifPresent(dm::setRecipient);
+                .ifPresent(draftMetaRequest::setRecipient);
+
+        Optional.of(recipient)
+                .map(ClientInfo.Recipient::getUpfrCode)
+                .filter(s -> !s.isEmpty())
+                .map(PfrRecipient::new)
+                .ifPresent(draftMetaRequest::setRecipient);
 
         ClientInfo.Sender sender = clientInfo.getSender();
-        dm.setSender(new SenderRequest(
+        draftMetaRequest.setSender(new SenderRequest(
                 sender.getInn(),
                 sender.getKpp(),
                 sender.getCertificate(),
                 senderIp
         ));
-        return dm;
+        return draftMetaRequest;
     }
 
     public static DocumentContents loadDocumentContents(String path, DocType docType) {
+        if (docType == DocType.PFR && path.contains("SomePfrAttachment.txt")) {
+            return getPfrAttachmentContents(path);
+        }
+
         Document dom;
         try (InputStream is = TestUtils.class.getResourceAsStream(path)) {
             dom = XMLUtil.deserialize(is);
@@ -120,9 +137,23 @@ public class TestUtils {
             documentDescription.setType(null);
             documentDescription.setFilename(newFileId + ".xml");
         }
+        if (docType == DocType.PFR && path.contains("SomePfrReportDescription.xml")) {
+            documentDescription.setContentType("application/xml");
+
+            String currentDateTimeStr = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+            dom.getDocumentElement().getFirstChild().getNextSibling().getChildNodes().item(0).setNodeValue(
+                    currentDateTimeStr);
+        }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        UncheckedRunnable.run(() -> XMLUtil.serialize(dom, os, "Windows-1251"));
+        UncheckedRunnable.run(() -> {
+            String encoding = "Windows-1251";
+            if (docType == DocType.PFR && path.contains("SomePfrReport.xml")) {
+                encoding = "UTF-8";
+            }
+            XMLUtil.serialize(dom, os, encoding);
+        });
 
         DocumentContents documentContents = new DocumentContents();
         documentContents.setBase64Content(Base64.getEncoder().encodeToString(os.toByteArray()));
@@ -130,6 +161,23 @@ public class TestUtils {
 
         return documentContents;
 
+    }
+
+    @NotNull
+    private static DocumentContents getPfrAttachmentContents(String path) {
+        DocumentContents attachmentContents = new DocumentContents();
+        DocumentDescription description = new DocumentDescription();
+        description.setFilename("SomePfrAttachment.txt");
+        attachmentContents.setDescription(description);
+        InputStream resourceAsStream = TestUtils.class.getResourceAsStream(path);
+        byte[] attachment = new byte[0];
+        try {
+            attachment = IOUtils.toByteArray(resourceAsStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        attachmentContents.setBase64Content(Base64.getEncoder().encodeToString(attachment));
+        return attachmentContents;
     }
 
     public static byte[] loadDocument(String path) {

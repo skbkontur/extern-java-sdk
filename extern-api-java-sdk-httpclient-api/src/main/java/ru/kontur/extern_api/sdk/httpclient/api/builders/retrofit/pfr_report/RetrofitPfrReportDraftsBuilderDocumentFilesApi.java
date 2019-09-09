@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory;
+package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -34,14 +33,14 @@ import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFile;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileContents;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMeta;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFile;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMeta;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMetaRequest;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
-public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
+public interface RetrofitPfrReportDraftsBuilderDocumentFilesApi {
 
     /**
      * Create new a drafts builder document file
@@ -52,11 +51,11 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param contents drafts builder document file contents
      */
     @POST("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFile> create(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFile> create(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Body FnsInventoryDraftsBuilderDocumentFileContents contents
+            @Body PfrReportDraftsBuilderDocumentFileContents contents
     );
 
     /**
@@ -67,7 +66,7 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param draftsBuilderDocumentId drafts builder document identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFile[]> getAll(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFile[]> getAll(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId
@@ -82,7 +81,7 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFile> get(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFile> get(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
@@ -99,60 +98,12 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param newContents new drafts builder document file contents
      */
     @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFile> update(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFile> update(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
             @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId,
-            @Body FnsInventoryDraftsBuilderDocumentFileContents newContents
-    );
-
-    /**
-     * Delete a drafts builder document file
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @DELETE("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}")
-    CompletableFuture<Void> delete(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
-    );
-
-    /**
-     * Get a drafts builder document file content
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @GET("/v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/content")
-    CompletableFuture<byte[]> getContent(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
-    );
-
-    /**
-     * Delete a drafts builder document file signature content
-     *
-     * @param accountId private account identifier
-     * @param draftsBuilderId drafts builder identifier
-     * @param draftsBuilderDocumentId drafts builder document identifier
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     */
-    @GET("/v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/signature")
-    CompletableFuture<byte[]> getSignature(
-            @Path("accountId") UUID accountId,
-            @Path("draftsBuilderId") UUID draftsBuilderId,
-            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
-            @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId
+            @Body PfrReportDraftsBuilderDocumentFileContents newContents
     );
 
     /**
@@ -164,7 +115,7 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
      */
     @GET("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/meta")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFileMeta> getMeta(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFileMeta> getMeta(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
@@ -181,11 +132,11 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentFilesApi {
      * @param newMeta drafts builder document file metadata
      */
     @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/meta")
-    CompletableFuture<FnsInventoryDraftsBuilderDocumentFileMeta> updateMeta(
+    CompletableFuture<PfrReportDraftsBuilderDocumentFileMeta> updateMeta(
             @Path("accountId") UUID accountId,
             @Path("draftsBuilderId") UUID draftsBuilderId,
             @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
             @Path("draftsBuilderDocumentFileId") UUID draftsBuilderDocumentFileId,
-            @Body FnsInventoryDraftsBuilderDocumentFileMetaRequest newMeta
+            @Body PfrReportDraftsBuilderDocumentFileMetaRequest newMeta
     );
 }

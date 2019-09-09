@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk;
+package ru.kontur.extern_api.sdk.pfr_report;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,13 +32,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentData;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMeta;
-import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
-import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentData;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMeta;
+import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
@@ -47,14 +48,14 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Drafts builder document service should be able to")
-class FnsInventoryDraftsBuilderDocumentServiceIT {
+class PfrReportDraftsBuilderDocumentServiceIT {
 
     private static ExternEngine engine;
     private static DraftsBuilderDocumentCreator draftsBuilderDocumentCreator;
-    private static FnsInventoryDraftsBuilderDocumentService draftsBuilderDocumentService;
+    private static PfrReportDraftsBuilderDocumentService draftsBuilderDocumentService;
 
-    private static FnsInventoryDraftsBuilder draftsBuilder;
-    private static FnsInventoryDraftsBuilderDocument draftsBuilderDocument;
+    private static PfrReportDraftsBuilder draftsBuilder;
+    private static PfrReportDraftsBuilderDocument draftsBuilderDocument;
 
     @BeforeAll
     static void setUpClass() {
@@ -63,20 +64,20 @@ class FnsInventoryDraftsBuilderDocumentServiceIT {
         draftsBuilderDocumentCreator = new DraftsBuilderDocumentCreator();
 
         draftsBuilder = new DraftsBuilderCreator()
-                .createFnsInventoryDraftsBuilder(
+                .createPfrReportDraftsBuilder(
                         engine,
                         cryptoUtils
                 );
 
         draftsBuilderDocument = draftsBuilderDocumentCreator
-                .createFnsInventoryDraftsBuilderDocument(
+                .createPfrReportDraftsBuilderDocument(
                         engine,
                         draftsBuilder
                 );
 
         draftsBuilderDocumentService = engine
                 .getDraftsBuilderService()
-                .fnsInventory()
+                .pfrReport()
                 .getDocumentService(draftsBuilder.getId());
     }
 
@@ -89,7 +90,7 @@ class FnsInventoryDraftsBuilderDocumentServiceIT {
     @Test
     @DisplayName("get all drafts builder documents")
     void getAll() {
-        FnsInventoryDraftsBuilderDocument[] draftsBuilderDocuments =
+        PfrReportDraftsBuilderDocument[] draftsBuilderDocuments =
                 draftsBuilderDocumentService
                         .getAllAsync()
                         .join();
@@ -101,7 +102,7 @@ class FnsInventoryDraftsBuilderDocumentServiceIT {
     @Test
     @DisplayName("get drafts builder document")
     void get() {
-        FnsInventoryDraftsBuilderDocument receivedDraftsBuilderDocument =
+        PfrReportDraftsBuilderDocument receivedDraftsBuilderDocument =
                 draftsBuilderDocumentService
                         .getAsync(draftsBuilderDocument.getId())
                         .join();
@@ -110,18 +111,13 @@ class FnsInventoryDraftsBuilderDocumentServiceIT {
                 draftsBuilderDocument.getId(),
                 receivedDraftsBuilderDocument.getId()
         );
-
-        assertEquals(
-                draftsBuilderDocument.getMeta().getBuilderData().getClaimItemNumber(),
-                receivedDraftsBuilderDocument.getMeta().getBuilderData().getClaimItemNumber()
-        );
     }
 
     @Test
     @DisplayName("delete drafts builder document")
     void delete() {
-        FnsInventoryDraftsBuilderDocument newDraftsBuilderDocument =
-                draftsBuilderDocumentCreator.createFnsInventoryDraftsBuilderDocument(engine, draftsBuilder);
+        PfrReportDraftsBuilderDocument newDraftsBuilderDocument =
+                draftsBuilderDocumentCreator.createPfrReportDraftsBuilderDocument(engine, draftsBuilder);
 
         draftsBuilderDocumentService
                 .deleteAsync(newDraftsBuilderDocument.getId())
@@ -139,37 +135,29 @@ class FnsInventoryDraftsBuilderDocumentServiceIT {
     @Test
     @DisplayName("get meta drafts builder document")
     void getMeta() {
-        FnsInventoryDraftsBuilderDocumentMeta meta =
+        PfrReportDraftsBuilderDocumentMeta meta =
                 draftsBuilderDocumentService
                         .getMetaAsync(draftsBuilderDocument.getId())
                         .join();
-
-        assertEquals(
-                draftsBuilderDocument.getMeta().getBuilderData().getClaimItemNumber(),
-                meta.getBuilderData().getClaimItemNumber()
-        );
+        assertNotNull(meta);
     }
 
     @Test
     @DisplayName("update meta drafts builder document")
     void updateMeta() {
-        final String newClaimItemNumber = "1.02";
+        PfrReportDraftsBuilderDocument newDraftsBuilderDocument =
+                draftsBuilderDocumentCreator.createPfrReportDraftsBuilderDocument(engine, draftsBuilder);
 
-        FnsInventoryDraftsBuilderDocument newDraftsBuilderDocument =
-                draftsBuilderDocumentCreator.createFnsInventoryDraftsBuilderDocument(engine, draftsBuilder);
+        PfrReportDraftsBuilderDocumentMetaRequest newMeta = new PfrReportDraftsBuilderDocumentMetaRequest();
 
-        FnsInventoryDraftsBuilderDocumentMetaRequest newMeta = new FnsInventoryDraftsBuilderDocumentMetaRequest();
-
-        FnsInventoryDraftsBuilderDocumentData data = new FnsInventoryDraftsBuilderDocumentData();
-        data.setClaimItemNumber(newClaimItemNumber);
+        PfrReportDraftsBuilderDocumentData data = new PfrReportDraftsBuilderDocumentData();
 
         newMeta.setBuilderData(data);
 
-        FnsInventoryDraftsBuilderDocumentMeta actualMeta =
+        PfrReportDraftsBuilderDocumentMeta actualMeta =
                 draftsBuilderDocumentService
                         .updateMetaAsync(newDraftsBuilderDocument.getId(), newMeta)
                         .join();
-
-        assertEquals(newClaimItemNumber, actualMeta.getBuilderData().getClaimItemNumber());
+        assertNotNull(actualMeta);
     }
 }

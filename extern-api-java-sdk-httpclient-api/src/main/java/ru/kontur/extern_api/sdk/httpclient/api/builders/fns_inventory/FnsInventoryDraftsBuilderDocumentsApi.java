@@ -25,6 +25,8 @@ package ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuilderDocumentsApi;
+import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.fns_inventory.RetrofitFnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentMetaRequest;
@@ -35,10 +37,15 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
                 FnsInventoryDraftsBuilderDocumentMeta,
                 FnsInventoryDraftsBuilderDocumentMetaRequest> {
 
-    private RetrofitFnsInventoryDraftsBuilderDocumentsApi api;
+    private RetrofitFnsInventoryDraftsBuilderDocumentsApi specificContract;
+    private RetrofitCommonDraftsBuilderDocumentsApi commonContract;
 
-    public FnsInventoryDraftsBuilderDocumentsApi(RetrofitFnsInventoryDraftsBuilderDocumentsApi api) {
-        this.api = api;
+    public FnsInventoryDraftsBuilderDocumentsApi(
+            RetrofitFnsInventoryDraftsBuilderDocumentsApi specificContract,
+            RetrofitCommonDraftsBuilderDocumentsApi commonContract
+    ) {
+        this.specificContract = specificContract;
+        this.commonContract = commonContract;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID draftsBuilderId,
             FnsInventoryDraftsBuilderDocumentMetaRequest meta
     ) {
-        return api.create(
+        return specificContract.create(
                 accountId,
                 draftsBuilderId,
                 meta
@@ -59,7 +66,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID accountId,
             UUID draftsBuilderId
     ) {
-        return api.getAll(
+        return specificContract.getAll(
                 accountId,
                 draftsBuilderId
         );
@@ -71,7 +78,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
-        return api.get(
+        return specificContract.get(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId
@@ -84,7 +91,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
-        return api.delete(
+        return commonContract.delete(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId
@@ -97,7 +104,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID draftsBuilderId,
             UUID draftsBuilderDocumentId
     ) {
-        return api.getMeta(
+        return specificContract.getMeta(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId
@@ -111,7 +118,7 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
             UUID draftsBuilderDocumentId,
             FnsInventoryDraftsBuilderDocumentMetaRequest newMeta
     ) {
-        return api.updateMeta(
+        return specificContract.updateMeta(
                 accountId,
                 draftsBuilderId,
                 draftsBuilderDocumentId,
