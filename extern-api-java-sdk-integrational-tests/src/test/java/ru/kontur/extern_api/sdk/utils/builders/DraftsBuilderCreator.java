@@ -86,9 +86,6 @@ public class DraftsBuilderCreator {
         draftsBuilderMetaRequest.setSender(draftMeta.getSender());
         draftsBuilderMetaRequest.setRecipient(draftMeta.getRecipient());
 
-        PfrReportDraftsBuilderData data = new PfrReportDraftsBuilderData();
-        draftsBuilderMetaRequest.setBuilderData(data);
-
         return engine
                 .getDraftsBuilderService()
                 .pfrReport()
