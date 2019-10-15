@@ -61,7 +61,8 @@ class OrganizationIT{
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InterruptedException {
+        Thread.sleep(15000);
         this.companyId = createOrFindOrganisation();
         assertNotNull(companyId);
     }
