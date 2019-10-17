@@ -107,8 +107,8 @@ public class CryptoApi {
         return cryptoService;
     }
 
-    public synchronized List<Key> getInstalledKeys(boolean refreshCache) {
-        if (keyCache == null || refreshCache) {
+    public List<Key> getInstalledKeys(boolean refreshCache) {
+        if (keyCache == null || refreshCache || true) {
             log.info("Installed keys loading...");
             CryptoService cryptoService = getCryptoService();
             CryptoExceptionThrows<Key[]> keysResult = cryptoService::getKeys;

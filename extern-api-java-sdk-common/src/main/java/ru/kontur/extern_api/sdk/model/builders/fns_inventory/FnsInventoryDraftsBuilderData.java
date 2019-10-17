@@ -28,26 +28,7 @@ import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 public class FnsInventoryDraftsBuilderData extends
         DraftsBuilderData {
 
-    private String claimItemNumber;
     private RelatedDocumentRequest relatedDocument;
-
-    /**
-     * Возвращает пункт требования
-     *
-     * @return пункт требования
-     */
-    public String getClaimItemNumber() {
-        return claimItemNumber;
-    }
-
-    /**
-     * Устанавливает пункт требования
-     *
-     * @param claimItemNumber пункт требования
-     */
-    public void setClaimItemNumber(String claimItemNumber) {
-        this.claimItemNumber = claimItemNumber;
-    }
 
     /**
      * Возвращает связный ДО

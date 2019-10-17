@@ -140,15 +140,12 @@ class FnsInventoryDraftsBuilderServiceIT {
     @Test
     @DisplayName("update meta drafts builder")
     void updateMeta() {
-        final String newClaimItemNumber = "1.02";
-
         FnsInventoryDraftsBuilder newDraftsBuilder =
                 draftsBuilderCreator.createFnsInventoryDraftsBuilder(engine, cryptoUtils);
 
         FnsInventoryDraftsBuilderMetaRequest newMeta = new FnsInventoryDraftsBuilderMetaRequest();
 
         FnsInventoryDraftsBuilderData data = new FnsInventoryDraftsBuilderData();
-        data.setClaimItemNumber(newClaimItemNumber);
         data.setRelatedDocument(newDraftsBuilder.getMeta().getBuilderData().getRelatedDocument());
 
         newMeta.setBuilderData(data);
@@ -157,7 +154,13 @@ class FnsInventoryDraftsBuilderServiceIT {
                 draftsBuilderService
                         .updateMetaAsync(newDraftsBuilder.getId(), newMeta)
                         .join();
-
-        assertEquals(newClaimItemNumber, actualMeta.getBuilderData().getClaimItemNumber());
+        assertEquals(
+                actualMeta.getBuilderData().getRelatedDocument().getRelatedDocflowId(),
+                newDraftsBuilder.getMeta().getBuilderData().getRelatedDocument().getRelatedDocflowId()
+                );
+        assertEquals(
+                actualMeta.getBuilderData().getRelatedDocument().getRelatedDocumentId(),
+                newDraftsBuilder.getMeta().getBuilderData().getRelatedDocument().getRelatedDocumentId()
+        );
     }
 }

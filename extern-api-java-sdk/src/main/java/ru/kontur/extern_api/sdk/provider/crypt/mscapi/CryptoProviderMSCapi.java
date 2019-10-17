@@ -108,8 +108,8 @@ public class CryptoProviderMSCapi implements CryptoProvider {
         });
     }
 
-    private byte[] decrypt(Key key, byte[] content) throws CryptoException {
-        int credit = 5;
+    private byte[] decrypt(Key key, byte[] content) throws CryptoException, InterruptedException {
+        int credit = 500;
         CryptoException t = null;
         while (credit > 0) {
             credit = credit - 1;

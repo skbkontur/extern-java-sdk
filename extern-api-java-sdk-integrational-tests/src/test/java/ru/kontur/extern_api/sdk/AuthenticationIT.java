@@ -110,11 +110,6 @@ class AuthenticationIT {
     @DisplayName("cert authentication")
     class CertAuthTest {
 
-        CertAuthTest() throws Exception {
-            // cache installed keys before start working with auth.
-            new CryptoApi().getCertificatesInstalledLocally();
-        }
-
         @Test
         void certAuth() throws Exception {
             CryptoProviderMSCapi mscapi = new CryptoProviderMSCapi();
