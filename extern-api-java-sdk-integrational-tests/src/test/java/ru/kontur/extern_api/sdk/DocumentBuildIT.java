@@ -70,7 +70,7 @@ import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class DocumentBuildIT {
 
     private static DraftService draftService;

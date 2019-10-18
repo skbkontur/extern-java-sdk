@@ -38,7 +38,7 @@ import ru.kontur.extern_api.sdk.portal.model.SearchQuery;
 import ru.kontur.extern_api.sdk.utils.SystemProperty;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Portal services tests")
 class PortalPackageIT {
 

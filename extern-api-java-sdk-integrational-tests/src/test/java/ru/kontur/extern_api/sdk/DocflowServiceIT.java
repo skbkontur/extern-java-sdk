@@ -78,8 +78,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Docflow service should be able to")
 class DocflowServiceIT {
 

@@ -41,7 +41,7 @@ import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class OrganizationIT{
 
     private static final Company COMPANY = new Company();

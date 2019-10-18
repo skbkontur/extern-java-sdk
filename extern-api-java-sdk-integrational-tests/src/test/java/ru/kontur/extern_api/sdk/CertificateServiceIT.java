@@ -42,7 +42,7 @@ import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class CertificateServiceIT {
 
     private static CertificateService certificateService;
