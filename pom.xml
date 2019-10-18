@@ -93,7 +93,7 @@
         <junit.version>5.5.2</junit.version>
         <junit-platform.version>1.4.2</junit-platform.version>
 
-        <cryptoservice.version>5.0.21</cryptoservice.version>
+        <cryptoservice.version>5.0.22-SNAPSHOT</cryptoservice.version>
         <annotations.version>15.0</annotations.version>
         <hamcrest.version>2.1</hamcrest.version>
 
