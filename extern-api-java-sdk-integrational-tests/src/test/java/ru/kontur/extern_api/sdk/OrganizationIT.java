@@ -41,8 +41,8 @@ import ru.kontur.extern_api.sdk.model.OrgFilter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-@Execution(ExecutionMode.CONCURRENT)
-class OrganizationIT{
+@Execution(ExecutionMode.SAME_THREAD)
+class OrganizationIT {
 
     private static final Company COMPANY = new Company();
 
@@ -54,16 +54,19 @@ class OrganizationIT{
     static void setUpClass() {
         engine = TestSuite.Load().engine;
         CompanyGeneral general = new CompanyGeneral();
-        general.setInn("7810654318");
-        general.setKpp("781001001");
-        general.setName("ASBEST, LLC");
+        general.setInn("4284312625");
+        general.setKpp("835945450");
+        general.setName("TEST OrganizationIT, LLC");
         COMPANY.setGeneral(general);
     }
 
     @BeforeEach
-    void setUp() throws InterruptedException {
-        Thread.sleep(15000);
-        this.companyId = createOrFindOrganisation();
+    void setUp() throws Exception {
+        try {
+            this.companyId = createOrFindOrganisation();
+        } catch (Exception ex) {
+            throw new Exception("SetUp failed! Cant' create or find organization!", ex);
+        }
         assertNotNull(companyId);
     }
 
