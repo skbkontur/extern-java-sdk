@@ -37,7 +37,7 @@ public class PfrRecipient implements Recipient {
 
     /**
      * <p>Возвращает код управления пенсионного фонда РФ</p>
-     * @return
+     * @return upfrCode Код УПФР т.е. Контролирующего Органа
      */
     public String getUpfrCode() {
         return upfrCode;
@@ -45,7 +45,7 @@ public class PfrRecipient implements Recipient {
 
     /**
      * <p>Устанавливает код управления пенсионного фонда РФ</p>
-     * @param upfrCode
+     * @param upfrCode Код УПФР т.е. Контролирующего Органа
      */
     public void setUpfrCode(String upfrCode) {
         this.upfrCode = upfrCode;

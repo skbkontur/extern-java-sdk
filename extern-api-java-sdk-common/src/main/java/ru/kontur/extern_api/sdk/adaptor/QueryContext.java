@@ -2135,6 +2135,9 @@ public class QueryContext<R> implements Serializable {
      * Same as {@link QueryContext#get()} but throws
      *
      * @throws java.util.NoSuchElementException when no such parameter presented in a context
+     * @param fieldName fieldName
+     * @param <T> type of object
+     * @return get method result
      */
     @NotNull
     public <T> T require(@NotNull String fieldName) {
@@ -2146,6 +2149,10 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Changes result of QueryContext with mapper.
+     * @param newKey newKey
+     * @param mapper mapper
+     * @param <T> type of object
+     * @return get method result
      */
     public <T> QueryContext<T> map(String newKey, Function<R, T> mapper) {
         if (isFail()) {

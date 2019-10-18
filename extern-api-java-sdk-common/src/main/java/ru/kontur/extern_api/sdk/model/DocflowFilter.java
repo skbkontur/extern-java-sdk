@@ -83,6 +83,7 @@ public class DocflowFilter implements Filter {
 
     /**
      * @param orderBy SendDate is used to order docflows
+     * @return DocflowFilter
      */
     public DocflowFilter orderBy(@Nullable SortOrder orderBy) {
         this.orderBy = orderBy;
@@ -135,6 +136,8 @@ public class DocflowFilter implements Filter {
 
     /**
      * @deprecated it's a unreliable solution to use raw string types in a search query
+     * @param rawType Тип
+     * @return DocflowFilter Фильтр для получения документооборотов
      */
     @Deprecated
     public DocflowFilter type(String rawType) {

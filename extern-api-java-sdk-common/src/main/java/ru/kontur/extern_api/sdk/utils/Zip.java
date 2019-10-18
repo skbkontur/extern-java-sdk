@@ -65,6 +65,8 @@ public class Zip {
 
     /**
      * Basic isZip condition, do not rely on in in case of common zip usage
+     * @param content Содержимое файла
+     * @return isZip Флаг является ли архивом zip содержимое файла
      */
     public static boolean isZip(byte[] content) {
         return content.length >= 2 && content[0] == 'P' && content[1] == 'K';
