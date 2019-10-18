@@ -36,6 +36,19 @@ public class DraftTestPack {
                 || draft.get().getStatus().name().equals("sent")) {
             createNewEmptyDraft();
         }
+
+        // ждем пока черновик действительно появится в апи
+        UUID draftId = defaultDraftCxt.get();
+        Awaiter.waitForCondition(
+                () -> engine.getDraftService().lookupAsync(draftId),
+                cxt -> {
+                    System.out.println("Wait until draft created, draftId is " + draftId
+                                               + " now service error is - " + cxt.getServiceError());
+                    return cxt.isSuccess() || cxt.getServiceError().getCode() != 404;
+                },
+                2000,
+                60 * 1000 * 3
+        ).join().getOrThrow();
     }
 
     private QueryContext<UUID> getCreateDraftCxt() {
