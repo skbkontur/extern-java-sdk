@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
-import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 import ru.kontur.extern_api.sdk.Messages;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -79,7 +78,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
             Key key = getKeyByThumbprint(cxt.getThumbprint());
             byte[] content = cxt.getContent();
 
-            return new PKCS7(cryptoService).sign(key, null, content, false);
+            return new PKCS7KeAPi(cryptoService).sign(key, null, content, false);
         });
     }
 
@@ -118,7 +117,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     }
 
     private byte[] decrypt(Key key, byte[] content) throws CryptoException, InterruptedException {
-        PKCS7Custom pkcs7 = new PKCS7Custom(cryptoService);
+        PKCS7KeAPi pkcs7 = new PKCS7KeAPi(cryptoService);
         byte[] decrypted = pkcs7.decrypt(key, null, content);
         return decrypted;
     }
