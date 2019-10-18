@@ -49,9 +49,15 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     private final CryptoService cryptoService;
     private static HashMap<String, Key> keysCache = new HashMap<>();
 
+    private static CryptoApi cryptoApiSingletonInstance;
+
     public CryptoProviderMSCapi() throws SDKException {
         try {
-            cryptoApi = new CryptoApi();
+            cryptoApi = cryptoApiSingletonInstance != null
+                ? cryptoApiSingletonInstance
+                : new CryptoApi();
+            cryptoApiSingletonInstance = cryptoApi;
+
             cryptoService = cryptoApi.getCryptoService();
 
         } catch (CertificateException x) {
@@ -62,8 +68,8 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
         return CompletableFuture.supplyAsync(() -> sign(new QueryContext<byte[]>()
-                .setThumbprint(thumbprint)
-                .setContent(content)
+                                                                .setThumbprint(thumbprint)
+                                                                .setContent(content)
         ));
     }
 
@@ -80,7 +86,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getSignerCertificateAsync(String thumbprint) {
         return CompletableFuture.supplyAsync(() -> getSignerCertificate(new QueryContext<byte[]>()
-                .setThumbprint(thumbprint)));
+                                                                                .setThumbprint(thumbprint)));
     }
 
     @Override
@@ -92,10 +98,13 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     @Override
     public CompletableFuture<QueryContext<byte[]>> decryptAsync(String thumbprint, byte[] content) {
-        return CompletableFuture.supplyAsync(() -> decrypt(new QueryContext<byte[]>()
-                .setThumbprint(thumbprint)
-                .setContent(content)
-        ));
+        return CompletableFuture.supplyAsync(
+                () ->
+                        decrypt(new QueryContext<byte[]>()
+                                        .setThumbprint(thumbprint)
+                                        .setContent(content)
+                        )
+        );
     }
 
     @Override
@@ -109,24 +118,13 @@ public class CryptoProviderMSCapi implements CryptoProvider {
     }
 
     private byte[] decrypt(Key key, byte[] content) throws CryptoException, InterruptedException {
-        int credit = 500;
-        CryptoException t = null;
-        while (credit > 0) {
-            credit = credit - 1;
-            try {
-                return new PKCS7(cryptoService).decrypt(key, null, content);
-            } catch (CryptoException e) {
-                if (e.getErrorCode() != 28) {
-                    throw e;
-                }
-                t = e;
-            }
-        }
-        throw t;
+        PKCS7Custom pkcs7 = new PKCS7Custom(cryptoService);
+        byte[] decrypted = pkcs7.decrypt(key, null, content);
+        return decrypted;
     }
 
     @NotNull
-    private synchronized Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
+    private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
         if (keysCache.containsKey(thumbprint)) {
             System.out.printf("Certificate %s found in local cache. \n", thumbprint);
             return keysCache.get(thumbprint);
