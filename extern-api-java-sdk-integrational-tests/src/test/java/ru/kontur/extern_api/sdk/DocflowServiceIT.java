@@ -756,6 +756,15 @@ class DocflowServiceIT {
     void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
         DocflowService docflowService = engine.getDocflowService();
 
+        Awaiter.waitForCondition(
+                () -> docflowService.lookupDocumentAsync(
+                        demandTestData.getDemandId(),
+                        demandTestData.getDemandAttachmentId()
+                ),
+                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
+                5000
+        ).thenApply(QueryContext::getOrThrow);
+
         Document document = docflowService.lookupDocumentAsync(
                 demandTestData.getDemandId(),
                 demandTestData.getDemandAttachmentId()
