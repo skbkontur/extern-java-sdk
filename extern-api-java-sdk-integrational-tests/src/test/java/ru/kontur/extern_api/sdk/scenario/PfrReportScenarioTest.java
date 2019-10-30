@@ -54,6 +54,7 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
@@ -89,7 +90,7 @@ class PfrReportScenarioTest {
                 .build(Level.BASIC)
         );
         engine = test.engine;
-        cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+        cryptoUtils = CryptoUtils.with(new CryptoProviderMSCapi());
     }
 
     @Test
@@ -131,8 +132,8 @@ class PfrReportScenarioTest {
                 .getOrThrow();
 
         for (Document document : pfrDocflowFinished.getDocuments()) {
-            System.out.println("Will process " + document.getDescription().getType());
-            if (document.getDescription().getType().toString() == "PfrReportProtocolAppendix"){
+            System.out.println("Will process contents " + document.getDescription().getType());
+            if (document.getDescription().getType().toString() == "PfrReportProtocolAppendix") {
                 // TODO fix condition when pfr content links will be done
                 System.out.println("Skip " + document.getDescription().getType());
                 continue;
@@ -156,11 +157,8 @@ class PfrReportScenarioTest {
             }
 
             // TODO fix condition when pfr content links will be done
-            /*boolean canGetDecryptedContent = !document.hasDecryptedContent()
-                    && !document.hasEncryptedContent();*/
-
-            // protocol appendix - нельзя получить?
-            boolean canGetDecryptedContent = false;
+            boolean canGetDecryptedContent = !document.hasDecryptedContent()
+                    && !document.hasEncryptedContent();
             if (canGetDecryptedContent) {
                 byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
                         pfrDocflowFinished.getId(),
@@ -210,7 +208,7 @@ class PfrReportScenarioTest {
                     link.getHref(),
                     DraftDocument.class
             );
-            openDraftDocumentAsPdf(draftId, draftDocument.getId());
+            openDraftDocumentAsPdf(draftId, draftDocument);
         }
 
         // check
@@ -351,7 +349,9 @@ class PfrReportScenarioTest {
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
-                System.out.println("Ok, Cannot print document. " + e.getMessage());
+                System.out.println(
+                        "Ok, Cannot print document " + document.getDescription().getType() + ". " + e
+                                .getMessage());
             }
 
             String type = document.getReplyOptions()[0];
@@ -393,16 +393,20 @@ class PfrReportScenarioTest {
         return docflow;
     }
 
-    private void openDraftDocumentAsPdf(UUID draftId, UUID draftDocumentId) throws Exception {
+    private void openDraftDocumentAsPdf(UUID draftId, DraftDocument draftDocument) throws Exception {
+        UUID draftDocumentId = draftDocument.getId();
+        String type = draftDocument.getDescription().getType();
         try {
             byte[] pdfPrintingForm = engine.getDraftService()
                     .getDocumentAsPdfAsync(draftId, draftDocumentId)
                     .get()
                     .getOrThrow();
             System.out.println(
-                    "Draft document " + draftDocumentId + " printed, pdf size is " + pdfPrintingForm.length);
+                    "Draft document " + type + " " + draftDocumentId + " printed, pdf size is "
+                            + pdfPrintingForm.length);
         } catch (Exception ex) {
-            System.out.println("Draft document " + draftDocumentId + " can't be printed, error : " + ex);
+            System.out.println(
+                    "Draft document " + type + " " + draftDocumentId + " can't be printed, error : " + ex);
         }
     }
 
