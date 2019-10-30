@@ -20,6 +20,8 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param paramName paramName
+     * @param value value
      * @return {@code (paramName="value")}
      */
     @NotNull
@@ -28,6 +30,7 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param queries queries
      * @return {@code (query or query or query ...)}
      */
     @NotNull
@@ -36,6 +39,7 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param queries queries
      * @return {@code (query and query and query ...)}
      */
     @NotNull
@@ -44,7 +48,9 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param queries queries
      * @see SearchQuery#or(SearchQuery...)
+     * @return SearchQuery SearchQuery
      */
     @NotNull
     public static SearchQuery or(Stream<SearchQuery> queries) {
@@ -52,7 +58,9 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param queries queries
      * @see SearchQuery#and(SearchQuery...)
+     * @return SearchQuery SearchQuery
      */
     @NotNull
     public static SearchQuery and(Stream<SearchQuery> queries) {
@@ -60,6 +68,8 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param fieldName fieldName
+     * @param examples examples
      * @return query matching fieldName any of examples
      */
     @NotNull
@@ -68,7 +78,10 @@ public class SearchQuery implements Token {
     }
 
     /**
+     * @param fieldName fieldName
+     * @param examples examples
      * @see SearchQuery#searchAll(String, Collection)
+     * @return SearchQuery SearchQuery
      */
     @NotNull
     public static SearchQuery searchAll(String fieldName, Stream<String> examples) {

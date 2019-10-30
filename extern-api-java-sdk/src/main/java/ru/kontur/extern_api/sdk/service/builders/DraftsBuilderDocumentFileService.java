@@ -119,6 +119,7 @@ public interface DraftsBuilderDocumentFileService<
      * Асинхронный метод получения контента файла
      *
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
+     * @return Контент файла
      */
     CompletableFuture<byte[]> getContentAsync(
             UUID draftsBuilderDocumentFileId
@@ -129,6 +130,7 @@ public interface DraftsBuilderDocumentFileService<
      * Асинхронный метод получения контента подписи файла
      *
      * @param draftsBuilderDocumentFileId drafts builder document file identifier
+     * @return Контент подписи
      */
     CompletableFuture<byte[]> getSignatureAsync(
             UUID draftsBuilderDocumentFileId

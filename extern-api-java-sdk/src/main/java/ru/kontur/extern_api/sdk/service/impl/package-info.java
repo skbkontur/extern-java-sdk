@@ -21,7 +21,6 @@
  *
  */
 
-@ParametersAreNonnullByDefault
 package ru.kontur.extern_api.sdk.service.impl;
 
 import javax.annotation.ParametersAreNonnullByDefault;

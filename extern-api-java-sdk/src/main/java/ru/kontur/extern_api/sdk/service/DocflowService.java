@@ -424,8 +424,11 @@ public interface DocflowService {
     );
 
     /**
-     * Асинхронный метод отправляет документ в контролирующий орган
+     * Асинхронный метод отправляет ответный документ в контролирующий орган
      *
+     * @param docflowId ИД докуметооборота, в рамках которого отправляется ответ
+     * @param documentId ИД документа, в рамках которого отправляется ответ
+     * @param replyId ИД ответа на документ
      * @return ДО
      * @see ReplyDocument
      */
@@ -486,6 +489,16 @@ public interface DocflowService {
     @Deprecated
     QueryContext<ReplyDocument> getReplyDocument(QueryContext<?> parent);
 
+    /**
+     * Асинхронный метод обновления контента ответного документа
+     *
+     * @param docflowId идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param replyId идентификатор ответного документа
+     * @param content массив байт ответного документа
+     * @see ReplyDocument обновленный ответ
+     * @return Ответ
+     */
     CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
             UUID docflowId,
             UUID documentId,
@@ -501,7 +514,7 @@ public interface DocflowService {
      * @param replyId идентификатор ответного документа
      * @param content массив байт ответного документа
      * @return объект с данными ответного документа
-     * @see ReplyDocument
+     * @see ReplyDocument обновленный ответ
      */
     CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentContentAsync(
             String docflowId,
@@ -535,7 +548,18 @@ public interface DocflowService {
      * <p>GET /v1/{accountId}/docflows</p>
      * Асинхронный метод постранично возвращает список ДО.
      *
+     * @param finished Фильтр - флаг завершен ли документооборот
+     * @param incoming Фильтр - флаг true - входящие ДО, false - исходящие
+     * @param skip Пропустить N ДО для постраничной выдачи
+     * @param take Размер страницы выборки
+     * @param innKpp ИНН-КПП
+     * @param updatedFrom Фильтрация по времени изменения ДО, может менять сортировку при выдаче
+     * @param updatedTo  Фильтрация по времени изменения ДО, может менять сортировку при выдаче
+     * @param createdFrom Фильтрация по времени создания ДО, может менять сортировку при выдаче
+     * @param createdTo Фильтрация по времени создания ДО, может менять сортировку при выдаче
+     * @param type Фильтр - тип ДО, пример pfr-letter
      * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
+     * @return DocflowPage - страницы выдачи результатов поиска ДО, может содержать от 0 до take документооборотов
      */
     @Deprecated
     CompletableFuture<QueryContext<DocflowPage>> getDocflowsAsync(
@@ -555,8 +579,10 @@ public interface DocflowService {
      * <p>GET /v1/{accountId}/docflows</p>
      * Синхронный метод постранично возвращает список ДО.
      *
+     * @param parent parent
      * @see DocflowPage
      * @deprecated use {@link DocflowService#searchDocflows(DocflowFilter)} instead
+     * @return Страница выдачи списка ДО
      */
     @Deprecated
     QueryContext<DocflowPage> getDocflows(QueryContext<?> parent);
@@ -674,6 +700,15 @@ public interface DocflowService {
     @Deprecated
     QueryContext<SignInitiation> cloudSignReplyDocument(QueryContext<?> parent);
 
+    /**
+     * Подтверждение подписания ответа через код.
+     * @param docflowId ИД документооборота, в рамках которого формируется ответ
+     * @param documentId ИД документа, на который сформирован ответ
+     * @param replyId ИД ответа
+     * @param requestId ИД запроса на подпись
+     * @param smsCode Код подтверждения из СМС
+     * @return SignConfirmResultData информация об операции подписания.
+     */
     CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
@@ -689,6 +724,7 @@ public interface DocflowService {
      * @param docflowId идентификатор ДО
      * @param documentId идентификатор документа
      * @param replyId идентификатор ответного документа
+     * @param requestId ИД запроса операции подписания
      * @param smsCode смс код подтверждения подписания
      * @return объект с результатом инициации облачной паодписи
      */
@@ -696,7 +732,7 @@ public interface DocflowService {
             String docflowId,
             String documentId,
             String replyId,
-            String requestCode,
+            String requestId,
             String smsCode
     );
 
@@ -718,6 +754,13 @@ public interface DocflowService {
     @Deprecated
     QueryContext<SignConfirmResultData> cloudSignConfirmReplyDocument(QueryContext<?> parent);
 
+    /**
+     * Инициировать операцию облачного дешифрования документа через код подтверждения
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param certificate Сертификат
+     * @return DecryptInitiation Информация об операции
+     */
     CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
@@ -727,6 +770,9 @@ public interface DocflowService {
     /**
      * Инициация процесса облачного расшифрования документа из Docflow
      *
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param certBase64 Контент сертификата в формате base64 строки
      * @return ссылка на подтверждение расшифрования
      */
     QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
@@ -735,6 +781,14 @@ public interface DocflowService {
             String certBase64
     );
 
+    /**
+     * Расшифровать через операции с кодом подтверджения
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param requestId ИД операции расшифрования
+     * @param code Код из СМС
+     * @return расшифрованный контент
+     */
     CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentConfirmAsync(
             UUID docflowId,
             UUID documentId,
@@ -745,6 +799,10 @@ public interface DocflowService {
     /**
      * Подтверждение облачного расшифрования документа из Docflow
      *
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param requestId ИД операции расшифрования
+     * @param code Код из СМС
      * @return Расшифрованый конент документа
      */
     QueryContext<byte[]> cloudDecryptDocumentConfirm(
@@ -754,6 +812,15 @@ public interface DocflowService {
             String code
     );
 
+    /**
+     * Расшифровать через операции с кодом подтверджения
+     *
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param certificate Контент сертификата
+     * @param smsCodeProvider СМС провайдер
+     * @return Расшифрованный контент
+     */
     CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentAsync(
             UUID docflowId,
             UUID documentId,
@@ -764,6 +831,9 @@ public interface DocflowService {
     /**
      * Инициация и подтверждение облачного расшифрования документа из Docflow
      *
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param certBase64 Контент сертификата в формате base64 строки
      * @param smsCodeProvider метод получения кода подтверждения.
      * @return Расшифрованый конент документа
      */
@@ -774,6 +844,13 @@ public interface DocflowService {
             Function<DecryptInitiation, String> smsCodeProvider
     );
 
+    /**
+     * Получить информацию об отложенной задаче
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param taskId ИД задачи
+     * @return Информация о задаче
+     */
     CompletableFuture<TaskInfo> getDocflowDocumentTaskInfo(
             UUID docflowId,
             UUID documentId,

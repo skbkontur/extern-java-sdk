@@ -56,9 +56,6 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     private final ProviderHolder providerHolder;
     private final Configuration configuration;
 
-    /**
-     * @see ExternEngineBuilder#createExternEngine(String)
-     */
     public ExternEngine(
             Configuration configuration,
             ProviderHolder providerHolder,
@@ -100,6 +97,7 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     /**
+     * @param draftId ИД черновика
      * @return TaskService сервис предназначен для работы с длительными операциями в черновиках
      * @see TaskService
      */
@@ -108,6 +106,9 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     /**
+     * @param docflowId ИД документооборота
+     * @param documentId ИД документа
+     * @param replyId ИД ответа
      * @return ReplyTaskService сервис предназначен для работы с операциями с ответными документами
      * @see ReplyTaskService
      */
@@ -116,6 +117,8 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     /**
+     * @param relatedDocflowId ИД Связанного документооборота
+     * @param relatedDocumentId ИД Связанного документасв
      * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
      * @see RelatedDocumentsService
      */
@@ -127,6 +130,8 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     }
 
     /**
+     * @param relatedDocflow Связанный документооборот
+     * @param relatedDocument Связанный документ
      * @return RelatedDocumentsService сервис предназначен для работы со связанными документами
      * @see RelatedDocumentsService
      */
