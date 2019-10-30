@@ -27,10 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -43,6 +41,8 @@ import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -217,7 +217,7 @@ public interface DocflowsApi {
     );
 
     /**
-     * Get Reply document from specified workflow
+     * Get Fns-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -234,7 +234,24 @@ public interface DocflowsApi {
     );
 
     /**
-     * Get Reply document from specified workflow
+     * Get Pfr-Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param documentType Reply document identifier (required)
+     */
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-generate-reply")
+    CompletableFuture<ApiResponse<PfrReply>> generatePfrReplyDocument(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Query("documentType") String documentType,
+            @Body CertificateContent certificate
+    );
+
+    /**
+     * Get Fns-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -250,7 +267,23 @@ public interface DocflowsApi {
     );
 
     /**
-     * Put content to Reply document from specified workflow
+     * Get Pfr-Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     */
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}")
+    CompletableFuture<ApiResponse<PfrReplyDocument>> getPfrReplyDocument(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId
+    );
+
+    /**
+     * Put content to Fns-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -267,8 +300,37 @@ public interface DocflowsApi {
             @Body @Raw byte[] content
     );
 
+    /**
+     * Put content to Pfr-Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply identifier (required)
+     * @param replyDocumentId Reply document identifier (required)
+     * @param content (required)
+     */
+    @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/documents/{replyDocumentId}/decrypted-content")
+    CompletableFuture<ApiResponse<Void>> savePfrReplyDocumentDecryptedContentAsync(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Path("replyDocumentId") UUID replyDocumentId,
+            @Body @Raw byte[] content
+    );
+
+    /**
+     * Отправить подпись к ответному документу Fns-Reply
+     * @param accountId ИД аккуанта
+     * @param docflowId ИД документооборота
+     * @param documentId ИД документа
+     * @param replyId ИД ответного документа
+     * @param signature Подпись в виде массива байт
+     * @return
+     */
     @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
-    CompletableFuture<ApiResponse<ReplyDocument>> putReplyDocumentSignature(
+    CompletableFuture<ApiResponse<Void>> putReplyDocumentSignature(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
@@ -277,7 +339,27 @@ public interface DocflowsApi {
     );
 
     /**
-     * Put content to Reply document from specified workflow
+     * Отправить подпись к ответному документу Pfr-Reply
+     * @param accountId ИД аккуанта
+     * @param docflowId ИД документооборота
+     * @param documentId ИД документа
+     * @param replyId ИД ответного документа
+     * @param replyDocumentId ИД ответного документа
+     * @param signature Подпись в виде массива байт
+     * @return
+     */
+    @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/documents/{replyDocumentId}/signature")
+    CompletableFuture<ApiResponse<Void>> savePfrReplyDocumentSignatureAsync(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Path("replyDocumentId") UUID replyDocumentId,
+            @Body @Raw byte[] signature
+    );
+
+    /**
+     * Put content to Fns-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -295,7 +377,25 @@ public interface DocflowsApi {
     );
 
     /**
-     * Cloud sign Reply document from specified workflow
+     * Put content to Pfr-Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     * @param data (required)
+     */
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/send")
+    CompletableFuture<ApiResponse<Docflow>> sendPfrReply(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Body SenderIp data
+    );
+
+    /**
+     * Cloud sign Fns-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -311,8 +411,35 @@ public interface DocflowsApi {
             @Query("forceConfirmation") boolean forceConfirmation
     );
 
+    /**
+     * Cloud sign Fns-Reply document from specified workflow
+     *
+     * @param accountId Account identifier (required)
+     * @param docflowId Docflow object identifier (required)
+     * @param documentId Document identifier (required)
+     * @param replyId Reply document identifier (required)
+     */
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign")
+    CompletableFuture<ApiResponse<SignInitiation>> cloudSignPfrReplyDocumentInit(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Query("forceConfirmation") boolean forceConfirmation
+    );
+
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
     CompletableFuture<ApiResponse<SignConfirmResultData>> cloudSignReplyDocumentConfirm(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Query("requestId") String requestId,
+            @Query("code") String code
+    );
+
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign-confirm")
+    CompletableFuture<ApiResponse<SignConfirmResultData>> cloudSignPfrReplyDocumentConfirm(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
