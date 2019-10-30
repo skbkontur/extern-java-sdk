@@ -30,6 +30,7 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
+import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 
 
 /**

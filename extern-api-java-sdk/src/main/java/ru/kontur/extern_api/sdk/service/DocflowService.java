@@ -31,7 +31,22 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocflowFilter;
+import ru.kontur.extern_api.sdk.model.DocflowPage;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.DocumentToSend;
+import ru.kontur.extern_api.sdk.model.RecognizedMeta;
+import ru.kontur.extern_api.sdk.model.ReplyDocument;
+import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.Signature;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
@@ -349,6 +364,13 @@ public interface DocflowService {
             byte[] signerCert
     );
 
+    CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            String replyType,
+            byte[] signerCert
+    );
+
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/reply/{documentType}/generate</p>
      * <p>Асинхронный метод создает служебный документ для документа ДО с заданным типом.</p>
@@ -366,6 +388,32 @@ public interface DocflowService {
             String documentId,
             String replyType,
             String signerX509Base64
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-reply/{documentType}/generate</p>
+     * <p>Асинхронный метод создает служебный документ для документа ДО с заданным типом.</p>
+     * <p>Возможные типы ответного документа можно найти в Document#getReplyOptions </p>
+     *
+     * @param docflowId id документооборота
+     * @param documentId id документа для которого генерируется ответный
+     * @param replyType тип ответного документа (см выше)
+     * @param signerX509Base64 сертификат подписанта
+     * @return структура данных для отправки
+     * @see PfrReply
+     */
+    CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyType,
+            String signerX509Base64
+    );
+
+    CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyType,
+            byte[] signerCert
     );
 
     /**
@@ -410,6 +458,29 @@ public interface DocflowService {
             byte[] signature
     );
 
+    CompletableFuture<QueryContext<Void>> putReplyDocumentSignature(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            byte[] signature
+    );
+
+    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentSignatureAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            UUID replyDocumentId,
+            byte[] signature
+    );
+
+    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentSignatureAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            String replyDocumentId,
+            byte[] signature
+    );
+
     CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
             String docflowId,
             String documentId,
@@ -417,7 +488,20 @@ public interface DocflowService {
             byte[] signature
     );
 
+    CompletableFuture<QueryContext<Void>> putReplyDocumentSignature(
+            String docflowId,
+            String documentId,
+            String replyId,
+            byte[] signature
+    );
+
     CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    );
+
+    CompletableFuture<QueryContext<Docflow>> sendPfrReplyAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId
@@ -433,6 +517,18 @@ public interface DocflowService {
      * @see ReplyDocument
      */
     CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyId
+    );
+
+    /**
+     * Асинхронный метод отправляет документ в контролирующий орган
+     *
+     * @return ДО
+     * @see PfrReplyDocument
+     */
+    CompletableFuture<QueryContext<Docflow>> sendPfrReplyAsync(
             String docflowId,
             String documentId,
             String replyId
@@ -455,6 +551,12 @@ public interface DocflowService {
             UUID replyId
     );
 
+    CompletableFuture<QueryContext<PfrReplyDocument>> getPfrReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    );
+
     /**
      * Асинхронный метод получения ответного документа по идентификатору
      *
@@ -465,6 +567,21 @@ public interface DocflowService {
      * @see ReplyDocument
      */
     CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId
+    );
+
+    /**
+     * Асинхронный метод получения ответного документа по идентификатору
+     *
+     * @param docflowId идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param replyId идентификатор ответного документа
+     * @return объект с данными ответного документа
+     * @see PfrReplyDocument
+     */
+    CompletableFuture<QueryContext<PfrReplyDocument>> getPfrReplyDocumentAsync(
             String docflowId,
             String documentId,
             String replyId
@@ -503,6 +620,22 @@ public interface DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId,
+            byte[] content
+    );
+
+    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentDecryptedContentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            String replyDocumentId,
+            byte[] content
+    );
+
+    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentDecryptedContentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            UUID replyDocumentId,
             byte[] content
     );
 
@@ -660,11 +793,21 @@ public interface DocflowService {
             UUID documentId,
             UUID replyId
     );
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID pfrReplyId
+    );
 
     CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId
+    );
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentForceConfirmationAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID pfrReplyId
     );
 
     /**
@@ -680,6 +823,21 @@ public interface DocflowService {
             String docflowId,
             String documentId,
             String replyId
+    );
+
+    /**
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
+     * Асинхронный метод инициирует облачное подписание ответного документа
+     *
+     * @param docflowId идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param pfrReplyId идентификатор ответного документа
+     * @return объект с результатом инициации облачной паодписи
+     */
+    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String pfrReplyId
     );
 
 
