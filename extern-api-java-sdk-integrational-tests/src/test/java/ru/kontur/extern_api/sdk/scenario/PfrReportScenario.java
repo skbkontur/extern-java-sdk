@@ -67,7 +67,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-class PfrReportScenarioTest {
+class PfrReportScenario {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
