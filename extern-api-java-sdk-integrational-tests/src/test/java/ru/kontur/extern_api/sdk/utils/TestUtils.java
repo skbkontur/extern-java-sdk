@@ -46,10 +46,10 @@ import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.FssRecipient;
 import ru.kontur.extern_api.sdk.model.OrganizationRequest;
-import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.SenderRequest;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 import ru.kontur.extern_api.sdk.service.SDKException;
 
 public class TestUtils {

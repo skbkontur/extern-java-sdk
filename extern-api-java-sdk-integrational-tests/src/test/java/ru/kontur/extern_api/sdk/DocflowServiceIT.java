@@ -651,11 +651,14 @@ class DocflowServiceIT {
                 .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
-                .page(0, 10)
-                .finished(true)
-                .incoming(false)
-                .innKpp(company.getInn(), company.getKpp())
-                .type(DocflowType.FNS534_REPORT)
+                                                                        .page(0, 10)
+                                                                        .finished(true)
+                                                                        .incoming(false)
+                                                                        .innKpp(
+                                                                                company.getInn(),
+                                                                                company.getKpp()
+                                                                        )
+                                                                        .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
         Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
@@ -829,18 +832,16 @@ class DocflowServiceIT {
     ) {
         boolean isPfrTestData = testData.getClientInfo().getOrganization().getRegistrationNumberPfr() != null;
         if (isPfrTestData) {
-            return createPfrDocflow(engine, draftService);
+            return createPfrDocflow(engine);
         } else {
             return createDefaultDocflow(engine, draftService, testData);
         }
     }
 
-    private static CompletableFuture<QueryContext<Docflow>> createPfrDocflow(
-            ExternEngine engine,
-            DraftService draftService
-    ) {
+    private static CompletableFuture<QueryContext<Docflow>> createPfrDocflow(ExternEngine engine) {
         UUID draftId = buildPfrDraftViaBuilder(engine);
-        Draft draft = engine.getDraftService()
+        DraftService draftService = engine.getDraftService();
+        Draft draft = draftService
                 .lookupAsync(draftId)
                 .join()
                 .getOrThrow();
