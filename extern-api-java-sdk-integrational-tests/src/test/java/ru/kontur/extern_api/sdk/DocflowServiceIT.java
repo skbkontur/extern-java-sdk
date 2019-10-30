@@ -140,7 +140,6 @@ class DocflowServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
         docflowService = engine.getDocflowService();
     }

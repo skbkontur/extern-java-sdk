@@ -65,11 +65,12 @@ public class TestSuite {
         return gson.toJson(obj);
     }
 
+    private static CryptoProviderMSCapi cryptoProvider = new CryptoProviderMSCapi();
+
     public static TestSuite Load(Consumer<Configuration> configOverride) {
 
         Configuration config = TestConfig.LoadConfigFromEnvironment();
         configOverride.accept(config);
-
         ExternEngine engine = ExternEngineBuilder
                 .createExternEngine(config)
                 .apiKey(config.getApiKey())
@@ -78,7 +79,7 @@ public class TestSuite {
                         builder -> builder.passwordAuthentication(
                                 config.getLogin(), config.getPass())
                 )
-                .cryptoProvider(new CryptoProviderMSCapi())
+                .cryptoProvider(cryptoProvider)
                 .doNotSetupAccount()
                 .build(Level.BODY);
 

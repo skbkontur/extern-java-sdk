@@ -56,7 +56,6 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
@@ -69,7 +68,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class PfrReportTestScenario {
 
     private static ExternEngine engine;
@@ -79,21 +78,9 @@ class PfrReportTestScenario {
 
     @BeforeAll
     static void setUpClass() {
-        test = TestSuite.LoadManually((cfg, builder) -> builder
-                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
-                        .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
-                        .configureEncryption(
-                                cfg.getJksPass(),
-                                cfg.getRsaKeyPass(),
-                                cfg.getThumbprintRsa()
-                        )
-                )
-                .doNotUseCryptoProvider()
-                .doNotSetupAccount()
-                .build(Level.BASIC)
-        );
+        test = TestSuite.Load();
         engine = test.engine;
-        cryptoUtils = CryptoUtils.with(new CryptoProviderMSCapi());
+        cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
     }
 
     @Test
@@ -338,7 +325,7 @@ class PfrReportTestScenario {
 
             if (document == null) {
 
-                int timeout = 20;
+                int timeout = 30;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
                 docflow = engine.getDocflowService()

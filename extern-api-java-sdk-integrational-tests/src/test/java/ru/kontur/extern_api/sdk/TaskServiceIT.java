@@ -66,7 +66,6 @@ class TaskServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
         TestData[] testData = TestUtils.getTestData(certificate);

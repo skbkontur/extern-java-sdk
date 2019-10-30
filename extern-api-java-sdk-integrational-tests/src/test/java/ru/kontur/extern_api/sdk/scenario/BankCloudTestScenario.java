@@ -44,7 +44,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class BankCloudTestScenario {
 
     private static ExternEngine engine;
@@ -53,19 +53,7 @@ class BankCloudTestScenario {
 
     @BeforeAll
     static void setUpClass() {
-        test = TestSuite.LoadManually((cfg, builder) -> builder
-                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
-                        .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
-                        .configureEncryption(
-                                cfg.getJksPass(),
-                                cfg.getRsaKeyPass(),
-                                cfg.getThumbprintRsa()
-                        )
-                )
-                .doNotUseCryptoProvider()
-                .doNotSetupAccount()
-                .build(Level.BASIC)
-        );
+        test = TestSuite.Load();
         engine = test.engine;
 
     }

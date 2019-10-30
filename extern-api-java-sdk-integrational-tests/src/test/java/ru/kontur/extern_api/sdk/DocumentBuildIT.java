@@ -67,6 +67,7 @@ import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.PreparedTestData;
 import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @DisplayName("Draft service should")
@@ -112,13 +113,14 @@ class DocumentBuildIT {
     @BeforeAll
     static void init() throws Exception {
         config = TestConfig.LoadConfigFromEnvironment();
+        TestSuite testSuite = TestSuite.Load();
         ee = ExternEngineBuilder
                 .createExternEngine(config.getServiceBaseUri())
                 .apiKey(config.getApiKey())
                 .buildAuthentication(config.getAuthBaseUri(), builder -> builder.
                         passwordAuthentication(config.getLogin(), config.getPass())
                 )
-                .cryptoProvider(new CryptoProviderMSCapi())
+                .cryptoProvider(testSuite.engine.getCryptoProvider())
                 .accountId(config.getAccountId())
                 .build(Level.BODY);
 
