@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.pfr;
+
+import ru.kontur.extern_api.sdk.model.Recipient;
 
 /**
  * Класс содержит информацию об управлении пенсионного фонда РФ, в который необходимо отправить документ.
