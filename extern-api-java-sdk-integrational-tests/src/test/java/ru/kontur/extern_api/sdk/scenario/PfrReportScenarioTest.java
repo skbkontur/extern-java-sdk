@@ -132,6 +132,11 @@ class PfrReportScenarioTest {
 
         for (Document document : pfrDocflowFinished.getDocuments()) {
             System.out.println("Will process " + document.getDescription().getType());
+            if (document.getDescription().getType().toString() == "PfrReportProtocolAppendix"){
+                // TODO fix condition when pfr content links will be done
+                System.out.println("Skip " + document.getDescription().getType());
+                continue;
+            }
             if (document.hasEncryptedContent()) {
 
                 byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
