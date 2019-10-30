@@ -58,7 +58,6 @@ import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
@@ -78,7 +77,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Docflow service should be able to")
 class DocflowServiceIT {
 
@@ -133,8 +132,13 @@ class DocflowServiceIT {
 //        return testPack.get().testDocflows.stream();
     }
 
+    private static List<QueryContext<Docflow>> testDocflows;
+
     private static Stream<QueryContext<Docflow>> docflowFactory() {
-        return getTestPack(engine).testDocflows.stream();
+        testDocflows = testDocflows == null
+                ? getTestPack(engine).testDocflows
+                : testDocflows;
+        return testDocflows.stream();
     }
 
     @BeforeAll
@@ -531,6 +535,7 @@ class DocflowServiceIT {
                 new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class
         );
+        testDocflows = null;
     }
 
     @ParameterizedTest
@@ -636,6 +641,8 @@ class DocflowServiceIT {
                 new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class
         );
+        // TODO хак нужен только для фикса fns534-report-receipt? "Сan not return reply document with type \"fns534-report-receipt\".",
+        testDocflows = null;
     }
 
 
@@ -750,6 +757,7 @@ class DocflowServiceIT {
                 Assertions.assertNotNull(printCxt.get());
             }
         }
+        testDocflows = null;
     }
 
     @ParameterizedTest
