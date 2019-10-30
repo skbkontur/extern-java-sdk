@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,7 +38,6 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
@@ -67,7 +65,6 @@ class OrganizationIT {
         try {
             this.companyId = createOrFindOrganization();
         } catch (Exception ex) {
-            this.companyId = createOrFindOrganization();
             throw new Exception("SetUp failed! Cant' create or find organization!", ex);
         }
         assertNotNull(companyId);
@@ -123,20 +120,30 @@ class OrganizationIT {
                 .getCompanies();
     }
 
-    private UUID createOrFindOrganization() {
-        List<Company> companies = searchOrganisations(likeGiven(COMPANY));
-
-        if (companies != null && !companies.isEmpty()) {
-            return companies.get(0).getId();
+    private UUID createOrFindOrganization() throws Exception {
+        Company org = null;
+        int tryNumber = 0;
+        while (tryNumber < 10 && org == null) {
+            List<Company> companies = searchOrganisations(likeGiven(COMPANY));
+            if (companies != null && !companies.isEmpty()) {
+                return companies.get(0).getId();
+            } else {
+                try {
+                    org = engine.getOrganizationService()
+                            .createAsync(COMPANY.getGeneral())
+                            .join()
+                            .getOrThrow();
+                    return org.getId();
+                } catch (Exception ex) {
+                    if (!ex.getMessage().contains("Such organization already exists")) {
+                        throw ex;
+                    }
+                    System.out.println("Some error on creating org on " + tryNumber + " try: " + ex);
+                }
+            }
+            tryNumber++;
         }
-
-        Company company = engine.getOrganizationService()
-                .createAsync(COMPANY.getGeneral())
-                .join()
-                .getOrThrow();
-
-        assertNotNull(company);
-        return company.getId();
+        throw new Exception("Cant't create or find test org");
     }
 
     private static OrgFilter likeGiven(Company company) {
