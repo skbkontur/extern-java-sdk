@@ -51,7 +51,7 @@ import ru.argosgrp.cryptoservice.pkcs7.PKCS7;
 import ru.argosgrp.cryptoservice.utils.IOUtil;
 
 /**
- * See ru.argosgrp 5.0.22 authors to update this class.cd ..
+ * See ru.argosgrp 5.0.22 authors to update this class.
  * And ru.argosgrp.cryptoservice.pkcs7.PKCS7
  */
 public class PKCS7KeAPi {

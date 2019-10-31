@@ -78,7 +78,6 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@DisplayName("Docflow service should be able to")
 class DocflowServiceIT {
 
     protected static ExternEngine engine;
@@ -447,50 +446,6 @@ class DocflowServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("two options for generate reply works")
-    @MethodSource("docflowLazyFactory")
-    void testGenerateReply(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        String thumbprint = engine.getConfiguration().getThumbprint();
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        String certificateBase64 = engineUtils.crypto.loadX509(thumbprint);
-        GenerateReplyDocumentRequestData cert = new GenerateReplyDocumentRequestData()
-                .certificateBase64(certificateBase64);
-
-        ReplyDocument linkReply = engine.getAuthorizedHttpClient()
-                .followPostLink(generateLink.getHref(), cert, ReplyDocument.class);
-
-        ReplyDocument funcReply = engine.getDocflowService().generateReplyAsync(
-                docflow.getId(),
-                document.getId(),
-                document.getReplyOptions()[0],
-                Base64.getDecoder().decode(certificateBase64)
-        ).join().getOrThrow();
-
-        String lName = linkReply.getFilename();
-        lName = lName.substring(0, lName.lastIndexOf("_"));
-
-        String rName = funcReply.getFilename();
-        rName = rName.substring(0, rName.lastIndexOf("_"));
-
-        Assertions.assertEquals(lName, rName);
-    }
-
-    @ParameterizedTest
     @DisplayName("send reply documents by choosing its type")
     @MethodSource("docflowFactory")
     void testSendOneReply(QueryContext<Docflow> docflowCxt) {
@@ -535,114 +490,6 @@ class DocflowServiceIT {
                 new SenderIp(engine.getUserIPProvider().userIP()),
                 Docflow.class
         );
-        testDocflows = null;
-    }
-
-    @ParameterizedTest
-    @DisplayName("send reply document by choosing its type with cloud cert")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                SignInitiation.class
-        );
-
-        HashMap<String, Object> queryParams = new HashMap<>();
-        queryParams.put("code", codeProvider.get().apply(signInitiation.getRequestId()));
-        queryParams.put("requestId", signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getCloudSignConfirmLink().getHref(),
-                queryParams,
-                null,
-                SignConfirmResultData.class
-        );
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-    }
-
-
-    @ParameterizedTest
-    @DisplayName("send all replies for document by choosing type")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        // если есть ссылка на генерацию ИОПа
-        Assertions.assertEquals("fns534-report-receipt", generateLink.getName());
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                // включить возможность подписи без подтверждения
-                Collections.singletonMap("forceConfirmation", false),
-                null,
-                SignInitiation.class
-        );
-
-        // если requestId == null -- то сервер подписал документ и не требует подтверждения
-        Assertions.assertNull(signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-        // TODO хак нужен только для фикса fns534-report-receipt? "Сan not return reply document with type \"fns534-report-receipt\".",
-        testDocflows = null;
     }
 
 
@@ -757,7 +604,6 @@ class DocflowServiceIT {
                 Assertions.assertNotNull(printCxt.get());
             }
         }
-        testDocflows = null;
     }
 
     @ParameterizedTest
@@ -772,7 +618,8 @@ class DocflowServiceIT {
                         demandTestData.getDemandAttachmentId()
                 ),
                 cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
-                5000
+                1000 * 20,
+                1000 * 60 * 5
         ).thenApply(QueryContext::getOrThrow);
 
         Document document = docflowService.lookupDocumentAsync(
