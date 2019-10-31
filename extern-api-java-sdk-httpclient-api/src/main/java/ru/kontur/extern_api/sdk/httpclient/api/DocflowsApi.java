@@ -311,7 +311,7 @@ public interface DocflowsApi {
      * @param content (required)
      */
     @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/documents/{replyDocumentId}/decrypted-content")
-    CompletableFuture<ApiResponse<Void>> savePfrReplyDocumentDecryptedContentAsync(
+    CompletableFuture<ApiResponse<Void>> updatePfrReplyDocumentDecryptedContent(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
@@ -330,7 +330,7 @@ public interface DocflowsApi {
      * @return
      */
     @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/signature")
-    CompletableFuture<ApiResponse<Void>> putReplyDocumentSignature(
+    CompletableFuture<ApiResponse<Void>> updateReplyDocumentSignature(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
@@ -349,7 +349,7 @@ public interface DocflowsApi {
      * @return
      */
     @PUT("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/documents/{replyDocumentId}/signature")
-    CompletableFuture<ApiResponse<Void>> savePfrReplyDocumentSignatureAsync(
+    CompletableFuture<ApiResponse<Void>> updatePfrReplyDocumentSignature(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,

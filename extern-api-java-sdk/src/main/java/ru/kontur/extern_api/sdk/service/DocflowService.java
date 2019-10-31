@@ -458,14 +458,14 @@ public interface DocflowService {
             byte[] signature
     );
 
-    CompletableFuture<QueryContext<Void>> putReplyDocumentSignature(
+    CompletableFuture<QueryContext<Void>> updateReplyDocumentSignature(
             UUID docflowId,
             UUID documentId,
             UUID replyId,
             byte[] signature
     );
 
-    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentSignatureAsync(
+    CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentSignatureAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId,
@@ -473,7 +473,7 @@ public interface DocflowService {
             byte[] signature
     );
 
-    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentSignatureAsync(
+    CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentSignatureAsync(
             String docflowId,
             String documentId,
             String replyId,
@@ -488,7 +488,7 @@ public interface DocflowService {
             byte[] signature
     );
 
-    CompletableFuture<QueryContext<Void>> putReplyDocumentSignature(
+    CompletableFuture<QueryContext<Void>> updateReplyDocumentSignature(
             String docflowId,
             String documentId,
             String replyId,
@@ -623,7 +623,7 @@ public interface DocflowService {
             byte[] content
     );
 
-    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentDecryptedContentAsync(
+    CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentDecryptedContentAsync(
             String docflowId,
             String documentId,
             String replyId,
@@ -631,7 +631,7 @@ public interface DocflowService {
             byte[] content
     );
 
-    CompletableFuture<QueryContext<Void>> savePfrReplyDocumentDecryptedContentAsync(
+    CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentDecryptedContentAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId,

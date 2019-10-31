@@ -493,7 +493,7 @@ class PfrReportSlowScenario {
         byte[] decryptedContent = cryptoUtils.decrypt(thumbprint, encryptedContent);
 
         engine.getDocflowService()
-                .savePfrReplyDocumentDecryptedContentAsync(
+                .updatePfrReplyDocumentDecryptedContentAsync(
                         replyDocument.getDocflowId(),
                         documentId,
                         replyDocument.getReplyId(),
@@ -505,7 +505,7 @@ class PfrReportSlowScenario {
 
         byte[] signature = cryptoUtils.sign(thumbprint, decryptedContent);
         engine.getDocflowService()
-                .savePfrReplyDocumentSignatureAsync(
+                .updatePfrReplyDocumentSignatureAsync(
                         replyDocument.getDocflowId(),
                         replyDocument.getDocumentId(),
                         replyDocument.getReplyId(),
