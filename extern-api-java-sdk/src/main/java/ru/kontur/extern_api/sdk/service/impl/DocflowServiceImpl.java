@@ -37,6 +37,8 @@ import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
@@ -51,7 +53,8 @@ public class DocflowServiceImpl implements DocflowService {
     DocflowServiceImpl(
             AccountProvider accountProvider,
             UserIPProvider ipProvider,
-            DocflowsApi api) {
+            DocflowsApi api
+    ) {
         this.acc = accountProvider;
         this.ip = ipProvider;
         this.api = api;
@@ -92,7 +95,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
             UUID docflowId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getDocument(acc.accountId(), docflowId, documentId)
                 .thenApply(contextAdaptor(QueryContext.DOCUMENT));
     }
@@ -100,7 +104,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<Document>> lookupDocumentAsync(
             String docflowId,
-            String documentId) {
+            String documentId
+    ) {
         return lookupDocumentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
@@ -115,7 +120,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
             UUID docflowId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getDocumentDescription(acc.accountId(), docflowId, documentId)
                 .thenApply(contextAdaptor(QueryContext.DOCUMENT_DESCRIPTION));
     }
@@ -123,7 +129,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<DocflowDocumentDescription>> lookupDescriptionAsync(
             String docflowId,
-            String documentId) {
+            String documentId
+    ) {
         return lookupDescriptionAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
@@ -133,7 +140,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID documentId,
             byte[] documentContent
     ) {
-        return this.api.recognize(acc.accountId(), docflowId, documentId,  documentContent).thenApply(contextAdaptor(QueryContext.RECOGNITION_META));
+        return this.api.recognize(acc.accountId(), docflowId, documentId, documentContent).thenApply(
+                contextAdaptor(QueryContext.RECOGNITION_META));
     }
 
     @Override
@@ -147,7 +155,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
             UUID docflowId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getEncryptedContent(acc.accountId(), docflowId, documentId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -155,7 +164,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getEncryptedContentAsync(
             String docflowId,
-            String documentId) {
+            String documentId
+    ) {
         return getEncryptedContentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
@@ -170,7 +180,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
             UUID docflowId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getDecryptedContent(acc.accountId(), docflowId, documentId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -178,7 +189,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<byte[]>> getDecryptedContentAsync(
             String docflowId,
-            String documentId) {
+            String documentId
+    ) {
         return getDecryptedContentAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
@@ -193,7 +205,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
             UUID docflowId,
-            UUID documentId) {
+            UUID documentId
+    ) {
         return api.getSignatures(acc.accountId(), docflowId, documentId)
                 .thenApply(contextAdaptor(QueryContext.SIGNATURES));
     }
@@ -201,7 +214,8 @@ public class DocflowServiceImpl implements DocflowService {
     @Override
     public CompletableFuture<QueryContext<List<Signature>>> getSignaturesAsync(
             String docflowId,
-            String documentId) {
+            String documentId
+    ) {
         return getSignaturesAsync(UUID.fromString(docflowId), UUID.fromString(documentId));
     }
 
@@ -217,7 +231,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<Signature>> getSignatureAsync(
             UUID docflowId,
             UUID documentId,
-            UUID signatureId) {
+            UUID signatureId
+    ) {
         return api.getSignature(acc.accountId(), docflowId, documentId, signatureId)
                 .thenApply(contextAdaptor(QueryContext.SIGNATURE));
     }
@@ -226,7 +241,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<Signature>> getSignatureAsync(
             String docflowId,
             String documentId,
-            String signatureId) {
+            String signatureId
+    ) {
         return getSignatureAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -247,7 +263,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
             UUID docflowId,
             UUID documentId,
-            UUID signatureId) {
+            UUID signatureId
+    ) {
         return api.getSignatureContent(acc.accountId(), docflowId, documentId, signatureId)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -256,7 +273,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<byte[]>> getSignatureContentAsync(
             String docflowId,
             String documentId,
-            String signatureId) {
+            String signatureId
+    ) {
         return getSignatureContentAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -278,7 +296,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             String replyType,
-            byte[] signerCert) {
+            byte[] signerCert
+    ) {
         return api.generateReplyDocument(
                 acc.accountId(),
                 docflowId,
@@ -290,16 +309,61 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
+    public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            UUID docflowId, UUID documentId, String replyType, byte[] signerCert
+    ) {
+        return api.generatePfrReplyDocument(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyType,
+                new CertificateContent(signerCert)
+        )
+                .thenApply(contextAdaptor(QueryContext.PFR_REPLY_DOCUMENT));
+    }
+
+    @Override
     public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
             String docflowId,
             String documentId,
             String replyType,
-            String signerCertBase64) {
+            String signerCertBase64
+    ) {
         return generateReplyAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 replyType,
                 Base64.getDecoder().decode(signerCertBase64)
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyType,
+            String signerX509Base64
+    ) {
+        return generatePfrReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                replyType,
+                Base64.getDecoder().decode(signerX509Base64)
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
+            String docflowId,
+            String documentId,
+            String replyType,
+            byte[] signerCert
+    ) {
+        return generatePfrReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                replyType,
+                signerCert
         );
     }
 
@@ -318,18 +382,69 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId,
-            byte[] signature) {
+            byte[] signature
+    ) {
         return api.updateReplyDocumentContent(acc.accountId(), docflowId, documentId, replyId, signature)
                 .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updateReplyDocumentSignature(
+            UUID docflowId, UUID documentId, UUID replyId, byte[] signature
+    ) {
+        return api.updateReplyDocumentSignature(acc.accountId(), docflowId, documentId, replyId, signature)
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentSignatureAsync(
+            String docflowId, String documentId, String replyId, String replyDocumentId, byte[] signature
+    ) {
+        return updatePfrReplyDocumentSignatureAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                UUID.fromString(replyDocumentId),
+                signature
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentSignatureAsync(
+            UUID docflowId, UUID documentId, UUID replyId, UUID replyDocumentId, byte[] signature
+    ) {
+        return api.updatePfrReplyDocumentSignature(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                replyDocumentId,
+                signature
+        )
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
+    }
+
 
     @Override
     public CompletableFuture<QueryContext<ReplyDocument>> uploadReplyDocumentSignatureAsync(
             String docflowId,
             String documentId,
             String replyId,
-            byte[] signature) {
+            byte[] signature
+    ) {
         return uploadReplyDocumentSignatureAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                signature
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updateReplyDocumentSignature(
+            String docflowId, String documentId, String replyId, byte[] signature
+    ) {
+        return updateReplyDocumentSignature(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId),
@@ -351,8 +466,17 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId) {
+            UUID replyId
+    ) {
         return api.sendReply(acc.accountId(), docflowId, documentId, replyId, new SenderIp(ip.userIP()))
+                .thenApply(contextAdaptor(QueryContext.DOCFLOW));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Docflow>> sendPfrReplyAsync(
+            UUID docflowId, UUID documentId, UUID replyId
+    ) {
+        return api.sendPfrReply(acc.accountId(), docflowId, documentId, replyId, new SenderIp(ip.userIP()))
                 .thenApply(contextAdaptor(QueryContext.DOCFLOW));
     }
 
@@ -360,8 +484,20 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
             String docflowId,
             String documentId,
-            String replyId) {
+            String replyId
+    ) {
         return sendReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId)
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Docflow>> sendPfrReplyAsync(
+            String docflowId, String documentId, String replyId
+    ) {
+        return sendPfrReplyAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId)
@@ -381,8 +517,17 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId) {
+            UUID replyId
+    ) {
         return api.getReplyDocument(acc.accountId(), docflowId, documentId, replyId)
+                .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrReplyDocument>> getPfrReplyDocumentAsync(
+            UUID docflowId, UUID documentId, UUID replyId
+    ) {
+        return api.getPfrReplyDocument(acc.accountId(), docflowId, documentId, replyId)
                 .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
 
@@ -390,8 +535,20 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<ReplyDocument>> getReplyDocumentAsync(
             String docflowId,
             String documentId,
-            String replyId) {
+            String replyId
+    ) {
         return getReplyDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId)
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrReplyDocument>> getPfrReplyDocumentAsync(
+            String docflowId, String documentId, String replyId
+    ) {
+        return getPfrReplyDocumentAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId)
@@ -412,7 +569,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId,
-            byte[] content) {
+            byte[] content
+    ) {
         return api.updateReplyDocumentContent(acc.accountId(), docflowId, documentId, replyId, content)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -422,13 +580,47 @@ public class DocflowServiceImpl implements DocflowService {
             String docflowId,
             String documentId,
             String replyId,
-            byte[] content) {
+            byte[] content
+    ) {
         return updateReplyDocumentContentAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId),
                 content
         );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentDecryptedContentAsync(
+            String docflowId, String documentId, String replyId, String replyDocumentId, byte[] content
+    ) {
+        return updatePfrReplyDocumentDecryptedContentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                UUID.fromString(replyDocumentId),
+                content
+        );
+    }
+
+
+    @Override
+    public CompletableFuture<QueryContext<Void>> updatePfrReplyDocumentDecryptedContentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            UUID replyDocumentId,
+            byte[] content
+    ) {
+        return api.updatePfrReplyDocumentDecryptedContent(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                replyDocumentId,
+                content
+        )
+                .thenApply(contextAdaptor(QueryContext.NOTHING));
     }
 
     @Override
@@ -507,7 +699,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<String>> printAsync(
             String docflowId,
             String documentId,
-            String documentContentBase64) {
+            String documentContentBase64
+    ) {
         return getDocumentAsPdfAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -529,7 +722,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<byte[]>> getDocumentAsPdfAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] documentContent) {
+            byte[] documentContent
+    ) {
 
         return api.print(acc.accountId(), docflowId, documentId, new ByteContent(documentContent))
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
@@ -539,27 +733,57 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId) {
+            UUID replyId
+    ) {
         return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, false);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+            UUID docflowId, UUID documentId, UUID pfrReplyId
+    ) {
+        // TODO not implemented now
+        return cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReplyId, false);
     }
 
     @Override
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
             UUID docflowId,
             UUID documentId,
-            UUID replyId) {
+            UUID replyId
+    ) {
         return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, true);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentForceConfirmationAsync(
+            UUID docflowId, UUID documentId, UUID pfrReplyId
+    ) {
+        // TODO not implemented now
+        return cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReplyId, true);
     }
 
     @Override
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             String docflowId,
             String documentId,
-            String replyId) {
+            String replyId
+    ) {
         return cloudSignReplyDocumentAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId)
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+            String docflowId, String documentId, String pfrReplyId
+    ) {
+        return cloudSignPfrReplyDocumentAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(pfrReplyId)
         );
     }
 
@@ -578,7 +802,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID documentId,
             UUID replyId,
             String requestId,
-            String smsCode) {
+            String smsCode
+    ) {
         return api.cloudSignReplyDocumentConfirm(
                 acc.accountId(),
                 docflowId,
@@ -595,7 +820,8 @@ public class DocflowServiceImpl implements DocflowService {
             String documentId,
             String replyId,
             String requestId,
-            String smsCode) {
+            String smsCode
+    ) {
         return cloudSignConfirmReplyDocumentAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -620,7 +846,8 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] certificate) {
+            byte[] certificate
+    ) {
         return api.cloudDecryptDocumentInit(
                 acc.accountId(),
                 docflowId,
@@ -634,7 +861,8 @@ public class DocflowServiceImpl implements DocflowService {
     public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
-            String certBase64) {
+            String certBase64
+    ) {
         return join(cloudDecryptDocumentInitAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -647,7 +875,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             String requestId,
-            String code) {
+            String code
+    ) {
         return api.cloudDecryptDocumentConfirm(acc.accountId(), docflowId, documentId, requestId, code, true)
                 .thenApply(contextAdaptor(QueryContext.CONTENT));
     }
@@ -657,7 +886,8 @@ public class DocflowServiceImpl implements DocflowService {
             String docflowId,
             String documentId,
             String requestId,
-            String code) {
+            String code
+    ) {
         return join(cloudDecryptDocumentConfirmAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
@@ -671,7 +901,8 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             byte[] certificate,
-            Function<QueryContext<DecryptInitiation>, String> smsCodeProvider) {
+            Function<QueryContext<DecryptInitiation>, String> smsCodeProvider
+    ) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
                 docflowId, documentId, certificate
@@ -682,7 +913,8 @@ public class DocflowServiceImpl implements DocflowService {
                         docflowId,
                         documentId,
                         cxt.get().getRequestId(),
-                        code)
+                        code
+                             )
                 )
         );
     }
@@ -692,7 +924,8 @@ public class DocflowServiceImpl implements DocflowService {
             String docflowId,
             String documentId,
             String certBase64,
-            Function<DecryptInitiation, String> smsCodeProvider) {
+            Function<DecryptInitiation, String> smsCodeProvider
+    ) {
 
         return join(cloudDecryptDocumentAsync(
                 UUID.fromString(docflowId),
@@ -715,9 +948,32 @@ public class DocflowServiceImpl implements DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId,
-            boolean forceConfirmation) {
-        return api.cloudSignReplyDocumentInit(acc.accountId(), docflowId, documentId, replyId, forceConfirmation)
+            boolean forceConfirmation
+    ) {
+        return api.cloudSignReplyDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                forceConfirmation
+        )
                 .thenApply(contextAdaptor("sign-reply"));
     }
 
+    private CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            boolean forceConfirmation
+    ) {
+        // TODO not implemented now
+        return api.cloudSignPfrReplyDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                forceConfirmation
+        )
+                .thenApply(contextAdaptor("sign-pfr-reply"));
+    }
 }

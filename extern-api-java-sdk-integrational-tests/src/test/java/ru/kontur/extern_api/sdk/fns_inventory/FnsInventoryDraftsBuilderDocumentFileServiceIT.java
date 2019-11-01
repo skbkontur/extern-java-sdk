@@ -66,7 +66,6 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
         draftsBuilderDocumentFileCreator = new DraftsBuilderDocumentFileCreator();
 

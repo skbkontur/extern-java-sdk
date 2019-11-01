@@ -50,11 +50,15 @@ public class CryptoApi {
 
     private final X509CertificateFactory certificateFactory;
 
+    private static CryptoService singletonCryptoServiceInstance;
 
     public CryptoApi() throws CertificateException {
         CryptoService cryptoService = null;
         try {
-            cryptoService = new MSCapi(true, CryptoService.GOST_2012_256_ALG_ID);
+            cryptoService = singletonCryptoServiceInstance != null
+                    ? singletonCryptoServiceInstance
+                    : new MSCapi(true, CryptoService.GOST_2012_256_ALG_ID);
+            singletonCryptoServiceInstance = cryptoService;
         } catch (Exception e) {
             log.warning(e.getMessage());
         }

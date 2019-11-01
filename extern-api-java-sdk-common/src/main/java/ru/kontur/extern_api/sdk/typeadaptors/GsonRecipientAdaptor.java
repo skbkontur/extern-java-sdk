@@ -33,9 +33,9 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.FssRecipient;
-import ru.kontur.extern_api.sdk.model.PfrRecipient;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.TogsRecipient;
+import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 
 /**
  *

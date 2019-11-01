@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.argosgrp.cryptoservice</groupId>
+        <artifactId>cryptoservice</artifactId>
+        <version>5.0.22-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>pkcs</artifactId>
+
+    <properties>
+        <SpecificationTitle>Argos PKCS Module</SpecificationTitle>
+        <ImplementationVersion>${applicationVersion}</ImplementationVersion>
+    </properties>
+
+    <packaging>jar</packaging>
+
+    <repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/maven-central/</url>
+        </repository>
+        <repository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </snapshotRepository>
+        <repository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </repository>
+    </distributionManagement>
+
+   
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.argosgrp.cryptoservice</groupId>
+            <artifactId>asn1</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.argosgrp.cryptoservice</groupId>
+            <artifactId>cs-util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

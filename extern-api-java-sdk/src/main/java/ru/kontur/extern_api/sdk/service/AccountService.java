@@ -132,6 +132,7 @@ public interface AccountService {
      * Асинхронный метод предназначен для удаления учетной записи
      *
      * @param accountId идентификатор учетной записи
+     * @return Void Void
      */
     CompletableFuture<QueryContext<Void>> deleteAccountAsync(UUID accountId);
 }

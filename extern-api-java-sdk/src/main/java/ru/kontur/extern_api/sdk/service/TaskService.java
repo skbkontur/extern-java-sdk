@@ -34,6 +34,7 @@ public interface TaskService {
      * <p>GET /v1/{accountId}/drafts/{draftId}/task/{taskId}</p>
      * Асинхронный метод получающий текущий статус задачи
      *
+     * @param taskInfo Инфо о задаче
      * @return статус задачи
      */
     CompletableFuture<TaskState> getTaskStatus(TaskInfo taskInfo);

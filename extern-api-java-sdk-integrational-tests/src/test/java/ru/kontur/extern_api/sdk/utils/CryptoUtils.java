@@ -23,10 +23,7 @@
 
 package ru.kontur.extern_api.sdk.utils;
 
-import java.io.PrintStream;
 import java.util.Base64;
-import java.util.concurrent.CompletableFuture;
-import java.util.prefs.Preferences;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.provider.CryptoProvider;
@@ -56,12 +53,15 @@ public class CryptoUtils {
     }
 
     public String loadX509(String thumbprint) {
+        byte[] certContent = loadCertContent(thumbprint);
+        return Base64.getEncoder().encodeToString(certContent);
+    }
 
+    public byte[] loadCertContent(String thumbprint) {
         return cryptoProvider
                 .getSignerCertificateAsync(thumbprint)
                 .thenApply(QueryContext::ensureSuccess)
                 .thenApply(QueryContext::getContent)
-                .thenApply(Base64.getEncoder()::encodeToString)
                 .join();
     }
 

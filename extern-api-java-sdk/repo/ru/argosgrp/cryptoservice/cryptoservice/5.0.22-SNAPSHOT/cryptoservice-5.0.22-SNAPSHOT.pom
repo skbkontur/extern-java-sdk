@@ -1,0 +1,341 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.argosgrp.cryptoservice</groupId>
+    <artifactId>cryptoservice</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+        <nativeDir>${project.basedir}/../Native</nativeDir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <SpecificationVersion>${project.version}</SpecificationVersion>
+        <ImplementationVersion>${project.version}</ImplementationVersion>
+        <SpecificationVendor>Argos Group LLC.</SpecificationVendor>
+        <SpecificationTitle>Argos Group LLC.</SpecificationTitle>
+        <ImplementationTitle>com.argos</ImplementationTitle>
+        <ImplementationVendor>Argos Group LLC.</ImplementationVendor>
+        <log4j.log4j.version>1.2.17</log4j.log4j.version>
+        <log4j.version>1.2.15</log4j.version>
+        <code.sign.jks>D:\Aleksey\Projects\ARGOS-CODE-KEY\argos.jks</code.sign.jks>
+        <code.sign.alias>argos</code.sign.alias>
+        <code.sign.storepass>123456</code.sign.storepass>
+        <code.sign.keypass>123456</code.sign.keypass>
+        <sign.tsa>http://timestamp.globalsign.com/scripts/timestamp.dll</sign.tsa>
+        <srcencoding>UTF-8</srcencoding>
+        <java-version>1.7</java-version>
+        <javacArguments></javacArguments>
+    </properties>
+
+    <version>5.0.22-SNAPSHOT</version>
+
+    <modules>
+        <module>asn1</module>
+        <module>pkcs</module>
+        <module>cs</module>
+        <module>cs-util</module>
+        <module>cs-openssl</module>
+        <module>cs-mscapi</module>
+        <!-- this module is not supported by java 1.7 64 bit -->
+        <!--module>cs-pkcs11</module-->
+    </modules>
+
+    <!--
+	<repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/maven-central/</url>
+        </repository>
+        <repository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </snapshotRepository>
+        <repository>
+            <id>argos</id>
+            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
+        </repository>
+    </distributionManagement>-->
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <!--version>3.6.2</version-->
+                    <configuration>
+                        <encoding>${srcencoding}</encoding>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                        <showDeprecation>false</showDeprecation>
+                        <showWarnings>false</showWarnings>
+                        <verbose>false</verbose>
+                        <!-- release>9</release-->
+                        <compilerArgs>
+                            <arg>${javacArguments}</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <compress>true</compress>
+                            <index>false</index>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Specification-Title>${SpecificationTitle}</Specification-Title>
+                                <Specification-Version>${SpecificationVersion}</Specification-Version>
+                                <Specification-Vendor>${SpecificationVendor}</Specification-Vendor>
+                                <Implementation-Title>${ImplementationTitle}</Implementation-Title>
+                                <Implementation-Version>${ImplementationVersion}</Implementation-Version>
+                                <Implementation-Vendor>${ImplementationVendor}</Implementation-Vendor>
+                            </manifestEntries>
+                        </archive>
+                        <finalName>${project.artifactId}</finalName>
+                        <!--finalName>${project.artifactId}</finalName-->
+                        <!--outputDirectory>${project.basedir}/dist</outputDirectory -->
+                    </configuration>
+                </plugin>
+
+                <!-- деплой исходников и жабадоков -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <!-- TODO: расскоментарить при переводе проекта на java 1.8 -->
+                                <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                                <!--<additionalOptions>-Xdoclint:none</additionalOptions>-->
+                                <!--<additionalJOption>-Xdoclint:none</additionalJOption>-->
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <!-- explicitly define maven-deploy-plugin after other to force exec order -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                    <executions>
+                        <execution>
+                            <id>deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- !деплой исходников и жабадоков -->
+
+
+                <!-- тестовое покрытие -->
+                <!-- тут не совсем свежие версии, т.к. под жабу 1.7 уже мало кто собирает свои поделки -->
+                <!--<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                    <executions>
+                        <execution>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>-->
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludes>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <!-- !тестовое покрытие -->
+            </plugins>
+        </pluginManagement>
+
+
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.9</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>dependencies</report>
+                            <!--<report>project-team</report>-->
+                            <!--<report>mailing-list</report>-->
+                            <report>cim</report>
+                            <!--<report>issue-tracking</report>-->
+                            <report>license</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                <configuration>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.mebigfatguy.fb-contrib</groupId>
+                            <artifactId>fb-contrib</artifactId>
+                            <version>7.4.6</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>1.7.1</version>
+                        </plugin>
+                    </plugins>
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Optional directory to put findbugs xdoc xml report -->
+                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <excludes>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.9.0</version>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <sourceEncoding>${srcencoding}</sourceEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>${java-version}</targetJdk>
+                    <excludes>
+
+                    </excludes>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/stubs</excludeRoot>
+                    </excludeRoots>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <tagListOptions>
+                        <tagClasses>
+                            <tagClass>
+                                <displayName>Todo Work</displayName>
+                                <tags>
+                                    <tag>
+                                        <matchString>todo</matchString>
+                                        <matchType>ignoreCase</matchType>
+                                    </tag>
+                                    <tag>
+                                        <matchString>FIXME</matchString>
+                                        <matchType>exact</matchType>
+                                    </tag>
+                                </tags>
+                            </tagClass>
+                        </tagClasses>
+                    </tagListOptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <configuration>
+                    <show>public</show>
+                    <!-- TODO: расскоментарить при переводе проекта на java 1.8 -->
+                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                    <!--<additionalOptions>-Xdoclint:none</additionalOptions>-->
+                    <!--<additionalJOption>-Xdoclint:none</additionalJOption>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

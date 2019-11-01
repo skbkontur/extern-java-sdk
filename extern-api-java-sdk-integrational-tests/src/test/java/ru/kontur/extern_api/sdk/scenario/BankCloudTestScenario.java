@@ -31,6 +31,8 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -42,7 +44,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
 import ru.kontur.extern_api.sdk.utils.Zip;
 
-
+@Execution(ExecutionMode.CONCURRENT)
 class BankCloudTestScenario {
 
     private static ExternEngine engine;
@@ -51,19 +53,7 @@ class BankCloudTestScenario {
 
     @BeforeAll
     static void setUpClass() {
-        test = TestSuite.LoadManually((cfg, builder) -> builder
-                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
-                        .trustedAuthentication(UUID.fromString(cfg.getServiceUserId()))
-                        .configureEncryption(
-                                cfg.getJksPass(),
-                                cfg.getRsaKeyPass(),
-                                cfg.getThumbprintRsa()
-                        )
-                )
-                .doNotUseCryptoProvider()
-                .doNotSetupAccount()
-                .build(Level.BASIC)
-        );
+        test = TestSuite.Load();
         engine = test.engine;
 
     }

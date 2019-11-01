@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 public interface RelatedDocumentsService {
     /**
      * Возвращает опись связанную с документом по ее Id
+     * @param inventoryId ИД описи
      * @return Опись с текущим документом {@link Inventory}
      */
     CompletableFuture<Inventory> getInventory(UUID inventoryId);

@@ -3,10 +3,9 @@
   <groupId>ru.argosgrp.cryptoservice</groupId>
   <artifactId>cs</artifactId>
   <versioning>
-    <release>5.0.21</release>
     <versions>
-      <version>5.0.21</version>
+      <version>5.0.22-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20190307101811</lastUpdated>
+    <lastUpdated>20191017111412</lastUpdated>
   </versioning>
 </metadata>

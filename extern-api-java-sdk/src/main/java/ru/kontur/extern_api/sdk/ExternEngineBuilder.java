@@ -72,8 +72,10 @@ public final class ExternEngineBuilder implements Syntax {
      * Trying to guess authentication type from given configuration by provided
      * either login+pass or rsa thumbprint+credential strings.
      *
+     * @param configuration configuration
      * @deprecated Unreliable magic detection. Use explicit
      *         {@link ExternEngineBuilder#buildAuthentication(String, Function)} instead.
+     * @return MaybeCryptoProviderSyntax MaybeCryptoProviderSyntax
      */
     @NotNull
     @Deprecated

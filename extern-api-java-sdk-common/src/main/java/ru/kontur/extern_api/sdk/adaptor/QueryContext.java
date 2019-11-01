@@ -36,27 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.ServiceError;
 import ru.kontur.extern_api.sdk.ServiceError.ErrorCode;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.AccountList;
-import ru.kontur.extern_api.sdk.model.CertificateList;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
-import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.DraftMeta;
-import ru.kontur.extern_api.sdk.model.EventsPage;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SenderIp;
-import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
@@ -146,9 +126,13 @@ public class QueryContext<R> implements Serializable {
      */
     public static final String DOCUMENT_TYPE = "documentType";
     /**
-     * Идентификатор ответа
+     * Идентификатор ответа для ФНС документооборота
      */
     public static final String REPLY_ID = "replyId";
+    /**
+     * Идентификатор ответа для ПФР документооборота
+     */
+    public static final String PFR_REPLY_ID = "pfrReplyId";
     /**
      * Объект для отправки документа @see DocumentToSend
      */
@@ -386,6 +370,10 @@ public class QueryContext<R> implements Serializable {
      * Объект, содержащий информацию об ответном документе
      */
     public static final String REPLY_DOCUMENT = "replyDocument";
+    /**
+     * Объект, содержащий информацию об ответном документе ПФР
+     */
+    public static final String PFR_REPLY_DOCUMENT = "pfrReplyDocument";
 
     /**
      * Объект, содержащий информацию об ответных документах
@@ -2135,6 +2123,9 @@ public class QueryContext<R> implements Serializable {
      * Same as {@link QueryContext#get()} but throws
      *
      * @throws java.util.NoSuchElementException when no such parameter presented in a context
+     * @param fieldName fieldName
+     * @param <T> type of object
+     * @return get method result
      */
     @NotNull
     public <T> T require(@NotNull String fieldName) {
@@ -2146,6 +2137,10 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Changes result of QueryContext with mapper.
+     * @param newKey newKey
+     * @param mapper mapper
+     * @param <T> type of object
+     * @return get method result
      */
     public <T> QueryContext<T> map(String newKey, Function<R, T> mapper) {
         if (isFail()) {

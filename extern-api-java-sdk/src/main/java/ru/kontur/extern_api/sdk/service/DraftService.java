@@ -30,6 +30,7 @@ import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
+import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 
 
 /**
@@ -182,11 +183,12 @@ public interface DraftService {
 
     /**
      * <p>GET /v1/{accountId}/drafts/{draftId}/meta</p>
-     * Асинхронный метод поиска мета-данных черновика
+     * Асинхронный метод обновления мета-данных черновика
      *
      * @param draftId идентификатор черновика
+     * @param draftMeta Новые мета-данные черновика
      * @return мета-данные черновика
-     * @see DraftMeta
+     * @see DraftMeta Обновленные мета-данные
      */
     CompletableFuture<QueryContext<DraftMeta>> updateDraftMetaAsync(
             UUID draftId,
@@ -909,6 +911,7 @@ public interface DraftService {
      *
      * @param draftId ID драфта с которым производится работа
      * @param documentId ID документа для которого создать контент
+     * @param ionType Тип
      * @param requestContract данные для создания ИОН запроса
      * @return статус успеха в QueryContext
      */
@@ -924,6 +927,7 @@ public interface DraftService {
      * По {@link IonRequestContractInterface} создаётся ИОН запрос.
      *
      * @param draftId ID драфта с которым производится работа
+     * @param ionType Тип
      * @param requestContract данные для создания ИОН запроса
      * @return созданный документ
      */

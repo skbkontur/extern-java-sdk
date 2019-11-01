@@ -171,20 +171,20 @@ public class Account {
      *   <li>admin - Администратор.</li>
      *   <li>director - Директор.</li>
      * </ul>
-     * @return
+     * @return ExternUserRole
      */
     public ExternUserRole getRole() {
         return role;
     }
 
     /**
-     * Получить роль пользователя Экстерн, возможные значения:
+     * Установить роль пользователя Экстерн, возможные значения:
      * <ul>
      *   <li>user - Пользователь.</li>
      *   <li>admin - Администратор.</li>
      *   <li>director - Директор.</li>
      * </ul>
-     * @param role
+     * @param role Роль пользователя Эктерн
      */
     public void setRole(ExternUserRole role) {
         this.role = role;

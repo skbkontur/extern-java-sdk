@@ -10,6 +10,7 @@ public interface ReplyTaskService {
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/tasks/{apiTaskId}</p>
      * Асинхронный метод, получающий текущий статус задачи
      *
+     * @param taskId ИД задачи
      * @return статус задачи
      */
     CompletableFuture<TaskState> getTaskStatus(UUID taskId);

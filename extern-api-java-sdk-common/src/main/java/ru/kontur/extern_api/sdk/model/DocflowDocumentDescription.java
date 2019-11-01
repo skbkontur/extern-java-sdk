@@ -22,7 +22,7 @@ public class DocflowDocumentDescription {
 
     /**
      * Возвращает реквизиты документа
-     * @return
+     * @return реквизиты документа
      */
     public DocflowDocumentRequisitesBase getRequisites() {
         return requisites;
@@ -30,14 +30,14 @@ public class DocflowDocumentDescription {
 
     /**
      * Устанавливает реквизиты документа
-     * @param requisites
+     * @param requisites Реквизиты документа
      */
     public void setRequisites(DocflowDocumentRequisitesBase requisites) {
         this.requisites = requisites;
     }
     /**
      * Возвращает информацию поддерживаетсяли распознование документа
-     * @return
+     * @return getSupportRecognition
      */
     public Boolean getSupportRecognition() {
         return supportRecognition;
@@ -45,7 +45,7 @@ public class DocflowDocumentDescription {
 
     /**
      * Устанавливают инфорацию поддерживается ли распознование документа
-     * @param supportRecognition
+     * @param supportRecognition Флаг поддерживать ли
      */
     public void setSupportRecognition(Boolean supportRecognition) {
         this.supportRecognition = supportRecognition;

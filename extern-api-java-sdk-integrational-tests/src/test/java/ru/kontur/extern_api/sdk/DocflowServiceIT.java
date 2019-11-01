@@ -58,7 +58,6 @@ import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
@@ -78,9 +77,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-
 @Execution(ExecutionMode.SAME_THREAD)
-@DisplayName("Docflow service should be able to")
 class DocflowServiceIT {
 
     protected static ExternEngine engine;
@@ -134,14 +131,18 @@ class DocflowServiceIT {
 //        return testPack.get().testDocflows.stream();
     }
 
+    private static List<QueryContext<Docflow>> testDocflows;
+
     private static Stream<QueryContext<Docflow>> docflowFactory() {
-        return getTestPack(engine).testDocflows.stream();
+        testDocflows = testDocflows == null
+                ? getTestPack(engine).testDocflows
+                : testDocflows;
+        return testDocflows.stream();
     }
 
     @BeforeAll
     static void setUpClass() {
         engine = TestSuite.Load().engine;
-        engine.setCryptoProvider(new CryptoProviderMSCapi());
         engineUtils = EngineUtils.with(engine);
         docflowService = engine.getDocflowService();
     }
@@ -445,50 +446,6 @@ class DocflowServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("two options for generate reply works")
-    @MethodSource("docflowLazyFactory")
-    void testGenerateReply(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        String thumbprint = engine.getConfiguration().getThumbprint();
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        String certificateBase64 = engineUtils.crypto.loadX509(thumbprint);
-        GenerateReplyDocumentRequestData cert = new GenerateReplyDocumentRequestData()
-                .certificateBase64(certificateBase64);
-
-        ReplyDocument linkReply = engine.getAuthorizedHttpClient()
-                .followPostLink(generateLink.getHref(), cert, ReplyDocument.class);
-
-        ReplyDocument funcReply = engine.getDocflowService().generateReplyAsync(
-                docflow.getId(),
-                document.getId(),
-                document.getReplyOptions()[0],
-                Base64.getDecoder().decode(certificateBase64)
-        ).join().getOrThrow();
-
-        String lName = linkReply.getFilename();
-        lName = lName.substring(0, lName.lastIndexOf("_"));
-
-        String rName = funcReply.getFilename();
-        rName = rName.substring(0, rName.lastIndexOf("_"));
-
-        Assertions.assertEquals(lName, rName);
-    }
-
-    @ParameterizedTest
     @DisplayName("send reply documents by choosing its type")
     @MethodSource("docflowFactory")
     void testSendOneReply(QueryContext<Docflow> docflowCxt) {
@@ -535,111 +492,6 @@ class DocflowServiceIT {
         );
     }
 
-    @ParameterizedTest
-    @DisplayName("send reply document by choosing its type with cloud cert")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                SignInitiation.class
-        );
-
-        HashMap<String, Object> queryParams = new HashMap<>();
-        queryParams.put("code", codeProvider.get().apply(signInitiation.getRequestId()));
-        queryParams.put("requestId", signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getCloudSignConfirmLink().getHref(),
-                queryParams,
-                null,
-                SignConfirmResultData.class
-        );
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-    }
-
-
-    @ParameterizedTest
-    @DisplayName("send all replies for document by choosing type")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        // если есть ссылка на генерацию ИОПа
-        Assertions.assertEquals("fns534-report-receipt", generateLink.getName());
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                // включить возможность подписи без подтверждения
-                Collections.singletonMap("forceConfirmation", false),
-                null,
-                SignInitiation.class
-        );
-
-        // если requestId == null -- то сервер подписал документ и не требует подтверждения
-        Assertions.assertNull(signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-    }
-
 
     @ParameterizedTest
     @DisplayName("search docflows filtered")
@@ -652,11 +504,14 @@ class DocflowServiceIT {
                 .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
-                .page(0, 10)
-                .finished(true)
-                .incoming(false)
-                .innKpp(company.getInn(), company.getKpp())
-                .type(DocflowType.FNS534_REPORT)
+                                                                        .page(0, 10)
+                                                                        .finished(true)
+                                                                        .incoming(false)
+                                                                        .innKpp(
+                                                                                company.getInn(),
+                                                                                company.getKpp()
+                                                                        )
+                                                                        .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
         Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
@@ -757,6 +612,16 @@ class DocflowServiceIT {
     void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
         DocflowService docflowService = engine.getDocflowService();
 
+        Awaiter.waitForCondition(
+                () -> docflowService.lookupDocumentAsync(
+                        demandTestData.getDemandId(),
+                        demandTestData.getDemandAttachmentId()
+                ),
+                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
+                1000 * 20,
+                1000 * 60 * 5
+        ).thenApply(QueryContext::getOrThrow);
+
         Document document = docflowService.lookupDocumentAsync(
                 demandTestData.getDemandId(),
                 demandTestData.getDemandAttachmentId()
@@ -821,18 +686,16 @@ class DocflowServiceIT {
     ) {
         boolean isPfrTestData = testData.getClientInfo().getOrganization().getRegistrationNumberPfr() != null;
         if (isPfrTestData) {
-            return createPfrDocflow(engine, draftService);
+            return createPfrDocflow(engine);
         } else {
             return createDefaultDocflow(engine, draftService, testData);
         }
     }
 
-    private static CompletableFuture<QueryContext<Docflow>> createPfrDocflow(
-            ExternEngine engine,
-            DraftService draftService
-    ) {
+    private static CompletableFuture<QueryContext<Docflow>> createPfrDocflow(ExternEngine engine) {
         UUID draftId = buildPfrDraftViaBuilder(engine);
-        Draft draft = engine.getDraftService()
+        DraftService draftService = engine.getDraftService();
+        Draft draft = draftService
                 .lookupAsync(draftId)
                 .join()
                 .getOrThrow();

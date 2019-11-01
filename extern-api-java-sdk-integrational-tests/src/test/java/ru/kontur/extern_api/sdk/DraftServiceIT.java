@@ -28,6 +28,11 @@
  */
 package ru.kontur.extern_api.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -43,8 +48,16 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
+import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DraftTestPack;
@@ -52,8 +65,6 @@ import ru.kontur.extern_api.sdk.utils.Pair;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 import ru.kontur.extern_api.sdk.utils.Zip;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -128,7 +139,6 @@ class DraftServiceIT {
             "draftWithDocumentFactory",
             "draftWithSignedDocumentFactory"})
     void testGetDraft(Draft draft) {
-
         Draft found = engine.getDraftService()
                 .lookupAsync(draft.getId())
                 .join()

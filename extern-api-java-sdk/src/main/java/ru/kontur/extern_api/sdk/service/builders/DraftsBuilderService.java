@@ -136,6 +136,7 @@ public interface DraftsBuilderService<
      * Асинхронный метод получения информации о билде билдера черновиков
      *
      * @param draftsBuilderId идентификатор билдера черновиков
+     * @param taskId ИД задачи
      * @return Информация о задаче билда билдера черновиков
      * @see BuildDraftsBuilderTaskInfo
      */
@@ -149,6 +150,7 @@ public interface DraftsBuilderService<
      * Асинхронный метод ожадания завершения билда билдера черновиков
      *
      * @param draftsBuilderId идентификатор билдера черновиков
+     * @param taskId  ИД задачи
      * @return Готовые черновики и список ошибочных документов
      * @see BuildDraftsBuilderResult
      */

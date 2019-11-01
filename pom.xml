@@ -90,15 +90,15 @@
         <gson-fire-version>1.8.0</gson-fire-version>
         <retrofit-version>2.5.0</retrofit-version>
 
-        <junit.version>5.4.2</junit.version>
+        <junit.version>5.5.2</junit.version>
         <junit-platform.version>1.4.2</junit-platform.version>
 
-        <cryptoservice.version>5.0.21</cryptoservice.version>
+        <cryptoservice.version>5.0.22-SNAPSHOT</cryptoservice.version>
         <annotations.version>15.0</annotations.version>
         <hamcrest.version>2.1</hamcrest.version>
 
         <maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
-        <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
         <maven-jar-plugin.version>2.2</maven-jar-plugin.version>
@@ -239,6 +239,9 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <source>8</source>
+                    </configuration>
                 </plugin>
 
                 <plugin>

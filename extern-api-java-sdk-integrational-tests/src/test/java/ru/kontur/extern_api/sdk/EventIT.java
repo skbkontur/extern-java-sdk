@@ -40,7 +40,7 @@ import ru.kontur.extern_api.sdk.utils.EventId;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
-@Execution(ExecutionMode.SAME_THREAD)
+@Execution(ExecutionMode.CONCURRENT)
 class EventIT {
 
     private static ExternEngine engine;
