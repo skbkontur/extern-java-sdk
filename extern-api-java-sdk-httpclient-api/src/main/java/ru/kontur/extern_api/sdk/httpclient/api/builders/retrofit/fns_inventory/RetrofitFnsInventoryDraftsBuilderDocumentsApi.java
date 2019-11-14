@@ -83,6 +83,22 @@ public interface RetrofitFnsInventoryDraftsBuilderDocumentsApi {
     );
 
     /**
+     * Update a drafts builder document
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param draftsBuilderDocumentId drafts builder document identifier
+     * @param meta drafts builder document metadata
+     */
+    @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}")
+    CompletableFuture<FnsInventoryDraftsBuilderDocument> update(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Path("draftsBuilderDocumentId") UUID draftsBuilderDocumentId,
+            @Body FnsInventoryDraftsBuilderDocumentMetaRequest meta
+    );
+
+    /**
      * Get a drafts builder document meta by an identifier
      *
      * @param accountId private account identifier

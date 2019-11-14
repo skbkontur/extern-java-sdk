@@ -73,6 +73,19 @@ public class PfrReportDraftsBuildersApi implements
     }
 
     @Override
+    public CompletableFuture<PfrReportDraftsBuilder> update(
+            UUID accountId,
+            UUID draftsBuilderId,
+            PfrReportDraftsBuilderMetaRequest meta
+    ) {
+        return specificContract.update(
+                accountId,
+                draftsBuilderId,
+                meta
+        );
+    }
+
+    @Override
     public CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId

@@ -94,6 +94,19 @@ public interface DraftsBuilderDocumentService<
     );
 
     /**
+     * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
+     * Асинхронный метод обновления документа билдера черновиков
+     *
+     * @param draftsBuilderDocumentId идентификатор документа билдера черновиков
+     * @param meta мета-данные документа билдера черновиков
+     * @return документ билдера черновиков
+     */
+    CompletableFuture<TDraftsBuilderDocument> updateAsync(
+            UUID draftsBuilderDocumentId,
+            TDraftsBuilderDocumentMetaRequest meta
+    );
+
+    /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}</p>
      * Асинхронный метод удаления документа билдера черновиков
      *

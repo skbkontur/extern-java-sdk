@@ -86,6 +86,21 @@ public class FnsInventoryDraftsBuilderDocumentsApi implements
     }
 
     @Override
+    public CompletableFuture<FnsInventoryDraftsBuilderDocument> update(
+            UUID accountId,
+            UUID draftsBuilderId,
+            UUID draftsBuilderDocumentId,
+            FnsInventoryDraftsBuilderDocumentMetaRequest meta
+    ) {
+        return specificContract.update(
+                accountId,
+                draftsBuilderId,
+                draftsBuilderDocumentId,
+                meta
+        );
+    }
+
+    @Override
     public CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId,

@@ -22,6 +22,7 @@
 
 package ru.kontur.extern_api.sdk.utils.builders;
 
+import java.util.UUID;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
@@ -31,12 +32,21 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentData;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
 
 public class DraftsBuilderDocumentCreator {
 
     public FnsInventoryDraftsBuilderDocument createFnsInventoryDraftsBuilderDocument(
             ExternEngine engine,
             FnsInventoryDraftsBuilder draftsBuilder
+    ) {
+        return createFnsInventoryDraftsBuilderDocument(engine, draftsBuilder, null);
+    }
+
+    public FnsInventoryDraftsBuilderDocument createFnsInventoryDraftsBuilderDocument(
+            ExternEngine engine,
+            FnsInventoryDraftsBuilder draftsBuilder,
+            UUID draftsBuilderDocumentId
     ) {
         // Пункт требования, подходящий по формату. Он нужен ФНС для понимания того, на какую часть требования пришел документ.
         final String claimItemNumber = "1.01";
@@ -46,12 +56,14 @@ public class DraftsBuilderDocumentCreator {
         data.setClaimItemNumber(claimItemNumber);
         meta.setBuilderData(data);
 
-        return engine
+        FnsInventoryDraftsBuilderDocumentService documentService = engine
                 .getDraftsBuilderService()
                 .fnsInventory()
-                .getDocumentService(draftsBuilder.getId())
-                .createAsync(meta)
-                .join();
+                .getDocumentService(draftsBuilder.getId());
+
+        return draftsBuilderDocumentId == null
+                ? documentService.createAsync(meta).join()
+                : documentService.updateAsync(draftsBuilderDocumentId, meta).join();
     }
 
     public PfrReportDraftsBuilderDocument createPfrReportDraftsBuilderDocument(

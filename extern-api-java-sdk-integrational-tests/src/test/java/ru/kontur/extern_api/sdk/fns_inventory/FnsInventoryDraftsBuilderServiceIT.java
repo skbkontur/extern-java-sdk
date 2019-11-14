@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.fns_inventory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.UUID;
 import java.util.concurrent.CompletionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,6 +74,20 @@ class FnsInventoryDraftsBuilderServiceIT {
     @DisplayName("get drafts builder")
     void create() {
         assertNotNull(draftsBuilder);
+    }
+
+    @Test
+    @DisplayName("create drafts builder with specified id")
+    void createWithId() {
+        UUID draftsBuilderId = UUID.randomUUID();
+        FnsInventoryDraftsBuilder newDraftsBuilder =
+                draftsBuilderCreator.createFnsInventoryDraftsBuilder(
+                        engine,
+                        cryptoUtils,
+                        draftsBuilderId
+                );
+
+        assertEquals(newDraftsBuilder.getId(), draftsBuilderId);
     }
 
     @Test

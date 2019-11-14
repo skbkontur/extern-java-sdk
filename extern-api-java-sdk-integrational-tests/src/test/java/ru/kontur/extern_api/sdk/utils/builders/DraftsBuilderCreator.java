@@ -32,8 +32,8 @@ import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsB
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderMetaRequest;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
@@ -45,6 +45,17 @@ public class DraftsBuilderCreator {
     public FnsInventoryDraftsBuilder createFnsInventoryDraftsBuilder(
             ExternEngine engine,
             CryptoUtils cryptoUtils
+    ) {
+        return createFnsInventoryDraftsBuilder(engine, cryptoUtils, null);
+    }
+
+    /**
+     * ДО на который отвечаем - требование созданное в облаке
+     */
+    public FnsInventoryDraftsBuilder createFnsInventoryDraftsBuilder(
+            ExternEngine engine,
+            CryptoUtils cryptoUtils,
+            UUID draftsBuilderId
     ) {
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
         TestData[] testData = TestUtils.getTestData(certificate);
@@ -63,11 +74,13 @@ public class DraftsBuilderCreator {
         data.setRelatedDocument(relatedDocument);
         meta.setBuilderData(data);
 
-        return engine
+        FnsInventoryDraftsBuilderService draftsBuilderService = engine
                 .getDraftsBuilderService()
-                .fnsInventory()
-                .createAsync(meta)
-                .join();
+                .fnsInventory();
+
+        return draftsBuilderId == null
+                ? draftsBuilderService.createAsync(meta).join()
+                : draftsBuilderService.updateAsync(draftsBuilderId, meta).join();
     }
 
     public PfrReportDraftsBuilder createPfrReportDraftsBuilder(
