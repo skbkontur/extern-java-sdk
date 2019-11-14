@@ -38,7 +38,7 @@ public class PfrReplyDocument implements LinksHolder {
     private String docflowId;
     private String documentId;
     private byte[] encryptedContent;
-    private byte[] decryptedContent;
+    private Link decryptedContent;
     private byte[] signature;
     private List<Link> links;
 
@@ -66,7 +66,7 @@ public class PfrReplyDocument implements LinksHolder {
         return encryptedContent;
     }
 
-    public byte[] getDecryptedContent() {
+    public Link getDecryptedContent() {
         return decryptedContent;
     }
 
