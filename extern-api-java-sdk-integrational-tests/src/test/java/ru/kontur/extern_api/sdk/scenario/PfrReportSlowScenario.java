@@ -145,11 +145,7 @@ class PfrReportSlowScenario {
                                            + pfrServiceDocumentContentDecrypted.length);
             }
 
-            boolean canGetDecryptedContent = !document.hasDecryptedContent()
-                    && !document.hasEncryptedContent();
-            // TODO fix condition when pfr content links will be done
-            canGetDecryptedContent = false;
-            if (canGetDecryptedContent) {
+            if (document.hasDecryptedContent()) {
                 byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
                         pfrDocflowFinished.getId(),
                         document.getId()

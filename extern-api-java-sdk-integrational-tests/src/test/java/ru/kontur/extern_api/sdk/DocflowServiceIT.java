@@ -314,7 +314,9 @@ class DocflowServiceIT {
                     .join()
                     .getOrThrow();
 
-            if (d.getDescription().getCompressed()) {
+            Boolean needDecompress = d.getDescription().getCompressed()
+                    && docflow.getType() != DocflowType.PFR_REPORT;
+            if (needDecompress) {
                 decrypted = Zip.unzip(decrypted);
             }
 
