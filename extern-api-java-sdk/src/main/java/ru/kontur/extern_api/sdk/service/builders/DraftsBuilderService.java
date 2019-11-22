@@ -73,6 +73,19 @@ public interface DraftsBuilderService<
     );
 
     /**
+     * <p>PUT /v1/{accountId}/drafts/builders/{draftsBuilderId}</p>
+     * Асинхронный метод обновления билдера черновиков
+     *
+     * @param draftsBuilderId идентификатор билдера черновиков
+     * @param meta мета-данные билдера черновиков
+     * @return билдер черновиков
+     */
+    CompletableFuture<TDraftsBuilder> updateAsync(
+            UUID draftsBuilderId,
+            TDraftsBuilderMetaRequest meta
+    );
+
+    /**
      * <p>DELETE /v1/{accountId}/drafts/builders/{draftsBuilderId}</p>
      * Асинхронный метод удаления билдера черновиков
      *

@@ -66,6 +66,20 @@ public interface RetrofitPfrReportDraftsBuildersApi {
     );
 
     /**
+     * Update a drafts builder
+     *
+     * @param accountId private account identifier
+     * @param draftsBuilderId drafts builder identifier
+     * @param meta drafts builder metadata
+     */
+    @PUT("v1/{accountId}/drafts/builders/{draftsBuilderId}")
+    CompletableFuture<PfrReportDraftsBuilder> update(
+            @Path("accountId") UUID accountId,
+            @Path("draftsBuilderId") UUID draftsBuilderId,
+            @Body PfrReportDraftsBuilderMetaRequest meta
+    );
+
+    /**
      * Get a drafts builder meta by an identifier
      *
      * @param accountId private account identifier

@@ -45,6 +45,12 @@ public interface DraftsBuildersApi<
             UUID draftsBuilderId
     );
 
+    CompletableFuture<TDraftsBuilder> update(
+            UUID accountId,
+            UUID draftsBuilderId,
+            TDraftsBuilderMetaRequest meta
+    );
+
     CompletableFuture<Void> delete(
             UUID accountId,
             UUID draftsBuilderId

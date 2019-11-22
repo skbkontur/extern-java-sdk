@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.UUID;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderDocument;
@@ -41,6 +42,7 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 
 public class DraftsBuilderDocumentFileCreator {
@@ -50,6 +52,16 @@ public class DraftsBuilderDocumentFileCreator {
             CryptoUtils cryptoUtils,
             FnsInventoryDraftsBuilder draftsBuilder,
             FnsInventoryDraftsBuilderDocument draftsBuilderDocument
+    ) {
+        return createFnsInventoryDraftsBuilderDocumentFile(engine, cryptoUtils, draftsBuilder, draftsBuilderDocument, null);
+    }
+
+    public FnsInventoryDraftsBuilderDocumentFile createFnsInventoryDraftsBuilderDocumentFile(
+            ExternEngine engine,
+            CryptoUtils cryptoUtils,
+            FnsInventoryDraftsBuilder draftsBuilder,
+            FnsInventoryDraftsBuilderDocument draftsBuilderDocument,
+            UUID draftsBuilderDocumentFileId
     ) {
         final String fileName = "AnyFileName.pdf";
 
@@ -69,13 +81,15 @@ public class DraftsBuilderDocumentFileCreator {
         meta.setFileName(fileName);
         contents.setMeta(meta);
 
-        return engine
+        FnsInventoryDraftsBuilderDocumentFileService fileService = engine
                 .getDraftsBuilderService()
                 .fnsInventory()
                 .getDocumentService(draftsBuilder.getId())
-                .getFileService(draftsBuilderDocument.getId())
-                .createAsync(contents)
-                .join();
+                .getFileService(draftsBuilderDocument.getId());
+
+        return draftsBuilderDocumentFileId == null
+                ? fileService.createAsync(contents).join()
+                : fileService.updateAsync(draftsBuilderDocumentFileId, contents).join();
     }
 
     public String getScannedContent() {

@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.UUID;
 import java.util.concurrent.CompletionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -100,6 +101,22 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
     @DisplayName("get drafts builder document file")
     void create() {
         assertNotNull(draftsBuilderDocumentFile);
+    }
+
+    @Test
+    @DisplayName("create drafts builder document file with specified id")
+    void createWithId() {
+        UUID draftsBuilderDocumentFileId = UUID.randomUUID();
+        FnsInventoryDraftsBuilderDocumentFile newDraftsBuilderDocumentFile =
+                draftsBuilderDocumentFileCreator.createFnsInventoryDraftsBuilderDocumentFile(
+                        engine,
+                        cryptoUtils,
+                        draftsBuilder,
+                        draftsBuilderDocument,
+                        draftsBuilderDocumentFileId
+                );
+
+        assertEquals(newDraftsBuilderDocumentFile.getId(), draftsBuilderDocumentFileId);
     }
 
     @Test

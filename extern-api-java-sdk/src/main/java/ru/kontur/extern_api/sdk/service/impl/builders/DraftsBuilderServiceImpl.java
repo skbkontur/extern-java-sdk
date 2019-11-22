@@ -98,6 +98,22 @@ public abstract class DraftsBuilderServiceImpl<
     }
 
     @Override
+    public CompletableFuture<TDraftsBuilder> updateAsync(
+            UUID draftsBuilderId,
+            TDraftsBuilderMetaRequest meta
+    ) {
+        return specificApi.update(
+                accountProvider.accountId(),
+                draftsBuilderId,
+                meta
+        ).whenComplete((builder, throwable) -> {
+            if (builder != null) {
+                CheckBuilderType(builder.getMeta().getBuilderType());
+            }
+        });
+    }
+
+    @Override
     public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderId
     ) {

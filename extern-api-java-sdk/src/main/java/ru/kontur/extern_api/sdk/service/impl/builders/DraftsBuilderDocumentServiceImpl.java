@@ -121,6 +121,23 @@ public abstract class DraftsBuilderDocumentServiceImpl<
     }
 
     @Override
+    public CompletableFuture<TDraftsBuilderDocument> updateAsync(
+            UUID draftsBuilderDocumentId,
+            TDraftsBuilderDocumentMetaRequest meta
+    ) {
+        return builderDocumentsApi.update(
+                accountProvider.accountId(),
+                draftsBuilderId,
+                draftsBuilderDocumentId,
+                meta
+        ).whenComplete((document, throwable) -> {
+            if (document != null) {
+                CheckBuilderType(document.getMeta().getBuilderType());
+            }
+        });
+    }
+
+    @Override
     public CompletableFuture<Void> deleteAsync(
             UUID draftsBuilderDocumentId
     ) {
