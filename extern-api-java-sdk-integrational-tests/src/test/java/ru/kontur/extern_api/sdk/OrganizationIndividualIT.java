@@ -26,14 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
@@ -54,8 +52,7 @@ class OrganizationIndividualIT {
     static void setUpClass() {
         engine = TestSuite.Load().engine;
         CompanyGeneral general = new CompanyGeneral();
-        general.setInn("621411289044");
-        general.setKpp(null);
+        general.setInn("434597087833"); // Org with fake INN-KPP
         general.setName("TEST Individual Person OrganizationIndividualIT, LLC");
         COMPANY.setGeneral(general);
     }
@@ -70,11 +67,6 @@ class OrganizationIndividualIT {
         assertNotNull(companyId);
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
-        engine.getOrganizationService().deleteAsync(companyId).get();
-    }
-
     @Test
     void testLookup() {
 
@@ -83,25 +75,14 @@ class OrganizationIndividualIT {
                 .join()
                 .ensureSuccess();
 
-        assertCompanyEquals(companyCxt.get(), COMPANY);
-    }
-
-    @Test
-    void testUpdate() {
-        String newName = "Emerald";
-        Company company = engine.getOrganizationService()
-                .updateAsync(companyId, newName)
-                .join()
-                .getOrThrow();
-
-        Assertions.assertEquals(company.getGeneral().getName(), newName);
+        assertCompanyIsCorrect(companyCxt.get());
     }
 
     @Test
     void testSearch() {
         Company company = searchOrganisations(likeGiven(COMPANY)).get(0);
         assertNotNull(company);
-        assertCompanyEquals(company, COMPANY);
+        assertCompanyIsCorrect(company);
     }
 
     @Test
@@ -152,10 +133,10 @@ class OrganizationIndividualIT {
                 .kpp(company.getGeneral().getKpp());
     }
 
-    private static void assertCompanyEquals(Company actual, Company expected) {
-        assertEquals(actual.getGeneral().getInn(), expected.getGeneral().getInn());
-        assertEquals(actual.getGeneral().getKpp(), expected.getGeneral().getKpp());
-        assertEquals(actual.getGeneral().getName(), expected.getGeneral().getName());
+    private static void assertCompanyIsCorrect(Company actual) {
+        assertEquals("434597087833", actual.getGeneral().getInn());
+        assertEquals("434500000", actual.getGeneral().getKpp()); // Включен показ фейковых КПП для ИП
+        assertEquals( "TEST Individual Person OrganizationIndividualIT, LLC", actual.getGeneral().getName());
         assertNotNull(actual.getId());
     }
 }
