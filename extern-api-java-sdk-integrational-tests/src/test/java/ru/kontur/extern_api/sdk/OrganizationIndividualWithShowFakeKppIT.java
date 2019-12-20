@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.UUID;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,12 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
-class OrganizationIndividualIT {
+class OrganizationIndividualWithShowFakeKppIT {
 
     private static final Company COMPANY = new Company();
 
@@ -49,7 +51,16 @@ class OrganizationIndividualIT {
 
     @BeforeAll
     static void setUpClass() {
-        engine = TestSuite.Load().engine;
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+        engine = TestSuite.LoadManually((cfg, builder) -> builder
+                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
+                        .passwordAuthentication(config.getLoginSecond(), config.getPassSecond())
+                )
+                .doNotUseCryptoProvider()
+                .doNotSetupAccount()
+                .build(Level.BODY)
+        ).engine;
+
         CompanyGeneral general = new CompanyGeneral();
         general.setInn("266061768316"); // Org with fake INN-KPP
         general.setName("TEST Individual Person Petrov OrganizationIndividualIT, LLC");
@@ -101,27 +112,9 @@ class OrganizationIndividualIT {
     }
 
     private UUID createOrFindOrganization() throws Exception {
-        Company org = null;
-        int tryNumber = 0;
-        while (tryNumber < 10 && org == null) {
-            List<Company> companies = searchOrganisations(likeGiven(COMPANY));
-            if (companies != null && !companies.isEmpty()) {
-                return companies.get(0).getId();
-            } else {
-                try {
-                    org = engine.getOrganizationService()
-                            .createAsync(COMPANY.getGeneral())
-                            .join()
-                            .getOrThrow();
-                    return org.getId();
-                } catch (Exception ex) {
-                    if (!ex.getMessage().contains("Such organization already exists")) {
-                        throw ex;
-                    }
-                    System.out.println("Some error on creating org on " + tryNumber + " try: " + ex);
-                }
-            }
-            tryNumber++;
+        List<Company> companies = searchOrganisations(likeGiven(COMPANY));
+        if (companies != null && !companies.isEmpty()) {
+            return companies.get(0).getId();
         }
         throw new Exception("Cant't create or find test org");
     }
@@ -134,8 +127,11 @@ class OrganizationIndividualIT {
 
     private static void assertCompanyIsCorrect(Company actual) {
         assertEquals("266061768316", actual.getGeneral().getInn());
-        assertEquals(null, actual.getGeneral().getKpp());
-        assertEquals( "TEST Individual Person Petrov OrganizationIndividualIT, LLC", actual.getGeneral().getName());
+        assertEquals("266000000", actual.getGeneral().getKpp()); // Включен показ фейковых КПП для ИП
+        assertEquals(
+                "TEST Individual Person Petrov OrganizationIndividualIT, LLC",
+                actual.getGeneral().getName()
+        );
         assertNotNull(actual.getId());
     }
 }
