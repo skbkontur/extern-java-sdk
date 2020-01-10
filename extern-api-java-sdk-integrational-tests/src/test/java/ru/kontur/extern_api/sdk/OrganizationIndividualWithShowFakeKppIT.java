@@ -127,7 +127,10 @@ class OrganizationIndividualWithShowFakeKppIT {
 
     private static void assertCompanyIsCorrect(Company actual) {
         assertEquals("266061768316", actual.getGeneral().getInn());
-        assertEquals("266000000", actual.getGeneral().getKpp()); // Включен показ фейковых КПП для ИП
+        assertEquals("266000000",
+                     actual.getGeneral().getKpp(),
+                     "Т.к. включен показ фейковых КПП для ИП в Adjustment eUserId==gO a5e12a0d-6e15-46fc-9080-ba5b27c66137 куда входит тестовый Михайлов Николай Богданович"
+        );
         assertEquals(
                 "TEST Individual Person Petrov OrganizationIndividualIT, LLC",
                 actual.getGeneral().getName()

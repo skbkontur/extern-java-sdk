@@ -134,8 +134,14 @@ class OrganizationIndividualIT {
 
     private static void assertCompanyIsCorrect(Company actual) {
         assertEquals("266061768316", actual.getGeneral().getInn());
-        assertEquals(null, actual.getGeneral().getKpp());
-        assertEquals( "TEST Individual Person Petrov OrganizationIndividualIT, LLC", actual.getGeneral().getName());
+        assertEquals(null,
+                     actual.getGeneral().getKpp(),
+                     "Выключен показ фейковых КПП для ИП в Adjustment eUserId==gO 92a8db94-356e-4804-a4e2-34a9bc8e1aff, куда входит тестовый Орлов Сергей Юрьевич"
+        );
+        assertEquals(
+                "TEST Individual Person Petrov OrganizationIndividualIT, LLC",
+                actual.getGeneral().getName()
+        );
         assertNotNull(actual.getId());
     }
 }
