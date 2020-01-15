@@ -91,7 +91,9 @@ public class TestSuite {
             BiFunction<Configuration, ApiKeyOrAuth, ExternEngine> buildFunc
     ) {
         Configuration config = TestConfig.LoadConfigFromEnvironment();
-        return new TestSuite(buildFunc.apply(config, createExternEngine(config)), config);
+        ApiKeyOrAuth apiKeyOrAuth = createExternEngine(config);
+        ExternEngine externEngine = buildFunc.apply(config, apiKeyOrAuth);
+        return new TestSuite(externEngine, config);
     }
 
     public CompletableFuture<EasyDocflowApi> GetEasyDocflowApi() {

@@ -45,6 +45,8 @@ public class Configuration {
     private String serviceUserId;
     private String login;
     private String pass;
+    private String loginSecond;
+    private String passSecond;
     private String serviceBaseUri;
     private String authBaseUri;
     private String thumbprint; // a thumbprint of a signature certificate for CryptoPro
@@ -170,5 +172,21 @@ public class Configuration {
             return new Gson()
                     .fromJson(new JsonReader(new InputStreamReader(is)), Configuration.class);
         }
+    }
+
+    public String getLoginSecond() {
+        return loginSecond;
+    }
+
+    public void setLoginSecond(String loginSecond) {
+        this.loginSecond = loginSecond;
+    }
+
+    public String getPassSecond() {
+        return passSecond;
+    }
+
+    public void setPassSecond(String passSecond) {
+        this.passSecond = passSecond;
     }
 }
