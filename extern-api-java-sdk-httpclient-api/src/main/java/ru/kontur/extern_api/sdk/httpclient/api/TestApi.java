@@ -37,7 +37,7 @@ import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface TestApi {
 
-    @GET("v1/get-confirmationcode")
+    @GET("test-tools/v1/get-cloud-sign-confirmation-code")
     CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
 
 }
