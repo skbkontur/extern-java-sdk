@@ -57,7 +57,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
 @DisplayName("Task service should be able to")
-class TaskServiceIT {
+class DraftTaskServiceIT {
 
     private static ExternEngine engine;
     private static List<DraftTestPack> tests;

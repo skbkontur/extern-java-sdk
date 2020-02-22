@@ -1,9 +1,10 @@
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.*;
 
-public interface TaskService {
+import java.util.concurrent.CompletableFuture;
+
+public interface DraftTaskService {
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/send?deferred=true</p>

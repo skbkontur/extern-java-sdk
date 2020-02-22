@@ -43,7 +43,7 @@ import ru.kontur.extern_api.sdk.service.OrganizationService;
 import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
 import ru.kontur.extern_api.sdk.service.ReplyTaskService;
 import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.TaskService;
+import ru.kontur.extern_api.sdk.service.DraftTaskService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
 
 
@@ -99,9 +99,9 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
     /**
      * @param draftId ИД черновика
      * @return TaskService сервис предназначен для работы с длительными операциями в черновиках
-     * @see TaskService
+     * @see DraftTaskService
      */
-    public TaskService getTaskService(@NotNull UUID draftId) {
+    public DraftTaskService getTaskService(@NotNull UUID draftId) {
         return servicesFactory.getTaskService(draftId);
     }
 

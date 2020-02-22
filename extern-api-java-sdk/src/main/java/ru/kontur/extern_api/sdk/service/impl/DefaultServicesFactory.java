@@ -103,8 +103,8 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
-    public TaskService getTaskService(@NotNull UUID draftId) {
-        return new TaskServiceImpl(
+    public DraftTaskService getTaskService(@NotNull UUID draftId) {
+        return new DraftTaskServiceImpl(
                 providerHolder.getAccountProvider(),
                 createApi(DraftsApi.class),
                 draftId
