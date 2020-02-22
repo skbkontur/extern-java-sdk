@@ -161,4 +161,22 @@ public interface RelatedDocflowApi {
             @QueryMap Map<String, String> filters
     );
 
+    /**
+     * Get task result
+     *
+     * @param accountId           private account identifier
+     * @param docflowId           docflow identifier
+     * @param documentId          document identifier
+     * @param inventoryDocumentId document identifier
+     * @param taskId              task identifier
+     */
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Path("taskId") UUID taskId
+    );
 }

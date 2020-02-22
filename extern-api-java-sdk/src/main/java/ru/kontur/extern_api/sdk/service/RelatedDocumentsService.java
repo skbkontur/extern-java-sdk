@@ -101,4 +101,14 @@ public interface RelatedDocumentsService {
      *  @return список описей связанных с текущим документом {@link InventoriesPage}
      */
     CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta);
+
+    /**
+     * Возвращает результат работы таски
+     *
+     * @param inventoryId         идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @param taskId              идентификатор подписи
+     * @return результат работы {@link TaskInfo}
+     */
+    CompletableFuture<TaskInfo> getTaskResult(UUID inventoryId, UUID inventoryDocumentId, UUID taskId);
 }

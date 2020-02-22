@@ -120,8 +120,13 @@ public class RelatedDocumentsServiceImpl implements RelatedDocumentsService {
 
     @Override
     public CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta) {
-       DraftMetaRequest relatedDraftMetaRequest = new DraftMetaRequest(draftMeta,
+        DraftMetaRequest relatedDraftMetaRequest = new DraftMetaRequest(draftMeta,
                 new RelatedDocumentRequest(relatedDocflowId, relatedDocumentId));
         return api.create(acc.accountId(), relatedDraftMetaRequest);
+    }
+
+    @Override
+    public CompletableFuture<TaskInfo> getTaskResult(UUID inventoryId, UUID inventoryDocumentId, UUID taskId) {
+        return api.getTaskInfo(acc.accountId(), relatedDocflowId, relatedDocumentId, inventoryId, inventoryDocumentId, taskId);
     }
 }
