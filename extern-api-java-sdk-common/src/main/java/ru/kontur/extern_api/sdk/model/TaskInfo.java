@@ -19,12 +19,14 @@ import java.util.UUID;
  */
 public class TaskInfo<TResult> {
 
-    private UUID id = null;
-    private TaskState taskState = null;
-    private TaskType taskType = null;
+    private UUID id;
+    private TaskState taskState;
+    private TaskType taskType;
 
-    private TResult taskResult = null;
-    private ErrorInfo error = null;
+    private TResult taskResult;
+    private ErrorInfo error;
+
+    private String progress;
 
     /**
      * Возвращает идентификатор задачи
@@ -44,6 +46,23 @@ public class TaskInfo<TResult> {
         this.id = id;
     }
 
+    /**
+     * Возвращает идентификатор задачи
+     *
+     * @return progress идентификатор задачи
+     */
+    public String getProgress() {
+        return progress;
+    }
+
+    /**
+     * Устанавливает идентификатор задачи
+     *
+     * @param progress идентификатор задачи
+     */
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
 
     /**
      * Возвращает тип задачи:
@@ -127,6 +146,7 @@ public class TaskInfo<TResult> {
         TaskInfo<TOut> taskOut = task;
         taskOut.error = error;
         taskOut.id = id;
+        taskOut.progress = progress;
         taskOut.taskState = taskState;
         taskOut.taskType = taskType;
         if (isNotFailed() && taskResult != null) {
