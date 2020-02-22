@@ -22,12 +22,13 @@
 
 package ru.kontur.extern_api.sdk.service.builders;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentMetaRequest;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * <p>Группа методов предоставляет доступ к операциям для работы с документами билдера черновиков</p>

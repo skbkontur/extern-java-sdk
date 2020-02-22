@@ -22,7 +22,6 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersDocumentsApi;
@@ -36,14 +35,16 @@ import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuild
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderDocumentFileServiceImpl;
 
+import java.util.UUID;
+
 public class PfrReportDraftsBuilderDocumentFileServiceImpl extends
         DraftsBuilderDocumentFileServiceImpl<
-                        PfrReportDraftsBuilderDocumentFile,
-                        PfrReportDraftsBuilderDocumentFileContents,
-                        PfrReportDraftsBuilderDocumentFileMeta,
-                        PfrReportDraftsBuilderDocumentFileMetaRequest,
-                        PfrReportDraftsBuilderDocumentService,
-                        PfrReportDraftsBuilderDocumentFilesApi>
+                PfrReportDraftsBuilderDocumentFile,
+                PfrReportDraftsBuilderDocumentFileContents,
+                PfrReportDraftsBuilderDocumentFileMeta,
+                PfrReportDraftsBuilderDocumentFileMetaRequest,
+                PfrReportDraftsBuilderDocumentService,
+                PfrReportDraftsBuilderDocumentFilesApi>
         implements PfrReportDraftsBuilderDocumentFileService {
 
     private final PfrReportDraftsBuildersApi buildersApi;

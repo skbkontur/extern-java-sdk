@@ -22,8 +22,6 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuilderDocumentFilesApi;
@@ -32,12 +30,15 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMeta;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMetaRequest;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 public class PfrReportDraftsBuilderDocumentFilesApi implements
         DraftsBuilderDocumentFilesApi<
-                        PfrReportDraftsBuilderDocumentFile,
-                        PfrReportDraftsBuilderDocumentFileContents,
-                        PfrReportDraftsBuilderDocumentFileMeta,
-                        PfrReportDraftsBuilderDocumentFileMetaRequest> {
+                PfrReportDraftsBuilderDocumentFile,
+                PfrReportDraftsBuilderDocumentFileContents,
+                PfrReportDraftsBuilderDocumentFileMeta,
+                PfrReportDraftsBuilderDocumentFileMetaRequest> {
 
     private RetrofitPfrReportDraftsBuilderDocumentFilesApi specificContract;
     private RetrofitCommonDraftsBuilderDocumentFilesApi commonRetrofit;

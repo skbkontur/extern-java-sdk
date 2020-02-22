@@ -22,7 +22,6 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentsApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.fns_inventory.FnsInventoryDraftsBuildersApi;
@@ -35,6 +34,8 @@ import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentFileService;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderDocumentFileServiceImpl;
+
+import java.util.UUID;
 
 public class FnsInventoryDraftsBuilderDocumentFileServiceImpl extends
         DraftsBuilderDocumentFileServiceImpl<

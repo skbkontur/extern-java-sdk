@@ -23,17 +23,7 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
+import retrofit2.http.*;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
@@ -43,6 +33,11 @@ import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)

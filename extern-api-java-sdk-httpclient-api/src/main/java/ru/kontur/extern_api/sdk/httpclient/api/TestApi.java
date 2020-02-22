@@ -24,13 +24,14 @@
 package ru.kontur.extern_api.sdk.httpclient.api;
 
 
-import java.util.concurrent.CompletableFuture;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+
+import java.util.concurrent.CompletableFuture;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)

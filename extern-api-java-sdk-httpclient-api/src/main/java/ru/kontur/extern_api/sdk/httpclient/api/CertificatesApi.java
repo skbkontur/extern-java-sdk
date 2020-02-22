@@ -23,8 +23,6 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -35,6 +33,9 @@ import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.CertificateList;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)

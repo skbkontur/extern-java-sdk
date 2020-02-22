@@ -24,29 +24,17 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import org.jetbrains.annotations.Nullable;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
+import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import org.jetbrains.annotations.Nullable;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.DecryptInitiation;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowDocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocflowFilter;
-import ru.kontur.extern_api.sdk.model.DocflowPage;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentDescription;
-import ru.kontur.extern_api.sdk.model.DocumentToSend;
-import ru.kontur.extern_api.sdk.model.RecognizedMeta;
-import ru.kontur.extern_api.sdk.model.ReplyDocument;
-import ru.kontur.extern_api.sdk.model.SignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.Signature;
-import ru.kontur.extern_api.sdk.model.TaskInfo;
-import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
-import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)

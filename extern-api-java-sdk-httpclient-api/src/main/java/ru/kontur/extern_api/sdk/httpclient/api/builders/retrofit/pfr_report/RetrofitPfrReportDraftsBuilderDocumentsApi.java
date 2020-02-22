@@ -22,13 +22,7 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
@@ -36,6 +30,9 @@ import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMeta;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentMetaRequest;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)

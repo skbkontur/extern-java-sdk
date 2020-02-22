@@ -22,12 +22,13 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builders;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentFile;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentFileMeta;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentFileMetaRequest;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface DraftsBuilderDocumentFilesApi<
         TDraftsBuilderDocumentFile extends DraftsBuilderDocumentFile,

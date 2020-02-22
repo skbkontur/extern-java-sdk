@@ -24,14 +24,15 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
-
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.EventsApi;
 import ru.kontur.extern_api.sdk.model.EventsPage;
 import ru.kontur.extern_api.sdk.service.EventService;
+
+import java.util.concurrent.CompletableFuture;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 
 public class EventServiceImpl implements EventService {

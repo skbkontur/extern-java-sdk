@@ -22,8 +22,6 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common.RetrofitCommonDraftsBuildersApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.pfr_report.RetrofitPfrReportDraftsBuildersApi;
@@ -33,11 +31,14 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMeta;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderMetaRequest;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 public class PfrReportDraftsBuildersApi implements
         DraftsBuildersApi<
-                        PfrReportDraftsBuilder,
-                        PfrReportDraftsBuilderMeta,
-                        PfrReportDraftsBuilderMetaRequest> {
+                PfrReportDraftsBuilder,
+                PfrReportDraftsBuilderMeta,
+                PfrReportDraftsBuilderMetaRequest> {
 
     private RetrofitPfrReportDraftsBuildersApi specificContract;
     private RetrofitCommonDraftsBuildersApi commonContract;

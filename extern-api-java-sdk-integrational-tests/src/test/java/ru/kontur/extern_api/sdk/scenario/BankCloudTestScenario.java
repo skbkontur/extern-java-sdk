@@ -23,11 +23,6 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,11 +33,11 @@ import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
-import ru.kontur.extern_api.sdk.utils.Zip;
+import ru.kontur.extern_api.sdk.utils.*;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Execution(ExecutionMode.CONCURRENT)
 class BankCloudTestScenario {

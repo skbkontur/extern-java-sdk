@@ -23,16 +23,6 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
-
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
@@ -42,6 +32,13 @@ import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 
 public class DocflowServiceImpl implements DocflowService {
@@ -914,7 +911,7 @@ public class DocflowServiceImpl implements DocflowService {
                         documentId,
                         cxt.get().getRequestId(),
                         code
-                             )
+                        )
                 )
         );
     }
