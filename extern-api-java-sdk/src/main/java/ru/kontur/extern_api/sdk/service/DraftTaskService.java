@@ -69,4 +69,10 @@ public interface DraftTaskService {
      * @see Docflow
      */
     CompletableFuture<Docflow> getSendResult(SendTaskInfo sendTaskInfo);
+
+    /**
+     * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
+     * Асинхронный метод получающий результат критоорперации
+     */
+    CompletableFuture<CryptOperationResult> getCryptOperationResult(CryptOperationTaskInfo taskInfo);
 }

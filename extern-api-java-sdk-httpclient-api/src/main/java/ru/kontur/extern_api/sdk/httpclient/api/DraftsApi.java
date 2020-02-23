@@ -393,6 +393,33 @@ public interface DraftsApi {
     );
 
     /**
+     * Use crypto-session cloud signing of the draft
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/session-cloud-sign")
+    CompletableFuture<ApiResponse<SignInitiation>> cloudSignDraftBySession(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Body SessionSignDraftData sessionSignDraftData
+    );
+
+    /**
+     * Get sign-result by taskId
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     * @param taskId task identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/session-cloud-sign")
+    CompletableFuture<ApiResponse<CryptOperationTaskInfo>> getSignTaskResult(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Path("taskId") UUID taskId
+    );
+
+    /**
      * Confirms given sign operation by requestId via sms-code.
      *
      * @param accountId private account identifier

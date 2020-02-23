@@ -67,6 +67,13 @@ public class DraftTaskServiceImpl implements DraftTaskService {
         );
     }
 
+    @Override
+    public CompletableFuture<CryptOperationResult> getCryptOperationResult(CryptOperationTaskInfo taskInfo) {
+        return waitWhileRunning(() -> api
+                .gettas(acc.accountId(), draftId, taskInfo.getId())
+        );    }
+
+
     private <T extends TaskInfo<?>> boolean checkStateRunning(T callResult) {
         return callResult.getTaskState() != TaskState.RUNNING;
     }
