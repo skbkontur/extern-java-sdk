@@ -321,22 +321,6 @@ public interface DraftsApi {
     );
 
     /**
-     * Update a decrypted document content
-     *
-     * @param accountId private account identifier
-     * @param draftId draft identifier
-     * @param documentId document identifier
-     * @param content decrypted document content
-     */
-    @PUT("v1/{accountId}/drafts/{draftId}/documents/{documentId}/decrypted-content")
-    CompletableFuture<ApiResponse<Void>> updateDecryptedDocumentContent(
-            @Path("accountId") UUID accountId,
-            @Path("draftId") UUID draftId,
-            @Path("documentId") UUID documentId,
-            @Body byte[] content
-    );
-
-    /**
      * Get a encrypted document content
      *
      * @param accountId private account identifier

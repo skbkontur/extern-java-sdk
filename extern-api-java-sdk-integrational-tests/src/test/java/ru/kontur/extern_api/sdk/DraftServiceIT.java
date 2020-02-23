@@ -319,21 +319,6 @@ class DraftServiceIT {
     }
 
     @ParameterizedTest
-    @DisplayName("update decrypted document content")
-    @MethodSource({"draftWithNewFnsDocumentFactory"})
-    void testUpdateDecryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
-
-        QueryContext<Void> update = engine.getDraftService()
-                .updateDecryptedDocumentContentAsync(
-                        addDocumentPack.first.getId(),
-                        addDocumentPack.second.getId(),
-                        Base64.getEncoder().encode(new byte[0]))
-                .join();
-
-        assertNull(update.getServiceError());
-    }
-
-    @ParameterizedTest
     @DisplayName("get encrypted document content")
     @MethodSource({"draftWithNewDocumentFactory"})
     void testGetEncryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {

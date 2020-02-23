@@ -340,38 +340,6 @@ public class DraftServiceImpl implements DraftService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            UUID draftId,
-            UUID documentId,
-            byte[] content
-    ) {
-        return api.updateDecryptedDocumentContent(acc.accountId(), draftId, documentId, content)
-                .thenApply(contextAdaptor(QueryContext.NOTHING));
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            String draftId,
-            String documentId,
-            byte[] content
-    ) {
-        return updateDecryptedDocumentContentAsync(
-                UUID.fromString(draftId),
-                UUID.fromString(documentId),
-                content
-        );
-    }
-
-    @Override
-    public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> parent) {
-        return join(updateDecryptedDocumentContentAsync(
-                parent.<UUID>require(QueryContext.DRAFT_ID),
-                parent.require(QueryContext.DOCUMENT_ID),
-                parent.require(QueryContext.CONTENT)
-        ));
-    }
-
-    @Override
     public CompletableFuture<QueryContext<byte[]>> getEncryptedDocumentContentAsync(
             UUID draftId,
             UUID documentId

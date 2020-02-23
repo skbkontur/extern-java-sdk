@@ -23,35 +23,26 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
-import java.security.cert.CertificateException;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
-import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
-import ru.kontur.extern_api.sdk.utils.Zip;
+import ru.kontur.extern_api.sdk.utils.*;
 
-@Disabled("Crypt operations must be manually confirmed")
+import java.security.cert.CertificateException;
+import java.util.Base64;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
 class BankCloudDssTestScenario {
 
     private static ExternEngine engine;
@@ -64,7 +55,6 @@ class BankCloudDssTestScenario {
     static void setUpClass() throws CertificateException {
 
         String dssConfigPath = "/secret/extern-sdk-dss-config.json";
-
         configuration = TestConfig.LoadConfigFromEnvironment(dssConfigPath);
 
         engine = ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
@@ -116,7 +106,6 @@ class BankCloudDssTestScenario {
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
         finishDocflow(docflow);
-
     }
 
     Account getAccount() throws ExecutionException, InterruptedException {
@@ -229,7 +218,6 @@ class BankCloudDssTestScenario {
                     .orElse(null);
 
             if (document == null) {
-
                 int timeout = 20;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
@@ -238,7 +226,6 @@ class BankCloudDssTestScenario {
                         .get()
                         .getOrThrow();
                 continue;
-
             }
 
             System.out.println("Reply on " + document.getDescription().getType());
@@ -333,10 +320,9 @@ class BankCloudDssTestScenario {
         Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
 
         TaskState taskState;
+        TaskInfo ti = new TaskInfo();
+        ti.setId(UUID.fromString(signInitiation.getTaskId()));
         do {
-            TaskInfo ti = new TaskInfo();
-            ti.setId(UUID.fromString(signInitiation.getTaskId()));
-
             taskState = engine.getTaskService(draftId).getTaskStatus(ti).get();
             Thread.sleep(2000);
             System.out.println("Waiting for user to confirm dss operation...");
@@ -368,20 +354,15 @@ class BankCloudDssTestScenario {
         if (!signInitiation.needToConfirmSigning()) {
             System.out.println("Wow! You shouldn't confirm this signing!");
         } else {
-
             Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
 
             TaskState taskState;
             do {
-                TaskInfo ti = new TaskInfo();
-                ti.setId(UUID.fromString(signInitiation.getTaskId()));
-
                 taskState = engine.getReplyTaskService(
                         UUID.fromString(docflowId),
                         UUID.fromString(documentId),
                         UUID.fromString(reply.getId())
-                )
-                        .getTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
+                ).getTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
 
                 Thread.sleep(2000);
                 System.out.println("Waiting for user to confirm dss operation...");

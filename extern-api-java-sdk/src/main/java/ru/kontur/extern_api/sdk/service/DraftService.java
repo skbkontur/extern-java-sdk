@@ -552,50 +552,6 @@ public interface DraftService {
     QueryContext<String> getDecryptedDocumentContent(QueryContext<?> cxt);
 
     /**
-     * Асинхронный метод обновления незашифрованного контента документа
-     *
-     * @param draftId идентификатор черновика
-     * @param documentId идентификатор документа
-     * @param content массив байт незашифрованного контента документа
-     * @return {@link Void}
-     */
-    CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            UUID draftId,
-            UUID documentId,
-            byte[] content
-    );
-
-    /**
-     * Асинхронный метод обновления незашифрованного контента документа
-     *
-     * @param draftId идентификатор черновика
-     * @param documentId идентификатор документа
-     * @param content массив байт незашифрованного контента документа
-     * @return {@link Void}
-     */
-    CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            String draftId,
-            String documentId,
-            byte[] content
-    );
-
-    /**
-     * Синхронный метод обновления незашифрованного контента документа
-     *
-     * @param cxt контекст. Должен содержать следующие данные:
-     *         <p>- индентификатор черновика. Для установки необходимо использовать метод {@link
-     *         QueryContext#setDraftId};</p>
-     *         <p>- идентификатор документа. Для установки необходимо использовать метод {@link
-     *         QueryContext#setDocumentId};</p>
-     *         <p>- массив байт незашифрованного контента документа. Для установки необходимо использовать
-     *         метод {@link QueryContext#setContent};</p>
-     * @return {@link Void}
-     * @deprecated use async method instead
-     */
-    @Deprecated
-    QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> cxt);
-
-    /**
      * Асинхронный метод получения зашифрованного контента
      *
      * @param draftId идентификатор черновика
