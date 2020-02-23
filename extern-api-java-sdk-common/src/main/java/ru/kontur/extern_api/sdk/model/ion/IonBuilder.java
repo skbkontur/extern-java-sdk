@@ -1,9 +1,4 @@
-package ru.kontur.extern_api.sdk.model;
-
-import ru.kontur.extern_api.sdk.model.ion.ClientInfo;
-import ru.kontur.extern_api.sdk.model.ion.IonPeriod;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
-import ru.kontur.extern_api.sdk.model.ion.IonRequestData;
+package ru.kontur.extern_api.sdk.model.ion;
 
 interface IIonBuilder {
 
