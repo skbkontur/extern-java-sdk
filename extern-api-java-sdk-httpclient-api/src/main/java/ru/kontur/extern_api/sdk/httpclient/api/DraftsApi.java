@@ -35,13 +35,12 @@ import ru.kontur.extern_api.sdk.model.*;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface DraftsApi {
 
     /**
-     * Create new a draft
+     * create new a draft
      *
      * @param accountId private account identifier
      * @param clientInfo draft metadata
@@ -51,9 +50,8 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Body DraftMetaRequest clientInfo
     );
-
     /**
-     * Delete a draft
+     * delete a draft
      * DELETE /v1/{accountId}/drafts/{draftId}
      *
      * @param accountId private account identifier
@@ -109,7 +107,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/check")
+    @POST("v1/{accountId}/drafts/{draftId}/check?deferred=false")
     CompletableFuture<ApiResponse<DataWrapper<CheckResultData>>> check(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -121,7 +119,7 @@ public interface DraftsApi {
      * @param accountId private account identifier
      * @param draftId draft identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/prepare")
+    @POST("v1/{accountId}/drafts/{draftId}/prepare?deferred=false")
     CompletableFuture<ApiResponse<PrepareResult>> prepare(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId
@@ -157,7 +155,7 @@ public interface DraftsApi {
     );
 
     /**
-     * Starts Send draft process and return taskInfo object
+     * Get result of Send task
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
@@ -171,7 +169,19 @@ public interface DraftsApi {
     );
 
     /**
-     * Starts Send draft process and return taskInfo object
+     * Starts Prepare draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/prepare?deferred=true")
+    CompletableFuture<PrepareTaskInfo> startPrepare(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId
+    );
+
+    /**
+     * Get result of Prepare task
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
@@ -185,7 +195,19 @@ public interface DraftsApi {
     );
 
     /**
-     * Starts Send draft process and return taskInfo object
+     * Starts Check draft process and return taskInfo object
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @POST("v1/{accountId}/drafts/{draftId}/check?deferred=true")
+    CompletableFuture<WrappedCheckTaskInfo> startCheck(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId
+    );
+
+    /**
+     * Get result of Check task
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
@@ -196,17 +218,6 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
-    );
-    /**
-     * Starts Send draft process and return taskInfo object
-     *
-     * @param accountId private account identifier
-     * @param draftId draft identifier
-     */
-    @POST("v1/{accountId}/drafts/{draftId}/check?deferred=true")
-    CompletableFuture<WrappedCheckTaskInfo> startCheck(
-            @Path("accountId") UUID accountId,
-            @Path("draftId") UUID draftId
     );
 
     /**
@@ -223,17 +234,6 @@ public interface DraftsApi {
             @Path("taskId") UUID taskId
     );
 
-    /**
-     * Starts Send draft process and return taskInfo object
-     *
-     * @param accountId private account identifier
-     * @param draftId draft identifier
-     */
-    @POST("v1/{accountId}/drafts/{draftId}/prepare?deferred=true")
-    CompletableFuture<PrepareTaskInfo> startPrepare(
-            @Path("accountId") UUID accountId,
-            @Path("draftId") UUID draftId
-    );
     /**
      * Delete a document from the draft
      *
@@ -393,7 +393,7 @@ public interface DraftsApi {
     );
 
     /**
-     * Use crypto-session cloud signing of the draft
+     * Use crypto-session for init process cloud signing of the draft
      *
      * @param accountId private account identifier
      * @param draftId draft identifier
@@ -412,7 +412,7 @@ public interface DraftsApi {
      * @param draftId draft identifier
      * @param taskId task identifier
      */
-    @POST("v1/{accountId}/drafts/{draftId}/session-cloud-sign")
+    @POST("v1/{accountId}/drafts/{draftId}/tasks/{taskId}")
     CompletableFuture<ApiResponse<CryptOperationTaskInfo>> getSignTaskResult(
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,

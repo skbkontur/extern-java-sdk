@@ -2,6 +2,7 @@ package ru.kontur.extern_api.sdk.service;
 
 import ru.kontur.extern_api.sdk.model.*;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface DraftTaskService {
@@ -74,5 +75,5 @@ public interface DraftTaskService {
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
      * Асинхронный метод получающий результат критоорперации
      */
-    CompletableFuture<CryptOperationResult> getCryptOperationResult(CryptOperationTaskInfo taskInfo);
+    CompletableFuture<CryptOperationResult> getCryptOperationResult(UUID taskId);
 }
