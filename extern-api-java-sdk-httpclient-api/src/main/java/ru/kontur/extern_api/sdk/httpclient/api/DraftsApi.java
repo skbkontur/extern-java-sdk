@@ -377,19 +377,6 @@ public interface DraftsApi {
     );
 
     /**
-     * Use crypto-session for init process cloud signing of the draft
-     *
-     * @param accountId private account identifier
-     * @param draftId draft identifier
-     */
-    @POST("v1/{accountId}/drafts/{draftId}/session-cloud-sign")
-    CompletableFuture<ApiResponse<SignInitiation>> cloudSignDraftBySession(
-            @Path("accountId") UUID accountId,
-            @Path("draftId") UUID draftId,
-            @Body SessionSignDraftData sessionSignDraftData
-    );
-
-    /**
      * Get sign-result by taskId
      *
      * @param accountId private account identifier
