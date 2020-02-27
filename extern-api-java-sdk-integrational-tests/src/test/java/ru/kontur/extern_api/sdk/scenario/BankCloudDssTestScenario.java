@@ -207,6 +207,17 @@ class BankCloudDssTestScenario {
         docflow = updated;
         Assertions.assertNotNull(docflow, "Cannot get docflow in 5 minutes");
 
+        Document document = docflow.getDocuments().stream()
+                .filter(d -> d.getDescription().getType() == DocumentType.Fns534Report)
+                .findFirst()
+                .orElse(null);
+
+        try {
+            openDocflowDocumentAsPdf(docflow.getId(), document.getId());
+        } catch (ApiException e) {
+            System.out.println("Cannot print document. " + e.getMessage());
+        }
+
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
@@ -214,7 +225,7 @@ class BankCloudDssTestScenario {
                 break;
             }
 
-            Document document = docflow.getDocuments().stream()
+            document = docflow.getDocuments().stream()
                     .filter(Document::isNeedToReply)
                     .findFirst()
                     .orElse(null);
@@ -234,7 +245,7 @@ class BankCloudDssTestScenario {
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
-                System.out.println("Ok, Cannot print document. " + e.getMessage());
+                System.out.println("Cannot print document. " + e.getMessage());
             }
 
             String type = document.getReplyOptions()[0];
@@ -382,14 +393,15 @@ class BankCloudDssTestScenario {
         DecryptInitiation decryptInitiation = engine.getDocflowService().cloudDecryptDocumentInitAsync(
                 docflowId,
                 documentId,
+                true,
                 Base64.getDecoder().decode(senderCertificate.getContent())
         )
                 .get().getOrThrow();
 
         Assertions.assertEquals(ConfirmType.MY_DSS, decryptInitiation.getConfirmType());
-        TaskInfo taskInfo;
+        TaskInfo<DecryptDocumentResultContent> taskInfo;
         do {
-            taskInfo = engine.getDocflowService().getDocflowDocumentTaskInfo(
+            taskInfo = engine.getDocflowService().getDecryptTaskResult(
                     docflowId,
                     documentId,
                     UUID.fromString(decryptInitiation.getTaskId())
@@ -404,7 +416,10 @@ class BankCloudDssTestScenario {
                     "Crypt operation completed, but does not have a result. TaskId = " + taskInfo.getId());
         }
 
-        return Base64.getDecoder().decode((String) taskInfo.getTaskResult());
+        DecryptDocumentResultContent documentResultContent = (DecryptDocumentResultContent) taskInfo.getTaskResult();
+        UUID contentId = documentResultContent.getContentId();
+        byte[] content = engine.getContentService().downloadAllContent(contentId).get().bytes();
+        return content;
     }
 
     private Certificate getDssCert() throws Exception {
