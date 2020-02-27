@@ -31,8 +31,8 @@ public class DownloadedContent {
      *
      * @return content
      */
-    public String getContent() {
-        return contentType;
+    public byte[] getContent() {
+        return content;
     }
 
     /**

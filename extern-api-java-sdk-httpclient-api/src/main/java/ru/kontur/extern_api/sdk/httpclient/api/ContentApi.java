@@ -22,14 +22,15 @@ package ru.kontur.extern_api.sdk.httpclient.api;
  *
  */
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
-import ru.kontur.extern_api.sdk.model.DownloadedContent;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -40,13 +41,13 @@ import java.util.concurrent.CompletableFuture;
 public interface ContentApi {
 
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<DownloadedContent> downloadContent(
+    CompletableFuture<ResponseBody> downloadContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId
     );
 
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<byte[]> downloadContentByPart(
+    CompletableFuture<ResponseBody> downloadContentByPart(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId,
             @Header("Range") String range

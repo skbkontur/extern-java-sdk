@@ -448,6 +448,7 @@ public interface DocflowsApi {
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
+            @Query("unzipIfCan") boolean unzipIfCan,
             @Body CertificateContent certificate
     );
 
@@ -463,6 +464,14 @@ public interface DocflowsApi {
 
     @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/tasks/{taskId}")
     CompletableFuture<TaskInfo> getTaskInfo(
+                    @Path("accountId") UUID accountId,
+                    @Path("docflowId") UUID docflowId,
+                    @Path("documentId") UUID documentId,
+                    @Path("taskId") UUID taskId
+            );
+
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptResult(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,

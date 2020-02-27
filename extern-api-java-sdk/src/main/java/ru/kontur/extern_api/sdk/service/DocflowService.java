@@ -26,6 +26,7 @@ package ru.kontur.extern_api.sdk.service;
 
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.DecryptDocumentResultContent;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
@@ -910,6 +911,7 @@ public interface DocflowService {
     CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
+            boolean unzipIfCan,
             byte[] certificate
     );
 
@@ -924,6 +926,7 @@ public interface DocflowService {
     QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
+            boolean unzipIfCan,
             String certBase64
     );
 
@@ -998,6 +1001,19 @@ public interface DocflowService {
      * @return Информация о задаче
      */
     CompletableFuture<TaskInfo> getDocflowDocumentTaskInfo(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
+    );
+
+    /**
+     * Получить результат дешифрования, contentId - идентификатор контента в сервисе контентов
+     * @param docflowId ИД документоборота
+     * @param documentId ИД документа
+     * @param taskId ИД задачи
+     * @return Информация о задаче
+     */
+    public CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptTaskResult(
             UUID docflowId,
             UUID documentId,
             UUID taskId

@@ -843,12 +843,14 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
+            boolean unzipIfCan,
             byte[] certificate
     ) {
         return api.cloudDecryptDocumentInit(
                 acc.accountId(),
                 docflowId,
                 documentId,
+                unzipIfCan,
                 new CertificateContent(certificate)
         )
                 .thenApply(contextAdaptor("decrypt-init"));
@@ -858,11 +860,13 @@ public class DocflowServiceImpl implements DocflowService {
     public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
+            boolean unzipIfCan,
             String certBase64
     ) {
         return join(cloudDecryptDocumentInitAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
+                unzipIfCan,
                 Base64.getDecoder().decode(certBase64)
         ));
     }
@@ -902,7 +906,7 @@ public class DocflowServiceImpl implements DocflowService {
     ) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
-                docflowId, documentId, certificate
+                docflowId, documentId, false, certificate
         );
         return future.thenCompose(cxt -> future
                 .thenApply(smsCodeProvider)
@@ -939,6 +943,15 @@ public class DocflowServiceImpl implements DocflowService {
             UUID taskId
     ) {
         return api.getTaskInfo(acc.accountId(), docflowId, documentId, taskId);
+    }
+
+    @Override
+    public CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptTaskResult(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
+    ) {
+        return api.getDecryptResult(acc.accountId(), docflowId, documentId, taskId);
     }
 
     private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(

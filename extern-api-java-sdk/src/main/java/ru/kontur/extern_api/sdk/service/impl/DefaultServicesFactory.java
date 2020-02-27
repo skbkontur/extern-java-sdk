@@ -90,6 +90,11 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
+    public ContentService getContentService() {
+        return new ContentServiceImpl(createApi(ContentApi.class), providerHolder.getAccountProvider());
+    }
+
+    @Override
     public OrganizationService getOrganizationService() {
         return new OrganizationServiceImpl(
                 providerHolder.getAccountProvider(),

@@ -41,7 +41,6 @@ public interface ProviderHolder {
 
     void setUserAgentProvider(UserAgentProvider userAgentProvider);
 
-
     UriProvider getServiceBaseUriProvider();
 
     AuthenticationProvider getAuthenticationProvider();
@@ -55,5 +54,4 @@ public interface ProviderHolder {
     UserIPProvider getUserIPProvider();
 
     UserAgentProvider getUserAgentProvider();
-
 }

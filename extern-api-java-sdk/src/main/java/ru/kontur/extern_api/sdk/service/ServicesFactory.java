@@ -43,6 +43,8 @@ public interface ServicesFactory {
 
     EventService getEventService();
 
+    ContentService getContentService();
+
     OrganizationService getOrganizationService();
 
     HttpClient getHttpClient();

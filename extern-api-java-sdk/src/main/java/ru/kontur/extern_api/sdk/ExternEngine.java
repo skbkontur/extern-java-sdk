@@ -23,8 +23,6 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import java.util.Optional;
-import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
@@ -34,17 +32,11 @@ import ru.kontur.extern_api.sdk.provider.ApiKeyProvider;
 import ru.kontur.extern_api.sdk.provider.AuthenticationProvider;
 import ru.kontur.extern_api.sdk.provider.ProviderHolder;
 import ru.kontur.extern_api.sdk.provider.ProviderHolderParent;
-import ru.kontur.extern_api.sdk.service.AccountService;
-import ru.kontur.extern_api.sdk.service.CertificateService;
-import ru.kontur.extern_api.sdk.service.DocflowService;
-import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.EventService;
-import ru.kontur.extern_api.sdk.service.OrganizationService;
-import ru.kontur.extern_api.sdk.service.RelatedDocumentsService;
-import ru.kontur.extern_api.sdk.service.ReplyTaskService;
-import ru.kontur.extern_api.sdk.service.ServicesFactory;
-import ru.kontur.extern_api.sdk.service.DraftTaskService;
+import ru.kontur.extern_api.sdk.service.*;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -94,6 +86,14 @@ public class ExternEngine implements ProviderHolderParent<ProviderHolder> {
      */
     public DocflowService getDocflowService() {
         return servicesFactory.getDocflowService();
+    }
+
+    /**
+     * @return ContentService сервис предназначен для работы хранения, скачивания контентов
+     * @see ContentService
+     */
+    public ContentService getContentService() {
+        return servicesFactory.getContentService();
     }
 
     /**
