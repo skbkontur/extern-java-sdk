@@ -389,9 +389,6 @@ class BankCloudDssTestScenario {
         Assertions.assertEquals(ConfirmType.MY_DSS, decryptInitiation.getConfirmType());
         TaskInfo taskInfo;
         do {
-            TaskInfo ti = new TaskInfo();
-            ti.setId(UUID.fromString(decryptInitiation.getTaskId()));
-
             taskInfo = engine.getDocflowService().getDocflowDocumentTaskInfo(
                     docflowId,
                     documentId,
@@ -400,8 +397,6 @@ class BankCloudDssTestScenario {
 
             Thread.sleep(2000);
             System.out.println("Waiting for user to confirm dss operation...");
-
-
         } while (taskInfo.getTaskState() == TaskState.RUNNING);
 
         if (taskInfo.getTaskResult() == null) {
