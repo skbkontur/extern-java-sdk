@@ -418,7 +418,7 @@ class BankCloudDssTestScenario {
 
         DecryptDocumentResultContent documentResultContent = (DecryptDocumentResultContent) taskInfo.getTaskResult();
         UUID contentId = documentResultContent.getContentId();
-        byte[] content = engine.getContentService().downloadAllContent(contentId).get().bytes();
+        byte[] content = engine.getContentService().downloadAllContent(contentId).get();
         return content;
     }
 

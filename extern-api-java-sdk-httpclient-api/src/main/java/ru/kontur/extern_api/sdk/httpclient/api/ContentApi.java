@@ -22,10 +22,13 @@ package ru.kontur.extern_api.sdk.httpclient.api;
  *
  */
 
+import okhttp3.Headers;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
@@ -48,6 +51,14 @@ public interface ContentApi {
 
     @GET("v1/{accountId}/contents/{contentId}")
     CompletableFuture<ResponseBody> downloadContentByPart(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId,
+            @Header("Range") String range
+    );
+
+    @Streaming
+    @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ResponseBody> downloadContentByStream(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId,
             @Header("Range") String range
