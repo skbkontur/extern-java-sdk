@@ -20,7 +20,6 @@ public class DownloadedContent {
      * Устанавливает contentType
      *
      * @param contentType String
-     * @see UUID
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
@@ -39,7 +38,6 @@ public class DownloadedContent {
      * Устанавливает content
      *
      * @param content byte[]
-     * @see UUID
      */
     public void setContent(byte[] content) {
         this.content = content;

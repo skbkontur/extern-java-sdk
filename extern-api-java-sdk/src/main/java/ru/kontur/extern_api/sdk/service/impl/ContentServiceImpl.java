@@ -34,7 +34,7 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public CompletableFuture<byte[]> downloadPartContent(UUID contentId, int from, int to) {
         String header = String.format("bytes=%d-%d", from, to);
-        return api.downloadContentByPart(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
+        return api.downloadPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
             try {
                 return responseBody.bytes();
             } catch (IOException e) {
@@ -48,7 +48,7 @@ public class ContentServiceImpl implements ContentService {
     public CompletableFuture<byte[]> downloadPartContentByLength(UUID contentId, int from, int length) {
 
         String header = String.format("bytes=%d-%d", from, from + length - 1);
-        return api.downloadContentByPart(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
+        return api.downloadPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
             try {
                 return responseBody.bytes();
             } catch (IOException e) {

@@ -103,11 +103,11 @@ public interface RelatedDocumentsService {
     CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta);
 
     /**
-     * Возвращает результат работы таски
+     * Возвращает информацию об отложенной задаче
      *
      * @param inventoryId         идентификатор описи
      * @param inventoryDocumentId идентификатор документа
-     * @param taskId              идентификатор подписи
+     * @param taskId              идентификатор таски
      * @return результат работы {@link TaskInfo}
      */
     CompletableFuture<TaskInfo> getTaskResult(UUID inventoryId, UUID inventoryDocumentId, UUID taskId);

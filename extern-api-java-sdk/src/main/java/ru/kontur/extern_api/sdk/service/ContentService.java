@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 public interface ContentService {
 
     /**
-     * Метод инициализирует скачивание контента полностью.
+     * Метод скачивает контент полностью.
      *
      * @param contentId Идентификатор контента
      * @return контент
@@ -16,7 +16,7 @@ public interface ContentService {
     );
 
     /**
-     * Метод инициализирует скачивание контента по частям с указанием диапозона байт.
+     * Метод скачивает контент по частям с указанием диапзона байт.
      *
      * @param contentId Идентификатор контента
      * @param from      Номер байта, с которого начать скачивание
@@ -26,11 +26,11 @@ public interface ContentService {
     CompletableFuture<byte[]> downloadPartContent(UUID contentId, int from, int to);
 
     /**
-     * Метод инициализирует скачивание контента по частям с указанием диапозона байт.
+     * Метод скачивает контент по частям с указанием начального байта и длины кусочка
      *
      * @param contentId Идентификатор контента
      * @param from      Номер байта, с которого начать скачивание
-     * @param length    Количество байт, уоторые нужно скачать
+     * @param length    Количество байт, которые нужно скачать
      * @return контент
      */
     CompletableFuture<byte[]> downloadPartContentByLength(UUID contentId, int from, int length);

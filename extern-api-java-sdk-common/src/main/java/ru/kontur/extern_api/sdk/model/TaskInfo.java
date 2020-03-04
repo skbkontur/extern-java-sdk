@@ -1,15 +1,15 @@
 package ru.kontur.extern_api.sdk.model;
 
-import java.net.HttpURLConnection;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import org.jetbrains.annotations.Contract;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.ErrorInfo;
 
+import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Класс предоставляет информацию о выполняемой на сервере задаче.
@@ -47,19 +47,14 @@ public class TaskInfo<TResult> {
     }
 
     /**
-     * Возвращает идентификатор задачи
+     * Возвращает прогресс задачи
      *
-     * @return progress идентификатор задачи
+     * @return progress
      */
     public String getProgress() {
         return progress;
     }
 
-    /**
-     * Устанавливает идентификатор задачи
-     *
-     * @param progress идентификатор задачи
-     */
     public void setProgress(String progress) {
         this.progress = progress;
     }
@@ -113,7 +108,7 @@ public class TaskInfo<TResult> {
 
     /**
      * @return ApiException with info from {@link ApiResponse#getErrorInfo()} or null if {@link
-     *         ApiResponse#isSuccessful()}
+     * ApiResponse#isSuccessful()}
      */
     public ApiException asApiException() {
 

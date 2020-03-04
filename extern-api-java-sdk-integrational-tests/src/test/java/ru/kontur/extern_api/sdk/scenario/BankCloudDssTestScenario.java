@@ -404,7 +404,7 @@ class BankCloudDssTestScenario {
             taskInfo = engine.getDocflowService().getDecryptTaskResult(
                     docflowId,
                     documentId,
-                    UUID.fromString(decryptInitiation.getTaskId())
+                    UUID.fromString(decryptInitiation.getDecryptionTaskId())
             ).get();
 
             Thread.sleep(2000);

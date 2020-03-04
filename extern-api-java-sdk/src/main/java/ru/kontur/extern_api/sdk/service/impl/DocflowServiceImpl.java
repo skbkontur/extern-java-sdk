@@ -872,6 +872,36 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
+    public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] certificate
+    ) {
+        return api.cloudDecryptDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                false,
+                new CertificateContent(certificate)
+        )
+                .thenApply(contextAdaptor("decrypt-init"));
+    }
+
+    @Override
+    public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64
+    ) {
+        return join(cloudDecryptDocumentInitAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                false,
+                Base64.getDecoder().decode(certBase64)
+        ));
+    }
+
+    @Override
     public CompletableFuture<QueryContext<byte[]>> cloudDecryptDocumentConfirmAsync(
             UUID docflowId,
             UUID documentId,

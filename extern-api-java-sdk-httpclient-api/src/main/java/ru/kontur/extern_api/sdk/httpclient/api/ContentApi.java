@@ -50,7 +50,7 @@ public interface ContentApi {
     );
 
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<ResponseBody> downloadContentByPart(
+    CompletableFuture<ResponseBody> downloadPartialContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId,
             @Header("Range") String range

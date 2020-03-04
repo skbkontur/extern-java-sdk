@@ -15,5 +15,5 @@ public class DecryptDocumentResultContent {
     }
 
     @SerializedName("content-id")
-    UUID contentId;
+    private UUID contentId;
 }

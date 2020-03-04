@@ -41,13 +41,19 @@ public class DecryptInitiation {
         return requestId;
     }
 
-    public String getTaskId() {
+    public String getDecryptionTaskId() {
         return decryptionTaskId;
     }
 
-    public void setTaskId(String decryptionTaskId) { this.decryptionTaskId = decryptionTaskId; }
+    public void setDecryptionTaskId(String decryptionTaskId) {
+        this.decryptionTaskId = decryptionTaskId;
+    }
 
-    public ConfirmType getConfirmType() { return confirmType; }
+    public ConfirmType getConfirmType() {
+        return confirmType;
+    }
 
-    public void setConfirmType(ConfirmType confirmType) { this.confirmType = confirmType; }
+    public void setConfirmType(ConfirmType confirmType) {
+        this.confirmType = confirmType;
+    }
 }

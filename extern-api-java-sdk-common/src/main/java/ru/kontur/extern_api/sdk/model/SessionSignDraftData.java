@@ -7,7 +7,7 @@ public class SessionSignDraftData {
     /**
      * Идентификатор криптосессии
      */
-    public UUID cryptoSessionId;
+    private UUID cryptoSessionId;
 
 
     public UUID getId() {
