@@ -32,6 +32,14 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
+    public CompletableFuture<Integer> getTotalSizeInBytes(UUID contentId) {
+        String header = "bytes=0-1";
+        return api.getResponse(accountProvider.accountId(), contentId, header)
+                .thenApply(response -> Integer.parseInt(
+                        response.getHeaders().get("content-range").get(0).split("/")[1]));
+    }
+
+    @Override
     public CompletableFuture<byte[]> downloadPartialContent(UUID contentId, int from, int to) {
         String header = String.format("bytes=%d-%d", from, to);
         return api.downloadPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {

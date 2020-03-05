@@ -6,14 +6,15 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ContentService {
 
+    public CompletableFuture<Integer> getTotalSizeInBytes(UUID contentId);
+
     /**
      * Метод скачивает контент полностью.
      *
      * @param contentId Идентификатор контента
      * @return контент
      */
-    CompletableFuture<byte[]> downloadAllContent(UUID contentId
-    );
+    CompletableFuture<byte[]> downloadAllContent(UUID contentId);
 
     /**
      * Метод скачивает контент по частям с указанием диапзона байт.

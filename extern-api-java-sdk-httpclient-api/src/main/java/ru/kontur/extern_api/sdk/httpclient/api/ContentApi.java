@@ -44,6 +44,13 @@ import java.util.concurrent.CompletableFuture;
 public interface ContentApi {
 
     @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ApiResponse<ResponseBody>> getResponse(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId,
+            @Header("Range") String range
+    );
+
+    @GET("v1/{accountId}/contents/{contentId}")
     CompletableFuture<ResponseBody> downloadContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId
