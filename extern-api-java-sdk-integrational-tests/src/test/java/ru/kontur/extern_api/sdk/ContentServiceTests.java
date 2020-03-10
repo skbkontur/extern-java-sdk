@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Execution(ExecutionMode.SAME_THREAD)
 public class ContentServiceTests {
     private static ExternEngine engine;
-    private final UUID contentId = fromString("d2ccfe4e-40ec-4aa0-ba6d-5dba54018923");    //50mb
+    private final UUID contentId = fromString("0e9efa9b-9c82-4d8e-86f8-8c14ed66b8d8");    //50mb
     private final Integer size = 51146377;
-    //private final UUID contentId = fromString("3f112178-4d1f-4af9-a54e-3d2ab51c770b");  //114mb
+    //private final UUID contentId = fromString("16bdce54-0c8f-42de-b669-2f7e4f502d26");  //114mb
     //private final UUID contentId = fromString("f10425d4-0cdc-42cf-9b0f-f65e128da6e3");  //900mb Exception in thread "OkHttp Dispatcher" java.lang.OutOfMemoryError: Java heap space
 
     @BeforeAll
