@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Execution(ExecutionMode.SAME_THREAD)
-public class ContentServiceTests {
+public class ContentServiceIT {
     private static ExternEngine engine;
     private final UUID contentId = fromString("0e9efa9b-9c82-4d8e-86f8-8c14ed66b8d8");    //50mb
     private final Integer size = 51146377;
