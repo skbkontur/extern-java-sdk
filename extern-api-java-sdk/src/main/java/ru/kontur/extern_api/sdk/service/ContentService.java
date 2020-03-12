@@ -14,7 +14,7 @@ public interface ContentService {
      * @param contentId Идентификатор контента
      * @return контент
      */
-    CompletableFuture<byte[]> downloadAllContent(UUID contentId);
+    CompletableFuture<byte[]> getContent(UUID contentId);
 
     /**
      * Метод скачивает контент по частям с указанием диапазона байт.
@@ -24,7 +24,7 @@ public interface ContentService {
      * @param to        Номер байта, по который скачивать контент
      * @return контент
      */
-    CompletableFuture<byte[]> downloadPartialContent(UUID contentId, int from, int to);
+    CompletableFuture<byte[]> getPartialContent(UUID contentId, int from, int to);
 
     /**
      * Метод скачивает контент по частям с указанием начального байта и длины кусочка
@@ -34,6 +34,6 @@ public interface ContentService {
      * @param length    Количество байт, которые нужно скачать
      * @return контент
      */
-    CompletableFuture<byte[]> downloadPartialContentByLength(UUID contentId, int from, int length);
+    CompletableFuture<byte[]> getPartialContentByLength(UUID contentId, int from, int length);
 
 }

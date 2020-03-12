@@ -20,8 +20,8 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public CompletableFuture<byte[]> downloadAllContent(UUID contentId) {
-        return api.downloadContent(accountProvider.accountId(), contentId).thenApply(responseBody -> {
+    public CompletableFuture<byte[]> getContent(UUID contentId) {
+        return api.getContent(accountProvider.accountId(), contentId).thenApply(responseBody -> {
             try {
                 return responseBody.bytes();
             } catch (IOException e) {
@@ -40,9 +40,9 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public CompletableFuture<byte[]> downloadPartialContent(UUID contentId, int from, int to) {
+    public CompletableFuture<byte[]> getPartialContent(UUID contentId, int from, int to) {
         String header = String.format("bytes=%d-%d", from, to);
-        return api.downloadPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
+        return api.getPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
             try {
                 return responseBody.bytes();
             } catch (IOException e) {
@@ -53,10 +53,10 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public CompletableFuture<byte[]> downloadPartialContentByLength(UUID contentId, int from, int length) {
+    public CompletableFuture<byte[]> getPartialContentByLength(UUID contentId, int from, int length) {
 
         String header = String.format("bytes=%d-%d", from, from + length - 1);
-        return api.downloadPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
+        return api.getPartialContent(accountProvider.accountId(), contentId, header).thenApply(responseBody -> {
             try {
                 return responseBody.bytes();
             } catch (IOException e) {

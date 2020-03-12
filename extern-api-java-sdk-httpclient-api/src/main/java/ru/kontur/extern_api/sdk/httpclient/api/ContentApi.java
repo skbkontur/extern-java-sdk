@@ -51,13 +51,13 @@ public interface ContentApi {
     );
 
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<ResponseBody> downloadContent(
+    CompletableFuture<ResponseBody> getContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId
     );
 
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<ResponseBody> downloadPartialContent(
+    CompletableFuture<ResponseBody> getPartialContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId,
             @Header("Range") String range
@@ -65,7 +65,7 @@ public interface ContentApi {
 
     @Streaming
     @GET("v1/{accountId}/contents/{contentId}")
-    CompletableFuture<ResponseBody> downloadContentByStream(
+    CompletableFuture<ResponseBody> getContentByStream(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId,
             @Header("Range") String range

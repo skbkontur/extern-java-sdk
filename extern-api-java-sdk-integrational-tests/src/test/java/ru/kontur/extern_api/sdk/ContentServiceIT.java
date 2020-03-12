@@ -32,15 +32,15 @@ public class ContentServiceIT {
         Integer requestedSize = engine.getContentService().getTotalSizeInBytes(contentId).get();
         assertEquals(size, requestedSize);
 
-        byte[] content = engine.getContentService().downloadAllContent(contentId).get();
+        byte[] content = engine.getContentService().getContent(contentId).get();
         assertNotNull(content);
         assertEquals(size, content.length);
 
-        byte[] partialContent = engine.getContentService().downloadPartialContent(contentId, 0, 40).get();
+        byte[] partialContent = engine.getContentService().getPartialContent(contentId, 0, 40).get();
         assertNotNull(partialContent);
         assertEquals(partialContent.length, 41);
 
-        byte[] partialContentByLength = engine.getContentService().downloadPartialContentByLength(contentId, 41, 50).get();
+        byte[] partialContentByLength = engine.getContentService().getPartialContentByLength(contentId, 41, 50).get();
         assertNotNull(partialContentByLength);
         assertEquals(partialContentByLength.length, 50);
     }
