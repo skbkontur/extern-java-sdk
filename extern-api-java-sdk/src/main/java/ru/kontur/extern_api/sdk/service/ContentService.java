@@ -17,7 +17,7 @@ public interface ContentService {
     CompletableFuture<byte[]> downloadAllContent(UUID contentId);
 
     /**
-     * Метод скачивает контент по частям с указанием диапзона байт.
+     * Метод скачивает контент по частям с указанием диапазона байт.
      *
      * @param contentId Идентификатор контента
      * @param from      Номер байта, с которого начать скачивание

@@ -393,8 +393,8 @@ class BankCloudDssTestScenario {
         DecryptInitiation decryptInitiation = engine.getDocflowService().cloudDecryptDocumentInitAsync(
                 docflowId,
                 documentId,
-                true,
-                Base64.getDecoder().decode(senderCertificate.getContent())
+                Base64.getDecoder().decode(senderCertificate.getContent()),
+                true
         )
                 .get().getOrThrow();
 

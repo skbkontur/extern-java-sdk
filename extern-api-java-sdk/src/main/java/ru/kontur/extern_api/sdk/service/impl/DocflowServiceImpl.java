@@ -843,15 +843,15 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
-            boolean unzipIfCan,
-            byte[] certificate
+            byte[] certificate,
+            boolean unzipIfCan
     ) {
         return api.cloudDecryptDocumentInit(
                 acc.accountId(),
                 docflowId,
                 documentId,
-                unzipIfCan,
-                new CertificateContent(certificate)
+                new CertificateContent(certificate),
+                unzipIfCan
         )
                 .thenApply(contextAdaptor("decrypt-init"));
     }
@@ -860,14 +860,14 @@ public class DocflowServiceImpl implements DocflowService {
     public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
-            boolean unzipIfCan,
-            String certBase64
+            String certBase64,
+            boolean unzipIfCan
     ) {
         return join(cloudDecryptDocumentInitAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
-                unzipIfCan,
-                Base64.getDecoder().decode(certBase64)
+                Base64.getDecoder().decode(certBase64),
+                unzipIfCan
         ));
     }
 
@@ -881,8 +881,8 @@ public class DocflowServiceImpl implements DocflowService {
                 acc.accountId(),
                 docflowId,
                 documentId,
-                false,
-                new CertificateContent(certificate)
+                new CertificateContent(certificate),
+                false
         )
                 .thenApply(contextAdaptor("decrypt-init"));
     }
@@ -896,8 +896,8 @@ public class DocflowServiceImpl implements DocflowService {
         return join(cloudDecryptDocumentInitAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
-                false,
-                Base64.getDecoder().decode(certBase64)
+                Base64.getDecoder().decode(certBase64),
+                false
         ));
     }
 
@@ -936,7 +936,7 @@ public class DocflowServiceImpl implements DocflowService {
     ) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
-                docflowId, documentId, false, certificate
+                docflowId, documentId, certificate, false
         );
         return future.thenCompose(cxt -> future
                 .thenApply(smsCodeProvider)

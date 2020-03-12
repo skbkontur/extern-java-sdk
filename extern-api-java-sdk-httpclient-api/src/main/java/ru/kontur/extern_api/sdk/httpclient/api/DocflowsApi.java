@@ -448,9 +448,9 @@ public interface DocflowsApi {
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
-            @Query("unzipIfCan") boolean unzipIfCan,
-            @Body CertificateContent certificate
-    );
+            @Body CertificateContent certificate,
+            @Query("unzipIfCan") boolean unzipIfCan
+            );
 
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/decrypt-content-confirm")
     CompletableFuture<ApiResponse<byte[]>> cloudDecryptDocumentConfirm(

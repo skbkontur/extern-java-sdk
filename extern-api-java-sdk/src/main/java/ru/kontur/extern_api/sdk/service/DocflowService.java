@@ -908,15 +908,15 @@ public interface DocflowService {
      *
      * @param docflowId   ИД документоборота
      * @param documentId  ИД документа
-     * @param unzipIfCan  расжать контент
      * @param certificate Сертификат
+     * @param unzipIfCan  Расжать контент на сервере, если это возможно
      * @return DecryptInitiation Информация об операции
      */
     CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
-            boolean unzipIfCan,
-            byte[] certificate
+            byte[] certificate,
+            boolean unzipIfCan
     );
 
     /**
@@ -924,15 +924,15 @@ public interface DocflowService {
      *
      * @param docflowId  ИД документоборота
      * @param documentId ИД документа
-     * @param unzipIfCan расжать контент
      * @param certBase64 Контент сертификата в формате base64 строки
+     * @param unzipIfCan Расжать контент на сервере, если это возможно
      * @return ссылка на подтверждение расшифрования
      */
     QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
             String docflowId,
             String documentId,
-            boolean unzipIfCan,
-            String certBase64
+            String certBase64,
+            boolean unzipIfCan
     );
 
     /**
