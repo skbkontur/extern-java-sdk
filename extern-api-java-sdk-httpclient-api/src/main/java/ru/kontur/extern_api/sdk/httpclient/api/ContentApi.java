@@ -43,6 +43,7 @@ import java.util.concurrent.CompletableFuture;
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface ContentApi {
 
+    @Streaming
     @GET("v1/{accountId}/contents/{contentId}")
     CompletableFuture<ApiResponse<ResponseBody>> getResponse(
             @Path("accountId") UUID accountId,
@@ -50,12 +51,14 @@ public interface ContentApi {
             @Header("Range") String range
     );
 
+    @Streaming
     @GET("v1/{accountId}/contents/{contentId}")
     CompletableFuture<ResponseBody> getContent(
             @Path("accountId") UUID accountId,
             @Path("contentId") UUID contentId
     );
 
+    @Streaming
     @GET("v1/{accountId}/contents/{contentId}")
     CompletableFuture<ResponseBody> getPartialContent(
             @Path("accountId") UUID accountId,
