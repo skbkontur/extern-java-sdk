@@ -23,16 +23,6 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
-
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
@@ -42,6 +32,13 @@ import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 
 public class DocflowServiceImpl implements DocflowService {
@@ -846,13 +843,46 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
             UUID docflowId,
             UUID documentId,
+            byte[] certificate,
+            boolean unzipIfCan
+    ) {
+        return api.cloudDecryptDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                new CertificateContent(certificate),
+                unzipIfCan
+        )
+                .thenApply(contextAdaptor("decrypt-init"));
+    }
+
+    @Override
+    public QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
+            String docflowId,
+            String documentId,
+            String certBase64,
+            boolean unzipIfCan
+    ) {
+        return join(cloudDecryptDocumentInitAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                Base64.getDecoder().decode(certBase64),
+                unzipIfCan
+        ));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
+            UUID docflowId,
+            UUID documentId,
             byte[] certificate
     ) {
         return api.cloudDecryptDocumentInit(
                 acc.accountId(),
                 docflowId,
                 documentId,
-                new CertificateContent(certificate)
+                new CertificateContent(certificate),
+                false
         )
                 .thenApply(contextAdaptor("decrypt-init"));
     }
@@ -866,7 +896,8 @@ public class DocflowServiceImpl implements DocflowService {
         return join(cloudDecryptDocumentInitAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
-                Base64.getDecoder().decode(certBase64)
+                Base64.getDecoder().decode(certBase64),
+                false
         ));
     }
 
@@ -905,7 +936,7 @@ public class DocflowServiceImpl implements DocflowService {
     ) {
 
         CompletableFuture<QueryContext<DecryptInitiation>> future = cloudDecryptDocumentInitAsync(
-                docflowId, documentId, certificate
+                docflowId, documentId, certificate, false
         );
         return future.thenCompose(cxt -> future
                 .thenApply(smsCodeProvider)
@@ -914,7 +945,7 @@ public class DocflowServiceImpl implements DocflowService {
                         documentId,
                         cxt.get().getRequestId(),
                         code
-                             )
+                        )
                 )
         );
     }
@@ -942,6 +973,15 @@ public class DocflowServiceImpl implements DocflowService {
             UUID taskId
     ) {
         return api.getTaskInfo(acc.accountId(), docflowId, documentId, taskId);
+    }
+
+    @Override
+    public CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptTaskResult(
+            UUID docflowId,
+            UUID documentId,
+            UUID taskId
+    ) {
+        return api.getDecryptResult(acc.accountId(), docflowId, documentId, taskId);
     }
 
     private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(

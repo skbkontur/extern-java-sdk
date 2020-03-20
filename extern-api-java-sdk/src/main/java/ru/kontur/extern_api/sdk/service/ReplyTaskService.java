@@ -1,8 +1,9 @@
 package ru.kontur.extern_api.sdk.service;
 
+import ru.kontur.extern_api.sdk.model.TaskState;
+
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.TaskState;
 
 public interface ReplyTaskService {
 

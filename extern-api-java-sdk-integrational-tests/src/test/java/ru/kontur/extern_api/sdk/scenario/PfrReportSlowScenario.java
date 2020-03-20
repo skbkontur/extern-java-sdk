@@ -23,13 +23,6 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,17 +32,7 @@ import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Account;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
-import ru.kontur.extern_api.sdk.model.Document;
-import ru.kontur.extern_api.sdk.model.DocumentContents;
-import ru.kontur.extern_api.sdk.model.Draft;
-import ru.kontur.extern_api.sdk.model.DraftDocument;
-import ru.kontur.extern_api.sdk.model.Link;
-import ru.kontur.extern_api.sdk.model.SignInitiation;
-import ru.kontur.extern_api.sdk.model.SignedDraft;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
@@ -57,15 +40,18 @@ import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
-import ru.kontur.extern_api.sdk.utils.CryptoUtils;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
-import ru.kontur.extern_api.sdk.utils.Zip;
+import ru.kontur.extern_api.sdk.utils.*;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
+
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Execution(ExecutionMode.CONCURRENT)
 class PfrReportSlowScenario {
@@ -142,7 +128,7 @@ class PfrReportSlowScenario {
                 );
 
                 System.out.println("DoService Document " + document.getId() + "content decrypted, len bytes ="
-                                           + pfrServiceDocumentContentDecrypted.length);
+                        + pfrServiceDocumentContentDecrypted.length);
             }
 
             if (document.hasDecryptedContent()) {
@@ -152,7 +138,7 @@ class PfrReportSlowScenario {
                 ).join().getOrThrow();
 
                 System.out.println("Document " + document.getId() + "content received, len bytes ="
-                                           + pfrSpecialDecryptedContent.length);
+                        + pfrSpecialDecryptedContent.length);
             }
         }
     }

@@ -23,13 +23,6 @@
 
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
-
-import java.util.Base64;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.*;
@@ -37,6 +30,14 @@ import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
+
+import java.util.Base64;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 
 public class DraftServiceImpl implements DraftService {
@@ -179,7 +180,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public CompletableFuture<QueryContext<Docflow>> sendAsync(UUID draftId) {
-        return api.send(acc.accountId(), draftId,  false)
+        return api.send(acc.accountId(), draftId, false)
                 .thenApply(contextAdaptor(QueryContext.DOCFLOW));
 
     }
@@ -335,38 +336,6 @@ public class DraftServiceImpl implements DraftService {
         return join(getDecryptedDocumentContentAsync(
                 parent.<UUID>require(QueryContext.DRAFT_ID).toString(),
                 parent.<UUID>require(QueryContext.DOCUMENT_ID).toString()
-        ));
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            UUID draftId,
-            UUID documentId,
-            byte[] content
-    ) {
-        return api.updateDecryptedDocumentContent(acc.accountId(), draftId, documentId, content)
-                .thenApply(contextAdaptor(QueryContext.NOTHING));
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<Void>> updateDecryptedDocumentContentAsync(
-            String draftId,
-            String documentId,
-            byte[] content
-    ) {
-        return updateDecryptedDocumentContentAsync(
-                UUID.fromString(draftId),
-                UUID.fromString(documentId),
-                content
-        );
-    }
-
-    @Override
-    public QueryContext<Void> updateDecryptedDocumentContent(QueryContext<?> parent) {
-        return join(updateDecryptedDocumentContentAsync(
-                parent.<UUID>require(QueryContext.DRAFT_ID),
-                parent.require(QueryContext.DOCUMENT_ID),
-                parent.require(QueryContext.CONTENT)
         ));
     }
 

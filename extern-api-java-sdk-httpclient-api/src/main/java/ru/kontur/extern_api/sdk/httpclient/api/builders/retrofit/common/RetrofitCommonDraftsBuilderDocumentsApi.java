@@ -22,14 +22,15 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api.builders.retrofit.common;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import retrofit2.http.DELETE;
 import retrofit2.http.Path;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)

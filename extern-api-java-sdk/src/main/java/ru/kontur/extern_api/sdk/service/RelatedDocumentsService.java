@@ -21,6 +21,7 @@
  */
 
 package ru.kontur.extern_api.sdk.service;
+
 import ru.kontur.extern_api.sdk.model.*;
 
 import java.util.List;
@@ -100,4 +101,14 @@ public interface RelatedDocumentsService {
      *  @return список описей связанных с текущим документом {@link InventoriesPage}
      */
     CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta);
+
+    /**
+     * Возвращает информацию об отложенной задаче
+     *
+     * @param inventoryId         идентификатор описи
+     * @param inventoryDocumentId идентификатор документа
+     * @param taskId              идентификатор таски
+     * @return результат работы {@link TaskInfo}
+     */
+    CompletableFuture<TaskInfo> getTaskResult(UUID inventoryId, UUID inventoryDocumentId, UUID taskId);
 }

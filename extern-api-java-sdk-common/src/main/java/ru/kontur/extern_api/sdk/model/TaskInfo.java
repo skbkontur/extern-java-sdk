@@ -1,15 +1,15 @@
 package ru.kontur.extern_api.sdk.model;
 
-import java.net.HttpURLConnection;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import org.jetbrains.annotations.Contract;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.adaptor.ErrorInfo;
 
+import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Класс предоставляет информацию о выполняемой на сервере задаче.
@@ -19,12 +19,14 @@ import java.util.UUID;
  */
 public class TaskInfo<TResult> {
 
-    private UUID id = null;
-    private TaskState taskState = null;
-    private TaskType taskType = null;
+    private UUID id;
+    private TaskState taskState;
+    private TaskType taskType;
 
-    private TResult taskResult = null;
-    private ErrorInfo error = null;
+    private TResult taskResult;
+    private ErrorInfo error;
+
+    private String progress;
 
     /**
      * Возвращает идентификатор задачи
@@ -44,6 +46,18 @@ public class TaskInfo<TResult> {
         this.id = id;
     }
 
+    /**
+     * Возвращает прогресс задачи
+     *
+     * @return progress
+     */
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
 
     /**
      * Возвращает тип задачи:
@@ -94,7 +108,7 @@ public class TaskInfo<TResult> {
 
     /**
      * @return ApiException with info from {@link ApiResponse#getErrorInfo()} or null if {@link
-     *         ApiResponse#isSuccessful()}
+     * ApiResponse#isSuccessful()}
      */
     public ApiException asApiException() {
 
@@ -127,6 +141,7 @@ public class TaskInfo<TResult> {
         TaskInfo<TOut> taskOut = task;
         taskOut.error = error;
         taskOut.id = id;
+        taskOut.progress = progress;
         taskOut.taskState = taskState;
         taskOut.taskType = taskType;
         if (isNotFailed() && taskResult != null) {

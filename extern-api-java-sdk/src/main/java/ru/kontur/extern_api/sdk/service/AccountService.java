@@ -24,12 +24,13 @@
 
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 
 /**

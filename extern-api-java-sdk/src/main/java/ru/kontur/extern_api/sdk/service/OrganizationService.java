@@ -23,14 +23,15 @@
  */
 package ru.kontur.extern_api.sdk.service;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.Company;
 import ru.kontur.extern_api.sdk.model.CompanyBatch;
 import ru.kontur.extern_api.sdk.model.CompanyGeneral;
 import ru.kontur.extern_api.sdk.model.OrgFilter;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с организациями:

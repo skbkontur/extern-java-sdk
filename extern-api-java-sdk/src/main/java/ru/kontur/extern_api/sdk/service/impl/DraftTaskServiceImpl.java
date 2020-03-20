@@ -1,23 +1,23 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
+import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.service.DraftTaskService;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
+
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
-import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.TaskService;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
-
-public class TaskServiceImpl implements TaskService {
+public class DraftTaskServiceImpl implements DraftTaskService {
 
     private final AccountProvider acc;
     private final DraftsApi api;
     private final static int DELAY_TIMEOUT = 2000;
     private final UUID draftId;
 
-    TaskServiceImpl(AccountProvider accountProvider, DraftsApi api, UUID draftId) {
+    DraftTaskServiceImpl(AccountProvider accountProvider, DraftsApi api, UUID draftId) {
         this.acc = accountProvider;
         this.api = api;
         this.draftId = draftId;

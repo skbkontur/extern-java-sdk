@@ -22,7 +22,6 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders.pfr_report;
 
-import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuilderDocumentFilesApi;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.pfr_report.PfrReportDraftsBuildersApi;
@@ -36,14 +35,16 @@ import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuild
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.impl.builders.DraftsBuilderServiceImpl;
 
+import java.util.UUID;
+
 
 public class PfrReportDraftsBuilderServiceImpl extends
         DraftsBuilderServiceImpl<
-                        PfrReportDraftsBuilder,
-                        PfrReportDraftsBuilderMeta,
-                        PfrReportDraftsBuilderMetaRequest,
-                        PfrReportDraftsBuilderDocumentService,
-                        PfrReportDraftsBuildersApi>
+                PfrReportDraftsBuilder,
+                PfrReportDraftsBuilderMeta,
+                PfrReportDraftsBuilderMetaRequest,
+                PfrReportDraftsBuilderDocumentService,
+                PfrReportDraftsBuildersApi>
         implements PfrReportDraftsBuilderService {
 
     private final PfrReportDraftsBuildersDocumentsApi builderDocumentsApi;

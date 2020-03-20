@@ -608,6 +608,7 @@ class DocflowServiceIT {
         }
     }
 
+    @Disabled
     @ParameterizedTest
     @MethodSource("demandLazyFactory")
     @DisplayName("recognize demand attachment")

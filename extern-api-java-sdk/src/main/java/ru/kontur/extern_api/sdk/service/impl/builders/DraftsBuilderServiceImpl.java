@@ -22,21 +22,17 @@
 
 package ru.kontur.extern_api.sdk.service.impl.builders;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.httpclient.api.builders.DraftsBuildersApi;
 import ru.kontur.extern_api.sdk.model.TaskState;
-import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
-import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderTaskInfo;
-import ru.kontur.extern_api.sdk.model.builders.DraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMeta;
-import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
-import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
+import ru.kontur.extern_api.sdk.model.builders.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentService;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.Awaiter;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class DraftsBuilderServiceImpl<
         TDraftsBuilder extends DraftsBuilder,

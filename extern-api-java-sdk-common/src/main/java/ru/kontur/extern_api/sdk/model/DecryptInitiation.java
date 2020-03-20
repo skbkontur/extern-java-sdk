@@ -29,7 +29,7 @@ public class DecryptInitiation {
 
     private String requestId;
 
-    private String taskId;
+    private String decryptionTaskId;
 
     private ConfirmType confirmType;
 
@@ -41,13 +41,19 @@ public class DecryptInitiation {
         return requestId;
     }
 
-    public String getTaskId() {
-        return taskId;
+    public String getDecryptionTaskId() {
+        return decryptionTaskId;
     }
 
-    public void setTaskId(String taskId) { this.taskId = taskId; }
+    public void setDecryptionTaskId(String decryptionTaskId) {
+        this.decryptionTaskId = decryptionTaskId;
+    }
 
-    public ConfirmType getConfirmType() { return confirmType; }
+    public ConfirmType getConfirmType() {
+        return confirmType;
+    }
 
-    public void setConfirmType(ConfirmType confirmType) { this.confirmType = confirmType; }
+    public void setConfirmType(ConfirmType confirmType) {
+        this.confirmType = confirmType;
+    }
 }

@@ -22,20 +22,14 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api;
 
-import java.util.Map;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
+import retrofit2.http.*;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.model.*;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -167,4 +161,22 @@ public interface RelatedDocflowApi {
             @QueryMap Map<String, String> filters
     );
 
+    /**
+     * Get task result
+     *
+     * @param accountId           private account identifier
+     * @param docflowId           docflow identifier
+     * @param documentId          document identifier
+     * @param inventoryDocumentId document identifier
+     * @param taskId              task identifier
+     */
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo> getTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Path("taskId") UUID taskId
+    );
 }

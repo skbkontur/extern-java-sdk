@@ -23,21 +23,18 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
-
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.Nullable;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.OrganizationsApi;
-import ru.kontur.extern_api.sdk.model.Company;
-import ru.kontur.extern_api.sdk.model.CompanyBatch;
-import ru.kontur.extern_api.sdk.model.CompanyGeneral;
-import ru.kontur.extern_api.sdk.model.CompanyName;
-import ru.kontur.extern_api.sdk.model.OrgFilter;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.OrganizationService;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.join;
 
 
 public class OrganizationServiceImpl implements OrganizationService {

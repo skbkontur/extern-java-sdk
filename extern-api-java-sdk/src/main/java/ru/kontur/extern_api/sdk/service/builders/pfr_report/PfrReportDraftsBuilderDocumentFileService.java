@@ -30,10 +30,10 @@ import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderDocumentFileServic
 
 public interface PfrReportDraftsBuilderDocumentFileService extends
         DraftsBuilderDocumentFileService<
-                        PfrReportDraftsBuilderDocumentFile,
-                        PfrReportDraftsBuilderDocumentFileContents,
-                        PfrReportDraftsBuilderDocumentFileMeta,
-                        PfrReportDraftsBuilderDocumentFileMetaRequest,
-                        PfrReportDraftsBuilderDocumentService> {
+                PfrReportDraftsBuilderDocumentFile,
+                PfrReportDraftsBuilderDocumentFileContents,
+                PfrReportDraftsBuilderDocumentFileMeta,
+                PfrReportDraftsBuilderDocumentFileMetaRequest,
+                PfrReportDraftsBuilderDocumentService> {
 
 }

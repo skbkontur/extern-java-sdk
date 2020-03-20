@@ -1,3 +1,4 @@
+package ru.kontur.extern_api.sdk.httpclient.api;
 /*
  * Copyright (c) 2018 SKB Kontur
  *
@@ -21,24 +22,55 @@
  *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
-
-
+import okhttp3.Headers;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Header;
+import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
-public interface TestApi {
+public interface ContentApi {
 
-    @GET("test-tools/v1/get-cloud-sign-confirmation-code")
-    CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
+    @Streaming
+    @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ApiResponse<ResponseBody>> getResponse(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId,
+            @Header("Range") String range
+    );
 
+    @Streaming
+    @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ResponseBody> getContent(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId
+    );
+
+    @Streaming
+    @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ResponseBody> getPartialContent(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId,
+            @Header("Range") String range
+    );
+
+    @Streaming
+    @GET("v1/{accountId}/contents/{contentId}")
+    CompletableFuture<ResponseBody> getContentByStream(
+            @Path("accountId") UUID accountId,
+            @Path("contentId") UUID contentId,
+            @Header("Range") String range
+    );
 }

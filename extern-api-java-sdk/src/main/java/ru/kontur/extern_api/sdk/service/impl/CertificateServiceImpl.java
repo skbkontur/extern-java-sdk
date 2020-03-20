@@ -23,15 +23,16 @@
  */
 package ru.kontur.extern_api.sdk.service.impl;
 
-import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
-
-import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.CertificatesApi;
 import ru.kontur.extern_api.sdk.model.CertificateList;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.CertificateService;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
+
+import java.util.concurrent.CompletableFuture;
+
+import static ru.kontur.extern_api.sdk.utils.QueryContextUtils.contextAdaptor;
 
 
 public class CertificateServiceImpl implements CertificateService {
