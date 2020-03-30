@@ -315,7 +315,8 @@ class DocflowServiceIT {
                     .getOrThrow();
 
             Boolean needDecompress = d.getDescription().getCompressed()
-                    && docflow.getType() != DocflowType.PFR_REPORT;
+                    && docflow.getType() != DocflowType.PFR_REPORT
+                    && !d.hasEncryptedContent(); //расшифрованный контент для зашифрованных документов всегда расжат
             if (needDecompress) {
                 decrypted = Zip.unzip(decrypted);
             }
