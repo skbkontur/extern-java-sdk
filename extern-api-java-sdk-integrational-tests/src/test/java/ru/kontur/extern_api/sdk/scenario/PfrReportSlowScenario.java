@@ -46,10 +46,9 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,7 +56,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PfrReportSlowScenario {
 
     private static ExternEngine engine;
-    private static Certificate senderCertificate;
     private static TestSuite test;
     private static CryptoUtils cryptoUtils;
 
@@ -80,22 +78,6 @@ class PfrReportSlowScenario {
 
     void scenario() throws Exception {
 
-        Certificate workingCert = findWorkingCerts().get(0);
-        senderCertificate = workingCert;
-
-        System.out.printf(
-                "Using certificate: %s %s %s\n",
-                workingCert.getFio(),
-                workingCert.getInn(),
-                workingCert.getKpp()
-        );
-
-        List<Account> accounts = engine.getAccountService()
-                .getAccountsAsync(0, 100)
-                .get()
-                .getOrThrow()
-                .getAccounts();
-
         Docflow pfrDocflow = sendPfrReport(engine).get().getOrThrow();
         System.out.println("Draft is sent. Long live the Docflow " + pfrDocflow.getId());
 
@@ -114,7 +96,6 @@ class PfrReportSlowScenario {
                 continue;
             }
             if (document.hasEncryptedContent()) {
-
                 byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
                         pfrDocflowFinished.getId(),
                         document.getId()
@@ -305,7 +286,6 @@ class PfrReportSlowScenario {
                     .orElse(null);
 
             if (document == null) {
-
                 int timeout = 30;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
@@ -316,21 +296,19 @@ class PfrReportSlowScenario {
                 continue;
             }
 
-            // TODO - fix decrypting error || получать печатную форму после расшифровки, когда будут готовы ссылки на DecryptedContent
             System.out.println("Reply on " + document.getDescription().getType());
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
-                System.out.println(
-                        "Ok, Cannot print document " + document.getDescription().getType() + ". " + e
-                                .getMessage());
+                System.out.println("Ok, Cannot print document " + document.getDescription().getType() + ". " + e.getMessage());
+                if (!e.getErrorId().equals("urn:error:externapi:documentPrintUnsupported"))
+                    throw e;
             }
 
             String type = document.getReplyOptions()[0];
             System.out.println("Reply with " + type);
             docflow = sendReply(docflow.getId().toString(), document, type);
         }
-
     }
 
     private Docflow sendReply(String docflowId, Document document, String type)
@@ -418,7 +396,7 @@ class PfrReportSlowScenario {
         }
 
         System.out.println("Decrypting document...");
-        return cloudDecryptDocument(docflowId, documentId);
+        return decryptDocument(docflowId, documentId);
     }
 
     // TODO добавить когда будет готова поддержва пфр cloudSign
@@ -503,38 +481,12 @@ class PfrReportSlowScenario {
     }
 
 
-    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId) {
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-        return engine.getDocflowService()
-                .cloudDecryptDocument(
-                        docflowId.toString(),
-                        documentId.toString(),
-                        senderCertificate.getContent(),
-                        init -> smsProvider.apply(init.getRequestId())
-                ).getOrThrow();
-    }
-
-    private List<Certificate> findWorkingCerts() throws Exception {
-
-        List<Certificate> remotes = engine
-                .getCertificateService()
-                .getCertificates(0, 100)
+    private byte[] decryptDocument(UUID docflowId, UUID documentId) throws ExecutionException, InterruptedException {
+        byte[] encrypted = engine.getDocflowService()
+                .getEncryptedContentAsync(docflowId, documentId)
                 .get()
-                .getOrThrow()
-                .getCertificates();
+                .getOrThrow();
 
-        List<Certificate> cloudCerts = remotes.stream()
-                .filter(Certificate::getIsCloud)
-                .filter(Certificate::getIsValid)
-                .filter(Certificate::getIsQualified)
-                .collect(Collectors.toList());
-
-        System.out.printf(
-                "Found %s valid qualified cloud certificates\n",
-                cloudCerts.size()
-        );
-
-        return cloudCerts;
+        return cryptoUtils.decrypt(engine.getConfiguration().getThumbprint(), encrypted);
     }
 }
