@@ -16,4 +16,12 @@ public interface ReplyTaskService {
      */
     CompletableFuture<TaskState> getTaskStatus(UUID taskId);
 
+    /**
+     * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/tasks/{apiTaskId}</p>
+     * Асинхронный метод, получающий текущий статус задачи пфр
+     *
+     * @param taskId ИД задачи
+     * @return статус задачи
+     */
+    CompletableFuture<TaskState> getPfrTaskStatus(UUID taskId);
 }

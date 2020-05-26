@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
@@ -782,7 +784,7 @@ public interface DocflowService {
             UUID replyId
     );
 
-    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
             UUID pfrReplyId
@@ -792,12 +794,6 @@ public interface DocflowService {
             UUID docflowId,
             UUID documentId,
             UUID replyId
-    );
-
-    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentForceConfirmationAsync(
-            UUID docflowId,
-            UUID documentId,
-            UUID pfrReplyId
     );
 
     /**
@@ -817,14 +813,14 @@ public interface DocflowService {
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
-     * Асинхронный метод инициирует облачное подписание ответного документа
+     * Асинхронный метод инициирует облачное подписание ответного документа пфр
      *
      * @param docflowId  идентификатор ДО
      * @param documentId идентификатор документа
      * @param pfrReplyId идентификатор ответного документа
      * @return объект с результатом инициации облачной паодписи
      */
-    CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
             String docflowId,
             String documentId,
             String pfrReplyId
@@ -885,6 +881,41 @@ public interface DocflowService {
             String smsCode
     );
 
+    /**
+     * <p>POST v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign-confirm</p>
+     * Асинхронный метод подтверждает облачное подписание ответного документа пфр
+     *
+     * @param docflowId  идентификатор ДО
+     * @param documentId идентификатор документа
+     * @param replyId    идентификатор ответного документа
+     * @param requestId  ИД запроса операции подписания
+     * @param smsCode    смс код подтверждения подписания
+     * @return PfrSignConfirmResultData информация об операции подписания.
+     */
+    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+            String docflowId,
+            String documentId,
+            String replyId,
+            String requestId,
+            String smsCode
+    );
+
+    /**
+     * Подтверждение подписания ответа через код.
+     *
+     * @param docflowId  ИД документооборота, в рамках которого формируется ответ
+     * @param documentId ИД документа, на который сформирован ответ
+     * @param replyId    ИД ответа
+     * @param requestId  ИД запроса на подпись
+     * @param smsCode    Код подтверждения из СМС
+     * @return PfrSignConfirmResultData информация об операции подписания.
+     */
+    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            String requestId,
+            String smsCode);
 
     /**
      * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign-confirm</p>

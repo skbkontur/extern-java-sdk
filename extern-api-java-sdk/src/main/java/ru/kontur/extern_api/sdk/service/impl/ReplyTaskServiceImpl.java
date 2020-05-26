@@ -36,4 +36,10 @@ public class ReplyTaskServiceImpl implements ReplyTaskService {
         return api.getTaskInfo(acc.accountId(), docflowId, documentId, replyId, taskId)
                 .thenApply(TaskInfo::getTaskState);
     }
+
+    @Override
+    public CompletableFuture<TaskState> getPfrTaskStatus(UUID taskId) {
+        return api.getPfrTaskInfo(acc.accountId(), docflowId, documentId, replyId, taskId)
+                .thenApply(TaskInfo::getTaskState);
+    }
 }

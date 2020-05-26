@@ -76,7 +76,8 @@ class PfrReportDraftsBuilderBuildIT {
                 engine,
                 cryptoUtils,
                 draftsBuilder,
-                draftsBuilderDocument
+                draftsBuilderDocument,
+                false
         );
     }
 

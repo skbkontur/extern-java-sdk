@@ -1,155 +1,116 @@
-/*
- * Copyright (c) 2018 SKB Kontur
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- */
-
 package ru.kontur.extern_api.sdk.scenario;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.security.cert.CertificateException;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
+import ru.kontur.extern_api.sdk.crypt.CryptoApi;
+import ru.kontur.extern_api.sdk.model.Account;
+import ru.kontur.extern_api.sdk.model.Certificate;
+import ru.kontur.extern_api.sdk.model.ConfirmType;
+import ru.kontur.extern_api.sdk.model.DecryptDocumentResultContent;
+import ru.kontur.extern_api.sdk.model.DecryptInitiation;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocflowStatus;
+import ru.kontur.extern_api.sdk.model.Document;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.Link;
+import ru.kontur.extern_api.sdk.model.SignInitiation;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
+import ru.kontur.extern_api.sdk.model.TaskState;
 import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
-import ru.kontur.extern_api.sdk.utils.*;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
+import ru.kontur.extern_api.sdk.utils.UncheckedRunnable;
+import ru.kontur.extern_api.sdk.utils.Zip;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-import java.util.Base64;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@Execution(ExecutionMode.CONCURRENT)
-class PfrReportSlowScenario {
+@Disabled
+public class PfrReportDssTestScenario {
 
     private static ExternEngine engine;
-    private static TestSuite test;
-    private static CryptoUtils cryptoUtils;
+    private static Certificate senderCertificate;
+    private static Configuration configuration;
+    private static CryptoApi cryptoApi;
 
     @BeforeAll
-    static void setUpClass() {
-        test = TestSuite.Load();
-        engine = test.engine;
-        cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
+    static void setUpClass() throws CertificateException {
+        String dssConfigPath = "/secret/extern-sdk-dss-config.json";
+        configuration = TestConfig.LoadConfigFromEnvironment(dssConfigPath);
+
+        engine = ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
+                .apiKey(configuration.getApiKey())
+                .buildAuthentication(configuration.getAuthBaseUri(), ab -> ab
+                        .withApiKey(configuration.getApiKey())
+                        .passwordAuthentication(configuration.getLogin(), configuration.getPass())
+                )
+                .doNotUseCryptoProvider()
+                .accountId(configuration.getAccountId())
+                .build(Level.BASIC);
+
+        cryptoApi = new CryptoApi();
     }
 
     @Test
     void main() throws Exception {
         try {
-            scenario();
+            dssScenario();
         } catch (ApiException e) {
             System.err.println(e.prettyPrint());
             throw e;
         }
     }
 
-    void scenario() throws Exception {
+    void dssScenario() throws Exception {
+        senderCertificate = getDssCert();
+
+        String thumbprint = cryptoApi.getThumbprint(senderCertificate.getContent());
+        engine.getConfiguration().setThumbprint(thumbprint);
+
+        System.out.printf(
+                "Using certificate: %s %s %s\n",
+                senderCertificate.getFio(),
+                senderCertificate.getInn(),
+                senderCertificate.getKpp()
+        );
 
         Docflow pfrDocflow = sendPfrReport(engine).get().getOrThrow();
         System.out.println("Draft is sent. Long live the Docflow " + pfrDocflow.getId());
 
         finishDocflow(pfrDocflow);
-
-        Docflow pfrDocflowFinished = engine.getDocflowService()
-                .lookupDocflowAsync(pfrDocflow.getId().toString())
-                .get()
-                .getOrThrow();
-
-        for (Document document : pfrDocflowFinished.getDocuments()) {
-            System.out.println("Will process contents " + document.getDescription().getType());
-            if (document.getDescription().getType().toString() == "PfrReportProtocolAppendix") {
-                // TODO fix condition when pfr content links will be done
-                System.out.println("Skip " + document.getDescription().getType());
-                continue;
-            }
-            if (document.hasEncryptedContent()) {
-                byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
-                        pfrDocflowFinished.getId(),
-                        document.getId()
-                ).join().getOrThrow();
-                System.out.println(
-                        "Service Document " + document.getId() + " encrypted content received, len bytes ="
-                                + pfrServiceDocumentContent.length);
-                byte[] pfrServiceDocumentContentDecrypted = cryptoUtils.decrypt(
-                        engine.getConfiguration().getThumbprint(),
-                        pfrServiceDocumentContent
-                );
-
-                System.out.println("DoService Document " + document.getId() + "content decrypted, len bytes ="
-                        + pfrServiceDocumentContentDecrypted.length);
-            }
-
-            if (document.hasDecryptedContent()) {
-                byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
-                        pfrDocflowFinished.getId(),
-                        document.getId()
-                ).join().getOrThrow();
-
-                System.out.println("Document " + document.getId() + "content received, len bytes ="
-                        + pfrSpecialDecryptedContent.length);
-            }
-        }
     }
 
     private CompletableFuture<QueryContext<Docflow>> sendPfrReport(ExternEngine engine) throws Exception {
         UUID draftId = buildPfrDraftViaBuilder(engine);
         DraftService draftService = engine.getDraftService();
-        Draft draft = draftService
-                .lookupAsync(draftId)
-                .join()
-                .getOrThrow();
 
         HttpClient httpClient = engine.getHttpClient();
-
-        draft.getDocuments()
-                .stream()
-                .map(Link::getHref)
-                .map(link -> httpClient.followGetLink(link, DraftDocument.class))
-                .map(document -> {
-                    DocumentContents contents = updateSignaturesInDraftDocument(
-                            engine,
-                            draftService,
-                            draftId,
-                            httpClient,
-                            document
-                    );
-
-                    return contents;
-                })
-                .toArray();
+        cloudSignDraft(draftId);
 
         // check pdf printing
         Draft updatedDraft = draftService
@@ -167,6 +128,7 @@ class PfrReportSlowScenario {
         // check
         draftService
                 .checkAsync(draftId)
+                .thenApply(QueryContext::ensureSuccess)
                 .join();
 
         // prepare
@@ -183,57 +145,61 @@ class PfrReportSlowScenario {
                 });
     }
 
-    private DocumentContents updateSignaturesInDraftDocument(
-            ExternEngine engine,
-            DraftService draftService,
-            UUID draftId,
-            HttpClient httpClient,
-            DraftDocument document
-    ) {
-        Assertions.assertNotNull(document);
+    private void cloudSignDraft(UUID draftId) throws ExecutionException, InterruptedException {
+        DraftService draftService = engine.getDraftService();
+        SignInitiation signInitiation = draftService
+                .cloudSignInitAsync(draftId)
+                .get()
+                .getOrThrow();
 
-        String contentLink = document.getDecryptedContentLink().getHref();
-        String data = httpClient.followGetLink(contentLink, String.class);
+        Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
 
-        String thumbprint = engine.getConfiguration().getThumbprint();
-        byte[] decryptedContent = draftService.getDecryptedDocumentContentAsync(
-                draftId,
-                document.getId()
-        ).join().getOrThrow();
+        TaskState taskState;
+        TaskInfo ti = new TaskInfo();
+        ti.setId(UUID.fromString(signInitiation.getTaskId()));
+        do {
+            taskState = engine.getTaskService(draftId).getTaskStatus(ti).get();
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
 
-        byte[] signature = cryptoUtils.sign(thumbprint, decryptedContent);
+        } while (taskState == TaskState.RUNNING);
 
-        DocumentContents contents = new DocumentContents();
-        contents.setDescription(document.getDescription());
-        contents.setBase64Content(data);
-        contents.setSignature(Base64.getEncoder().encodeToString(signature));
-
-        draftService.updateDocumentAsync(draftId, document.getId(), contents)
-                .join().getOrThrow();
-        return contents;
+        draftService.lookupAsync(draftId).join().getOrThrow().getDocuments()
+                .stream()
+                .map(link -> engine.getHttpClient().followGetLink(link.getHref(), DraftDocument.class))
+                .map(draftDocument -> draftService.getSignatureContentAsync(
+                        draftId,
+                        draftDocument.getId()
+                ).join().getOrThrow())
+                .forEach(signature -> Assertions.assertTrue(signature.length > 0));
     }
 
-    private static UUID buildPfrDraftViaBuilder(ExternEngine engine) {
+    private UUID buildPfrDraftViaBuilder(ExternEngine engine)
+            throws ExecutionException, InterruptedException {
+
         PfrReportDraftsBuilderService pfrReportDraftsBuilderService = engine
                 .getDraftsBuilderService().pfrReport();
 
         PfrReportDraftsBuilder draftsBuilder = new DraftsBuilderCreator()
                 .createPfrReportDraftsBuilder(
                         engine,
-                        cryptoUtils
-                );
+                        getAccount(),
+                        senderCertificate.getContent());
+
         PfrReportDraftsBuilderDocument draftsBuilderDocument = new DraftsBuilderDocumentCreator()
                 .createPfrReportDraftsBuilderDocument(
                         engine,
                         draftsBuilder
                 );
+
         new DraftsBuilderDocumentFileCreator().createPfrReportDraftsBuilderDocumentFile(
                 engine,
-                cryptoUtils,
+                null,
                 draftsBuilder,
                 draftsBuilderDocument,
-                false
+                true
         );
+
         BuildDraftsBuilderResult draftsBuilderResult = pfrReportDraftsBuilderService.buildAsync(
                 draftsBuilder
                         .getId())
@@ -287,6 +253,7 @@ class PfrReportSlowScenario {
                     .orElse(null);
 
             if (document == null) {
+
                 int timeout = 30;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
@@ -297,13 +264,14 @@ class PfrReportSlowScenario {
                 continue;
             }
 
+            // TODO - fix decrypting error || получать печатную форму после расшифровки, когда будут готовы ссылки на DecryptedContent
             System.out.println("Reply on " + document.getDescription().getType());
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
-                System.out.println("Ok, Cannot print document " + document.getDescription().getType() + ". " + e.getMessage());
-                if (!e.getErrorId().equals("urn:error:externapi:documentPrintUnsupported"))
-                    throw e;
+                System.out.println(
+                        "Ok, Cannot print document " + document.getDescription().getType() + ". " + e
+                                .getMessage());
             }
 
             String type = document.getReplyOptions()[0];
@@ -316,17 +284,38 @@ class PfrReportSlowScenario {
             throws Exception {
 
         String documentId = document.getId().toString();
-        byte[] certContent = cryptoUtils.loadCertContent(engine.getConfiguration().getThumbprint());
         PfrReply pfrReply = engine.getDocflowService()
-                .generatePfrReplyAsync(docflowId, documentId, type, certContent)
+                .generatePfrReplyAsync(docflowId, documentId, type, senderCertificate.getContent())
                 .get()
                 .getOrThrow();
 
         System.out.println("Reply generated");
 
         for (PfrReplyDocument replyDocument : pfrReply.getDocuments()) {
-            signReplyDocumentAndUploadSignature(documentId, replyDocument);
+            prepareReplyDocument(documentId, replyDocument);
         }
+
+        PfrSignInitiation signInitiation = engine.getDocflowService()
+                .cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReply.getId())
+                .get()
+                .getOrThrow();
+
+        Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
+
+        TaskState taskState;
+        do {
+            taskState = engine.getReplyTaskService(
+                    UUID.fromString(docflowId),
+                    UUID.fromString(documentId),
+                    UUID.fromString(pfrReply.getId())
+            ).getPfrTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
+
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
+
+        } while (taskState == TaskState.RUNNING);
+
+        System.out.println("Reply signed in cloud");
 
         Docflow docflow = engine.getDocflowService()
                 .sendPfrReplyAsync(
@@ -339,6 +328,25 @@ class PfrReportSlowScenario {
 
         System.out.println("PFR Reply sent!");
         return docflow;
+    }
+
+    private void prepareReplyDocument(String documentId, PfrReplyDocument reply) {
+        engine.getDocflowService()
+                .updatePfrReplyDocumentDecryptedContentAsync(
+                        reply.getDocflowId(),
+                        documentId,
+                        reply.getReplyId(),
+                        reply.getId(),
+                        GetRandomBytes()
+                )
+                .join().getOrThrow();
+    }
+
+    private byte[] GetRandomBytes(){
+        Random rd = new Random();
+        byte[] arr = new byte[100];
+        rd.nextBytes(arr);
+        return arr;
     }
 
     private void openDraftDocumentAsPdf(UUID draftId, DraftDocument draftDocument) throws Exception {
@@ -394,53 +402,60 @@ class PfrReportSlowScenario {
         }
 
         System.out.println("Decrypting document...");
-        return decryptDocument(docflowId, documentId);
+        return cloudDecryptDocument(docflowId, documentId);
     }
 
-    private void signReplyDocumentAndUploadSignature(
-            String documentId,
-            PfrReplyDocument replyDocument
-    ) {
-        String thumbprint = engine.getConfiguration().getThumbprint();
+    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId)
+            throws InterruptedException {
 
-        byte[] encryptedContent = replyDocument.getEncryptedContent();
-        byte[] decryptedContent = cryptoUtils.decrypt(thumbprint, encryptedContent);
-
-        engine.getDocflowService()
-                .updatePfrReplyDocumentDecryptedContentAsync(
-                        replyDocument.getDocflowId(),
+        DecryptInitiation initiation = engine.getDocflowService()
+                .cloudDecryptDocumentInitAsync(
+                        docflowId,
                         documentId,
-                        replyDocument.getReplyId(),
-                        replyDocument.getId(),
-                        decryptedContent
-                )
-                .join().getOrThrow();
-        System.out.println("Reply document decrypted");
+                        senderCertificate.getContent().getBytes()
+                ).join().getOrThrow();
 
-        byte[] signature = cryptoUtils.sign(thumbprint, decryptedContent);
-        engine.getDocflowService()
-                .updatePfrReplyDocumentSignatureAsync(
-                        replyDocument.getDocflowId(),
-                        replyDocument.getDocumentId(),
-                        replyDocument.getReplyId(),
-                        replyDocument.getId(),
-                        signature
-                )
-                .join().getOrThrow();
-        System.out.println(
-                "Reply document " + replyDocument.getId() + " signature saved for docflow " + replyDocument
-                        .getDocflowId()
-                        + " and original doc " + replyDocument.getDocumentId()
-        );
+        TaskInfo<DecryptDocumentResultContent> taskInfo;
+        do {
+            taskInfo = engine.getDocflowService().getDecryptTaskResult(
+                    docflowId,
+                    documentId,
+                    UUID.fromString(initiation.getDecryptionTaskId())).join();
+
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
+
+        } while (taskInfo.getTaskState() == TaskState.RUNNING);
+
+        return engine.getContentService()
+                .getContent(taskInfo.getTaskResult().getContentId())
+                .join();
     }
 
+    private Certificate getDssCert() throws Exception {
 
-    private byte[] decryptDocument(UUID docflowId, UUID documentId) throws ExecutionException, InterruptedException {
-        byte[] encrypted = engine.getDocflowService()
-                .getEncryptedContentAsync(docflowId, documentId)
+        return engine
+                .getCertificateService()
+                .getCertificates(0, 100)
                 .get()
-                .getOrThrow();
+                .getOrThrow()
+                .getCertificates()
+                .stream()
+                .filter(c -> cryptoApi.getThumbprint(c.getContent()).equals(configuration.getThumbprint()))
+                .findFirst()
+                .get();
+    }
 
-        return cryptoUtils.decrypt(engine.getConfiguration().getThumbprint(), encrypted);
+    private Account getAccount() throws ExecutionException, InterruptedException {
+
+        return engine.getAccountService()
+                .getAccountsAsync(0, 100)
+                .get()
+                .getOrThrow()
+                .getAccounts()
+                .stream()
+                .filter(acc -> acc.getInn().equals(senderCertificate.getInn()))
+                .collect(Collectors.toList())
+                .get(0);
     }
 }
