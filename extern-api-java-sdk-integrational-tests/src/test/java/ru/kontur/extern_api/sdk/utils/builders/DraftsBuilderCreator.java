@@ -105,4 +105,26 @@ public class DraftsBuilderCreator {
                 .createAsync(draftsBuilderMetaRequest)
                 .join();
     }
+
+    public PfrReportDraftsBuilder createPfrReportDraftsBuilder(
+            ExternEngine engine,
+            String certificate
+    ) {
+        TestData[] testData = TestUtils.getTestData(certificate);
+
+        DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[3]);
+        PfrReportDraftsBuilderMetaRequest draftsBuilderMetaRequest = new PfrReportDraftsBuilderMetaRequest();
+
+        OrganizationRequest payer = draftMeta.getPayer();
+
+        draftsBuilderMetaRequest.setPayer(payer);
+        draftsBuilderMetaRequest.setSender(draftMeta.getSender());
+        draftsBuilderMetaRequest.setRecipient(draftMeta.getRecipient());
+
+        return engine
+                .getDraftsBuilderService()
+                .pfrReport()
+                .createAsync(draftsBuilderMetaRequest)
+                .join();
+    }
 }

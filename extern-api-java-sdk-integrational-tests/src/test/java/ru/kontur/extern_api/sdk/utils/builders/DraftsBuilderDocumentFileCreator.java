@@ -25,7 +25,6 @@ package ru.kontur.extern_api.sdk.utils.builders;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -93,18 +92,7 @@ public class DraftsBuilderDocumentFileCreator {
     }
 
     public String getScannedContent() {
-        URL contentUrl = DraftsBuilderDocumentFileCreator.class
-                .getClassLoader()
-                .getResource("docs/Scanned.pdf");
-
-        String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
-
-        try {
-            byte[] bytes = Files.readAllBytes(Paths.get(contentPath));
-            return Base64.getEncoder().encodeToString(bytes);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot find scanned file in resources");
-        }
+        return getTestDataFileContent("docs/Scanned.pdf");
     }
 
     public PfrReportDraftsBuilderDocumentFile createPfrReportDraftsBuilderDocumentFile(
@@ -117,7 +105,7 @@ public class DraftsBuilderDocumentFileCreator {
         PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
 
-        String pfrReportContent = getPfrReportContent();
+        String pfrReportContent = getTestDataFileContent("docs/pfr/SomePfrReport.xml");
 
         byte[] signature = cryptoUtils.sign(
                 engine.getConfiguration().getThumbprint(),
@@ -139,10 +127,35 @@ public class DraftsBuilderDocumentFileCreator {
                 .join();
     }
 
-    public String getPfrReportContent() {
+    public PfrReportDraftsBuilderDocumentFile createPfrReportV2DraftsBuilderDocumentFile(
+            ExternEngine engine,
+            PfrReportDraftsBuilder draftsBuilder,
+            PfrReportDraftsBuilderDocument draftsBuilderDocument
+    ) {
+        final String fileName = "SomePfrV2Report.xml";
+        PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
+        PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
+
+        String pfrReportContent = getTestDataFileContent("docs/pfr/SomePfrV2Report.xml");
+
+        contents.setBase64Content(pfrReportContent);
+
+        meta.setFileName(fileName);
+        contents.setMeta(meta);
+
+        return engine
+                .getDraftsBuilderService()
+                .pfrReport()
+                .getDocumentService(draftsBuilder.getId())
+                .getFileService(draftsBuilderDocument.getId())
+                .createAsync(contents)
+                .join();
+    }
+
+    public String getTestDataFileContent(String path) {
         URL contentUrl = DraftsBuilderDocumentFileCreator.class
                 .getClassLoader()
-                .getResource("docs/pfr/SomePfrReport.xml");
+                .getResource(path);
 
         String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
 
