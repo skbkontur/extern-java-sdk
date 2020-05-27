@@ -409,7 +409,7 @@ public interface DocflowsApi {
     );
 
     /**
-     * Cloud sign Fns-Pfr-Reply document from specified workflow
+     * Cloud sign Pfr-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)

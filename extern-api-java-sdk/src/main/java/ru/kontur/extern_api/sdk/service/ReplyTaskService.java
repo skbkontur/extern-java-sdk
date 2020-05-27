@@ -18,7 +18,7 @@ public interface ReplyTaskService {
 
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/tasks/{apiTaskId}</p>
-     * Асинхронный метод, получающий текущий статус задачи пфр
+     * Асинхронный метод, получающий текущий статус задачи подписания ответного документа ПФР
      *
      * @param taskId ИД задачи
      * @return статус задачи

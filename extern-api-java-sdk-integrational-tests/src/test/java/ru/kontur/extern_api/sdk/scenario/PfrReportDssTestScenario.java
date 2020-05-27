@@ -264,7 +264,6 @@ public class PfrReportDssTestScenario {
                 continue;
             }
 
-            // TODO - fix decrypting error || получать печатную форму после расшифровки, когда будут готовы ссылки на DecryptedContent
             System.out.println("Reply on " + document.getDescription().getType());
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());

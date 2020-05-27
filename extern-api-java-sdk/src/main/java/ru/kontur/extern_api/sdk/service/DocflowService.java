@@ -797,7 +797,7 @@ public interface DocflowService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign</p>
      * Асинхронный метод инициирует облачное подписание ответного документа
      *
      * @param docflowId  идентификатор ДО
@@ -812,8 +812,8 @@ public interface DocflowService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
-     * Асинхронный метод инициирует облачное подписание ответного документа пфр
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign</p>
+     * Асинхронный метод инициирует облачное подписание пакета ответных документов пфр
      *
      * @param docflowId  идентификатор ДО
      * @param documentId идентификатор документа
@@ -828,7 +828,7 @@ public interface DocflowService {
 
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign</p>
      * Cинхронный метод инициирует облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
@@ -863,7 +863,7 @@ public interface DocflowService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign-confirm</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign-confirm</p>
      * Асинхронный метод подтверждает облачное подписание ответного документа
      *
      * @param docflowId  идентификатор ДО
@@ -883,7 +883,7 @@ public interface DocflowService {
 
     /**
      * <p>POST v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign-confirm</p>
-     * Асинхронный метод подтверждает облачное подписание ответного документа пфр
+     * Асинхронный метод подтверждает облачное подписание пакета ответных документов пфр
      *
      * @param docflowId  идентификатор ДО
      * @param documentId идентификатор документа
@@ -918,7 +918,7 @@ public interface DocflowService {
             String smsCode);
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/[replyId}/cloud-sign-confirm</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign-confirm</p>
      * Cинхронный метод подтверждает облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:

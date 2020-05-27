@@ -11,7 +11,7 @@ public class PfrSignConfirmResultData {
         return links;
     }
 
-    public void setLinks(List<Link> signedDocuments){
-        this.links = signedDocuments;
+    public void setLinks(List<Link> links){
+        this.links = links;
     }
 }
