@@ -25,6 +25,7 @@ package ru.kontur.extern_api.sdk.scenario;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -137,13 +138,7 @@ class PfrReportV2CloudTestScenario {
 
         for (Document document : pfrDocflowFinished.getDocuments()) {
             System.out.println("Will process contents " + document.getDescription().getType());
-            if (document.getDescription().getType().toString() == "PfrReportProtocolAppendix") {
-                // TODO fix condition when pfr content links will be done
-                System.out.println("Skip " + document.getDescription().getType());
-                continue;
-            }
             if (document.hasEncryptedContent()) {
-
                 byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
                         pfrDocflowFinished.getId(),
                         document.getId()
@@ -152,26 +147,25 @@ class PfrReportV2CloudTestScenario {
                         "Service Document " + document.getId() + " encrypted content received, len bytes ="
                                 + pfrServiceDocumentContent.length);
 
-                // TODO fix using cloud decrypting
-                /*
-                byte[] pfrServiceDocumentContentDecrypted = cryptoUtils.decrypt(
-                        engine.getConfiguration().getThumbprint(),
-                        pfrServiceDocumentContent
-                );
-
-                System.out.println("DoService Document " + document.getId() + "content decrypted, len bytes ="
-                                           + pfrServiceDocumentContentDecrypted.length);
-                 */
+                ApproveCodeProvider backdoor = new ApproveCodeProvider(engine);
+                byte[] decrypted = engine.getDocflowService().cloudDecryptDocument(
+                        pfrDocflow.getId().toString(),
+                        document.getId().toString(),
+                        senderCertificate.getContent(),
+                        init -> backdoor.apply(init.getRequestId())
+                )
+                        .getOrThrow();
+                Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypted, 0, 5));
             }
 
             if (document.hasDecryptedContent()) {
-                byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
+                byte[] decryptedContent = engine.getDocflowService().getDecryptedContentAsync(
                         pfrDocflowFinished.getId(),
                         document.getId()
                 ).join().getOrThrow();
 
                 System.out.println("Document " + document.getId() + "content received, len bytes ="
-                                           + pfrSpecialDecryptedContent.length);
+                                           + decryptedContent.length);
             }
         }
     }
@@ -304,17 +298,22 @@ class PfrReportV2CloudTestScenario {
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
+            if (docflow.getStatus() == DocflowStatus.SENT) {
+                System.out.println("Docflow " + docflow.getId() + " status: " + docflow.getStatus());
+                break;
+            }
+
             if (docflow.getStatus() == DocflowStatus.FINISHED) {
-                System.out.println("Docflow status: " + docflow.getStatus());
+                System.out.println("Docflow " + docflow.getId() + " status: " + docflow.getStatus());
                 break;
             }
 
             if (docflow.getStatus() == DocflowStatus.RESPONSE_ARRIVED) {
-                System.out.println("Docflow status: " + docflow.getStatus());
+                System.out.println("Docflow " + docflow.getId() + "status: " + docflow.getStatus());
             }
 
             Document document = docflow.getDocuments().stream()
-                    .filter(x -> x.getDescription().getType().toString() == "")
+                    //.filter(x -> x.getDescription().getType().toString() == "")
                     .findFirst()
                     .orElse(null);
 
@@ -367,6 +366,7 @@ class PfrReportV2CloudTestScenario {
                 .get()
                 .getOrThrow();
 
+        /* TODO - почему падает на unzip - или контент не сжат или зашифрован но флаг hasDecryptedContent стоит true?
         if (document.hasDecryptedContent()) {
             System.out.println("Document is already decrypted");
             byte[] content = engine.getDocflowService()
@@ -379,7 +379,7 @@ class PfrReportV2CloudTestScenario {
             }
 
             return content;
-        }
+        }*/
 
         System.out.println("Decrypting document...");
         return cloudDecryptDocument(docflowId, documentId);

@@ -442,6 +442,24 @@ public enum DocumentType implements Urn<DocumentType> {
     @SerializedName("urn:document:pfr-report")
     PfrReport,
 
+    @SerializedName("urn:document:pfr-report-report-v2")
+    PfrReportV2,
+
+    @SerializedName("urn:document:pfr-report-acknowledgement-v2")
+    PfrReportAcknowledgementV2,
+
+    @SerializedName("urn:document:pfr-report-decline-notice")
+    PfrReportDeclineNotice,
+
+    @SerializedName("urn:document:pfr-ancillary-delivery-notice")
+    PfrAncillaryDeliveryNotice,
+
+    @SerializedName("urn:document:pfr-ancillary-rejection-notice")
+    PfrAncillaryRejectionNotice,
+
+    @SerializedName("urn:document:pfr-ancillary-document")
+    PfrAncillary,
+
     @SerializedName("urn:document:pfr-report-description")
     PfrReportDescription,
 
