@@ -239,7 +239,7 @@ public interface DocflowsApi {
      * @param documentType Reply document identifier (required)
      */
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-generate-reply")
-    CompletableFuture<ApiResponse<PfrReply>> generatePfrReplyDocument(
+    CompletableFuture<ApiResponse<PfrReply>> generatePfrReply(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,

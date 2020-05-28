@@ -784,7 +784,7 @@ public interface DocflowService {
             UUID replyId
     );
 
-    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             UUID docflowId,
             UUID documentId,
             UUID pfrReplyId
@@ -797,7 +797,7 @@ public interface DocflowService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign</p>
      * Асинхронный метод инициирует облачное подписание ответного документа
      *
      * @param docflowId  идентификатор ДО
@@ -820,7 +820,7 @@ public interface DocflowService {
      * @param pfrReplyId идентификатор ответного документа
      * @return объект с результатом инициации облачной паодписи
      */
-    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             String docflowId,
             String documentId,
             String pfrReplyId
@@ -828,7 +828,7 @@ public interface DocflowService {
 
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign</p>
      * Cинхронный метод инициирует облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:
@@ -863,7 +863,7 @@ public interface DocflowService {
     );
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign-confirm</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm</p>
      * Асинхронный метод подтверждает облачное подписание ответного документа
      *
      * @param docflowId  идентификатор ДО
@@ -892,7 +892,7 @@ public interface DocflowService {
      * @param smsCode    смс код подтверждения подписания
      * @return PfrSignConfirmResultData информация об операции подписания.
      */
-    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
             String docflowId,
             String documentId,
             String replyId,
@@ -910,7 +910,7 @@ public interface DocflowService {
      * @param smsCode    Код подтверждения из СМС
      * @return PfrSignConfirmResultData информация об операции подписания.
      */
-    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+    CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId,
@@ -918,7 +918,7 @@ public interface DocflowService {
             String smsCode);
 
     /**
-     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/{replyId}/cloud-sign-confirm</p>
+     * <p>POST /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm</p>
      * Cинхронный метод подтверждает облачное подписание ответного документа
      *
      * @param parent контекст. Должен содержать следующие параметры:

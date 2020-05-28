@@ -311,7 +311,7 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
             UUID docflowId, UUID documentId, String replyType, byte[] signerCert
     ) {
-        return api.generatePfrReplyDocument(
+        return api.generatePfrReply(
                 acc.accountId(),
                 docflowId,
                 documentId,
@@ -760,10 +760,10 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
+    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             String docflowId, String documentId, String pfrReplyId
     ) {
-        return cloudSignPfrReplyDocumentAsync(
+        return cloudSignPfrReplyAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(pfrReplyId)
@@ -815,9 +815,9 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
             String docflowId, String documentId, String replyId, String requestId, String smsCode) {
-        return cloudSignConfirmPfrReplyDocumentAsync(
+        return cloudSignConfirmPfrReplyAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(replyId),
@@ -827,7 +827,7 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyDocumentAsync(
+    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId,
@@ -1001,7 +1001,7 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyDocumentAsync(
+    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId

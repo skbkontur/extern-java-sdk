@@ -263,12 +263,12 @@ public class PfrReportCloudTestScenario {
         }
 
         PfrSignInitiation signInitiation = engine.getDocflowService()
-                .cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReply.getId())
+                .cloudSignPfrReplyAsync(docflowId, documentId, pfrReply.getId())
                 .get()
                 .getOrThrow();
 
         engine.getDocflowService()
-                .cloudSignConfirmPfrReplyDocumentAsync(
+                .cloudSignConfirmPfrReplyAsync(
                         docflowId,
                         documentId,
                         pfrReply.getId(),
