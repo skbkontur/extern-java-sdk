@@ -54,7 +54,6 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
@@ -205,10 +204,7 @@ class PfrReportV2CloudTestScenario {
         // send
         return draftService
                 .sendAsync(draftId)
-                .thenApply(QueryContext::ensureSuccess)
-                .whenComplete((cxt, throwable) -> {
-                    awaitDocflowIndexed(engine, cxt.getDocflow());
-                });
+                .thenApply(QueryContext::ensureSuccess);
     }
 
     private static UUID buildPfrDraftViaBuilder(
@@ -239,14 +235,6 @@ class PfrReportV2CloudTestScenario {
                 .join();
         assertEquals(1, draftsBuilderResult.getDraftIds().length);
         return draftsBuilderResult.getDraftIds()[0];
-    }
-
-    private static void awaitDocflowIndexed(ExternEngine engine, Docflow docflow) {
-        Awaiter.waitForCondition(
-                () -> engine.getDocflowService().lookupDocflowAsync(docflow.getId()),
-                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
-                2000
-        ).thenApply(QueryContext::getOrThrow);
     }
 
     private void finishDocflow(Docflow docflow) throws Exception {

@@ -88,22 +88,7 @@ public class DraftsBuilderCreator {
             CryptoUtils cryptoUtils
     ) {
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
-        TestData[] testData = TestUtils.getTestData(certificate);
-
-        DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[3]);
-        PfrReportDraftsBuilderMetaRequest draftsBuilderMetaRequest = new PfrReportDraftsBuilderMetaRequest();
-
-        OrganizationRequest payer = draftMeta.getPayer();
-
-        draftsBuilderMetaRequest.setPayer(payer);
-        draftsBuilderMetaRequest.setSender(draftMeta.getSender());
-        draftsBuilderMetaRequest.setRecipient(draftMeta.getRecipient());
-
-        return engine
-                .getDraftsBuilderService()
-                .pfrReport()
-                .createAsync(draftsBuilderMetaRequest)
-                .join();
+        return createPfrReportDraftsBuilder(engine, certificate);
     }
 
     public PfrReportDraftsBuilder createPfrReportDraftsBuilder(

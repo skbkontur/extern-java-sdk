@@ -23,9 +23,6 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.List;
@@ -49,7 +46,6 @@ import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
 import ru.kontur.extern_api.sdk.utils.DocType;
 import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
@@ -247,10 +243,7 @@ class PfrReportV2DssTestScenario {
         // send
         return draftService
                 .sendAsync(draftId)
-                .thenApply(QueryContext::ensureSuccess)
-                .whenComplete((cxt, throwable) -> {
-                    awaitDocflowIndexed(engine, cxt.getDocflow());
-                });
+                .thenApply(QueryContext::ensureSuccess);
     }
 
     private void cloudSignDraftWithDssCert(UUID draftId) throws Exception {
@@ -318,14 +311,6 @@ class PfrReportV2DssTestScenario {
                 .join().ensureSuccess();
 
         return draftId;
-    }
-
-    private static void awaitDocflowIndexed(ExternEngine engine, Docflow docflow) {
-        Awaiter.waitForCondition(
-                () -> engine.getDocflowService().lookupDocflowAsync(docflow.getId()),
-                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
-                2000
-        ).thenApply(QueryContext::getOrThrow);
     }
 
     private void finishDocflow(Docflow docflow) throws Exception {
