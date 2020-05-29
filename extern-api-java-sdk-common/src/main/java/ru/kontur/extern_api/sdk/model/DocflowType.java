@@ -155,6 +155,13 @@ public enum DocflowType implements Urn<DocflowType> {
     PFR_REPORT(PfrReport.class),
 
     /**
+     * Служебные документы, например.
+     * Заявление на подключение страхователя к ЭДО ПФР (ЗПЭД).
+     */
+    @SerializedName("urn:docflow:pfr-ancillary")
+    PFR_ANCILLARY(PfrReport.class),
+
+    /**
      * Письма в пенсионный фонд.
      */
     @SerializedName("urn:docflow:pfr-letter")

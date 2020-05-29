@@ -177,10 +177,7 @@ class PfrReportSlowScenario {
         // send
         return draftService
                 .sendAsync(draftId)
-                .thenApply(QueryContext::ensureSuccess)
-                .whenComplete((cxt, throwable) -> {
-                    awaitDocflowIndexed(engine, cxt.getDocflow());
-                });
+                .thenApply(QueryContext::ensureSuccess);
     }
 
     private DocumentContents updateSignaturesInDraftDocument(
@@ -239,14 +236,6 @@ class PfrReportSlowScenario {
                 .join();
         assertEquals(1, draftsBuilderResult.getDraftIds().length);
         return draftsBuilderResult.getDraftIds()[0];
-    }
-
-    private static void awaitDocflowIndexed(ExternEngine engine, Docflow docflow) {
-        Awaiter.waitForCondition(
-                () -> engine.getDocflowService().lookupDocflowAsync(docflow.getId()),
-                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
-                2000
-        ).thenApply(QueryContext::getOrThrow);
     }
 
     /**

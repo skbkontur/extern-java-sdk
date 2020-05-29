@@ -88,6 +88,13 @@ public class DraftsBuilderCreator {
             CryptoUtils cryptoUtils
     ) {
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
+        return createPfrReportDraftsBuilder(engine, certificate);
+    }
+
+    public PfrReportDraftsBuilder createPfrReportDraftsBuilder(
+            ExternEngine engine,
+            String certificate
+    ) {
         TestData[] testData = TestUtils.getTestData(certificate);
 
         DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[3]);
