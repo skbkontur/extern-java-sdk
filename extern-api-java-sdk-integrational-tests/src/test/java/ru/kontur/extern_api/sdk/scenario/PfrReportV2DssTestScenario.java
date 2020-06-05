@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -54,6 +55,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
  * Тест на сценарий отправки отчета PfrV2 СЗВ-ТД c Dss
  */
 @Execution(ExecutionMode.CONCURRENT)
+@Disabled
 class PfrReportV2DssTestScenario {
 
     private static ExternEngine engine;
