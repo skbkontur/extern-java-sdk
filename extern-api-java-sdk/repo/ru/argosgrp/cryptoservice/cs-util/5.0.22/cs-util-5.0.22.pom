@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.argosgrp.cryptoservice</groupId>
         <artifactId>cryptoservice</artifactId>
-        <version>5.0.22-SNAPSHOT</version>
+        <version>5.0.22</version>
     </parent>
 
     <artifactId>cs-util</artifactId>
@@ -21,25 +21,9 @@
 
 
     <repositories>
-        <repository>
-            <id>maven-central</id>
-            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/maven-central/</url>
-        </repository>
-        <repository>
-            <id>argos</id>
-            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
-        </repository>
     </repositories>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>argos</id>
-            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
-        </snapshotRepository>
-        <repository>
-            <id>argos</id>
-            <url>http://arg-dev.pythagoras.spb.ru:8081/repository/argos/</url>
-        </repository>
     </distributionManagement>
 
 </project>
