@@ -39,6 +39,7 @@ public class DraftDocument {
     private Link encryptedContentLink = null;
     private Link signatureContentLink = null;
     private DocumentDescription description = null;
+    private UUID dataToSignContentId = null;
 
     /**
      * Возвращает идентификатор документа
@@ -127,5 +128,9 @@ public class DraftDocument {
      */
     public void setDescription(DocumentDescription description) {
         this.description = description;
+    }
+
+    public UUID getDataToSignContentId() {
+        return dataToSignContentId;
     }
 }
