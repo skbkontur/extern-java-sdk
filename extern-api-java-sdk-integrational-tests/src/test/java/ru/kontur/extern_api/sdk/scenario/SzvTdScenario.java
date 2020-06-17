@@ -1,7 +1,5 @@
 package ru.kontur.extern_api.sdk.scenario;
 
-import org.bouncycastle.crypto.signers.ECGOST3410_2012Signer;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,22 +8,18 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DraftDocument;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
 import ru.kontur.extern_api.sdk.model.pfr.Zped.ZpedRequestContract;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.ContentService;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.*;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
+import ru.kontur.extern_api.sdk.utils.Resources;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestUtils;
 
-import java.io.FileInputStream;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.UUID;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class SzvTdScenario {
