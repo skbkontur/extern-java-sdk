@@ -19,6 +19,7 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -65,9 +66,8 @@ public class ZpedBuilderIT {
                 .getOrThrow();
 
         String contentLink = draftDocument.getDecryptedContentLink().getHref();
-        String data = httpClient.followGetLink(contentLink, String.class);
-        System.out.println("Built document: " + data);
-        Assertions.assertTrue(data.contains("ЗПЭД"));
+        byte[] data = Base64.getDecoder().decode(httpClient.followGetLink(contentLink, String.class));
+        Assertions.assertTrue(new String(data).contains("ЗПЭД"));
 
         draftService.checkAsync(draftId).join().getOrThrow();
 
