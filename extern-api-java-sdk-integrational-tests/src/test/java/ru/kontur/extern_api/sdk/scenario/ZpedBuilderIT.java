@@ -64,16 +64,17 @@ public class ZpedBuilderIT {
                 .join()
                 .getOrThrow();
 
+        String contentLink = draftDocument.getDecryptedContentLink().getHref();
+        String data = httpClient.followGetLink(contentLink, String.class);
+        System.out.println("Built document: " + data);
+        Assertions.assertTrue(data.contains("ЗПЭД"));
+
         draftService.checkAsync(draftId).join().getOrThrow();
 
         draftDocument = draftService.lookupDocumentAsync(draftId, draftDocument.getId()).join().getOrThrow();
-        String contentLink = draftDocument.getDecryptedContentLink().getHref();
-        String data = httpClient.followGetLink(contentLink, String.class);
-        Assertions.assertTrue(data.contains("ЗПЭД"));
-
         UUID dataToSignContentId = draftDocument.getDataToSignContentId();
-
         ContentService contentService = engine.getContentService();
+
         byte[] dataToSign = contentService.getContent(dataToSignContentId).join();
         Assertions.assertNotNull(dataToSign);
         Assertions.assertEquals(64, dataToSign.length);
