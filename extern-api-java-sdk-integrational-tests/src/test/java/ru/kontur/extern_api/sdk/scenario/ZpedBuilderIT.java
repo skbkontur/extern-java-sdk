@@ -67,7 +67,9 @@ public class ZpedBuilderIT {
 
         String contentLink = draftDocument.getDecryptedContentLink().getHref();
         byte[] data = Base64.getDecoder().decode(httpClient.followGetLink(contentLink, String.class));
-        Assertions.assertTrue(new String(data).contains("ЗПЭД"));
+        String xml = new String(data);
+        System.out.println("Built document: " + xml);
+        Assertions.assertTrue(xml.contains("ЗПЭД"));
 
         draftService.checkAsync(draftId).join().getOrThrow();
 
