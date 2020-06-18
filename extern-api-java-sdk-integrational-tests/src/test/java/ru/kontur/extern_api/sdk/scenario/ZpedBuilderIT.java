@@ -18,6 +18,8 @@ import ru.kontur.extern_api.sdk.utils.Resources;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 import ru.kontur.extern_api.sdk.utils.TestUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
@@ -47,7 +49,7 @@ public class ZpedBuilderIT {
         }
     }
 
-    private void scenario() {
+    private void scenario() throws UnsupportedEncodingException {
         String thumbprint = engine.getConfiguration().getThumbprint();
         String cert = cryptoUtils.loadX509(thumbprint);
         DraftMetaRequest draftMetaRequest = Arrays
@@ -67,7 +69,7 @@ public class ZpedBuilderIT {
 
         String contentLink = draftDocument.getDecryptedContentLink().getHref();
         byte[] data = Base64.getDecoder().decode(httpClient.followGetLink(contentLink, String.class));
-        String xml = new String(data);
+        String xml = new String(data, "UTF-8");
         System.out.println("Built document: " + xml);
         Assertions.assertTrue(xml.contains("ЗПЭД"));
 
