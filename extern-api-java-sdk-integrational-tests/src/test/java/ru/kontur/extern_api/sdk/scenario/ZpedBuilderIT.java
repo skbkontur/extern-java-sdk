@@ -81,6 +81,7 @@ public class ZpedBuilderIT {
 
         byte[] dataToSign = contentService.getContent(dataToSignContentId).join();
         Assertions.assertNotNull(dataToSign);
+        Assertions.assertTrue(dataToSign.length > 0);
     }
 
     private static ZpedRequestContract loadZped(String path) {
