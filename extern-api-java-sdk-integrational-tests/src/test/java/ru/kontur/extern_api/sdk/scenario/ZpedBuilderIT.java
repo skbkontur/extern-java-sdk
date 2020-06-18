@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @Execution(ExecutionMode.CONCURRENT)
-public class SzvTdScenario {
+public class ZpedBuilderIT {
     private static ExternEngine engine;
     private static TestSuite test;
     private static CryptoUtils cryptoUtils;
@@ -46,7 +46,7 @@ public class SzvTdScenario {
         }
     }
 
-    private void scenario() throws Exception {
+    private void scenario() {
         String thumbprint = engine.getConfiguration().getThumbprint();
         String cert = cryptoUtils.loadX509(thumbprint);
         DraftMetaRequest draftMetaRequest = Arrays
