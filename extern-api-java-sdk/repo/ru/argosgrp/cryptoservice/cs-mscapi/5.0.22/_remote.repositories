@@ -1,4 +1,4 @@
 #NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Thu Oct 17 15:14:13 SAMT 2019
-cs-openssl-5.0.22-SNAPSHOT.jar>=
-cs-openssl-5.0.22-SNAPSHOT.pom>=
+#Mon Jun 15 20:05:42 SAMT 2020
+cs-mscapi-5.0.22.pom>=
+cs-mscapi-5.0.22.jar>=
