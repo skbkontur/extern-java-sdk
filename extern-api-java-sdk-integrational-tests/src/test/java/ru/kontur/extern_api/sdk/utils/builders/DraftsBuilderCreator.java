@@ -95,8 +95,7 @@ public class DraftsBuilderCreator {
             CryptoUtils cryptoUtils
     ) {
         String certificate = cryptoUtils.loadX509(engine.getConfiguration().getThumbprint());
-        TestData[] testData = TestUtils.getTestData(certificate);
-        return createPfrReportDraftsBuilderFromTestData(engine, testData);
+        return createPfrReportDraftsBuilder(engine, certificate);
     }
 
     public PfrReportDraftsBuilder createPfrReportDraftsBuilder(

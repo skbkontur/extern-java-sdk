@@ -32,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.List;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,7 @@ import ru.kontur.extern_api.sdk.model.AccountList;
 import ru.kontur.extern_api.sdk.model.CreateAccountRequest;
 import ru.kontur.extern_api.sdk.model.ExternUserRole;
 import ru.kontur.extern_api.sdk.service.AccountService;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -53,12 +56,32 @@ class AccountIT {
 
     @BeforeAll
     static void setUpClass() {
-        accountService = TestSuite.Load().engine.getAccountService();
+        Configuration config = TestConfig.LoadConfigFromEnvironment();
+        ExternEngine engine =TestSuite.LoadManually((cfg, builder) -> builder
+                .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
+                        .passwordAuthentication(config.getLoginSecond(), config.getPassSecond())
+                )
+                .doNotUseCryptoProvider()
+                .doNotSetupAccount()
+                .build(Level.BODY)
+        ).engine;
+        accountService = engine.getAccountService();
     }
 
+  /*
     private static final String INN = "7810654318";
     private static final String KPP = "781001001";
     private static final String ORG_NAME = "Рога и Копыта";
+    */
+
+    private static final String INN = "5447822240";
+    private static final String KPP = "156145230";
+    private static final String ORG_NAME = "Рога123 и Копыта123";
+
+  /*  private static final String INN = "0270006356";
+    private static final String KPP = "014243797";
+    private static final String ORG_NAME = "Рога789 и Копыта789";
+   */
 
     @Test
     void acquireAccounts() {
@@ -87,7 +110,7 @@ class AccountIT {
 
 
     @Test
-    void acquireAccount(){
+    void acquireAccount() {
         QueryContext<AccountList> cxt = accountService
                 .getAccountsAsync(0, 100)
                 .join()
@@ -113,7 +136,6 @@ class AccountIT {
                 .kpp(KPP)
                 .organizationName(ORG_NAME);
 
-
         QueryContext<Account> createCxt = accountService
                 .createAccountAsync(createAccountRequest)
                 .join()
@@ -126,7 +148,8 @@ class AccountIT {
 
         assertNull(deleteCxt.getServiceError());
 
-        ApiException apiException = Assertions.assertThrows(ApiException.class,
+        ApiException apiException = Assertions.assertThrows(
+                ApiException.class,
                 () -> accountService.getAccountAsync(createCxt.getOrThrow().getId()).get().getOrThrow()
         );
 

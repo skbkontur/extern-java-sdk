@@ -87,7 +87,8 @@ public class KonturConfiguredClient {
                 .addInterceptor(apiKeyToken)
                 .addInterceptor(authenticationToken)
                 .followRedirects(false)
-                .followSslRedirects(false);
+                .followSslRedirects(false)
+                .retryOnConnectionFailure(false);
     }
 
     public KonturConfiguredClient(
