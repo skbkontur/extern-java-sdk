@@ -63,7 +63,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
  * Тест на сценарий отправки отчета PfrV2 СЗВ-ТД
  */
 @Execution(ExecutionMode.CONCURRENT)
-class PfrReportV2CloudTestScenario {
+class PfrReportV2CloudTestScenarioIT {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;

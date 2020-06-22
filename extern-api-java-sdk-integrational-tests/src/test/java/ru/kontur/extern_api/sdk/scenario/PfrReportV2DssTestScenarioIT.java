@@ -56,7 +56,7 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
  */
 @Execution(ExecutionMode.CONCURRENT)
 @Disabled
-class PfrReportV2DssTestScenario {
+class PfrReportV2DssTestScenarioIT {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;

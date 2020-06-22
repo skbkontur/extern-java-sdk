@@ -23,86 +23,104 @@
 
 package ru.kontur.extern_api.sdk.scenario;
 
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import ru.kontur.extern_api.sdk.Configuration;
 import ru.kontur.extern_api.sdk.ExternEngine;
+import ru.kontur.extern_api.sdk.ExternEngineBuilder;
 import ru.kontur.extern_api.sdk.adaptor.ApiException;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
 import ru.kontur.extern_api.sdk.utils.*;
 
-import java.util.List;
+import java.security.cert.CertificateException;
+import java.util.Base64;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-@Execution(ExecutionMode.CONCURRENT)
-class BankCloudTestScenario {
+@Disabled
+class BankCloudDssTestScenarioIT {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;
     private static TestSuite test;
+    private static Configuration configuration;
+    private static CryptoApi cryptoApi;
 
     @BeforeAll
-    static void setUpClass() {
-        test = TestSuite.Load();
-        engine = test.engine;
+    static void setUpClass() throws CertificateException {
 
+        String dssConfigPath = "/secret/extern-sdk-dss-config.json";
+        configuration = TestConfig.LoadConfigFromEnvironment(dssConfigPath);
+
+        engine = ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
+                .apiKey(configuration.getApiKey())
+                .buildAuthentication(configuration.getAuthBaseUri(), ab -> ab
+                        .withApiKey(configuration.getApiKey())
+                        .passwordAuthentication(configuration.getLogin(), configuration.getPass())
+                )
+                .doNotUseCryptoProvider()
+                .accountId(configuration.getAccountId())
+                .build(Level.BASIC);
+
+        cryptoApi = new CryptoApi();
+
+        test = new TestSuite(engine, configuration);
     }
 
     @Test
     void main() throws Exception {
         try {
-            scenario();
+            dssScenario();
         } catch (ApiException e) {
             System.err.println(e.prettyPrint());
             throw e;
         }
     }
 
-    void scenario() throws Exception {
+    void dssScenario() throws Exception {
 
-        Certificate workingCert = findWorkingCerts().get(0);
-        senderCertificate = workingCert;
-
+        senderCertificate = getDssCert();
         System.out.printf(
-                "Using certificate: %s %s %s\n",
-                workingCert.getFio(),
-                workingCert.getInn(),
-                workingCert.getKpp()
+                "Using certificate: fio = %s, inn = %s, kpp = %s\n",
+                senderCertificate.getFio(),
+                senderCertificate.getInn(),
+                senderCertificate.getKpp()
         );
 
-        List<Account> accounts = engine.getAccountService()
-                .getAccountsAsync(0, 100)
-                .get()
-                .getOrThrow()
-                .getAccounts();
-
-        Account account = accounts.stream()
-                .filter(
-                        acc -> acc.getInn().equals(senderCertificate.getInn())
-                                && acc.getKpp().equals(senderCertificate.getKpp()))
-                .collect(Collectors.toList())
-                .get(0);
-
+        Account account = getAccount();
         engine.setAccountProvider(account::getId);
-
-        System.out.printf("Found %s accounts\n", accounts.size());
         System.out.printf(
-                "Using account: %s inn=%s kpp=%s\n",
+                "Using account: %s inn = %s kpp = %s\n",
                 account.getOrganizationName(),
                 account.getInn(),
                 account.getKpp()
         );
 
-        Docflow docflow = sendDraftWithUsn(account, workingCert);
+        Docflow docflow = sendDraftWithUsn(account, senderCertificate);
 
         System.out.println("Draft is sent. Long live the Docflow " + docflow.getId());
 
         finishDocflow(docflow);
+    }
+
+    Account getAccount() throws ExecutionException, InterruptedException {
+
+        return engine.getAccountService()
+                .getAccountsAsync(0, 100)
+                .get()
+                .getOrThrow()
+                .getAccounts()
+                .stream()
+                .filter(acc -> acc.getInn().equals(senderCertificate.getInn()))
+                .collect(Collectors.toList())
+                .get(0);
     }
 
     private Docflow sendDraftWithUsn(Account senderAcc, Certificate certificate)
@@ -140,7 +158,7 @@ class BankCloudTestScenario {
         System.out.println("Usn document built and added to draft");
 
         openDraftDocumentAsPdf(draftId, document.getId());
-        cloudSignDraft(draftId);
+        cloudSignDraftWithDssCert(draftId);
 
         CheckResultData checkResult = engine.getDraftService()
                 .checkAsync(draftId)
@@ -189,6 +207,17 @@ class BankCloudTestScenario {
         docflow = updated;
         Assertions.assertNotNull(docflow, "Cannot get docflow in 5 minutes");
 
+        Document document = docflow.getDocuments().stream()
+                .filter(d -> d.getDescription().getType() == DocumentType.Fns534Report)
+                .findFirst()
+                .orElse(null);
+
+        try {
+            openDocflowDocumentAsPdf(docflow.getId(), document.getId());
+        } catch (ApiException e) {
+            System.out.println("Cannot print document. " + e.getMessage());
+        }
+
         while (true) {
             System.out.println("Docflow status: " + docflow.getStatus());
 
@@ -196,13 +225,12 @@ class BankCloudTestScenario {
                 break;
             }
 
-            Document document = docflow.getDocuments().stream()
+            document = docflow.getDocuments().stream()
                     .filter(Document::isNeedToReply)
                     .findFirst()
                     .orElse(null);
 
             if (document == null) {
-
                 int timeout = 20;
                 System.out.println("No reply available yet. Waiting " + timeout + " seconds");
                 UncheckedRunnable.run(() -> Thread.sleep(timeout * 1000));
@@ -217,7 +245,7 @@ class BankCloudTestScenario {
             try {
                 openDocflowDocumentAsPdf(docflow.getId(), document.getId());
             } catch (ApiException e) {
-                System.out.println("Ok, Cannot print document. " + e.getMessage());
+                System.out.println("Cannot print document. " + e.getMessage());
             }
 
             String type = document.getReplyOptions()[0];
@@ -295,82 +323,116 @@ class BankCloudTestScenario {
         return cloudDecryptDocument(docflowId, documentId);
     }
 
-    private void cloudSignDraft(UUID draftId) throws Exception {
+    private void cloudSignDraftWithDssCert(UUID draftId) throws Exception {
 
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-        SignedDraft signedDraft = engine.getDraftService()
-                .cloudSignAsync(draftId, cxt -> smsProvider.apply(cxt.get().getRequestId()))
+        SignInitiation signInitiation = engine.getDraftService()
+                .cloudSignInitAsync(draftId)
                 .get()
                 .getOrThrow();
 
-        System.out.printf(
-                "Draft signed in cloud, %s document(s) signed\n",
-                signedDraft.getSignedDocuments().size()
-        );
+        Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
+
+        TaskState taskState;
+        TaskInfo ti = new TaskInfo();
+        ti.setId(UUID.fromString(signInitiation.getTaskId()));
+        do {
+            taskState = engine.getTaskService(draftId).getTaskStatus(ti).get();
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
+
+        } while (taskState == TaskState.RUNNING);
+
+        engine.getDraftService().lookupAsync(draftId).join().getOrThrow().getDocuments()
+                .stream()
+                .map(link -> engine.getHttpClient().followGetLink(link.getHref(), DraftDocument.class))
+                .map(draftDocument -> engine.getDraftService().getSignatureContentAsync(
+                        draftId,
+                        draftDocument.getId()
+                ).join().getOrThrow())
+                .forEach(signature -> Assertions.assertTrue(signature.length > 0));
     }
 
     private void cloudSignReplyDocument(String docflowId, String documentId, ReplyDocument reply)
             throws Exception {
 
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-        SignInitiation init = engine.getDocflowService()
-                .cloudSignReplyDocumentAsync(docflowId, documentId, reply.getId())
+        SignInitiation signInitiation = engine.getDocflowService()
+                .cloudSignReplyDocumentForceConfirmationAsync(
+                        UUID.fromString(docflowId),
+                        UUID.fromString(documentId),
+                        UUID.fromString(reply.getId())
+                )
                 .get()
                 .getOrThrow();
 
-        if (!init.needToConfirmSigning()) {
+        if (!signInitiation.needToConfirmSigning()) {
             System.out.println("Wow! You shouldn't confirm this signing!");
         } else {
-            engine.getDocflowService()
-                    .cloudSignConfirmReplyDocumentAsync(
-                            docflowId,
-                            documentId,
-                            reply.getId(),
-                            init.getRequestId(),
-                            smsProvider.apply(init.getRequestId())
-                    )
-                    .get()
-                    .getOrThrow();
+            Assertions.assertEquals(signInitiation.getConfirmType(), ConfirmType.MY_DSS);
+
+            TaskState taskState;
+            do {
+                taskState = engine.getReplyTaskService(
+                        UUID.fromString(docflowId),
+                        UUID.fromString(documentId),
+                        UUID.fromString(reply.getId())
+                ).getTaskStatus(UUID.fromString(signInitiation.getTaskId())).get();
+
+                Thread.sleep(2000);
+                System.out.println("Waiting for user to confirm dss operation...");
+
+            } while (taskState == TaskState.RUNNING);
         }
 
         System.out.println("Reply signed in cloud");
     }
 
 
-    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId) {
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
+    private byte[] cloudDecryptDocument(UUID docflowId, UUID documentId)
+            throws Exception {
 
-        return engine.getDocflowService()
-                .cloudDecryptDocument(
-                        docflowId.toString(),
-                        documentId.toString(),
-                        senderCertificate.getContent(),
-                        init -> smsProvider.apply(init.getRequestId())
-                ).getOrThrow();
+        DecryptInitiation decryptInitiation = engine.getDocflowService().cloudDecryptDocumentInitAsync(
+                docflowId,
+                documentId,
+                Base64.getDecoder().decode(senderCertificate.getContent()),
+                true
+        )
+                .get().getOrThrow();
+
+        Assertions.assertEquals(ConfirmType.MY_DSS, decryptInitiation.getConfirmType());
+        TaskInfo<DecryptDocumentResultContent> taskInfo;
+        do {
+            taskInfo = engine.getDocflowService().getDecryptTaskResult(
+                    docflowId,
+                    documentId,
+                    UUID.fromString(decryptInitiation.getDecryptionTaskId())
+            ).get();
+
+            Thread.sleep(2000);
+            System.out.println("Waiting for user to confirm dss operation...");
+        } while (taskInfo.getTaskState() == TaskState.RUNNING);
+
+        if (taskInfo.getTaskResult() == null) {
+            throw new Exception(
+                    "Crypt operation completed, but does not have a result. TaskId = " + taskInfo.getId());
+        }
+
+        DecryptDocumentResultContent documentResultContent = (DecryptDocumentResultContent) taskInfo.getTaskResult();
+        UUID contentId = documentResultContent.getContentId();
+        byte[] content = engine.getContentService().getContent(contentId).get();
+        return content;
     }
 
-    private List<Certificate> findWorkingCerts() throws Exception {
+    private Certificate getDssCert() throws Exception {
 
-        List<Certificate> remotes = engine
+        return engine
                 .getCertificateService()
                 .getCertificates(0, 100)
                 .get()
                 .getOrThrow()
-                .getCertificates();
-
-        List<Certificate> cloudCerts = remotes.stream()
-                .filter(Certificate::getIsCloud)
-                .filter(Certificate::getIsValid)
-                .filter(Certificate::getIsQualified)
-                .collect(Collectors.toList());
-
-        System.out.printf(
-                "Found %s valid qualified cloud certificates\n",
-                cloudCerts.size()
-        );
-
-        return cloudCerts;
+                .getCertificates()
+                .stream()
+                .filter(c -> cryptoApi.getThumbprint(c.getContent()).equals(configuration.getThumbprint()))
+                .findFirst()
+                .get();
     }
 }
