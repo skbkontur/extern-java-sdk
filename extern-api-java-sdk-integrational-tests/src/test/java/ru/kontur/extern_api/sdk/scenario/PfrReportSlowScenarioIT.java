@@ -53,7 +53,7 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Execution(ExecutionMode.CONCURRENT)
-class PfrReportSlowScenario {
+class PfrReportSlowScenarioIT {
 
     private static ExternEngine engine;
     private static TestSuite test;
@@ -228,7 +228,8 @@ class PfrReportSlowScenario {
                 engine,
                 cryptoUtils,
                 draftsBuilder,
-                draftsBuilderDocument
+                draftsBuilderDocument,
+                false
         );
         BuildDraftsBuilderResult draftsBuilderResult = pfrReportDraftsBuilderService.buildAsync(
                 draftsBuilder
@@ -312,9 +313,6 @@ class PfrReportSlowScenario {
 
         System.out.println("Reply generated");
 
-        // TODO - облачную подпись Pfr-Replies?
-        // cloudSignReplyDocument(docflowId, documentId, replyDocument);
-
         for (PfrReplyDocument replyDocument : pfrReply.getDocuments()) {
             signReplyDocumentAndUploadSignature(documentId, replyDocument);
         }
@@ -386,50 +384,6 @@ class PfrReportSlowScenario {
 
         System.out.println("Decrypting document...");
         return decryptDocument(docflowId, documentId);
-    }
-
-    // TODO добавить когда будет готова поддержва пфр cloudSign
-    private void cloudSignDraft(UUID draftId) throws Exception {
-
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-        SignedDraft signedDraft = engine.getDraftService()
-                .cloudSignAsync(draftId, cxt -> smsProvider.apply(cxt.get().getRequestId()))
-                .get()
-                .getOrThrow();
-
-        System.out.printf(
-                "Draft signed in cloud, %s document(s) signed\n",
-                signedDraft.getSignedDocuments().size()
-        );
-    }
-
-    private void cloudSignReplyDocument(String docflowId, String documentId, PfrReplyDocument reply)
-            throws Exception {
-
-        ApproveCodeProvider smsProvider = new ApproveCodeProvider(engine);
-
-        SignInitiation init = engine.getDocflowService()
-                .cloudSignReplyDocumentAsync(docflowId, documentId, reply.getId())
-                .get()
-                .getOrThrow();
-
-        if (!init.needToConfirmSigning()) {
-            System.out.println("Wow! You shouldn't confirm this signing!");
-        } else {
-            engine.getDocflowService()
-                    .cloudSignConfirmReplyDocumentAsync(
-                            docflowId,
-                            documentId,
-                            reply.getId(),
-                            init.getRequestId(),
-                            smsProvider.apply(init.getRequestId())
-                    )
-                    .get()
-                    .getOrThrow();
-        }
-
-        System.out.println("Reply signed in cloud");
     }
 
     private void signReplyDocumentAndUploadSignature(

@@ -47,4 +47,13 @@ public interface RepliesApi {
             @Path("replyId") UUID replyId,
             @Path("taskId") UUID taskId
     );
+
+    @GET("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/tasks/{taskId}")
+    CompletableFuture<TaskInfo> getPfrTaskInfo(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Path("replyId") UUID replyId,
+            @Path("taskId") UUID taskId
+    );
 }

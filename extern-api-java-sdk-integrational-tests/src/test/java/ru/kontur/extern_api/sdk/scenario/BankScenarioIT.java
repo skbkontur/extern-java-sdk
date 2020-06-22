@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 
 @Disabled
-class BankScenario {
+class BankScenarioIT {
 
     private static ExternEngine engine;
     private static CryptoApi cryptoApi;

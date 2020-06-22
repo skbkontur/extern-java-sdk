@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 
 
 @Disabled
-class BankCloudInteractiveScenario {
+class BankCloudInteractiveScenarioIT {
 
     private static ExternEngine engine;
     private static Certificate senderCertificate;

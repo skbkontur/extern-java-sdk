@@ -29,6 +29,8 @@ import ru.kontur.extern_api.sdk.httpclient.api.DocflowsApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.provider.UserIPProvider;
 import ru.kontur.extern_api.sdk.service.DocflowService;
@@ -309,7 +311,7 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
             UUID docflowId, UUID documentId, String replyType, byte[] signerCert
     ) {
-        return api.generatePfrReplyDocument(
+        return api.generatePfrReply(
                 acc.accountId(),
                 docflowId,
                 documentId,
@@ -736,28 +738,12 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
-            UUID docflowId, UUID documentId, UUID pfrReplyId
-    ) {
-        // TODO not implemented now
-        return cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReplyId, false);
-    }
-
-    @Override
     public CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentForceConfirmationAsync(
             UUID docflowId,
             UUID documentId,
             UUID replyId
     ) {
         return cloudSignReplyDocumentAsync(docflowId, documentId, replyId, true);
-    }
-
-    @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentForceConfirmationAsync(
-            UUID docflowId, UUID documentId, UUID pfrReplyId
-    ) {
-        // TODO not implemented now
-        return cloudSignPfrReplyDocumentAsync(docflowId, documentId, pfrReplyId, true);
     }
 
     @Override
@@ -774,10 +760,10 @@ public class DocflowServiceImpl implements DocflowService {
     }
 
     @Override
-    public CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
+    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             String docflowId, String documentId, String pfrReplyId
     ) {
-        return cloudSignPfrReplyDocumentAsync(
+        return cloudSignPfrReplyAsync(
                 UUID.fromString(docflowId),
                 UUID.fromString(documentId),
                 UUID.fromString(pfrReplyId)
@@ -826,6 +812,36 @@ public class DocflowServiceImpl implements DocflowService {
                 requestId,
                 smsCode
         );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
+            String docflowId, String documentId, String replyId, String requestId, String smsCode) {
+        return cloudSignConfirmPfrReplyAsync(
+                UUID.fromString(docflowId),
+                UUID.fromString(documentId),
+                UUID.fromString(replyId),
+                requestId,
+                smsCode
+        );
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<PfrSignConfirmResultData>> cloudSignConfirmPfrReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId,
+            String requestId,
+            String smsCode) {
+        return api.cloudSignPfrReplyDocumentConfirm(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId,
+                requestId,
+                smsCode
+        )
+                .thenApply(contextAdaptor("sign-pfr-reply-result"));
     }
 
     @Override
@@ -984,6 +1000,21 @@ public class DocflowServiceImpl implements DocflowService {
         return api.getDecryptResult(acc.accountId(), docflowId, documentId, taskId);
     }
 
+    @Override
+    public CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            UUID replyId
+    ) {
+        return api.cloudSignPfrReplyDocumentInit(
+                acc.accountId(),
+                docflowId,
+                documentId,
+                replyId
+        )
+                .thenApply(contextAdaptor("sign-pfr-reply"));
+    }
+
     private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,
@@ -998,22 +1029,5 @@ public class DocflowServiceImpl implements DocflowService {
                 forceConfirmation
         )
                 .thenApply(contextAdaptor("sign-reply"));
-    }
-
-    private CompletableFuture<QueryContext<SignInitiation>> cloudSignPfrReplyDocumentAsync(
-            UUID docflowId,
-            UUID documentId,
-            UUID replyId,
-            boolean forceConfirmation
-    ) {
-        // TODO not implemented now
-        return api.cloudSignPfrReplyDocumentInit(
-                acc.accountId(),
-                docflowId,
-                documentId,
-                replyId,
-                forceConfirmation
-        )
-                .thenApply(contextAdaptor("sign-pfr-reply"));
     }
 }

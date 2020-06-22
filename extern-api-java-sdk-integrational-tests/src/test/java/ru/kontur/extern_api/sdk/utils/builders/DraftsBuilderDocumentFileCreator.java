@@ -99,21 +99,24 @@ public class DraftsBuilderDocumentFileCreator {
             ExternEngine engine,
             CryptoUtils cryptoUtils,
             PfrReportDraftsBuilder draftsBuilder,
-            PfrReportDraftsBuilderDocument draftsBuilderDocument
+            PfrReportDraftsBuilderDocument draftsBuilderDocument,
+            boolean isDss
     ) {
         final String fileName = "SomePfrXmlReport.xml";
         PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
 
-        String pfrReportContent = getTestDataFileContent("docs/pfr/SomePfrReport.xml");
+        String pfrReportContent = getTestDataFileContent(
+                isDss ? "docs/pfr-dss/SomePfrReport.xml" : "docs/pfr/SomePfrReport.xml");
 
-        byte[] signature = cryptoUtils.sign(
-                engine.getConfiguration().getThumbprint(),
-                Base64.getDecoder().decode(pfrReportContent)
-        );
-
+        if (cryptoUtils != null) {
+            byte[] signature = cryptoUtils.sign(
+                    engine.getConfiguration().getThumbprint(),
+                    Base64.getDecoder().decode(pfrReportContent)
+            );
+            contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
+        }
         contents.setBase64Content(pfrReportContent);
-        contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
 
         meta.setFileName(fileName);
         contents.setMeta(meta);
@@ -126,6 +129,7 @@ public class DraftsBuilderDocumentFileCreator {
                 .createAsync(contents)
                 .join();
     }
+
 
     public PfrReportDraftsBuilderDocumentFile createPfrReportV2DraftsBuilderDocumentFile(
             ExternEngine engine,
