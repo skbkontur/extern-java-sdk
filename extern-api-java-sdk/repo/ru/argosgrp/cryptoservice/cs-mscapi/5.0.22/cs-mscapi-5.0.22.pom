@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.argosgrp.cryptoservice</groupId>
         <artifactId>cryptoservice</artifactId>
-        <version>5.0.22-SNAPSHOT</version>
+        <version>5.0.22</version>
     </parent>
 
     <!--groupId>ru.argosgrp.cryptoservice</groupId-->
@@ -25,11 +25,9 @@
     <packaging>jar</packaging>
 
     <repositories>
-        
     </repositories>
 
     <distributionManagement>
-        
     </distributionManagement>
 
     <dependencies>
