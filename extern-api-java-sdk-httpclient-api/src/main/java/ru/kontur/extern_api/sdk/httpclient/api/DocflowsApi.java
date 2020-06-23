@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -237,7 +239,7 @@ public interface DocflowsApi {
      * @param documentType Reply document identifier (required)
      */
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-generate-reply")
-    CompletableFuture<ApiResponse<PfrReply>> generatePfrReplyDocument(
+    CompletableFuture<ApiResponse<PfrReply>> generatePfrReply(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
@@ -407,7 +409,7 @@ public interface DocflowsApi {
     );
 
     /**
-     * Cloud sign Fns-Reply document from specified workflow
+     * Cloud sign Pfr-Reply document from specified workflow
      *
      * @param accountId Account identifier (required)
      * @param docflowId Docflow object identifier (required)
@@ -415,12 +417,11 @@ public interface DocflowsApi {
      * @param replyId Reply document identifier (required)
      */
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign")
-    CompletableFuture<ApiResponse<SignInitiation>> cloudSignPfrReplyDocumentInit(
+    CompletableFuture<ApiResponse<PfrSignInitiation>> cloudSignPfrReplyDocumentInit(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
-            @Path("replyId") UUID replyId,
-            @Query("forceConfirmation") boolean forceConfirmation
+            @Path("replyId") UUID replyId
     );
 
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/replies/{replyId}/cloud-sign-confirm")
@@ -434,7 +435,7 @@ public interface DocflowsApi {
     );
 
     @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/pfr-replies/{replyId}/cloud-sign-confirm")
-    CompletableFuture<ApiResponse<SignConfirmResultData>> cloudSignPfrReplyDocumentConfirm(
+    CompletableFuture<ApiResponse<PfrSignConfirmResultData>> cloudSignPfrReplyDocumentConfirm(
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,

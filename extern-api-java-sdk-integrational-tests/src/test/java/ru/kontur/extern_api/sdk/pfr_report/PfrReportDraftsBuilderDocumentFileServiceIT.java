@@ -41,7 +41,6 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileContents;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMeta;
 import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocumentFileMetaRequest;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderDocumentFileService;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -86,7 +85,8 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
                         engine,
                         cryptoUtils,
                         draftsBuilder,
-                        draftsBuilderDocument
+                        draftsBuilderDocument,
+                        false
                 );
 
         draftsBuilderDocumentFileService = engine
@@ -144,7 +144,8 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
                                 engine,
                                 cryptoUtils,
                                 draftsBuilder,
-                                draftsBuilderDocument
+                                draftsBuilderDocument,
+                                false
                         );
 
         PfrReportDraftsBuilderDocumentFileContents newContents = new PfrReportDraftsBuilderDocumentFileContents();
@@ -184,7 +185,8 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
                                 engine,
                                 cryptoUtils,
                                 draftsBuilder,
-                                draftsBuilderDocument
+                                draftsBuilderDocument,
+                                false
                         );
 
         draftsBuilderDocumentFileService
@@ -245,7 +247,8 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
                                 engine,
                                 cryptoUtils,
                                 draftsBuilder,
-                                draftsBuilderDocument
+                                draftsBuilderDocument,
+                                false
                         );
 
         PfrReportDraftsBuilderDocumentFileMetaRequest newMeta =

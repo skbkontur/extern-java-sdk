@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.argosgrp.cryptoservice</groupId>
+        <artifactId>cryptoservice</artifactId>
+        <version>5.0.22</version>
+    </parent>
+
+    <artifactId>cs-util</artifactId>
+
+    <properties>
+        <SpecificationTitle>Argos Crypto service Module</SpecificationTitle>
+        <ImplementationVersion>${applicationVersion}</ImplementationVersion>
+
+    </properties>
+
+    <packaging>jar</packaging>
+
+
+    <repositories>
+    </repositories>
+
+    <distributionManagement>
+    </distributionManagement>
+
+</project>
