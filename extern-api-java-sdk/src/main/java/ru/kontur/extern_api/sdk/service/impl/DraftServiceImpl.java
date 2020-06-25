@@ -27,6 +27,7 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
+import ru.kontur.extern_api.sdk.model.pfr.Zped.ZpedRequestContract;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.utils.QueryContextUtils;
@@ -590,6 +591,17 @@ public class DraftServiceImpl implements DraftService {
                 documentType,
                 contractVersion,
                 requestContract
+        ).thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<DraftDocument>> createAndBuildZpedAsync(UUID draftId, ZpedRequestContract zpedRequestContract) {
+        return api.createAndBuildDocument(
+                acc.accountId(),
+                draftId,
+                BuildDocumentType.ZPED,
+                1,
+                zpedRequestContract
         ).thenApply(contextAdaptor(QueryContext.DRAFT_DOCUMENT));
     }
 

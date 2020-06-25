@@ -28,6 +28,7 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContractInterface;
 import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
+import ru.kontur.extern_api.sdk.model.pfr.Zped.ZpedRequestContract;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -933,4 +934,6 @@ public interface DraftService {
             BuildDocumentContract requestContract,
             int contractVersion
     );
+
+    CompletableFuture<QueryContext<DraftDocument>> createAndBuildZpedAsync(UUID draftId, ZpedRequestContract zpedRequestContract);
 }

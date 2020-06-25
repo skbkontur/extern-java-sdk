@@ -1,0 +1,15 @@
+{
+  "for-ul": true,
+  "insurer-ul": {
+    "full-name": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ «КОЛОРИТ»",
+    "short-name": "ООО «КОЛОРИТ»",
+      "phone": "83912150738",
+    "email": "color24@mail.ru"
+  },
+  "representative": {
+    "name": "И",
+    "surname": "Калашников",
+    "patronymic": "Г",
+    "position": "Директор"
+  }
+}
