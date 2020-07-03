@@ -36,6 +36,7 @@ import java.util.List;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -53,11 +54,21 @@ import ru.kontur.extern_api.sdk.utils.TestSuite;
 class AccountIT {
 
     private static AccountService accountService;
+    private static Configuration config;
+
 
     @BeforeAll
-    static void setUpClass() {
-        Configuration config = TestConfig.LoadConfigFromEnvironment();
-        ExternEngine engine =TestSuite.LoadManually((cfg, builder) -> builder
+    static void beforeAllSetUpClass(){
+        config = TestConfig.LoadConfigFromEnvironment();
+    }
+
+    @BeforeEach
+    void setUpClass() {
+        accountService = createAccountService();
+    }
+
+    private AccountService createAccountService(){
+        ExternEngine engine = TestSuite.LoadManually((cfg, builder) -> builder
                 .buildAuthentication(cfg.getAuthBaseUri(), authBuilder -> authBuilder
                         .passwordAuthentication(config.getLoginSecond(), config.getPassSecond())
                 )
@@ -65,7 +76,7 @@ class AccountIT {
                 .doNotSetupAccount()
                 .build(Level.BODY)
         ).engine;
-        accountService = engine.getAccountService();
+        return engine.getAccountService();
     }
 
   /*
@@ -130,7 +141,6 @@ class AccountIT {
 
     @Test
     void deleteAccount() {
-
         CreateAccountRequest createAccountRequest = new CreateAccountRequest()
                 .inn(INN)
                 .kpp(KPP)
@@ -148,12 +158,14 @@ class AccountIT {
 
         assertNull(deleteCxt.getServiceError());
 
+        AccountService accountServiceWithNewSession = createAccountService();
+
         ApiException apiException = Assertions.assertThrows(
                 ApiException.class,
-                () -> accountService.getAccountAsync(createCxt.getOrThrow().getId()).get().getOrThrow()
+                () -> accountServiceWithNewSession.getAccountAsync(createCxt.getOrThrow().getId()).get().getOrThrow()
         );
 
-        Assertions.assertEquals(404, apiException.getCode());
+        Assertions.assertEquals(404, apiException.getCode());//при удалении учетки удаляется сессия
     }
 
 
