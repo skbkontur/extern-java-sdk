@@ -29,7 +29,7 @@ import java.util.Objects;
 
 /**
  * <p>
- * Класс предназначен для хронения информации сертификата см. класс {@code CertificateService}
+ * Класс предназначен для хранения информации сертификата см. класс {@code CertificateService}
  * </p>
  * @author Aleksey Sukhorukov
  */
