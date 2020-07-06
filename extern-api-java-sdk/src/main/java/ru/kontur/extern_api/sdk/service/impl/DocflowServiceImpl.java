@@ -1015,6 +1015,14 @@ public class DocflowServiceImpl implements DocflowService {
                 .thenApply(contextAdaptor("sign-pfr-reply"));
     }
 
+    @Override
+    public CompletableFuture<CheckDemandResult> checkDemandAsync(UUID docflowId, CheckDemandRequestData requestData) {
+        return api.checkDemandAsync(
+                acc.accountId(),
+                docflowId,
+                requestData);
+    }
+
     private CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             UUID docflowId,
             UUID documentId,

@@ -3,6 +3,9 @@ package ru.kontur.extern_api.sdk.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс предназначен для представления результатов проверки требования
+ */
 public class CheckDemandResult {
 
     private List<Link> links = null;

@@ -29,14 +29,14 @@ import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 /**
  * Группа методов предоставляет доступ к операциям для работы с докуметооборотом (ДО)
@@ -500,7 +500,7 @@ public interface DocflowService {
     /**
      * Асинхронный метод отправляет ответный документ в контролирующий орган
      *
-     * @param docflowId  ИД докуметооборота, в рамках которого отправляется ответ
+     * @param docflowId  ИД документооборота, в рамках которого отправляется ответ
      * @param documentId ИД документа, в рамках которого отправляется ответ
      * @param replyId    ИД ответа на документ
      * @return ДО
@@ -749,7 +749,7 @@ public interface DocflowService {
      *
      * @param docflowId       идентификатор ДО
      * @param documentId      идентификатор документа
-     * @param documentContent расшифрованый формализованный документ, для которого
+     * @param documentContent расшифрованный формализованный документ, для которого
      *                        необходимо создать печатную форму
      * @return печатная форма
      */
@@ -803,7 +803,7 @@ public interface DocflowService {
      * @param docflowId  идентификатор ДО
      * @param documentId идентификатор документа
      * @param replyId    идентификатор ответного документа
-     * @return объект с результатом инициации облачной паодписи
+     * @return объект с результатом инициации облачной подписи
      */
     CompletableFuture<QueryContext<SignInitiation>> cloudSignReplyDocumentAsync(
             String docflowId,
@@ -818,7 +818,7 @@ public interface DocflowService {
      * @param docflowId  идентификатор ДО
      * @param documentId идентификатор документа
      * @param pfrReplyId идентификатор ответного документа
-     * @return объект с результатом инициации облачной паодписи
+     * @return объект с результатом инициации облачной подписи
      */
     CompletableFuture<QueryContext<PfrSignInitiation>> cloudSignPfrReplyAsync(
             String docflowId,
@@ -871,7 +871,7 @@ public interface DocflowService {
      * @param replyId    идентификатор ответного документа
      * @param requestId  ИД запроса операции подписания
      * @param smsCode    смс код подтверждения подписания
-     * @return объект с результатом инициации облачной паодписи
+     * @return объект с результатом инициации облачной подписи
      */
     CompletableFuture<QueryContext<SignConfirmResultData>> cloudSignConfirmReplyDocumentAsync(
             String docflowId,
@@ -928,7 +928,7 @@ public interface DocflowService {
      *               QueryContext#setDocumentId};</p>
      *               <p>- идентификатор ответного документа. Для установки необходимо использовать метод {@link
      *               QueryContext#setReplyId(String)};</p>
-     * @return объект с результатом инициации облачной паодписи
+     * @return объект с результатом инициации облачной подписи
      * @deprecated use async method instead
      */
     @Deprecated
@@ -937,10 +937,10 @@ public interface DocflowService {
     /**
      * Инициировать операцию облачного дешифрования документа через код подтверждения
      *
-     * @param docflowId   ИД документоборота
+     * @param docflowId   ИД документооборота
      * @param documentId  ИД документа
      * @param certificate Сертификат
-     * @param unzipIfCan  Расжать контент на сервере, если это возможно
+     * @param unzipIfCan  Разжать контент на сервере, если это возможно
      * @return DecryptInitiation Информация об операции
      */
     CompletableFuture<QueryContext<DecryptInitiation>> cloudDecryptDocumentInitAsync(
@@ -953,10 +953,10 @@ public interface DocflowService {
     /**
      * Инициация процесса облачного расшифрования документа из Docflow
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param certBase64 Контент сертификата в формате base64 строки
-     * @param unzipIfCan Расжать контент на сервере, если это возможно
+     * @param unzipIfCan Разжать контент на сервере, если это возможно
      * @return ссылка на подтверждение расшифрования
      */
     QueryContext<DecryptInitiation> cloudDecryptDocumentInit(
@@ -969,7 +969,7 @@ public interface DocflowService {
     /**
      * Инициировать операцию облачного дешифрования документа через код подтверждения
      *
-     * @param docflowId   ИД документоборота
+     * @param docflowId   ИД документооборота
      * @param documentId  ИД документа
      * @param certificate Сертификат
      * @return DecryptInitiation Информация об операции
@@ -983,7 +983,7 @@ public interface DocflowService {
     /**
      * Инициация процесса облачного расшифрования документа из Docflow
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param certBase64 Контент сертификата в формате base64 строки
      * @return ссылка на подтверждение расшифрования
@@ -995,9 +995,9 @@ public interface DocflowService {
     );
 
     /**
-     * Расшифровать через операции с кодом подтверджения
+     * Расшифровать через операции с кодом подтверждения
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param requestId  ИД операции расшифрования
      * @param code       Код из СМС
@@ -1013,11 +1013,11 @@ public interface DocflowService {
     /**
      * Подтверждение облачного расшифрования документа из Docflow
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param requestId  ИД операции расшифрования
      * @param code       Код из СМС
-     * @return Расшифрованый конент документа
+     * @return Расшифрованный контент документа
      */
     QueryContext<byte[]> cloudDecryptDocumentConfirm(
             String docflowId,
@@ -1029,7 +1029,7 @@ public interface DocflowService {
     /**
      * Расшифровать через операции с кодом подтверджения
      *
-     * @param docflowId       ИД документоборота
+     * @param docflowId       ИД документооборота
      * @param documentId      ИД документа
      * @param certificate     Контент сертификата
      * @param smsCodeProvider СМС провайдер
@@ -1045,7 +1045,7 @@ public interface DocflowService {
     /**
      * Инициация и подтверждение облачного расшифрования документа из Docflow
      *
-     * @param docflowId       ИД документоборота
+     * @param docflowId       ИД документооборота
      * @param documentId      ИД документа
      * @param certBase64      Контент сертификата в формате base64 строки
      * @param smsCodeProvider метод получения кода подтверждения.
@@ -1061,7 +1061,7 @@ public interface DocflowService {
     /**
      * Получить информацию об отложенной задаче
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param taskId     ИД задачи
      * @return Информация о задаче
@@ -1075,14 +1075,23 @@ public interface DocflowService {
     /**
      * Получить результат дешифрования
      *
-     * @param docflowId  ИД документоборота
+     * @param docflowId  ИД документооборота
      * @param documentId ИД документа
      * @param taskId     ИД задачи
      * @return Информация о задаче
      */
-    public CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptTaskResult(
+    CompletableFuture<TaskInfo<DecryptDocumentResultContent>> getDecryptTaskResult(
             UUID docflowId,
             UUID documentId,
             UUID taskId
     );
+
+    /**
+     * Получить результат проверки требования
+     *
+     * @param docflowId   ИД документооборота
+     * @param requestData Информации для проверки требования
+     * @return Результат проверки требования
+     */
+    CompletableFuture<CheckDemandResult> checkDemandAsync(UUID docflowId, CheckDemandRequestData requestData);
 }
