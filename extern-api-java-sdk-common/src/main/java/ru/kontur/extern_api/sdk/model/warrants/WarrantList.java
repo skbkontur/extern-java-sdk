@@ -22,63 +22,54 @@
 
 package ru.kontur.extern_api.sdk.model.warrants;
 
+import java.util.ArrayList;
 import java.util.List;
 import ru.kontur.extern_api.sdk.model.Link;
 
 /**
- * WarrantList
+ * Список доверенностей
  */
 public class WarrantList {
 
-    private Long skip;
-    private Long take;
-    private Long totalCount;
-    private List<OrganizationWarrantInformation> organizationWarrantInformations;
-    private List<Link> links;
+    private Integer skip = null;
+    private Integer take = null;
+    private Integer totalCount = null;
+    private List<OrganizationWarrantInformation> organizationWarrantInformations = new ArrayList<>();
 
     /**
-     * Get skip
+     * Возвращает смещение от начала списка
      *
-     * @return skip
+     * @return смещение от начала списка
      **/
-    public Long getSkip() {
+    public Integer getSkip() {
         return skip;
     }
 
     /**
-     * Get take
+     * Возвращает максимальный размер возвращаемого списка
      *
-     * @return take
+     * @return максимальный размер возвращаемого списка
      **/
-    public Long getTake() {
+    public Integer getTake() {
         return take;
     }
 
     /**
-     * Get totalCount
+     * Возвращает общее количество доверенностей
      *
-     * @return totalCount
+     * @return общее количество доверенностей
      **/
-    public Long getTotalCount() {
+    public Integer getTotalCount() {
         return totalCount;
     }
 
     /**
-     * Get warrants
+     * Возвращает список организаций
      *
-     * @return warrants
+     * @return список организаций
      **/
     public List<OrganizationWarrantInformation> getOrganizationWarrantInformations() {
         return organizationWarrantInformations;
-    }
-
-    /**
-     * Get links
-     *
-     * @return links
-     **/
-    public List<Link> getLinks() {
-        return links;
     }
 }
 

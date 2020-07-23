@@ -22,6 +22,7 @@
 
 package ru.kontur.extern_api.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,13 +48,19 @@ public class WarrantsIT {
                 .getWarrantsForAllUsers(0, 10)
                 .join();
 
-        assertFalse(warrantList.getOrganizationWarrantInformations().isEmpty());
+        int warrantsCount = warrantList.getOrganizationWarrantInformations().size();
+        assertTrue(warrantsCount > 0);
+        assertEquals(0, warrantList.getSkip());
+        assertEquals(warrantsCount, warrantList.getTake());
+
         for (OrganizationWarrantInformation warrantInfo : warrantList.getOrganizationWarrantInformations()) {
             assertNotNull(warrantInfo.getOrganizationId());
             assertNotNull(warrantInfo.getOrganizationName());
             if (warrantInfo.getWarrant() == null)
                 continue;
             assertNotNull(warrantInfo.getWarrant().getIssuer());
+            assertNotNull(warrantInfo.getWarrant().getIssuer().getIssuerOrganization());
+            assertNotNull(warrantInfo.getWarrant().getIssuer().getIssuerOrganization().getName());
             assertNotNull(warrantInfo.getWarrant().getDateBegin());
         }
         assertTrue(warrantList.getOrganizationWarrantInformations().stream().anyMatch(w -> w.getWarrant() != null));
