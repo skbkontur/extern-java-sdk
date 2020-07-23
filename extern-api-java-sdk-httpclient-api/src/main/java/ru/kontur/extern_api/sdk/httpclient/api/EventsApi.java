@@ -44,12 +44,12 @@ public interface EventsApi {
      *
      * @param fromId Event Id offset from which data is read out (required). {@code 0_0} - zero
      * offset. next offsets will be returned
-     * @param batchSize Max count of events to be returned (default - 100)
+     * @param take Max count of events to be returned (default - 100)
      * @return ApiResponse&lt;EventsPage&gt;
      */
     @GET("v1/events")
     CompletableFuture<ApiResponse<EventsPage>> getEvents(
             @Query("fromId") String fromId,
-            @Query("batchSize") Integer batchSize
+            @Query("take") Integer take
     );
 }
