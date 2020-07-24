@@ -297,15 +297,29 @@ public class DocflowServiceImpl implements DocflowService {
             String replyType,
             byte[] signerCert
     ) {
+        return generateReplyAsync(docflowId, documentId, replyType, null, signerCert);
+    }
+
+    @Override
+    public CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            String replyType,
+            List<String> declineNoticeErrorCodes,
+            byte[] signerCert
+    ) {
+
         return api.generateReplyDocument(
                 acc.accountId(),
                 docflowId,
                 documentId,
                 replyType,
+                declineNoticeErrorCodes,
                 new CertificateContent(signerCert)
         )
                 .thenApply(contextAdaptor(QueryContext.REPLY_DOCUMENT));
     }
+
 
     @Override
     public CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(

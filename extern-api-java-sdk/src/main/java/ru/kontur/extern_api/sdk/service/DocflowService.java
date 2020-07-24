@@ -354,6 +354,14 @@ public interface DocflowService {
             byte[] signerCert
     );
 
+    CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            UUID docflowId,
+            UUID documentId,
+            String replyType,
+            List<String> declineNoticeErrorCodes,
+            byte[] signerCert
+    );
+
     CompletableFuture<QueryContext<PfrReply>> generatePfrReplyAsync(
             UUID docflowId,
             UUID documentId,

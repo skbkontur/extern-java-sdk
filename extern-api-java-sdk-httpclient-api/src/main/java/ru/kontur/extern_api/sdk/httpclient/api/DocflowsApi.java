@@ -227,6 +227,7 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Query("documentType") String documentType,
+            @Query("declineNoticeErrorCode") List<String> declineNoticeErrorCode,
             @Body CertificateContent certificate
     );
 
