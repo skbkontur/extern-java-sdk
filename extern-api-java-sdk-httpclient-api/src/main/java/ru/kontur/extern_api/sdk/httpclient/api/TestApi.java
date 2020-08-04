@@ -32,12 +32,14 @@ import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.httpclient.Raw;
 
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
 public interface TestApi {
 
+    @Raw
     @GET("test-tools/v1/get-cloud-sign-confirmation-code")
     CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
 
