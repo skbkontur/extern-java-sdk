@@ -37,6 +37,8 @@ public interface ServicesFactory {
 
     CertificateService getCertificateService();
 
+    WarrantService getWarrantService();
+
     DocflowService getDocflowService();
 
     DraftService getDraftService();

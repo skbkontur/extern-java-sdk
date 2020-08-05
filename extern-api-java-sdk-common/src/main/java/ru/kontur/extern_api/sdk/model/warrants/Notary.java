@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 SKB Kontur
+ * Copyright (c) 2019 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,29 +18,53 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.model.warrants;
 
+import ru.kontur.extern_api.sdk.model.Fio;
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+public class Notary {
 
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.httpclient.Raw;
+    private Fio fio;
+    private String inn;
+    private String address;
+    private WarrantOrganization notaryOrganization;
 
+    /**
+     * ФИО нотариуса
+     *
+     * @return fio
+     **/
+    public Fio getFio() {
+        return fio;
+    }
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface TestApi {
+    /**
+     * ИНН
+     *
+     * @return inn
+     **/
+    public String getInn() {
+        return inn;
+    }
 
-    @Raw
-    @GET("test-tools/v1/get-cloud-sign-confirmation-code")
-    CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
+    /**
+     * Адрес
+     *
+     * @return address
+     **/
+    public String getAddress() {
+        return address;
+    }
 
+    /**
+     * Информация об организации, в случае если это нотариальная контора
+     *
+     * @return notaryOrganization
+     **/
+    public WarrantOrganization getNotaryOrganization() {
+        return notaryOrganization;
+    }
 }
+

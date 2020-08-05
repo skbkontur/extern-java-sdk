@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 SKB Kontur
+ * Copyright (c) 2019 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,29 +18,36 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
-
-
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+package ru.kontur.extern_api.sdk.service.impl;
 
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.httpclient.Raw;
+import ru.kontur.extern_api.sdk.httpclient.api.WarrantsApi;
+import ru.kontur.extern_api.sdk.model.warrants.WarrantList;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.service.WarrantService;
 
+public class WarrantServiceImpl implements WarrantService {
 
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface TestApi {
+    private final AccountProvider accountProvider;
+    private final WarrantsApi api;
 
-    @Raw
-    @GET("test-tools/v1/get-cloud-sign-confirmation-code")
-    CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
+    public WarrantServiceImpl(
+            AccountProvider accountProvider,
+            WarrantsApi api
+    ) {
+        this.accountProvider = accountProvider;
+        this.api = api;
+    }
 
+    @Override
+    public CompletableFuture<WarrantList> getWarrants(int skip, int take) {
+        return api.getWarrants(accountProvider.accountId(), skip, take, false);
+    }
+
+    @Override
+    public CompletableFuture<WarrantList> getWarrantsForAllUsers(int skip, int take) {
+        return api.getWarrants(accountProvider.accountId(), skip, take, true);
+    }
 }
