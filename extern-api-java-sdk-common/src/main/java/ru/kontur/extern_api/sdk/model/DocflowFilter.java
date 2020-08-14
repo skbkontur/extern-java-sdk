@@ -35,10 +35,10 @@ import ru.kontur.extern_api.sdk.utils.YAStringUtils;
 public class DocflowFilter implements Filter {
 
     private long skip;
-    private int take = 1000;
+    private int take = 100;
     private SortOrder orderBy;
 
-    private final HashMap<String, String> filterMap = new HashMap<>(14);
+    private final HashMap<String, String> filterMap = new HashMap<>(20);
 
     private DocflowFilter() {
 
@@ -127,6 +127,36 @@ public class DocflowFilter implements Filter {
 
     public DocflowFilter knd(int knd) {
         return knd(String.valueOf(knd));
+    }
+
+    public DocflowFilter okud(@Nullable String okud) {
+        filterMap.put("okud", okud);
+        return this;
+    }
+
+    public DocflowFilter okpo(@Nullable String okpo) {
+        filterMap.put("okpo", okpo);
+        return this;
+    }
+
+    public DocflowFilter cu(@Nullable String cu) {
+        filterMap.put("cu", cu);
+        return this;
+    }
+
+    public DocflowFilter regNumber(@Nullable String regNumber) {
+        filterMap.put("regNumber", regNumber);
+        return this;
+    }
+
+    public DocflowFilter formName(@Nullable String formName) {
+        filterMap.put("formName", formName);
+        return this;
+    }
+
+    public DocflowFilter forAllUsers() {
+        filterMap.put("forAllUsers", "true");
+        return this;
     }
 
     public DocflowFilter type(@Nullable DocflowType type) {

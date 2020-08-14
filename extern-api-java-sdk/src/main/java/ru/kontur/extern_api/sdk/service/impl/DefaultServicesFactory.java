@@ -68,6 +68,14 @@ public class DefaultServicesFactory implements ServicesFactory {
     }
 
     @Override
+    public WarrantService getWarrantService() {
+        return new WarrantServiceImpl(
+                providerHolder.getAccountProvider(),
+                createApi(WarrantsApi.class)
+        );
+    }
+
+    @Override
     public DocflowService getDocflowService() {
         return new DocflowServiceImpl(
                 providerHolder.getAccountProvider(),

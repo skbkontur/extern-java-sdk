@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 SKB Kontur
+ * Copyright (c) 2019 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,29 +18,36 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
-package ru.kontur.extern_api.sdk.httpclient.api;
+package ru.kontur.extern_api.sdk.model.warrants;
 
+/**
+ * Уполномоченный представитель, на которого выдана доверенность (отправитель)
+ */
+public class WarrantSender {
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import ru.kontur.extern_api.sdk.GsonProvider;
-import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
-import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
-import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+    private WarrantIndividual senderIndividual;
+    private WarrantOrganization senderOrganization;
 
-import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.httpclient.Raw;
+    /**
+     * Информация о частном лице или индивидуальном предпринимателе - уполномоченном представителе
+     * (отправителе)
+     *
+     * @return senderIndividual
+     **/
+    public WarrantIndividual getSenderIndividual() {
+        return senderIndividual;
+    }
 
-
-@JsonSerialization(GsonProvider.LIBAPI)
-@ApiResponseConverter(LibapiResponseConverter.class)
-public interface TestApi {
-
-    @Raw
-    @GET("test-tools/v1/get-cloud-sign-confirmation-code")
-    CompletableFuture<String> getSmsCode(@Query("requestId") String requestId);
+    /**
+     * Информация об организации - уполномоченном представителе (отправителе)
+     *
+     * @return senderOrganization
+     **/
+    public WarrantOrganization getSenderOrganization() {
+        return senderOrganization;
+    }
 
 }
+
