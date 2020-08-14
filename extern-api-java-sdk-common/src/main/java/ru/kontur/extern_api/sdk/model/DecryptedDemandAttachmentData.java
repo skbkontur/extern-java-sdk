@@ -5,11 +5,11 @@ import java.util.UUID;
 /**
  * Класс содержит идентификаторы приложения и его расшифрованного контента для проверки требования
  */
-public class DemandAttachmentsContentData {
+public class DecryptedDemandAttachmentData {
 
-    private UUID AttachmentId = null;
+    private UUID Id = null;
 
-    private UUID AttachmentContentId = null;
+    private UUID ContentId = null;
 
 
     /**
@@ -17,17 +17,17 @@ public class DemandAttachmentsContentData {
      *
      * @return Идентификатор приложения
      */
-    public UUID getAttachmentId() {
-        return AttachmentId;
+    public UUID getId() {
+        return Id;
     }
 
     /**
      * Устанавливает идентификатор приложения
      *
-     * @param attachmentId идентификатор приложения
+     * @param id идентификатор приложения
      */
-    public void setAttachmentId(UUID attachmentId) {
-        AttachmentId = attachmentId;
+    public void setId(UUID id) {
+        Id = id;
     }
 
     /**
@@ -35,16 +35,16 @@ public class DemandAttachmentsContentData {
      *
      * @return Идентификатор контента приложения
      */
-    public UUID getAttachmentContentId() {
-        return AttachmentContentId;
+    public UUID getContentId() {
+        return ContentId;
     }
 
     /**
      * Устанавливает идентификатор контента приложения
      *
-     * @param attachmentContentId идентификатор контента приложения
+     * @param contentId идентификатор контента приложения
      */
-    public void setAttachmentContentId(UUID attachmentContentId) {
-        AttachmentContentId = attachmentContentId;
+    public void setContentId(UUID contentId) {
+        ContentId = contentId;
     }
 }

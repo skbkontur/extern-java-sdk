@@ -23,29 +23,8 @@
 
 package ru.kontur.extern_api.sdk;
 
-import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumingThat;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,21 +38,24 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
-import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
-import ru.kontur.extern_api.sdk.utils.CryptoUtils;
-import ru.kontur.extern_api.sdk.utils.DemandTestData;
-import ru.kontur.extern_api.sdk.utils.DemandTestDataProvider;
-import ru.kontur.extern_api.sdk.utils.DocType;
-import ru.kontur.extern_api.sdk.utils.EngineUtils;
-import ru.kontur.extern_api.sdk.utils.Lazy;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.utils.TestUtils;
-import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
-import ru.kontur.extern_api.sdk.utils.Zip;
+import ru.kontur.extern_api.sdk.utils.*;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.Optional.ofNullable;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
+
 
 @Execution(ExecutionMode.SAME_THREAD)
 class DocflowServiceIT {
@@ -89,16 +71,16 @@ class DocflowServiceIT {
         }
     }
 
-    private static Logger log = Logger.getLogger(DocflowServiceIT.class.getName());
+    private static final Logger log = Logger.getLogger(DocflowServiceIT.class.getName());
     private static EngineUtils engineUtils;
 
-    private static Lazy<TestPack> testPack = Lazy.of(() -> getTestPack(engine));
-    private static Lazy<TestData[]> testData = Lazy.of(() -> getTestData(engine));
+    private static final Lazy<TestPack> testPack = Lazy.of(() -> getTestPack(engine));
+    private static final Lazy<TestData[]> testData = Lazy.of(() -> getTestData(engine));
 
 
     private static HttpClient client;
-    private static Lazy<Certificate> cloudCert = Lazy.of(DocflowServiceIT::getCloudCertificate);
-    private static Lazy<ApproveCodeProvider> codeProvider = Lazy
+    private static final Lazy<Certificate> cloudCert = Lazy.of(DocflowServiceIT::getCloudCertificate);
+    private static final Lazy<ApproveCodeProvider> codeProvider = Lazy
             .of(() -> new ApproveCodeProvider(engine));
 
     private static DocflowService docflowService;
@@ -505,14 +487,14 @@ class DocflowServiceIT {
                 .getGeneral();
 
         DocflowPage docflowPage = docflowService.searchDocflows(DocflowFilter
-                                                                        .page(0, 10)
-                                                                        .finished(true)
-                                                                        .incoming(false)
-                                                                        .innKpp(
-                                                                                company.getInn(),
-                                                                                company.getKpp()
-                                                                        )
-                                                                        .type(DocflowType.FNS534_REPORT)
+                .page(0, 10)
+                .finished(true)
+                .incoming(false)
+                .innKpp(
+                        company.getInn(),
+                        company.getKpp()
+                )
+                .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
         Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
@@ -660,6 +642,36 @@ class DocflowServiceIT {
         Assertions.assertEquals(requisites.getDemandNumber(), recognizedMeta.getDemandNumber());
         Assertions.assertLinesMatch(requisites.getDemandInnList(), recognizedMeta.getDemandInnList());
     }
+
+    @ParameterizedTest
+    @MethodSource("demandLazyFactory")
+    @DisplayName("check demand")
+    void checkDemand() throws RuntimeException {
+        DocflowService docflowService = engine.getDocflowService();
+
+        UUID docflowId = UUID.fromString("d8daeb8f-fda9-45b6-a6e8-7990d056bf1c");
+        UUID decryptedMainDocumentContentId = UUID.fromString("4e0632ee-d32b-4ec5-8042-2d28030a531e");
+        UUID demandAttId = UUID.fromString("ddb3f232-62d1-4706-8683-b9d5f03f10ff");
+        UUID demandAttDecryptedContentId = UUID.fromString("a7f865b8-82e0-4c5e-b8a9-17af42c7ac72");
+
+        CheckDemandRequestData requestData = new CheckDemandRequestData();
+
+        DecryptedDemandAttachmentData decryptedDemandAttachmentData = new DecryptedDemandAttachmentData();
+        decryptedDemandAttachmentData.setId(demandAttId);
+        decryptedDemandAttachmentData.setContentId(demandAttDecryptedContentId);
+
+        ArrayList<DecryptedDemandAttachmentData> decryptedDemandAttachmentDataList = new ArrayList<>();
+        decryptedDemandAttachmentDataList.add(decryptedDemandAttachmentData);
+
+        requestData.setDecryptedAttachments(decryptedDemandAttachmentDataList);
+        requestData.setDecryptedDemandContentId(decryptedMainDocumentContentId);
+
+
+        CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowId, requestData).join();
+        Assertions.assertFalse(checkDemandResult.hasErrors());
+        assertEquals(0, checkDemandResult.getErrorCodes().size());
+    }
+
 
     private static List<QueryContext<Docflow>> createDocflows(
             ExternEngine engine,

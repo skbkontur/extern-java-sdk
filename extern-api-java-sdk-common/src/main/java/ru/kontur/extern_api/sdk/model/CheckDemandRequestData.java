@@ -10,9 +10,9 @@ import java.util.UUID;
  */
 public class CheckDemandRequestData {
 
-    private UUID MainDocumentContentId = null;
+    private UUID DecryptedDemandContentId = null;
 
-    private List<DemandAttachmentsContentData> DemandAttachmentsContentData = new ArrayList<>();
+    private List<DecryptedDemandAttachmentData> DecryptedAttachments = new ArrayList<>();
 
 
     /**
@@ -20,33 +20,33 @@ public class CheckDemandRequestData {
      *
      * @return значение идентификатора расшифрованного контента главного документа (urn:document:fns534-demand)
      */
-    public UUID getMainDocumentContentId() {
-        return MainDocumentContentId;
+    public UUID getDecryptedDemandContentId() {
+        return DecryptedDemandContentId;
     }
 
     /**
      * Устанавливает значение идентификатора расшифрованного контента главного документа (urn:document:fns534-demand)
      */
-    public void setMainDocumentContentId(UUID mainDocumentContentId) {
-        MainDocumentContentId = mainDocumentContentId;
+    public void setDecryptedDemandContentId(UUID decryptedDemandContentId) {
+        DecryptedDemandContentId = decryptedDemandContentId;
     }
 
     /**
      * Возвращает список объектов класса DemandAttachmentsContentData
      *
      * @return список объектов класса DemandAttachmentsContentData
-     * @see DemandAttachmentsContentData
+     * @see DecryptedDemandAttachmentData
      */
-    public List<DemandAttachmentsContentData> getDemandAttachmentsContentData() {
-        return DemandAttachmentsContentData;
+    public List<DecryptedDemandAttachmentData> getDecryptedAttachments() {
+        return DecryptedAttachments;
     }
 
     /**
      * Устанавливает список объектов класса DemandAttachmentsContentData
      *
-     * @see DemandAttachmentsContentData
+     * @see DecryptedDemandAttachmentData
      */
-    public void setDemandAttachmentsContentData(List<DemandAttachmentsContentData> demandAttachmentsContentData) {
-        DemandAttachmentsContentData = demandAttachmentsContentData;
+    public void setDecryptedAttachments(List<DecryptedDemandAttachmentData> decryptedAttachments) {
+        DecryptedAttachments = decryptedAttachments;
     }
 }
