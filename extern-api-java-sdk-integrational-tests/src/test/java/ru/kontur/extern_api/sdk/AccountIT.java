@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.List;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -89,10 +88,9 @@ class AccountIT {
     private static final String KPP = "156145230";
     private static final String ORG_NAME = "Рога123 и Копыта123";
 
-  /*  private static final String INN = "0270006356";
-    private static final String KPP = "014243797";
-    private static final String ORG_NAME = "Рога789 и Копыта789";
-   */
+    private static final String INN_FOR_DELETING = "0270006356";
+    private static final String KPP_FOR_DELETING = "014243797";
+    private static final String ORG_NAME_FOR_DELETING = "Рога789 и Копыта789";
 
     @Test
     void acquireAccounts() {
@@ -142,9 +140,9 @@ class AccountIT {
     @Test
     void deleteAccount() {
         CreateAccountRequest createAccountRequest = new CreateAccountRequest()
-                .inn(INN)
-                .kpp(KPP)
-                .organizationName(ORG_NAME);
+                .inn(INN_FOR_DELETING)
+                .kpp(KPP_FOR_DELETING)
+                .organizationName(ORG_NAME_FOR_DELETING);
 
         QueryContext<Account> createCxt = accountService
                 .createAccountAsync(createAccountRequest)
