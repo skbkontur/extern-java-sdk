@@ -678,7 +678,7 @@ class DocflowServiceIT {
         ExternEngine engine = GetExistingDocflowProviderEngine();
         DocflowService docflowService = engine.getDocflowService();
 
-        UUID docflowId = UUID.fromString("ac4768ab-ee23-49d7-a817-373079a2fc38");
+        UUID docflowWithIncorrectSignaturesId = UUID.fromString("ac4768ab-ee23-49d7-a817-373079a2fc38");
         UUID decryptedMainDocumentContentId = UUID.fromString("925ee6d9-5f9e-4d04-af1b-d5c3eb8f9d5f");
         UUID demandAttId = UUID.fromString("5eadf5da-c4ea-474b-9d75-d7f22bca6eb5");
         UUID demandAttDecryptedContentId = UUID.fromString("d5c53ac5-29a0-4912-9d9d-a10734d5951a");
@@ -696,10 +696,12 @@ class DocflowServiceIT {
         requestData.setDecryptedDemandContentId(decryptedMainDocumentContentId);
 
 
-        CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowId, requestData).join();
+        CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowWithIncorrectSignaturesId, requestData).join();
         Assertions.assertTrue(checkDemandResult.hasErrors());
         assertEquals(1, checkDemandResult.getErrorCodes().size());
-        assertEquals("0100100004", checkDemandResult.getErrorCodes().get(0));
+
+        String signatureMismatchErrorCode = "0100100004";
+        assertEquals(signatureMismatchErrorCode, checkDemandResult.getErrorCodes().get(0));
     }
 
     private ExternEngine GetExistingDocflowProviderEngine() {
