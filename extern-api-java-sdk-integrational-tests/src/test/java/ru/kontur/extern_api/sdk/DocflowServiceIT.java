@@ -23,6 +23,7 @@
 
 package ru.kontur.extern_api.sdk;
 
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -43,7 +44,6 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -643,8 +643,7 @@ class DocflowServiceIT {
         Assertions.assertLinesMatch(requisites.getDemandInnList(), recognizedMeta.getDemandInnList());
     }
 
-    @ParameterizedTest
-    @MethodSource("demandLazyFactory")
+    @Test
     @DisplayName("check demand")
     void checkDemand() throws RuntimeException {
         DocflowService docflowService = engine.getDocflowService();
@@ -672,6 +671,54 @@ class DocflowServiceIT {
         assertEquals(0, checkDemandResult.getErrorCodes().size());
     }
 
+    @Test
+    @DisplayName("check demand when incorrect signature")
+    void checkDemandWhenIncorrectSignature() throws RuntimeException {
+
+        ExternEngine engine = GetExistingDocflowProviderEngine();
+        DocflowService docflowService = engine.getDocflowService();
+
+        UUID docflowId = UUID.fromString("ac4768ab-ee23-49d7-a817-373079a2fc38");
+        UUID decryptedMainDocumentContentId = UUID.fromString("925ee6d9-5f9e-4d04-af1b-d5c3eb8f9d5f");
+        UUID demandAttId = UUID.fromString("5eadf5da-c4ea-474b-9d75-d7f22bca6eb5");
+        UUID demandAttDecryptedContentId = UUID.fromString("d5c53ac5-29a0-4912-9d9d-a10734d5951a");
+
+        CheckDemandRequestData requestData = new CheckDemandRequestData();
+
+        DecryptedDemandAttachmentData decryptedDemandAttachmentData = new DecryptedDemandAttachmentData();
+        decryptedDemandAttachmentData.setId(demandAttId);
+        decryptedDemandAttachmentData.setContentId(demandAttDecryptedContentId);
+
+        ArrayList<DecryptedDemandAttachmentData> decryptedDemandAttachmentDataList = new ArrayList<>();
+        decryptedDemandAttachmentDataList.add(decryptedDemandAttachmentData);
+
+        requestData.setDecryptedAttachments(decryptedDemandAttachmentDataList);
+        requestData.setDecryptedDemandContentId(decryptedMainDocumentContentId);
+
+
+        CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowId, requestData).join();
+        Assertions.assertTrue(checkDemandResult.hasErrors());
+        assertEquals(1, checkDemandResult.getErrorCodes().size());
+        assertEquals("0100100004", checkDemandResult.getErrorCodes().get(0));
+    }
+
+    private ExternEngine GetExistingDocflowProviderEngine() {
+
+        String configPath = "/secret/existing-docflow-provider-config.json";
+        Configuration configuration = TestConfig.LoadConfigFromEnvironment(configPath);
+
+        engine = ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
+                .apiKey(configuration.getApiKey())
+                .buildAuthentication(configuration.getAuthBaseUri(), ab -> ab
+                        .withApiKey(configuration.getApiKey())
+                        .passwordAuthentication(configuration.getLogin(), configuration.getPass())
+                )
+                .doNotUseCryptoProvider()
+                .accountId(configuration.getAccountId())
+                .build(HttpLoggingInterceptor.Level.BASIC);
+
+        return engine;
+    }
 
     private static List<QueryContext<Docflow>> createDocflows(
             ExternEngine engine,
