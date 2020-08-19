@@ -709,7 +709,7 @@ class DocflowServiceIT {
         String configPath = "/secret/existing-docflow-provider-config.json";
         Configuration configuration = TestConfig.LoadConfigFromEnvironment(configPath);
 
-        engine = ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
+        return ExternEngineBuilder.createExternEngine(configuration.getServiceBaseUri())
                 .apiKey(configuration.getApiKey())
                 .buildAuthentication(configuration.getAuthBaseUri(), ab -> ab
                         .withApiKey(configuration.getApiKey())
@@ -718,8 +718,6 @@ class DocflowServiceIT {
                 .doNotUseCryptoProvider()
                 .accountId(configuration.getAccountId())
                 .build(HttpLoggingInterceptor.Level.BASIC);
-
-        return engine;
     }
 
     private static List<QueryContext<Docflow>> createDocflows(
