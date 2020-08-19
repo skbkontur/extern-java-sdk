@@ -1,16 +1,16 @@
 package ru.kontur.extern_api.sdk.utils;
 
-import java.util.Base64;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.crypt.CertificateWrapper;
 import ru.kontur.extern_api.sdk.crypt.X509CertificateFactory;
 import ru.kontur.extern_api.sdk.model.DemandRequestDto;
-import ru.kontur.extern_api.sdk.model.Document;
 import ru.kontur.extern_api.sdk.model.DocumentType;
 import ru.kontur.extern_api.sdk.model.TestData;
+
+import java.util.Base64;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class DemandTestDataProvider extends TestData {
 
@@ -65,10 +65,13 @@ public class DemandTestDataProvider extends TestData {
                 .thenApply(documents -> {
                     documents.stream()
                             .filter(document -> document.getDescription().getType()
-                                    == DocumentType.Fns534DemandAttachment)
-                            .map(Document::getId)
-                            .findFirst()
-                            .ifPresent(testData::setDemandAttachmentId);
+                                    == DocumentType.Fns534DemandAttachment || document.getDescription().getType() == DocumentType.Fns534Demand)
+                            .forEach(document -> {
+                                if (document.getDescription().getType() == DocumentType.Fns534DemandAttachment)
+                                    testData.setDemandAttachmentId(document.getId());
+                                if (document.getDescription().getType() == DocumentType.Fns534Demand)
+                                    testData.setDemandMainDocumentId(document.getId());
+                            });
 
                     return testData;
                 })
@@ -91,6 +94,27 @@ public class DemandTestDataProvider extends TestData {
                 })
                 .thenApply(c -> {
                     testData.setDemandAttachmentDecryptedBytes(Zip.unzip(c.getContent()));
+                    return testData;
+                })
+                .thenCompose(demandTestData -> testSuite.engine
+                        .getDocflowService()
+                        .getEncryptedContentAsync(testData.getDemandId(), testData.getDemandMainDocumentId())
+                )
+                .thenCompose(content -> {
+                    String senderCertificate = testData.getClientInfo().getSender().getCertificate();
+
+                    CertificateWrapper certificateWrapper = UncheckedSupplier
+                            .get(() -> new X509CertificateFactory()
+                                    .create(Base64.getDecoder().decode(senderCertificate))
+                            );
+
+                    return testSuite.engine.getCryptoProvider().decryptAsync(
+                            certificateWrapper.getThumbprint(),
+                            content.getContent()
+                    );
+                })
+                .thenApply(c -> {
+                    testData.setDemandMainDocumentDecryptedBytes(Zip.unzip(c.getContent()));
                     return testData;
                 });
     }

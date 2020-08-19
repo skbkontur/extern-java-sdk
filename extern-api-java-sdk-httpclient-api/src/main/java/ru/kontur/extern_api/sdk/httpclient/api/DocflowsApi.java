@@ -33,13 +33,13 @@ import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReply;
 import ru.kontur.extern_api.sdk.model.pfr.PfrReplyDocument;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
+import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import ru.kontur.extern_api.sdk.model.pfr.PfrSignConfirmResultData;
-import ru.kontur.extern_api.sdk.model.pfr.PfrSignInitiation;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -227,6 +227,7 @@ public interface DocflowsApi {
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
             @Query("documentType") String documentType,
+            @Query("declineNoticeErrorCode") List<String> declineNoticeErrorCode,
             @Body CertificateContent certificate
     );
 
@@ -478,4 +479,10 @@ public interface DocflowsApi {
             @Path("documentId") UUID documentId,
             @Path("taskId") UUID taskId
     );
+
+    @POST("v1/{accountId}/docflows/{docflowId}/check-demand")
+    CompletableFuture<CheckDemandResult> checkDemandAsync(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Body CheckDemandRequestData requestData);
 }

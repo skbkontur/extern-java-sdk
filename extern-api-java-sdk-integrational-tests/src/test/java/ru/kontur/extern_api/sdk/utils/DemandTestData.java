@@ -8,6 +8,8 @@ public class DemandTestData extends TestData {
     private UUID demandId;
     private UUID demandAttachmentId;
     private byte[] demandAttachmentDecryptedBytes;
+    private UUID demandMainDocumentId;
+    private byte[] demandMainDocumentDecryptedBytes;
 
     public UUID getDemandId() {
         return demandId;
@@ -37,5 +39,21 @@ public class DemandTestData extends TestData {
 
     public void setDemandAttachmentDecryptedBytes(byte[] demandAttachmentDecryptedBytes) {
         this.demandAttachmentDecryptedBytes = demandAttachmentDecryptedBytes;
+    }
+
+    public byte[] getDemandMainDocumentDecryptedBytes() {
+        return demandMainDocumentDecryptedBytes;
+    }
+
+    public void setDemandMainDocumentDecryptedBytes(byte[] demandMainDocumentDecryptedBytes) {
+        this.demandMainDocumentDecryptedBytes = demandMainDocumentDecryptedBytes;
+    }
+
+    public UUID getDemandMainDocumentId() {
+        return demandMainDocumentId;
+    }
+
+    public void setDemandMainDocumentId(UUID demandMainDocumentId) {
+        this.demandMainDocumentId = demandMainDocumentId;
     }
 }
