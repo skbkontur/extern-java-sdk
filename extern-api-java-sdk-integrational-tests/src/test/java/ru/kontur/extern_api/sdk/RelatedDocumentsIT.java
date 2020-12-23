@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,7 +45,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.kontur.extern_api.sdk.adaptor.ApiException;
+import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowPage;
 import ru.kontur.extern_api.sdk.model.DocflowType;
@@ -132,16 +133,13 @@ class RelatedDocumentsIT {
         Inventory sentInventory = sendRelatedInventory(testData).join();
         Document messageDocument = getInventoryMessage(sentInventory);
 
-        engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
-                .getDecryptedContentAsync(sentInventory.getId(), messageDocument.getId())
-                .handle((result, throwable) -> {
-                    if (!(throwable instanceof ApiException)) {
-                        fail();
-                    }
-                    assertEquals(404, ((ApiException) throwable).getCode());
-                    assertEquals("urn:error:externapi:emptyContent", ((ApiException) throwable).getErrorId());
-                    return null;
-                }).join();
+        byte[] documentDecryptedContentBytes = engine.getRelatedDocumentsService(testData.getDemandId(), testData.getDemandAttachmentId())
+                .getDecryptedContentAsync(sentInventory.getId(), messageDocument.getId()).join();
+
+        String decryptedContent = fromWin1251Bytes(documentDecryptedContentBytes);
+        
+        assertTrue(decryptedContent.contains("ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 13.0\" ВерсФорм=\"5.01\">"));
+        assertTrue(decryptedContent.length() > 100);
     }
 
     @ParameterizedTest
