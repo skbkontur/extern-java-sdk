@@ -146,7 +146,7 @@ class AuthenticationIT {
         void registerExternalServiceId() {
 
             final UUID serviceUserId = UUID.fromString("47024bf5-8c2c-4f1a-8a28-4b41b104a030");
-            final String phone = "9500308900";
+            final String phone = "79854394424";
 
             auth.registerExternalServiceId(serviceUserId, phone).getOrThrow();
         }
