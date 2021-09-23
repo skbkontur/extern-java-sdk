@@ -22,14 +22,16 @@
 
 package ru.kontur.extern_api.sdk.model.builders;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Link;
+
+import java.util.UUID;
 
 public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta extends DraftsBuilderDocumentFileMeta> {
 
     private UUID id;
     private UUID draftsBuilderId;
     private UUID draftsBuilderDocumentId;
+    private UUID contentId;
     private Link contentLink;
     private Link signatureContentLink;
     private TDraftsBuilderDocumentFileMeta meta;
@@ -86,6 +88,24 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
      */
     public void setDraftsBuilderDocumentId(UUID draftsBuilderDocumentId) {
         this.draftsBuilderDocumentId = draftsBuilderDocumentId;
+    }
+
+    /**
+     * Возвращает идентификатор контента документа билдера черновика
+     *
+     * @return коллекция с идентификаторами контента
+     */
+    public UUID getContentId() {
+        return contentId;
+    }
+
+    /**
+     * Устанавливает идентификатор контента документа билдера черновика
+     *
+     * @param contentId идентификатор контента документа билдера черновика
+     */
+    public void setContentId(UUID contentId) {
+        this.contentId = contentId;
     }
 
     /**
