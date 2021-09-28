@@ -84,7 +84,7 @@ public class PfrReportCloudTestScenarioIT {
         Docflow pfrDocflow = sendPfrReport(engine).get().getOrThrow();
         System.out.println("Draft is sent. Long live the Docflow " + pfrDocflow.getId());
 
-        finishDocflow(pfrDocflow);
+//        finishDocflow(pfrDocflow);
     }
 
     private CompletableFuture<QueryContext<Docflow>> sendPfrReport(ExternEngine engine) throws Exception {
