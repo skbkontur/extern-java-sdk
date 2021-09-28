@@ -23,7 +23,7 @@
  */
 package ru.kontur.extern_api.sdk.model;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -39,7 +39,7 @@ public class DraftDocument {
     private Link encryptedContentLink = null;
     private Link signatureContentLink = null;
     private DocumentDescription description = null;
-    private UUID dataToSignContentId = null;
+    private Collection<DraftDocumentContent> contents = null;
 
     /**
      * Возвращает идентификатор документа
@@ -130,7 +130,21 @@ public class DraftDocument {
         this.description = description;
     }
 
-    public UUID getDataToSignContentId() {
-        return dataToSignContentId;
+    /**
+     * Возвращает коллекцию с идентификаторами контента черновика
+     * @return коллекция с идентификаторами контента
+     * @see DraftDocumentContent
+     */
+    public Collection<DraftDocumentContent> getContents() {
+        return contents;
+    }
+
+    /**
+     * Устанавливает коллекцию с идентификаторами контента черновика
+     * @param contents коллекция с идентификаторами контента
+     * @see DocumentDescription
+     */
+    public void setContents(Collection<DraftDocumentContent> contents) {
+        this.contents = contents;
     }
 }
