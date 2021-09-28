@@ -250,6 +250,8 @@ class DraftServiceIT {
         assertEquals(draftDocument.getDescription().getType(),
                 document.getDescription().getType());
 
+        assertEquals(1, document.getContents().size());
+
         assertNull(getDocument.getServiceError());
     }
 

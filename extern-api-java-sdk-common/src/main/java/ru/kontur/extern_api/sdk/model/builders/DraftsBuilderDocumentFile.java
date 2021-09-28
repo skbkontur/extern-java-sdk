@@ -22,14 +22,16 @@
 
 package ru.kontur.extern_api.sdk.model.builders;
 
-import java.util.UUID;
 import ru.kontur.extern_api.sdk.model.Link;
+
+import java.util.UUID;
 
 public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta extends DraftsBuilderDocumentFileMeta> {
 
     private UUID id;
     private UUID draftsBuilderId;
     private UUID draftsBuilderDocumentId;
+    private UUID contentId;
     private Link contentLink;
     private Link signatureContentLink;
     private TDraftsBuilderDocumentFileMeta meta;
@@ -89,6 +91,24 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     }
 
     /**
+     * Возвращает идентификатор контента файла
+     *
+     * @return идентификатор контента файла
+     */
+    public UUID getContentId() {
+        return contentId;
+    }
+
+    /**
+     * Устанавливает идентификатор контента файла
+     *
+     * @param contentId идентификатор контента файла
+     */
+    public void setContentId(UUID contentId) {
+        this.contentId = contentId;
+    }
+
+    /**
      * Возвращает ссылку на контент файла
      *
      * @return ссылку на контент файла
@@ -100,7 +120,7 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     /**
      * Устанавливает ссылку на контент файла
      *
-     * @param contentLink ссылку на контент файла
+     * @param contentLink ссылка на контент файла
      */
     public void setContentLink(Link contentLink) {
         this.contentLink = contentLink;
@@ -109,7 +129,7 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     /**
      * Возвращает ссылку на контент подписи файла
      *
-     * @return ссылку на контент подписи файла
+     * @return ссылка на контент подписи файла
      */
     public Link getSignatureContentLink() {
         return signatureContentLink;
