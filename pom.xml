@@ -129,7 +129,7 @@
         <skipITs>${skipTests}</skipITs>
         <skipUTs>${skipTests}</skipUTs>
         <jsr305.version>3.0.2</jsr305.version>
-        <commons-compress.version>1.19</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
     </properties>
 
     <modules>
