@@ -91,18 +91,18 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     }
 
     /**
-     * Возвращает идентификатор контента документа билдера черновика
+     * Возвращает идентификатор контента файла
      *
-     * @return коллекция с идентификаторами контента
+     * @return идентификатор контента файла
      */
     public UUID getContentId() {
         return contentId;
     }
 
     /**
-     * Устанавливает идентификатор контента документа билдера черновика
+     * Устанавливает идентификатор контента файла
      *
-     * @param contentId идентификатор контента документа билдера черновика
+     * @param contentId идентификатор контента файла
      */
     public void setContentId(UUID contentId) {
         this.contentId = contentId;
@@ -120,7 +120,7 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     /**
      * Устанавливает ссылку на контент файла
      *
-     * @param contentLink ссылку на контент файла
+     * @param contentLink ссылка на контент файла
      */
     public void setContentLink(Link contentLink) {
         this.contentLink = contentLink;
@@ -129,7 +129,7 @@ public abstract class DraftsBuilderDocumentFile<TDraftsBuilderDocumentFileMeta e
     /**
      * Возвращает ссылку на контент подписи файла
      *
-     * @return ссылку на контент подписи файла
+     * @return ссылка на контент подписи файла
      */
     public Link getSignatureContentLink() {
         return signatureContentLink;

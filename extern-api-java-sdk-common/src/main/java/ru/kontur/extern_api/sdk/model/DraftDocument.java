@@ -40,6 +40,7 @@ public class DraftDocument {
     private Link signatureContentLink = null;
     private DocumentDescription description = null;
     private Collection<DraftDocumentContent> contents = null;
+    private UUID dataToSignContentId = null;
 
     /**
      * Возвращает идентификатор документа
@@ -131,7 +132,7 @@ public class DraftDocument {
     }
 
     /**
-     * Возвращает коллекцию с идентификаторами контента черновика
+     * Возвращает коллекцию с идентификаторами контента документа
      * @return коллекция с идентификаторами контента
      * @see DraftDocumentContent
      */
@@ -140,11 +141,19 @@ public class DraftDocument {
     }
 
     /**
-     * Устанавливает коллекцию с идентификаторами контента черновика
+     * Устанавливает коллекцию с идентификаторами контента документа
      * @param contents коллекция с идентификаторами контента
      * @see DocumentDescription
      */
     public void setContents(Collection<DraftDocumentContent> contents) {
         this.contents = contents;
+    }
+
+    public UUID getDataToSignContentId() {
+        return dataToSignContentId;
+    }
+
+    public void setDataToSignContentId(UUID dataToSignContentId) {
+        this.dataToSignContentId = dataToSignContentId;
     }
 }
