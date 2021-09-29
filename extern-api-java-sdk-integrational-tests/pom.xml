@@ -28,7 +28,7 @@
     <parent>
         <groupId>ru.kontur.extern-api</groupId>
         <artifactId>extern-api-java-sdk-parent</artifactId>
-        <version>1.7.7</version>
+        <version>1.7.8-SNAPSHOT</version>
     </parent>
 
     <artifactId>extern-api-java-sdk-integrational-tests</artifactId>
