@@ -25,7 +25,7 @@
 package ru.kontur.extern_api.sdk.model;
 
 import java.util.Date;
-
+import java.util.UUID;
 
 /**
  * <p>
@@ -42,6 +42,10 @@ public class ApiEvent {
     private String newState;
     private Date eventDateTime;
     private String id;
+    private UUID docflowId;
+    private UUID accountId;
+    private UUID relatedDocflowId;
+    private UUID relatedDocumentId;
 
     /**
      * Возвращает ИНН подотчетной организации
@@ -114,5 +118,19 @@ public class ApiEvent {
         return id;
     }
 
+    public UUID getDocflowId() {
+        return docflowId;
+    }
 
+    public UUID getAccountId() {
+        return accountId;
+    }
+
+    public UUID getRelatedDocflowId() {
+        return relatedDocflowId;
+    }
+
+    public UUID getRelatedDocumentId() {
+        return relatedDocumentId;
+    }
 }

@@ -210,7 +210,7 @@ public interface DocflowsApi {
             @Path("accountId") UUID accountId,
             @Path("docflowId") UUID docflowId,
             @Path("documentId") UUID documentId,
-            @Body @Raw byte[] content
+            @Body RecognizeMetaRequest request
     );
 
     /**

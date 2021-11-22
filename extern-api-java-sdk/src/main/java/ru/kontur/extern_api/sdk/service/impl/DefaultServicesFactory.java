@@ -151,6 +151,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     ) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
+                providerHolder.getUserIPProvider(),
                 createApi(RelatedDocflowApi.class),
                 relatedDocflowId,
                 relatedDocumentId
@@ -164,6 +165,7 @@ public class DefaultServicesFactory implements ServicesFactory {
     ) {
         return new RelatedDocumentsServiceImpl(
                 providerHolder.getAccountProvider(),
+                providerHolder.getUserIPProvider(),
                 createApi(RelatedDocflowApi.class),
                 relatedDocflow.getId(),
                 relatedDocumentId.getId()

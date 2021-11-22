@@ -6,7 +6,10 @@ import java.util.List;
 
 public class RecognizedMeta {
     private String demandNumber;
+    private String demandKnd;
     private Date demandDate = null;
+    private Date receiptDeadlineDate = null;
+    private Date replyDeadlineDate = null;
     private List<String> demandInnList = new ArrayList<>();
 
     public String getDemandNumber() {
@@ -17,12 +20,36 @@ public class RecognizedMeta {
         this.demandNumber = demandNumber;
     }
 
+    public String getDemandKnd() {
+        return demandKnd;
+    }
+
+    public void setDemandKnd(String demandKnd) {
+        this.demandKnd = demandKnd;
+    }
+
     public Date getDemandDate() {
         return demandDate;
     }
 
     public void setDemandDate(Date demandDate) {
         this.demandDate = demandDate;
+    }
+
+    public Date getReceiptDeadlineDate() {
+        return receiptDeadlineDate;
+    }
+
+    public void setReceiptDeadlineDate(Date receiptDeadlineDate) {
+        this.receiptDeadlineDate = receiptDeadlineDate;
+    }
+
+    public Date getReplyDeadlineDate() {
+        return replyDeadlineDate;
+    }
+
+    public void setReplyDeadlineDate(Date replyDeadlineDate) {
+        this.replyDeadlineDate = replyDeadlineDate;
     }
 
     public List<String> getDemandInnList() {

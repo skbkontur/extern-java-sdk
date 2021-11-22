@@ -28,7 +28,7 @@ import java.util.UUID;
 public class BuildDraftsBuilderResult {
 
     private UUID[] draftIds;
-    private Map<UUID, String> errorDraftsBuilderDocuments;
+    private BuildDraftsBuilderResultError[] errorDraftsBuilderDocuments;
 
     /**
      * Возвращает идентификаторы созданных черновиков
@@ -53,7 +53,7 @@ public class BuildDraftsBuilderResult {
      *
      * @return список ошибок по документам
      */
-    public Map<UUID, String> getErrorDraftsBuilderDocuments() {
+    public BuildDraftsBuilderResultError[] getErrorDraftsBuilderDocuments() {
         return errorDraftsBuilderDocuments;
     }
 
@@ -62,7 +62,7 @@ public class BuildDraftsBuilderResult {
      *
      * @param errorDraftsBuilderDocuments список ошибок по документам
      */
-    public void setErrorDraftsBuilderDocuments(Map<UUID, String> errorDraftsBuilderDocuments) {
+    public void setErrorDraftsBuilderDocuments(BuildDraftsBuilderResultError[] errorDraftsBuilderDocuments) {
         this.errorDraftsBuilderDocuments = errorDraftsBuilderDocuments;
     }
 }
