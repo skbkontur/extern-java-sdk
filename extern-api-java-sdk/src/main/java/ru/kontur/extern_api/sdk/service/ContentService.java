@@ -22,7 +22,7 @@ public interface ContentService {
      * @param content контент
      * @return Идентификатор контента
      */
-    CompletableFuture<UUID> loadContent(byte[] content);
+    CompletableFuture<UUID> uploadContent(byte[] content);
 
     /**
      * Метод скачивает контент по частям с указанием диапазона байт.

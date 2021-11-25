@@ -80,7 +80,7 @@ public interface ContentApi {
 
     @Streaming
     @POST("v1/{accountId}/contents")
-    CompletableFuture<ContentId> loadContent(
+    CompletableFuture<ContentId> uploadContent(
             @Path("accountId") UUID accountId,
 //            @Header("Range") String range,
             @Body @Raw byte[] content

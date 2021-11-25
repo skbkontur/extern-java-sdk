@@ -33,8 +33,8 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public CompletableFuture<UUID> loadContent(byte[] content) {
-        return api.loadContent(accountProvider.accountId(), content).thenApply(ContentId::getId);
+    public CompletableFuture<UUID> uploadContent(byte[] content) {
+        return api.uploadContent(accountProvider.accountId(), content).thenApply(ContentId::getId);
     }
 
     @Override
