@@ -22,6 +22,7 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
 
 import java.util.List;
@@ -101,6 +102,38 @@ public interface RelatedDocumentsService {
      *  @return список описей связанных с текущим документом {@link InventoriesPage}
      */
     CompletableFuture<Draft> createRelatedDraft(DraftMetaRequest draftMeta);
+
+    /**
+     * TODO:
+     */
+    CompletableFuture<QueryContext<ReplyDocument>> generateReplyAsync(
+            UUID inventoryId,
+            UUID inventoryDocumentId,
+            String replyType,
+            byte[] signerCert
+    );
+
+    /**
+     * TODO:
+     */
+    CompletableFuture<QueryContext<ReplyDocument>> updateReplyDocumentSignature(
+            UUID inventoryId,
+            UUID inventoryDocumentId,
+            UUID replyId,
+            byte[] signature
+    );
+
+    CompletableFuture<QueryContext<Docflow>> sendReplyAsync(
+            UUID inventoryId,
+            UUID inventoryDocumentId,
+            UUID replyId
+    );
+
+    CompletableFuture<byte[]> print(
+            UUID inventoryId,
+            UUID inventoryDocumentId,
+            byte[] content
+    );
 
     /**
      * Возвращает информацию об отложенной задаче

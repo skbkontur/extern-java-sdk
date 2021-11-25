@@ -24,11 +24,15 @@ package ru.kontur.extern_api.sdk.httpclient.api;
 
 import retrofit2.http.*;
 import ru.kontur.extern_api.sdk.GsonProvider;
+import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
+import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -47,6 +51,61 @@ public interface RelatedDocflowApi {
     CompletableFuture<Draft> create(
             @Path("accountId") UUID accountId,
             @Body DraftMetaRequest clientInfo
+    );
+
+    /**
+     * TODO:
+     */
+    @POST("v1/{accountId}/docflows/{relatedDocflowId}/documents/{relatedDocumentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/generate-reply")
+    CompletableFuture<ApiResponse<ReplyDocument>> generateReply(
+            @Path("accountId") UUID accountId,
+            @Path("relatedDocflowId") UUID relatedDocflowId,
+            @Path("relatedDocumentId") UUID relatedDocumentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Query("documentType") String documentType,
+            @Body CertificateContent certificate
+    );
+
+    /**
+     * TODO:
+     */
+    @PUT("/v1/{accountId}/docflows/{relatedDocflowId}/documents/{relatedDocumentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/replies/{replyId}/signature")
+    CompletableFuture<ApiResponse<ReplyDocument>> updateReplyDocumentSignature(
+            @Path("accountId") UUID accountId,
+            @Path("relatedDocflowId") UUID relatedDocflowId,
+            @Path("relatedDocumentId") UUID relatedDocumentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Path("replyId") UUID replyId,
+            @Body @Raw byte[] signature
+    );
+
+    /**
+     * TODO:
+     */
+    @POST("/v1/{accountId}/docflows/{relatedDocflowId}/documents/{relatedDocumentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/replies/{replyId}/send")
+    CompletableFuture<ApiResponse<Docflow>> sendReplyAsync(
+            @Path("accountId") UUID accountId,
+            @Path("relatedDocflowId") UUID relatedDocflowId,
+            @Path("relatedDocumentId") UUID relatedDocumentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Path("replyId") UUID replyId,
+            @Body SenderIp data
+    );
+
+    /**
+     * TODO:
+     */
+    @POST("/v1/{accountId}/docflows/{relatedDocflowId}/documents/{relatedDocumentId}/inventories/{inventoryId}/documents/{inventoryDocumentId}/print")
+    CompletableFuture<byte[]> print(
+            @Path("accountId") UUID accountId,
+            @Path("relatedDocflowId") UUID relatedDocflowId,
+            @Path("relatedDocumentId") UUID relatedDocumentId,
+            @Path("inventoryId") UUID inventoryId,
+            @Path("inventoryDocumentId") UUID inventoryDocumentId,
+            @Body ByteContent request
     );
 
     /**
