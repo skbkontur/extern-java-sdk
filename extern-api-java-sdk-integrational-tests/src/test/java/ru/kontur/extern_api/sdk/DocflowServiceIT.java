@@ -54,6 +54,7 @@ import java.util.stream.Stream;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 
@@ -145,7 +146,7 @@ class DocflowServiceIT {
                 .findAny();
 
         Assumptions.assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () -> {
-            Assertions.assertTrue(
+            assertTrue(
                     webDocflowLink.isPresent(),
                     "Web view docflow link should exists in docflow links."
             );
@@ -245,12 +246,12 @@ class DocflowServiceIT {
                 .join()
                 .getOrThrow();
 
+        int processedDocs = 0;
         for (Document d : docs) {
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//            if (!d.hasEncryptedContent()) {
-//                continue;
-//            }
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted())) {
+                continue;
+            }
 
             byte[] encrypted = docflowService
                     .getEncryptedContentAsync(docflow.getId(), d.getId())
@@ -269,7 +270,9 @@ class DocflowServiceIT {
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @ParameterizedTest
@@ -284,32 +287,33 @@ class DocflowServiceIT {
                 .join()
                 .getOrThrow();
 
+        int processedDocs = 0;
         for (Document d : docs) {
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//            if (!d.hasDecryptedContent()) {
-//                continue;
-//            }
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> content.isEncrypted())) {
+                continue;
+            }
 
             byte[] decrypted = docflowService
                     .getDecryptedContentAsync(docflow.getId(), d.getId())
                     .join()
                     .getOrThrow();
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//            Boolean needDecompress = d.getDescription().getCompressed()
-//                    && docflow.getType() != DocflowType.PFR_REPORT
-//                    && !d.hasEncryptedContent(); //расшифрованный контент для зашифрованных документов всегда расжат
-//            if (needDecompress) {
-//                decrypted = Zip.unzip(decrypted);
-//            }
+            Boolean needDecompress = d.getDescription().getCompressed()
+                    && docflow.getType() != DocflowType.PFR_REPORT
+                    && d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted()); //расшифрованный контент для зашифрованных документов всегда расжат
+            if (needDecompress) {
+                decrypted = Zip.unzip(decrypted);
+            }
 
             byte[] first5letters = Arrays.copyOfRange(decrypted, 0, 5);
 
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @Disabled("@see DraftWithCloudCertIT")
@@ -325,12 +329,12 @@ class DocflowServiceIT {
                 .join()
                 .ensureSuccess();
 
+        int processedDocs = 0;
         for (Document d : docsCxt.getOrThrow()) {
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//            if (!d.hasEncryptedContent()) {
-//                continue;
-//            }
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted())) {
+                continue;
+            }
 
             byte[] decrypted = docflowService.cloudDecryptDocument(
                     docflow.getId().toString(),
@@ -345,7 +349,9 @@ class DocflowServiceIT {
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @ParameterizedTest
@@ -501,7 +507,7 @@ class DocflowServiceIT {
                 .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
-        Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
+        assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
 
         for (DocflowPageItem docflowPageItem : docflowPage.getDocflowsPageItem()) {
             Assertions.assertEquals(DocflowStatus.FINISHED, docflowPageItem.getStatus());
@@ -551,7 +557,7 @@ class DocflowServiceIT {
                         .updatedFrom(laterDate))
                 .getOrThrow();
 
-        Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() > 0);
+        assertTrue(docflowPage.getDocflowsPageItem().size() > 0);
         Assertions.assertNotEquals(oldestDocflow.getId(), docflowPage.getDocflowsPageItem().get(0).getId());
     }
 
@@ -702,7 +708,7 @@ class DocflowServiceIT {
 
 
         CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowWithIncorrectSignaturesId, requestData).join();
-        Assertions.assertTrue(checkDemandResult.hasErrors());
+        assertTrue(checkDemandResult.hasErrors());
         assertEquals(1, checkDemandResult.getErrorCodes().size());
 
         String signatureMismatchErrorCode = "0100100004";
