@@ -33,9 +33,9 @@ public class Fns534Submission extends DocflowDescription {
 
     private Date periodEnd;
 
-    private String recepient;
+    private String recipient;
 
-    private String finalRecepient;
+    private String finalRecipient;
 
     private UUID originDocflowId;
 
@@ -61,20 +61,20 @@ public class Fns534Submission extends DocflowDescription {
         this.periodEnd = periodEnd;
     }
 
-    public String getRecepient() {
-        return recepient;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
-    public String getFinalRecepient() {
-        return finalRecepient;
+    public String getFinalRecipient() {
+        return finalRecipient;
     }
 
-    public void setFinalRecepient(String finalRecepient) {
-        this.finalRecepient = finalRecepient;
+    public void setFinalRecipient(String finalRecipient) {
+        this.finalRecipient = finalRecipient;
     }
 
     public UUID getOriginDocflowId() {

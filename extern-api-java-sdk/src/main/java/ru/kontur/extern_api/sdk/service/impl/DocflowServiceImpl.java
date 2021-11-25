@@ -137,9 +137,9 @@ public class DocflowServiceImpl implements DocflowService {
     public CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] documentContent
+            UUID contentId
     ) {
-        return this.api.recognize(acc.accountId(), docflowId, documentId, documentContent).thenApply(
+        return this.api.recognize(acc.accountId(), docflowId, documentId, new RecognizeMetaRequest(contentId)).thenApply(
                 contextAdaptor(QueryContext.RECOGNITION_META));
     }
 

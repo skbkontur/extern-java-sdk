@@ -151,7 +151,7 @@ public interface DocflowService {
     CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
             UUID docflowId,
             UUID documentId,
-            byte[] documentContent
+            UUID contentId
     );
 
     /**

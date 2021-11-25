@@ -54,6 +54,7 @@ import java.util.stream.Stream;
 import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 
@@ -145,7 +146,7 @@ class DocflowServiceIT {
                 .findAny();
 
         Assumptions.assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () -> {
-            Assertions.assertTrue(
+            assertTrue(
                     webDocflowLink.isPresent(),
                     "Web view docflow link should exists in docflow links."
             );
@@ -245,9 +246,10 @@ class DocflowServiceIT {
                 .join()
                 .getOrThrow();
 
+        int processedDocs = 0;
         for (Document d : docs) {
 
-            if (!d.hasEncryptedContent()) {
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted())) {
                 continue;
             }
 
@@ -268,7 +270,9 @@ class DocflowServiceIT {
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @ParameterizedTest
@@ -283,9 +287,10 @@ class DocflowServiceIT {
                 .join()
                 .getOrThrow();
 
+        int processedDocs = 0;
         for (Document d : docs) {
 
-            if (!d.hasDecryptedContent()) {
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> content.isEncrypted())) {
                 continue;
             }
 
@@ -296,7 +301,7 @@ class DocflowServiceIT {
 
             Boolean needDecompress = d.getDescription().getCompressed()
                     && docflow.getType() != DocflowType.PFR_REPORT
-                    && !d.hasEncryptedContent(); //расшифрованный контент для зашифрованных документов всегда расжат
+                    && d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted()); //расшифрованный контент для зашифрованных документов всегда расжат
             if (needDecompress) {
                 decrypted = Zip.unzip(decrypted);
             }
@@ -306,7 +311,9 @@ class DocflowServiceIT {
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @Disabled("@see DraftWithCloudCertIT")
@@ -322,9 +329,10 @@ class DocflowServiceIT {
                 .join()
                 .ensureSuccess();
 
+        int processedDocs = 0;
         for (Document d : docsCxt.getOrThrow()) {
 
-            if (!d.hasEncryptedContent()) {
+            if (d.getContent().getDocflowDocumentContents().stream().allMatch(content -> !content.isEncrypted())) {
                 continue;
             }
 
@@ -341,7 +349,9 @@ class DocflowServiceIT {
             assumingThat(docflow.getType() != DocflowType.FSS_REPORT, () ->
                     assertArrayEquals("<?xml".getBytes(), first5letters)
             );
+            processedDocs++;
         }
+        assertTrue(processedDocs > 0, "Should be at least 1 processed document");
     }
 
     @ParameterizedTest
@@ -497,7 +507,7 @@ class DocflowServiceIT {
                 .type(DocflowType.FNS534_REPORT)
         ).getOrThrow();
 
-        Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
+        assertTrue(docflowPage.getDocflowsPageItem().size() <= 10);
 
         for (DocflowPageItem docflowPageItem : docflowPage.getDocflowsPageItem()) {
             Assertions.assertEquals(DocflowStatus.FINISHED, docflowPageItem.getStatus());
@@ -547,7 +557,7 @@ class DocflowServiceIT {
                         .updatedFrom(laterDate))
                 .getOrThrow();
 
-        Assertions.assertTrue(docflowPage.getDocflowsPageItem().size() > 0);
+        assertTrue(docflowPage.getDocflowsPageItem().size() > 0);
         Assertions.assertNotEquals(oldestDocflow.getId(), docflowPage.getDocflowsPageItem().get(0).getId());
     }
 
@@ -589,59 +599,60 @@ class DocflowServiceIT {
         }
     }
 
-    @Disabled
-    @ParameterizedTest
-    @MethodSource("demandLazyFactory")
-    @DisplayName("recognize demand attachment")
-    void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
-        DocflowService docflowService = engine.getDocflowService();
-
-        Awaiter.waitForCondition(
-                () -> docflowService.lookupDocumentAsync(
-                        demandTestData.getDemandId(),
-                        demandTestData.getDemandAttachmentId()
-                ),
-                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
-                1000 * 20,
-                1000 * 60 * 5
-        ).thenApply(QueryContext::getOrThrow);
-
-        Document document = docflowService.lookupDocumentAsync(
-                demandTestData.getDemandId(),
-                demandTestData.getDemandAttachmentId()
-        )
-                .join().getOrThrow();
-
-        DemandAttachmentRequisites requisites = (DemandAttachmentRequisites) document.getDescription()
-                .getRequisites();
-        Assertions.assertNull(requisites.getDemandDate());
-        Assertions.assertNull(requisites.getDemandNumber());
-        Assertions.assertEquals(requisites.getDemandInnList().size(), 0);
-
-        RecognizedMeta recognizedMeta = docflowService
-                .recognizeAsync(
-                        demandTestData.getDemandId(),
-                        demandTestData.getDemandAttachmentId(),
-                        demandTestData.getDemandAttachmentDecryptedBytes()
-                )
-                .join()
-                .getOrThrow();
-
-        Assertions.assertNotNull(recognizedMeta);
-        Assertions.assertNotNull(recognizedMeta.getDemandDate());
-        Assertions.assertNotNull(recognizedMeta.getDemandNumber());
-        Assertions.assertNotNull(recognizedMeta.getDemandInnList());
-
-        document = docflowService.lookupDocumentAsync(
-                demandTestData.getDemandId(),
-                demandTestData.getDemandAttachmentId()
-        ).join().getOrThrow();
-        requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
-
-        Assertions.assertEquals(requisites.getDemandDate(), recognizedMeta.getDemandDate());
-        Assertions.assertEquals(requisites.getDemandNumber(), recognizedMeta.getDemandNumber());
-        Assertions.assertLinesMatch(requisites.getDemandInnList(), recognizedMeta.getDemandInnList());
-    }
+//    TODO: Починить тест
+//    @Disabled
+//    @ParameterizedTest
+//    @MethodSource("demandLazyFactory")
+//    @DisplayName("recognize demand attachment")
+//    void testDemandRecognize(DemandTestData demandTestData) throws RuntimeException {
+//        DocflowService docflowService = engine.getDocflowService();
+//
+//        Awaiter.waitForCondition(
+//                () -> docflowService.lookupDocumentAsync(
+//                        demandTestData.getDemandId(),
+//                        demandTestData.getDemandAttachmentId()
+//                ),
+//                cxt -> cxt.isSuccess() || cxt.getServiceError().getCode() != 404,
+//                1000 * 20,
+//                1000 * 60 * 5
+//        ).thenApply(QueryContext::getOrThrow);
+//
+//        Document document = docflowService.lookupDocumentAsync(
+//                demandTestData.getDemandId(),
+//                demandTestData.getDemandAttachmentId()
+//        )
+//                .join().getOrThrow();
+//
+//        DemandAttachmentRequisites requisites = (DemandAttachmentRequisites) document.getDescription()
+//                .getRequisites();
+//        Assertions.assertNull(requisites.getDemandDate());
+//        Assertions.assertNull(requisites.getDemandNumber());
+//        Assertions.assertEquals(requisites.getDemandInnList().size(), 0);
+//
+//        RecognizedMeta recognizedMeta = docflowService
+//                .recognizeAsync(
+//                        demandTestData.getDemandId(),
+//                        demandTestData.getDemandAttachmentId(),
+//                        demandTestData.getDemandAttachmentDecryptedBytes()
+//                )
+//                .join()
+//                .getOrThrow();
+//
+//        Assertions.assertNotNull(recognizedMeta);
+//        Assertions.assertNotNull(recognizedMeta.getDemandDate());
+//        Assertions.assertNotNull(recognizedMeta.getDemandNumber());
+//        Assertions.assertNotNull(recognizedMeta.getDemandInnList());
+//
+//        document = docflowService.lookupDocumentAsync(
+//                demandTestData.getDemandId(),
+//                demandTestData.getDemandAttachmentId()
+//        ).join().getOrThrow();
+//        requisites = (DemandAttachmentRequisites) document.getDescription().getRequisites();
+//
+//        Assertions.assertEquals(requisites.getDemandDate(), recognizedMeta.getDemandDate());
+//        Assertions.assertEquals(requisites.getDemandNumber(), recognizedMeta.getDemandNumber());
+//        Assertions.assertLinesMatch(requisites.getDemandInnList(), recognizedMeta.getDemandInnList());
+//    }
 
     @Test
     @DisplayName("check demand")
@@ -697,7 +708,7 @@ class DocflowServiceIT {
 
 
         CheckDemandResult checkDemandResult = docflowService.checkDemandAsync(docflowWithIncorrectSignaturesId, requestData).join();
-        Assertions.assertTrue(checkDemandResult.hasErrors());
+        assertTrue(checkDemandResult.hasErrors());
         assertEquals(1, checkDemandResult.getErrorCodes().size());
 
         String signatureMismatchErrorCode = "0100100004";

@@ -17,6 +17,14 @@ public interface ContentService {
     CompletableFuture<byte[]> getContent(UUID contentId);
 
     /**
+     * Метод загружает контент полностью.
+     *
+     * @param content контент
+     * @return Идентификатор контента
+     */
+    CompletableFuture<UUID> uploadContent(byte[] content);
+
+    /**
      * Метод скачивает контент по частям с указанием диапазона байт.
      *
      * @param contentId Идентификатор контента

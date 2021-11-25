@@ -1,6 +1,7 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
 import ru.kontur.extern_api.sdk.httpclient.api.ContentApi;
+import ru.kontur.extern_api.sdk.model.ContentId;
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.ContentService;
 
@@ -29,6 +30,11 @@ public class ContentServiceImpl implements ContentService {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    @Override
+    public CompletableFuture<UUID> uploadContent(byte[] content) {
+        return api.uploadContent(accountProvider.accountId(), content).thenApply(ContentId::getId);
     }
 
     @Override

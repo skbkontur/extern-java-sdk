@@ -1,7 +1,5 @@
 /*
- * MIT License
- *
- * Copyright (c) 2018 SKB Kontur
+ * Copyright (c) 2019 SKB Kontur
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +20,28 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.model;
+package ru.kontur.extern_api.sdk.model.builders;
 
-import java.util.Collection;
+import java.util.UUID;
 
-/**
- * //TODO: Обновить Javadoc
- *
- * <p>
- * Класс ДТО для получения ссылок на расшифрованный и зашифрованный контенты документов документооборота.
- * Объект данного класса инкопсулированы в объект {@link Document}. Используется в методах {@code DocflowService}.
- * </p>
- * @author Aleksey Sukhorukov
- */
-public class Content {
+public class BuildDraftsBuilderResultError {
 
-    private Collection<DocflowDocumentContents> docflowDocumentContents;
+    private UUID documentId;
+    private String errorMessage;
 
-    public Collection<DocflowDocumentContents> getDocflowDocumentContents() {
-        return docflowDocumentContents;
+    public UUID getDocumentId() {
+        return documentId;
     }
 
-    public void setDocflowDocumentContents(Collection<DocflowDocumentContents> docflowDocumentContents) {
-        this.docflowDocumentContents = docflowDocumentContents;
+    public void setDocumentId(UUID documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }
