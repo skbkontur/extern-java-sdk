@@ -148,6 +148,7 @@ class AccountIT {
                 .createAccountAsync(createAccountRequest)
                 .join()
                 .ensureSuccess();
+        WaitForIndexing();
 
         QueryContext<?> deleteCxt = accountService
                 .deleteAccountAsync(createCxt.getAccount().getId())
@@ -166,7 +167,6 @@ class AccountIT {
         Assertions.assertEquals(404, apiException.getCode());//при удалении учетки удаляется сессия
     }
 
-
     private void checkFields(Account account, String inn, String kpp, String orgName) {
         assertEquals(account.getInn(), inn);
         assertEquals(account.getKpp(), kpp);
@@ -174,5 +174,13 @@ class AccountIT {
         assertFalse(account.getLinks().isEmpty());
         assertEquals(account.getProductName(), "extern");
         assertEquals(account.getRole(), ExternUserRole.ADMIN);
+    }
+
+    private void WaitForIndexing() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
