@@ -154,6 +154,12 @@ public interface DocflowService {
             UUID contentId
     );
 
+    CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent
+    );
+
     /**
      * <p>GET /v1/{accountId}/docflows/{docflowId}/documents/{documentId}/description</p>
      * Синхронный метод возвращает мета-данные для документа
