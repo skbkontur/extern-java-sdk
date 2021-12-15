@@ -119,22 +119,21 @@ class DraftWithCloudCertIT {
                 .join()
                 .getOrThrow();
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//        for (Document d : docflow.getDocuments()) {
-//            if (!d.hasEncryptedContent()) {
-//                continue;
-//            }
-//
-//            byte[] decrypted = engine.getDocflowService().cloudDecryptDocument(
-//                    docflow.getId().toString(),
-//                    d.getId().toString(),
-//                    cloudCert.getContent(),
-//                    init -> backdoor.apply(init.getRequestId())
-//            )
-//                    .getOrThrow();
-//
-//            Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypted, 0, 5));
-//        }
+        for (Document d : docflow.getDocuments()) {
+            if (!d.hasEncryptedContent()) {
+                continue;
+            }
+
+            byte[] decrypted = engine.getDocflowService().cloudDecryptDocument(
+                    docflow.getId().toString(),
+                    d.getId().toString(),
+                    cloudCert.getContent(),
+                    init -> backdoor.apply(init.getRequestId())
+            )
+                    .getOrThrow();
+
+            Assertions.assertArrayEquals("<?xml".getBytes(), Arrays.copyOfRange(decrypted, 0, 5));
+        }
     }
 
 
