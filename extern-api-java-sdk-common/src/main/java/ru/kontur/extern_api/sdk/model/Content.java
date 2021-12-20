@@ -36,8 +36,73 @@ import java.util.Collection;
  * @author Aleksey Sukhorukov
  */
 public class Content {
-
+    private Link decrypted = null;
+    private Link encrypted = null;
     private Collection<DocflowDocumentContents> docflowDocumentContents;
+
+    /**
+     * Устанавливает ссылку на расшифрованный контент
+     *
+     * @param decrypted ссылка на расшифрованный контент
+     * @return {@link Content}
+     */
+    @Deprecated
+    public Content decrypted(Link decrypted) {
+        this.decrypted = decrypted;
+        return this;
+    }
+
+    /**
+     * Возвращает ссылку на расшифрованный контент
+     *
+     * @return decrypted ссылка на расшифрованный контент
+     */
+    @Deprecated
+    public Link getDecrypted() {
+        return decrypted;
+    }
+
+    /**
+     * Устанавливает ссылку на расшифрованный контент
+     *
+     * @param decrypted ссылка на расшифрованный контент
+     */
+    @Deprecated
+    public void setDecrypted(Link decrypted) {
+        this.decrypted = decrypted;
+    }
+
+    /**
+     * Устанавливает ссылку на зашифрованный контент
+     *
+     * @param encrypted ссылка на зашифрованный контент
+     * @return {@link Content}
+     */
+    @Deprecated
+    public Content encrypted(Link encrypted) {
+        this.encrypted = encrypted;
+        return this;
+    }
+
+    /**
+     * Возвращает ссылку на зашифрованный контент
+     *
+     * @return encrypted ссылка на зашифрованный контент
+     */
+    @Deprecated
+    public Link getEncrypted() {
+        return encrypted;
+    }
+
+    /**
+     * Устанавливает ссылку на зашифрованный контент
+     *
+     * @param encrypted ссылка на зашифрованный контент
+     */
+    @Deprecated
+    public void setEncrypted(Link encrypted) {
+        this.encrypted = encrypted;
+    }
 
     public Collection<DocflowDocumentContents> getDocflowDocumentContents() {
         return docflowDocumentContents;

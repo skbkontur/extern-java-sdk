@@ -98,34 +98,32 @@ class PfrReportSlowScenarioIT {
                 continue;
             }
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//
-//            if (document.hasEncryptedContent()) {
-//                byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
-//                        pfrDocflowFinished.getId(),
-//                        document.getId()
-//                ).join().getOrThrow();
-//                System.out.println(
-//                        "Service Document " + document.getId() + " encrypted content received, len bytes ="
-//                                + pfrServiceDocumentContent.length);
-//                byte[] pfrServiceDocumentContentDecrypted = cryptoUtils.decrypt(
-//                        engine.getConfiguration().getThumbprint(),
-//                        pfrServiceDocumentContent
-//                );
-//
-//                System.out.println("DoService Document " + document.getId() + "content decrypted, len bytes ="
-//                        + pfrServiceDocumentContentDecrypted.length);
-//            }
-//
-//            if (document.hasDecryptedContent()) {
-//                byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
-//                        pfrDocflowFinished.getId(),
-//                        document.getId()
-//                ).join().getOrThrow();
-//
-//                System.out.println("Document " + document.getId() + "content received, len bytes ="
-//                        + pfrSpecialDecryptedContent.length);
-//            }
+            if (document.hasEncryptedContent()) {
+                byte[] pfrServiceDocumentContent = engine.getDocflowService().getEncryptedContentAsync(
+                        pfrDocflowFinished.getId(),
+                        document.getId()
+                ).join().getOrThrow();
+                System.out.println(
+                        "Service Document " + document.getId() + " encrypted content received, len bytes ="
+                                + pfrServiceDocumentContent.length);
+                byte[] pfrServiceDocumentContentDecrypted = cryptoUtils.decrypt(
+                        engine.getConfiguration().getThumbprint(),
+                        pfrServiceDocumentContent
+                );
+
+                System.out.println("DoService Document " + document.getId() + "content decrypted, len bytes ="
+                        + pfrServiceDocumentContentDecrypted.length);
+            }
+
+            if (document.hasDecryptedContent()) {
+                byte[] pfrSpecialDecryptedContent = engine.getDocflowService().getDecryptedContentAsync(
+                        pfrDocflowFinished.getId(),
+                        document.getId()
+                ).join().getOrThrow();
+
+                System.out.println("Document " + document.getId() + "content received, len bytes ="
+                        + pfrSpecialDecryptedContent.length);
+            }
         }
     }
 
@@ -373,20 +371,19 @@ class PfrReportSlowScenarioIT {
                 .get()
                 .getOrThrow();
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//        if (document.hasDecryptedContent()) {
-//            System.out.println("Document is already decrypted");
-//            byte[] content = engine.getDocflowService()
-//                    .getDecryptedContentAsync(docflowId, documentId)
-//                    .get()
-//                    .getOrThrow();
-//
-//            if (document.getDescription().getCompressed()) {
-//                content = Zip.unzip(content);
-//            }
-//
-//            return content;
-//        }
+        if (document.hasDecryptedContent()) {
+            System.out.println("Document is already decrypted");
+            byte[] content = engine.getDocflowService()
+                    .getDecryptedContentAsync(docflowId, documentId)
+                    .get()
+                    .getOrThrow();
+
+            if (document.getDescription().getCompressed()) {
+                content = Zip.unzip(content);
+            }
+
+            return content;
+        }
 
         System.out.println("Decrypting document...");
         return decryptDocument(docflowId, documentId);

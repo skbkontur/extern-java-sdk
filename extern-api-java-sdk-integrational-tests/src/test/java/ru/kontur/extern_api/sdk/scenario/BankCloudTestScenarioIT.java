@@ -277,20 +277,19 @@ class BankCloudTestScenarioIT {
                 .get()
                 .getOrThrow();
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//        if (document.hasDecryptedContent()) {
-//            System.out.println("Document is already decrypted");
-//            byte[] content = engine.getDocflowService()
-//                    .getDecryptedContentAsync(docflowId, documentId)
-//                    .get()
-//                    .getOrThrow();
-//
-//            if (document.getDescription().getCompressed()) {
-//                content = Zip.unzip(content);
-//            }
-//
-//            return content;
-//        }
+        if (document.hasDecryptedContent()) {
+            System.out.println("Document is already decrypted");
+            byte[] content = engine.getDocflowService()
+                    .getDecryptedContentAsync(docflowId, documentId)
+                    .get()
+                    .getOrThrow();
+
+            if (document.getDescription().getCompressed()) {
+                content = Zip.unzip(content);
+            }
+
+            return content;
+        }
 
         System.out.println("Decrypting document...");
         return cloudDecryptDocument(docflowId, documentId);

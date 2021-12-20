@@ -26,7 +26,6 @@ package ru.kontur.extern_api.sdk.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -87,12 +86,22 @@ public class Document {
         this.description = description;
     }
 
-    //TODO: Javadoc
+    /**
+     * Возвращает контент документа {@link Content}
+     *
+     * @return content контент документа
+     * @see Content
+     */
     public Content getContent() {
         return content;
     }
 
-    //TODO: Javadoc
+    /**
+     * Устанавливает контент документа {@link Content}
+     *
+     * @param content контент документа
+     * @see Content
+     */
     public void setContent(Content content) {
         this.content = content;
     }
@@ -123,6 +132,21 @@ public class Document {
      */
     public void setSignatures(List<Signature> signatures) {
         this.signatures = signatures;
+    }
+
+    public boolean hasEncryptedContent() {
+
+        return content
+                .getDocflowDocumentContents()
+                .stream()
+                .anyMatch(DocflowDocumentContents::isEncrypted);
+    }
+
+    public boolean hasDecryptedContent() {
+        return content
+                .getDocflowDocumentContents()
+                .stream()
+                .anyMatch(c -> !c.isEncrypted());
     }
 
     /**
