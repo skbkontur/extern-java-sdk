@@ -213,6 +213,14 @@ public interface DocflowsApi {
             @Body RecognizeMetaRequest request
     );
 
+    @POST("v1/{accountId}/docflows/{docflowId}/documents/{documentId}/recognize")
+    CompletableFuture<ApiResponse<RecognizedMeta>> recognize(
+            @Path("accountId") UUID accountId,
+            @Path("docflowId") UUID docflowId,
+            @Path("documentId") UUID documentId,
+            @Body @Raw byte[] content
+    );
+
     /**
      * Get Fns-Reply document from specified workflow
      *

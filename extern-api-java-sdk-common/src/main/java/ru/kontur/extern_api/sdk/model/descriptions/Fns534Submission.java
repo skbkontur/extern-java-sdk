@@ -61,16 +61,36 @@ public class Fns534Submission extends DocflowDescription {
         this.periodEnd = periodEnd;
     }
 
+    @Deprecated
+    public String getRecepient() {
+        return recipient;
+    }
+
     public String getRecipient() {
         return recipient;
+    }
+
+    @Deprecated
+    public void setRecepient(String recepient) {
+        this.recipient = recepient;
     }
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
     }
 
+    @Deprecated
+    public String getFinalRecepient() {
+        return finalRecipient;
+    }
+
     public String getFinalRecipient() {
         return finalRecipient;
+    }
+
+    @Deprecated
+    public void setFinalRecepient(String finalRecepient) {
+        this.finalRecipient = finalRecepient;
     }
 
     public void setFinalRecipient(String finalRecipient) {

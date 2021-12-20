@@ -143,6 +143,15 @@ public class DocflowServiceImpl implements DocflowService {
                 contextAdaptor(QueryContext.RECOGNITION_META));
     }
 
+    public CompletableFuture<QueryContext<RecognizedMeta>> recognizeAsync(
+            UUID docflowId,
+            UUID documentId,
+            byte[] documentContent
+    ) {
+        return this.api.recognize(acc.accountId(), docflowId, documentId, documentContent).thenApply(
+                contextAdaptor(QueryContext.RECOGNITION_META));
+    }
+
     @Override
     public QueryContext<DocflowDocumentDescription> lookupDescription(QueryContext<?> parent) {
         return join(lookupDescriptionAsync(
