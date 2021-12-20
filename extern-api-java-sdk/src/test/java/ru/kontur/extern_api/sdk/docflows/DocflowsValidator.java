@@ -122,12 +122,11 @@ public class DocflowsValidator {
             assertNull("DocumentDescription must be null!", document.getDescription());
         }
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//        if (withContent) {
-//            validateContent(document.getContent());
-//        } else {
-//            assertNull("Content must be null!", document.getContent());
-//        }
+        if (withContent) {
+            validateContent(document.getContent());
+        } else {
+            assertNull("Content must be null!", document.getContent());
+        }
 
         if (withSignature) {
             StandardObjectsValidator.validateNotEmptyList(document.getSignatures(), "Signatures");
@@ -152,12 +151,11 @@ public class DocflowsValidator {
         assertEquals("Compressed is wrong!", (Object) true, documentDescription.getCompressed());
     }
 
-//        TODO: Поправить тест под новый DocflowDocumentContents
-//    private static void validateContent(Content content) {
-//        assertNotNull("Content must not be null!", content);
-//        StandardObjectsValidator.validateLink(content.getDecrypted());
-//        StandardObjectsValidator.validateLink(content.getEncrypted());
-//    }
+    private static void validateContent(Content content) {
+        assertNotNull("Content must not be null!", content);
+        StandardObjectsValidator.validateLink(content.getDecrypted());
+        StandardObjectsValidator.validateLink(content.getEncrypted());
+    }
 
     public static void validateSignature(Signature signature, boolean withContentLink,
         boolean withLinks) {

@@ -22,8 +22,10 @@
 
 package ru.kontur.extern_api.sdk.model.builders;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BuildDraftsBuilderResult {
 
@@ -53,8 +55,42 @@ public class BuildDraftsBuilderResult {
      *
      * @return список ошибок по документам
      */
-    public BuildDraftsBuilderResultError[] getErrorDraftsBuilderDocuments() {
+    @Deprecated
+    public Map<UUID, String> getErrorDraftsBuilderDocuments() {
+        return Arrays
+                .stream(errorDraftsBuilderDocuments)
+                .collect(Collectors.toMap(
+                        BuildDraftsBuilderResultError::getDocumentId,
+                        BuildDraftsBuilderResultError::getErrorMessage));
+    }
+
+    /**
+     * Возвращает список ошибок по документам
+     *
+     * @return список ошибок по документам
+     */
+    public BuildDraftsBuilderResultError[] getErrorBuilderDocuments() {
         return errorDraftsBuilderDocuments;
+    }
+
+    /**
+     * Устанавливает список ошибок по документам
+     *
+     * @param errorDraftsBuilderDocuments список ошибок по документам
+     */
+    @Deprecated
+    public void setErrorDraftsBuilderDocuments(Map<UUID, String> errorDraftsBuilderDocuments) {
+        this.errorDraftsBuilderDocuments = errorDraftsBuilderDocuments
+                .keySet()
+                .stream()
+                .map(documentId ->
+                {
+                    BuildDraftsBuilderResultError error = new BuildDraftsBuilderResultError();
+                    error.setDocumentId(documentId);
+                    error.setErrorMessage(errorDraftsBuilderDocuments.get(documentId));
+                    return error;
+                })
+                .toArray(BuildDraftsBuilderResultError[]::new);
     }
 
     /**
