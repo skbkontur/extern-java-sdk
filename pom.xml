@@ -117,7 +117,7 @@
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
         <jb-annotations.version>[13.0,]</jb-annotations.version>
-        <jetty-server.version>9.4.41.v20210516</jetty-server.version>
+        <jetty-server.version>10.0.10</jetty-server.version>
         <servlet-api.version>2.5</servlet-api.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <mockserver-netty.version>5.3.0</mockserver-netty.version>
