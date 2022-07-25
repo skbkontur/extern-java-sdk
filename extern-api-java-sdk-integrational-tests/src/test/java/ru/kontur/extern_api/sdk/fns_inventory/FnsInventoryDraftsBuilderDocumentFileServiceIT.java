@@ -165,7 +165,8 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
                         );
 
         FnsInventoryDraftsBuilderDocumentFileContents newContents = new FnsInventoryDraftsBuilderDocumentFileContents();
-        newContents.setBase64Content(draftsBuilderDocumentFileCreator.getScannedContent());
+        UUID contentId = engine.getContentService().uploadContent(draftsBuilderDocumentFileCreator.getScannedContent()).join();
+        newContents.setContentId(contentId);
 
         FnsInventoryDraftsBuilderDocumentFileMetaRequest meta = new FnsInventoryDraftsBuilderDocumentFileMetaRequest();
         meta.setFileName(newFileName);
@@ -215,16 +216,6 @@ class FnsInventoryDraftsBuilderDocumentFileServiceIT {
 
         ApiException apiException = (ApiException) exception.getCause();
         assertEquals(404, apiException.getCode());
-    }
-
-    @Test
-    @DisplayName("get content drafts builder document file")
-    void getContent() {
-        byte[] content = draftsBuilderDocumentFileService
-                .getContentAsync(draftsBuilderDocumentFile.getId())
-                .join();
-
-        assertNotNull(content);
     }
 
     @Test

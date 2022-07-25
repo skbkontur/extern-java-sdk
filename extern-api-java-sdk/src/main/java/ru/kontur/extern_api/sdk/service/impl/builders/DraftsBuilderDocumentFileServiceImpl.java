@@ -159,18 +159,6 @@ public abstract class DraftsBuilderDocumentFileServiceImpl<
     }
 
     @Override
-    public CompletableFuture<byte[]> getContentAsync(
-            UUID draftsBuilderDocumentFileId
-    ) {
-        return builderDocumentFilesApi.getContent(
-                accountProvider.accountId(),
-                draftsBuilderId,
-                draftsBuilderDocumentId,
-                draftsBuilderDocumentFileId
-        );
-    }
-
-    @Override
     public CompletableFuture<byte[]> getSignatureAsync(
             UUID draftsBuilderDocumentFileId
     ) {
