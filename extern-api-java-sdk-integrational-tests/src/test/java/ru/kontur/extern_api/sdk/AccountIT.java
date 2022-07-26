@@ -168,12 +168,12 @@ class AccountIT {
     }
 
     private void checkFields(Account account, String inn, String kpp, String orgName) {
-        assertEquals(account.getInn(), inn);
-        assertEquals(account.getKpp(), kpp);
-        assertEquals(account.getOrganizationName(), orgName);
+        assertEquals(inn, account.getInn());
+        assertEquals(kpp, account.getKpp());
+        assertEquals(orgName, account.getOrganizationName());
         assertFalse(account.getLinks().isEmpty());
-        assertEquals(account.getProductName(), "extern");
-        assertEquals(account.getRole(), ExternUserRole.ADMIN);
+        assertEquals("extern", account.getProductName());
+        assertEquals(ExternUserRole.ADMIN, account.getRole());
     }
 
     private void WaitForIndexing() {
