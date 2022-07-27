@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.UUID;
 import java.util.concurrent.CompletionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -149,7 +150,8 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
                         );
 
         PfrReportDraftsBuilderDocumentFileContents newContents = new PfrReportDraftsBuilderDocumentFileContents();
-        newContents.setBase64Content(draftsBuilderDocumentFileCreator.getScannedContent());
+        UUID contentId = engine.getContentService().uploadContent(draftsBuilderDocumentFileCreator.getScannedContent()).join();
+        newContents.setContentId(contentId);
 
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
         meta.setFileName(newFileName);
@@ -200,16 +202,6 @@ class PfrReportDraftsBuilderDocumentFileServiceIT {
 
         ApiException apiException = (ApiException) exception.getCause();
         assertEquals(404, apiException.getCode());
-    }
-
-    @Test
-    @DisplayName("get content drafts builder document file")
-    void getContent() {
-        byte[] content = draftsBuilderDocumentFileService
-                .getContentAsync(draftsBuilderDocumentFile.getId())
-                .join();
-
-        assertNotNull(content);
     }
 
     @Test

@@ -22,28 +22,26 @@
 
 package ru.kontur.extern_api.sdk.model.builders;
 
+import java.util.UUID;
+
 public abstract class DraftsBuilderDocumentFileContents<TDraftsBuilderDocumentFileMetaRequest extends DraftsBuilderDocumentFileMetaRequest> {
 
-    private String base64Content;
+    private UUID contentId;
     private String base64SignatureContent;
     private TDraftsBuilderDocumentFileMetaRequest meta;
 
     /**
-     * Возвращает контент файла
-     *
-     * @return контент файла
+     * Возвращает идентификатор контента
      */
-    public String getBase64Content() {
-        return base64Content;
+    public UUID getContentId() {
+        return contentId;
     }
 
     /**
-     * Устанавливает контент файла
-     *
-     * @param base64Content контент файла
+     * Устанавливает идентификатор контента
      */
-    public void setBase64Content(String base64Content) {
-        this.base64Content = base64Content;
+    public void setContentId(UUID contentId) {
+        this.contentId = contentId;
     }
 
     /**

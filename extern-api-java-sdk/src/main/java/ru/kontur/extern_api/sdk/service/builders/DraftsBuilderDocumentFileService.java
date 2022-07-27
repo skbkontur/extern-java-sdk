@@ -116,17 +116,6 @@ public interface DraftsBuilderDocumentFileService<
     );
 
     /**
-     * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/content</p>
-     * Асинхронный метод получения контента файла
-     *
-     * @param draftsBuilderDocumentFileId drafts builder document file identifier
-     * @return Контент файла
-     */
-    CompletableFuture<byte[]> getContentAsync(
-            UUID draftsBuilderDocumentFileId
-    );
-
-    /**
      * <p>GET /v1/{accountId}/drafts/builders/{draftsBuilderId}/documents/{draftsBuilderDocumentId}/files/{draftsBuilderDocumentFileId}/signature</p>
      * Асинхронный метод получения контента подписи файла
      *

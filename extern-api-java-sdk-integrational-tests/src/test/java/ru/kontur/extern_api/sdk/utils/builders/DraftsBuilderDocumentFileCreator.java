@@ -67,14 +67,15 @@ public class DraftsBuilderDocumentFileCreator {
         FnsInventoryDraftsBuilderDocumentFileContents contents = new FnsInventoryDraftsBuilderDocumentFileContents();
         FnsInventoryDraftsBuilderDocumentFileMetaRequest meta = new FnsInventoryDraftsBuilderDocumentFileMetaRequest();
 
-        String scannedContent = getScannedContent();
+        byte[] scannedContent = getScannedContent();
+        UUID scannedContentId = engine.getContentService().uploadContent(scannedContent).join();
 
         byte[] signature = cryptoUtils.sign(
                 engine.getConfiguration().getThumbprint(),
-                Base64.getDecoder().decode(scannedContent)
+                scannedContent
         );
 
-        contents.setBase64Content(scannedContent);
+        contents.setContentId(scannedContentId);
         contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
 
         meta.setFileName(fileName);
@@ -91,7 +92,7 @@ public class DraftsBuilderDocumentFileCreator {
                 : fileService.updateAsync(draftsBuilderDocumentFileId, contents).join();
     }
 
-    public String getScannedContent() {
+    public byte[] getScannedContent() {
         return getTestDataFileContent("docs/Scanned.pdf");
     }
 
@@ -106,17 +107,18 @@ public class DraftsBuilderDocumentFileCreator {
         PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
 
-        String pfrReportContent = getTestDataFileContent(
+        byte[] pfrReportContent = getTestDataFileContent(
                 isDss ? "docs/pfr-dss/SomePfrReport.xml" : "docs/pfr/SomePfrReport.xml");
+        UUID pfrReportContentId = engine.getContentService().uploadContent(pfrReportContent).join();
 
         if (cryptoUtils != null) {
             byte[] signature = cryptoUtils.sign(
                     engine.getConfiguration().getThumbprint(),
-                    Base64.getDecoder().decode(pfrReportContent)
+                    pfrReportContent
             );
             contents.setBase64SignatureContent(Base64.getEncoder().encodeToString(signature));
         }
-        contents.setBase64Content(pfrReportContent);
+        contents.setContentId(pfrReportContentId);
 
         meta.setFileName(fileName);
         contents.setMeta(meta);
@@ -140,9 +142,10 @@ public class DraftsBuilderDocumentFileCreator {
         PfrReportDraftsBuilderDocumentFileContents contents = new PfrReportDraftsBuilderDocumentFileContents();
         PfrReportDraftsBuilderDocumentFileMetaRequest meta = new PfrReportDraftsBuilderDocumentFileMetaRequest();
 
-        String pfrReportContent = getTestDataFileContent("docs/pfr/SomePfrV2Report.xml");
+        byte[] pfrReportContent = getTestDataFileContent("docs/pfr/SomePfrV2Report.xml");
+        UUID pfrReportContentId = engine.getContentService().uploadContent(pfrReportContent).join();
 
-        contents.setBase64Content(pfrReportContent);
+        contents.setContentId(pfrReportContentId);
 
         meta.setFileName(fileName);
         contents.setMeta(meta);
@@ -156,7 +159,7 @@ public class DraftsBuilderDocumentFileCreator {
                 .join();
     }
 
-    public String getTestDataFileContent(String path) {
+    public byte[] getTestDataFileContent(String path) {
         URL contentUrl = DraftsBuilderDocumentFileCreator.class
                 .getClassLoader()
                 .getResource(path);
@@ -164,8 +167,7 @@ public class DraftsBuilderDocumentFileCreator {
         String contentPath = new File(Objects.requireNonNull(contentUrl).getFile()).getAbsolutePath();
 
         try {
-            byte[] bytes = Files.readAllBytes(Paths.get(contentPath));
-            return Base64.getEncoder().encodeToString(bytes);
+            return Files.readAllBytes(Paths.get(contentPath));
         } catch (IOException e) {
             throw new RuntimeException("Cannot find scanned file in resources");
         }
