@@ -237,58 +237,6 @@ class DocflowAdditionalServiceIT {
         );
     }
 
-
-    @ParameterizedTest
-    @DisplayName("send all replies for document by choosing type")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSignWithoutConfirmation(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        // если есть ссылка на генерацию ИОПа
-        Assertions.assertEquals("fns534-report-receipt", generateLink.getName());
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                // включить возможность подписи без подтверждения
-                Collections.singletonMap("forceConfirmation", false),
-                null,
-                SignInitiation.class
-        );
-
-        // если requestId == null -- то сервер подписал документ и не требует подтверждения
-        Assertions.assertNull(signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-    }
-
     @Disabled("print it with decrypt")
     @ParameterizedTest
     @MethodSource("docflowFactory")
