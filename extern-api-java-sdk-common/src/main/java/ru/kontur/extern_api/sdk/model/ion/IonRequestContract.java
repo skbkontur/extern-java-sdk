@@ -32,7 +32,6 @@ public class IonRequestContract<TIonData extends IonRequestData> implements IonR
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
-    private int version;
     private @Nullable IonPeriod period;
     private ClientInfo additionalOrgInfo;
     private TIonData data;
@@ -42,13 +41,8 @@ public class IonRequestContract<TIonData extends IonRequestData> implements IonR
             @Nullable IonPeriod period,
             @NotNull TIonData data) {
         this.period = period;
-        this.version = 1;
         this.additionalOrgInfo = additionalOrgInfo;
         this.data = data;
-    }
-
-    public int getVersion() {
-        return version;
     }
 
     public ClientInfo getAdditionalOrgInfo() {

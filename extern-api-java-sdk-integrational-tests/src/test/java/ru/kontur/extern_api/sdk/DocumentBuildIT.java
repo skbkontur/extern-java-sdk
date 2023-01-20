@@ -23,52 +23,25 @@
 
 package ru.kontur.extern_api.sdk;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.BuildDocumentType;
-import ru.kontur.extern_api.sdk.model.Certificate;
-import ru.kontur.extern_api.sdk.model.CheckResultData;
-import ru.kontur.extern_api.sdk.model.Docflow;
-import ru.kontur.extern_api.sdk.model.DocflowStatus;
-import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
-import ru.kontur.extern_api.sdk.model.Ion1RequestContract;
-import ru.kontur.extern_api.sdk.model.Ion2RequestContract;
-import ru.kontur.extern_api.sdk.model.Ion3RequestContract;
-import ru.kontur.extern_api.sdk.model.Ion4RequestContract;
-import ru.kontur.extern_api.sdk.model.Ion5RequestContract;
-import ru.kontur.extern_api.sdk.model.OrganizationRequest;
-import ru.kontur.extern_api.sdk.model.UsnServiceContractInfo;
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.ion.IonRequestContract;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.utils.CryptoUtils;
-import ru.kontur.extern_api.sdk.utils.PreparedTestData;
-import ru.kontur.extern_api.sdk.utils.Resources;
-import ru.kontur.extern_api.sdk.utils.TestConfig;
-import ru.kontur.extern_api.sdk.utils.TestSuite;
-import ru.kontur.extern_api.sdk.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.*;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @DisplayName("Draft service should")
 @Execution(ExecutionMode.CONCURRENT)
@@ -81,8 +54,6 @@ class DocumentBuildIT {
     private static Certificate workCert;
     private Map<BuildDocumentType, String> IonTypeToTestFolder = new HashMap<BuildDocumentType, String>() {
         {
-            put(BuildDocumentType.ION1, "/docs/ion1/");
-            put(BuildDocumentType.ION2, "/docs/ion2/");
             put(BuildDocumentType.ION3, "/docs/ion3/");
             put(BuildDocumentType.ION4, "/docs/ion4/");
             put(BuildDocumentType.ION5, "/docs/ion5/");
@@ -91,10 +62,6 @@ class DocumentBuildIT {
 
     private static IonRequestContract loadIon(String path, BuildDocumentType type) {
         switch (type) {
-            case ION1:
-                return Resources.loadFromJson(path, Ion1RequestContract.class);
-            case ION2:
-                return Resources.loadFromJson(path, Ion2RequestContract.class);
             case ION3:
                 return Resources.loadFromJson(path, Ion3RequestContract.class);
             case ION4:
@@ -179,8 +146,6 @@ class DocumentBuildIT {
         OrganizationRequest org = new OrganizationRequest("111", "111", "111");
 
         return Stream.of(
-                dynamicTest("Good Ion1 from dto", () -> checkIon(BuildDocumentType.ION1, PreparedTestData.buildIon(BuildDocumentType.ION1, workCert, org), true)),
-                dynamicTest("Good Ion2 from dto", () -> checkIon(BuildDocumentType.ION2, PreparedTestData.buildIon(BuildDocumentType.ION2, workCert, org), true)),
                 dynamicTest("Good Ion3 from dto", () -> checkIon(BuildDocumentType.ION3, PreparedTestData.buildIon(BuildDocumentType.ION3, workCert, org), true)),
                 dynamicTest("Good Ion4 from dto", () -> checkIon(BuildDocumentType.ION4, PreparedTestData.buildIon(BuildDocumentType.ION4, workCert, org), true)),
                 dynamicTest("Good Ion5 from dto", () -> checkIon(BuildDocumentType.ION5, PreparedTestData.buildIon(BuildDocumentType.ION5, workCert, org), true))
@@ -263,7 +228,7 @@ class DocumentBuildIT {
 
     private void sendCheckedIon() {
         sendDraftTest(draftId -> draftService
-                .newIonRequestAsync(draftId, BuildDocumentType.ION1, loadIon("/docs/ion.json", BuildDocumentType.ION1))
+                .newIonRequestAsync(draftId, BuildDocumentType.ION3, loadIon("/docs/ion3/+ ion3_contract.json", BuildDocumentType.ION3))
                 .thenApply(QueryContext::getOrThrow)
                 .join()
                 .getId()

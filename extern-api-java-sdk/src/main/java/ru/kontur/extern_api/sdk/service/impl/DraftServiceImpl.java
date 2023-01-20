@@ -548,7 +548,7 @@ public class DraftServiceImpl implements DraftService {
             BuildDocumentType ionType,
             IonRequestContractInterface requestContract
     ) {
-        return buildDocumentAsync(draftId, documentId, ionType, requestContract, 1);
+        return buildDocumentAsync(draftId, documentId, ionType, requestContract, 2);
     }
 
     @Override
@@ -557,7 +557,7 @@ public class DraftServiceImpl implements DraftService {
             BuildDocumentType ionType,
             IonRequestContractInterface requestContract
     ) {
-        return newDocumentAsync(draftId, ionType, requestContract, 1);
+        return newDocumentAsync(draftId, ionType, requestContract, 2);
     }
 
     @Override

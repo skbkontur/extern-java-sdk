@@ -5,20 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class RequestingTax {
 
-    @SerializedName("Налог")
-    @Nullable
-    private String taxName;
-
     @SerializedName("КБК")
     private String kbk;
 
-    @SerializedName("ОКАТО")
-    private String okato;
+    public RequestingTax(String kbk) {
 
-    public RequestingTax(@Nullable String taxName, String kbk, String okato) {
-
-        this.taxName = taxName;
         this.kbk = kbk;
-        this.okato = okato;
     }
 }

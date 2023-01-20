@@ -1,12 +1,9 @@
 {
-  "version": "1",
   "period": {
-    "year": "2018"
+    "year": "2023"
   },
   "data": {
-    "ВидЗапр": 1,
-    "ФормОтв": 2,
-    "НаДату": "01.11.2018"
+    "ФормОтв": 4
   },
   "additional-org-info": {
     "document-sender": {
