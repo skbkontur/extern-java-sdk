@@ -8,34 +8,43 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Ion4RequestData extends IonRequestData {
-    @SerializedName("НаДату")
-    private String onDate;
+    @SerializedName("ДатаНач")
+    private String beginDate;
 
-    @SerializedName("Год")
-    private int year;
+    @SerializedName("ДатаКон")
+    private String finishDate;
 
-    @SerializedName("ЗапрашиваемыйНалог")
+    @SerializedName("ПрКБК")
+    private int prKbk;
+
+    @SerializedName("ЗапрКБК")
     @Nullable
     private ArrayList<RequestingTax> requestingTax;
 
     public Ion4RequestData(
-            IonRequestContract.RequestType requestType,
             IonRequestContract.AnswerFormat answerFormat,
-            Date onDate,
-            Year year,
+            Date beginDate,
+            Date finishDate,
+            int prKbk,
             @Nullable ArrayList<RequestingTax> requestingTax) {
-        super(requestType, answerFormat);
-        this.onDate = formatter.format(onDate);
-        this.year = year.getValue();
+        super(answerFormat);
+
         this.requestingTax = requestingTax;
+        this.beginDate = formatter.format(beginDate);
+        this.finishDate = formatter.format(finishDate);
+        this.prKbk = prKbk;
     }
 
-    public String getOnDate() {
-        return onDate;
+    public int getPrKbk() {
+        return prKbk;
     }
 
-    public int getYear() {
-        return year;
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public String getFinishDate() {
+        return finishDate;
     }
 
     public ArrayList<RequestingTax> getRequestingTax() {

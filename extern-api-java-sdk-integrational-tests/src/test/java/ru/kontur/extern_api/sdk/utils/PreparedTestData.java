@@ -29,6 +29,7 @@ import ru.kontur.extern_api.sdk.model.AdditionalClientInfo.SignerTypeEnum;
 import ru.kontur.extern_api.sdk.model.ion.ClientInfo;
 import ru.kontur.extern_api.sdk.model.ion.*;
 
+import java.text.DateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
@@ -125,48 +126,33 @@ public class PreparedTestData {
         return IonBuilder.Create()
                 .setClientInfo(createIonClientInfo(certificate.getFio(), org.getOrgName(), true))
                 .setIonData(getIonRequestData(ionType))
-                .setIonPeriod(new IonPeriod(Year.of(2018)))
+                .setIonPeriod(new IonPeriod(Year.of(2023)))
                 .build();
     }
 
     private static IonRequestData getIonRequestData(BuildDocumentType ionType) {
         switch (ionType) {
-            case ION1:
-                return new Ion1RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS,
-                        IonRequestContract.AnswerFormat.XML,
-                        new Date(2018 - 1900, 11, 1));
-            case ION2:
-                return new Ion2RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS,
-                        IonRequestContract.AnswerFormat.XML,
-                        IonRequestContract.ReportGenerationCondition.GROUP_BY_ALL_PAYMENT_TYPES,
-                        Year.of(2018),
-                        null);
             case ION3:
                 return new Ion3RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS,
                         IonRequestContract.AnswerFormat.XML,
-                        new Date(2018 - 1900, 0, 1),
-                        new Date(2018 - 1900, 11, 31),
-                        IonRequestContract.ReportSelectionCondition.ALL_REPORT_TYPES);
+                        new Date(22, 0, 1),
+                        new Date(22, 11, 1)
+                );
             case ION4:
                 return new Ion4RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS,
                         IonRequestContract.AnswerFormat.XML,
-                        new Date(2018 - 1900, 11, 1),
-                        Year.of(2018),
+                        new Date(22, 0, 1),
+                        new Date(22, 11, 1),
+                        2,
                         new ArrayList<RequestingTax>() {{
-                            add(new RequestingTax("Налог на прибыль", "18210102010012100110", "45305000"));
+                            add(new RequestingTax("18210102010012100110"));
                         }}
                 );
             case ION5:
                 return new Ion5RequestData(
-                        IonRequestContract.RequestType.ALL_KPPS,
-                        IonRequestContract.AnswerFormat.XML,
-                        new Date(2018 - 1900, 11, 1));
+                        IonRequestContract.AnswerFormat.XML);
             default:
-                return new IonRequestData(IonRequestContract.RequestType.ALL_KPPS, IonRequestContract.AnswerFormat.XML);
+                return new IonRequestData(IonRequestContract.AnswerFormat.XML);
         }
     }
 

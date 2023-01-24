@@ -11,20 +11,14 @@ public class Ion3RequestData extends IonRequestData {
     @SerializedName("ДатаКон")
     private String finishDate;
 
-    @SerializedName("УслВыбОтч")
-    private int reportSelectionCondition;
-
     public Ion3RequestData(
-            IonRequestContract.RequestType requestType,
             IonRequestContract.AnswerFormat answerFormat,
             Date beginDate,
-            Date finishDate,
-            IonRequestContract.ReportSelectionCondition reportSelectionCondition) {
-        super(requestType, answerFormat);
+            Date finishDate) {
+        super(answerFormat);
 
         this.beginDate = formatter.format(beginDate);
         this.finishDate = formatter.format(finishDate);
-        this.reportSelectionCondition = reportSelectionCondition.index();
     }
 
     public String getBeginDate() {
@@ -33,9 +27,5 @@ public class Ion3RequestData extends IonRequestData {
 
     public String getFinishDate() {
         return finishDate;
-    }
-
-    public int getReportSelectionCondition() {
-        return reportSelectionCondition;
     }
 }

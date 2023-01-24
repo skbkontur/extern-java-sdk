@@ -30,19 +30,13 @@ import java.text.SimpleDateFormat;
 public class IonRequestData {
 
     protected static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-    @SerializedName("ВидЗапр")
-    private int requestType;
     @SerializedName("ФормОтв")
     private int answerFormat;
 
-    public IonRequestData(IonRequestContract.RequestType requestType, IonRequestContract.AnswerFormat answerFormat) {
-        this.requestType = requestType.index();
+    public IonRequestData(IonRequestContract.AnswerFormat answerFormat) {
         this.answerFormat = answerFormat.index();
     }
 
-    public int getRequestType() {
-        return requestType;
-    }
 
     public int getAnswerFormat() {
         return answerFormat;

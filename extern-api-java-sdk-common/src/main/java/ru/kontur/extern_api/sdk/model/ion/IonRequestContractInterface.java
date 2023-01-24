@@ -27,8 +27,6 @@ import ru.kontur.extern_api.sdk.model.BuildDocumentContract;
 
 public interface IonRequestContractInterface extends BuildDocumentContract {
 
-    int getVersion();
-
     ClientInfo getAdditionalOrgInfo();
 
     IonRequestData getData();
