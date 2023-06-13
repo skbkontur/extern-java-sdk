@@ -31,10 +31,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
-import ru.kontur.extern_api.sdk.model.FssRecipient;
-import ru.kontur.extern_api.sdk.model.Recipient;
-import ru.kontur.extern_api.sdk.model.TogsRecipient;
+
+import ru.kontur.extern_api.sdk.model.*;
 import ru.kontur.extern_api.sdk.model.pfr.PfrRecipient;
 
 /**
@@ -61,6 +59,9 @@ public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDese
             else if (src instanceof PfrRecipient){
                 return context.serialize(src, PfrRecipient.class);
             }
+            else if (src instanceof RegistrationFnsRecipient) {
+                return context.serialize(src, RegistrationFnsRecipient.class);
+            }
             else {
                 return JsonNull.INSTANCE;
             }
@@ -71,6 +72,9 @@ public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDese
     public Recipient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String str = json.toString();
         try {
+            if (str.matches(".*registration-ifns-code.*")) {
+                return context.deserialize(json, RegistrationFnsRecipient.class);
+            }
             if (str.matches(".*ifns-code.*")) {
                 return context.deserialize(json, FnsRecipient.class);
             }
@@ -91,5 +95,5 @@ public class GsonRecipientAdaptor implements JsonSerializer<Recipient>, JsonDese
             throw new JsonParseException(e);
         }
     }
-    
+
 }
