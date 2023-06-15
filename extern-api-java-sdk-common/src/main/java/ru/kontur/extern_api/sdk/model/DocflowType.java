@@ -3,22 +3,7 @@ package ru.kontur.extern_api.sdk.model;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Application;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534CuLetter;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Demand;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Inventory;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Ion;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Letter;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Report;
-import ru.kontur.extern_api.sdk.model.descriptions.Fns534Submission;
-import ru.kontur.extern_api.sdk.model.descriptions.FssReport;
-import ru.kontur.extern_api.sdk.model.descriptions.FssSickReport;
-import ru.kontur.extern_api.sdk.model.descriptions.PfrIos;
-import ru.kontur.extern_api.sdk.model.descriptions.PfrLetter;
-import ru.kontur.extern_api.sdk.model.descriptions.PfrReport;
-import ru.kontur.extern_api.sdk.model.descriptions.StatLetter;
-import ru.kontur.extern_api.sdk.model.descriptions.StatReport;
-import ru.kontur.extern_api.sdk.model.descriptions.UnknownDescription;
+import ru.kontur.extern_api.sdk.model.descriptions.*;
 
 public enum DocflowType implements Urn<DocflowType> {
 
@@ -93,6 +78,9 @@ public enum DocflowType implements Urn<DocflowType> {
      */
     @SerializedName("urn:docflow:fns705-letter-outgoing")
     FNS705_LETTER_OUTGOING,
+
+    @SerializedName("urn:docflow:business-registration")
+    BUSINESS_REGISTRATION(BusinessRegistrationDescription.class),
 
     /**
      * Отчетность Росстат.
