@@ -384,6 +384,8 @@ public class QueryContext<R> implements Serializable {
     public static final String TASK_INFO_CHECK_RESULT_DATA = "taskInfoCheckResultData";
     public static final String TASK_INFO_PREPARE_RESULT = "taskInfoPrepareResult";
 
+    public static final String INCLUDE_RELEASED = "includeReleased";
+
     private final Map<String, Object> params;
 
     private String result;
@@ -631,7 +633,8 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setAuthenticationProvider(
-            @NotNull AuthenticationProvider authenticationProvider) {
+            @NotNull AuthenticationProvider authenticationProvider
+    ) {
         this.authenticationProvider = authenticationProvider;
         return this;
     }
@@ -1747,7 +1750,8 @@ public class QueryContext<R> implements Serializable {
      * @return контекст
      */
     public QueryContext<R> setUsnServiceContractInfo(
-            UsnServiceContractInfo usnServiceContractInfo) {
+            UsnServiceContractInfo usnServiceContractInfo
+    ) {
         return set(USN_SERVICE_CONTRACT_INFO, usnServiceContractInfo);
     }
 
@@ -1969,6 +1973,14 @@ public class QueryContext<R> implements Serializable {
         return set(FORCE_CONFIRMATION, forceConfirmation);
     }
 
+    public boolean getIncludeReleased() {
+        return (boolean) params.get(INCLUDE_RELEASED);
+    }
+
+    public QueryContext<R> setIncludeReleased(boolean includeReleased) {
+        return set(INCLUDE_RELEASED, includeReleased);
+    }
+
     /**
      * Метод возвращает IP адрес отправителя
      *
@@ -2122,10 +2134,10 @@ public class QueryContext<R> implements Serializable {
     /**
      * Same as {@link QueryContext#get()} but throws
      *
-     * @throws java.util.NoSuchElementException when no such parameter presented in a context
      * @param fieldName fieldName
      * @param <T> type of object
      * @return get method result
+     * @throws java.util.NoSuchElementException when no such parameter presented in a context
      */
     @NotNull
     public <T> T require(@NotNull String fieldName) {
@@ -2137,6 +2149,7 @@ public class QueryContext<R> implements Serializable {
 
     /**
      * Changes result of QueryContext with mapper.
+     *
      * @param newKey newKey
      * @param mapper mapper
      * @param <T> type of object

@@ -23,7 +23,15 @@
 
 package ru.kontur.extern_api.sdk.httpclient.api;
 
-import retrofit2.http.*;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 import ru.kontur.extern_api.sdk.GsonProvider;
 import ru.kontur.extern_api.sdk.adaptor.ApiResponse;
 import ru.kontur.extern_api.sdk.httpclient.ApiResponseConverter;
@@ -31,9 +39,6 @@ import ru.kontur.extern_api.sdk.httpclient.JsonSerialization;
 import ru.kontur.extern_api.sdk.httpclient.LibapiResponseConverter;
 import ru.kontur.extern_api.sdk.httpclient.Raw;
 import ru.kontur.extern_api.sdk.model.*;
-
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @JsonSerialization(GsonProvider.LIBAPI)
 @ApiResponseConverter(LibapiResponseConverter.class)
@@ -232,6 +237,22 @@ public interface DraftsApi {
             @Path("accountId") UUID accountId,
             @Path("draftId") UUID draftId,
             @Path("taskId") UUID taskId
+    );
+
+
+    /**
+     * Get all draft tasks
+     *
+     * @param accountId private account identifier
+     * @param draftId draft identifier
+     */
+    @GET("v1/{accountId}/drafts/{draftId}/tasks")
+    CompletableFuture<TaskPage> getTasks(
+            @Path("accountId") UUID accountId,
+            @Path("draftId") UUID draftId,
+            @Query("skip") long skip,
+            @Query("take") int take,
+            @Query("includeReleased") boolean includeReleased
     );
 
     /**
