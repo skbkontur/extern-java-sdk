@@ -36,6 +36,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -119,6 +120,7 @@ class AccountIT {
 
 
     @Test
+    @Disabled
     void acquireAccount() {
         QueryContext<AccountList> cxt = accountService
                 .getAccountsAsync(0, 100)

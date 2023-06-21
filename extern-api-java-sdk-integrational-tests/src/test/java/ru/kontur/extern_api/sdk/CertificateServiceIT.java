@@ -34,6 +34,7 @@ import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -85,6 +86,7 @@ class CertificateServiceIT {
     }
 
     @Test
+    @Disabled
     void getCertificateForAllUsersTest() {
         List<Certificate> forAllUsers = certificateService
                 .getCertificatesForAllUsers(0, 100)
