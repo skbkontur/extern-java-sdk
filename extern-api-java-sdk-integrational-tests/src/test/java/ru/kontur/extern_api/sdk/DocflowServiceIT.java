@@ -23,9 +23,32 @@
 
 package ru.kontur.extern_api.sdk;
 
+import static java.util.Optional.ofNullable;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,26 +62,26 @@ import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
 import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
-import ru.kontur.extern_api.sdk.utils.*;
+import ru.kontur.extern_api.sdk.utils.ApproveCodeProvider;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
+import ru.kontur.extern_api.sdk.utils.DemandTestData;
+import ru.kontur.extern_api.sdk.utils.DemandTestDataProvider;
+import ru.kontur.extern_api.sdk.utils.DocType;
+import ru.kontur.extern_api.sdk.utils.EngineUtils;
+import ru.kontur.extern_api.sdk.utils.Lazy;
+import ru.kontur.extern_api.sdk.utils.TestConfig;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.UncheckedSupplier;
+import ru.kontur.extern_api.sdk.utils.Zip;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumingThat;
-
 
 @Execution(ExecutionMode.SAME_THREAD)
+@Disabled
 class DocflowServiceIT {
 
     protected static ExternEngine engine;

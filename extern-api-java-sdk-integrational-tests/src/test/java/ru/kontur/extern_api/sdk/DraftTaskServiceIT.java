@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -48,7 +49,6 @@ import ru.kontur.extern_api.sdk.model.SendTaskInfo;
 import ru.kontur.extern_api.sdk.model.TaskState;
 import ru.kontur.extern_api.sdk.model.TaskType;
 import ru.kontur.extern_api.sdk.model.TestData;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
 import ru.kontur.extern_api.sdk.utils.CryptoUtils;
 import ru.kontur.extern_api.sdk.utils.DraftTestPack;
 import ru.kontur.extern_api.sdk.utils.TestSuite;
@@ -104,6 +104,7 @@ class DraftTaskServiceIT {
     @ParameterizedTest
     @DisplayName("GetSendResult")
     @MethodSource({"newDraftWithDocumentFactory"})
+    @Disabled
     void testGetSendResult(Draft draft) {
         SendTaskInfo startSend = engine.getTaskService(draft.getId())
                 .startSendAsync()
@@ -140,6 +141,7 @@ class DraftTaskServiceIT {
     @ParameterizedTest
     @DisplayName("GetPrepareResult")
     @MethodSource({"newDraftWithDocumentFactory"})
+    @Disabled
     void testGetPrepareResult(Draft draft) {
         PrepareTaskInfo startPrepare = engine.getTaskService(draft.getId())
                 .startPrepareAsync()

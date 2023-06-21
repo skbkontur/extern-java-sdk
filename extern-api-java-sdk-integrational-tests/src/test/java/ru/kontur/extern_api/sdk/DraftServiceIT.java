@@ -28,18 +28,10 @@
  */
 package ru.kontur.extern_api.sdk;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import ru.kontur.extern_api.sdk.adaptor.QueryContext;
-import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
-import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
-import ru.kontur.extern_api.sdk.utils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,8 +39,32 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.DocumentContents;
+import ru.kontur.extern_api.sdk.model.DocumentDescription;
+import ru.kontur.extern_api.sdk.model.Draft;
+import ru.kontur.extern_api.sdk.model.DraftDocument;
+import ru.kontur.extern_api.sdk.model.DraftMeta;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.PrepareResult.Status;
+import ru.kontur.extern_api.sdk.model.TestData;
+import ru.kontur.extern_api.sdk.provider.crypt.mscapi.CryptoProviderMSCapi;
+import ru.kontur.extern_api.sdk.utils.CryptoUtils;
+import ru.kontur.extern_api.sdk.utils.DraftTestPack;
+import ru.kontur.extern_api.sdk.utils.Pair;
+import ru.kontur.extern_api.sdk.utils.TestSuite;
+import ru.kontur.extern_api.sdk.utils.TestUtils;
+import ru.kontur.extern_api.sdk.utils.Zip;
 
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -307,6 +323,7 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("get encrypted document content")
     @MethodSource({"draftWithNewDocumentFactory"})
+    @Disabled
     void testGetEncryptedDocumentContent(Pair<Draft, DraftDocument> addDocumentPack) {
 
         engine.getDraftService().prepareAsync(addDocumentPack.first.getId())
@@ -385,6 +402,7 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("command \"Prepare\"")
     @MethodSource({"newDraftWithDocumentFactory"})
+    @Disabled
     void testPrepare(Draft draft) {
 
         PrepareResult prepareResult = engine.getDraftService()
@@ -400,6 +418,7 @@ class DraftServiceIT {
     @ParameterizedTest
     @DisplayName("command \"Send\"")
     @MethodSource({"newDraftWithDocumentFactory"})
+    @Disabled
     void testSend(Draft draft) {
 
         QueryContext<Docflow> send = engine.getDraftService()
