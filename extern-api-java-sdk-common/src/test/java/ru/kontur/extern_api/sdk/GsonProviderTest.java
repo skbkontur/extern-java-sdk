@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import ru.kontur.extern_api.sdk.model.Docflow;
 import ru.kontur.extern_api.sdk.model.DocflowStatus;
 import ru.kontur.extern_api.sdk.model.DocflowType;
+import ru.kontur.extern_api.sdk.model.Recipient;
+import ru.kontur.extern_api.sdk.model.RegistrationFnsRecipient;
 import ru.kontur.extern_api.sdk.model.TransactionTypes.Fns534Report;
 import ru.kontur.extern_api.sdk.model.descriptions.Fns534Demand;
 
@@ -42,6 +44,22 @@ class GsonProviderTest {
         Assertions.assertEquals("0087", description.getCu());
         Assertions.assertEquals(1, description.getAttachmentsCount());
         Assertions.assertEquals("exists", description.getFormVersions().get(0).getKnd());
+    }
+
+    @Test
+    void gsonShouldParseRecipient() {
+        Gson gson = GsonProvider.getPreConfiguredGsonBuilder().setPrettyPrinting().create();
+
+        String fnsRecipient = "{\n"
+                + "  \"registration-ifns-code\": \"056\""
+                + "}";
+
+        Recipient rcp = gson.fromJson(fnsRecipient, Recipient.class);
+        System.out.println(rcp);
+        System.out.println(gson.toJson(rcp));
+
+        RegistrationFnsRecipient registrationFnsRecipient = (RegistrationFnsRecipient) rcp;
+        Assertions.assertEquals("056", registrationFnsRecipient.getRegistrationIfnsCode());
     }
 
     @Test

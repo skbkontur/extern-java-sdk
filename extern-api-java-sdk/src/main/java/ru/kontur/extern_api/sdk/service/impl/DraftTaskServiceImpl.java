@@ -1,14 +1,23 @@
 package ru.kontur.extern_api.sdk.service.impl;
 
-import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
-import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.provider.AccountProvider;
-import ru.kontur.extern_api.sdk.service.DraftTaskService;
-import ru.kontur.extern_api.sdk.utils.Awaiter;
-
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.httpclient.api.DraftsApi;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.CheckTaskInfo;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.PrepareTaskInfo;
+import ru.kontur.extern_api.sdk.model.SendTaskInfo;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
+import ru.kontur.extern_api.sdk.model.TaskPage;
+import ru.kontur.extern_api.sdk.model.TaskState;
+import ru.kontur.extern_api.sdk.model.WrappedCheckTaskInfo;
+import ru.kontur.extern_api.sdk.provider.AccountProvider;
+import ru.kontur.extern_api.sdk.service.DraftTaskService;
+import ru.kontur.extern_api.sdk.utils.Awaiter;
 
 public class DraftTaskServiceImpl implements DraftTaskService {
 
@@ -43,6 +52,19 @@ public class DraftTaskServiceImpl implements DraftTaskService {
     public CompletableFuture<TaskState> getTaskStatus(TaskInfo taskInfo) {
         return api.getTaskInfo(acc.accountId(), draftId, taskInfo.getId())
                 .thenApply(TaskInfo::getTaskState);
+    }
+
+    @Override
+    public CompletableFuture<TaskPage> getTasks(QueryContext<?> ctx) {
+        Long skip = ctx.getSkip();
+        Integer take = ctx.getTake();
+        return api.getTasks(
+                acc.accountId(),
+                draftId,
+                skip == null ? 0 : skip,
+                take == null ? 1000 : take,
+                ctx.getIncludeReleased()
+        );
     }
 
     @Override

@@ -1,9 +1,16 @@
 package ru.kontur.extern_api.sdk.service;
 
-import ru.kontur.extern_api.sdk.model.*;
-
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import ru.kontur.extern_api.sdk.adaptor.QueryContext;
+import ru.kontur.extern_api.sdk.model.CheckResultData;
+import ru.kontur.extern_api.sdk.model.CheckTaskInfo;
+import ru.kontur.extern_api.sdk.model.Docflow;
+import ru.kontur.extern_api.sdk.model.PrepareResult;
+import ru.kontur.extern_api.sdk.model.PrepareTaskInfo;
+import ru.kontur.extern_api.sdk.model.SendTaskInfo;
+import ru.kontur.extern_api.sdk.model.TaskInfo;
+import ru.kontur.extern_api.sdk.model.TaskPage;
+import ru.kontur.extern_api.sdk.model.TaskState;
 
 public interface DraftTaskService {
 
@@ -40,6 +47,8 @@ public interface DraftTaskService {
      * @return статус задачи
      */
     CompletableFuture<TaskState> getTaskStatus(TaskInfo taskInfo);
+
+    CompletableFuture<TaskPage> getTasks(QueryContext<?> cxt);
 
     /**
      * <p>POST /v1/{accountId}/drafts/{draftId}/tasks/{taskId}</p>
