@@ -7,5 +7,7 @@ public enum BusinessType {
     IP,
     @SerializedName("ul")
     UL,
+
+    @SerializedName("unknown")
     UNKNOWN
 }
