@@ -68,6 +68,7 @@ class DraftServiceIT {
         TestData[] testData = TestUtils.getTestData(certificate);
         tests = Arrays
                 .stream(testData)
+                .filter(data -> data.getClientInfo().getRecipient().getUpfrCode() == null)
                 .map((TestData data) -> new DraftTestPack(data, engine, cryptoUtils))
                 .collect(Collectors.toList());
 

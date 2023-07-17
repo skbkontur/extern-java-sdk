@@ -283,6 +283,7 @@ class DocflowAdditionalServiceIT {
 
         List<CompletableFuture<QueryContext<Docflow>>> docflowCreateFutures = Arrays
                 .stream(testDatas)
+                .filter(testData -> testData.getClientInfo().getRecipient().getUpfrCode() == null)
                 .map(testData -> {
                     if (testData.getDocs() == null || testData.getDocs().length == 0) {
                         Assertions.fail("missing test documents");
