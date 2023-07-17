@@ -24,7 +24,6 @@
 package ru.kontur.extern_api.sdk;
 
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -33,16 +32,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ru.kontur.extern_api.sdk.adaptor.HttpClient;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.*;
-import ru.kontur.extern_api.sdk.model.builders.BuildDraftsBuilderResult;
-import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilder;
-import ru.kontur.extern_api.sdk.model.builders.pfr_report.PfrReportDraftsBuilderDocument;
 import ru.kontur.extern_api.sdk.service.DocflowService;
 import ru.kontur.extern_api.sdk.service.DraftService;
-import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
 import ru.kontur.extern_api.sdk.utils.*;
-import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderCreator;
-import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
-import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 import java.time.Instant;
 import java.util.*;
@@ -738,6 +730,7 @@ class DocflowServiceIT {
 
         List<CompletableFuture<QueryContext<Docflow>>> docflowCreateFutures = Arrays
                 .stream(testDatas)
+                .filter(testData -> testData.getClientInfo().getRecipient().getUpfrCode() == null)
                 .map(testData -> {
                     if (testData.getDocs() == null || testData.getDocs().length == 0) {
                         Assertions.fail("missing test documents");
@@ -755,116 +748,7 @@ class DocflowServiceIT {
             DraftService draftService,
             TestData testData
     ) {
-        boolean isPfrTestData = testData.getClientInfo().getOrganization().getRegistrationNumberPfr() != null;
-        if (isPfrTestData) {
-            return createPfrDocflow(engine);
-        } else {
-            return createDefaultDocflow(engine, draftService, testData);
-        }
-    }
-
-    private static CompletableFuture<QueryContext<Docflow>> createPfrDocflow(ExternEngine engine) {
-        UUID draftId = buildPfrDraftViaBuilder(engine);
-        DraftService draftService = engine.getDraftService();
-        Draft draft = draftService
-                .lookupAsync(draftId)
-                .join()
-                .getOrThrow();
-
-        HttpClient httpClient = engine.getHttpClient();
-
-        draft.getDocuments()
-                .stream()
-                .map(Link::getHref)
-                .map(link -> httpClient.followGetLink(link, DraftDocument.class))
-                .map(document -> {
-                    DocumentContents contents = updateSignaturesInDraftDocument(
-                            engine,
-                            draftService,
-                            draftId,
-                            httpClient,
-                            document
-                    );
-
-                    return contents;
-                })
-                .toArray();
-
-        draftService
-                .checkAsync(draftId)
-                .join();
-
-        draftService
-                .prepareAsync(draftId)
-                .join();
-
-        return draftService
-                .sendAsync(draftId)
-                .thenApply(QueryContext::ensureSuccess)
-                .whenComplete((cxt, throwable) -> {
-                    awaitDocflowIndexed(engine, cxt.getDocflow());
-                });
-    }
-
-    @NotNull
-    private static DocumentContents updateSignaturesInDraftDocument(
-            ExternEngine engine,
-            DraftService draftService,
-            UUID draftId,
-            HttpClient httpClient,
-            DraftDocument document
-    ) {
-        Assertions.assertNotNull(document);
-
-        String contentLink = document.getDecryptedContentLink().getHref();
-        String data = httpClient.followGetLink(contentLink, String.class);
-
-        String thumbprint = engine.getConfiguration().getThumbprint();
-        byte[] decryptedContent = draftService.getDecryptedDocumentContentAsync(
-                draftId,
-                document.getId()
-        ).join().getOrThrow();
-
-        byte[] signature = engineUtils.crypto.sign(thumbprint, decryptedContent);
-
-        DocumentContents contents = new DocumentContents();
-        contents.setDescription(document.getDescription());
-        contents.setBase64Content(data);
-        contents.setSignature(Base64.getEncoder().encodeToString(signature));
-
-        draftService.updateDocumentAsync(draftId, document.getId(), contents)
-                .join().getOrThrow();
-        return contents;
-    }
-
-    private static UUID buildPfrDraftViaBuilder(ExternEngine engine) {
-        CryptoUtils cryptoUtils = CryptoUtils.with(engine.getCryptoProvider());
-        PfrReportDraftsBuilderService pfrReportDraftsBuilderService = engine
-                .getDraftsBuilderService().pfrReport();
-
-        PfrReportDraftsBuilder draftsBuilder = new DraftsBuilderCreator()
-                .createPfrReportDraftsBuilder(
-                        engine,
-                        cryptoUtils
-                );
-        PfrReportDraftsBuilderDocument draftsBuilderDocument = new DraftsBuilderDocumentCreator()
-                .createPfrReportDraftsBuilderDocument(
-                        engine,
-                        draftsBuilder
-                );
-        new DraftsBuilderDocumentFileCreator().createPfrReportDraftsBuilderDocumentFile(
-                engine,
-                cryptoUtils,
-                draftsBuilder,
-                draftsBuilderDocument,
-                false
-        );
-        BuildDraftsBuilderResult draftsBuilderResult = pfrReportDraftsBuilderService.buildAsync(
-                draftsBuilder
-                        .getId())
-                .join();
-        assertEquals(1, draftsBuilderResult.getDraftIds().length);
-        return draftsBuilderResult.getDraftIds()[0];
+        return createDefaultDocflow(engine, draftService, testData);
     }
 
     private static CompletableFuture<QueryContext<Docflow>> createDefaultDocflow(
