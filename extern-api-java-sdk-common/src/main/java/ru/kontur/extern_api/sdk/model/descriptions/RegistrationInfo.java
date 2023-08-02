@@ -3,11 +3,24 @@ package ru.kontur.extern_api.sdk.model.descriptions;
 import java.util.List;
 
 public class RegistrationInfo {
+
     private List<ApplicantInfo> applicantInfos;
 
     private BusinessType businessType;
 
     private UlInfo ulInfo;
+
+    private IpInfo ipInfo;
+
+    private ApplicantCode applicationCode;
+
+    public ApplicantCode getApplicationCode() {
+        return applicationCode;
+    }
+
+    public void setApplicationCode(ApplicantCode applicationCode) {
+        this.applicationCode = applicationCode;
+    }
 
     public List<ApplicantInfo> getApplicantInfos() {
         return applicantInfos;
@@ -31,5 +44,13 @@ public class RegistrationInfo {
 
     public void setUlInfo(UlInfo ulInfo) {
         this.ulInfo = ulInfo;
+    }
+
+    public IpInfo getIpInfo() {
+        return ipInfo;
+    }
+
+    public void setIpInfo(IpInfo ipInfo) {
+        this.ipInfo = ipInfo;
     }
 }
