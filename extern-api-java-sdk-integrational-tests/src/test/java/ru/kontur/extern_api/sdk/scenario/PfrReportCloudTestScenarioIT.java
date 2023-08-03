@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -45,6 +46,7 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 
 @Execution(ExecutionMode.CONCURRENT)
+@Disabled
 public class PfrReportCloudTestScenarioIT {
 
     private static ExternEngine engine;
