@@ -24,10 +24,9 @@
 
 package ru.kontur.extern_api.sdk.service;
 
+import java.util.concurrent.CompletableFuture;
 import ru.kontur.extern_api.sdk.adaptor.QueryContext;
 import ru.kontur.extern_api.sdk.model.CertificateList;
-
-import java.util.concurrent.CompletableFuture;
 
 
 /**
