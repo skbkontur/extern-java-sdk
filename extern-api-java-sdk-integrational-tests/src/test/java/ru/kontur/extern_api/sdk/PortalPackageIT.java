@@ -62,7 +62,7 @@ class PortalPackageIT {
 
         CertificatesClient certClient = new CertificatesClient(
                 configuration::getApiKey,
-                () -> "http://api.testkontur.ru/certapi/");
+                () -> "https://api.testkontur.ru/certapi/");
 
         @Test
         @DisplayName("search certificates")
