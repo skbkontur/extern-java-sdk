@@ -13,7 +13,7 @@ public class Awaiter {
             @NotNull Predicate<T> predicate,
             final int delayTimeOutMs
     ) {
-        return waitForCondition(supplier, predicate, delayTimeOutMs, 60 * 1000);
+        return waitForCondition(supplier, predicate, delayTimeOutMs, 5 * 60 * 1000);
     }
 
     public static <T> CompletableFuture<T> waitForCondition(
