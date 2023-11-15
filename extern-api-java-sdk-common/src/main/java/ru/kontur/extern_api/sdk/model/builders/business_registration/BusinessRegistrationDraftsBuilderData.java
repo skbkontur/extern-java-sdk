@@ -27,8 +27,7 @@ import ru.kontur.extern_api.sdk.model.PaperDocumentsDeliveryType;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderData;
 import ru.kontur.extern_api.sdk.model.descriptions.RegistrationInfo;
 
-public class BusinessRegistrationDraftsBuilderData extends
-        DraftsBuilderData {
+public class BusinessRegistrationDraftsBuilderData extends DraftsBuilderData {
 
     private RegistrationInfo registrationInfo;
     private PaperDocumentsDeliveryType paperDocumentsDeliveryType;

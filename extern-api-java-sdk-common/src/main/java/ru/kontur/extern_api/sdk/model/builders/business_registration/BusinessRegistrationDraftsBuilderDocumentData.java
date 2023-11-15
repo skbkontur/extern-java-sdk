@@ -24,14 +24,14 @@ package ru.kontur.extern_api.sdk.model.builders.business_registration;
 
 import java.util.List;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentData;
-import ru.kontur.extern_api.sdk.model.descriptions.Fio;
+import ru.kontur.extern_api.sdk.model.descriptions.Signer;
 
 public class BusinessRegistrationDraftsBuilderDocumentData extends
         DraftsBuilderDocumentData {
 
     private String svdregCode;
 
-    private List<Fio> signers;
+    private List<Signer> signers;
 
     public String getSvdregCode() {
         return svdregCode;
@@ -41,11 +41,11 @@ public class BusinessRegistrationDraftsBuilderDocumentData extends
         this.svdregCode = svdregCode;
     }
 
-    public List<Fio> getSigners() {
+    public List<Signer> getSigners() {
         return signers;
     }
 
-    public void setSigners(List<Fio> signer) {
+    public void setSigners(List<Signer> signer) {
         this.signers = signer;
     }
 }
