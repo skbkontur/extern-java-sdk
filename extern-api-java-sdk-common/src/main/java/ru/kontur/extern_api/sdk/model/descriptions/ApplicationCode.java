@@ -43,6 +43,10 @@ public enum ApplicationCode {
     P16003,
     @SerializedName("р18002")
     P18002,
+    @SerializedName("р18003")
+    P18003,
+    @SerializedName("р18004")
+    P18004,
     @SerializedName("р34001")
     P34001,
     @SerializedName("р34002")
