@@ -12,7 +12,7 @@ public class BusinessRegistrationDescription extends DocflowDescription {
 
     private List<String> svdRegCodes;
 
-    private RegistrationInfo registrationInfo;
+    private RegistrationInfoDescription registrationInfo;
 
     private UUID originDraftId;
 
@@ -40,11 +40,11 @@ public class BusinessRegistrationDescription extends DocflowDescription {
         this.svdRegCodes = svdRegCodes;
     }
 
-    public RegistrationInfo getRegistrationInfo() {
+    public RegistrationInfoDescription getRegistrationInfo() {
         return registrationInfo;
     }
 
-    public void setRegistrationInfo(RegistrationInfo registrationInfo) {
+    public void setRegistrationInfo(RegistrationInfoDescription registrationInfo) {
         this.registrationInfo = registrationInfo;
     }
 

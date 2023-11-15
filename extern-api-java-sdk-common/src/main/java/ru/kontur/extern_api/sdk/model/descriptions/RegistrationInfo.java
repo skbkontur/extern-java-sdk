@@ -4,15 +4,13 @@ import java.util.List;
 
 public class RegistrationInfo {
 
-    private List<ApplicantInfo> applicantInfos;
+    private ApplicationCode applicationCode;
 
-    private BusinessType businessType;
+    private List<ApplicantInfo> applicantInfos;
 
     private UlInfo ulInfo;
 
     private IpInfo ipInfo;
-
-    private ApplicationCode applicationCode;
 
     public ApplicationCode getApplicationCode() {
         return applicationCode;
@@ -28,14 +26,6 @@ public class RegistrationInfo {
 
     public void setApplicantInfos(List<ApplicantInfo> applicantInfos) {
         this.applicantInfos = applicantInfos;
-    }
-
-    public BusinessType getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(BusinessType businessType) {
-        this.businessType = businessType;
     }
 
     public UlInfo getUlInfo() {
