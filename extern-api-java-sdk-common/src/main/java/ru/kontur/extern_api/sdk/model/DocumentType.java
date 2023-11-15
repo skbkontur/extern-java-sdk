@@ -212,7 +212,6 @@ public enum DocumentType implements Urn<DocumentType> {
     @SerializedName("urn:document:fns534-submission-receipt")
     Fns534SubmissionReceipt,
 
-
     /** Опись */
     @SerializedName("urn:document:fns534-inventory-message")
     Fns534InventoryMessage,
@@ -710,6 +709,13 @@ public enum DocumentType implements Urn<DocumentType> {
 
     /** Любое приложение, которое содержит дополнительные сведения от ФНС. */
     @SerializedName("urn:document:business-registration-incoming-attachment")
-    BusinessRegistrationIncomingAttachment
+    BusinessRegistrationIncomingAttachment,
 
+    /** Патент на право применения патентной системы налогообложения. */
+    @SerializedName("urn:document:business-registration-patent")
+    BusinessRegistrationPatent,
+
+    /** Уведомление об отказе в выдаче патента. */
+    @SerializedName("urn:document:business-registration-patent-decline-notice")
+    PatentDeclineNotice;
 }
