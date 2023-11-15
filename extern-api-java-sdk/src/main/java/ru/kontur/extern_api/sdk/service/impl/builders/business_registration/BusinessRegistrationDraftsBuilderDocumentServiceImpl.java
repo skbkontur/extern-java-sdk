@@ -63,7 +63,7 @@ public class BusinessRegistrationDraftsBuilderDocumentServiceImpl extends
 
     @Override
     protected DraftsBuilderType getDraftsBuilderType() {
-        return DraftsBuilderType.IndividualBusinessRegistration;
+        return DraftsBuilderType.BusinessRegistration;
     }
 
     @Override

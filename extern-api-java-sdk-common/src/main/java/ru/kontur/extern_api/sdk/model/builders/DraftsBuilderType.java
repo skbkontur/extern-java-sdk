@@ -33,7 +33,11 @@ public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
     FnsLetter,
 
     @SerializedName("urn:externapi:business-registration:registration")
+    @Deprecated
     IndividualBusinessRegistration,
+
+    @SerializedName("urn:externapi:business-registration:registration")
+    BusinessRegistration,
 
     @SerializedName("urn:drafts-builder:pfr-report")
     PfrReport,

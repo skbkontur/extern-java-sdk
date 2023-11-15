@@ -30,6 +30,6 @@ public class BusinessRegistrationDraftsBuilderMetaRequest extends
 
     @Override
     protected DraftsBuilderType provideBuilderType() {
-        return DraftsBuilderType.IndividualBusinessRegistration;
+        return DraftsBuilderType.BusinessRegistration;
     }
 }
