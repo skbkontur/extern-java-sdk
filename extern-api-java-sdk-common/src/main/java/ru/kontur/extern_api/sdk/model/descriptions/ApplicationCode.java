@@ -2,7 +2,7 @@ package ru.kontur.extern_api.sdk.model.descriptions;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum ApplicantCode {
+public enum ApplicationCode {
     @SerializedName("р21001")
     P21001,
     @SerializedName("р21002")

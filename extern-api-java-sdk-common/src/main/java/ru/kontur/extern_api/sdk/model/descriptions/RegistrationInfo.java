@@ -12,13 +12,13 @@ public class RegistrationInfo {
 
     private IpInfo ipInfo;
 
-    private ApplicantCode applicationCode;
+    private ApplicationCode applicationCode;
 
-    public ApplicantCode getApplicationCode() {
+    public ApplicationCode getApplicationCode() {
         return applicationCode;
     }
 
-    public void setApplicationCode(ApplicantCode applicationCode) {
+    public void setApplicationCode(ApplicationCode applicationCode) {
         this.applicationCode = applicationCode;
     }
 
