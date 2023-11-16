@@ -23,8 +23,8 @@
 package ru.kontur.extern_api.sdk.model.builders.business_registration;
 
 import java.util.List;
+import ru.kontur.extern_api.sdk.model.Signer;
 import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentData;
-import ru.kontur.extern_api.sdk.model.descriptions.Signer;
 
 public class BusinessRegistrationDraftsBuilderDocumentData extends
         DraftsBuilderDocumentData {

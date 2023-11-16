@@ -1,5 +1,7 @@
 package ru.kontur.extern_api.sdk.model.descriptions;
 
+import ru.kontur.extern_api.sdk.model.Fio;
+
 public class ApplicantInfoDescription {
 
     private Fio fio;
