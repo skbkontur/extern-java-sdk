@@ -70,7 +70,6 @@ import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentCreator;
 import ru.kontur.extern_api.sdk.utils.builders.DraftsBuilderDocumentFileCreator;
 
 @Execution(ExecutionMode.SAME_THREAD)
-@Disabled
 class DocflowAdditionalServiceIT {
 
     protected static ExternEngine engine;

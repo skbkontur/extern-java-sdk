@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -64,7 +63,6 @@ import ru.kontur.extern_api.sdk.utils.TestUtils;
 
 @Execution(ExecutionMode.CONCURRENT)
 @DisplayName("RelatedDocuments relatedDocumentService should be able to")
-@Disabled
 class RelatedDocumentsIT {
 
     private static final String IFNS_CODE = "0087";
