@@ -38,7 +38,9 @@ public class SenderRequest {
     public SenderRequest(String inn, String kpp, String certificate, String ipaddress) {
         this.inn = inn;
         this.kpp = kpp;
-        this.certificate = new Certificate(certificate);
+        if (certificate != null) {
+            this.certificate = new Certificate(certificate);
+        }
         this.ipaddress = ipaddress;
     }
 

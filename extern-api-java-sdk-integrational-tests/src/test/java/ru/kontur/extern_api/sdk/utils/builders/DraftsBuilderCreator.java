@@ -23,16 +23,13 @@
 package ru.kontur.extern_api.sdk.utils.builders;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import ru.kontur.extern_api.sdk.ExternEngine;
 import ru.kontur.extern_api.sdk.model.Account;
 import ru.kontur.extern_api.sdk.model.DraftMetaRequest;
-import ru.kontur.extern_api.sdk.model.FnsRecipient;
 import ru.kontur.extern_api.sdk.model.OrganizationRequest;
 import ru.kontur.extern_api.sdk.model.Recipient;
 import ru.kontur.extern_api.sdk.model.RelatedDocumentRequest;
 import ru.kontur.extern_api.sdk.model.SenderRequest;
-import ru.kontur.extern_api.sdk.model.SenderRequest.Certificate;
 import ru.kontur.extern_api.sdk.model.TestData;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilder;
 import ru.kontur.extern_api.sdk.model.builders.fns_inventory.FnsInventoryDraftsBuilderData;
@@ -109,7 +106,7 @@ public class DraftsBuilderCreator {
     private PfrReportDraftsBuilder createPfrReportDraftsBuilderFromTestData(
             ExternEngine engine,
             TestData[] testData
-    ){
+    ) {
         DraftMetaRequest draftMeta = TestUtils.toDraftMetaRequest(testData[3]);
         PfrReportDraftsBuilderMetaRequest draftsBuilderMetaRequest = new PfrReportDraftsBuilderMetaRequest();
 

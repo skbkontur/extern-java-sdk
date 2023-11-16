@@ -25,7 +25,6 @@ package ru.kontur.extern_api.sdk;
 
 import java.util.UUID;
 import java.util.function.Function;
-
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import okhttp3.logging.HttpLoggingInterceptor.Logger;
 import org.jetbrains.annotations.NotNull;

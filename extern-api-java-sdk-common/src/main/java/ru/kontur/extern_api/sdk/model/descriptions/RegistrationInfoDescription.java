@@ -2,18 +2,19 @@ package ru.kontur.extern_api.sdk.model.descriptions;
 
 import java.util.List;
 
-public class RegistrationInfo {
-    private List<ApplicantInfo> applicantInfos;
+public class RegistrationInfoDescription {
+
+    private List<ApplicantInfoDescription> applicantInfos;
 
     private BusinessType businessType;
 
-    private UlInfo ulInfo;
+    private UlInfoDescription ulInfo;
 
-    public List<ApplicantInfo> getApplicantInfos() {
+    public List<ApplicantInfoDescription> getApplicantInfos() {
         return applicantInfos;
     }
 
-    public void setApplicantInfos(List<ApplicantInfo> applicantInfos) {
+    public void setApplicantInfos(List<ApplicantInfoDescription> applicantInfos) {
         this.applicantInfos = applicantInfos;
     }
 
@@ -25,11 +26,11 @@ public class RegistrationInfo {
         this.businessType = businessType;
     }
 
-    public UlInfo getUlInfo() {
+    public UlInfoDescription getUlInfo() {
         return ulInfo;
     }
 
-    public void setUlInfo(UlInfo ulInfo) {
+    public void setUlInfo(UlInfoDescription ulInfo) {
         this.ulInfo = ulInfo;
     }
 }

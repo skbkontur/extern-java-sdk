@@ -20,20 +20,18 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders;
+package ru.kontur.extern_api.sdk.service.builders.business_registration;
 
-import ru.kontur.extern_api.sdk.service.builders.business_registration.BusinessRegistrationDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
+import ru.kontur.extern_api.sdk.model.builders.business_registration.BusinessRegistrationDraftsBuilder;
+import ru.kontur.extern_api.sdk.model.builders.business_registration.BusinessRegistrationDraftsBuilderMeta;
+import ru.kontur.extern_api.sdk.model.builders.business_registration.BusinessRegistrationDraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderService;
 
-/**
- * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
- */
-public interface DraftsBuilderServiceFactory {
+public interface BusinessRegistrationDraftsBuilderService extends
+        DraftsBuilderService<
+                BusinessRegistrationDraftsBuilder,
+                BusinessRegistrationDraftsBuilderMeta,
+                BusinessRegistrationDraftsBuilderMetaRequest,
+                BusinessRegistrationDraftsBuilderDocumentService> {
 
-    FnsInventoryDraftsBuilderService fnsInventory();
-
-    PfrReportDraftsBuilderService pfrReport();
-
-    BusinessRegistrationDraftsBuilderService businessRegistration();
 }

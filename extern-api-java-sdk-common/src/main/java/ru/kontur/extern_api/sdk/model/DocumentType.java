@@ -212,7 +212,6 @@ public enum DocumentType implements Urn<DocumentType> {
     @SerializedName("urn:document:fns534-submission-receipt")
     Fns534SubmissionReceipt,
 
-
     /** Опись */
     @SerializedName("urn:document:fns534-inventory-message")
     Fns534InventoryMessage,
@@ -244,8 +243,6 @@ public enum DocumentType implements Urn<DocumentType> {
     /** КвитанцияОприеме. */
     @SerializedName("urn:document:fns534-inventory-receipt")
     Fns534InventoryReceipt,
-    
-    
 
     /** Документ */
     @SerializedName("urn:document:fns534-demand")
@@ -633,6 +630,92 @@ public enum DocumentType implements Urn<DocumentType> {
 
     /** ПодтверждениеОператора. */
     @SerializedName("urn:document:stat-cu-broadcast-confirmation")
-    StatCuBroadcastConfirmation
+    StatCuBroadcastConfirmation,
 
+    /** Служебный документ, в котором передается описание документа (установленный формат). */
+    @SerializedName("urn:document:business-registration-inventory")
+    BusinessRegistrationInventory,
+
+    /** Документ об уплате государственной пошлины. */
+    @SerializedName("urn:document:business-registration-duty")
+    BusinessRegistrationDuty,
+
+    /**
+     * Заявление о государственной регистрации юридического лица, физического лица в качестве индивидуального
+     * предпринимателя.
+     */
+    @SerializedName("urn:document:business-registration-application")
+    BusinessRegistrationApplication,
+
+    /** Заявление о переходе на упрощенную систему налогообложения (форма №26.2-1). */
+    @SerializedName("urn:document:business-registration-application-usn")
+    BusinessRegistrationApplicationUSN,
+
+    /** Учредительный документ. */
+    @SerializedName("urn:document:business-registration-founding-document")
+    BusinessRegistrationFoundingDocument,
+
+    /** Изменения в учредительный документ. */
+    @SerializedName("urn:document:business-registration-founding-document-correction")
+    BusinessRegistrationFoundingDocumentCorrection,
+
+    /** Документы, необходимые для государственной регистрации. */
+    @SerializedName("urn:document:business-registration-attachment")
+    BusinessRegistrationAttachment,
+
+    /** Протокол с информацией о выявленных несоответствиях форматно-логического контроля. */
+    @SerializedName("urn:document:business-registration-check-protocol")
+    BusinessRegistrationCheckProtocol,
+
+    /** Расписка о принятии заявления. */
+    @SerializedName("urn:document:business-registration-receipt")
+    BusinessRegistrationReceipt,
+
+    /** Решение об отказе в регистрации. */
+    @SerializedName("urn:document:business-registration-acceptance-result-negative")
+    BusinessRegistrationAcceptanceResultNegative,
+
+    /** Уведомление о постановке на учёт. */
+    @SerializedName("urn:document:business-registration-registration-notice")
+    BusinessRegistrationRegistrationNotice,
+
+    /** Свидетельство о постановке на учет. */
+    @SerializedName("urn:document:business-registration-registration-certificate")
+    BusinessRegistrationRegistrationCertificate,
+
+    /** Уведомление о снятии с учета. */
+    @SerializedName("urn:document:business-registration-deregistration-notice")
+    BusinessRegistrationDeregistrationNotice,
+
+    /** Выписка или лист записи ЕГРИП. */
+    @SerializedName("urn:document:business-registration-egrip-extract")
+    BusinessRegistrationEgripExtract,
+
+    /** Выписка или лист записи ЕГРЮЛ. */
+    @SerializedName("urn:document:business-registration-egrul-extract")
+    BusinessRegistrationEgrulExtract,
+
+    /** Уведомление об оставлении документов без рассмотрения. */
+    @SerializedName("urn:document:business-registration-decline-notice")
+    BusinessRegistrationDeclineNotice,
+
+    /** Решение о приостановлении регистрации. */
+    @SerializedName("urn:document:business-registration-acceptance-result-suspension")
+    BusinessRegistrationAcceptanceResultSuspension,
+
+    /** Информационное письмо. */
+    @SerializedName("urn:document:business-registration-cu-letter")
+    BusinessRegistrationCuLetter,
+
+    /** Любое приложение, которое содержит дополнительные сведения от ФНС. */
+    @SerializedName("urn:document:business-registration-incoming-attachment")
+    BusinessRegistrationIncomingAttachment,
+
+    /** Патент на право применения патентной системы налогообложения. */
+    @SerializedName("urn:document:business-registration-patent")
+    BusinessRegistrationPatent,
+
+    /** Уведомление об отказе в выдаче патента. */
+    @SerializedName("urn:document:business-registration-patent-decline-notice")
+    PatentDeclineNotice;
 }

@@ -20,20 +20,16 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders;
+package ru.kontur.extern_api.sdk.model.builders.business_registration;
 
-import ru.kontur.extern_api.sdk.service.builders.business_registration.BusinessRegistrationDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderMetaRequest;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderType;
 
-/**
- * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
- */
-public interface DraftsBuilderServiceFactory {
+public class BusinessRegistrationDraftsBuilderMetaRequest extends
+        DraftsBuilderMetaRequest<BusinessRegistrationDraftsBuilderData> {
 
-    FnsInventoryDraftsBuilderService fnsInventory();
-
-    PfrReportDraftsBuilderService pfrReport();
-
-    BusinessRegistrationDraftsBuilderService businessRegistration();
+    @Override
+    protected DraftsBuilderType provideBuilderType() {
+        return DraftsBuilderType.BusinessRegistration;
+    }
 }

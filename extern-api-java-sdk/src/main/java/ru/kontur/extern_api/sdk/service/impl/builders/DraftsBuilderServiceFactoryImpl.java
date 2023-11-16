@@ -24,7 +24,10 @@ package ru.kontur.extern_api.sdk.service.impl.builders;
 
 import ru.kontur.extern_api.sdk.provider.AccountProvider;
 import ru.kontur.extern_api.sdk.service.builders.DraftsBuilderServiceFactory;
+import ru.kontur.extern_api.sdk.service.builders.business_registration.BusinessRegistrationDraftsBuilderService;
 import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
+import ru.kontur.extern_api.sdk.service.impl.builders.business_registration.BusinessRegistrationDraftsBuilderApiFactory;
+import ru.kontur.extern_api.sdk.service.impl.builders.business_registration.BusinessRegistrationDraftsBuilderServiceImpl;
 import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuilderApiFactory;
 import ru.kontur.extern_api.sdk.service.impl.builders.fns_inventory.FnsInventoryDraftsBuilderServiceImpl;
 import ru.kontur.extern_api.sdk.service.impl.builders.pfr_report.PfrReportDraftsBuilderApiFactory;
@@ -34,6 +37,7 @@ public class DraftsBuilderServiceFactoryImpl implements DraftsBuilderServiceFact
 
     private final AccountProvider acc;
 
+    private final BusinessRegistrationDraftsBuilderApiFactory businessRegistrationDraftsBuilderApiFactory;
     private final FnsInventoryDraftsBuilderApiFactory fnsInventoryDraftsBuilderApiFactory;
     private final PfrReportDraftsBuilderApiFactory pfrReportDraftsBuilderApiFactory;
 
@@ -41,12 +45,14 @@ public class DraftsBuilderServiceFactoryImpl implements DraftsBuilderServiceFact
             AccountProvider accountProvider,
 
             FnsInventoryDraftsBuilderApiFactory fnsInventoryDraftsBuilderApiFactory,
-            PfrReportDraftsBuilderApiFactory pfrReportDraftsBuilderApiFactory
+            PfrReportDraftsBuilderApiFactory pfrReportDraftsBuilderApiFactory,
+            BusinessRegistrationDraftsBuilderApiFactory businessRegistrationDraftsBuilderApiFactory
     ) {
         this.acc = accountProvider;
 
         this.fnsInventoryDraftsBuilderApiFactory = fnsInventoryDraftsBuilderApiFactory;
         this.pfrReportDraftsBuilderApiFactory = pfrReportDraftsBuilderApiFactory;
+        this.businessRegistrationDraftsBuilderApiFactory = businessRegistrationDraftsBuilderApiFactory;
     }
 
     @Override
@@ -66,6 +72,16 @@ public class DraftsBuilderServiceFactoryImpl implements DraftsBuilderServiceFact
                 pfrReportDraftsBuilderApiFactory.createDraftsBuildersApi(),
                 pfrReportDraftsBuilderApiFactory.createDraftsBuildersDocumentApi(),
                 pfrReportDraftsBuilderApiFactory.createDraftsBuildersDocumentFilesApi()
+        );
+    }
+
+    @Override
+    public BusinessRegistrationDraftsBuilderService businessRegistration() {
+        return new BusinessRegistrationDraftsBuilderServiceImpl(
+                acc,
+                businessRegistrationDraftsBuilderApiFactory.createDraftsBuildersApi(),
+                businessRegistrationDraftsBuilderApiFactory.createDraftsBuildersDocumentApi(),
+                businessRegistrationDraftsBuilderApiFactory.createDraftsBuildersDocumentFilesApi()
         );
     }
 }

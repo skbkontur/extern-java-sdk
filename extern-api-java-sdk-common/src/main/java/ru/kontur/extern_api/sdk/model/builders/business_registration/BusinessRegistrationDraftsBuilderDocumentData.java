@@ -20,20 +20,32 @@
  * SOFTWARE.
  */
 
-package ru.kontur.extern_api.sdk.service.builders;
+package ru.kontur.extern_api.sdk.model.builders.business_registration;
 
-import ru.kontur.extern_api.sdk.service.builders.business_registration.BusinessRegistrationDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.fns_inventory.FnsInventoryDraftsBuilderService;
-import ru.kontur.extern_api.sdk.service.builders.pfr_report.PfrReportDraftsBuilderService;
+import java.util.List;
+import ru.kontur.extern_api.sdk.model.Signer;
+import ru.kontur.extern_api.sdk.model.builders.DraftsBuilderDocumentData;
 
-/**
- * <p>Группа методов предоставляет доступ к выбору типа билдера черновиков</p>
- */
-public interface DraftsBuilderServiceFactory {
+public class BusinessRegistrationDraftsBuilderDocumentData extends
+        DraftsBuilderDocumentData {
 
-    FnsInventoryDraftsBuilderService fnsInventory();
+    private String svdregCode;
 
-    PfrReportDraftsBuilderService pfrReport();
+    private List<Signer> signers;
 
-    BusinessRegistrationDraftsBuilderService businessRegistration();
+    public String getSvdregCode() {
+        return svdregCode;
+    }
+
+    public void setSvdregCode(String svdregCode) {
+        this.svdregCode = svdregCode;
+    }
+
+    public List<Signer> getSigners() {
+        return signers;
+    }
+
+    public void setSigners(List<Signer> signer) {
+        this.signers = signer;
+    }
 }
