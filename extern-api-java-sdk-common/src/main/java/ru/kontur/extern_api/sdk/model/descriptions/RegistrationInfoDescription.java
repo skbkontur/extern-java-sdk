@@ -4,17 +4,17 @@ import java.util.List;
 
 public class RegistrationInfoDescription {
 
-    private List<ApplicantInfo> applicantInfos;
+    private List<ApplicantInfoDescription> applicantInfos;
 
     private BusinessType businessType;
 
     private UlInfoDescription ulInfo;
 
-    public List<ApplicantInfo> getApplicantInfos() {
+    public List<ApplicantInfoDescription> getApplicantInfos() {
         return applicantInfos;
     }
 
-    public void setApplicantInfos(List<ApplicantInfo> applicantInfos) {
+    public void setApplicantInfos(List<ApplicantInfoDescription> applicantInfos) {
         this.applicantInfos = applicantInfos;
     }
 
