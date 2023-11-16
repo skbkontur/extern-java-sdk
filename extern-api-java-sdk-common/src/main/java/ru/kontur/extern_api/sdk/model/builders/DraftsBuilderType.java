@@ -36,7 +36,7 @@ public enum DraftsBuilderType implements Urn<DraftsBuilderType> {
     @Deprecated
     IndividualBusinessRegistration,
 
-    @SerializedName("urn:externapi:business-registration:registration")
+    @SerializedName("urn:drafts-builder:business-registration")
     BusinessRegistration,
 
     @SerializedName("urn:drafts-builder:pfr-report")
