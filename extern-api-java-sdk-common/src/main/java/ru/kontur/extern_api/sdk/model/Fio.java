@@ -54,4 +54,16 @@ public class Fio {
     public String getPatronymic() {
         return patronymic;
     }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
 }
