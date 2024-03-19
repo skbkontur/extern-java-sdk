@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
@@ -128,13 +129,29 @@ public class CryptoProviderMSCapi implements CryptoProvider {
             System.out.printf("Certificate %s found in local cache. \n", thumbprint);
             return keysCache.get(thumbprint);
         }
-        List<Key> installedKeys = cryptoApi.getInstalledKeys(true);
+
+        List<Key> installedKeys = cryptoApi.getInstalledKeysCache(false);
+        Key key = getKeyFromCacheByThumbprint(thumbprint, installedKeys);
+        if (key != null)
+            return key;
+
+        System.out.printf("Certificate %s not found in local cache. Will refresh cache \n", thumbprint);
+        installedKeys = cryptoApi.getInstalledKeysCache(true);
+        key = getKeyFromCacheByThumbprint(thumbprint, installedKeys);
+        if (key != null)
+            return key;
+
+        throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);
+    }
+
+    @Nullable
+    private static Key getKeyFromCacheByThumbprint(@NotNull String thumbprint, List<Key> installedKeys) {
         for (Key key : installedKeys) {
             if (thumbprint.compareToIgnoreCase(IOUtil.bytesToHex(key.getThumbprint())) == 0) {
                 keysCache.put(thumbprint, key);
                 return key;
             }
         }
-        throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);
+        return null;
     }
 }
