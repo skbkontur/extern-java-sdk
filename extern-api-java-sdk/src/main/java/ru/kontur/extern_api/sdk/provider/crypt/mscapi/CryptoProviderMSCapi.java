@@ -47,7 +47,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     private final CryptoApi cryptoApi;
     private final CryptoService cryptoService;
-    private static HashMap<String, Key> keysCache = new HashMap<>();
+    private static final HashMap<String, Key> keysCache = new HashMap<>();
 
     private static CryptoApi cryptoApiSingletonInstance;
 
@@ -129,10 +129,9 @@ public class CryptoProviderMSCapi implements CryptoProvider {
         });
     }
 
-    private byte[] decrypt(Key key, byte[] content) throws CryptoException, InterruptedException {
+    private byte[] decrypt(Key key, byte[] content) throws CryptoException {
         PKCS7KeAPi pkcs7 = new PKCS7KeAPi(cryptoService);
-        byte[] decrypted = pkcs7.decrypt(key, null, content);
-        return decrypted;
+        return pkcs7.decrypt(key, null, content);
     }
 
     @NotNull
