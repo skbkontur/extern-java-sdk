@@ -65,6 +65,18 @@ public class CryptoProviderMSCapi implements CryptoProvider {
         }
     }
 
+    public CryptoProviderMSCapi withKeysInCache(Key[] initialPrivateKeys) {
+        addKeysToCache(initialPrivateKeys);
+        return this;
+    }
+
+    public static void addKeysToCache(Key[] initialPrivateKeys) {
+        for (Key key : initialPrivateKeys) {
+            String thumbprint = IOUtil.bytesToHex(key.getThumbprint());
+            keysCache.put(thumbprint.toLowerCase(), key);
+        }
+    }
+
     @Override
     public CompletableFuture<QueryContext<byte[]>> signAsync(String thumbprint, byte[] content) {
         return CompletableFuture.supplyAsync(() -> sign(new QueryContext<byte[]>()
@@ -125,6 +137,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     @NotNull
     private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
+        thumbprint = thumbprint.toLowerCase();
         if (keysCache.containsKey(thumbprint)) {
             System.out.printf("Certificate %s found in local cache. \n", thumbprint);
             return keysCache.get(thumbprint);
