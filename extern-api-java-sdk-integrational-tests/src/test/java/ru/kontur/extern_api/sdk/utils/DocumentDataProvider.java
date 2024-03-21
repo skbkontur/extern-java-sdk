@@ -5,7 +5,7 @@ import ru.kontur.extern_api.sdk.model.TestData;
 
 class DocumentDataProvider {
 
-    private String ifnsCode;
+    private final String ifnsCode;
 
     DocumentDataProvider(String ifnsCode) {
         this.ifnsCode = ifnsCode;
@@ -16,10 +16,10 @@ class DocumentDataProvider {
                 + "<Файл ИдФайл=\"ON_DOCNPNO_" + ifnsCode + "_" + ifnsCode + "_"
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getKpp()
-                + "_20180226_"
-                + UUID.randomUUID().toString()
-                + "\" ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 13.0\" ВерсФорм=\"5.01\">"
-                + "<Документ КНД=\"1184002\" ДатаДок=\"17.05.2018\">"
+                + "_20231201_"
+                + UUID.randomUUID()
+                + "\" ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 16.0\" ВерсФорм=\"5.02\">"
+                + "<Документ КНД=\"1184002\" ДатаДок=\"01.12.2023\">"
                 + "<СвОтпрДок>"
                 + "<ОтпрЮЛ НаимОрг=\"ООО «Первая Ижевская тестовая»\" ИННЮЛ=\""
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
@@ -51,9 +51,9 @@ class DocumentDataProvider {
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getKpp()
                 + "_"
-                + UUID.randomUUID().toString()
+                + UUID.randomUUID()
                 + "_20170807_"
-                + UUID.randomUUID().toString()
+                + UUID.randomUUID()
                 + "</ИдФайлОсн>"
                 + "<ДокСкан ПорНомДок=\"1.01\" КодДок=\"0510041\" НаимДок=\"Фото_1\" >"
                 + "<ИмяФайл>"
@@ -76,7 +76,7 @@ class DocumentDataProvider {
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getInn()
                 + TestUtils.toDraftMetaRequest(testData).getPayer().getKpp()
                 + "_20180301_"
-                + UUID.randomUUID().toString()
+                + UUID.randomUUID()
                 + "\" ВерсПрог=\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 13.0\" ВерсФорм=\"5.03\">"
                 + "<Документ КНД=\"1166102\" ДатаДок=\"01.03.2018\">"
                 + "<СвНП>"

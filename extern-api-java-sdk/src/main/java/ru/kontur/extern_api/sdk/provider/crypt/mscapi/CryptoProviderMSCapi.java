@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.argosgrp.cryptoservice.CryptoException;
 import ru.argosgrp.cryptoservice.CryptoService;
 import ru.argosgrp.cryptoservice.Key;
@@ -46,7 +47,7 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
     private final CryptoApi cryptoApi;
     private final CryptoService cryptoService;
-    private static HashMap<String, Key> keysCache = new HashMap<>();
+    private static final HashMap<String, Key> keysCache = new HashMap<>();
 
     private static CryptoApi cryptoApiSingletonInstance;
 
@@ -61,6 +62,18 @@ public class CryptoProviderMSCapi implements CryptoProvider {
 
         } catch (CertificateException x) {
             throw new SDKException(Messages.get(C_CRYPTO_ERROR_INIT), x);
+        }
+    }
+
+    public CryptoProviderMSCapi withKeysInCache(Key[] initialPrivateKeys) {
+        addKeysToCache(initialPrivateKeys);
+        return this;
+    }
+
+    public static void addKeysToCache(Key[] initialPrivateKeys) {
+        for (Key key : initialPrivateKeys) {
+            String thumbprint = IOUtil.bytesToHex(key.getThumbprint());
+            keysCache.put(thumbprint.toLowerCase(), key);
         }
     }
 
@@ -116,25 +129,41 @@ public class CryptoProviderMSCapi implements CryptoProvider {
         });
     }
 
-    private byte[] decrypt(Key key, byte[] content) throws CryptoException, InterruptedException {
+    private byte[] decrypt(Key key, byte[] content) throws CryptoException {
         PKCS7KeAPi pkcs7 = new PKCS7KeAPi(cryptoService);
-        byte[] decrypted = pkcs7.decrypt(key, null, content);
-        return decrypted;
+        return pkcs7.decrypt(key, null, content);
     }
 
     @NotNull
     private Key getKeyByThumbprint(@NotNull String thumbprint) throws CryptoException {
+        thumbprint = thumbprint.toLowerCase();
         if (keysCache.containsKey(thumbprint)) {
             System.out.printf("Certificate %s found in local cache. \n", thumbprint);
             return keysCache.get(thumbprint);
         }
-        List<Key> installedKeys = cryptoApi.getInstalledKeys(true);
+
+        List<Key> installedKeys = cryptoApi.getInstalledKeysCache(false);
+        Key key = getKeyFromCacheByThumbprint(thumbprint, installedKeys);
+        if (key != null)
+            return key;
+
+        System.out.printf("Certificate %s not found in local cache. Will refresh cache \n", thumbprint);
+        installedKeys = cryptoApi.getInstalledKeysCache(true);
+        key = getKeyFromCacheByThumbprint(thumbprint, installedKeys);
+        if (key != null)
+            return key;
+
+        throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);
+    }
+
+    @Nullable
+    private static Key getKeyFromCacheByThumbprint(@NotNull String thumbprint, List<Key> installedKeys) {
         for (Key key : installedKeys) {
             if (thumbprint.compareToIgnoreCase(IOUtil.bytesToHex(key.getThumbprint())) == 0) {
                 keysCache.put(thumbprint, key);
                 return key;
             }
         }
-        throw new CryptoException("Cannot find locally installed certificate with thumbprint " + thumbprint);
+        return null;
     }
 }
