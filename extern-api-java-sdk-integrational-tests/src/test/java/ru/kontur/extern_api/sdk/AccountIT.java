@@ -127,7 +127,7 @@ class AccountIT {
 
         assertFalse(cxt.getOrThrow().getAccounts().isEmpty());
 
-        Account account = cxt.getOrThrow().getAccounts().get(0);
+        Account account = cxt.getOrThrow().getAccounts().get(1);
 
         QueryContext<Account> accCxt = accountService
                 .getAccountAsync(account.getId().toString())

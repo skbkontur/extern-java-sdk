@@ -135,7 +135,7 @@ class RelatedDocumentsIT {
 
         String decryptedContent = fromWin1251Bytes(documentDecryptedContentBytes);
         
-        assertTrue(decryptedContent.contains("ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 13.0\" ВерсФорм=\"5.01\">"));
+        assertTrue(decryptedContent.contains("ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 16.0\" ВерсФорм=\"5.02\">"));
         assertTrue(decryptedContent.length() > 100);
     }
 
@@ -150,7 +150,7 @@ class RelatedDocumentsIT {
                 .getEncryptedContentAsync(sentInventory.getId(), messageDocument.getId()).join());
 
         assertFalse(documentEncryptedContent
-                .contains("ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 13.0\" ВерсФорм=\"5.01\">"));
+                .contains("ВерсПрог =\"КОНТУР-ЭКСТЕРН, ВЕРСИЯ 16.0\" ВерсФорм=\"5.02\">"));
         assertTrue(documentEncryptedContent.length() > 100);
     }
 

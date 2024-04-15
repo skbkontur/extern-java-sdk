@@ -45,8 +45,9 @@ public class CryptoApi {
 
     // Probably bad design, but significantly improves performance
     private static List<Key> keyCache = null;
+    private static ArrayList<CertificateWrapper> localCertsCache;
 
-    private CryptoService cryptoService;
+    private final CryptoService cryptoService;
 
     private final X509CertificateFactory certificateFactory;
 
@@ -84,14 +85,16 @@ public class CryptoApi {
         return builder.build();
     }
 
-    private static ArrayList<CertificateWrapper> localCertsCache;
-
     public synchronized List<CertificateWrapper> getCertificatesInstalledLocally()
             throws CertificateException {
+        return getCertificatesInstalledLocally(false);
+    }
 
-        if (localCertsCache == null) {
+    public synchronized List<CertificateWrapper> getCertificatesInstalledLocally(boolean refreshCache)
+            throws CertificateException {
+        if (localCertsCache == null || refreshCache) {
             localCertsCache = new ArrayList<>();
-            List<Key> installedKeys = getInstalledKeys(false);
+            List<Key> installedKeys = getInstalledKeysCache(refreshCache);
             for (Key key : installedKeys) {
                 localCertsCache.add(certificateFactory.create(key.getX509ctx()));
             }
@@ -111,8 +114,18 @@ public class CryptoApi {
         return cryptoService;
     }
 
+    /**
+     * Метод был реализован с ошибкой - параметр refreshCache всегда считается как true. Используйте метод getInstalledKeysCache
+     *
+     * @see #getInstalledKeysCache
+     */
+    @Deprecated
     public List<Key> getInstalledKeys(boolean refreshCache) {
-        if (keyCache == null || refreshCache || true) {
+        return getInstalledKeysCache(true);
+    }
+
+    public List<Key> getInstalledKeysCache(boolean refreshCache) {
+        if (keyCache == null || refreshCache) {
             log.info("Installed keys loading...");
             CryptoService cryptoService = getCryptoService();
             CryptoExceptionThrows<Key[]> keysResult = cryptoService::getKeys;
@@ -123,5 +136,4 @@ public class CryptoApi {
 
         return keyCache;
     }
-
 }
