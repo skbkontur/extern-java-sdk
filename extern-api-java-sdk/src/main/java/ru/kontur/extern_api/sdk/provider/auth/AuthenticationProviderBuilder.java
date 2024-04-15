@@ -30,6 +30,7 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.jetbrains.annotations.NotNull;
+import ru.argosgrp.cryptoservice.Key;
 import ru.kontur.extern_api.sdk.crypt.CryptoApi;
 import ru.kontur.extern_api.sdk.httpclient.KonturConfiguredClient;
 import ru.kontur.extern_api.sdk.model.Credential;
@@ -101,9 +102,19 @@ public final class AuthenticationProviderBuilder {
         );
     }
 
+    /**
+     * Закрытый ключ сертификата будет найден в локальном хранилище
+     */
     public CertificateAuthenticationProvider certificateAuthentication(@NotNull byte[] certContent)
             throws CertificateException {
         return certificateAuthentication(new CryptoProviderMSCapi(), certContent);
+    }
+
+    public CertificateAuthenticationProvider certificateAuthentication(
+            @NotNull byte[] certPublicContent,
+            @NotNull Key certPrivateKey)
+            throws CertificateException {
+        return certificateAuthentication(new CryptoProviderMSCapi().withKeysInCache(new Key[]{certPrivateKey}), certPublicContent);
     }
 
     public TrustedAuthenticationProviderBuilder trustedAuthentication(@NotNull UUID serviceUserId) {
@@ -129,7 +140,6 @@ public final class AuthenticationProviderBuilder {
         );
     }
 
-
     public class TrustedAuthenticationProviderBuilder {
 
         private final BiFunction<CryptoProvider, String, TrustedAuthenticationProvider> authCtor;
@@ -153,8 +163,5 @@ public final class AuthenticationProviderBuilder {
         ) {
             return configureEncryption(new CryptoProviderRSA(jksPass, rsaKeyStorePass), signerThumbprint);
         }
-
     }
-
-
 }
