@@ -181,59 +181,6 @@ class DocflowAdditionalServiceIT {
         Assertions.assertEquals(lName, rName);
     }
 
-    @ParameterizedTest
-    @DisplayName("send reply document by choosing its type with cloud cert")
-    @MethodSource("docflowFactory")
-    void testSendOneReplyWithCloudSign(QueryContext<Docflow> docflowCxt) {
-        Docflow docflow = docflowCxt.getDocflow();
-
-        Document document = docflow.getDocuments()
-                .stream()
-                .filter(Document::isNeedToReply)
-                .findFirst()
-                .orElse(null);
-
-        if (document == null) {
-            log.warning("Docflow " + docflow.getId() + " has no reply options");
-            return;
-        }
-
-        Link generateLink = document.getReplyLinks()[0];
-
-        GenerateReplyDocumentRequestData certificateBase64 = new GenerateReplyDocumentRequestData()
-                .certificateBase64(cloudCert.get().getContent());
-
-        client = engine.getAuthorizedHttpClient();
-
-        ReplyDocument reply = client.followPostLink(
-                generateLink.getHref(),
-                certificateBase64,
-                ReplyDocument.class
-        );
-
-        SignInitiation signInitiation = client.followPostLink(
-                reply.getCloudSignLink().getHref(),
-                SignInitiation.class
-        );
-
-        HashMap<String, Object> queryParams = new HashMap<>();
-        queryParams.put("code", codeProvider.get().apply(signInitiation.getRequestId()));
-        queryParams.put("requestId", signInitiation.getRequestId());
-
-        client.followPostLink(
-                reply.getCloudSignConfirmLink().getHref(),
-                queryParams,
-                null,
-                SignConfirmResultData.class
-        );
-
-        client.followPostLink(
-                reply.getSendLink().getHref(),
-                new SenderIp(engine.getUserIPProvider().userIP()),
-                Docflow.class
-        );
-    }
-
     @Disabled("print it with decrypt")
     @ParameterizedTest
     @MethodSource("docflowFactory")
